@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import {Component, OnInit} from '@angular/core';
 import {Table, TableModule} from "primeng/table";
 import {Product} from "../../Models/product";
 import {ProductService} from "../../Services/product.service";
@@ -11,6 +11,8 @@ import {CurrencyPipe, NgClass} from "@angular/common";
 import {FileUploadModule} from "primeng/fileupload";
 import {ToolbarModule} from "primeng/toolbar";
 import {ToastModule} from "primeng/toast";
+import {UserService} from "../../Services/user.service";
+import {User} from "../../Models/user";
 
 
 @Component({
@@ -31,7 +33,7 @@ import {ToastModule} from "primeng/toast";
   templateUrl: './user.component.html',
   styleUrl: './user.component.css'
 })
-export class UserComponent {
+export class UserComponent implements OnInit{
   productDialog: boolean = false;
 
   deleteProductDialog: boolean = false;
@@ -51,12 +53,13 @@ export class UserComponent {
   statuses: any[] = [];
 
   rowsPerPageOptions = [5, 10, 20];
-
-  constructor(private productService: ProductService, private messageService: MessageService) { }
+  // ======********============
+  users: User[] = [];
+  constructor(private productService: ProductService, private messageService: MessageService,private userService :UserService) { }
 
   ngOnInit() {
-    this.productService.getProducts().then(data => this.products = data);
-
+    // this.productService.getProducts().then(data => this.products = data);
+    this.userService.getAllUsers().then(data => this.users = data);
     this.cols = [
       { field: 'product', header: 'Product' },
       { field: 'price', header: 'Price' },

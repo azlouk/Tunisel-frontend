@@ -16,7 +16,7 @@
         </ng-template>
       </p-toolbar>
 
-      <p-table #dt [value]="products" [columns]="cols" responsiveLayout="scroll" [rows]="10" [globalFilterFields]="['name','country.name','representative.name','status']" [paginator]="true" [rowsPerPageOptions]="[10,20,30]" [showCurrentPageReport]="true" currentPageReportTemplate="Showing {first} to {last} of {totalRecords} entries" [(selection)]="selectedProducts" selectionMode="multiple" [rowHover]="true" dataKey="id">
+      <p-table #dt [value]="users" [columns]="cols" responsiveLayout="scroll" [rows]="10" [globalFilterFields]="['name','country.name','representative.name','status']" [paginator]="true" [rowsPerPageOptions]="[10,20,30]" [showCurrentPageReport]="true" currentPageReportTemplate="Showing {first} to {last} of {totalRecords} entries" [(selection)]="selectedProducts" selectionMode="multiple" [rowHover]="true" dataKey="id">
         <ng-template pTemplate="caption">
           <div class="flex flex-column md:flex-row md:justify-content-between md:align-items-center">
             <h5 class="m-0">Manage Products</h5>
@@ -31,49 +31,53 @@
             <th style="width: 3rem">
               <p-tableHeaderCheckbox></p-tableHeaderCheckbox>
             </th>
-            <th pSortableColumn="code">Code <p-sortIcon field="code"></p-sortIcon></th>
-            <th pSortableColumn="name">Name <p-sortIcon field="name"></p-sortIcon></th>
-            <th>Image</th>
-            <th pSortableColumn="price">Price <p-sortIcon field="price"></p-sortIcon></th>
-            <th pSortableColumn="category">Category <p-sortIcon field="category"></p-sortIcon></th>
-            <th pSortableColumn="rating">Reviews <p-sortIcon field="rating"></p-sortIcon></th>
-            <th pSortableColumn="inventoryStatus">Status <p-sortIcon field="inventoryStatus"></p-sortIcon></th>
-            <th></th>
+            <th pSortableColumn="code">Id <p-sortIcon field="code"></p-sortIcon></th>
+            <th pSortableColumn="name">Nom <p-sortIcon field="name"></p-sortIcon></th>
+<!--            <th>Image</th>-->
+            <th pSortableColumn="price">Telephone <p-sortIcon field="price"></p-sortIcon></th>
+            <th pSortableColumn="category">Poste <p-sortIcon field="category"></p-sortIcon></th>
+            <th pSortableColumn="rating">Pseudo <p-sortIcon field="rating"></p-sortIcon></th>
+<!--            <th pSortableColumn="inventoryStatus">Status <p-sortIcon field="inventoryStatus"></p-sortIcon></th>-->
+<!--            <th></th>-->
           </tr>
         </ng-template>
-        <ng-template pTemplate="body" let-product>
+        <ng-template pTemplate="body" let-user>
           <tr>
             <td>
-              <p-tableCheckbox [value]="product"></p-tableCheckbox>
+              <p-tableCheckbox [value]="user"></p-tableCheckbox>
             </td>
-            <td style="width:14%; min-width:10rem;"><span class="p-column-title">Code</span>
-              {{product.code || product.id}}
+            <td style="width:14%; min-width:10rem;"><span class="p-column-title">Id</span>
+              {{user.id}}
             </td>
             <td style="width:14%; min-width:10rem;">
-              <span class="p-column-title">Name</span>
-              {{product.name}}
+              <span class="p-column-title">Nom</span>
+              {{user.nom}}
             </td>
-            <td style="width:14%; min-width:10rem;"><span class="p-column-title">Image</span>
-              <img [src]="'assets/demo/images/product/' + product.image" [alt]="product.name" width="100" class="shadow-4" />
-            </td>
+<!--            <td style="width:14%; min-width:10rem;"><span class="p-column-title">Image</span>-->
+<!--              <img [src]="'assets/demo/images/product/' + product.image" [alt]="product.name" width="100" class="shadow-4" />-->
+<!--            </td>-->
             <td style="width:14%; min-width:8rem;">
-              <span class="p-column-title">Price</span>
-              {{product.price | currency:'USD'}}
+              <span class="p-column-title">Telephone</span>
+              {{user.telephone}}
             </td>
             <td style="width:14%; min-width:10rem;">
-              <span class="p-column-title">Category</span>
-              {{product.category}}
+              <span class="p-column-title">Poste</span>
+              {{user.poste}}
             </td>
-            <td style="width:14%; min-width: 10rem;"><span class="p-column-title">Reviews</span>
-              <p-rating [ngModel]="product.rating" [readonly]="true" [cancel]="false"></p-rating>
+            <td style="width:14%; min-width:10rem;">
+              <span class="p-column-title">Pseudo</span>
+              {{user.pseudo}}
             </td>
-            <td style="width:14%; min-width: 10rem;"><span class="p-column-title">Status</span>
-              <span [class]="'product-badge status-' + (product.inventoryStatus ? product.inventoryStatus.toLowerCase() : '')">{{product.inventoryStatus}}</span>
-            </td>
+<!--            <td style="width:14%; min-width: 10rem;"><span class="p-column-title">Reviews</span>-->
+<!--              <p-rating [ngModel]="product.rating" [readonly]="true" [cancel]="false"></p-rating>-->
+<!--            </td>-->
+<!--            <td style="width:14%; min-width: 10rem;"><span class="p-column-title">Status</span>-->
+<!--              <span [class]="'product-badge status-' + (product.inventoryStatus ? product.inventoryStatus.toLowerCase() : '')">{{product.inventoryStatus}}</span>-->
+<!--            </td>-->
             <td>
               <div class="flex">
-                <button pButton pRipple icon="pi pi-pencil" class="p-button-rounded p-button-success mr-2" (click)="editProduct(product)"></button>
-                <button pButton pRipple icon="pi pi-trash" class="p-button-rounded p-button-warning" (click)="deleteProduct(product)"></button>
+                <button pButton pRipple icon="pi pi-pencil" class="p-button-rounded p-button-success mr-2" (click)="editProduct(user)"></button>
+                <button pButton pRipple icon="pi pi-trash" class="p-button-rounded p-button-warning" (click)="deleteProduct(user)"></button>
               </div>
             </td>
           </tr>
