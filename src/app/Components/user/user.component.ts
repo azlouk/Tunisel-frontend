@@ -7,7 +7,7 @@ import {DialogModule} from "primeng/dialog";
 import {PaginatorModule} from "primeng/paginator";
 import {RadioButtonModule} from "primeng/radiobutton";
 import {RatingModule} from "primeng/rating";
-import {CurrencyPipe, NgClass} from "@angular/common";
+import {CurrencyPipe, JsonPipe, NgClass} from "@angular/common";
 import {FileUploadModule} from "primeng/fileupload";
 import {ToolbarModule} from "primeng/toolbar";
 import {ToastModule} from "primeng/toast";
@@ -59,7 +59,13 @@ export class UserComponent implements OnInit{
 
   ngOnInit() {
     // this.productService.getProducts().then(data => this.products = data);
-    this.userService.getAllUsers().then(data => this.users = data);
+    this.userService.getAllUsers().subscribe((v:  User[]) => {
+      this.users=v;
+      console.log(new JsonPipe().transform("====================>>>>>>"+this.users))
+
+    },error => {
+      console.log(error)})
+
     this.cols = [
       { field: 'product', header: 'Product' },
       { field: 'price', header: 'Price' },

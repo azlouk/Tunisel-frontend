@@ -11,13 +11,12 @@ import {Product} from "../Models/product";
   providedIn: 'root'
 })
 export class UserService {
- apiUrl="http://localhost:8081/"
+ apiUrl="http://localhost:8081"
   constructor(private http: HttpClient) { }
 
-  getAllUsers(): Promise<User[]> {
-    return this.http.get<User[]>(`${this.apiUrl}/users`) .toPromise()
-      .then(res => res as User[])
-      .then(data => data);
+  getAllUsers(): Observable<User[]> {
+    return this.http.get<User[]>(`${this.apiUrl}/users/read`) ;
+
   }
 
 }
