@@ -1,18 +1,23 @@
-import {Component} from '@angular/core';
+import {Component, CUSTOM_ELEMENTS_SCHEMA, NO_ERRORS_SCHEMA} from '@angular/core';
 import {RouterLink, RouterOutlet} from '@angular/router';
 import {ProductService} from "./Services/product.service";
 import {ButtonModule} from "primeng/button";
-import {SidebarComponent} from "./Components/sidebar/sidebar.component";
+
 import {MessageService} from "primeng/api";
+import {AppLayoutModule} from "./Components/layout/app.layout.module";
 
 
 @Component({
   selector: 'app-root',
   standalone: true,
-  imports: [RouterOutlet, RouterLink, ButtonModule, SidebarComponent],
+  imports: [RouterOutlet, RouterLink, ButtonModule, AppLayoutModule],
   templateUrl: './app.component.html',
   styleUrl: './app.component.css',
-  providers: [ProductService,MessageService]
+  providers: [ProductService,MessageService],
+  schemas: [
+    CUSTOM_ELEMENTS_SCHEMA,
+    NO_ERRORS_SCHEMA
+  ]
 })
 export class AppComponent {
   title = 'tuniselfrontend';

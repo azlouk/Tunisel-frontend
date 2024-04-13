@@ -8,7 +8,7 @@ import {CurrencyPipe, NgStyle} from "@angular/common";
 import {TableModule} from "primeng/table";
 import {MenuModule} from "primeng/menu";
 import {ChartModule} from "primeng/chart";
-import {SidebarComponent} from "../sidebar/sidebar.component";
+
 
 @Component({
   selector: 'app-dashboard',
@@ -19,7 +19,7 @@ import {SidebarComponent} from "../sidebar/sidebar.component";
     NgStyle,
     MenuModule,
     ChartModule,
-    SidebarComponent
+
   ],
   templateUrl: './dashboard.component.html',
   styleUrl: './dashboard.component.css'
