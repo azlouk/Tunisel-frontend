@@ -91,7 +91,7 @@ export class UserComponent implements OnInit{
     this.deleteProductsDialog = true;
   }
 
-  editProduct(product: Product) {
+  y(product: Product) {
     this.product = { ...product };
     this.productDialog = true;
   }
