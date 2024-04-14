@@ -22,6 +22,10 @@ export class UserService {
     console.log(`${this.apiUrl}/users/delete/${userId}`)
     return this.http.delete(`${this.apiUrl}/users/delete/${userId}`);
   }
+  saveUser(user: User): Observable<User> {
+    return this.http.put<User>(`${this.apiUrl}/users/${user.id}`, user);
+  }
+
 
 
 }

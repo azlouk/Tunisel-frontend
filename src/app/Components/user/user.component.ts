@@ -13,6 +13,7 @@ import {ToolbarModule} from "primeng/toolbar";
 import {ToastModule} from "primeng/toast";
 import {UserService} from "../../Services/user.service";
 import {User} from "../../Models/user";
+import {PasswordModule} from "primeng/password";
 
 
 @Component({
@@ -29,7 +30,8 @@ import {User} from "../../Models/user";
     ToolbarModule,
     ToastModule,
     NgClass,
-    NgIf
+    NgIf,
+    PasswordModule
   ],
   templateUrl: './user.component.html',
   styleUrl: './user.component.css'
@@ -150,6 +152,13 @@ export class UserComponent implements OnInit{
       this.productDialog = false;
       this.product = {};
     }
+  }
+  saveUser() {
+    this.submitted = false;
+    this.productDialog=false
+  alert(new JsonPipe().transform(this.user))
+    this.userService.saveUser(this.user).subscribe(() => console.log("user Updated"));
+
   }
 
   findIndexById(id: string): number {
