@@ -7,7 +7,7 @@ import {DialogModule} from "primeng/dialog";
 import {PaginatorModule} from "primeng/paginator";
 import {RadioButtonModule} from "primeng/radiobutton";
 import {RatingModule} from "primeng/rating";
-import {CurrencyPipe, JsonPipe, NgClass} from "@angular/common";
+import {CurrencyPipe, JsonPipe, NgClass, NgIf} from "@angular/common";
 import {FileUploadModule} from "primeng/fileupload";
 import {ToolbarModule} from "primeng/toolbar";
 import {ToastModule} from "primeng/toast";
@@ -28,7 +28,8 @@ import {User} from "../../Models/user";
     FileUploadModule,
     ToolbarModule,
     ToastModule,
-    NgClass
+    NgClass,
+    NgIf
   ],
   templateUrl: './user.component.html',
   styleUrl: './user.component.css'
@@ -55,6 +56,8 @@ export class UserComponent implements OnInit{
   rowsPerPageOptions = [5, 10, 20];
   // ======********============
   users: User[] = [];
+
+  user: User = {};
   constructor(private productService: ProductService, private messageService: MessageService,private userService :UserService) { }
 
   ngOnInit() {
@@ -91,14 +94,14 @@ export class UserComponent implements OnInit{
     this.deleteProductsDialog = true;
   }
 
-  editProduct(product: Product) {
-    this.product = { ...product };
+  editProduct(user: User) {
+    this.user = { ...user };
     this.productDialog = true;
   }
 
-  deleteProduct(product: Product) {
+  deleteProduct(user: User) {
     this.deleteProductDialog = true;
-    this.product = { ...product };
+    this.user = { ...user };
   }
 
   confirmDeleteSelected() {
@@ -110,9 +113,13 @@ export class UserComponent implements OnInit{
 
   confirmDelete() {
     this.deleteProductDialog = false;
-    this.products = this.products.filter(val => val.id !== this.product.id);
+    console.log("this.user.id", this.user.id);
+    this.users = this.users.filter(val => val.id !== this.user.id);
+    if (this.user.id!= null) {
+      this.userService.deleteUser(this.user.id).subscribe(() => console.log("user deleted"));
+    }
     this.messageService.add({ severity: 'success', summary: 'Successful', detail: 'Product Deleted', life: 3000 });
-    this.product = {};
+    this.user = {};
   }
 
   hideDialog() {
