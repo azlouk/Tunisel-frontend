@@ -13,6 +13,8 @@ import {ToolbarModule} from "primeng/toolbar";
 import {ToastModule} from "primeng/toast";
 import {UserService} from "../../Services/user.service";
 import {User} from "../../Models/user";
+import {InputGroupModule} from "primeng/inputgroup";
+import {InputOtpModule} from "primeng/inputotp";
 
 
 @Component({
@@ -28,7 +30,9 @@ import {User} from "../../Models/user";
     FileUploadModule,
     ToolbarModule,
     ToastModule,
-    NgClass
+    NgClass,
+    InputGroupModule,
+    InputOtpModule
   ],
   templateUrl: './user.component.html',
   styleUrl: './user.component.css'
