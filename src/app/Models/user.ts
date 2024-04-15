@@ -1,3 +1,5 @@
+import {UserType} from "../Enum/user-type";
+
 export interface User {
   id?: number;
   nom?: string;
@@ -5,7 +7,8 @@ export interface User {
   poste?: string;
   pseudo?: string;
   mp?: string;
- }
+  type?: UserType;
+}
 // export class User {
 //     private _id: number;
 //    private _nom: string;

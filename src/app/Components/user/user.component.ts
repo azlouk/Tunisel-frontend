@@ -14,6 +14,7 @@ import {ToastModule} from "primeng/toast";
 import {UserService} from "../../Services/user.service";
 import {User} from "../../Models/user";
 import {PasswordModule} from "primeng/password";
+import {UserType} from "../../Enum/user-type";
 
 
 @Component({
@@ -60,6 +61,11 @@ export class UserComponent implements OnInit{
   users: User[] = [];
 
   user: User = {};
+
+  selectedUsers: User[] = [];
+
+  private isUpdateUser=false;
+
   constructor(private productService: ProductService, private messageService: MessageService,private userService :UserService) { }
 
   ngOnInit() {
@@ -87,16 +93,19 @@ export class UserComponent implements OnInit{
   }
 
   openNew() {
-    this.product = {};
+    this.user = {};
     this.submitted = false;
     this.productDialog = true;
   }
 
-  deleteSelectedProducts() {
+  deleteSelectedUsers() {
+
     this.deleteProductsDialog = true;
+
   }
 
   editProduct(user: User) {
+    this.isUpdateUser=true;
     this.user = { ...user };
     this.productDialog = true;
   }
@@ -108,9 +117,20 @@ export class UserComponent implements OnInit{
 
   confirmDeleteSelected() {
     this.deleteProductsDialog = false;
-    this.products = this.products.filter(val => !this.selectedProducts.includes(val));
-    this.messageService.add({ severity: 'success', summary: 'Successful', detail: 'Products Deleted', life: 3000 });
-    this.selectedProducts = [];
+console.log(this.selectedUsers.length)
+    this.selectedUsers.forEach(selectedUser => {
+      this.userService.deleteUser(selectedUser.id).subscribe(
+        () => {
+          this.users = this.users.filter(user => user.id !== selectedUser.id);
+        },
+        (error) => {
+          console.error('Error deleting user:', error);
+        }
+      );
+    });
+
+    this.messageService.add({ severity: 'success', summary: 'Successful', detail: 'User Deleted', life: 3000 });
+    this.selectedUsers = [];
   }
 
   confirmDelete() {
@@ -157,8 +177,21 @@ export class UserComponent implements OnInit{
     this.submitted = false;
     this.productDialog=false
   alert(new JsonPipe().transform(this.user))
-    this.userService.saveUser(this.user).subscribe(() => console.log("user Updated"));
+    console.log(this.user.type)
+    if(this.isUpdateUser==true) {
+      this.userService.saveUser(this.user).subscribe(() => console.log("user Updated"));
+      this.isUpdateUser=false;
+    }
+    else
+    {
+      if (this.user.type && this.user.type === UserType.ADMIN){
+        this.userService.addAdmin(this.user).subscribe(() => console.log("Admin Added"));
+      }
+      if(this.user.type=="Employer") {
+        this.userService.AddEmployer(this.user).subscribe(() => console.log("Employer Added"));
+      }
 
+    }
   }
 
   findIndexById(id: string): number {

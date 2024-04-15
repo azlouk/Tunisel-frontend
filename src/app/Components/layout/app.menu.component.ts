@@ -17,14 +17,14 @@ export class AppMenuComponent implements OnInit {
             {
                 label: 'Home',
                 items: [
-                    { label: 'Dashboard', icon: 'pi pi-fw pi-home', routerLink: ['/dash'] }
+                    { label: 'Tableau de bord', icon: 'pi pi-fw pi-home', routerLink: ['/dash'] }
                 ]
             },
             {
                 label: 'UI Components',
                 items: [
                     { label: 'Form Layout', icon: 'pi pi-fw pi-id-card', routerLink: ['/uikit/formlayout'] },
-                  { label: 'Users', icon: 'pi pi-fw pi-id-card', routerLink: ['/users'] },
+                  { label: 'Utilisateurs', icon: 'pi pi-fw pi-id-card', routerLink: ['/users'] },
                     { label: 'Input', icon: 'pi pi-fw pi-check-square', routerLink: ['/uikit/input'] },
                     { label: 'Float Label', icon: 'pi pi-fw pi-bookmark', routerLink: ['/uikit/floatlabel'] },
                     { label: 'Invalid State', icon: 'pi pi-fw pi-exclamation-circle', routerLink: ['/uikit/invalidstate'] },

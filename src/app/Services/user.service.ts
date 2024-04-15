@@ -17,15 +17,28 @@ export class UserService {
   getAllUsers(): Observable<User[]> {
     return this.http.get<User[]>(`${this.apiUrl}/users/read`) ;
   }
-  deleteUser(userId: number): Observable<any> {
+
+  deleteUser(userId: number | undefined): Observable<any> {
     //const url = `${this.apiUrl}/users/delete/${userId}`; // Utilisez l'URL appropriée pour supprimer l'utilisateur par son ID
     console.log(`${this.apiUrl}/users/delete/${userId}`)
     return this.http.delete(`${this.apiUrl}/users/delete/${userId}`);
   }
   saveUser(user: User): Observable<User> {
+   console.log("update");
     return this.http.put<User>(`${this.apiUrl}/users/${user.id}`, user);
   }
 
 
+  addAdmin(user: User) : Observable<User>{
+    console.log("create Admin");
+    return this.http.post<User>(`${this.apiUrl}/admins/add`, user);
 
+  }
+
+
+  AddEmployer(user: User) {
+    console.log("create Employer");
+    return this.http.post<User>(`${this.apiUrl}/employers/add`, user);
+
+  }
 }
