@@ -1,0 +1,212 @@
+import {Component, OnInit} from '@angular/core';
+import {ButtonModule} from "primeng/button";
+import {DialogModule} from "primeng/dialog";
+import {JsonPipe, NgClass, NgIf} from "@angular/common";
+import {PaginatorModule} from "primeng/paginator";
+import {PasswordModule} from "primeng/password";
+import {RadioButtonModule} from "primeng/radiobutton";
+import {MessageService, SharedModule} from "primeng/api";
+import {Table, TableModule} from "primeng/table";
+import {ToastModule} from "primeng/toast";
+import {ToolbarModule} from "primeng/toolbar";
+import {Product} from "../../Models/product";
+import {ProductService} from "../../Services/product.service";
+import {Puit} from "../../Models/puit";
+import {PuitService} from "../../Services/puit.service";
+
+@Component({
+  selector: 'app-puit',
+  standalone: true,
+  imports: [
+    ButtonModule,
+    DialogModule,
+    NgIf,
+    PaginatorModule,
+    PasswordModule,
+    RadioButtonModule,
+    SharedModule,
+    TableModule,
+    ToastModule,
+    ToolbarModule,
+    NgClass
+  ],
+  templateUrl: './puit.component.html',
+  styleUrl: './puit.component.css'
+
+})
+export class PuitComponent implements OnInit{
+  productDialog: boolean = false;
+
+  deleteProductDialog: boolean = false;
+
+  deleteProductsDialog: boolean = false;
+
+  products: Product[] = [];
+
+  product: Product = {};
+
+  selectedProducts: Product[] = [];
+
+  submitted: boolean = false;
+
+  cols: any[] = [];
+
+  statuses: any[] = [];
+
+  rowsPerPageOptions = [5, 10, 20];
+  // ======********============
+  puits: Puit[] = [];
+
+  puit: Puit={};
+
+  selectedPuits: Puit[] = [];
+
+  private isUpdateUser=false;
+
+  constructor(private productService: ProductService, private messageService: MessageService,private puitService :PuitService) { }
+
+  ngOnInit() {
+    // this.productService.getProducts().then(data => this.products = data);
+    this.puitService.getAllPuits().subscribe((v:  Puit[]) => {
+      this.puits=v;
+      console.log(new JsonPipe().transform("====================>>>>>>"+this.puits))
+
+    },error => {
+      console.log(error)})
+
+    this.cols = [
+      { field: 'product', header: 'Product' },
+      { field: 'price', header: 'Price' },
+      { field: 'category', header: 'Category' },
+      { field: 'rating', header: 'Reviews' },
+      { field: 'inventoryStatus', header: 'Status' }
+    ];
+
+    this.statuses = [
+      { label: 'INSTOCK', value: 'instock' },
+      { label: 'LOWSTOCK', value: 'lowstock' },
+      { label: 'OUTOFSTOCK', value: 'outofstock' }
+    ];
+  }
+
+  openNew() {
+    this.puit = {};
+    this.submitted = false;
+    this.productDialog = true;
+  }
+
+  deleteSelectedPuits() {
+
+    this.deleteProductsDialog = true;
+
+  }
+
+  editPuit(puit: Puit) {
+    this.isUpdateUser=true;
+    this.puit = { ...puit };
+    this.productDialog = true;
+  }
+
+  deletePuit(puit: Puit) {
+    this.deleteProductDialog = true;
+    this.puit = { ...puit };
+  }
+
+  confirmDeleteSelected() {
+    this.deleteProductsDialog = false;
+    console.log(this.selectedPuits.length)
+    this.selectedPuits.forEach(selectedPuit => {
+      this.puitService.deletePuit(selectedPuit.id).subscribe(
+        () => {
+          this.puits = this.puits.filter(puit =>puit.id !== selectedPuit.id);
+        },
+        (error) => {
+          console.error('Error deleting user:', error);
+        }
+      );
+    });
+
+    this.messageService.add({ severity: 'success', summary: 'Successful', detail: 'User Deleted', life: 3000 });
+    this.selectedPuits = [];
+  }
+
+  confirmDelete() {
+    this.deleteProductDialog = false;
+    console.log("this.puit.id", this.puit.id);
+    this.puits = this.puits.filter(val => val.id !== this.puit.id);
+    if (this.puit.id!= null) {
+      this.puitService.deletePuit(this.puit.id).subscribe(() => console.log("puit deleted"));
+    }
+    this.messageService.add({ severity: 'success', summary: 'Successful', detail: 'Puit Deleted', life: 3000 });
+    this.puit = {};
+  }
+
+  hideDialog() {
+    this.productDialog = false;
+    this.submitted = false;
+  }
+
+  // savepuit() {
+  //   this.submitted = true;
+  //
+  //   if (this.product.name?.trim()) {
+  //     if (this.product.id) {
+  //       // @ts-ignore
+  //       this.product.inventoryStatus = this.product.inventoryStatus.value ? this.product.inventoryStatus.value : this.product.inventoryStatus;
+  //       this.products[this.findIndexById(this.product.id)] = this.product;
+  //       this.messageService.add({ severity: 'success', summary: 'Successful', detail: 'Product Updated', life: 3000 });
+  //     } else {
+  //       this.product.id = this.createId();
+  //       this.product.code = this.createId();
+  //       this.product.image = 'product-placeholder.svg';
+  //       // @ts-ignore
+  //       this.product.inventoryStatus = this.product.inventoryStatus ? this.product.inventoryStatus.value : 'INSTOCK';
+  //       this.products.push(this.product);
+  //       this.messageService.add({ severity: 'success', summary: 'Successful', detail: 'Product Created', life: 3000 });
+  //     }
+  //
+  //     this.products = [...this.products];
+  //     this.productDialog = false;
+  //     this.product = {};
+  //   }
+  // }
+  savePuit() {
+    this.submitted = false;
+    this.productDialog=false
+    alert(new JsonPipe().transform(this.puit))
+    if(this.isUpdateUser==true) {
+      this.puitService.updatePuit(this.puit).subscribe(() => console.log("puit Updated"));
+      this.isUpdateUser=false;
+    }
+    else
+    {
+        this.puitService.addPuit(this.puit).subscribe(() => console.log("puit Added"));
+
+    }
+  }
+
+  findIndexById(id: string): number {
+    let index = -1;
+    for (let i = 0; i < this.products.length; i++) {
+      if (this.products[i].id === id) {
+        index = i;
+        break;
+      }
+    }
+
+    return index;
+  }
+
+  createId(): string {
+    let id = '';
+    const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+    for (let i = 0; i < 5; i++) {
+      id += chars.charAt(Math.floor(Math.random() * chars.length));
+    }
+    return id;
+  }
+
+  onGlobalFilter(table: Table, event: Event) {
+    table.filterGlobal((event.target as HTMLInputElement).value, 'contains');
+  }
+}
