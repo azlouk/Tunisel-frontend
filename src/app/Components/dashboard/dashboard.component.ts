@@ -63,7 +63,7 @@ export class DashboardComponent implements OnInit, OnDestroy  {
       labels: ['January', 'February', 'March', 'April', 'May', 'June', 'July'],
       datasets: [
         {
-          label: 'First Dataset',
+          label: 'Chimique',
           data: [65, 59, 80, 81, 56, 55, 40],
           fill: false,
           backgroundColor: documentStyle.getPropertyValue('--bluegray-700'),
@@ -71,7 +71,7 @@ export class DashboardComponent implements OnInit, OnDestroy  {
           tension: .4
         },
         {
-          label: 'Second Dataset',
+          label: 'Granulométrique',
           data: [28, 48, 40, 19, 86, 27, 90],
           fill: false,
           backgroundColor: documentStyle.getPropertyValue('--green-600'),
