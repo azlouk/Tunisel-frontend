@@ -16,20 +16,20 @@ export class AppMenuComponent implements OnInit {
         this.model = [
             {
 
-                label: 'Home',
+                label: 'Principale',
                 items: [
                     { label: 'Tableau de bord', icon: 'pi pi-fw pi-home', routerLink: ['/dash'] }
                 ]
             },
             {
-                label: 'UI Components',
+                label: 'Interfaces',
                 items: [
-                    { label: 'Form Layout', icon: 'pi pi-fw pi-id-card', routerLink: ['/uikit/formlayout'] },
-                  { label: 'Utilisateurs', icon: 'pi pi-fw pi-id-card', routerLink: ['/users'] },
-                    { label: 'Input', icon: 'pi pi-fw pi-check-square', routerLink: ['/uikit/input'] },
-                    { label: 'Float Label', icon: 'pi pi-fw pi-bookmark', routerLink: ['/uikit/floatlabel'] },
-                    { label: 'Invalid State', icon: 'pi pi-fw pi-exclamation-circle', routerLink: ['/uikit/invalidstate'] },
-                    { label: 'Button', icon: 'pi pi-fw pi-box', routerLink: ['/uikit/button'] },
+                    { label: 'Puits', icon: 'pi pi-fw pi-filter', routerLink: ['/uikit/formlayout'] },
+                  { label: 'Utilisateurs', icon: 'pi pi-fw pi-user', routerLink: ['/users'] },
+                    { label: 'Bassin', icon: 'pi pi-fw pi-check-square', routerLink: ['/bassins'] },
+                    { label: 'Stock', icon: 'pi pi-fw pi-flag', routerLink: ['/uikit/floatlabel'] },
+                    { label: 'Prélèvement', icon: 'pi pi-fw pi-check-circle', routerLink: ['/uikit/invalidstate'] },
+                    { label: 'Inventaire', icon: 'pi pi-fw pi-clipboard', routerLink: ['/uikit/button'] },
                     { label: 'Table', icon: 'pi pi-fw pi-table', routerLink: ['/uikit/table'] },
                     { label: 'List', icon: 'pi pi-fw pi-list', routerLink: ['/uikit/list'] },
                     { label: 'Tree', icon: 'pi pi-fw pi-share-alt', routerLink: ['/uikit/tree'] },

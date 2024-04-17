@@ -1,44 +1,32 @@
 import {Component, OnInit} from '@angular/core';
-import {Table, TableModule} from "primeng/table";
 import {Product} from "../../Models/product";
+import {User} from "../../Models/user";
 import {ProductService} from "../../Services/product.service";
 import {MessageService} from "primeng/api";
-import {DialogModule} from "primeng/dialog";
-import {PaginatorModule} from "primeng/paginator";
-import {RadioButtonModule} from "primeng/radiobutton";
-import {RatingModule} from "primeng/rating";
-import {CurrencyPipe, JsonPipe, NgClass, NgIf} from "@angular/common";
-import {FileUploadModule} from "primeng/fileupload";
-import {ToolbarModule} from "primeng/toolbar";
-import {ToastModule} from "primeng/toast";
 import {UserService} from "../../Services/user.service";
-import {User} from "../../Models/user";
-import {PasswordModule} from "primeng/password";
+import {JsonPipe} from "@angular/common";
 import {UserType} from "../../Enum/user-type";
-import {forkJoin, map, Observable} from "rxjs";
-
+import {Table, TableModule} from "primeng/table";
+import {Puit} from "../../Models/puit";
+import {BassinService} from "../../Services/bassin.service";
+import {Bassin} from "../../Models/bassin";
+import {ToastModule} from "primeng/toast";
+import {ToolbarModule} from "primeng/toolbar";
+import {DialogModule} from "primeng/dialog";
 
 @Component({
-  selector: 'app-stock',
+  selector: 'app-bassin',
   standalone: true,
   imports: [
-    DialogModule,
-    PaginatorModule,
-    RadioButtonModule,
-    RatingModule,
-    CurrencyPipe,
     TableModule,
-    FileUploadModule,
-    ToolbarModule,
     ToastModule,
-    NgClass,
-    NgIf,
-    PasswordModule
+    ToolbarModule,
+    DialogModule
   ],
-  templateUrl: './user.component.html',
-  styleUrl: './user.component.css'
+  templateUrl: './bassin.component.html',
+  styleUrl: './bassin.component.css'
 })
-export class UserComponent implements OnInit{
+export class BassinComponent implements OnInit {
   productDialog: boolean = false;
 
   deleteProductDialog: boolean = false;
@@ -59,16 +47,16 @@ export class UserComponent implements OnInit{
 
   rowsPerPageOptions = [5, 10, 20];
   // ======********============
-  users: User[] = [];
+  bassins: Bassin[] = [];
 
-  user: User = {};
+  bassin: Bassin = {};
 
-  selectedUsers: User[] = [];
+  selectedBassins: Bassin[] = [];
 
-  private isUpdateUser=false;
+  private isUpdateBassin=false;
 
 
-  constructor(private productService: ProductService, private messageService: MessageService,private userService :UserService) { }
+  constructor(private productService: ProductService, private messageService: MessageService,private bassinService :BassinService) { }
 
   ngOnInit() {
     // // this.productService.getProducts().then(data => this.products = data);
@@ -82,45 +70,45 @@ export class UserComponent implements OnInit{
     //     return admins.concat(employers);
     //   })
     // )
-    this.userService.getAllUsers()
-      .subscribe((users: User[]) => {
-      this.users = users;
+    this.bassinService.getAllBassins()
+      .subscribe((bassins: Bassin[]) => {
+        this.bassins = bassins;
 
-  }, error => {
-  console.log('Error fetching users:', error);
-});
-}
+      }, error => {
+        console.log('Error fetching users:', error);
+      });
+  }
 
   openNew() {
-    this.user = {};
+    this.bassin = {};
     this.submitted = false;
     this.productDialog = true;
   }
 
-  deleteSelectedUsers() {
+  deleteSelectedBassins() {
 
     this.deleteProductsDialog = true;
 
   }
 
-  editProduct(user: User) {
-    this.isUpdateUser=true;
-    this.user = { ...user };
+  editBassin(bassin: Bassin) {
+    // this.isUpdateUser=true;
+    this.bassin = { ...bassin };
     this.productDialog = true;
   }
 
-  deleteProduct(user: User) {
+  deleteBassin(bassin: Bassin) {
     this.deleteProductDialog = true;
-    this.user = { ...user };
+    this.bassin = { ...bassin };
   }
 
   confirmDeleteSelected() {
     this.deleteProductsDialog = false;
-console.log(this.selectedUsers.length)
-    this.selectedUsers.forEach(selectedUser => {
-      this.userService.deleteUser(selectedUser.id).subscribe(
+    console.log(this.selectedBassins.length)
+    this.selectedBassins.forEach(selectedUser => {
+      this.bassinService.deleteBassin(selectedUser.id).subscribe(
         () => {
-          this.users = this.users.filter(user => user.id !== selectedUser.id);
+          this.bassins = this.bassins.filter(bassin => bassin.id !== selectedUser.id);
         },
         (error) => {
           console.error('Error deleting user:', error);
@@ -129,18 +117,18 @@ console.log(this.selectedUsers.length)
     });
 
     this.messageService.add({ severity: 'success', summary: 'Successful', detail: 'User Deleted', life: 3000 });
-    this.selectedUsers = [];
+    this.selectedBassins = [];
   }
 
   confirmDelete() {
     this.deleteProductDialog = false;
-    console.log("this.user.id", this.user.id);
-    this.users = this.users.filter(val => val.id !== this.user.id);
-    if (this.user.id!= null) {
-      this.userService.deleteUser(this.user.id).subscribe(() => console.log("user deleted"));
+    console.log("this.bassin.id", this.bassin.id);
+    this.bassins = this.bassins.filter(val => val.id !== this.bassin.id);
+    if (this.bassin.id!= null) {
+      this.bassinService.deleteBassin(this.bassin.id).subscribe(() => console.log("bassin deleted"));
     }
-    this.messageService.add({ severity: 'success', summary: 'Successful', detail: 'Product Deleted', life: 3000 });
-    this.user = {};
+    this.messageService.add({ severity: 'success', summary: 'Successful', detail: 'Bassin Deleted', life: 3000 });
+    this.bassin = {};
   }
 
   hideDialog() {
@@ -175,24 +163,24 @@ console.log(this.selectedUsers.length)
   saveUser() {
     this.submitted = false;
     this.productDialog=false
-  alert(new JsonPipe().transform(this.user))
-    console.log("test user type ", this.user.type)
-    console.log("save user ", this.user.id)
-    if(this.isUpdateUser==true && this.user ) {
-      this.userService.saveUser(this.user).subscribe(
-        () => console.log('User Updated'),
-        (error) => console.error('Error updating user:', error)
-      );
+    alert(new JsonPipe().transform(this.bassin))
 
-          this.isUpdateUser=false;
+    if(this.isUpdateBassin==true) {
+
+      if (this.bassin) {
+
+        this.bassinService.updateBassin(this.bassin).subscribe(
+          () => console.log('Bassin Updated'),
+          (error) => console.error('Error updating user:', error)
+        );
+      }
+      this.isUpdateBassin=false;
     }
     else
     {
-      if (this.user.type && this.user.type === UserType.ADMIN){
-        this.userService.addAdmin(this.user).subscribe(() => console.log("Admin Added"));
-      }
-      if (this.user.type && this.user.type === UserType.EMPLOYEE){
-        this.userService.AddEmployer(this.user).subscribe(() => console.log("Employer Added"));
+
+      if (this.bassin ){
+        this.bassinService.addBassin(this.bassin).subscribe(() => console.log("Bassin Added"));
       }
 
     }
@@ -222,4 +210,5 @@ console.log(this.selectedUsers.length)
   onGlobalFilter(table: Table, event: Event) {
     table.filterGlobal((event.target as HTMLInputElement).value, 'contains');
   }
+
 }
