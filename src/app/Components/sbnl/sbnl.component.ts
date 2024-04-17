@@ -1,45 +1,39 @@
 import {Component, OnInit} from '@angular/core';
-import {Table, TableModule} from "primeng/table";
-import {Product} from "../../Models/product";
-import {ProductService} from "../../Services/product.service";
-import {MessageService} from "primeng/api";
+import {ButtonModule} from "primeng/button";
 import {DialogModule} from "primeng/dialog";
+import {JsonPipe, NgIf} from "@angular/common";
 import {PaginatorModule} from "primeng/paginator";
-import {RadioButtonModule} from "primeng/radiobutton";
-import {RatingModule} from "primeng/rating";
-import {CurrencyPipe, JsonPipe, NgClass, NgIf} from "@angular/common";
-import {FileUploadModule} from "primeng/fileupload";
-import {ToolbarModule} from "primeng/toolbar";
-import {ToastModule} from "primeng/toast";
-import {UserService} from "../../Services/user.service";
-import {User} from "../../Models/user";
 import {PasswordModule} from "primeng/password";
+import {RadioButtonModule} from "primeng/radiobutton";
+import {MessageService, SharedModule} from "primeng/api";
+import {Table, TableModule} from "primeng/table";
+import {ToastModule} from "primeng/toast";
+import {ToolbarModule} from "primeng/toolbar";
+import {Product} from "../../Models/product";
+import {User} from "../../Models/user";
+import {ProductService} from "../../Services/product.service";
+import {UserService} from "../../Services/user.service";
 import {UserType} from "../../Enum/user-type";
-import {InputTextModule} from "primeng/inputtext";
-
 
 @Component({
-  selector: 'app-stock',
+  selector: 'app-sbnl',
   standalone: true,
-  imports: [
-    DialogModule,
-    PaginatorModule,
-    RadioButtonModule,
-    RatingModule,
-    CurrencyPipe,
-    TableModule,
-    FileUploadModule,
-    ToolbarModule,
-    ToastModule,
-    NgClass,
-    NgIf,
-    PasswordModule,
-    InputTextModule
-  ],
-  templateUrl: './user.component.html',
-  styleUrl: './user.component.css'
+    imports: [
+        ButtonModule,
+        DialogModule,
+        NgIf,
+        PaginatorModule,
+        PasswordModule,
+        RadioButtonModule,
+        SharedModule,
+        TableModule,
+        ToastModule,
+        ToolbarModule
+    ],
+  templateUrl: './sbnl.component.html',
+  styleUrl: './sbnl.component.css'
 })
-export class UserComponent implements OnInit{
+export class SbnlComponent implements OnInit{
   productDialog: boolean = false;
 
   deleteProductDialog: boolean = false;
@@ -119,7 +113,7 @@ export class UserComponent implements OnInit{
 
   confirmDeleteSelected() {
     this.deleteProductsDialog = false;
-console.log(this.selectedUsers.length)
+    console.log(this.selectedUsers.length)
     this.selectedUsers.forEach(selectedUser => {
       this.userService.deleteUser(selectedUser.id).subscribe(
         () => {
@@ -151,11 +145,34 @@ console.log(this.selectedUsers.length)
     this.submitted = false;
   }
 
+  saveProduct() {
+    this.submitted = true;
 
+    if (this.product.name?.trim()) {
+      if (this.product.id) {
+        // @ts-ignore
+        this.product.inventoryStatus = this.product.inventoryStatus.value ? this.product.inventoryStatus.value : this.product.inventoryStatus;
+        this.products[this.findIndexById(this.product.id)] = this.product;
+        this.messageService.add({ severity: 'success', summary: 'Successful', detail: 'Product Updated', life: 3000 });
+      } else {
+        this.product.id = this.createId();
+        this.product.code = this.createId();
+        this.product.image = 'product-placeholder.svg';
+        // @ts-ignore
+        this.product.inventoryStatus = this.product.inventoryStatus ? this.product.inventoryStatus.value : 'INSTOCK';
+        this.products.push(this.product);
+        this.messageService.add({ severity: 'success', summary: 'Successful', detail: 'Product Created', life: 3000 });
+      }
+
+      this.products = [...this.products];
+      this.productDialog = false;
+      this.product = {};
+    }
+  }
   saveUser() {
     this.submitted = false;
     this.productDialog=false
-  alert(new JsonPipe().transform(this.user))
+    alert(new JsonPipe().transform(this.user))
     console.log(this.user.type)
     if(this.isUpdateUser==true) {
       this.userService.saveUser(this.user).subscribe(() => console.log("user Updated"));

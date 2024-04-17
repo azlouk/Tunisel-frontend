@@ -13,6 +13,7 @@ import {Product} from "../../Models/product";
 import {ProductService} from "../../Services/product.service";
 import {Puit} from "../../Models/puit";
 import {PuitService} from "../../Services/puit.service";
+import {InputTextModule} from "primeng/inputtext";
 
 @Component({
   selector: 'app-puit',
@@ -28,7 +29,8 @@ import {PuitService} from "../../Services/puit.service";
     TableModule,
     ToastModule,
     ToolbarModule,
-    NgClass
+    NgClass,
+    InputTextModule
   ],
   templateUrl: './puit.component.html',
   styleUrl: './puit.component.css'
@@ -82,11 +84,7 @@ export class PuitComponent implements OnInit{
       { field: 'inventoryStatus', header: 'Status' }
     ];
 
-    this.statuses = [
-      { label: 'INSTOCK', value: 'instock' },
-      { label: 'LOWSTOCK', value: 'lowstock' },
-      { label: 'OUTOFSTOCK', value: 'outofstock' }
-    ];
+
   }
 
   openNew() {
@@ -146,42 +144,27 @@ export class PuitComponent implements OnInit{
     this.submitted = false;
   }
 
-  // savepuit() {
-  //   this.submitted = true;
-  //
-  //   if (this.product.name?.trim()) {
-  //     if (this.product.id) {
-  //       // @ts-ignore
-  //       this.product.inventoryStatus = this.product.inventoryStatus.value ? this.product.inventoryStatus.value : this.product.inventoryStatus;
-  //       this.products[this.findIndexById(this.product.id)] = this.product;
-  //       this.messageService.add({ severity: 'success', summary: 'Successful', detail: 'Product Updated', life: 3000 });
-  //     } else {
-  //       this.product.id = this.createId();
-  //       this.product.code = this.createId();
-  //       this.product.image = 'product-placeholder.svg';
-  //       // @ts-ignore
-  //       this.product.inventoryStatus = this.product.inventoryStatus ? this.product.inventoryStatus.value : 'INSTOCK';
-  //       this.products.push(this.product);
-  //       this.messageService.add({ severity: 'success', summary: 'Successful', detail: 'Product Created', life: 3000 });
-  //     }
-  //
-  //     this.products = [...this.products];
-  //     this.productDialog = false;
-  //     this.product = {};
-  //   }
-  // }
   savePuit() {
     this.submitted = false;
     this.productDialog=false
     alert(new JsonPipe().transform(this.puit))
     if(this.isUpdateUser==true) {
-      this.puitService.updatePuit(this.puit).subscribe(() => console.log("puit Updated"));
+      this.puitService.updatePuit(this.puit).subscribe(() =>{
+        this.puitService.getAllPuits().subscribe((puits: Puit[]) => {
+          this.puits = puits;
+        });
+      });
+      console.log('Puit updated');
       this.isUpdateUser=false;
     }
     else
     {
-        this.puitService.addPuit(this.puit).subscribe(() => console.log("puit Added"));
-
+      this.puitService.addPuit(this.puit).subscribe(() => {
+        this.puitService.getAllPuits().subscribe((puits: Puit[]) => {
+          this.puits = puits;
+        });
+      });
+      console.log('Puit added');
     }
   }
 

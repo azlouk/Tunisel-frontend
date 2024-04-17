@@ -118,6 +118,7 @@
         </div>
         <div class="field">
           <label for="emplacement">Emplacement</label>
+<!--          <p-inputNumber  mode="decimal" inputId="withoutgrouping" [useGrouping]="false"> </p-inputNumber>-->
           <input type="text" pInputText id="emplacement"  [(ngModel)]="puit.emplacement" required autofocus [ngClass]="{'ng-invalid ng-dirty' : submitted && !puit.emplacement}"/>
           <small class="ng-dirty ng-invalid" *ngIf="submitted && !puit.emplacement">Telephone is required.</small>
         </div>
@@ -128,7 +129,7 @@
         </div>
         <div class="field">
           <label for="dateFermeture">Date Fermeture</label>
-          <input type="text" pInputText id="dateFermeture"  [(ngModel)]="puit.dateFermeture" required autofocus [ngClass]="{'ng-invalid ng-dirty' : submitted && !puit.dateFermeture}"/>
+          <input type="text" pInputText id="dateFermeture" class="border border-gray-300 shadow p-3 w-full rounded mb-" [(ngModel)]="puit.dateFermeture" required autofocus [ngClass]="{'ng-invalid ng-dirty' : submitted && !puit.dateFermeture}"/>
           <small class="ng-dirty ng-invalid" *ngIf="submitted && !puit.dateFermeture">Telephone is required.</small>
         </div>
 
