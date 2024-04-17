@@ -158,13 +158,15 @@ console.log(this.selectedUsers.length)
   alert(new JsonPipe().transform(this.user))
     console.log(this.user.type)
     if(this.isUpdateUser==true) {
+      console.log(new JsonPipe().transform(this.user) )
       this.userService.saveUser(this.user).subscribe(() => console.log("user Updated"));
       this.isUpdateUser=false;
     }
     else
     {
       if (this.user.type && this.user.type === UserType.ADMIN){
-        this.userService.addAdmin(this.user).subscribe(() => console.log("Admin Added"));
+        this.userService.addAdmin(this.user).subscribe(() => console.log("Admin Added")
+        );console.log(new JsonPipe().transform(this.user) )
       }
       if(this.user.type=="Employer") {
         this.userService.AddEmployer(this.user).subscribe(() => console.log("Employer Added"));

@@ -14,6 +14,7 @@ import {ProductService} from "../../Services/product.service";
 import {Puit} from "../../Models/puit";
 import {PuitService} from "../../Services/puit.service";
 import {InputTextModule} from "primeng/inputtext";
+import {CalendarModule} from "primeng/calendar";
 
 @Component({
   selector: 'app-puit',
@@ -30,7 +31,8 @@ import {InputTextModule} from "primeng/inputtext";
     ToastModule,
     ToolbarModule,
     NgClass,
-    InputTextModule
+    InputTextModule,
+    CalendarModule
   ],
   templateUrl: './puit.component.html',
   styleUrl: './puit.component.css'
@@ -68,7 +70,6 @@ export class PuitComponent implements OnInit{
   constructor(private productService: ProductService, private messageService: MessageService,private puitService :PuitService) { }
 
   ngOnInit() {
-    // this.productService.getProducts().then(data => this.products = data);
     this.puitService.getAllPuits().subscribe((v:  Puit[]) => {
       this.puits=v;
       console.log(new JsonPipe().transform("====================>>>>>>"+this.puits))
@@ -77,11 +78,14 @@ export class PuitComponent implements OnInit{
       console.log(error)})
 
     this.cols = [
-      { field: 'product', header: 'Product' },
-      { field: 'price', header: 'Price' },
-      { field: 'category', header: 'Category' },
-      { field: 'rating', header: 'Reviews' },
-      { field: 'inventoryStatus', header: 'Status' }
+      { field: 'id', header: 'id' },
+      { field: 'reference', header: 'reference' },
+      { field: 'description', header: 'description' },
+      { field: 'dateCreation', header: 'dateCreation' },
+      { field: 'nom', header: 'nom' },
+      { field: 'emplacement', header: 'emplacement' },
+      { field: 'etat', header: 'etat' },
+      { field: 'dateFermeture', header: 'dateFermeture' },
     ];
 
 
@@ -147,7 +151,7 @@ export class PuitComponent implements OnInit{
   savePuit() {
     this.submitted = false;
     this.productDialog=false
-    alert(new JsonPipe().transform(this.puit))
+    // alert(new JsonPipe().transform(this.puit))
     if(this.isUpdateUser==true) {
       this.puitService.updatePuit(this.puit).subscribe(() =>{
         this.puitService.getAllPuits().subscribe((puits: Puit[]) => {

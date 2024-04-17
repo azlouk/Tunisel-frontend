@@ -13,7 +13,7 @@
 
       </p-toolbar>
 
-      <p-table #dt [value]="puits" [columns]="cols"  responsiveLayout="scroll" [rows]="10" [globalFilterFields]="['name','country.name','representative.name','status']" [paginator]="true" [rowsPerPageOptions]="[10,20,30]" [showCurrentPageReport]="true" currentPageReportTemplate="Affichage du  {first} au  {last} des  {totalRecords} entrées" [(selection)]="selectedPuits" selectionMode="multiple" [rowHover]="true" dataKey="id">
+      <p-table #dt [value]="puits" [columns]="cols"  responsiveLayout="scroll" [rows]="10" [globalFilterFields]="['id','reference','description','dateCreation','nom','emplacement','etat','dateFermeture']" [paginator]="true" [rowsPerPageOptions]="[10,20,30]" [showCurrentPageReport]="true" currentPageReportTemplate="Affichage du  {first} au  {last} des  {totalRecords} entrées" [(selection)]="selectedPuits" selectionMode="multiple" [rowHover]="true" dataKey="id">
         <ng-template pTemplate="caption">
           <div class="flex flex-column md:flex-row md:justify-content-between md:align-items-center">
             <h5 class="m-0">Gestion des Puits</h5>
@@ -31,14 +31,14 @@
             <th style="width: 3rem">
               <p-tableHeaderCheckbox></p-tableHeaderCheckbox>
             </th>
-            <th pSortableColumn="code">Id <p-sortIcon field="code"></p-sortIcon></th>
-            <th pSortableColumn="name">Reference <p-sortIcon field="name"></p-sortIcon></th>
-            <th pSortableColumn="rating">Description <p-sortIcon field="rating"></p-sortIcon></th>
-            <th pSortableColumn="category">Date Creation<p-sortIcon field="category"></p-sortIcon></th>
-            <th pSortableColumn="price">Nom <p-sortIcon field="price"></p-sortIcon></th>
-            <th pSortableColumn="price">Emplacement <p-sortIcon field="price"></p-sortIcon></th>
-            <th pSortableColumn="price">Etat <p-sortIcon field="price"></p-sortIcon></th>
-            <th pSortableColumn="price">Date Fermeture <p-sortIcon field="price"></p-sortIcon></th>
+            <th pSortableColumn="id">Id <p-sortIcon field="id"></p-sortIcon></th>
+            <th pSortableColumn="reference">Reference <p-sortIcon field="reference"></p-sortIcon></th>
+            <th pSortableColumn="description">Description <p-sortIcon field="description"></p-sortIcon></th>
+            <th pSortableColumn="dateCreation">Date Creation<p-sortIcon field="dateCreation"></p-sortIcon></th>
+            <th pSortableColumn="nom">Nom <p-sortIcon field="nom"></p-sortIcon></th>
+            <th pSortableColumn="emplacement">Emplacement <p-sortIcon field="emplacement"></p-sortIcon></th>
+            <th pSortableColumn="etat">Etat <p-sortIcon field="etat"></p-sortIcon></th>
+            <th pSortableColumn="dateFermeture">Date Fermeture <p-sortIcon field="dateFermeture"></p-sortIcon></th>
             <th></th>
           </tr>
         </ng-template>
@@ -83,7 +83,7 @@
               {{puit.dateFermeture}}
             </td>
             <td>
-              <div class="flex">
+              <div class="flex ">
                 <button pButton pRipple icon="pi pi-pencil" class="p-button-rounded p-button-success mr-2" (click)="editPuit(puit)"></button>
                 <button pButton pRipple icon="pi pi-trash" class="p-button-rounded p-button-warning" (click)="deletePuit(puit)"></button>
               </div>
@@ -108,7 +108,8 @@
 
         <div class="field">
           <label for="dateCreation">Date Creation</label>
-          <input type="text" pInputText id="dateCreation"  [(ngModel)]="puit.dateCreation" required autofocus [ngClass]="{'ng-invalid ng-dirty' : submitted && !puit.dateCreation}"/>
+          <p-calendar dateFormat="yy-mm-dd" id="dateCreation" [(ngModel)]="puit.dateCreation"  [ngClass]="{'ng-invalid ng-dirty' : submitted && !puit.dateCreation}" [showIcon]="true"></p-calendar>
+<!--          <input type="text" pInputText id="dateCreation"  [(ngModel)]="puit.dateCreation" required autofocus [ngClass]="{'ng-invalid ng-dirty' : submitted && !puit.dateCreation}"/>-->
           <small class="ng-dirty ng-invalid" *ngIf="submitted && !puit.dateCreation">poste is required.</small>
         </div>
         <div class="field">
@@ -117,8 +118,8 @@
           <small class="ng-dirty ng-invalid" *ngIf="submitted && !puit.nom">Telephone is required.</small>
         </div>
         <div class="field">
+
           <label for="emplacement">Emplacement</label>
-<!--          <p-inputNumber  mode="decimal" inputId="withoutgrouping" [useGrouping]="false"> </p-inputNumber>-->
           <input type="text" pInputText id="emplacement"  [(ngModel)]="puit.emplacement" required autofocus [ngClass]="{'ng-invalid ng-dirty' : submitted && !puit.emplacement}"/>
           <small class="ng-dirty ng-invalid" *ngIf="submitted && !puit.emplacement">Telephone is required.</small>
         </div>
@@ -129,7 +130,7 @@
         </div>
         <div class="field">
           <label for="dateFermeture">Date Fermeture</label>
-          <input type="text" pInputText id="dateFermeture" class="border border-gray-300 shadow p-3 w-full rounded mb-" [(ngModel)]="puit.dateFermeture" required autofocus [ngClass]="{'ng-invalid ng-dirty' : submitted && !puit.dateFermeture}"/>
+          <p-calendar dateFormat="yy-mm-dd" id="dateFermeture" class="border border-gray-300 shadow p-3 w-full rounded mb-" [(ngModel)]="puit.dateFermeture"  [ngClass]="{'ng-invalid ng-dirty' : submitted && !puit.dateFermeture}" [showIcon]="true"></p-calendar>
           <small class="ng-dirty ng-invalid" *ngIf="submitted && !puit.dateFermeture">Telephone is required.</small>
         </div>
 

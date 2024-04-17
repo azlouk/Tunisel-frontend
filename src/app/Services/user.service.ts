@@ -26,7 +26,7 @@ export class UserService {
   }
   saveUser(user: User): Observable<User> {
    console.log("update");
-    return this.http.put<User>(`${this.apiUrl}/users/${user.id}`, user);
+    return this.http.put<User>(`${this.apiUrl}/admins/${user.id}`, user);
   }
 
 

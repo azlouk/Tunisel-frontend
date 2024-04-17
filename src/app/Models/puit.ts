@@ -4,11 +4,11 @@ export interface Puit{
   id?: number;
   reference?: string;
   description?: string;
-  dateCreation?: string;
+  dateCreation?: Date;
   nom?: string;
- emplacement?: string;
+  emplacement?: string;
   etat?: string;
-  dateFermeture?: string;
+  dateFermeture?: Date;
   bassins?: Bassin[];
   analysesChimiques?: AnalysesChimique[];
 
