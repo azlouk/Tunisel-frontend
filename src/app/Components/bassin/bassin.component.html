@@ -1,180 +1,170 @@
-<!--<div class="grid">-->
-<!--  <div class="col-12">-->
-<!--    <div class="card px-6 py-6">-->
-<!--      <p-toast></p-toast>-->
-<!--      <p-toolbar styleClass="mb-4">-->
-
-<!--        <ng-template pTemplate="left">-->
-<!--          <div class="my-2">-->
-<!--            <button pButton pRipple label="Ajouter" icon="pi pi-plus" class="p-button-success mr-2" (click)="openNew()"></button>-->
-<!--            <button pButton pRipple label="Supprimer" icon="pi pi-trash" class="p-button-danger" (click)="deleteSelectedBassins()" [disabled]="!selectedBassins || !selectedBassins.length"></button>-->
-<!--          </div>-->
-<!--        </ng-template>-->
-
-
-<!--      </p-toolbar>-->
-
-<!--      <p-table #dt [value]="bassins" [columns]="cols"  responsiveLayout="scroll" [rows]="10" [globalFilterFields]="['name','country.name','representative.name','status']" [paginator]="true" [rowsPerPageOptions]="[10,20,30]" [showCurrentPageReport]="true" currentPageReportTemplate="Affichage du  {first} au  {last} des  {totalRecords} entrées" [(selection)]="selectedBassins" selectionMode="multiple" [rowHover]="true" dataKey="id">-->
-<!--        <ng-template pTemplate="caption">-->
-<!--          <div class="flex flex-column md:flex-row md:justify-content-between md:align-items-center">-->
-<!--            <h5 class="m-0">Gestion des Bassins</h5>-->
-<!--            <span class="block mt-2 md:mt-0 p-input-icon-left">-->
-<!--                            <i class="pi pi-search"></i>-->
-<!--                            <input  type="text" pInputText (input)="onGlobalFilter(dt, $event)" placeholder="Rechercher..."  class="w-full sm:w-auto"/>-->
-<!--                        </span>-->
+<div class="grid">
+  <div class="col-12">
+    <div class="card px-6 py-6">
+      <p-toast></p-toast>
+      <p-toolbar styleClass="mb-4">
+        <ng-template pTemplate="left">
+          <div class="my-2">
+            <button pButton pRipple label="Ajouter" icon="pi pi-plus" class="p-button-success mr-2" (click)="openNew()"></button>
+            <button pButton pRipple label="Supprimer" icon="pi pi-trash" class="p-button-danger" (click)="deleteSelectedBassins()" [disabled]="!selectedBassins || !selectedBassins.length"></button>
+          </div>
+        </ng-template>
 
 
+      </p-toolbar>
 
-<!--          </div>-->
-<!--        </ng-template>-->
-<!--        <ng-template pTemplate="header">-->
-<!--          <tr>-->
-<!--            <th style="width: 3rem">-->
-<!--              <p-tableHeaderCheckbox></p-tableHeaderCheckbox>-->
-<!--            </th>-->
-<!--            <th pSortableColumn="code">Id <p-sortIcon field="code"></p-sortIcon></th>-->
-<!--            <th pSortableColumn="name">Reference <p-sortIcon field="name"></p-sortIcon></th>-->
-<!--            <th pSortableColumn="rating">Description <p-sortIcon field="rating"></p-sortIcon></th>-->
-<!--            <th pSortableColumn="category">DateCreation <p-sortIcon field="category"></p-sortIcon></th>-->
-<!--            <th pSortableColumn="price">Nom <p-sortIcon field="price"></p-sortIcon></th>-->
-<!--            <th pSortableColumn="price">Emplacement <p-sortIcon field="price"></p-sortIcon></th>-->
-<!--            <th pSortableColumn="price">Etat <p-sortIcon field="price"></p-sortIcon></th>-->
-<!--            <th pSortableColumn="price">Surface <p-sortIcon field="price"></p-sortIcon></th>-->
-
-<!--            &lt;!&ndash;            <th pSortableColumn="inventoryStatus">Status <p-sortIcon field="inventoryStatus"></p-sortIcon></th>&ndash;&gt;-->
-<!--            <th></th>-->
-<!--          </tr>-->
-<!--        </ng-template>-->
-<!--        <ng-template pTemplate="body" let-bassin >-->
-<!--          <tr >-->
-<!--            <td>-->
-<!--              <p-tableCheckbox [value]="bassin"></p-tableCheckbox>-->
-<!--            </td>-->
-<!--            <td style="width:14%; min-width:10rem;"><span class="p-column-title">Id</span>-->
-<!--              {{bassin.id}}-->
-<!--            </td>-->
-<!--            <td style="width:14%; min-width:10rem;">-->
-<!--              <span class="p-column-title">Reference</span>-->
-<!--              {{bassin.reference}}-->
-<!--            </td>-->
-<!--            <td style="width:14%; min-width:10rem;">-->
-<!--              <span class="p-column-title">Description</span>-->
-<!--              {{bassin.description}}-->
+      <p-table #dt [value]="bassins" [columns]="cols"  responsiveLayout="scroll" [rows]="10" [globalFilterFields]="['surface','etat','id','emplacement','nom','dateCreation','reference','description']" [paginator]="true" [rowsPerPageOptions]="[10,20,30]" [showCurrentPageReport]="true" currentPageReportTemplate="Affichage du  {first} au  {last} des  {totalRecords} entrées" [(selection)]="selectedBassins" selectionMode="multiple" [rowHover]="true" dataKey="id">
+        <ng-template pTemplate="caption">
+          <div class="flex flex-column md:flex-row md:justify-content-between md:align-items-center">
+            <h5 class="m-0">Gestion des Bassins</h5>
+            <span class="block mt-2 md:mt-0 p-input-icon-left">
+                            <i class="pi pi-search"></i>
+                            <input  type="text" pInputText (input)="onGlobalFilter(dt, $event)" placeholder="Rechercher..."  class="w-full sm:w-auto"/>
+                        </span>
 
 
 
-<!--              <span class="p-column-title">DateCreation</span>-->
-<!--              {{bassin.dateCreation}}-->
-<!--            </td>-->
-<!--            <td style="width:14%; min-width:8rem;">-->
-<!--              <span class="p-column-title">Nom</span>-->
-<!--              {{bassin.nom}}-->
-<!--            </td>-->
-
-<!--            <td style="width:14%; min-width:8rem;">-->
-<!--              <span class="p-column-title">Emplacement</span>-->
-<!--              {{bassin.emplacement}}-->
-<!--            </td>-->
-<!--            <td style="width:14%; min-width:8rem;">-->
-<!--              <span class="p-column-title">Etat</span>-->
-<!--              {{bassin.etat}}-->
-<!--            </td>-->
-<!--            <td style="width:14%; min-width:8rem;">-->
-<!--              <span class="p-column-title">Surface</span>-->
-<!--              {{bassin.surface}}-->
-<!--            </td>-->
-
-
-
-<!--            &lt;!&ndash;            <td style="width:14%; min-width: 10rem;"><span class="p-column-title">Reviews</span>&ndash;&gt;-->
-<!--            &lt;!&ndash;              <p-rating [ngModel]="product.rating" [readonly]="true" [cancel]="false"></p-rating>&ndash;&gt;-->
-<!--            &lt;!&ndash;            </td>&ndash;&gt;-->
-<!--            &lt;!&ndash;            <td style="width:14%; min-width: 10rem;"><span class="p-column-title">Status</span>&ndash;&gt;-->
-<!--            &lt;!&ndash;              <span [class]="'product-badge status-' + (product.inventoryStatus ? product.inventoryStatus.toLowerCase() : '')">{{product.inventoryStatus}}</span>&ndash;&gt;-->
-<!--            &lt;!&ndash;            </td>&ndash;&gt;-->
-<!--            <td>-->
-<!--              <div class="flex">-->
-<!--                <button pButton pRipple icon="pi pi-pencil" class="p-button-rounded p-button-success mr-2" (click)="editBassin(bassin)"></button>-->
-<!--                <button pButton pRipple icon="pi pi-trash" class="p-button-rounded p-button-warning" (click)="deleteBassin(bassin)"></button>-->
-<!--              </div>-->
-<!--            </td>-->
-<!--          </tr>-->
-<!--        </ng-template>-->
-<!--      </p-table>-->
-<!--    </div>-->
-
-<!--    <p-dialog [(visible)]="productDialog" [style]="{width: '450px'}" header="Product Details" [modal]="true" class="p-fluid">-->
-<!--      <ng-template pTemplate="content">-->
-<!--        <img [src]="'assets/demo/images/product/' + product.image" [alt]="product.image" width="150" class="mt-0 mx-auto mb-5 block shadow-2" *ngIf="product.image">-->
-<!--        <div class="field">-->
-<!--          <label for="id">Id</label>-->
-<!--          <input type="text" pInputText id="id"  [(ngModel)]="bassin.id" required autofocus [ngClass]="{'ng-invalid ng-dirty' : submitted && !bassin.id}"/>-->
-<!--          <small class="ng-dirty ng-invalid" *ngIf="submitted && !bassin.id">Name is required.</small>-->
-<!--        </div>-->
-<!--        <div class="field">-->
-<!--          <label for="reference">Reference</label>-->
-<!--          <input type="text" pInputText id="reference"  [(ngModel)]="bassin.reference" required autofocus [ngClass]="{'ng-invalid ng-dirty' : submitted && !bassin.reference}"/>-->
-<!--          <small class="ng-dirty ng-invalid" *ngIf="submitted && !bassin.reference">Pseudo is required.</small>-->
-<!--        </div>-->
+          </div>
+        </ng-template>
+        <ng-template pTemplate="header">
+          <tr>
+            <th style="width: 3rem">
+              <p-tableHeaderCheckbox></p-tableHeaderCheckbox>
+            </th>
+            <th pSortableColumn="id">Id <p-sortIcon field="id"></p-sortIcon></th>
+            <th pSortableColumn="reference">Reference <p-sortIcon field="reference"></p-sortIcon></th>
+            <th pSortableColumn="description">Description <p-sortIcon field="description"></p-sortIcon></th>
+            <th pSortableColumn="dateCreation">Date Creation<p-sortIcon field="dateCreation"></p-sortIcon></th>
+            <th pSortableColumn="nom">Nom <p-sortIcon field="nom"></p-sortIcon></th>
+            <th pSortableColumn="emplacement">Emplacement <p-sortIcon field="emplacement"></p-sortIcon></th>
+            <th pSortableColumn="etat">Etat <p-sortIcon field="etat"></p-sortIcon></th>
+            <th pSortableColumn="surface">Surface <p-sortIcon field="surface"></p-sortIcon></th>
+            <th></th>
+          </tr>
+        </ng-template>
+        <ng-template pTemplate="body" let-bassin >
+          <tr >
+            <td>
+              <p-tableCheckbox [value]="bassin"></p-tableCheckbox>
+            </td>
+            <td style="width:14%; min-width:10rem;"><span class="p-column-title">Id</span>
+              {{bassin.id}}
+            </td>
+            <td style="width:14%; min-width:10rem;">
+              <span class="p-column-title">Reference</span>
+              {{bassin.reference}}
+            </td>
+            <td style="width:14%; min-width:10rem;">
+              <span class="p-column-title">Description</span>
+              {{bassin.description}}
 
 
+            </td>
 
 
-<!--        <div class="field">-->
-<!--          <label for="description">description</label>-->
-<!--          <input type="text" pInputText id="description"  [(ngModel)]="bassin.description" required autofocus [ngClass]="{'ng-invalid ng-dirty' : submitted && !bassin.description}"/>-->
-<!--          <small class="ng-dirty ng-invalid" *ngIf="submitted && !bassin.description">poste is required.</small>-->
-<!--        </div>-->
-<!--        <div class="field">-->
-<!--          <label for="dateCreation">dateCreation</label>-->
-<!--          <input type="text" pInputText id="dateCreation"  [(ngModel)]="bassin.dateCreation" required autofocus [ngClass]="{'ng-invalid ng-dirty' : submitted && !bassin.dateCreation}"/>-->
-<!--          <small class="ng-dirty ng-invalid" *ngIf="submitted && !bassin.dateCreation">Telephone is required.</small>-->
-<!--        </div>-->
-<!--        <div class="field">-->
-<!--          <label for="nom">Nom</label>-->
-<!--          <input type="text" pInputText id="nom"  [(ngModel)]="bassin.nom" required autofocus [ngClass]="{'ng-invalid ng-dirty' : submitted && !bassin.nom}"/>-->
-<!--          <small class="ng-dirty ng-invalid" *ngIf="submitted && !bassin.nom">nom is required.</small>-->
-<!--        </div>-->
-<!--        <div class="field">-->
-<!--         </div>-->
-<!--      </ng-template>-->
+            <td style="width:14%; min-width:10rem;">
+              <span class="p-column-title">Date Creation</span>
+              {{bassin.dateCreation}}
+            </td>
+            <td style="width:14%; min-width:8rem;">
+              <span class="p-column-title">Nom</span>
+              {{bassin.nom}}
+            </td>
+            <td style="width:14%; min-width:8rem;">
+              <span class="p-column-title">Emplacement</span>
+              {{bassin.emplacement}}
+            </td>
+            <td style="width:14%; min-width:8rem;">
+              <span class="p-column-title">Etat</span>
+              {{bassin.etat}}
+            </td>
+            <td style="width:14%; min-width:8rem;">
+              <span class="p-column-title">Surface</span>
+              {{bassin.surface}}
+            </td>
+            <td>
+              <div class="flex">
+                <button pButton pRipple icon="pi pi-pencil" class="p-button-rounded p-button-success mr-2" (click)="editBassin(bassin)"></button>
+                <button pButton pRipple icon="pi pi-trash" class="p-button-rounded p-button-warning" (click)="deleteBassin(bassin)"></button>
+              </div>
+            </td>
+          </tr>
+        </ng-template>
+      </p-table>
+    </div>
 
-<!--      <div class="flex flex-wrap gap-3">-->
-<!--        <div class="flex align-items-center">-->
+    <p-dialog [(visible)]="productDialog" [style]="{width: '450px'}" header="Product Details" [modal]="true" class="p-fluid">
+      <ng-template pTemplate="content">
+        <div class="field">
+          <label for="name">Reference</label>
+          <input type="text" pInputText id="name"  [(ngModel)]="bassin.reference" required autofocus [ngClass]="{'ng-invalid ng-dirty' : submitted && !bassin.reference}"/>
+          <small class="ng-dirty ng-invalid" *ngIf="submitted && !bassin.reference">Name is required.</small>
+        </div>
+        <div class="field">
+          <label for="Description">Description</label>
+          <input type="text" pInputText id="Description"  [(ngModel)]="bassin.description" required autofocus [ngClass]="{'ng-invalid ng-dirty' : submitted && !bassin.description}"/>
+          <small class="ng-dirty ng-invalid" *ngIf="submitted && !bassin.description">Pseudo is required.</small>
+        </div>
 
-<!--        </div>-->
+        <div class="field">
+          <label for="dateCreation">Date Creation</label>
+          <p-calendar id="dateCreation" dateFormat="yy-mm-dd" [(ngModel)]="bassin.dateCreation"  [ngClass]="{'ng-invalid ng-dirty' : submitted && !bassin.dateCreation}" [showIcon]="true"></p-calendar>
+          <small class="ng-dirty ng-invalid" *ngIf="submitted && !bassin.dateCreation">poste is required.</small>
+        </div>
+        <div class="field">
+          <label for="nom">Nom</label>
+          <input type="text" pInputText id="nom"  [(ngModel)]="bassin.nom" required autofocus [ngClass]="{'ng-invalid ng-dirty' : submitted && !bassin.nom}"/>
+          <small class="ng-dirty ng-invalid" *ngIf="submitted && !bassin.nom">Telephone is required.</small>
+        </div>
+        <div class="field">
+          <label for="emplacement">Emplacement</label>
+          <!--          <p-inputNumber  mode="decimal" inputId="withoutgrouping" [useGrouping]="false"> </p-inputNumber>-->
+          <input type="text" pInputText id="emplacement"  [(ngModel)]="bassin.emplacement" required autofocus [ngClass]="{'ng-invalid ng-dirty' : submitted && !bassin.emplacement}"/>
+          <small class="ng-dirty ng-invalid" *ngIf="submitted && !bassin.emplacement">Telephone is required.</small>
+        </div>
+        <div class="field">
+          <label for="etat">Etat</label>
+          <input type="text" pInputText id="etat"  [(ngModel)]="bassin.etat" required autofocus [ngClass]="{'ng-invalid ng-dirty' : submitted && !bassin.etat}"/>
+          <small class="ng-dirty ng-invalid" *ngIf="submitted && !bassin.etat">Telephone is required.</small>
+        </div>
+        <div class="field">
+          <label for="dateFermeture">Surface</label>
+          <input type="text" pInputText id="dateFermeture" class="border border-gray-300 shadow p-3 w-full rounded mb-" [(ngModel)]="bassin.surface" required autofocus [ngClass]="{'ng-invalid ng-dirty' : submitted && !bassin.surface}"/>
+          <small class="ng-dirty ng-invalid" *ngIf="submitted && !bassin.surface">Telephone is required.</small>
+        </div>
 
-<!--        <div class="flex align-items-center">-->
+      </ng-template>
 
-<!--        </div>-->
-<!--      </div>-->
-<!--      <ng-template pTemplate="footer">-->
-<!--        <button pButton pRipple label="Cancel" icon="pi pi-times" class="p-button-text" (click)="hideDialog()"></button>-->
-<!--        <button pButton pRipple label="Save" icon="pi pi-check" class="p-button-text" (click)="saveUser()"></button>-->
-<!--      </ng-template>-->
-<!--    </p-dialog>-->
 
-<!--    <p-dialog [(visible)]="deleteProductDialog" header="Confirm" [modal]="true" [style]="{width:'450px'}">-->
-<!--      <div class="flex align-items-center justify-content-center">-->
-<!--        <i class="pi pi-exclamation-triangle mr-3" style="font-size: 2rem"></i>-->
-<!--        <span *ngIf="product">Are you sure you want to delete <b>{{product.name}}</b>?</span>-->
-<!--      </div>-->
-<!--      <ng-template pTemplate="footer">-->
-<!--        <button pButton pRipple icon="pi pi-times" class="p-button-text" label="No" (click)="deleteProductDialog = false"></button>-->
-<!--        <button pButton pRipple icon="pi pi-check" class="p-button-text" label="Yes" (click)="confirmDelete()"></button>-->
-<!--      </ng-template>-->
-<!--    </p-dialog>-->
 
-<!--    <p-dialog [(visible)]="deleteProductsDialog" header="Confirm" [modal]="true" [style]="{width:'450px'}">-->
-<!--      <div class="flex align-items-center justify-content-center">-->
-<!--        <i class="pi pi-exclamation-triangle mr-3" style="font-size: 2rem"></i>-->
-<!--        <span>Are you sure you want to delete selected products?</span>-->
-<!--      </div>-->
-<!--      <ng-template pTemplate="footer">-->
-<!--        <button pButton pRipple icon="pi pi-times" class="p-button-text" label="No" (click)="deleteProductsDialog = false"></button>-->
-<!--        <button pButton pRipple icon="pi pi-check" class="p-button-text" label="Yes" (click)="confirmDeleteSelected()"></button>-->
-<!--      </ng-template>-->
-<!--    </p-dialog>-->
-<!--  </div>-->
-<!--</div>-->
+
+      <ng-template pTemplate="footer">
+        <button pButton pRipple label="Cancel" icon="pi pi-times" class="p-button-text" (click)="hideDialog()"></button>
+        <button pButton pRipple label="Save" icon="pi pi-check" class="p-button-text" (click)="saveBassin()"></button>
+      </ng-template>
+    </p-dialog>
+
+    <p-dialog [(visible)]="deleteProductDialog" header="Confirm" [modal]="true" [style]="{width:'450px'}">
+      <div class="flex align-items-center justify-content-center">
+        <i class="pi pi-exclamation-triangle mr-3" style="font-size: 2rem"></i>
+        <span *ngIf="product">Are you sure you want to delete <b>{{product.name}}</b>?</span>
+      </div>
+      <ng-template pTemplate="footer">
+        <button pButton pRipple icon="pi pi-times" class="p-button-text" label="No" (click)="deleteProductDialog = false"></button>
+        <button pButton pRipple icon="pi pi-check" class="p-button-text" label="Yes" (click)="confirmDelete()"></button>
+      </ng-template>
+    </p-dialog>
+
+    <p-dialog [(visible)]="deleteProductsDialog" header="Confirm" [modal]="true" [style]="{width:'450px'}">
+      <div class="flex align-items-center justify-content-center">
+        <i class="pi pi-exclamation-triangle mr-3" style="font-size: 2rem"></i>
+        <span>Are you sure you want to delete selected products?</span>
+      </div>
+      <ng-template pTemplate="footer">
+        <button pButton pRipple icon="pi pi-times" class="p-button-text" label="No" (click)="deleteProductsDialog = false"></button>
+        <button pButton pRipple icon="pi pi-check" class="p-button-text" label="Yes" (click)="confirmDeleteSelected()"></button>
+      </ng-template>
+    </p-dialog>
+  </div>
+</div>
 

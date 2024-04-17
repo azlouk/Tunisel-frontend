@@ -2,7 +2,7 @@ import {Component, OnInit} from '@angular/core';
 import {Table, TableModule} from "primeng/table";
 import {Product} from "../../Models/product";
 import {ProductService} from "../../Services/product.service";
-import {MessageService} from "primeng/api";
+import {MessageService, SharedModule} from "primeng/api";
 import {DialogModule} from "primeng/dialog";
 import {PaginatorModule} from "primeng/paginator";
 import {RadioButtonModule} from "primeng/radiobutton";
@@ -16,24 +16,42 @@ import {User} from "../../Models/user";
 import {PasswordModule} from "primeng/password";
 import {UserType} from "../../Enum/user-type";
 import {forkJoin, map, Observable} from "rxjs";
+import {ButtonModule} from "primeng/button";
+import {FormsModule} from "@angular/forms";
+import {InputTextModule} from "primeng/inputtext";
+import {InputTextareaModule} from "primeng/inputtextarea";
 
 
 @Component({
   selector: 'app-stock',
   standalone: true,
   imports: [
-    DialogModule,
-    PaginatorModule,
-    RadioButtonModule,
+
+
+
     RatingModule,
     CurrencyPipe,
-    TableModule,
+
     FileUploadModule,
-    ToolbarModule,
+
+
+
+    PasswordModule,
+    TableModule,
+    ButtonModule,
+    PaginatorModule,
+
+    RadioButtonModule,
+    SharedModule,
+
     ToastModule,
+    ToolbarModule,
+    DialogModule,
     NgClass,
+    FormsModule,
     NgIf,
-    PasswordModule
+    InputTextModule,
+    InputTextareaModule
   ],
   templateUrl: './user.component.html',
   styleUrl: './user.component.css'

@@ -2,9 +2,9 @@ import {Component, OnInit} from '@angular/core';
 import {Product} from "../../Models/product";
 import {User} from "../../Models/user";
 import {ProductService} from "../../Services/product.service";
-import {MessageService} from "primeng/api";
+import {MessageService, SharedModule} from "primeng/api";
 import {UserService} from "../../Services/user.service";
-import {JsonPipe} from "@angular/common";
+import {JsonPipe, NgClass, NgIf} from "@angular/common";
 import {UserType} from "../../Enum/user-type";
 import {Table, TableModule} from "primeng/table";
 import {Puit} from "../../Models/puit";
@@ -13,15 +13,35 @@ import {Bassin} from "../../Models/bassin";
 import {ToastModule} from "primeng/toast";
 import {ToolbarModule} from "primeng/toolbar";
 import {DialogModule} from "primeng/dialog";
+import {FormsModule} from "@angular/forms";
+import {ButtonModule} from "primeng/button";
+import {PaginatorModule} from "primeng/paginator";
+import {PasswordModule} from "primeng/password";
+import {RadioButtonModule} from "primeng/radiobutton";
+import {InputTextModule} from "primeng/inputtext";
+import {InputTextareaModule} from "primeng/inputtextarea";
+import {CalendarModule} from "primeng/calendar";
 
 @Component({
   selector: 'app-bassin',
   standalone: true,
   imports: [
     TableModule,
+    ButtonModule,
+    PaginatorModule,
+    PasswordModule,
+    RadioButtonModule,
+    SharedModule,
+    ToolbarModule,
     ToastModule,
     ToolbarModule,
-    DialogModule
+    DialogModule,
+    NgClass,
+    FormsModule,
+    NgIf,
+    InputTextModule,
+    InputTextareaModule,
+    CalendarModule
   ],
   templateUrl: './bassin.component.html',
   styleUrl: './bassin.component.css'
@@ -56,6 +76,7 @@ export class BassinComponent implements OnInit {
   private isUpdateBassin=false;
 
 
+
   constructor(private productService: ProductService, private messageService: MessageService,private bassinService :BassinService) { }
 
   ngOnInit() {
@@ -73,7 +94,6 @@ export class BassinComponent implements OnInit {
     this.bassinService.getAllBassins()
       .subscribe((bassins: Bassin[]) => {
         this.bassins = bassins;
-
       }, error => {
         console.log('Error fetching users:', error);
       });
@@ -160,28 +180,32 @@ export class BassinComponent implements OnInit {
       this.product = {};
     }
   }
-  saveUser() {
+  saveBassin() {
     this.submitted = false;
     this.productDialog=false
-    alert(new JsonPipe().transform(this.bassin))
 
     if(this.isUpdateBassin==true) {
 
       if (this.bassin) {
 
-        this.bassinService.updateBassin(this.bassin).subscribe(
-          () => console.log('Bassin Updated'),
-          (error) => console.error('Error updating user:', error)
-        );
+        this.bassinService.updateBassin(this.bassin).subscribe(() =>{ this.bassinService.getAllBassins()
+          .subscribe((bassins: Bassin[]) => {
+            this.bassins = bassins;
+          } );});
+        console.log('bassin updated')
+
       }
       this.isUpdateBassin=false;
     }
     else
     {
 
-      if (this.bassin ){
-        this.bassinService.addBassin(this.bassin).subscribe(() => console.log("Bassin Added"));
-      }
+
+        this.bassinService.addBassin(this.bassin).subscribe(() =>{ this.bassinService.getAllBassins()
+          .subscribe((bassins: Bassin[]) => {
+            this.bassins = bassins;
+          } );});
+      console.log('bassin added')
 
     }
   }
@@ -210,5 +234,6 @@ export class BassinComponent implements OnInit {
   onGlobalFilter(table: Table, event: Event) {
     table.filterGlobal((event.target as HTMLInputElement).value, 'contains');
   }
+
 
 }
