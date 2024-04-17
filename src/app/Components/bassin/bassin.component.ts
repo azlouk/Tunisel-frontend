@@ -21,6 +21,8 @@ import {RadioButtonModule} from "primeng/radiobutton";
 import {InputTextModule} from "primeng/inputtext";
 import {InputTextareaModule} from "primeng/inputtextarea";
 import {CalendarModule} from "primeng/calendar";
+import {MultiSelectModule} from "primeng/multiselect";
+import {PuitService} from "../../Services/puit.service";
 
 @Component({
   selector: 'app-bassin',
@@ -41,7 +43,8 @@ import {CalendarModule} from "primeng/calendar";
     NgIf,
     InputTextModule,
     InputTextareaModule,
-    CalendarModule
+    CalendarModule,
+    MultiSelectModule
   ],
   templateUrl: './bassin.component.html',
   styleUrl: './bassin.component.css'
@@ -72,12 +75,13 @@ export class BassinComponent implements OnInit {
   bassin: Bassin = {};
 
   selectedBassins: Bassin[] = [];
-
+  puits: Puit[] = [];
   private isUpdateBassin=false;
+  selectedPuit?: Puit;
 
 
 
-  constructor(private productService: ProductService, private messageService: MessageService,private bassinService :BassinService) { }
+  constructor(private productService: ProductService, private messageService: MessageService,private bassinService :BassinService,private puitService:PuitService) { }
 
   ngOnInit() {
     // // this.productService.getProducts().then(data => this.products = data);
@@ -97,6 +101,12 @@ export class BassinComponent implements OnInit {
       }, error => {
         console.log('Error fetching users:', error);
       });
+    this.puitService.getAllPuits().subscribe((v:  Puit[]) => {
+      this.puits=v;
+      console.log(new JsonPipe().transform("====================>>>>>>"+this.puits))
+
+    },error => {
+      console.log(error)})
   }
 
   openNew() {
@@ -205,7 +215,8 @@ export class BassinComponent implements OnInit {
           .subscribe((bassins: Bassin[]) => {
             this.bassins = bassins;
           } );});
-      console.log('bassin added')
+      console.log('bassin added');
+      console.log(new JsonPipe().transform(this.bassin));
 
     }
   }

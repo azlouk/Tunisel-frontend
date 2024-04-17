@@ -1,6 +1,7 @@
 import {AnalysesChimique} from "./analyses-chimique";
 import {AnalysesPhysique} from "./analyses-physique";
 import {Sbnl} from "./sbnl";
+import {Puit} from "./puit";
 
 export interface Bassin {
   id?: number;
@@ -14,5 +15,5 @@ export interface Bassin {
   sbnls?: Sbnl[];
   analysesChimiques?: AnalysesChimique[];
   analysesPhysiques?: AnalysesPhysique[];
-
+  bassinPuit?:Puit;
 }

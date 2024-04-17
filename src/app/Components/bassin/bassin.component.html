@@ -96,6 +96,12 @@
     <p-dialog [(visible)]="productDialog" [style]="{width: '450px'}" header="Product Details" [modal]="true" class="p-fluid">
       <ng-template pTemplate="content">
         <div class="field">
+        <label for="name">Puit</label>
+          <p-dropdown [options]="puits" [(ngModel)]="bassin.bassinPuit" [editable]="true" optionLabel="reference" class="w-full"></p-dropdown>
+        </div>
+<!--          <p-dropdown [options]="puits" [(ngModel)]="puits" [filter]="true" optionLabel="reference"></p-dropdown>-->
+
+        <div class="field">
           <label for="name">Reference</label>
           <input type="text" pInputText id="name"  [(ngModel)]="bassin.reference" required autofocus [ngClass]="{'ng-invalid ng-dirty' : submitted && !bassin.reference}"/>
           <small class="ng-dirty ng-invalid" *ngIf="submitted && !bassin.reference">Name is required.</small>
