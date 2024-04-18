@@ -10,9 +10,7 @@ import {Table, TableModule} from "primeng/table";
 import {ToastModule} from "primeng/toast";
 import {ToolbarModule} from "primeng/toolbar";
 import {Product} from "../../Models/product";
-import {Puit} from "../../Models/puit";
 import {ProductService} from "../../Services/product.service";
-import {PuitService} from "../../Services/puit.service";
 import {Sbl} from "../../Models/sbl";
 import {SblService} from "../../Services/sbl.service";
 
