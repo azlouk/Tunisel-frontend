@@ -4,13 +4,27 @@ import {Sbl} from "../../Models/sbl";
 import {ProductService} from "../../Services/product.service";
 import {MessageService} from "primeng/api";
 import {SblService} from "../../Services/sbl.service";
-import {JsonPipe} from "@angular/common";
-import {Table} from "primeng/table";
+import {JsonPipe, NgClass, NgIf} from "@angular/common";
+import {Table, TableModule} from "primeng/table";
+import {ToastModule} from "primeng/toast";
+import {ToolbarModule} from "primeng/toolbar";
+import {DialogModule} from "primeng/dialog";
+import {FormsModule} from "@angular/forms";
+import {CalendarModule} from "primeng/calendar";
 
 @Component({
   selector: 'app-sblf',
   standalone: true,
-  imports: [],
+  imports: [
+    ToastModule,
+    ToolbarModule,
+    TableModule,
+    DialogModule,
+    FormsModule,
+    NgClass,
+    CalendarModule,
+    NgIf
+  ],
   templateUrl: './sblf.component.html',
   styleUrl: './sblf.component.css'
 })

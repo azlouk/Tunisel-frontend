@@ -13,7 +13,7 @@
 
       </p-toolbar>
 
-      <p-table #dt [value]="sbls" [columns]="cols"  responsiveLayout="scroll" [rows]="10" [globalFilterFields]="['id','reference','description','dateCreation','nom','emplacement','etat','dateFermeture']" [paginator]="true" [rowsPerPageOptions]="[10,20,30]" [showCurrentPageReport]="true" currentPageReportTemplate="Affichage du  {first} au  {last} des  {totalRecords} entrées" [(selection)]="selectedSbls" selectionMode="multiple" [rowHover]="true" dataKey="id">
+      <p-table #dt [value]="sblfs" [columns]="cols"  responsiveLayout="scroll" [rows]="10" [globalFilterFields]="['id','reference','description','dateCreation','nom','emplacement','etat','dateFermeture']" [paginator]="true" [rowsPerPageOptions]="[10,20,30]" [showCurrentPageReport]="true" currentPageReportTemplate="Affichage du  {first} au  {last} des  {totalRecords} entrées" [(selection)]="selectedSbls" selectionMode="multiple" [rowHover]="true" dataKey="id">
         <ng-template pTemplate="caption">
           <div class="flex flex-column md:flex-row md:justify-content-between md:align-items-center">
             <h5 class="m-0">Gestion des Stock Sbl</h5>
@@ -43,21 +43,21 @@
             <th></th>
           </tr>
         </ng-template>
-        <ng-template pTemplate="body" let-sbl >
+        <ng-template pTemplate="body" let-sblf >
           <tr >
             <td>
-              <p-tableCheckbox [value]="sbl"></p-tableCheckbox>
+              <p-tableCheckbox [value]="sblf"></p-tableCheckbox>
             </td>
             <td style="width:14%; min-width:10rem;"><span class="p-column-title">Id</span>
-              {{sbl.id}}
+              {{sblf.id}}
             </td>
             <td style="width:14%; min-width:10rem;">
               <span class="p-column-title">Reference</span>
-              {{sbl.reference}}
+              {{sblf.reference}}
             </td>
             <td style="width:14%; min-width:10rem;">
               <span class="p-column-title">Description</span>
-              {{sbl.description}}
+              {{sblf.description}}
 
 
             </td>
@@ -65,29 +65,29 @@
 
             <td style="width:14%; min-width:10rem;">
               <span class="p-column-title">Date Stock</span>
-              {{sbl.dateStock}}
+              {{sblf.dateStock}}
             </td>
 
             <td style="width:14%; min-width:8rem;">
               <span class="p-column-title">Emplacement</span>
-              {{sbl.emplacement}}
+              {{sblf.emplacement}}
             </td>
             <td style="width:14%; min-width:8rem;">
               <span class="p-column-title">Etat</span>
-              {{sbl.etat}}
+              {{sblf.etat}}
             </td>
             <td style="width:14%; min-width:8rem;">
               <span class="p-column-title">Quantité</span>
-              {{sbl.quantite}}
+              {{sblf.quantite}}
             </td>
             <td style="width:14%; min-width:8rem;">
               <span class="p-column-title">Type</span>
-              {{sbl.stockType}}
+              {{sblf.stockType}}
             </td>
             <td>
               <div class="flex ">
-                <button pButton pRipple icon="pi pi-pencil" class="p-button-rounded p-button-success mr-2" (click)="editSbl(sbl)"></button>
-                <button pButton pRipple icon="pi pi-trash" class="p-button-rounded p-button-warning" (click)="deleteSbl(sbl)"></button>
+                <button pButton pRipple icon="pi pi-pencil" class="p-button-rounded p-button-success mr-2" (click)="editsblf(sblf)"></button>
+                <button pButton pRipple icon="pi pi-trash" class="p-button-rounded p-button-warning" (click)="deletesblf(sblf)"></button>
               </div>
             </td>
           </tr>
@@ -99,39 +99,39 @@
       <ng-template pTemplate="content">
         <div class="field">
           <label for="reference">Reference</label>
-          <input type="text" pInputText id="reference"  [(ngModel)]="sbl.reference" required autofocus [ngClass]="{'ng-invalid ng-dirty' : submitted && !sbl.reference}"/>
-          <small class="ng-dirty ng-invalid" *ngIf="submitted && !sbl.reference">reference is required.</small>
+          <input type="text" pInputText id="reference"  [(ngModel)]="sblf.reference" required autofocus [ngClass]="{'ng-invalid ng-dirty' : submitted && !sblf.reference}"/>
+          <small class="ng-dirty ng-invalid" *ngIf="submitted && !sblf.reference">reference is required.</small>
         </div>
         <div class="field">
           <label for="Description">Description</label>
-          <input type="text" pInputText id="Description"  [(ngModel)]="sbl.description" required autofocus [ngClass]="{'ng-invalid ng-dirty' : submitted && !sbl.description}"/>
-          <small class="ng-dirty ng-invalid" *ngIf="submitted && !sbl.description">Pseudo is required.</small>
+          <input type="text" pInputText id="Description"  [(ngModel)]="sblf.description" required autofocus [ngClass]="{'ng-invalid ng-dirty' : submitted && !sblf.description}"/>
+          <small class="ng-dirty ng-invalid" *ngIf="submitted && !sblf.description">Pseudo is required.</small>
         </div>
 
         <div class="field">
           <label for="dateStock">Date Stock</label>
-          <p-calendar dateFormat="yy-mm-dd" id="dateStock" [(ngModel)]="sbl.dateStock"  [ngClass]="{'ng-invalid ng-dirty' : submitted && !sbl.dateStock}" [showIcon]="true"></p-calendar>
-          <small class="ng-dirty ng-invalid" *ngIf="submitted && !sbl.dateStock">poste is required.</small>
+          <p-calendar dateFormat="yy-mm-dd" id="dateStock" [(ngModel)]="sblf.dateStock"  [ngClass]="{'ng-invalid ng-dirty' : submitted && !sblf.dateStock}" [showIcon]="true"></p-calendar>
+          <small class="ng-dirty ng-invalid" *ngIf="submitted && !sblf.dateStock">poste is required.</small>
         </div>
 
         <div class="field">
 
           <label for="emplacement">Emplacement</label>
-          <input type="text" pInputText id="emplacement"  [(ngModel)]="sbl.emplacement" required autofocus [ngClass]="{'ng-invalid ng-dirty' : submitted && !sbl.emplacement}"/>
-          <small class="ng-dirty ng-invalid" *ngIf="submitted && !sbl.emplacement">Telephone is required.</small>
+          <input type="text" pInputText id="emplacement"  [(ngModel)]="sblf.emplacement" required autofocus [ngClass]="{'ng-invalid ng-dirty' : submitted && !sblf.emplacement}"/>
+          <small class="ng-dirty ng-invalid" *ngIf="submitted && !sblf.emplacement">Telephone is required.</small>
         </div>
 
 
 
         <div class="field">
           <label for="etat">Etat</label>
-          <input type="text" pInputText id="etat"  [(ngModel)]="sbl.etat" required autofocus [ngClass]="{'ng-invalid ng-dirty' : submitted && !sbl.etat}"/>
-          <small class="ng-dirty ng-invalid" *ngIf="submitted && !sbl.etat">Telephone is required.</small>
+          <input type="text" pInputText id="etat"  [(ngModel)]="sblf.etat" required autofocus [ngClass]="{'ng-invalid ng-dirty' : submitted && !sblf.etat}"/>
+          <small class="ng-dirty ng-invalid" *ngIf="submitted && !sblf.etat">Telephone is required.</small>
         </div>
         <div class="field">
           <label for="quantite">Quantité</label>
-          <input type="text" pInputText id="quantite"  [(ngModel)]="sbl.quantite" required autofocus [ngClass]="{'ng-invalid ng-dirty' : submitted && !sbl.etat}"/>
-          <small class="ng-dirty ng-invalid" *ngIf="submitted && !sbl.etat">Telephone is required.</small>
+          <input type="text" pInputText id="quantite"  [(ngModel)]="sblf.quantite" required autofocus [ngClass]="{'ng-invalid ng-dirty' : submitted && !sblf.etat}"/>
+          <small class="ng-dirty ng-invalid" *ngIf="submitted && !sblf.etat">Telephone is required.</small>
         </div>
 
 
@@ -145,7 +145,7 @@
 
       <ng-template pTemplate="footer">
         <button pButton pRipple label="Cancel" icon="pi pi-times" class="p-button-text" (click)="hideDialog()"></button>
-        <button pButton pRipple label="Save" icon="pi pi-check" class="p-button-text" (click)="saveSbl()"></button>
+        <button pButton pRipple label="Save" icon="pi pi-check" class="p-button-text" (click)="saveSblf()"></button>
       </ng-template>
     </p-dialog>
 
