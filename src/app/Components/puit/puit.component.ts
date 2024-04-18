@@ -61,13 +61,13 @@ export class PuitComponent implements OnInit{
   // ======********============
   puits: Puit[] = [];
 
-  puit:Puit;
+  puit:Puit={};
 
   selectedPuits: Puit[] = [];
 
   private isUpdateUser=false;
 
-  constructor(private productService: ProductService, private messageService: MessageService,private puitService :PuitService) {this.puit = new Puit();}
+  constructor(private productService: ProductService, private messageService: MessageService,private puitService :PuitService) {}
 
   ngOnInit() {
     this.puitService.getAllPuits().subscribe((v:  Puit[]) => {
@@ -106,14 +106,14 @@ export class PuitComponent implements OnInit{
   editPuit(puit: Puit) {
     this.isUpdateUser=true;
 
-    // @ts-ignore
+
     this.puit = { ...puit };
     this.productDialog = true;
   }
 
   deletePuit(puit: Puit) {
     this.deleteProductDialog = true;
-    // @ts-ignore
+
     this.puit = { ...puit };
   }
 

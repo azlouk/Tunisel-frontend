@@ -1,53 +1,71 @@
 import {AnalysesChimique} from "./analyses-chimique";
 import {AnalysesPhysique} from "./analyses-physique";
-import {Stock} from "./stock";
+
 import {Sbl} from "./sbl";
 import {StockType} from "../Enum/stock-type";
 
-export class Sbnl extends Stock{
+export interface Sbnl {
 
-
-  private _sbls: Sbl[];
-  private _analysesChimiques: AnalysesChimique[];
-  private _analysesPhysiques: AnalysesPhysique[];
-
-  constructor(
-    id: number,
-  reference: string,
-  description: string,
-  dateStock: Date,
-  emplacement: string,
-  etat: string,
-  quantite: number, stockType:StockType,sbls?: Sbl[], analysesChimiques?: AnalysesChimique[], analysesPhysiques?: AnalysesPhysique[]) {
-    super(id, reference, description, dateStock, emplacement, etat, quantite,stockType);
-
-    this._sbls = sbls||[];
-    this._analysesChimiques = analysesChimiques||[];
-    this._analysesPhysiques = analysesPhysiques||[];
-  }
-
-
-  get sbls(): Sbl[] {
-    return this._sbls;
-  }
-
-  set sbls(value: Sbl[]) {
-    this._sbls = value;
-  }
-
-  get analysesChimiques(): AnalysesChimique[] {
-    return this._analysesChimiques;
-  }
-
-  set analysesChimiques(value: AnalysesChimique[]) {
-    this._analysesChimiques = value;
-  }
-
-  get analysesPhysiques(): AnalysesPhysique[] {
-    return this._analysesPhysiques;
-  }
-
-  set analysesPhysiques(value: AnalysesPhysique[]) {
-    this._analysesPhysiques = value;
-  }
+   id?: number;reference?: string;
+  description?: string;
+  dateStock?: Date;
+  emplacement?: string;
+  etat?: string;
+  quantite?: number;
+  stockType?:StockType ;
+  sbls?: Sbl[];
+analysesChimiques?: AnalysesChimique[];
+analysesPhysiques?: AnalysesPhysique[];
 }
+// export class Sbnl extends Stock{
+//
+//
+//   private sbls: Sbl[];
+//   private analysesChimiques: AnalysesChimique[];
+//   private analysesPhysiques: AnalysesPhysique[];
+//
+//   constructor(
+//     id?: number,
+//     reference?: string,
+//     description?: string,
+//     dateStock?: Date,
+//     emplacement?: string,
+//     etat?: string,
+//     quantite?: number,
+//     stockType?:StockType.SBNL,
+//     sbls?: Sbl[],
+//     analysesChimiques?: AnalysesChimique[],
+//     analysesPhysiques?: AnalysesPhysique[])
+//   {
+//     super(id, reference, description, dateStock, emplacement, etat, quantite,stockType);
+//
+//     this.sbls = sbls||[];
+//     this.analysesChimiques = analysesChimiques||[];
+//     this.analysesPhysiques = analysesPhysiques||[];
+//   }
+//
+//
+//    getsbls(): Sbl[] {
+//     return this.sbls;
+//   }
+//
+//    setsbls(value: Sbl[]) {
+//     this.sbls = value;
+//   }
+//
+//   getanalysesChimiques(): AnalysesChimique[] {
+//     return this.analysesChimiques;
+//   }
+//
+//   setanalysesChimiques(value: AnalysesChimique[]) {
+//     this.analysesChimiques = value;
+//   }
+//
+//   getanalysesPhysiques(): AnalysesPhysique[] {
+//     return this.analysesPhysiques;
+//   }
+//
+//   setanalysesPhysiques(value: AnalysesPhysique[]) {
+//     this.analysesPhysiques = value;
+//   }
+// }

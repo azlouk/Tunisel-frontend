@@ -1,7 +1,7 @@
 import {Component, OnInit} from '@angular/core';
 import {ButtonModule} from "primeng/button";
 import {DialogModule} from "primeng/dialog";
-import {JsonPipe, NgIf} from "@angular/common";
+import {JsonPipe, NgClass, NgIf} from "@angular/common";
 import {PaginatorModule} from "primeng/paginator";
 import {PasswordModule} from "primeng/password";
 import {RadioButtonModule} from "primeng/radiobutton";
@@ -10,32 +10,31 @@ import {Table, TableModule} from "primeng/table";
 import {ToastModule} from "primeng/toast";
 import {ToolbarModule} from "primeng/toolbar";
 import {Product} from "../../Models/product";
-import {User} from "../../Models/user";
 import {ProductService} from "../../Services/product.service";
-import {UserService} from "../../Services/user.service";
-import {UserType} from "../../Enum/user-type";
 import {CalendarModule} from "primeng/calendar";
 import {InputTextModule} from "primeng/inputtext";
-import {Puit} from "../../Models/puit";
-import {PuitService} from "../../Services/puit.service";
+import {Sbnl} from "../../Models/sbnl";
+import {SbnlService} from "../../Services/sbnl.service";
+import {Bassin} from "../../Models/bassin";
 
 @Component({
   selector: 'app-sbnl',
   standalone: true,
-    imports: [
-        ButtonModule,
-        DialogModule,
-        NgIf,
-        PaginatorModule,
-        PasswordModule,
-        RadioButtonModule,
-        SharedModule,
-        TableModule,
-        ToastModule,
-        ToolbarModule,
-        CalendarModule,
-        InputTextModule
-    ],
+  imports: [
+    ButtonModule,
+    DialogModule,
+    NgIf,
+    PaginatorModule,
+    PasswordModule,
+    RadioButtonModule,
+    SharedModule,
+    TableModule,
+    ToastModule,
+    ToolbarModule,
+    CalendarModule,
+    InputTextModule,
+    NgClass
+  ],
   templateUrl: './sbnl.component.html',
   styleUrl: './sbnl.component.css'
 })
@@ -60,20 +59,20 @@ export class SbnlComponent implements OnInit{
 
   rowsPerPageOptions = [5, 10, 20];
   // ======********============
-  puits: Puit[] = [];
+  sbnls: Sbnl[] = [];
 
-  puit:Puit;
+  sbnl:Sbnl={};
 
-  selectedPuits: Puit[] = [];
+  selectedSbnls: Sbnl[] = [];
 
-  private isUpdateUser=false;
+  private isUpdatesbnl=false;
 
-  constructor(private productService: ProductService, private messageService: MessageService,private puitService :PuitService) {this.puit = new Puit();}
+  constructor(private productService: ProductService, private messageService: MessageService,private sbnlService :SbnlService) {}
 
   ngOnInit() {
-    this.puitService.getAllPuits().subscribe((v:  Puit[]) => {
-      this.puits=v;
-      console.log(new JsonPipe().transform("====================>>>>>>"+this.puits))
+    this.sbnlService.getAllSbnls().subscribe((v:  Sbnl[]) => {
+      this.sbnls=v;
+      // console.log(new JsonPipe().transform("====================>>>>>>"+this.sbnls))
 
     },error => {
       console.log(error)})
@@ -93,38 +92,40 @@ export class SbnlComponent implements OnInit{
   }
 
   openNew() {
-    this.puit;
+    this.sbnl;
     this.submitted = false;
     this.productDialog = true;
   }
 
-  deleteSelectedPuits() {
+  deleteSelectedSbnls() {
 
     this.deleteProductsDialog = true;
 
   }
 
-  editPuit(puit: Puit) {
-    this.isUpdateUser=true;
+  editPuit(sbnl: Sbnl) {
+    this.isUpdatesbnl=true;
 
-    // @ts-ignore
-    this.puit = { ...puit };
+
+    this.sbnl = { ...sbnl };
     this.productDialog = true;
   }
 
-  deletePuit(puit: Puit) {
+  deletePuit(sbnl: Sbnl) {
     this.deleteProductDialog = true;
-    // @ts-ignore
-    this.puit = { ...puit };
+
+
+    this.sbnl = { ...sbnl };
+
   }
 
   confirmDeleteSelected() {
     this.deleteProductsDialog = false;
-    console.log(this.selectedPuits.length)
-    this.selectedPuits.forEach(selectedPuit => {
-      this.puitService.deletePuit(selectedPuit.id).subscribe(
+    console.log(this.selectedSbnls.length)
+    this.selectedSbnls.forEach(selectedSbnl => {
+      this.sbnlService.deleteSbnl(selectedSbnl.id).subscribe(
         () => {
-          this.puits = this.puits.filter(puit =>puit.id !== selectedPuit.id);
+          this.sbnls = this.sbnls.filter(sbnl =>sbnl.id !== selectedSbnl.id);
         },
         (error) => {
           console.error('Error deleting user:', error);
@@ -133,18 +134,18 @@ export class SbnlComponent implements OnInit{
     });
 
     this.messageService.add({ severity: 'success', summary: 'Successful', detail: 'User Deleted', life: 3000 });
-    this.selectedPuits = [];
+    this.selectedSbnls = [];
   }
 
   confirmDelete() {
     this.deleteProductDialog = false;
-    console.log("this.puit.id", this.puit.id);
-    this.puits = this.puits.filter(val => val.id !== this.puit.id);
-    if (this.puit.id!= null) {
-      this.puitService.deletePuit(this.puit.id).subscribe(() => console.log("puit deleted"));
+    console.log("this.sbnl.id", this.sbnl.id);
+    this.sbnls = this.sbnls.filter(val => val.id !== this.sbnl.id);
+    if (this.sbnl.id!= null) {
+      this.sbnlService.deleteSbnl(this.sbnl.id).subscribe(() => console.log("sbnl deleted"));
     }
     this.messageService.add({ severity: 'success', summary: 'Successful', detail: 'Puit Deleted', life: 3000 });
-    this.puit ;
+    this.sbnl ;
   }
 
   hideDialog() {
@@ -152,27 +153,28 @@ export class SbnlComponent implements OnInit{
     this.submitted = false;
   }
 
-  savePuit() {
+  saveSbnl() {
     this.submitted = false;
     this.productDialog=false
-    // alert(new JsonPipe().transform(this.puit))
-    if(this.isUpdateUser==true) {
-      this.puitService.updatePuit(this.puit).subscribe(() =>{
-        this.puitService.getAllPuits().subscribe((puits: Puit[]) => {
-          this.puits = puits;
+
+    if(this.isUpdatesbnl==true) {
+      this.sbnlService.updateSbnl(this.sbnl).subscribe(() =>{
+        this.sbnlService.getAllSbnls().subscribe((sbnls: Sbnl[]) => {
+          this.sbnls= sbnls;
         });
       });
-      console.log('Puit updated');
-      this.isUpdateUser=false;
+      console.log('Sbnl updated');
+      this.isUpdatesbnl=false;
     }
     else
     {
-      this.puitService.addPuit(this.puit).subscribe(() => {
-        this.puitService.getAllPuits().subscribe((puits: Puit[]) => {
-          this.puits = puits;
-        });
-      });
-      console.log('Puit added');
+      this.sbnlService.addSbnl(this.sbnl).subscribe(() => {this.sbnlService.getAllSbnls()
+        .subscribe((sbnls: Sbnl[]) => {
+          this.sbnls = sbnls;
+        } );});
+
+
+
     }
   }
 
