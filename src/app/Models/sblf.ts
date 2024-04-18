@@ -1,12 +1,13 @@
 import {Stock} from "./stock";
 import {AnalysesChimique} from "./analyses-chimique";
 import {AnalysesPhysique} from "./analyses-physique";
+import {StockType} from "../Enum/stock-type";
 
 export class Sblf extends Stock{
   private _analysesChimiques: AnalysesChimique[];
   private _analysesPhysiques: AnalysesPhysique[];
-  constructor(id: number, reference: string, description: string, dateStock: string, emplacement: string, etat: string, quantite: number,  analysesChimiques?: AnalysesChimique[], analysesPhysiques?: AnalysesPhysique[]) {
-    super(id, reference, description, dateStock, emplacement, etat, quantite);
+  constructor(id: number, reference: string, description: string, dateStock: Date, emplacement: string, etat: string, quantite: number,  stockType:StockType, analysesChimiques?: AnalysesChimique[], analysesPhysiques?: AnalysesPhysique[]) {
+    super(id, reference, description, dateStock, emplacement, etat, quantite,stockType);
 
 
     this._analysesChimiques = analysesChimiques||[];
