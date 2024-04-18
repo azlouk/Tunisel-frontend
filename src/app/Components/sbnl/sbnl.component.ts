@@ -14,6 +14,10 @@ import {User} from "../../Models/user";
 import {ProductService} from "../../Services/product.service";
 import {UserService} from "../../Services/user.service";
 import {UserType} from "../../Enum/user-type";
+import {CalendarModule} from "primeng/calendar";
+import {InputTextModule} from "primeng/inputtext";
+import {Puit} from "../../Models/puit";
+import {PuitService} from "../../Services/puit.service";
 
 @Component({
   selector: 'app-sbnl',
@@ -28,7 +32,9 @@ import {UserType} from "../../Enum/user-type";
         SharedModule,
         TableModule,
         ToastModule,
-        ToolbarModule
+        ToolbarModule,
+        CalendarModule,
+        InputTextModule
     ],
   templateUrl: './sbnl.component.html',
   styleUrl: './sbnl.component.css'
@@ -54,70 +60,68 @@ export class SbnlComponent implements OnInit{
 
   rowsPerPageOptions = [5, 10, 20];
   // ======********============
-  users: User[] = [];
+  puits: Puit[] = [];
 
-  user: User = {};
+  puit: Puit={};
 
-  selectedUsers: User[] = [];
+  selectedPuits: Puit[] = [];
 
   private isUpdateUser=false;
 
-  constructor(private productService: ProductService, private messageService: MessageService,private userService :UserService) { }
+  constructor(private productService: ProductService, private messageService: MessageService,private puitService :PuitService) { }
 
   ngOnInit() {
-    // this.productService.getProducts().then(data => this.products = data);
-    this.userService.getAllUsers().subscribe((v:  User[]) => {
-      this.users=v;
-      console.log(new JsonPipe().transform("====================>>>>>>"+this.users))
+    this.puitService.getAllPuits().subscribe((v:  Puit[]) => {
+      this.puits=v;
+      console.log(new JsonPipe().transform("====================>>>>>>"+this.puits))
 
     },error => {
       console.log(error)})
 
     this.cols = [
-      { field: 'product', header: 'Product' },
-      { field: 'price', header: 'Price' },
-      { field: 'category', header: 'Category' },
-      { field: 'rating', header: 'Reviews' },
-      { field: 'inventoryStatus', header: 'Status' }
+      { field: 'id', header: 'id' },
+      { field: 'reference', header: 'reference' },
+      { field: 'description', header: 'description' },
+      { field: 'dateCreation', header: 'dateCreation' },
+      { field: 'nom', header: 'nom' },
+      { field: 'emplacement', header: 'emplacement' },
+      { field: 'etat', header: 'etat' },
+      { field: 'dateFermeture', header: 'dateFermeture' },
     ];
 
-    this.statuses = [
-      { label: 'INSTOCK', value: 'instock' },
-      { label: 'LOWSTOCK', value: 'lowstock' },
-      { label: 'OUTOFSTOCK', value: 'outofstock' }
-    ];
+
   }
 
   openNew() {
-    this.user = {};
+    this.puit = {};
     this.submitted = false;
     this.productDialog = true;
   }
 
-  deleteSelectedUsers() {
+  deleteSelectedPuits() {
 
     this.deleteProductsDialog = true;
 
   }
 
-  editProduct(user: User) {
+  editPuit(puit: Puit) {
     this.isUpdateUser=true;
-    this.user = { ...user };
+    this.puit = { ...puit };
     this.productDialog = true;
   }
 
-  deleteProduct(user: User) {
+  deletePuit(puit: Puit) {
     this.deleteProductDialog = true;
-    this.user = { ...user };
+    this.puit = { ...puit };
   }
 
   confirmDeleteSelected() {
     this.deleteProductsDialog = false;
-    console.log(this.selectedUsers.length)
-    this.selectedUsers.forEach(selectedUser => {
-      this.userService.deleteUser(selectedUser.id).subscribe(
+    console.log(this.selectedPuits.length)
+    this.selectedPuits.forEach(selectedPuit => {
+      this.puitService.deletePuit(selectedPuit.id).subscribe(
         () => {
-          this.users = this.users.filter(user => user.id !== selectedUser.id);
+          this.puits = this.puits.filter(puit =>puit.id !== selectedPuit.id);
         },
         (error) => {
           console.error('Error deleting user:', error);
@@ -126,18 +130,18 @@ export class SbnlComponent implements OnInit{
     });
 
     this.messageService.add({ severity: 'success', summary: 'Successful', detail: 'User Deleted', life: 3000 });
-    this.selectedUsers = [];
+    this.selectedPuits = [];
   }
 
   confirmDelete() {
     this.deleteProductDialog = false;
-    console.log("this.user.id", this.user.id);
-    this.users = this.users.filter(val => val.id !== this.user.id);
-    if (this.user.id!= null) {
-      this.userService.deleteUser(this.user.id).subscribe(() => console.log("user deleted"));
+    console.log("this.puit.id", this.puit.id);
+    this.puits = this.puits.filter(val => val.id !== this.puit.id);
+    if (this.puit.id!= null) {
+      this.puitService.deletePuit(this.puit.id).subscribe(() => console.log("puit deleted"));
     }
-    this.messageService.add({ severity: 'success', summary: 'Successful', detail: 'Product Deleted', life: 3000 });
-    this.user = {};
+    this.messageService.add({ severity: 'success', summary: 'Successful', detail: 'Puit Deleted', life: 3000 });
+    this.puit = {};
   }
 
   hideDialog() {
@@ -145,48 +149,27 @@ export class SbnlComponent implements OnInit{
     this.submitted = false;
   }
 
-  saveProduct() {
-    this.submitted = true;
-
-    if (this.product.name?.trim()) {
-      if (this.product.id) {
-        // @ts-ignore
-        this.product.inventoryStatus = this.product.inventoryStatus.value ? this.product.inventoryStatus.value : this.product.inventoryStatus;
-        this.products[this.findIndexById(this.product.id)] = this.product;
-        this.messageService.add({ severity: 'success', summary: 'Successful', detail: 'Product Updated', life: 3000 });
-      } else {
-        this.product.id = this.createId();
-        this.product.code = this.createId();
-        this.product.image = 'product-placeholder.svg';
-        // @ts-ignore
-        this.product.inventoryStatus = this.product.inventoryStatus ? this.product.inventoryStatus.value : 'INSTOCK';
-        this.products.push(this.product);
-        this.messageService.add({ severity: 'success', summary: 'Successful', detail: 'Product Created', life: 3000 });
-      }
-
-      this.products = [...this.products];
-      this.productDialog = false;
-      this.product = {};
-    }
-  }
-  saveUser() {
+  savePuit() {
     this.submitted = false;
     this.productDialog=false
-    alert(new JsonPipe().transform(this.user))
-    console.log(this.user.type)
+    // alert(new JsonPipe().transform(this.puit))
     if(this.isUpdateUser==true) {
-      this.userService.saveUser(this.user).subscribe(() => console.log("user Updated"));
+      this.puitService.updatePuit(this.puit).subscribe(() =>{
+        this.puitService.getAllPuits().subscribe((puits: Puit[]) => {
+          this.puits = puits;
+        });
+      });
+      console.log('Puit updated');
       this.isUpdateUser=false;
     }
     else
     {
-      if (this.user.type && this.user.type === UserType.ADMIN){
-        this.userService.addAdmin(this.user).subscribe(() => console.log("Admin Added"));
-      }
-      if(this.user.type=="Employer") {
-        this.userService.AddEmployer(this.user).subscribe(() => console.log("Employer Added"));
-      }
-
+      this.puitService.addPuit(this.puit).subscribe(() => {
+        this.puitService.getAllPuits().subscribe((puits: Puit[]) => {
+          this.puits = puits;
+        });
+      });
+      console.log('Puit added');
     }
   }
 

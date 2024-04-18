@@ -6,17 +6,17 @@
         <ng-template pTemplate="left">
           <div class="my-2">
             <button pButton pRipple label="Ajouter" icon="pi pi-plus" class="p-button-success mr-2" (click)="openNew()"></button>
-            <button pButton pRipple label="Supprimer" icon="pi pi-trash" class="p-button-danger" (click)="deleteSelectedUsers()" [disabled]="!selectedUsers || !selectedUsers.length"></button>
+            <button pButton pRipple label="Supprimer" icon="pi pi-trash" class="p-button-danger" (click)="deleteSelectedPuits()" [disabled]="!selectedPuits || !selectedPuits.length"></button>
           </div>
         </ng-template>
 
 
       </p-toolbar>
 
-      <p-table #dt [value]="users" [columns]="cols"  responsiveLayout="scroll" [rows]="10" [globalFilterFields]="['name','country.name','representative.name','status']" [paginator]="true" [rowsPerPageOptions]="[10,20,30]" [showCurrentPageReport]="true" currentPageReportTemplate="Affichage du  {first} au  {last} des  {totalRecords} entrées" [(selection)]="selectedUsers" selectionMode="multiple" [rowHover]="true" dataKey="id">
+      <p-table #dt [value]="puits" [columns]="cols"  responsiveLayout="scroll" [rows]="10" [globalFilterFields]="['id','reference','description','dateCreation','nom','emplacement','etat','dateFermeture']" [paginator]="true" [rowsPerPageOptions]="[10,20,30]" [showCurrentPageReport]="true" currentPageReportTemplate="Affichage du  {first} au  {last} des  {totalRecords} entrées" [(selection)]="selectedPuits" selectionMode="multiple" [rowHover]="true" dataKey="id">
         <ng-template pTemplate="caption">
           <div class="flex flex-column md:flex-row md:justify-content-between md:align-items-center">
-            <h5 class="m-0">Gestion des Utilisateurs</h5>
+            <h5 class="m-0">Gestion des Puits</h5>
             <span class="block mt-2 md:mt-0 p-input-icon-left">
                             <i class="pi pi-search"></i>
                             <input  type="text" pInputText (input)="onGlobalFilter(dt, $event)" placeholder="Rechercher..."  class="w-full sm:w-auto"/>
@@ -31,58 +31,61 @@
             <th style="width: 3rem">
               <p-tableHeaderCheckbox></p-tableHeaderCheckbox>
             </th>
-            <th pSortableColumn="code">Id <p-sortIcon field="code"></p-sortIcon></th>
-            <th pSortableColumn="name">Nom <p-sortIcon field="name"></p-sortIcon></th>
-            <th pSortableColumn="rating">Pseudo <p-sortIcon field="rating"></p-sortIcon></th>
-            <th pSortableColumn="category">Poste <p-sortIcon field="category"></p-sortIcon></th>
-            <th pSortableColumn="price">Telephone <p-sortIcon field="price"></p-sortIcon></th>
-
-            <!--            <th pSortableColumn="inventoryStatus">Status <p-sortIcon field="inventoryStatus"></p-sortIcon></th>-->
+            <th pSortableColumn="id">Id <p-sortIcon field="id"></p-sortIcon></th>
+            <th pSortableColumn="reference">Reference <p-sortIcon field="reference"></p-sortIcon></th>
+            <th pSortableColumn="description">Description <p-sortIcon field="description"></p-sortIcon></th>
+            <th pSortableColumn="dateCreation">Date Creation<p-sortIcon field="dateCreation"></p-sortIcon></th>
+            <th pSortableColumn="nom">Nom <p-sortIcon field="nom"></p-sortIcon></th>
+            <th pSortableColumn="emplacement">Emplacement <p-sortIcon field="emplacement"></p-sortIcon></th>
+            <th pSortableColumn="etat">Etat <p-sortIcon field="etat"></p-sortIcon></th>
+            <th pSortableColumn="dateFermeture">Date Fermeture <p-sortIcon field="dateFermeture"></p-sortIcon></th>
             <th></th>
           </tr>
         </ng-template>
-        <ng-template pTemplate="body" let-user >
+        <ng-template pTemplate="body" let-puit >
           <tr >
             <td>
-              <p-tableCheckbox [value]="user"></p-tableCheckbox>
+              <p-tableCheckbox [value]="puit"></p-tableCheckbox>
             </td>
             <td style="width:14%; min-width:10rem;"><span class="p-column-title">Id</span>
-              {{user.id}}
+              {{puit.id}}
             </td>
             <td style="width:14%; min-width:10rem;">
-              <span class="p-column-title">Nom</span>
-              {{user.nom}}
+              <span class="p-column-title">Reference</span>
+              {{puit.reference}}
             </td>
             <td style="width:14%; min-width:10rem;">
-              <span class="p-column-title">Pseudo</span>
-              {{user.pseudo}}
+              <span class="p-column-title">Description</span>
+              {{puit.description}}
 
 
             </td>
-            <!--            <td style="width:14%; min-width:10rem;"><span class="p-column-title">Image</span>-->
-            <!--              <img [src]="'assets/demo/images/product/' + product.image" [alt]="product.name" width="100" class="shadow-4" />-->
-            <!--            </td>-->
+
 
             <td style="width:14%; min-width:10rem;">
-              <span class="p-column-title">Poste</span>
-              {{user.poste}}
+              <span class="p-column-title">Date Creation</span>
+              {{puit.dateCreation}}
             </td>
             <td style="width:14%; min-width:8rem;">
-              <span class="p-column-title">Telephone</span>
-              {{user.telephone}}
+              <span class="p-column-title">Nom</span>
+              {{puit.nom}}
             </td>
-
-
-            <!--            <td style="width:14%; min-width: 10rem;"><span class="p-column-title">Reviews</span>-->
-            <!--              <p-rating [ngModel]="product.rating" [readonly]="true" [cancel]="false"></p-rating>-->
-            <!--            </td>-->
-            <!--            <td style="width:14%; min-width: 10rem;"><span class="p-column-title">Status</span>-->
-            <!--              <span [class]="'product-badge status-' + (product.inventoryStatus ? product.inventoryStatus.toLowerCase() : '')">{{product.inventoryStatus}}</span>-->
-            <!--            </td>-->
+            <td style="width:14%; min-width:8rem;">
+              <span class="p-column-title">Emplacement</span>
+              {{puit.emplacement}}
+            </td>
+            <td style="width:14%; min-width:8rem;">
+              <span class="p-column-title">Etat</span>
+              {{puit.etat}}
+            </td>
+            <td style="width:14%; min-width:8rem;">
+              <span class="p-column-title">Date Fermeture</span>
+              {{puit.dateFermeture}}
+            </td>
             <td>
-              <div class="flex">
-                <button pButton pRipple icon="pi pi-pencil" class="p-button-rounded p-button-success mr-2" (click)="editProduct(user)"></button>
-                <button pButton pRipple icon="pi pi-trash" class="p-button-rounded p-button-warning" (click)="deleteProduct(user)"></button>
+              <div class="flex ">
+                <button pButton pRipple icon="pi pi-pencil" class="p-button-rounded p-button-success mr-2" (click)="editPuit(puit)"></button>
+                <button pButton pRipple icon="pi pi-trash" class="p-button-rounded p-button-warning" (click)="deletePuit(puit)"></button>
               </div>
             </td>
           </tr>
@@ -92,53 +95,53 @@
 
     <p-dialog [(visible)]="productDialog" [style]="{width: '450px'}" header="Product Details" [modal]="true" class="p-fluid">
       <ng-template pTemplate="content">
-        <img [src]="'assets/demo/images/product/' + product.image" [alt]="product.image" width="150" class="mt-0 mx-auto mb-5 block shadow-2" *ngIf="product.image">
         <div class="field">
-          <label for="name">Nom</label>
-          <input type="text" pInputText id="name"  [(ngModel)]="user.nom" required autofocus [ngClass]="{'ng-invalid ng-dirty' : submitted && !user.nom}"/>
-          <small class="ng-dirty ng-invalid" *ngIf="submitted && !user.nom">Name is required.</small>
+          <label for="name">Reference</label>
+          <input type="text" pInputText id="name"  [(ngModel)]="puit.reference" required autofocus [ngClass]="{'ng-invalid ng-dirty' : submitted && !puit.reference}"/>
+          <small class="ng-dirty ng-invalid" *ngIf="submitted && !puit.reference">Name is required.</small>
         </div>
         <div class="field">
-          <label for="pseudo">Pseudo</label>
-          <input type="text" pInputText id="pseudo"  [(ngModel)]="user.pseudo" required autofocus [ngClass]="{'ng-invalid ng-dirty' : submitted && !user.pseudo}"/>
-          <small class="ng-dirty ng-invalid" *ngIf="submitted && !user.pseudo">Pseudo is required.</small>
-        </div>
-
-        <div class="field">
-          <label for="poste">Poste</label>
-          <input type="text" pInputText id="poste"  [(ngModel)]="user.poste" required autofocus [ngClass]="{'ng-invalid ng-dirty' : submitted && !user.poste}"/>
-          <small class="ng-dirty ng-invalid" *ngIf="submitted && !user.poste">poste is required.</small>
-        </div>
-        <div class="field">
-          <label for="telephone">Telephone</label>
-          <input type="text" pInputText id="telephone"  [(ngModel)]="user.telephone" required autofocus [ngClass]="{'ng-invalid ng-dirty' : submitted && !user.telephone}"/>
-          <small class="ng-dirty ng-invalid" *ngIf="submitted && !user.telephone">Telephone is required.</small>
+          <label for="Description">Description</label>
+          <input type="text" pInputText id="Description"  [(ngModel)]="puit.description" required autofocus [ngClass]="{'ng-invalid ng-dirty' : submitted && !puit.description}"/>
+          <small class="ng-dirty ng-invalid" *ngIf="submitted && !puit.description">Pseudo is required.</small>
         </div>
 
-
-
         <div class="field">
-          <label for="password">Password</label>
-          <p-password id="password" [(ngModel)]="user.mp" [toggleMask]="true"></p-password>
+          <label for="dateCreation">Date Creation</label>
+          <p-calendar dateFormat="yy-mm-dd" id="dateCreation" [(ngModel)]="puit.dateCreation"  [ngClass]="{'ng-invalid ng-dirty' : submitted && !puit.dateCreation}" [showIcon]="true"></p-calendar>
+          <!--          <input type="text" pInputText id="dateCreation"  [(ngModel)]="puit.dateCreation" required autofocus [ngClass]="{'ng-invalid ng-dirty' : submitted && !puit.dateCreation}"/>-->
+          <small class="ng-dirty ng-invalid" *ngIf="submitted && !puit.dateCreation">poste is required.</small>
         </div>
+        <div class="field">
+          <label for="nom">Nom</label>
+          <input type="text" pInputText id="nom"  [(ngModel)]="puit.nom" required autofocus [ngClass]="{'ng-invalid ng-dirty' : submitted && !puit.nom}"/>
+          <small class="ng-dirty ng-invalid" *ngIf="submitted && !puit.nom">Telephone is required.</small>
+        </div>
+        <div class="field">
+
+          <label for="emplacement">Emplacement</label>
+          <input type="text" pInputText id="emplacement"  [(ngModel)]="puit.emplacement" required autofocus [ngClass]="{'ng-invalid ng-dirty' : submitted && !puit.emplacement}"/>
+          <small class="ng-dirty ng-invalid" *ngIf="submitted && !puit.emplacement">Telephone is required.</small>
+        </div>
+        <div class="field">
+          <label for="etat">Etat</label>
+          <input type="text" pInputText id="etat"  [(ngModel)]="puit.etat" required autofocus [ngClass]="{'ng-invalid ng-dirty' : submitted && !puit.etat}"/>
+          <small class="ng-dirty ng-invalid" *ngIf="submitted && !puit.etat">Telephone is required.</small>
+        </div>
+        <div class="field">
+          <label for="dateFermeture">Date Fermeture</label>
+          <p-calendar dateFormat="yy-mm-dd" id="dateFermeture" class="border border-gray-300 shadow p-3 w-full rounded mb-" [(ngModel)]="puit.dateFermeture"  [ngClass]="{'ng-invalid ng-dirty' : submitted && !puit.dateFermeture}" [showIcon]="true"></p-calendar>
+          <small class="ng-dirty ng-invalid" *ngIf="submitted && !puit.dateFermeture">Telephone is required.</small>
+        </div>
+
       </ng-template>
 
-      <div class="flex flex-wrap gap-3">
-        <div class="flex align-items-center">
-          <p-radioButton id="admin" name="admin" value="Admin" [(ngModel)]="user.type" inputId="admin"></p-radioButton>
-          <label for="admin" class="ml-2">Admin</label>
-        </div>
 
-        <div class="flex align-items-center">
-          <p-radioButton  id="employer" name="employer" value="Employer" [(ngModel)]="user.type" inputId="employer"></p-radioButton>
-          <label for="employer" class="ml-2">Employer</label>
-        </div>
-      </div>
 
 
       <ng-template pTemplate="footer">
         <button pButton pRipple label="Cancel" icon="pi pi-times" class="p-button-text" (click)="hideDialog()"></button>
-        <button pButton pRipple label="Save" icon="pi pi-check" class="p-button-text" (click)="saveUser()"></button>
+        <button pButton pRipple label="Save" icon="pi pi-check" class="p-button-text" (click)="savePuit()"></button>
       </ng-template>
     </p-dialog>
 
@@ -165,4 +168,5 @@
     </p-dialog>
   </div>
 </div>
+
 
