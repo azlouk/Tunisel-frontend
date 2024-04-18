@@ -14,8 +14,8 @@ import {ProductService} from "../../Services/product.service";
 import {CalendarModule} from "primeng/calendar";
 import {InputTextModule} from "primeng/inputtext";
 import {Sbnl} from "../../Models/sbnl";
-import {SbnlService} from "../../Services/sbnl.service";
 import {Bassin} from "../../Models/bassin";
+import {SbnlService} from "../../Services/sbnl.service";
 
 @Component({
   selector: 'app-sbnl',
@@ -72,7 +72,6 @@ export class SbnlComponent implements OnInit{
   ngOnInit() {
     this.sbnlService.getAllSbnls().subscribe((v:  Sbnl[]) => {
       this.sbnls=v;
-      // console.log(new JsonPipe().transform("====================>>>>>>"+this.sbnls))
 
     },error => {
       console.log(error)})
@@ -103,7 +102,7 @@ export class SbnlComponent implements OnInit{
 
   }
 
-  editPuit(sbnl: Sbnl) {
+  editSbnl(sbnl: Sbnl) {
     this.isUpdatesbnl=true;
 
 
@@ -111,7 +110,7 @@ export class SbnlComponent implements OnInit{
     this.productDialog = true;
   }
 
-  deletePuit(sbnl: Sbnl) {
+  deleteSbnl(sbnl: Sbnl) {
     this.deleteProductDialog = true;
 
 

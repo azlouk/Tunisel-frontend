@@ -108,7 +108,7 @@ export class SblComponent implements OnInit{
 
   deleteSbl(sbl: Sbl) {
     this.deleteProductDialog = true;
-    this.sbl;
+    this.sbl= {...sbl} ;
   }
 
   confirmDeleteSelected() {
