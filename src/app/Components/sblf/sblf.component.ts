@@ -1,39 +1,20 @@
-import {Component, OnInit} from '@angular/core';
-import {ButtonModule} from "primeng/button";
-import {CalendarModule} from "primeng/calendar";
-import {DialogModule} from "primeng/dialog";
-import {InputTextModule} from "primeng/inputtext";
-import {JsonPipe, NgClass, NgIf} from "@angular/common";
-import {PaginatorModule} from "primeng/paginator";
-import {MessageService, SharedModule} from "primeng/api";
-import {Table, TableModule} from "primeng/table";
-import {ToastModule} from "primeng/toast";
-import {ToolbarModule} from "primeng/toolbar";
+import { Component } from '@angular/core';
 import {Product} from "../../Models/product";
-import {ProductService} from "../../Services/product.service";
 import {Sbl} from "../../Models/sbl";
+import {ProductService} from "../../Services/product.service";
+import {MessageService} from "primeng/api";
 import {SblService} from "../../Services/sbl.service";
+import {JsonPipe} from "@angular/common";
+import {Table} from "primeng/table";
 
 @Component({
-  selector: 'app-sbl',
+  selector: 'app-sblf',
   standalone: true,
-  imports: [
-    ButtonModule,
-    CalendarModule,
-    DialogModule,
-    InputTextModule,
-    NgIf,
-    PaginatorModule,
-    SharedModule,
-    TableModule,
-    ToastModule,
-    ToolbarModule,
-    NgClass
-  ],
-  templateUrl: './sbl.component.html',
-  styleUrl: './sbl.component.css'
+  imports: [],
+  templateUrl: './sblf.component.html',
+  styleUrl: './sblf.component.css'
 })
-export class SblComponent implements OnInit{
+export class SblfComponent {
   productDialog: boolean = false;
 
   deleteProductDialog: boolean = false;
@@ -50,7 +31,7 @@ export class SblComponent implements OnInit{
 
   cols: any[] = [];
 
-  statuS: any[] = [];
+  statuses: any[] = [];
 
   rowsPerPageOptions = [5, 10, 20];
   // ======********============
@@ -146,7 +127,7 @@ export class SblComponent implements OnInit{
   saveSbl() {
     this.submitted = false;
     this.productDialog=false
-     alert(new JsonPipe().transform(this.sbl))
+    alert(new JsonPipe().transform(this.sbl))
     if(this.isUpdateSbl==true) {
       this.sblService.updateSbl(this.sbl).subscribe(() =>{
         this.sblService.getAllSbl().subscribe((sbls: Sbl[]) => {
