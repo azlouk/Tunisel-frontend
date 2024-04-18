@@ -6,24 +6,28 @@ import {MessageService} from "primeng/api";
 import {SblService} from "../../Services/sbl.service";
 import {JsonPipe, NgClass, NgIf} from "@angular/common";
 import {Table, TableModule} from "primeng/table";
-import {ToastModule} from "primeng/toast";
-import {ToolbarModule} from "primeng/toolbar";
+import {Sblf} from "../../Models/sblf";
+import {SblfService} from "../../Services/sblf.service";
 import {DialogModule} from "primeng/dialog";
 import {FormsModule} from "@angular/forms";
 import {CalendarModule} from "primeng/calendar";
+import {ToastModule} from "primeng/toast";
+import {ToolbarModule} from "primeng/toolbar";
+import {InputTextModule} from "primeng/inputtext";
 
 @Component({
   selector: 'app-sblf',
   standalone: true,
   imports: [
-    ToastModule,
-    ToolbarModule,
     TableModule,
     DialogModule,
-    FormsModule,
     NgClass,
+    FormsModule,
+    NgIf,
     CalendarModule,
-    NgIf
+    ToastModule,
+    ToolbarModule,
+    InputTextModule,
   ],
   templateUrl: './sblf.component.html',
   styleUrl: './sblf.component.css'
@@ -49,20 +53,20 @@ export class SblfComponent {
 
   rowsPerPageOptions = [5, 10, 20];
   // ======********============
-  sbls: Sbl[] = [];
+  sblfs: Sblf[] = [];
 
-  sbl:Sbl={};
+  sblf:Sblf={};
 
-  selectedSbls: Sbl[] = [];
+  selectedSblfs: Sblf[] = [];
 
-  private isUpdateSbl=false;
+  private isUpdateSblf=false;
 
-  constructor(private productService: ProductService, private messageService: MessageService,private sblService :SblService) {}
+  constructor(private productService: ProductService, private messageService: MessageService,private sblfService :SblfService) {}
 
   ngOnInit() {
-    this.sblService.getAllSbl().subscribe((v:  Sbl[]) => {
-      this.sbls=v;
-      console.log(new JsonPipe().transform("====================>>>>>>"+this.sbls))
+    this.sblfService.getAllSblfs().subscribe((v:  Sblf[]) => {
+      this.sblfs=v;
+      console.log(new JsonPipe().transform("====================>>>>>>"+this.sblfs))
 
     },error => {
       console.log(error)})
@@ -75,42 +79,42 @@ export class SblfComponent {
       { field: 'nom', header: 'nom' },
       { field: 'emplacement', header: 'emplacement' },
       { field: 'etat', header: 'etat' },
-      { field: 'dateFermeture', header: 'dateFermeture' },
+      { field: 'dateStock', header: 'dateStock' },
     ];
 
 
   }
 
   openNew() {
-    this.sbl ;
+    this.sblf ;
     this.submitted = false;
     this.productDialog = true;
   }
 
-  deleteSelectedSbls() {
+  deleteSelectedSblfs() {
 
     this.deleteProductsDialog = true;
 
   }
 
-  editSbl(sbl: Sbl) {
-    this.isUpdateSbl=true;
-    this.sbl= {...sbl} ;
+  editSblf(sblf: Sblf) {
+    this.isUpdateSblf=true;
+    this.sblf= {...sblf} ;
     this.productDialog = true;
   }
 
-  deleteSbl(sbl: Sbl) {
+  deleteSblf(sblf: Sblf) {
     this.deleteProductDialog = true;
-    this.sbl= {...sbl} ;
+    this.sblf= {...sblf} ;
   }
 
   confirmDeleteSelected() {
     this.deleteProductsDialog = false;
-    console.log(this.selectedSbls.length)
-    this.selectedSbls.forEach(selectedSbl => {
-      this.sblService.deleteSbl(selectedSbl.id).subscribe(
+    console.log(this.selectedSblfs.length)
+    this.selectedSblfs.forEach(selectedSblf => {
+      this.sblfService.deleteSblf(selectedSblf.id).subscribe(
         () => {
-          this.sbls = this.sbls.filter(sbl =>sbl.id !== selectedSbl.id);
+          this.sblfs = this.sblfs.filter(sblf =>sblf.id !== selectedSblf.id);
         },
         (error) => {
           console.error('Error deleting Sbl:', error);
@@ -119,18 +123,18 @@ export class SblfComponent {
     });
 
     this.messageService.add({ severity: 'success', summary: 'Successful', detail: 'Sbl Deleted', life: 3000 });
-    this.selectedSbls = [];
+    this.selectedSblfs = [];
   }
 
   confirmDelete() {
     this.deleteProductDialog = false;
-    console.log("this.sbl.id", this.sbl.id);
-    this.sbls = this.sbls.filter(val => val.id !== this.sbl.id);
-    if (this.sbl.id!= null) {
-      this.sblService.deleteSbl(this.sbl.id).subscribe(() => console.log("Sbl deleted"));
+    console.log("this.sblf.id", this.sblf.id);
+    this.sblfs = this.sblfs.filter(val => val.id !== this.sblf.id);
+    if (this.sblf.id!= null) {
+      this.sblfService.deleteSblf(this.sblf.id).subscribe(() => console.log("Sblf deleted"));
     }
-    this.messageService.add({ severity: 'success', summary: 'Successful', detail: 'Sbl Deleted', life: 3000 });
-    this.sbl ;
+    this.messageService.add({ severity: 'success', summary: 'Successful', detail: 'Sblf Deleted', life: 3000 });
+    this.sblf ;
   }
 
   hideDialog() {
@@ -138,27 +142,27 @@ export class SblfComponent {
     this.submitted = false;
   }
 
-  saveSbl() {
+  saveSblf() {
     this.submitted = false;
     this.productDialog=false
-    alert(new JsonPipe().transform(this.sbl))
-    if(this.isUpdateSbl==true) {
-      this.sblService.updateSbl(this.sbl).subscribe(() =>{
-        this.sblService.getAllSbl().subscribe((sbls: Sbl[]) => {
-          this.sbls = sbls;
+    alert(new JsonPipe().transform(this.sblf))
+    if(this.isUpdateSblf==true) {
+      this.sblfService.updateSblf(this.sblf).subscribe(() =>{
+        this.sblfService.getAllSblfs().subscribe((sblfs: Sblf[]) => {
+          this.sblfs = sblfs;
         });
       });
       console.log('Sbl updated');
-      this.isUpdateSbl=false;
+      this.isUpdateSblf=false;
     }
     else
     {
-      this.sblService.addSbl(this.sbl).subscribe(() => {
-        this.sblService.getAllSbl().subscribe((sbls: Sbl[]) => {
-          this.sbls = sbls;
+      this.sblfService.addSblf(this.sblf).subscribe(() => {
+        this.sblfService.getAllSblfs().subscribe((sblfs: Sblf[]) => {
+          this.sblfs = sblfs;
         });
       });
-      console.log('Sbl added');
+      console.log('Sblf added');
     }
   }
 

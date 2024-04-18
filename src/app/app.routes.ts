@@ -5,6 +5,7 @@ import {PuitComponent} from "./Components/puit/puit.component";
 import {BassinComponent} from "./Components/bassin/bassin.component";
 import {SblComponent} from "./Components/sbl/sbl.component";
 import {SbnlComponent} from "./Components/sbnl/sbnl.component";
+import {SblfComponent} from "./Components/sblf/sblf.component";
 
 export const routes: Routes = [
   {path:'dash', component:DashboardComponent},
@@ -12,7 +13,9 @@ export const routes: Routes = [
   {path:'puits', component:PuitComponent},
   {path:'bassins', component:BassinComponent},
   {path:'sbls', component:SblComponent},
-  {path:'sbnls', component:SbnlComponent}
+  {path:'sbnls', component:SbnlComponent},
+  {path:'sblfs', component:SblfComponent}
+
 
 
 ];
