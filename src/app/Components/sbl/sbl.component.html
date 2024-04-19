@@ -13,7 +13,7 @@
 
       </p-toolbar>
 
-      <p-table #dt [value]="sbls" [columns]="cols"  responsiveLayout="scroll" [rows]="10" [globalFilterFields]="['id','reference','description','dateCreation','nom','emplacement','etat','dateFermeture']" [paginator]="true" [rowsPerPageOptions]="[10,20,30]" [showCurrentPageReport]="true" currentPageReportTemplate="Affichage du  {first} au  {last} des  {totalRecords} entrées" [(selection)]="selectedSbls" selectionMode="multiple" [rowHover]="true" dataKey="id">
+      <p-table #dt [value]="sbls" [columns]="cols"  responsiveLayout="scroll" [rows]="10" [globalFilterFields]="['id','reference','description','dateStock','emplacement','etat','quantite','type']" [paginator]="true" [rowsPerPageOptions]="[10,20,30]" [showCurrentPageReport]="true" currentPageReportTemplate="Affichage du  {first} au  {last} des  {totalRecords} entrées" [(selection)]="selectedSbls" selectionMode="multiple" [rowHover]="true" dataKey="id">
         <ng-template pTemplate="caption">
           <div class="flex flex-column md:flex-row md:justify-content-between md:align-items-center">
             <h5 class="m-0">Gestion des Stock Sbl</h5>
@@ -40,7 +40,7 @@
             <th pSortableColumn="quantité">Quantité <p-sortIcon field="quantité"></p-sortIcon></th>
             <th pSortableColumn="type">Type <p-sortIcon field="type"></p-sortIcon></th>
 
-            <th></th>
+
           </tr>
         </ng-template>
         <ng-template pTemplate="body" let-sbl >

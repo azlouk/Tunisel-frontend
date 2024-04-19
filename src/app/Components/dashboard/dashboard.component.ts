@@ -9,6 +9,9 @@ import {TableModule} from "primeng/table";
 import {MenuModule} from "primeng/menu";
 import {ChartModule} from "primeng/chart";
 
+import {DashboardService} from "../../Services/dashboard.service";
+import {Dashboard} from "../../Models/Dashboard";
+
 
 @Component({
   selector: 'app-dashboard',
@@ -29,13 +32,15 @@ export class DashboardComponent implements OnInit, OnDestroy  {
 
   products!: Product[];
 
-  chartData: any;
+  chartDataAnalyse: any;
 
   chartOptions: any;
 
   subscription!: Subscription;
-
-  constructor(private productService: ProductService, public layoutService: LayoutService) {
+  // puit :Puit[];
+  public nbrPuits=0;
+  public dashboardData: Dashboard = new Dashboard(0,0);
+  constructor(private productService: ProductService, public layoutService: LayoutService, private dashboardService:DashboardService) {
     this.subscription = this.layoutService.configUpdate$
       .pipe(debounceTime(25))
       .subscribe((config) => {
@@ -46,11 +51,24 @@ export class DashboardComponent implements OnInit, OnDestroy  {
   ngOnInit() {
     this.initChart();
     this.productService.getProductsSmall().then(data => this.products = data);
+    this.fetchDashboardData()
 
     this.items = [
       { label: 'Add New', icon: 'pi pi-fw pi-plus' },
       { label: 'Remove', icon: 'pi pi-fw pi-minus' }
     ];
+  }
+
+  fetchDashboardData(): void {
+    this.dashboardService.getDashboardData().subscribe(
+      (data: Dashboard) => {
+        this.dashboardData = data;
+        console.log('Données du tableau de bord récupérées :', data);
+      },
+      (error) => {
+        console.error('Erreur lors de la récupération des données du tableau de bord :', error);
+      }
+    );
   }
 
   initChart() {
@@ -59,7 +77,7 @@ export class DashboardComponent implements OnInit, OnDestroy  {
     const textColorSecondary = documentStyle.getPropertyValue('--text-color-secondary');
     const surfaceBorder = documentStyle.getPropertyValue('--surface-border');
 
-    this.chartData = {
+    this.chartDataAnalyse = {
       labels: ['January', 'February', 'March', 'April', 'May', 'June', 'July'],
       datasets: [
         {

@@ -13,7 +13,7 @@
 
       </p-toolbar>
 
-      <p-table #dt [value]="users" [columns]="cols"  responsiveLayout="scroll" [rows]="10" [globalFilterFields]="['name','country.name','representative.name','status']" [paginator]="true" [rowsPerPageOptions]="[10,20,30]" [showCurrentPageReport]="true" currentPageReportTemplate="Affichage du  {first} au  {last} des  {totalRecords} entrées" [(selection)]="selectedUsers" selectionMode="multiple" [rowHover]="true" dataKey="id">
+      <p-table #dt [value]="users" [columns]="cols"  responsiveLayout="scroll" [rows]="10" [globalFilterFields]="['id','pseudo','.poste','telephone','nom']" [paginator]="true" [rowsPerPageOptions]="[10,20,30]" [showCurrentPageReport]="true" currentPageReportTemplate="Affichage du  {first} au  {last} des  {totalRecords} entrées" [(selection)]="selectedUsers" selectionMode="multiple" [rowHover]="true" dataKey="id">
         <ng-template pTemplate="caption">
           <div class="flex flex-column md:flex-row md:justify-content-between md:align-items-center">
             <h5 class="m-0">Gestion des Utilisateurs</h5>
@@ -31,11 +31,11 @@
             <th style="width: 3rem">
               <p-tableHeaderCheckbox></p-tableHeaderCheckbox>
             </th>
-            <th pSortableColumn="code">Id <p-sortIcon field="code"></p-sortIcon></th>
-            <th pSortableColumn="name">Nom <p-sortIcon field="name"></p-sortIcon></th>
-            <th pSortableColumn="rating">Pseudo <p-sortIcon field="rating"></p-sortIcon></th>
-            <th pSortableColumn="category">Poste <p-sortIcon field="category"></p-sortIcon></th>
-            <th pSortableColumn="price">Telephone <p-sortIcon field="price"></p-sortIcon></th>
+            <th pSortableColumn="id">Id <p-sortIcon field="id"></p-sortIcon></th>
+            <th pSortableColumn="nom">Nom <p-sortIcon field="nom"></p-sortIcon></th>
+            <th pSortableColumn="pseudo">Pseudo <p-sortIcon field="pseudo"></p-sortIcon></th>
+            <th pSortableColumn="poste">Poste <p-sortIcon field="poste"></p-sortIcon></th>
+            <th pSortableColumn="telephone">Telephone <p-sortIcon field="telephone"></p-sortIcon></th>
 
             <th></th>
           </tr>
