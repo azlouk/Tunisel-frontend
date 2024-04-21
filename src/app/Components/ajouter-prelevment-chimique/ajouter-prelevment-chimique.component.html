@@ -1,0 +1,96 @@
+<div class="grid">
+  <div class="col-12 card px-6 py-6 ">
+    <p-toolbar styleClass="mb-4" >
+      <ng-template pTemplate="end"  >
+        <div class=" my-2 " >
+          <button pButton pRipple label="Retour" icon="pi pi-arrow-left" class="p-button-success mr-2 " (click)="retour()"></button>
+        </div>
+      </ng-template>
+    </p-toolbar>
+    <div class=" flex justify-content-between  mt-8 border-1 border-round border-gray-300 p-6  h-22rem">
+    <div class="  flex flex-column   justify-content-between col-3 ">
+      <p-floatLabel >
+        <p-calendar   id="dateCreation" dateFormat="yy-mm-dd"  [showIcon]="true"></p-calendar>
+        <label for="dateCreation">Date Creation</label>
+<!--        <p-calendar id="dateCreation" dateFormat="yy-mm-dd" [(ngModel)]="bassin.dateCreation"  [ngClass]="{'ng-invalid ng-dirty' : submitted && !bassin.dateCreation}" [showIcon]="true"></p-calendar>-->
+<!--        <small class="ng-dirty ng-invalid" *ngIf="submitted && !bassin.dateCreation">poste is required.</small>-->
+      </p-floatLabel>
+    <p-floatLabel>
+      <input type="text" pInputText id="Reference"  />
+      <label >Reference</label>
+    </p-floatLabel>
+    <p-floatLabel>
+      <input type="text" pInputText id="Qualite"  />
+      <label >Qualite</label>
+    </p-floatLabel>
+    </div>
+      <div class="flex flex-column justify-content-between col-4">
+        <p-tabView>
+          <p-tabPanel header="Puit">
+            <p-listbox [options]="puits" [(ngModel)]="selectedPuit" optionLabel="nom" [filter]="true"  [listStyle]="{'height': '87px'}" ></p-listbox>
+
+          </p-tabPanel>
+          <p-tabPanel header="Bassin">
+            <p-listbox [options]="bassins" [(ngModel)]="selectedBassin" optionLabel="nom" [filter]="true" [listStyle]="{'height': '87px'}"  ></p-listbox>
+
+          </p-tabPanel>
+          <p-tabPanel header="Sbnl" pTooltip="Enter your username">
+            <p-listbox [options]="sbnls" [(ngModel)]="selectedSbnl" optionLabel="reference" [filter]="true" [listStyle]="{'height': '87px'}"  ></p-listbox>
+
+          </p-tabPanel>
+
+          <p-tabPanel header="Sbl">
+            <p-listbox [options]="sbls" [(ngModel)]="selectedSbl" optionLabel="reference" [filter]="true" [listStyle]="{'height': '87px'}" ></p-listbox>
+
+          </p-tabPanel>
+
+          <p-tabPanel header="Sblf">
+            <p-listbox [options]="sblfs" [(ngModel)]="selectedSblf" optionLabel="reference" [filter]="true"  [listStyle]="{'height': '87px'}" ></p-listbox>
+
+          </p-tabPanel>
+        </p-tabView>
+      </div>
+
+      <div class="card flex col-4 ">
+        <div class="flex flex-column gap-5 h-full flex-wrap ">
+          <div class="flex align-items-center  gap-1 " *ngFor="let attribut of attributs">
+            <p-checkbox [(ngModel)]="attribut.checked" [binary]="true" Id="ny"></p-checkbox>
+            <label for="ny" class="font-bold">{{attribut.name}}</label>
+          </div>
+        </div>
+
+      </div>
+    </div>
+<!---->
+<!--    <div class="  mt-4 border-1 border-round border-gray-300 p-6  ">-->
+<!--      <div class="row">-->
+<!--          <div class="   "  *ngFor="let attribut of attributs">-->
+<!--            <p-floatLabel  class="col-md-4 mb-2" *ngIf="attribut.checked" >-->
+<!--            <p-inputNumber [(ngModel)]="value1" inputId="mile" suffix=" mi" [name]="attribut.name"> </p-inputNumber>-->
+<!--              <label >{{attribut.label}}</label>-->
+<!--            </p-floatLabel>-->
+<!--          </div>-->
+<!--      </div>-->
+<!--    </div>-->
+    <div class="mt-4 border-1 border-round border-gray-300 p-6 ">
+      <div class="row flex flex-wrap justify-content-evenly">
+        <div *ngFor="let attribut of getattributs()"  class="m-3   ">
+
+            <p-floatLabel>
+              <p-inputNumber class="" [(ngModel)]="attribut.value" inputId="mile" suffix=" mi" [name]="attribut.name"></p-inputNumber>
+              <label>{{attribut.label}}</label>
+            </p-floatLabel>
+
+        </div>
+      </div>
+    </div>
+    <!---->
+    <div class=" flex col-12 justify-content-end">
+    <button pButton label="Enregisrer" icon="pi pi-check" class=" " (click)="saveAnalyseChimique()"></button>
+<!--    <button pButton label="Submit"></button>-->
+    </div>
+  </div>
+</div>
+
+
+
