@@ -46,7 +46,7 @@ export class AppMenuComponent implements OnInit {
       {
         label: 'Analyses ',
         items: [
-          {label: 'Prélèvement', icon: 'pi pi-fw pi-check-circle', routerLink: ['/uikit/floatlabel']},
+          {label: 'Prélèvement Chimique', icon: 'pi pi-fw pi-check-circle', routerLink: ['/analyseChimique']},
         ]
       },
       {
