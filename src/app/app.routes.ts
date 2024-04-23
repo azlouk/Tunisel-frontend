@@ -20,6 +20,7 @@ export const routes: Routes = [
   {path:'sbnls', component:SbnlComponent},
   {path:'sblfs', component:SblfComponent},
   {path:'analyseChimique', component:AnalyseChimiqueComponent},
-  {path:'ajouterPrelevmentChimique', component:AjouterPrelevmentChimiqueComponent}
+  {path:'ajouterPrelevmentChimique', component:AjouterPrelevmentChimiqueComponent},
+  {path:'updatePrelevmentChimique/:id', component:AjouterPrelevmentChimiqueComponent}
 
 ];

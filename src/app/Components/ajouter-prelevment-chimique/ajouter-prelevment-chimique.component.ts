@@ -2,7 +2,7 @@ import {Component, OnInit} from '@angular/core';
 import {ButtonModule} from "primeng/button";
 import {MessageService, SharedModule} from "primeng/api";
 import {ToolbarModule} from "primeng/toolbar";
-import {Router} from "@angular/router";
+import {ActivatedRoute, Router} from "@angular/router";
 import {ProductService} from "../../Services/product.service";
 import {PuitService} from "../../Services/puit.service";
 import {InputNumberModule} from "primeng/inputnumber";
@@ -26,6 +26,9 @@ import {Sblf} from "../../Models/sblf";
 import {SblfService} from "../../Services/sblf.service";
 import {CheckboxModule} from "primeng/checkbox";
 import {AnalysesChimique} from "../../Models/analyses-chimique";
+import {AnalyseChimiqueService} from "../../Services/analyse-chimique.service";
+import {log} from "@angular-devkit/build-angular/src/builders/ssr-dev-server";
+import {AnalyseChimiqueComponent} from "../analyse-chimique/analyse-chimique.component";
 
 @Component({
   selector: 'app-ajouter-prelevment-chimique',
@@ -64,6 +67,7 @@ export class AjouterPrelevmentChimiqueComponent implements OnInit{
   selectedSblf:Sblf={};
   checked: boolean = false;
   analysesChimique: AnalysesChimique={} ;
+  analysePuit:Puit={};
   attributs: any[] = [
     {name:'D',checked:false,label:'Densité', value:this.analysesChimique.densite},
     {name:'Ms',checked:false,label:'Matiére en suspension', value:this.analysesChimique.matiereEnSuspension},
@@ -81,17 +85,56 @@ export class AjouterPrelevmentChimiqueComponent implements OnInit{
     {name:'Fe',checked:false,label:'Frrocyanure', value:this.analysesChimique.ferrocyanure},
 
   ];
+  private analyseChimiqueId: any;
+  public isUpdateAnalyseChimique=false;
   constructor(private router: Router,
               private puitService :PuitService,
               private bassinService :BassinService,
               private sbnlService :SbnlService,
               private sblService :SblService,
-              private sblfService :SblfService)
+              private sblfService :SblfService,
+              private analyseChimiqueService:AnalyseChimiqueService ,
+              private route: ActivatedRoute,
+              private analyse:AnalyseChimiqueComponent)
   {}
 
 
 
   ngOnInit(): void {
+
+    this.analyseChimiqueId = this.route.snapshot.paramMap.get('id');
+    this.isUpdateAnalyseChimique=this.analyseChimiqueId!==null
+
+    this.analyseChimiqueService.getElementByAnalyseChimiqueId(this.analyseChimiqueId).subscribe((value :any) => {
+      this.selectedPuit=value.puit
+      this.selectedBassin=value.bassin;
+      this.selectedSbl=value.sbl;
+      this.selectedSbnl=value.sbnl;
+      this.selectedSblf=value.sblf ;
+      console.log(new JsonPipe().transform(value))
+    }, error => {
+
+    });
+this.analyseChimiqueService.getAnalyseChimiqueById(this.analyseChimiqueId).subscribe(value => {this.analysesChimique=value;
+  this.attributs[0].value=this.analysesChimique.densite;
+  this.attributs[1].value=this.analysesChimique.matiereEnSuspension;
+  this.attributs[2].value=this.analysesChimique.salimite;
+  this.attributs[3].value=this.analysesChimique.calcium;
+  this.attributs[4].value=this.analysesChimique.magnesium;
+  this.attributs[5].value=this.analysesChimique.sulfate;
+  this.attributs[6].value=this.analysesChimique.humidite;
+  this.attributs[7].value=this.analysesChimique.matiereInsoluble;
+  this.attributs[8].value=this.analysesChimique.potassium;
+  this.attributs[9].value=this.analysesChimique.sodium;
+  this.attributs[10].value=this.analysesChimique.chlorure;
+  this.attributs[11].value=this.analysesChimique.ph;
+  this.attributs[12].value=this.analysesChimique.chlorureDeSodium;
+  this.attributs[13].value=this.analysesChimique.ferrocyanure;
+  for (const attribut of this.attributs) {
+    attribut.checked = attribut.value != null;
+  }
+
+  },error => error)
     this.puitService.getAllPuits().subscribe((v:  Puit[]) => {
       this.puits=v;
       console.log(new JsonPipe().transform("====================>>>>>>"+this.puits))
@@ -136,8 +179,33 @@ export class AjouterPrelevmentChimiqueComponent implements OnInit{
 
 
   saveAnalyseChimique() {
-    console.log(new JsonPipe().transform(this.attributs))
-  }
+if(this.isUpdateAnalyseChimique){
+  // console.log('======>>>> ya tahan   '+new JsonPipe().transform(this.analyse.updateAnalyseChimique))
+   this.analyseChimiqueService.updateAnalyseChimique(this.analysesChimique).subscribe(value => this.router.navigate(['/analyseChimique']))
+
+}
+if(!this.isUpdateAnalyseChimique){
+   this.selectedPuit.analysesChimiques=[];
+   this.analysesChimique.densite=this.attributs[0].value;
+   this.analysesChimique.matiereEnSuspension=this.attributs[1].value;
+   this.analysesChimique.salimite=this.attributs[2].value;
+   this.analysesChimique.calcium=this.attributs[3].value;
+   this.analysesChimique.magnesium=this.attributs[4].value;
+   this.analysesChimique.sulfate=this.attributs[5].value;
+   this.analysesChimique.humidite=this.attributs[6].value;
+   this.analysesChimique.matiereInsoluble=this.attributs[7].value;
+   this.analysesChimique.potassium=this.attributs[8].value;
+   this.analysesChimique.sodium=this.attributs[9].value;
+   this.analysesChimique.chlorure=this.attributs[10].value;
+   this.analysesChimique.ph=this.attributs[11].value;
+   this.analysesChimique.chlorureDeSodium=this.attributs[12].value;
+   this.analysesChimique.ferrocyanure=this.attributs[13].value;
+
+   this.selectedPuit.analysesChimiques.push(this.analysesChimique) ;
+
+    this.analyseChimiqueService.addAnalyseChimique(this.selectedPuit).subscribe(value => this.router.navigate(['/analyseChimique']))
+
+  }}
 
   getattributs():any {
     return   this.attributs.filter(value => value.checked==true);
