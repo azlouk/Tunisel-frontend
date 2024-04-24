@@ -102,7 +102,7 @@
         </div>
         <div class="field">
           <label for="Description">Description</label>
-          <input type="text" pInputText id="Description"  [(ngModel)]="puit.description" required autofocus [ngClass]="{'ng-invalid ng-dirty' : submitted && !puit.description}"/>
+          <textarea rows="3" cols="30" type="text" pInputText id="Description"  [(ngModel)]="puit.description" required autofocus [ngClass]="{'ng-invalid ng-dirty' : submitted && !puit.description}"></textarea>
           <small class="ng-dirty ng-invalid" *ngIf="submitted && !puit.description">Pseudo is required.</small>
         </div>
 

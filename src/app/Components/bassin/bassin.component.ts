@@ -84,17 +84,7 @@ export class BassinComponent implements OnInit {
   constructor(private productService: ProductService, private messageService: MessageService,private bassinService :BassinService,private puitService:PuitService) { }
 
   ngOnInit() {
-    // // this.productService.getProducts().then(data => this.products = data);
-    // let adminList$: Observable<User[]> = this.userService.getAdmins();
-    // let employerList$: Observable<User[]> = this.userService.getEmployers();
-    //
-    // forkJoin([adminList$, employerList$]).pipe(
-    //   map(([admins, employers]) => {
-    //     admins.forEach(user => user.type = UserType.ADMIN);
-    //     employers.forEach(user => user.type = UserType.EMPLOYEE);
-    //     return admins.concat(employers);
-    //   })
-    // )
+
     this.bassinService.getAllBassins()
       .subscribe((bassins: Bassin[]) => {
         this.bassins = bassins;

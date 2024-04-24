@@ -14,21 +14,23 @@ import {CalendarModule} from "primeng/calendar";
 import {ToastModule} from "primeng/toast";
 import {ToolbarModule} from "primeng/toolbar";
 import {InputTextModule} from "primeng/inputtext";
+import {DropdownModule} from "primeng/dropdown";
 
 @Component({
   selector: 'app-sblf',
   standalone: true,
-  imports: [
-    TableModule,
-    DialogModule,
-    NgClass,
-    FormsModule,
-    NgIf,
-    CalendarModule,
-    ToastModule,
-    ToolbarModule,
-    InputTextModule,
-  ],
+    imports: [
+        TableModule,
+        DialogModule,
+        NgClass,
+        FormsModule,
+        NgIf,
+        CalendarModule,
+        ToastModule,
+        ToolbarModule,
+        InputTextModule,
+        DropdownModule,
+    ],
   templateUrl: './sblf.component.html',
   styleUrl: './sblf.component.css'
 })
@@ -58,10 +60,10 @@ export class SblfComponent {
   sblf:Sblf={};
 
   selectedSblfs: Sblf[] = [];
-
+  sbls: Sbl[] = [];
   private isUpdateSblf=false;
 
-  constructor(private productService: ProductService, private messageService: MessageService,private sblfService :SblfService) {}
+  constructor(private productService: ProductService, private messageService: MessageService,private sblfService :SblfService,private sblService:SblService) {}
 
   ngOnInit() {
     this.sblfService.getAllSblfs().subscribe((v:  Sblf[]) => {
@@ -70,7 +72,12 @@ export class SblfComponent {
 
     },error => {
       console.log(error)})
+    this.sblService.getAllSbl().subscribe((v:  Sbl[]) => {
+      this.sbls=v;
+      console.log(new JsonPipe().transform("====================>>>>>>"+this.sbls))
 
+    },error => {
+      console.log(error)})
     this.cols = [
       { field: 'id', header: 'id' },
       { field: 'reference', header: 'reference' },
@@ -145,7 +152,6 @@ export class SblfComponent {
   saveSblf() {
     this.submitted = false;
     this.productDialog=false
-    alert(new JsonPipe().transform(this.sblf))
     if(this.isUpdateSblf==true) {
       this.sblfService.updateSblf(this.sblf).subscribe(() =>{
         this.sblfService.getAllSblfs().subscribe((sblfs: Sblf[]) => {
@@ -166,26 +172,8 @@ export class SblfComponent {
     }
   }
 
-  findIndexById(id: string): number {
-    let index = -1;
-    for (let i = 0; i < this.products.length; i++) {
-      if (this.products[i].id === id) {
-        index = i;
-        break;
-      }
-    }
 
-    return index;
-  }
 
-  createId(): string {
-    let id = '';
-    const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
-    for (let i = 0; i < 5; i++) {
-      id += chars.charAt(Math.floor(Math.random() * chars.length));
-    }
-    return id;
-  }
 
   onGlobalFilter(table: Table, event: Event) {
     table.filterGlobal((event.target as HTMLInputElement).value, 'contains');

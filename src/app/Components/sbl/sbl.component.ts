@@ -13,6 +13,8 @@ import {Product} from "../../Models/product";
 import {ProductService} from "../../Services/product.service";
 import {Sbl} from "../../Models/sbl";
 import {SblService} from "../../Services/sbl.service";
+import {Sbnl} from "../../Models/sbnl";
+import {SbnlService} from "../../Services/sbnl.service";
 
 @Component({
   selector: 'app-sbl',
@@ -59,19 +61,23 @@ export class SblComponent implements OnInit{
   sbl:Sbl={};
 
   selectedSbls: Sbl[] = [];
-
+  sbnls: Sbnl[] = [];
   private isUpdateSbl=false;
 
-  constructor(private productService: ProductService, private messageService: MessageService,private sblService :SblService) {}
+  constructor(private productService: ProductService, private messageService: MessageService,private sblService :SblService,private sbnlService:SbnlService) {}
 
   ngOnInit() {
     this.sblService.getAllSbl().subscribe((v:  Sbl[]) => {
       this.sbls=v;
-      console.log(new JsonPipe().transform("====================>>>>>>"+this.sbls))
+      // console.log(new JsonPipe().transform("====================>>>>>>"+this.sbls))
 
     },error => {
       console.log(error)})
+    this.sbnlService.getAllSbnls().subscribe((v:  Sbnl[]) => {
+      this.sbnls=v;
 
+    },error => {
+      console.log(error)})
     this.cols = [
       { field: 'id', header: 'id' },
       { field: 'reference', header: 'reference' },
@@ -149,7 +155,7 @@ export class SblComponent implements OnInit{
     if(this.isUpdateSbl==true) {
       this.sblService.updateSbl(this.sbl).subscribe(() =>{
         this.sblService.getAllSbl().subscribe((sbls: Sbl[]) => {
-          this.sbls = sbls;     alert(new JsonPipe().transform(this.sbl))
+          this.sbls = sbls;
 
         });
       });
@@ -167,26 +173,9 @@ export class SblComponent implements OnInit{
     }
   }
 
-  findIndexById(id: string): number {
-    let index = -1;
-    for (let i = 0; i < this.products.length; i++) {
-      if (this.products[i].id === id) {
-        index = i;
-        break;
-      }
-    }
 
-    return index;
-  }
 
-  createId(): string {
-    let id = '';
-    const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
-    for (let i = 0; i < 5; i++) {
-      id += chars.charAt(Math.floor(Math.random() * chars.length));
-    }
-    return id;
-  }
+
 
   onGlobalFilter(table: Table, event: Event) {
     table.filterGlobal((event.target as HTMLInputElement).value, 'contains');

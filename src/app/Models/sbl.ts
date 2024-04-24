@@ -11,7 +11,7 @@ export interface Sbl {
   etat?: string;
   quantite?: number;
   stockType?:StockType ;
-  sbls?: Sbl[];
+  sblSbnl?: Sbl;
   analysesChimiques?: AnalysesChimique[];
   analysesPhysiques?: AnalysesPhysique[];
 }

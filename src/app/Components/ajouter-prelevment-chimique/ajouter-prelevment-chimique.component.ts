@@ -9,7 +9,7 @@ import {InputNumberModule} from "primeng/inputnumber";
 import {FormsModule} from "@angular/forms";
 import {FloatLabelModule} from "primeng/floatlabel";
 import {CalendarModule} from "primeng/calendar";
-import {JsonPipe, NgForOf, NgIf} from "@angular/common";
+import {DatePipe, JsonPipe, NgClass, NgForOf, NgIf} from "@angular/common";
 import {InputTextModule} from "primeng/inputtext";
 import {RadioButtonModule} from "primeng/radiobutton";
 import {TooltipModule} from "primeng/tooltip";
@@ -29,6 +29,8 @@ import {AnalysesChimique} from "../../Models/analyses-chimique";
 import {AnalyseChimiqueService} from "../../Services/analyse-chimique.service";
 import {log} from "@angular-devkit/build-angular/src/builders/ssr-dev-server";
 import {AnalyseChimiqueComponent} from "../analyse-chimique/analyse-chimique.component";
+import {DialogModule} from "primeng/dialog";
+import {DropdownModule} from "primeng/dropdown";
 
 @Component({
   selector: 'app-ajouter-prelevment-chimique',
@@ -49,6 +51,10 @@ import {AnalyseChimiqueComponent} from "../analyse-chimique/analyse-chimique.com
     ListboxModule,
     CheckboxModule,
     NgForOf,
+    DatePipe,
+    DialogModule,
+    DropdownModule,
+    NgClass,
 
   ],
   templateUrl: './ajouter-prelevment-chimique.component.html',
@@ -87,6 +93,7 @@ export class AjouterPrelevmentChimiqueComponent implements OnInit{
   ];
   private analyseChimiqueId: any;
   public isUpdateAnalyseChimique=false;
+  visibleDetails: boolean=false;
   constructor(private router: Router,
               private puitService :PuitService,
               private bassinService :BassinService,
@@ -226,5 +233,9 @@ else{
 
   getattributs():any {
     return   this.attributs.filter(value => value.checked==true);
+  }
+
+  openNew() {
+    this.visibleDetails=true;
   }
 }

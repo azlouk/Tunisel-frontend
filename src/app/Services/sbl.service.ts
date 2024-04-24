@@ -29,9 +29,6 @@ export class SblService {
 
 
   addSbl(sbl: Sbl) : Observable<Sbl>{
-    alert(new JsonPipe().transform(sbl))
-    alert(new JsonPipe().transform(this.http.post<Sbl>(`${this.apiUrl}/sbls/add`, sbl)))
-
     return this.http.post<Sbl>(`${this.apiUrl}/sbls/add`, sbl);
 
   }

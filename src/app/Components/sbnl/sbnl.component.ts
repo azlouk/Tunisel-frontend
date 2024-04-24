@@ -16,6 +16,7 @@ import {InputTextModule} from "primeng/inputtext";
 import {Sbnl} from "../../Models/sbnl";
 import {Bassin} from "../../Models/bassin";
 import {SbnlService} from "../../Services/sbnl.service";
+import {BassinService} from "../../Services/bassin.service";
 
 @Component({
   selector: 'app-sbnl',
@@ -66,8 +67,8 @@ export class SbnlComponent implements OnInit{
   selectedSbnls: Sbnl[] = [];
 
   private isUpdatesbnl=false;
-
-  constructor(private productService: ProductService, private messageService: MessageService,private sbnlService :SbnlService) {}
+  bassins: Bassin[] = [];
+  constructor(private productService: ProductService, private messageService: MessageService,private sbnlService :SbnlService,private serviceBassin:BassinService) {}
 
   ngOnInit() {
     this.sbnlService.getAllSbnls().subscribe((v:  Sbnl[]) => {
@@ -75,7 +76,12 @@ export class SbnlComponent implements OnInit{
 
     },error => {
       console.log(error)})
-
+    this.serviceBassin.getAllBassins()
+      .subscribe((bassins: Bassin[]) => {
+        this.bassins = bassins;
+      }, error => {
+        console.log('Error fetching users:', error);
+      });
     this.cols = [
       { field: 'id', header: 'id' },
       { field: 'reference', header: 'reference' },

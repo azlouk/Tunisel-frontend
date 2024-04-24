@@ -13,6 +13,7 @@ export interface Sblf {
   etat?: string;
   quantite?: number;
   stockType?:StockType ;
+  sblfSbl?:Sblf;
   analysesChimiques?: AnalysesChimique[];
   analysesPhysiques?: AnalysesPhysique[];
 }
