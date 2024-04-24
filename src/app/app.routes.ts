@@ -30,6 +30,7 @@ export const routes: Routes = [
   {path:'ajouterFichevieIntervention/:id', component:AjoutFichevieInterventionComponent},
 
   {path:'analyseChimique', component:AnalyseChimiqueComponent},
-  {path:'ajouterPrelevmentChimique', component:AjouterPrelevmentChimiqueComponent}
+  {path:'ajouterPrelevmentChimique', component:AjouterPrelevmentChimiqueComponent},
+  {path:'updatePrelevmentChimique/:id', component:AjouterPrelevmentChimiqueComponent}
 
 ];

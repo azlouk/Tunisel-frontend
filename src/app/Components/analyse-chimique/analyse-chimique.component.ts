@@ -1,4 +1,4 @@
-import {Component, OnInit} from '@angular/core';
+import {Component, Injectable, OnInit} from '@angular/core';
 import {Product} from "../../Models/product";
 import {Puit} from "../../Models/puit";
 import {ProductService} from "../../Services/product.service";
@@ -14,6 +14,8 @@ import {InputTextModule} from "primeng/inputtext";
 import {ToastModule} from "primeng/toast";
 import {ToolbarModule} from "primeng/toolbar";
 import {Router} from "@angular/router";
+import {AnalysesChimique} from "../../Models/analyses-chimique";
+import {AnalyseChimiqueService} from "../../Services/analyse-chimique.service";
 
 @Component({
   selector: 'app-analyse-chimique',
@@ -33,6 +35,9 @@ import {Router} from "@angular/router";
   ],
   templateUrl: './analyse-chimique.component.html',
   styleUrl: './analyse-chimique.component.css'
+})
+@Injectable({
+  providedIn: 'root'
 })
 export class AnalyseChimiqueComponent implements OnInit{
   productDialog: boolean = false;
@@ -55,20 +60,20 @@ export class AnalyseChimiqueComponent implements OnInit{
 
   rowsPerPageOptions = [5, 10, 20];
   // ======********============
-  puits: Puit[] = [];
 
-  puit:Puit={};
+  analysesChimiques:AnalysesChimique[] = [];
 
-  selectedPuits: Puit[] = [];
+  analyseChimique:AnalysesChimique={};
+  public updateAnalyseChimique:AnalysesChimique={};
+  selectedAnalysesChimiques: AnalysesChimique[] = [];
+  private isUpdateAnalyseChimique=false;
 
-  private isUpdateUser=false;
-
-  constructor(private router: Router,private productService: ProductService, private messageService: MessageService,private puitService :PuitService) {}
+  constructor(private router: Router,private productService: ProductService, private messageService: MessageService,private analyseChimiqueService :AnalyseChimiqueService) {}
 
   ngOnInit() {
-    this.puitService.getAllPuits().subscribe((v:  Puit[]) => {
-      this.puits=v;
-      console.log(new JsonPipe().transform("====================>>>>>>"+this.puits))
+    this.analyseChimiqueService.getAllAnalysesChimiques().subscribe((analysesChimiques:  AnalysesChimique[]) => {
+      this.analysesChimiques=analysesChimiques;
+      console.log(new JsonPipe().transform("====================>>>>>>"+this.analysesChimiques))
 
     },error => {
       console.log(error)})
@@ -92,33 +97,35 @@ export class AnalyseChimiqueComponent implements OnInit{
     this.router.navigate(['/ajouterPrelevmentChimique']);
   }
 
-  deleteSelectedPuits() {
+  deleteSelectedAnalysesChimiques() {
 
     this.deleteProductsDialog = true;
 
   }
 
-  editPuit(puit: Puit) {
-    this.isUpdateUser=true;
+  editAnalyseChimique(analyseChimique: AnalysesChimique) {
+    this.router.navigate([`/updatePrelevmentChimique/${analyseChimique.id}`]);
+    this.isUpdateAnalyseChimique=true;
+    this.analyseChimique = { ...analyseChimique };
+    this.updateAnalyseChimique = { ...analyseChimique };
+    console.log('======>>>> hhffhfhfhfffhhf  '+new JsonPipe().transform(this.updateAnalyseChimique))
 
-
-    this.puit = { ...puit };
     this.productDialog = true;
   }
 
-  deletePuit(puit: Puit) {
+  deleteAnalyseChimique(analyseChimique: AnalysesChimique) {
     this.deleteProductDialog = true;
 
-    this.puit = { ...puit };
+    this.analyseChimique = { ...analyseChimique };
   }
 
   confirmDeleteSelected() {
     this.deleteProductsDialog = false;
-    console.log(this.selectedPuits.length)
-    this.selectedPuits.forEach(selectedPuit => {
-      this.puitService.deletePuit(selectedPuit.id).subscribe(
+    console.log(this.selectedAnalysesChimiques.length)
+    this.selectedAnalysesChimiques.forEach(selectedAnalyseChimique => {
+      this.analyseChimiqueService.deleteAnalyseChimique(selectedAnalyseChimique.id).subscribe(
         () => {
-          this.puits = this.puits.filter(puit =>puit.id !== selectedPuit.id);
+          this.analysesChimiques = this.analysesChimiques.filter(analyseChimique =>analyseChimique.id !== selectedAnalyseChimique.id);
         },
         (error) => {
           console.error('Error deleting user:', error);
@@ -127,18 +134,17 @@ export class AnalyseChimiqueComponent implements OnInit{
     });
 
     this.messageService.add({ severity: 'success', summary: 'Successful', detail: 'User Deleted', life: 3000 });
-    this.selectedPuits = [];
+    this.selectedAnalysesChimiques = [];
   }
 
   confirmDelete() {
     this.deleteProductDialog = false;
-    console.log("this.puit.id", this.puit.id);
-    this.puits = this.puits.filter(val => val.id !== this.puit.id);
-    if (this.puit.id!= null) {
-      this.puitService.deletePuit(this.puit.id).subscribe(() => console.log("puit deleted"));
+    this.analysesChimiques = this.analysesChimiques.filter(val => val.id !== this.analyseChimique.id);
+    if (this.analyseChimique.id!= null) {
+      this.analyseChimiqueService.deleteAnalyseChimique(this.analyseChimique.id).subscribe(() => console.log("analyse Chimique deleted"));
     }
-    this.messageService.add({ severity: 'success', summary: 'Successful', detail: 'Puit Deleted', life: 3000 });
-    this.puit ;
+    this.messageService.add({ severity: 'success', summary: 'Successful', detail: 'Analyse Chimique Deleted', life: 3000 });
+    this.analyseChimique ;
   }
 
   hideDialog() {
@@ -146,29 +152,29 @@ export class AnalyseChimiqueComponent implements OnInit{
     this.submitted = false;
   }
 
-  savePuit() {
-    this.submitted = false;
-    this.productDialog=false
-    // alert(new JsonPipe().transform(this.puit))
-    if(this.isUpdateUser==true) {
-      this.puitService.updatePuit(this.puit).subscribe(() =>{
-        this.puitService.getAllPuits().subscribe((puits: Puit[]) => {
-          this.puits = puits;
-        });
-      });
-      console.log('Puit updated');
-      this.isUpdateUser=false;
-    }
-    else
-    {
-      this.puitService.addPuit(this.puit).subscribe(() => {
-        this.puitService.getAllPuits().subscribe((puits: Puit[]) => {
-          this.puits = puits;
-        });
-      });
-      console.log('Puit added');
-    }
-  }
+  // savePuit() {
+  //   this.submitted = false;
+  //   this.productDialog=false
+  //   // alert(new JsonPipe().transform(this.puit))
+  //   if(this.isUpdateUser==true) {
+  //     this.puitService.updatePuit(this.puit).subscribe(() =>{
+  //       this.puitService.getAllPuits().subscribe((puits: Puit[]) => {
+  //         this.puits = puits;
+  //       });
+  //     });
+  //     console.log('Puit updated');
+  //     this.isUpdateUser=false;
+  //   }
+  //   else
+  //   {
+  //     this.puitService.addPuit(this.puit).subscribe(() => {
+  //       this.puitService.getAllPuits().subscribe((puits: Puit[]) => {
+  //         this.puits = puits;
+  //       });
+  //     });
+  //     console.log('Puit added');
+  //   }
+  // }
 
   findIndexById(id: string): number {
     let index = -1;

@@ -6,14 +6,14 @@
         <ng-template pTemplate="left">
           <div class="my-2">
             <button pButton pRipple label="Ajouter" icon="pi pi-plus" class="p-button-success mr-2" (click)="openNew()"></button>
-            <button pButton pRipple label="Supprimer" icon="pi pi-trash" class="p-button-danger" (click)="deleteSelectedPuits()" [disabled]="!selectedPuits || !selectedPuits.length"></button>
+            <button pButton pRipple label="Supprimer" icon="pi pi-trash" class="p-button-danger" (click)="deleteSelectedAnalysesChimiques()" [disabled]="!selectedAnalysesChimiques || !selectedAnalysesChimiques.length"></button>
           </div>
         </ng-template>
 
 
       </p-toolbar>
 
-      <p-table #dt [value]="puits" [columns]="cols"  responsiveLayout="scroll" [rows]="10" [globalFilterFields]="['id','reference','description','dateCreation','nom','emplacement','etat','dateFermeture']" [paginator]="true" [rowsPerPageOptions]="[10,20,30]" [showCurrentPageReport]="true" currentPageReportTemplate="Affichage du  {first} au  {last} des  {totalRecords} entrées" [(selection)]="selectedPuits" selectionMode="multiple" [rowHover]="true" dataKey="id">
+      <p-table #dt [value]="analysesChimiques" [columns]="cols"  responsiveLayout="scroll" [rows]="10" [globalFilterFields]="['id','reference','description','dateCreation','nom','emplacement','etat','dateFermeture']" [paginator]="true" [rowsPerPageOptions]="[10,20,30]" [showCurrentPageReport]="true" currentPageReportTemplate="Affichage du  {first} au  {last} des  {totalRecords} entrées" [(selection)]="selectedAnalysesChimiques" selectionMode="multiple" [rowHover]="true" dataKey="id">
         <ng-template pTemplate="caption">
           <div class="flex flex-column md:flex-row md:justify-content-between md:align-items-center">
             <h5 class="m-0">Gestion des Puits</h5>
@@ -42,50 +42,46 @@
             <th></th>
           </tr>
         </ng-template>
-        <ng-template pTemplate="body" let-puit >
+        <ng-template pTemplate="body" let-analyseChimique >
           <tr >
             <td>
-              <p-tableCheckbox [value]="puit"></p-tableCheckbox>
+              <p-tableCheckbox [value]="analyseChimique"></p-tableCheckbox>
             </td>
             <td style="width:14%; min-width:10rem;"><span class="p-column-title">Id</span>
-              {{puit.id}}
+              {{analyseChimique.id}}
             </td>
             <td style="width:14%; min-width:10rem;">
               <span class="p-column-title">Reference</span>
-              {{puit.reference}}
+              {{analyseChimique.reference}}
             </td>
             <td style="width:14%; min-width:10rem;">
-              <span class="p-column-title">Description</span>
-              {{puit.description}}
-
-
+              <span class="p-column-title">Date Analyse</span>
+              {{analyseChimique.dateAnalyse}}
             </td>
-
-
             <td style="width:14%; min-width:10rem;">
-              <span class="p-column-title">Date Creation</span>
-              {{puit.dateCreation}}
+              <span class="p-column-title">Densite</span>
+              {{analyseChimique.densite}}
             </td>
             <td style="width:14%; min-width:8rem;">
-              <span class="p-column-title">Nom</span>
-              {{puit.nom}}
+              <span class="p-column-title">Matiere en suspension</span>
+              {{analyseChimique.matiereEnSuspension}}
             </td>
             <td style="width:14%; min-width:8rem;">
-              <span class="p-column-title">Emplacement</span>
-              {{puit.emplacement}}
+              <span class="p-column-title">Salimite</span>
+              {{analyseChimique.salimite}}
             </td>
             <td style="width:14%; min-width:8rem;">
-              <span class="p-column-title">Etat</span>
-              {{puit.etat}}
+              <span class="p-column-title">Calcium</span>
+              {{analyseChimique.calcium}}
             </td>
             <td style="width:14%; min-width:8rem;">
-              <span class="p-column-title">Date Fermeture</span>
-              {{puit.dateFermeture}}
+              <span class="p-column-title">Magnesium</span>
+              {{analyseChimique.magnesium}}
             </td>
             <td>
               <div class="flex ">
-                <button pButton pRipple icon="pi pi-pencil" class="p-button-rounded p-button-success mr-2" (click)="editPuit(puit)"></button>
-                <button pButton pRipple icon="pi pi-trash" class="p-button-rounded p-button-warning" (click)="deletePuit(puit)"></button>
+                <button pButton pRipple icon="pi pi-pencil" class="p-button-rounded p-button-success mr-2" (click)="editAnalyseChimique(analyseChimique)"></button>
+                <button pButton pRipple icon="pi pi-trash" class="p-button-rounded p-button-warning" (click)="deleteAnalyseChimique(analyseChimique)"></button>
               </div>
             </td>
           </tr>
