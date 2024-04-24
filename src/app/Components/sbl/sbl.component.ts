@@ -146,11 +146,11 @@ export class SblComponent implements OnInit{
   saveSbl() {
     this.submitted = false;
     this.productDialog=false
-     alert(new JsonPipe().transform(this.sbl))
     if(this.isUpdateSbl==true) {
       this.sblService.updateSbl(this.sbl).subscribe(() =>{
         this.sblService.getAllSbl().subscribe((sbls: Sbl[]) => {
-          this.sbls = sbls;
+          this.sbls = sbls;     alert(new JsonPipe().transform(this.sbl))
+
         });
       });
       console.log('Sbl updated');

@@ -1,0 +1,4 @@
+export enum EtatFiche {
+  MISEENSERVICE='MISEENSERVICE',
+  ARCHIVE='ARCHIVE'
+}

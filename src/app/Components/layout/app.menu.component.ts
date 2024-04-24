@@ -50,9 +50,12 @@ export class AppMenuComponent implements OnInit {
         ]
       },
       {
-        label: 'Inventaires',
+        label: 'Gestion Des Instruments',
         items: [
-          {label: 'Inventaire', icon: 'pi pi-fw pi-clipboard', routerLink: ['/uikit/invalidstate']},]
+          {label: 'Etalonage', icon: 'pi pi-fw pi-clipboard', routerLink: ['/etalonage']},
+          {label: 'Inventaire', icon: 'pi pi-fw pi-clipboard', routerLink: ['/inventaire']},
+
+    ]
       },
 
     ]
