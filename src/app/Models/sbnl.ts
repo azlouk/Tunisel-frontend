@@ -2,6 +2,7 @@ import {StockType} from "../Enum/stock-type";
 import {AnalysesChimique} from "./analyses-chimique";
 import {AnalysesPhysique} from "./analyses-physique";
 import {Sbl} from "./sbl";
+import {Bassin} from "./bassin";
 
 export interface Sbnl {
 
@@ -12,7 +13,7 @@ export interface Sbnl {
   etat?: string;
   quantite?: number;
   stockType?:StockType ;
-  sbls?: Sbl[];
+  sbnlBassin?: Bassin;
   analysesChimiques?: AnalysesChimique[];
   analysesPhysiques?: AnalysesPhysique[];
 }

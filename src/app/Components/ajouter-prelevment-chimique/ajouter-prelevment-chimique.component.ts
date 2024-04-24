@@ -184,27 +184,44 @@ if(this.isUpdateAnalyseChimique){
    this.analyseChimiqueService.updateAnalyseChimique(this.analysesChimique).subscribe(value => this.router.navigate(['/analyseChimique']))
 
 }
-if(!this.isUpdateAnalyseChimique){
+else{
+  this.analysesChimique.densite=this.attributs[0].value;
+  this.analysesChimique.matiereEnSuspension=this.attributs[1].value;
+  this.analysesChimique.salimite=this.attributs[2].value;
+  this.analysesChimique.calcium=this.attributs[3].value;
+  this.analysesChimique.magnesium=this.attributs[4].value;
+  this.analysesChimique.sulfate=this.attributs[5].value;
+  this.analysesChimique.humidite=this.attributs[6].value;
+  this.analysesChimique.matiereInsoluble=this.attributs[7].value;
+  this.analysesChimique.potassium=this.attributs[8].value;
+  this.analysesChimique.sodium=this.attributs[9].value;
+  this.analysesChimique.chlorure=this.attributs[10].value;
+  this.analysesChimique.ph=this.attributs[11].value;
+  this.analysesChimique.chlorureDeSodium=this.attributs[12].value;
+  this.analysesChimique.ferrocyanure=this.attributs[13].value;
+
+
+  if(this.selectedPuit){
    this.selectedPuit.analysesChimiques=[];
-   this.analysesChimique.densite=this.attributs[0].value;
-   this.analysesChimique.matiereEnSuspension=this.attributs[1].value;
-   this.analysesChimique.salimite=this.attributs[2].value;
-   this.analysesChimique.calcium=this.attributs[3].value;
-   this.analysesChimique.magnesium=this.attributs[4].value;
-   this.analysesChimique.sulfate=this.attributs[5].value;
-   this.analysesChimique.humidite=this.attributs[6].value;
-   this.analysesChimique.matiereInsoluble=this.attributs[7].value;
-   this.analysesChimique.potassium=this.attributs[8].value;
-   this.analysesChimique.sodium=this.attributs[9].value;
-   this.analysesChimique.chlorure=this.attributs[10].value;
-   this.analysesChimique.ph=this.attributs[11].value;
-   this.analysesChimique.chlorureDeSodium=this.attributs[12].value;
-   this.analysesChimique.ferrocyanure=this.attributs[13].value;
-
-   this.selectedPuit.analysesChimiques.push(this.analysesChimique) ;
-
+    this.selectedPuit.analysesChimiques.push(this.analysesChimique) ;
     this.analyseChimiqueService.addAnalyseChimique(this.selectedPuit).subscribe(value => this.router.navigate(['/analyseChimique']))
-
+  }if(this.selectedBassin){
+    this.selectedBassin.analysesChimiques=[];
+    this.selectedBassin.analysesChimiques.push(this.analysesChimique) ;
+    this.analyseChimiqueService.addAnalyseChimiqueToBassin(this.selectedBassin).subscribe(value => this.router.navigate(['/analyseChimique']))
+  }if(this.selectedSbnl){
+    this.selectedSbnl.analysesChimiques=[];
+    this.selectedSbnl.analysesChimiques.push(this.analysesChimique) ;
+    this.analyseChimiqueService.addAnalyseChimiqueToSbnl(this.selectedSbnl).subscribe(value => this.router.navigate(['/analyseChimique']))
+  }if(this.selectedSbl){
+    this.selectedSbl.analysesChimiques=[];
+    this.selectedSbl.analysesChimiques.push(this.analysesChimique) ;
+    this.analyseChimiqueService.addAnalyseChimiqueToSbl(this.selectedSbl).subscribe(value => this.router.navigate(['/analyseChimique']))
+  }if(this.selectedSblf){
+    this.selectedSblf.analysesChimiques=[];
+    this.selectedSblf.analysesChimiques.push(this.analysesChimique) ;
+    this.analyseChimiqueService.addAnalyseChimiqueToSblf(this.selectedSblf).subscribe(value => this.router.navigate(['/analyseChimique']))
+  }
   }}
 
   getattributs():any {
