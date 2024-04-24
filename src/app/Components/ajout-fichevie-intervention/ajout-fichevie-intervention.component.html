@@ -204,7 +204,8 @@
               {{intervention.observation}}
             </td>
 
-              <div class="flex ">
+              <div class="flex " >
+                <button *ngIf="isUpdateFichVie"  pButton pRipple icon="pi pi-pencil" class="p-button-rounded p-button-success mr-2" (click)="editIntrvention(intervention)"></button>
                 <button pButton pRipple icon="pi pi-trash" class="p-button-rounded p-button-warning" (click)="deleteIntervention(intervention)"></button>
               </div>
 
