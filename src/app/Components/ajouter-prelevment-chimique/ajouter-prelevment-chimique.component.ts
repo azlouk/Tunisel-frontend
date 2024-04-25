@@ -186,28 +186,24 @@ this.analyseChimiqueService.getAnalyseChimiqueById(this.analyseChimiqueId).subsc
 
 
   saveAnalyseChimique() {
+    this.analysesChimique.densite=this.attributs[0].value;
+    this.analysesChimique.matiereEnSuspension=this.attributs[1].value;
+    this.analysesChimique.salimite=this.attributs[2].value;
+    this.analysesChimique.calcium=this.attributs[3].value;
+    this.analysesChimique.magnesium=this.attributs[4].value;
+    this.analysesChimique.sulfate=this.attributs[5].value;
+    this.analysesChimique.humidite=this.attributs[6].value;
+    this.analysesChimique.matiereInsoluble=this.attributs[7].value;
+    this.analysesChimique.potassium=this.attributs[8].value;
+    this.analysesChimique.sodium=this.attributs[9].value;
+    this.analysesChimique.chlorure=this.attributs[10].value;
+    this.analysesChimique.ph=this.attributs[11].value;
+    this.analysesChimique.chlorureDeSodium=this.attributs[12].value;
+    this.analysesChimique.ferrocyanure=this.attributs[13].value;
 if(this.isUpdateAnalyseChimique){
-  // console.log('======>>>> ya tahan   '+new JsonPipe().transform(this.analyse.updateAnalyseChimique))
    this.analyseChimiqueService.updateAnalyseChimique(this.analysesChimique).subscribe(value => this.router.navigate(['/analyseChimique']))
-
 }
 else{
-  this.analysesChimique.densite=this.attributs[0].value;
-  this.analysesChimique.matiereEnSuspension=this.attributs[1].value;
-  this.analysesChimique.salimite=this.attributs[2].value;
-  this.analysesChimique.calcium=this.attributs[3].value;
-  this.analysesChimique.magnesium=this.attributs[4].value;
-  this.analysesChimique.sulfate=this.attributs[5].value;
-  this.analysesChimique.humidite=this.attributs[6].value;
-  this.analysesChimique.matiereInsoluble=this.attributs[7].value;
-  this.analysesChimique.potassium=this.attributs[8].value;
-  this.analysesChimique.sodium=this.attributs[9].value;
-  this.analysesChimique.chlorure=this.attributs[10].value;
-  this.analysesChimique.ph=this.attributs[11].value;
-  this.analysesChimique.chlorureDeSodium=this.attributs[12].value;
-  this.analysesChimique.ferrocyanure=this.attributs[13].value;
-
-
   if(this.selectedPuit){
    this.selectedPuit.analysesChimiques=[];
     this.selectedPuit.analysesChimiques.push(this.analysesChimique) ;

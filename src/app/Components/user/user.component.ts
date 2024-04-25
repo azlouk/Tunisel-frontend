@@ -71,13 +71,8 @@ export class UserComponent implements OnInit{
   constructor(private productService: ProductService, private messageService: MessageService,private userService :UserService) { }
 
   ngOnInit() {
-    // this.productService.getProducts().then(data => this.products = data);
     this.userService.getAllUsers().subscribe((v:  User[]) => {
-      this.users=v;
-      console.log(new JsonPipe().transform("====================>>>>>>"+this.users))
-
-    },error => {
-      console.log(error)})
+      this.users=v;},error => {console.log(error)})
 
     this.cols = [
       { field: 'product', header: 'Product' },
@@ -155,48 +150,37 @@ console.log(this.selectedUsers.length)
   saveUser() {
     this.submitted = false;
     this.productDialog=false
-  alert(new JsonPipe().transform(this.user))
-    console.log(this.user.type)
     if(this.isUpdateUser==true) {
       console.log(new JsonPipe().transform(this.user) )
-      this.userService.saveUser(this.user).subscribe(() => console.log("user Updated"));
+      this.userService.saveUser(this.user).subscribe(() => {
+        console.log("user Updated");this.userService.getAllUsers().subscribe((v:  User[]) => {
+          this.users=v;},error => {console.log(error)})
+      });
       this.isUpdateUser=false;
     }
     else
     {
-      if (this.user.type && this.user.type === UserType.ADMIN){
+      if (this.user.userType && this.user.userType === UserType.ADMIN){
         this.userService.addAdmin(this.user).subscribe(() => console.log("Admin Added")
-        );console.log(new JsonPipe().transform(this.user) )
+        );this.userService.getAllUsers().subscribe((v:  User[]) => {
+          this.users=v;},error => {console.log(error)})
       }
-      if(this.user.type=="Employer") {
-        this.userService.AddEmployer(this.user).subscribe(() => console.log("Employer Added"));
+      if(this.user.userType=="EMPLOYER") {
+        this.userService.AddEmployer(this.user).subscribe(() => {
+          console.log("Employer Added");this.userService.getAllUsers().subscribe((v:  User[]) => {
+            this.users=v;},error => {console.log(error)})
+        });
       }
 
     }
   }
 
-  findIndexById(id: string): number {
-    let index = -1;
-    for (let i = 0; i < this.products.length; i++) {
-      if (this.products[i].id === id) {
-        index = i;
-        break;
-      }
-    }
 
-    return index;
-  }
 
-  createId(): string {
-    let id = '';
-    const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
-    for (let i = 0; i < 5; i++) {
-      id += chars.charAt(Math.floor(Math.random() * chars.length));
-    }
-    return id;
-  }
 
   onGlobalFilter(table: Table, event: Event) {
     table.filterGlobal((event.target as HTMLInputElement).value, 'contains');
   }
+
+  protected readonly UserType = UserType;
 }

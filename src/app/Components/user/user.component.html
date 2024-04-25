@@ -84,7 +84,16 @@
 
     <p-dialog [(visible)]="productDialog" [style]="{width: '450px'}" header="Product Details" [modal]="true" class="p-fluid">
       <ng-template pTemplate="content">
-        <img [src]="'assets/demo/images/product/' + product.image" [alt]="product.image" width="150" class="mt-0 mx-auto mb-5 block shadow-2" *ngIf="product.image">
+        <div class="flex justify-content-evenly">
+        <div class="field">
+          <p-radioButton id="admin" name="user" [value]="UserType.ADMIN" [(ngModel)]="user.userType" inputId="admin"></p-radioButton>
+          <label for="admin" class="ml-2">Admin</label>
+        </div>
+        <div class="field">
+          <p-radioButton  id="employer" name="user"  [value]="UserType.EMPLOYER" [(ngModel)]="user.userType" inputId="employer"></p-radioButton>
+          <label for="employer" class="ml-2">Employer</label>
+        </div>
+        </div>
         <div class="field">
           <label for="name">Nom</label>
           <input type="text" pInputText id="name"  [(ngModel)]="user.nom" required autofocus [ngClass]="{'ng-invalid ng-dirty' : submitted && !user.nom}"/>
@@ -115,17 +124,17 @@
           </div>
       </ng-template>
 
-      <div class="flex flex-wrap gap-3">
-        <div class="flex align-items-center">
-          <p-radioButton id="admin" name="admin" value="Admin" [(ngModel)]="user.type" inputId="admin"></p-radioButton>
-          <label for="admin" class="ml-2">Admin</label>
-        </div>
+<!--      <div class="flex flex-wrap gap-3">-->
+<!--        <div class="flex align-items-center">-->
+<!--          <p-radioButton id="admin" name="admin" value="Admin" [(ngModel)]="user.type" inputId="admin"></p-radioButton>-->
+<!--          <label for="admin" class="ml-2">Admin</label>-->
+<!--        </div>-->
 
-        <div class="flex align-items-center">
-          <p-radioButton  id="employer" name="employer" value="Employer" [(ngModel)]="user.type" inputId="employer"></p-radioButton>
-          <label for="employer" class="ml-2">Employer</label>
-        </div>
-      </div>
+<!--        <div class="flex align-items-center">-->
+<!--          <p-radioButton  id="employer" name="employer" value="Employer" [(ngModel)]="user.type" inputId="employer"></p-radioButton>-->
+<!--          <label for="employer" class="ml-2">Employer</label>-->
+<!--        </div>-->
+<!--      </div>-->
 
 
       <ng-template pTemplate="footer">
