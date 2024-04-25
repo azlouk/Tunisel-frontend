@@ -1,11 +1,14 @@
-export interface Intervention {
-  id?: number;
-  dateintervention?: Date;
-  qui?: string;
-  natureAction?: string;
-  resultat?: string;
-  certificat?: string;
-  nomVisa?: string;
-  observation?: string;
+import {User} from "./user";
+import {ProduitDefectueux} from "./produitDefectueux";
 
+class Article {
+}
+
+export interface Inventaire {
+  id?: number;
+  reference?: string;
+  dateInventaire?: Date;
+  users?: User[];
+  articles?: Article[];
+  produitDefectueuxes?: ProduitDefectueux[];
 }

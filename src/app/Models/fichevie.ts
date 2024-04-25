@@ -1,4 +1,4 @@
-import {Intervention} from "./inventaire";
+import {Intervention} from "./intervention";
 import {EtatFiche} from "../Enum/etat-fiche";
 import {Emplacement} from "../Enum/emplacement";
 

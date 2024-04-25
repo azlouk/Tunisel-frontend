@@ -23,7 +23,7 @@ import {FormsModule} from "@angular/forms";
 import {RadioButtonModule} from "primeng/radiobutton";
 import {DialogModule} from "primeng/dialog";
 import {InterventionService} from "../../Services/intervention.service";
-import {Intervention} from "../../Models/inventaire";
+import {Intervention} from "../../Models/intervention";
 import {FicheVieService} from "../../Services/fichevie.service";
 import {FicheVie} from "../../Models/fichevie";
 import {Table, TableModule} from "primeng/table";

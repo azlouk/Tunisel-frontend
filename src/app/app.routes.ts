@@ -15,6 +15,7 @@ import {
 import {
   AjoutFichevieInterventionComponent
 } from "./Components/ajout-fichevie-intervention/ajout-fichevie-intervention.component";
+import {ArticleComponent} from "./Components/article/article.component";
 
 export const routes: Routes = [
   {path:'dash', component:DashboardComponent},
@@ -28,6 +29,7 @@ export const routes: Routes = [
   {path:'etalonage', component:FichevieComponent},
   {path:'ajouterFichevieIntervention', component:AjoutFichevieInterventionComponent},
   {path:'ajouterFichevieIntervention/:id', component:AjoutFichevieInterventionComponent},
+  {path:'articles', component:ArticleComponent},
 
   {path:'analyseChimique', component:AnalyseChimiqueComponent},
   {path:'ajouterPrelevmentChimique', component:AjouterPrelevmentChimiqueComponent},

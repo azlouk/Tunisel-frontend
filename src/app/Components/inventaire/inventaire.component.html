@@ -1,1 +1,154 @@
-<p>inventaire works!</p>
+<div class="grid">
+  <div class="col-12">
+    <div class="card px-6 py-6">
+      <p-toast></p-toast>
+      <p-toolbar styleClass="mb-4">
+        <ng-template pTemplate="left">
+          <div class="my-2">
+            <button pButton pRipple label="Ajouter" icon="pi pi-plus" class="p-button-success mr-2" (click)="openNew()"></button>
+            <button pButton pRipple label="Supprimer" icon="pi pi-trash" class="p-button-danger" (click)="deleteSelectedPuits()" [disabled]="!selectedPuits || !selectedPuits.length"></button>
+          </div>
+        </ng-template>
+
+
+      </p-toolbar>
+
+      <p-table #dt [value]="puits" [columns]="cols"  responsiveLayout="scroll" [rows]="10" [globalFilterFields]="['id','reference','description','dateCreation','nom','emplacement','etat','dateFermeture']" [paginator]="true" [rowsPerPageOptions]="[10,20,30]" [showCurrentPageReport]="true" currentPageReportTemplate="Affichage du  {first} au  {last} des  {totalRecords} entrées" [(selection)]="selectedPuits" selectionMode="multiple" [rowHover]="true" dataKey="id">
+        <ng-template pTemplate="caption">
+          <div class="flex flex-column md:flex-row md:justify-content-between md:align-items-center">
+            <h5 class="m-0">Gestion des Puits</h5>
+            <span class="block mt-2 md:mt-0 p-input-icon-left">
+                            <i class="pi pi-search"></i>
+                            <input  type="text" pInputText (input)="onGlobalFilter(dt, $event)" placeholder="Rechercher..."  class="w-full sm:w-auto"/>
+                        </span>
+
+
+
+          </div>
+        </ng-template>
+        <ng-template pTemplate="header">
+          <tr>
+            <th style="width: 3rem">
+              <p-tableHeaderCheckbox></p-tableHeaderCheckbox>
+            </th>
+            <th pSortableColumn="id">Id <p-sortIcon field="id"></p-sortIcon></th>
+            <th pSortableColumn="reference">Reference <p-sortIcon field="reference"></p-sortIcon></th>
+            <th pSortableColumn="description">Description <p-sortIcon field="description"></p-sortIcon></th>
+            <th pSortableColumn="dateCreation">Date Creation<p-sortIcon field="dateCreation"></p-sortIcon></th>
+            <th pSortableColumn="nom">Nom <p-sortIcon field="nom"></p-sortIcon></th>
+            <th pSortableColumn="emplacement">Emplacement <p-sortIcon field="emplacement"></p-sortIcon></th>
+            <th pSortableColumn="etat">Etat <p-sortIcon field="etat"></p-sortIcon></th>
+            <th pSortableColumn="dateFermeture">Date Fermeture <p-sortIcon field="dateFermeture"></p-sortIcon></th>
+            <th></th>
+          </tr>
+        </ng-template>
+        <ng-template pTemplate="body" let-puit >
+          <tr >
+            <td>
+              <p-tableCheckbox [value]="puit"></p-tableCheckbox>
+            </td>
+            <td style="width:14%; min-width:10rem;"><span class="p-column-title">Id</span>
+              {{puit.id}}
+            </td>
+            <td style="width:14%; min-width:10rem;">
+              <span class="p-column-title">Reference</span>
+              {{puit.reference}}
+            </td>
+            <td style="width:14%; min-width:10rem;">
+              <span class="p-column-title">Description</span>
+              {{puit.description}}
+
+
+            </td>
+
+
+            <td style="width:14%; min-width:10rem;">
+              <span class="p-column-title">Date Creation</span>
+              {{puit.dateCreation}}
+            </td>
+            <td style="width:14%; min-width:8rem;">
+              <span class="p-column-title">Nom</span>
+              {{puit.nom}}
+            </td>
+            <td style="width:14%; min-width:8rem;">
+              <span class="p-column-title">Emplacement</span>
+              {{puit.emplacement}}
+            </td>
+            <td style="width:14%; min-width:8rem;">
+              <span class="p-column-title">Etat</span>
+              {{puit.etat}}
+            </td>
+            <td style="width:14%; min-width:8rem;">
+              <span class="p-column-title">Date Fermeture</span>
+              {{puit.dateFermeture}}
+            </td>
+            <td>
+              <div class="flex ">
+                <button pButton pRipple icon="pi pi-pencil" class="p-button-rounded p-button-success mr-2" (click)="editPuit(puit)"></button>
+                <button pButton pRipple icon="pi pi-trash" class="p-button-rounded p-button-warning" (click)="deletePuit(puit)"></button>
+              </div>
+            </td>
+          </tr>
+        </ng-template>
+      </p-table>
+    </div>
+
+    <p-dialog [(visible)]="productDialog" [style]="{width: '450px'}" header="Product Details" [modal]="true" class="p-fluid">
+      <ng-template pTemplate="content">
+        <div class="field">
+          <label for="name">Reference</label>
+          <input type="text" pInputText id="name"  [(ngModel)]="puit.reference" required autofocus [ngClass]="{'ng-invalid ng-dirty' : submitted && !puit.reference}"/>
+          <small class="ng-dirty ng-invalid" *ngIf="submitted && !puit.reference">Name is required.</small>
+        </div>
+        <div class="field">
+          <label for="Description">Description</label>
+          <textarea rows="3" cols="30" type="text" pInputText id="Description"  [(ngModel)]="puit.description" required autofocus [ngClass]="{'ng-invalid ng-dirty' : submitted && !puit.description}"></textarea>
+          <small class="ng-dirty ng-invalid" *ngIf="submitted && !puit.description">Pseudo is required.</small>
+        </div>
+
+        <div class="field">
+          <label for="dateCreation">Date Creation</label>
+          <p-calendar dateFormat="yy-mm-dd" id="dateCreation" [(ngModel)]="puit.dateCreation"  [ngClass]="{'ng-invalid ng-dirty' : submitted && !puit.dateCreation}" [showIcon]="true"></p-calendar>
+          <!--          <input type="text" pInputText id="dateCreation"  [(ngModel)]="puit.dateCreation" required autofocus [ngClass]="{'ng-invalid ng-dirty' : submitted && !puit.dateCreation}"/>-->
+          <small class="ng-dirty ng-invalid" *ngIf="submitted && !puit.dateCreation">poste is required.</small>
+        </div>
+        <div class="field">
+          <label for="nom">Nom</label>
+          <input type="text" pInputText id="nom"  [(ngModel)]="puit.nom" required autofocus [ngClass]="{'ng-invalid ng-dirty' : submitted && !puit.nom}"/>
+          <small class="ng-dirty ng-invalid" *ngIf="submitted && !puit.nom">Telephone is required.</small>
+        </div>
+        <div class="field">
+
+          <label for="emplacement">Emplacement</label>
+          <input type="text" pInputText id="emplacement"  [(ngModel)]="puit.emplacement" required autofocus [ngClass]="{'ng-invalid ng-dirty' : submitted && !puit.emplacement}"/>
+          <small class="ng-dirty ng-invalid" *ngIf="submitted && !puit.emplacement">Telephone is required.</small>
+        </div>
+        <div class="field">
+          <label for="etat">Etat</label>
+          <input type="text" pInputText id="etat"  [(ngModel)]="puit.etat" required autofocus [ngClass]="{'ng-invalid ng-dirty' : submitted && !puit.etat}"/>
+          <small class="ng-dirty ng-invalid" *ngIf="submitted && !puit.etat">Telephone is required.</small>
+        </div>
+        <div class="field">
+          <label for="dateFermeture">Date Fermeture</label>
+          <p-calendar dateFormat="yy-mm-dd" id="dateFermeture" class="border border-gray-300 shadow p-3 w-full rounded mb-" [(ngModel)]="puit.dateFermeture"  [ngClass]="{'ng-invalid ng-dirty' : submitted && !puit.dateFermeture}" [showIcon]="true"></p-calendar>
+          <small class="ng-dirty ng-invalid" *ngIf="submitted && !puit.dateFermeture">Telephone is required.</small>
+        </div>
+
+      </ng-template>
+
+
+
+
+      <ng-template pTemplate="footer">
+        <button pButton pRipple label="Cancel" icon="pi pi-times" class="p-button-text" (click)="hideDialog()"></button>
+        <button pButton pRipple label="Save" icon="pi pi-check" class="p-button-text" (click)="savePuit()"></button>
+      </ng-template>
+    </p-dialog>
+
+
+
+
+  </div>
+</div>
+
+
