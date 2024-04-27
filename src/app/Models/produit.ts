@@ -1,6 +1,7 @@
 import {Article} from "./article";
+import {ProduitDefectueux} from "./produitDefectueux";
 
-export interface ProduitDefectueux {
+export interface Produit {
   id?: number;
   nom?: string;
   quantite?: number;
@@ -8,6 +9,4 @@ export interface ProduitDefectueux {
   reference?: string;
   article?: Article;
   produitDefectueux?: ProduitDefectueux;
-  description?: string;
-  dateDeffectation?: Date;
 }

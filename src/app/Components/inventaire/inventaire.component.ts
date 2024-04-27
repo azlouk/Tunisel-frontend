@@ -9,9 +9,11 @@ import {MessageService, SharedModule} from "primeng/api";
 import {Table, TableModule} from "primeng/table";
 import {ToastModule} from "primeng/toast";
 import {ToolbarModule} from "primeng/toolbar";
-import {Puit} from "../../Models/puit";
 import {ProductService} from "../../Services/product.service";
-import {PuitService} from "../../Services/puit.service";
+import {Product} from "../../Models/product";
+import {Router} from "@angular/router";
+import {Inventaire} from "../../Models/inventaire";
+import {InventaireService} from "../../Services/inventaire.service";
 
 @Component({
   selector: 'app-inventaire',
@@ -40,30 +42,35 @@ export class InventaireComponent implements OnInit{
 
   deleteProductsDialog: boolean = false;
 
+  products: Product[] = [];
 
+  product: Product = {};
 
+  selectedProducts: Product[] = [];
 
   submitted: boolean = false;
 
   cols: any[] = [];
 
+  statuses: any[] = [];
 
   rowsPerPageOptions = [5, 10, 20];
   // ======********============
-  puits: Puit[] = [];
+  inventaires: Inventaire[] = [];
 
-  puit:Puit={};
+  inventaire:Inventaire={};
 
-  selectedPuits: Puit[] = [];
+  selectedInventaire: Inventaire[] = [];
 
-  private isUpdateUser=false;
+  private isUpdateInventaire=false;
 
-  constructor(private productService: ProductService, private messageService: MessageService,private puitService :PuitService) {}
+
+  constructor(private router: Router,private productService: ProductService, private messageService: MessageService,private inventaireService :InventaireService) {}
 
   ngOnInit() {
-    this.puitService.getAllPuits().subscribe((v:  Puit[]) => {
-      this.puits=v;
-      console.log(new JsonPipe().transform("====================>>>>>>"+this.puits))
+    this.inventaireService.getInventaires().subscribe((v:  Inventaire[]) => {
+      this.inventaires=v;
+      console.log(new JsonPipe().transform("====================>>>>>>"+this.inventaires))
 
     },error => {
       console.log(error)})
@@ -71,70 +78,73 @@ export class InventaireComponent implements OnInit{
     this.cols = [
       { field: 'id', header: 'id' },
       { field: 'reference', header: 'reference' },
-      { field: 'description', header: 'description' },
-      { field: 'dateCreation', header: 'dateCreation' },
-      { field: 'nom', header: 'nom' },
+      { field: 'designation', header: 'designation' },
+      { field: 'code', header: 'code' },
+      { field: 'serie', header: 'serie' },
+      { field: 'marque', header: 'marque' },
+      { field: 'verification', header: 'verification' },
+      { field: 'dateInventaire', header: 'dateInventaire' },
+      { field: 'etatFiche', header: 'etatFiche' },
       { field: 'emplacement', header: 'emplacement' },
-      { field: 'etat', header: 'etat' },
-      { field: 'dateFermeture', header: 'dateFermeture' },
+
     ];
 
 
   }
 
   openNew() {
-    this.puit;
-    this.submitted = false;
-    this.productDialog = true;
+
+    this.router.navigate(['/ajouterInventaire']);
   }
 
-  deleteSelectedPuits() {
+  deleteSelectedInventaire() {
 
     this.deleteProductsDialog = true;
 
   }
 
-  editPuit(puit: Puit) {
-    this.isUpdateUser=true;
+  editInventaire(inventaire: Inventaire) {
+    this.isUpdateInventaire=true;
+    this.router.navigate(['/ajouterFichevieIntervention/'+inventaire.id]);
 
 
-    this.puit = { ...puit };
+    this.inventaire = { ...inventaire };
     this.productDialog = true;
   }
 
-  deletePuit(puit: Puit) {
+  deleteInventaire(inventaire:Inventaire) {
     this.deleteProductDialog = true;
 
-    this.puit = { ...puit };
+    this.inventaire = { ...inventaire };
   }
 
   confirmDeleteSelected() {
     this.deleteProductsDialog = false;
-    console.log(this.selectedPuits.length)
-    this.selectedPuits.forEach(selectedPuit => {
-      this.puitService.deletePuit(selectedPuit.id).subscribe(
+    console.log(this.selectedInventaire.length)
+    this.selectedInventaire.forEach(selectedInventaire => {
+      this.inventaireService.deleteInventaire(selectedInventaire.id).subscribe(
         () => {
-          this.puits = this.puits.filter(puit =>puit.id !== selectedPuit.id);
+          this.inventaires = this.inventaires.filter(inventaire =>inventaire.id !== selectedInventaire.id);
+
         },
         (error) => {
-          console.error('Error deleting user:', error);
+          console.error('Error deleting fiche de vie:', error);
         }
       );
     });
 
-    this.messageService.add({ severity: 'success', summary: 'Successful', detail: 'User Deleted', life: 3000 });
-    this.selectedPuits = [];
+    this.messageService.add({ severity: 'success', summary: 'Successful', detail: 'fiche de vie Deleted', life: 3000 });
+    this.selectedInventaire = [];
   }
 
   confirmDelete() {
     this.deleteProductDialog = false;
-    console.log("this.puit.id", this.puit.id);
-    this.puits = this.puits.filter(val => val.id !== this.puit.id);
-    if (this.puit.id!= null) {
-      this.puitService.deletePuit(this.puit.id).subscribe(() => console.log("puit deleted"));
+    this.inventaires = this.inventaires.filter(val => val.id !== this.inventaire.id);
+    if (this.inventaire.id!= null) {
+      this.inventaireService.deleteInventaire(this.inventaire.id).subscribe(() => console.log("fiche vie deleted"));
     }
-    this.messageService.add({ severity: 'success', summary: 'Successful', detail: 'Puit Deleted', life: 3000 });
-    this.puit ;
+    this.messageService.add({ severity: 'success', summary: 'Successful', detail: 'Fiche vie Deleted', life: 3000 });
+    this.inventaire ;
   }
 
   hideDialog() {
@@ -142,34 +152,50 @@ export class InventaireComponent implements OnInit{
     this.submitted = false;
   }
 
-  savePuit() {
-    this.submitted = false;
-    this.productDialog=false
-    // alert(new JsonPipe().transform(this.puit))
-    if(this.isUpdateUser==true) {
-      this.puitService.updatePuit(this.puit).subscribe(() =>{
-        this.puitService.getAllPuits().subscribe((puits: Puit[]) => {
-          this.puits = puits;
-        });
-      });
-      console.log('Puit updated');
-      this.isUpdateUser=false;
-    }
-    else
-    {
-      this.puitService.addPuit(this.puit).subscribe(() => {
-
-        this.puitService.getAllPuits().subscribe((puits: Puit[]) => {
-          this.puits = puits;
-        });
-      });
-      console.log('Puit added');
-    }
+  saveInventaire() {
+    // this.submitted = false;
+    // this.productDialog=false
+    // // alert(new JsonPipe().transform(this.puit))
+    // if(this.isUpdateInventaire==true) {
+    //   this.inventaireService.updateInventaire(this.inventaire).subscribe(() =>{
+    //     this.inventaireService.getFichesVies().subscribe((inventaires: Inventaire[]) => {
+    //       this.inventaires = inventaires;
+    //     });
+    //   });
+    //   console.log('Puit updated');
+    //   this.isUpdateInventaire=false;
+    // }
+    // else
+    // {
+    //   this.inventaireService.(this.inventaire).subscribe(() => {
+    //     this.inventaireService.getFichesVies().subscribe((inventaires: Inventaire[]) => {
+    //       this.inventaires = inventaires;
+    //     });
+    //   });
+    //   console.log('Puit added');
+    // }
   }
 
+  findIndexById(id: string): number {
+    let index = -1;
+    for (let i = 0; i < this.products.length; i++) {
+      if (this.products[i].id === id) {
+        index = i;
+        break;
+      }
+    }
 
+    return index;
+  }
 
-
+  createId(): string {
+    let id = '';
+    const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+    for (let i = 0; i < 5; i++) {
+      id += chars.charAt(Math.floor(Math.random() * chars.length));
+    }
+    return id;
+  }
 
   onGlobalFilter(table: Table, event: Event) {
     table.filterGlobal((event.target as HTMLInputElement).value, 'contains');

@@ -55,7 +55,7 @@ export class ArticleComponent implements OnInit{
   article:Article={};
   selectedArticles: Article[] = [];
 
-  private isUpdateArticle=false;
+  private isUpdateProduitDefectuation=false;
 
 
 
@@ -92,7 +92,7 @@ this.article.unite=Unite.PIECE
   }
 
   editArticle(article: Article) {
-    this.isUpdateArticle=true;
+    this.isUpdateProduitDefectuation=true;
 
 
     this.article = { ...article };
@@ -139,18 +139,18 @@ this.article.unite=Unite.PIECE
     this.submitted = false;
   }
 
-  saveArticle() {
+  saveProduitDefectuation() {
     this.submitted = false;
     this.productDialog=false
     // alert(new JsonPipe().transform(this.article))
-    if(this.isUpdateArticle==true) {
+    if(this.isUpdateProduitDefectuation==true) {
       this.articleService.updateArticle(this.article).subscribe(() =>{
         this.articleService.getAllArticles().subscribe((articles: Article[]) => {
           this.articles = articles;
         });
       });
       console.log('article updated');
-      this.isUpdateArticle=false;
+      this.isUpdateProduitDefectuation=false;
     }
     else
     {

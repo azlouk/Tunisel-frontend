@@ -3,6 +3,7 @@ import {HttpClient} from "@angular/common/http";
 import {Observable} from "rxjs";
 import {ProduitDefectueux} from "../Models/produitDefectueux";
 import {environment} from "../environment/environment";
+import {JsonPipe} from "@angular/common";
 
 @Injectable({
   providedIn: 'root'
@@ -19,21 +20,23 @@ export class ProduitDefectueuxService {
   }
 
   getProduitDefectueuxById(id: number): Observable<ProduitDefectueux> {
-    const url = `${this.apiUrl}/${id}`;
+    const url = `${this.apiUrl}/produitsDefectueux/${id}`;
     return this.http.get<ProduitDefectueux>(url);
   }
 
   createProduitDefectueux(produitDefectueux: ProduitDefectueux): Observable<ProduitDefectueux> {
-    return this.http.post<ProduitDefectueux>(this.apiUrl, produitDefectueux);
+    console.log(new JsonPipe().transform("====================>>>>>>"+produitDefectueux))
+
+    return this.http.post<ProduitDefectueux>(`${this.apiUrl}/produitsDefectueux/add`, produitDefectueux);
   }
 
   updateProduitDefectueux(produitDefectueux: ProduitDefectueux): Observable<ProduitDefectueux> {
-    const url = `${this.apiUrl}/${produitDefectueux.id}`;
+    const url = `${this.apiUrl}/produitsDefectueux/update/${produitDefectueux.id}`;
     return this.http.put<ProduitDefectueux>(url, produitDefectueux);
   }
 
-  deleteProduitDefectueux(id: number): Observable<void> {
-    const url = `${this.apiUrl}/${id}`;
+  deleteProduitDefectueux(id: number| undefined): Observable<void> {
+    const url = `${this.apiUrl}/produitsDefectueux/delete/${id}`;
     return this.http.delete<void>(url);
   }
 }
