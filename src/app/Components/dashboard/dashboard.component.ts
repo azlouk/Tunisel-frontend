@@ -1,5 +1,5 @@
 import {Component, OnDestroy, OnInit} from '@angular/core';
-import {MenuItem} from "primeng/api";
+import {MenuItem, TreeNode} from "primeng/api";
 import {debounceTime, Subscription} from "rxjs";
 import {ProductService} from "../../Services/product.service";
 import {LayoutService} from "../../Services/app.layout.service";
@@ -8,9 +8,11 @@ import {CurrencyPipe, NgStyle} from "@angular/common";
 import {TableModule} from "primeng/table";
 import {MenuModule} from "primeng/menu";
 import {ChartModule} from "primeng/chart";
-
 import {DashboardService} from "../../Services/dashboard.service";
 import {Dashboard} from "../../Models/Dashboard";
+import {OrganizationChartModule} from "primeng/organizationchart";
+import {DropdownModule} from "primeng/dropdown";
+import {FormsModule} from "@angular/forms";
 
 
 @Component({
@@ -22,6 +24,9 @@ import {Dashboard} from "../../Models/Dashboard";
     NgStyle,
     MenuModule,
     ChartModule,
+    OrganizationChartModule,
+    DropdownModule,
+    FormsModule,
 
   ],
   templateUrl: './dashboard.component.html',
@@ -33,6 +38,7 @@ export class DashboardComponent implements OnInit, OnDestroy  {
   products!: Product[];
 
   chartDataAnalyse: any;
+
 
   chartOptions: any;
 
@@ -78,11 +84,11 @@ export class DashboardComponent implements OnInit, OnDestroy  {
     const surfaceBorder = documentStyle.getPropertyValue('--surface-border');
 
     this.chartDataAnalyse = {
-      labels: ['January', 'February', 'March', 'April', 'May', 'June', 'July'],
+      labels: ['Janvier', 'Février', 'Mars', 'Avril', 'Mai', 'Juin', 'Juillet','Août','septembre','octobre','novembre','décembre'],
       datasets: [
         {
           label: 'Chimique',
-          data: [65, 59, 80, 81, 56, 55, 40],
+          data: [65, 59, 80, 81, 56, 55, 40,45,70,56,89,69],
           fill: false,
           backgroundColor: documentStyle.getPropertyValue('--bluegray-700'),
           borderColor: documentStyle.getPropertyValue('--bluegray-700'),
@@ -90,7 +96,7 @@ export class DashboardComponent implements OnInit, OnDestroy  {
         },
         {
           label: 'Granulométrique',
-          data: [28, 48, 40, 19, 86, 27, 90],
+          data: [28, 48, 40, 19, 86, 27, 90,58,85,45,53,46],
           fill: false,
           backgroundColor: documentStyle.getPropertyValue('--green-600'),
           borderColor: documentStyle.getPropertyValue('--green-600'),
@@ -129,6 +135,90 @@ export class DashboardComponent implements OnInit, OnDestroy  {
       }
     };
   }
+  // =====================================================================================================
+
+
+  selectedNodes!: TreeNode[];
+
+  data: TreeNode[] = [
+    {
+      expanded: true,
+      type: 'person',
+      data: {
+       icon:'pi-filter',
+        name: 'Puit',
+        title: ''
+      },
+      children: [
+        {
+          expanded: true,
+          type: 'person',
+          data: {
+            image: 'https://primefaces.org/cdn/primeng/images/demo/avatar/annafali.png',
+            name: 'Bassin1',
+            title: '',
+            icon:'pi-receipt'
+          },
+          children: [
+            {
+              label: 'SBNL',
+              icon:'pi-wave-pulse',
+              children: [
+                {
+                  label: 'SBL',
+                  children: [
+                    {
+                      label: 'SBLF',
+                    }]
+                }]
+            }
+
+          ]
+
+
+
+        },
+        {
+          expanded: true,
+          type: 'person',
+          data: {
+            image: 'https://primefaces.org/cdn/primeng/images/demo/avatar/stephenshaw.png',
+            name: 'Bassin2',
+            title: '',
+            icon:'pi-receipt'
+          },
+          children: [
+            {
+              label: 'SBNL',
+              icon:'pi-wave-pulse'
+              ,
+              children: [
+                {
+                  label: 'SBL',
+                  children: [
+                    {
+                      label: 'SBLF',
+                    }]
+                },
+
+              ]
+            },
+
+          ]
+        }
+      ]
+    }
+  ];
+
+
+
+
+
+
+
+
+
+
 
   ngOnDestroy() {
     if (this.subscription) {

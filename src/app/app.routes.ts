@@ -6,8 +6,8 @@ import {BassinComponent} from "./Components/bassin/bassin.component";
 import {SblComponent} from "./Components/sbl/sbl.component";
 import {SbnlComponent} from "./Components/sbnl/sbnl.component";
 import {SblfComponent} from "./Components/sblf/sblf.component";
-import {FichevieComponent} from "./Components/fichevie/fichevie.component";
 import {InventaireComponent} from "./Components/inventaire/inventaire.component";
+import {FichevieComponent} from "./Components/fichevie/fichevie.component";
 import {AnalyseChimiqueComponent} from "./Components/analyse-chimique/analyse-chimique.component";
 import {
   AjouterPrelevmentChimiqueComponent
@@ -23,6 +23,8 @@ export const routes: Routes = [
   {path:'bassins', component:BassinComponent},
   {path:'sbls', component:SblComponent},
   {path:'sbnls', component:SbnlComponent},
+  {path:'sblfs', component:SblfComponent},
+  {path:'', component:LoginComponent},
   {path:'sblfs', component:SblfComponent},
   {path:'inventaire', component:InventaireComponent},
   {path:'etalonage', component:FichevieComponent},
