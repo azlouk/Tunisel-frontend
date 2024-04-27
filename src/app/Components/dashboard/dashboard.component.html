@@ -176,10 +176,27 @@
 <!--    </div>-->
 <!--  </div>-->
 
-  <div class="col-12 xl:col-6">
-    <div class="card">
+  <div class="col-12  flex  justify-content-between  h-25rem">
+    <div class="card col-6 h-full">
       <h5>Analyses par mois</h5>
       <p-chart type="line" [data]="chartDataAnalyse" [options]="chartOptions"></p-chart>
+    </div>
+
+    <div class="card col-5 flex justify-content-center overflow-x-auto h-full">
+      <p-organizationChart [value]="data" selectionMode="multiple" [(selection)]="selectedNodes">
+        <ng-template let-node pTemplate="person">
+          <div class="p-2 text-center">
+
+            <div class="font-bold">{{ node.data.name }}</div>
+            <i class="pi {{node.data.icon}}"></i>
+
+            <div>
+            <p-dropdown  optionLabel="name" [showClear]="true" placeholder="Select a City"></p-dropdown></div>
+
+            <div>{{ node.data.title }}</div>
+          </div>
+        </ng-template>
+      </p-organizationChart>
     </div>
 
 
