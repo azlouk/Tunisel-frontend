@@ -27,7 +27,6 @@ import {SblfService} from "../../Services/sblf.service";
 import {CheckboxModule} from "primeng/checkbox";
 import {AnalysesChimique} from "../../Models/analyses-chimique";
 import {AnalyseChimiqueService} from "../../Services/analyse-chimique.service";
-import {log} from "@angular-devkit/build-angular/src/builders/ssr-dev-server";
 import {AnalyseChimiqueComponent} from "../analyse-chimique/analyse-chimique.component";
 import {DialogModule} from "primeng/dialog";
 import {DropdownModule} from "primeng/dropdown";
@@ -75,12 +74,12 @@ export class AjouterPrelevmentChimiqueComponent implements OnInit{
   analysesChimique: AnalysesChimique={} ;
   analysePuit:Puit={};
   attributs: any[] = [
-    {name:'D',checked:false,label:'Densité', value:this.analysesChimique.densite},
-    {name:'Ms',checked:false,label:'Matiére en suspension', value:this.analysesChimique.matiereEnSuspension},
+    {name:'d',checked:false,label:'Densité', value:this.analysesChimique.densite},
+    {name:'MS',checked:false,label:'Matiére en suspension', value:this.analysesChimique.matiereEnSuspension},
     {name:'S',checked:false,label:'Salimité', value:this.analysesChimique.salimite},
     {name:'Ca',checked:false,label:'Calcium', value:this.analysesChimique.calcium},
     {name:'Mg',checked:false,label:'Magnésium', value:this.analysesChimique.magnesium},
-    {name:'So4',checked:false,label:'Sulfate', value:this.analysesChimique.sulfate},
+    {name:'SO',checked:false,label:'Sulfate', value:this.analysesChimique.sulfate},
     {name:'H2o',checked:false,label:'Humidité', value:this.analysesChimique.humidite},
     {name:'Mi',checked:false,label:'Matiére insoluble', value:this.analysesChimique.matiereInsoluble},
     {name:'K',checked:false,label:'Potassium', value:this.analysesChimique.potassium},

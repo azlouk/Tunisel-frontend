@@ -15,6 +15,11 @@ import {
 import {
   AjoutFichevieInterventionComponent
 } from "./Components/ajout-fichevie-intervention/ajout-fichevie-intervention.component";
+import {AnalysePhysiqueComponent} from "./Components/analyse-physique/analyse-physique.component";
+import {
+  AjouterPrelevmentPhysiqueComponent
+} from "./Components/ajouter-prelevment-physique/ajouter-prelevment-physique.component";
+import {LoginComponent} from "./Components/login/login.component";
 
 export const routes: Routes = [
   {path:'dash', component:DashboardComponent},
@@ -33,6 +38,9 @@ export const routes: Routes = [
 
   {path:'analyseChimique', component:AnalyseChimiqueComponent},
   {path:'ajouterPrelevmentChimique', component:AjouterPrelevmentChimiqueComponent},
-  {path:'updatePrelevmentChimique/:id', component:AjouterPrelevmentChimiqueComponent}
+  {path:'updatePrelevmentChimique/:id', component:AjouterPrelevmentChimiqueComponent},
 
+  {path:'analysePhysique', component:AnalysePhysiqueComponent},
+  {path:'ajouterPrelevmentPhysique', component:AjouterPrelevmentPhysiqueComponent},
+  {path:'updatePrelevmentPhysique/:id', component:AjouterPrelevmentPhysiqueComponent},
 ];
