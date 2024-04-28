@@ -26,6 +26,7 @@ import {AnalysesPhysique} from "../../Models/analyses-physique";
 import {Table, TableModule} from "primeng/table";
 import {Tamis} from "../../Models/tamis";
 import {AnalysePhysiqueService} from "../../Services/analysePhysique.service";
+import {TamisService} from "../../Services/tamis.service";
 
 @Component({
   selector: 'app-ajouter-prelevment-physique',
@@ -71,6 +72,7 @@ export class AjouterPrelevmentPhysiqueComponent implements OnInit{
   visibale:boolean=false;
   listeTamis:Tamis[]=[];
   tamis:Tamis={};
+
   // =====================
   cols: any;
   selectedIntervention: any;
@@ -80,6 +82,7 @@ export class AjouterPrelevmentPhysiqueComponent implements OnInit{
               private sblService :SblService,
               private sblfService :SblfService,
               private analysePhysiqueService:AnalysePhysiqueService ,
+              private tamisService:TamisService ,
               private route: ActivatedRoute,
               )
   {}
@@ -97,11 +100,13 @@ export class AjouterPrelevmentPhysiqueComponent implements OnInit{
       this.selectedSbl=value.sbl;
       this.selectedSbnl=value.sbnl;
       this.selectedSblf=value.sblf ;
-      console.log(new JsonPipe().transform(value))
+      console.log(new JsonPipe().transform(value));
+
     }, error => {
 
     });
     this.analysePhysiqueService.getAnalysesPhysiquesById(this.analysePhysiqueId).subscribe(value => {this.analysesPhysique=value;
+      this.listeTamis=this.analysesPhysique.tamisList==undefined?[]:this.analysesPhysique.tamisList ;
 
     },error => error)
 
@@ -150,6 +155,7 @@ export class AjouterPrelevmentPhysiqueComponent implements OnInit{
     else{
       if(this.selectedBassin){
         this.selectedBassin.analysesPhysiques=[];
+        this.listeTamis=[];
         this.analysesPhysique.tamisList=this.listeTamis;
         this.selectedBassin.analysesPhysiques.push(this.analysesPhysique) ;
         console.log('======**********>>>>>>   '+new JsonPipe().transform(this.selectedBassin));
@@ -158,16 +164,19 @@ export class AjouterPrelevmentPhysiqueComponent implements OnInit{
         },error => console.log(error));
       }if(this.selectedSbnl){
         this.selectedSbnl.analysesPhysiques=[];
+        this.listeTamis=[];
         this.analysesPhysique.tamisList=this.listeTamis;
         this.selectedSbnl.analysesPhysiques.push(this.analysesPhysique) ;
         this.analysePhysiqueService.addAnalysesPhysiquesToSbnl(this.selectedSbnl).subscribe(value => this.router.navigate(['/analysePhysique']))
       }if(this.selectedSbl){
         this.selectedSbl.analysesPhysiques=[];
+        this.listeTamis=[];
         this.analysesPhysique.tamisList=this.listeTamis;
         this.selectedSbl.analysesPhysiques.push(this.analysesPhysique) ;
         this.analysePhysiqueService.addAnalysesPhysiquesToSbl(this.selectedSbl).subscribe(value => this.router.navigate(['/analysePhysique']))
       }if(this.selectedSblf){
         this.selectedSblf.analysesPhysiques=[];
+        this.listeTamis=[];
         this.analysesPhysique.tamisList=this.listeTamis;
         this.selectedSblf.analysesPhysiques.push(this.analysesPhysique) ;
         this.analysePhysiqueService.addAnalysesPhysiquesToSblf(this.selectedSblf).subscribe(value => this.router.navigate(['/analysePhysique']))
@@ -181,7 +190,16 @@ export class AjouterPrelevmentPhysiqueComponent implements OnInit{
   }
 
   deleteTamis(tamis: any) {
-    this.listeTamis = this.listeTamis.filter(item => item !== tamis);
+    if (this.isUpdateAnalysePhysique==true){
+      this.tamisService.deleteTamis(tamis.id).subscribe(value => { this.analysePhysiqueService.getAnalysesPhysiquesById(this.analysePhysiqueId).subscribe(value =>{this.analysesPhysique=value;
+        this.listeTamis=this.analysesPhysique.tamisList==undefined?[]:this.analysesPhysique.tamisList ;
+      } )
+
+      })
+      this.listeTamis = this.listeTamis.filter(item => item !== tamis)
+    }else {
+      this.listeTamis = this.listeTamis.filter(item => item !== tamis);
+    }
 
   }
 
