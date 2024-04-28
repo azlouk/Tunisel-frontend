@@ -4,10 +4,14 @@
       <p-toast></p-toast>
       <p-toolbar styleClass="mb-4">
         <ng-template pTemplate="left">
-          <div class="my-2">
+          <div class="my-2  ">
             <button pButton pRipple label="Ajouter" icon="pi pi-plus" class="p-button-success mr-2" (click)="openNew()"></button>
             <button pButton pRipple label="Supprimer" icon="pi pi-trash" class="p-button-danger" (click)="deleteSelectedPuits()" [disabled]="!selectedPuits || !selectedPuits.length"></button>
+            <button pButton pRipple label="Actualiser" icon="pi pi-trash" class="p-button-primary" (click)="getAllPuit()"  ></button>
+
           </div>
+
+
         </ng-template>
 
 
@@ -31,8 +35,7 @@
             <th style="width: 3rem">
               <p-tableHeaderCheckbox></p-tableHeaderCheckbox>
             </th>
-            <th pSortableColumn="id">Id <p-sortIcon field="id"></p-sortIcon></th>
-            <th pSortableColumn="reference">Reference <p-sortIcon field="reference"></p-sortIcon></th>
+             <th pSortableColumn="reference">Reference <p-sortIcon field="reference"></p-sortIcon></th>
             <th pSortableColumn="description">Description <p-sortIcon field="description"></p-sortIcon></th>
             <th pSortableColumn="dateCreation">Date Creation<p-sortIcon field="dateCreation"></p-sortIcon></th>
             <th pSortableColumn="nom">Nom <p-sortIcon field="nom"></p-sortIcon></th>
@@ -47,9 +50,7 @@
             <td>
               <p-tableCheckbox [value]="puit"></p-tableCheckbox>
             </td>
-            <td style="width:14%; min-width:10rem;"><span class="p-column-title">Id</span>
-              {{puit.id}}
-            </td>
+
             <td style="width:14%; min-width:10rem;">
               <span class="p-column-title">Reference</span>
               {{puit.reference}}
@@ -84,8 +85,9 @@
             </td>
             <td>
               <div class="flex ">
-                <button pButton pRipple icon="pi pi-pencil" class="p-button-rounded p-button-success mr-2" (click)="editPuit(puit)"></button>
-                <button pButton pRipple icon="pi pi-trash" class="p-button-rounded p-button-warning" (click)="deletePuit(puit)"></button>
+                 <button pButton pRipple icon="pi pi-pencil" class="p-button-rounded p-button-success mr-2" (click)="editPuit(puit)"></button>
+                <button pButton pRipple icon="pi pi-trash" class="p-button-rounded p-button-warning mr-2" (click)="deletePuit(puit)"></button>
+                <button pButton pRipple icon="pi pi-file-pdf" class="p-button-rounded p-button-primary mr-2"  (click)="exportrapport(puit)"></button>
               </div>
             </td>
           </tr>
@@ -93,46 +95,41 @@
       </p-table>
     </div>
 
-    <p-dialog [(visible)]="productDialog" [style]="{width: '450px'}" header="Product Details" [modal]="true" class="p-fluid">
+    <p-dialog [(visible)]="productDialog" [style]="{width: '450px'}" header="Nouveau puit " [modal]="true" class="p-fluid">
       <ng-template pTemplate="content">
         <div class="field">
-          <label for="name">Reference</label>
+          <label for="name">Référence</label>
           <input type="text" pInputText id="name"  [(ngModel)]="puit.reference" required autofocus [ngClass]="{'ng-invalid ng-dirty' : submitted && !puit.reference}"/>
-          <small class="ng-dirty ng-invalid" *ngIf="submitted && !puit.reference">Name is required.</small>
+          <small class="ng-dirty ng-invalid" *ngIf="submitted && !puit.reference">Réference obligatoire</small>
         </div>
         <div class="field">
           <label for="Description">Description</label>
-          <textarea rows="3" cols="30" type="text" pInputText id="Description"  [(ngModel)]="puit.description" required autofocus [ngClass]="{'ng-invalid ng-dirty' : submitted && !puit.description}"></textarea>
-          <small class="ng-dirty ng-invalid" *ngIf="submitted && !puit.description">Pseudo is required.</small>
-        </div>
+          <textarea rows="3" cols="30" type="text" pInputText id="Description"  [(ngModel)]="puit.description" required autofocus  ></textarea>
+         </div>
 
         <div class="field">
           <label for="dateCreation">Date Creation</label>
-          <p-calendar dateFormat="yy-mm-dd" id="dateCreation" [(ngModel)]="puit.dateCreation"  [ngClass]="{'ng-invalid ng-dirty' : submitted && !puit.dateCreation}" [showIcon]="true"></p-calendar>
+          <p-calendar dateFormat="yy-mm-dd" id="dateCreation" [(ngModel)]="puit.dateCreation"    [showIcon]="true"></p-calendar>
 <!--          <input type="text" pInputText id="dateCreation"  [(ngModel)]="puit.dateCreation" required autofocus [ngClass]="{'ng-invalid ng-dirty' : submitted && !puit.dateCreation}"/>-->
-          <small class="ng-dirty ng-invalid" *ngIf="submitted && !puit.dateCreation">poste is required.</small>
-        </div>
+         </div>
         <div class="field">
           <label for="nom">Nom</label>
           <input type="text" pInputText id="nom"  [(ngModel)]="puit.nom" required autofocus [ngClass]="{'ng-invalid ng-dirty' : submitted && !puit.nom}"/>
-          <small class="ng-dirty ng-invalid" *ngIf="submitted && !puit.nom">Telephone is required.</small>
+          <small class="ng-dirty ng-invalid" *ngIf="submitted && !puit.nom">Nom obligatoire.</small>
         </div>
         <div class="field">
 
           <label for="emplacement">Emplacement</label>
-          <input type="text" pInputText id="emplacement"  [(ngModel)]="puit.emplacement" required autofocus [ngClass]="{'ng-invalid ng-dirty' : submitted && !puit.emplacement}"/>
-          <small class="ng-dirty ng-invalid" *ngIf="submitted && !puit.emplacement">Telephone is required.</small>
-        </div>
+          <input type="text" pInputText id="emplacement"  [(ngModel)]="puit.emplacement" required autofocus  />
+         </div>
         <div class="field">
           <label for="etat">Etat</label>
-          <input type="text" pInputText id="etat"  [(ngModel)]="puit.etat" required autofocus [ngClass]="{'ng-invalid ng-dirty' : submitted && !puit.etat}"/>
-          <small class="ng-dirty ng-invalid" *ngIf="submitted && !puit.etat">Telephone is required.</small>
-        </div>
+          <input type="text" pInputText id="etat"  [(ngModel)]="puit.etat" required autofocus  />
+         </div>
         <div class="field">
           <label for="dateFermeture">Date Fermeture</label>
-          <p-calendar dateFormat="yy-mm-dd" id="dateFermeture" class="border border-gray-300 shadow p-3 w-full rounded mb-" [(ngModel)]="puit.dateFermeture"  [ngClass]="{'ng-invalid ng-dirty' : submitted && !puit.dateFermeture}" [showIcon]="true"></p-calendar>
-          <small class="ng-dirty ng-invalid" *ngIf="submitted && !puit.dateFermeture">Telephone is required.</small>
-        </div>
+          <p-calendar dateFormat="yy-mm-dd" id="dateFermeture" class="border border-gray-300 shadow p-3 w-full rounded mb-" [(ngModel)]="puit.dateFermeture"    [showIcon]="true"></p-calendar>
+         </div>
 
       </ng-template>
 
@@ -140,30 +137,30 @@
 
 
       <ng-template pTemplate="footer">
-        <button pButton pRipple label="Cancel" icon="pi pi-times" class="p-button-text" (click)="hideDialog()"></button>
-        <button pButton pRipple label="Save" icon="pi pi-check" class="p-button-text" (click)="savePuit()"></button>
-      </ng-template>
-    </p-dialog>
-
-    <p-dialog [(visible)]="deleteProductDialog" header="Confirm" [modal]="true" [style]="{width:'450px'}">
-      <div class="flex align-items-center justify-content-center">
-        <i class="pi pi-exclamation-triangle mr-3" style="font-size: 2rem"></i>
-        <span *ngIf="product">Are you sure you want to delete <b>{{product.name}}</b>?</span>
-      </div>
-      <ng-template pTemplate="footer">
-        <button pButton pRipple icon="pi pi-times" class="p-button-text" label="No" (click)="deleteProductDialog = false"></button>
-        <button pButton pRipple icon="pi pi-check" class="p-button-text" label="Yes" (click)="confirmDelete()"></button>
+        <button pButton pRipple label="Annuler" icon="pi pi-times" class="p-button-text" (click)="hideDialog()"></button>
+        <button pButton pRipple label="Ajouter" icon="pi pi-check" class="p-button-text" (click)="savePuit()"></button>
       </ng-template>
     </p-dialog>
 
-    <p-dialog [(visible)]="deleteProductsDialog" header="Confirm" [modal]="true" [style]="{width:'450px'}">
+    <p-dialog [(visible)]="deleteProductDialog" header="Confirmer" [modal]="true" [style]="{width:'450px'}">
       <div class="flex align-items-center justify-content-center">
         <i class="pi pi-exclamation-triangle mr-3" style="font-size: 2rem"></i>
-        <span>Are you sure you want to delete selected products?</span>
+        <span *ngIf="product">Êtes-vous sûr de vouloir supprimer <b>{{product.name}}</b>?</span>
       </div>
       <ng-template pTemplate="footer">
-        <button pButton pRipple icon="pi pi-times" class="p-button-text" label="No" (click)="deleteProductsDialog = false"></button>
-        <button pButton pRipple icon="pi pi-check" class="p-button-text" label="Yes" (click)="confirmDeleteSelected()"></button>
+        <button pButton pRipple icon="pi pi-times" class="p-button-text" label="Non" (click)="deleteProductDialog = false"></button>
+        <button pButton pRipple icon="pi pi-check" class="p-button-text" label="Oui" (click)="confirmDelete()"></button>
+      </ng-template>
+    </p-dialog>
+
+    <p-dialog [(visible)]="deleteProductsDialog" header="Confirmer" [modal]="true" [style]="{width:'450px'}">
+      <div class="flex align-items-center justify-content-center">
+        <i class="pi pi-exclamation-triangle mr-3" style="font-size: 2rem"></i>
+        <span>Voulez-vous vraiment supprimer des produits sélectionnés ?</span>
+      </div>
+      <ng-template pTemplate="footer">
+        <button pButton pRipple icon="pi pi-times" class="p-button-text" label="Non" (click)="deleteProductsDialog = false"></button>
+        <button pButton pRipple icon="pi pi-check" class="p-button-text" label="Oui" (click)="confirmDeleteSelected()"></button>
       </ng-template>
     </p-dialog>
   </div>

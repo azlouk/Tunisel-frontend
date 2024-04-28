@@ -41,7 +41,7 @@ function createWindow() {
     console.error("Error setting default zoom level:", e);
   }
 
-  win.loadFile('dist/gestion-stock/index.html');
+  win.loadFile('dist/tuniselfrontend/browser/index.html');
   const jarPath = path.join(__dirname, 'app.jar');
 
   // Spawn Java process if not already running

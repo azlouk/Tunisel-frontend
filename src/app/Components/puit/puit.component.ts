@@ -70,6 +70,7 @@ export class PuitComponent implements OnInit{
   constructor(private productService: ProductService, private messageService: MessageService,private puitService :PuitService) {}
 
   ngOnInit() {
+    this.puit.dateCreation=new Date() ;
     this.puitService.getAllPuits().subscribe((v:  Puit[]) => {
       this.puits=v;
       console.log(new JsonPipe().transform("====================>>>>>>"+this.puits))
@@ -92,7 +93,8 @@ export class PuitComponent implements OnInit{
   }
 
   openNew() {
-    this.puit;
+    this.puit={};
+    this.puit.reference="puit-"+this.createId()
     this.submitted = false;
     this.productDialog = true;
   }
@@ -131,7 +133,7 @@ export class PuitComponent implements OnInit{
       );
     });
 
-    this.messageService.add({ severity: 'success', summary: 'Successful', detail: 'User Deleted', life: 3000 });
+    this.messageService.add({ severity: 'success', summary: 'Réussi', detail: 'Puit est bien ajouté', life: 3000 });
     this.selectedPuits = [];
   }
 
@@ -142,7 +144,7 @@ export class PuitComponent implements OnInit{
     if (this.puit.id!= null) {
       this.puitService.deletePuit(this.puit.id).subscribe(() => console.log("puit deleted"));
     }
-    this.messageService.add({ severity: 'success', summary: 'Successful', detail: 'Puit Deleted', life: 3000 });
+    this.messageService.add({ severity: 'success', summary: 'Réussi', detail: 'Puit a été suprrimé', life: 3000 });
     this.puit ;
   }
 
@@ -153,25 +155,30 @@ export class PuitComponent implements OnInit{
 
   savePuit() {
     this.submitted = false;
-    this.productDialog=false
-    // alert(new JsonPipe().transform(this.puit))
-    if(this.isUpdateUser==true) {
-      this.puitService.updatePuit(this.puit).subscribe(() =>{
-        this.puitService.getAllPuits().subscribe((puits: Puit[]) => {
-          this.puits = puits;
+
+
+    if(this.puit.nom===undefined || this.puit.nom.trim()===''){
+      this.submitted=true
+    }else if(this.puit.reference===undefined || this.puit.reference.trim()=='')
+      this.submitted=true
+   else {
+      this.productDialog=false;
+      if (this.isUpdateUser == true) {
+        this.puitService.updatePuit(this.puit).subscribe(() => {
+          this.puitService.getAllPuits().subscribe((puits: Puit[]) => {
+            this.puits = puits;
+          });
         });
-      });
-      console.log('Puit updated');
-      this.isUpdateUser=false;
-    }
-    else
-    {
-      this.puitService.addPuit(this.puit).subscribe(() => {
-        this.puitService.getAllPuits().subscribe((puits: Puit[]) => {
-          this.puits = puits;
+        console.log('Puit updated');
+        this.isUpdateUser = false;
+      } else {
+        this.puitService.addPuit(this.puit).subscribe(() => {
+          this.puitService.getAllPuits().subscribe((puits: Puit[]) => {
+            this.puits = puits;
+          });
         });
-      });
-      console.log('Puit added');
+        console.log('Puit added');
+      }
     }
   }
 
@@ -189,8 +196,8 @@ export class PuitComponent implements OnInit{
 
   createId(): string {
     let id = '';
-    const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
-    for (let i = 0; i < 5; i++) {
+    const chars = '0123456789';
+    for (let i = 0; i < 2; i++) {
       id += chars.charAt(Math.floor(Math.random() * chars.length));
     }
     return id;
@@ -198,5 +205,16 @@ export class PuitComponent implements OnInit{
 
   onGlobalFilter(table: Table, event: Event) {
     table.filterGlobal((event.target as HTMLInputElement).value, 'contains');
+  }
+
+  exportrapport(puit :Puit) {
+
+    console.log(new JsonPipe().transform(puit)) ;
+  }
+
+  getAllPuit() {
+    this.puitService.getAllPuits().subscribe((puits: Puit[]) => {
+      this.puits = puits;
+    });
   }
 }
