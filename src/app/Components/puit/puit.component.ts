@@ -167,6 +167,7 @@ export class PuitComponent implements OnInit{
     else
     {
       this.puitService.addPuit(this.puit).subscribe(() => {
+
         this.puitService.getAllPuits().subscribe((puits: Puit[]) => {
           this.puits = puits;
         });

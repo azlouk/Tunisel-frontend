@@ -6,7 +6,7 @@ import {FloatLabelModule} from "primeng/floatlabel";
 import {InputNumberModule} from "primeng/inputnumber";
 import {InputTextModule} from "primeng/inputtext";
 import {ListboxModule} from "primeng/listbox";
-import {DatePipe, JsonPipe, NgForOf} from "@angular/common";
+import {DatePipe, JsonPipe, NgForOf, NgIf} from "@angular/common";
 import {SharedModule} from "primeng/api";
 import {TabViewModule} from "primeng/tabview";
 import {ToolbarModule} from "primeng/toolbar";
@@ -23,7 +23,7 @@ import {FormsModule} from "@angular/forms";
 import {RadioButtonModule} from "primeng/radiobutton";
 import {DialogModule} from "primeng/dialog";
 import {InterventionService} from "../../Services/intervention.service";
-import {Intervention} from "../../Models/inventaire";
+import {Intervention} from "../../Models/intervention";
 import {FicheVieService} from "../../Services/fichevie.service";
 import {FicheVie} from "../../Models/fichevie";
 import {Table, TableModule} from "primeng/table";
@@ -49,7 +49,8 @@ import {log} from "@angular-devkit/build-angular/src/builders/ssr-dev-server";
     RadioButtonModule,
     DialogModule,
     TableModule,
-    DatePipe
+    DatePipe,
+    NgIf
   ],
   templateUrl: './ajout-fichevie-intervention.component.html',
   styleUrl: './ajout-fichevie-intervention.component.css'
@@ -71,13 +72,14 @@ export class AjoutFichevieInterventionComponent implements  OnInit{
   // ====================
   visibale:boolean=false;
  intervention:Intervention={};
-listeInterventions:Intervention[]=[];
+listeInterventions:Intervention[] =[];
+
   ficheVie:FicheVie={};
 
   // =================
   selectedIntervention: Intervention[] = [];
 private ficheVieId:any;
-private  isUpdateFichVie:boolean=false;
+public  isUpdateFichVie:boolean=false;
   constructor(private router: Router,private  interventionService:InterventionService,private ficheVieService:FicheVieService,private route:ActivatedRoute)
   {}
 
@@ -87,7 +89,8 @@ private  isUpdateFichVie:boolean=false;
 this.ficheVieId=this.route.snapshot.paramMap.get('id');
 this.isUpdateFichVie=this.ficheVieId!==null;
 this.ficheVieService.getFicheById(this.ficheVieId).subscribe(value =>{this.ficheVie=value;
-  console.log('hhhhhhhhhhhh====>>>>    '+new JsonPipe().transform(this.ficheVie))} )
+this.listeInterventions=this.ficheVie.interventions==undefined?[]:this.ficheVie.interventions ;
+} )
 
 
   }
@@ -126,16 +129,46 @@ this.ficheVieService.updateFicheVie(this.ficheVie).subscribe(value =>   this.rou
  }
 
   saveIntervention() {
+    if(this.isUpdateFichVie==true){
+      this.interventionService.updateIntervention(this.intervention).subscribe(value => {console.log('intervent is update');
+
+
+          this.visibale=false;
+        this.ficheVieService.getFicheById(this.ficheVieId).subscribe(value =>{this.ficheVie=value;
+          this.listeInterventions=this.ficheVie.interventions==undefined?[]:this.ficheVie.interventions ;
+        } )
+      }
+    )
+
+
+    }else {
     this.listeInterventions.push(this.intervention);
     this.visibale=false;
     this.intervention={};
   }
+    this.ficheVieService.updateFicheVie(this.ficheVie).subscribe(value => {console.log('fiche is update')})
+    }
   onGlobalFilter(table: Table, event: Event) {
     table.filterGlobal((event.target as HTMLInputElement).value, 'contains');
   }
 
   deleteIntervention(intervention: Intervention) {
-    this.listeInterventions = this.listeInterventions.filter(item => item !== intervention);
+
+if (this.isUpdateFichVie==true){
+  this.interventionService.deleteIntervention(intervention.id).subscribe(value => { this.ficheVieService.getFicheById(this.ficheVieId).subscribe(value =>{this.ficheVie=value;
+    this.listeInterventions=this.ficheVie.interventions==undefined?[]:this.ficheVie.interventions ;
+  } )
+
+  })
+  this.listeInterventions = this.listeInterventions.filter(item => item !== intervention)
+}else {
+  this.listeInterventions = this.listeInterventions.filter(item => item !== intervention);
+}
+  }
+
+  editIntrvention(intervention: Intervention) {
+    this.intervention = { ...intervention };
+    this.visibale=true
 
   }
 }

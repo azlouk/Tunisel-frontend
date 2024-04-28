@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import {Observable} from "rxjs";
-import {Intervention} from "../Models/inventaire";
+import {Intervention} from "../Models/intervention";
 import {HttpClient} from "@angular/common/http";
 import {environment} from "../environment/environment";
 import {Bassin} from "../Models/bassin";
