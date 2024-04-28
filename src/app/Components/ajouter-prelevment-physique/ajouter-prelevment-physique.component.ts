@@ -155,7 +155,6 @@ export class AjouterPrelevmentPhysiqueComponent implements OnInit{
     else{
       if(this.selectedBassin){
         this.selectedBassin.analysesPhysiques=[];
-        this.listeTamis=[];
         this.analysesPhysique.tamisList=this.listeTamis;
         this.selectedBassin.analysesPhysiques.push(this.analysesPhysique) ;
         console.log('======**********>>>>>>   '+new JsonPipe().transform(this.selectedBassin));
@@ -164,19 +163,16 @@ export class AjouterPrelevmentPhysiqueComponent implements OnInit{
         },error => console.log(error));
       }if(this.selectedSbnl){
         this.selectedSbnl.analysesPhysiques=[];
-        this.listeTamis=[];
         this.analysesPhysique.tamisList=this.listeTamis;
         this.selectedSbnl.analysesPhysiques.push(this.analysesPhysique) ;
         this.analysePhysiqueService.addAnalysesPhysiquesToSbnl(this.selectedSbnl).subscribe(value => this.router.navigate(['/analysePhysique']))
       }if(this.selectedSbl){
         this.selectedSbl.analysesPhysiques=[];
-        this.listeTamis=[];
         this.analysesPhysique.tamisList=this.listeTamis;
         this.selectedSbl.analysesPhysiques.push(this.analysesPhysique) ;
         this.analysePhysiqueService.addAnalysesPhysiquesToSbl(this.selectedSbl).subscribe(value => this.router.navigate(['/analysePhysique']))
       }if(this.selectedSblf){
         this.selectedSblf.analysesPhysiques=[];
-        this.listeTamis=[];
         this.analysesPhysique.tamisList=this.listeTamis;
         this.selectedSblf.analysesPhysiques.push(this.analysesPhysique) ;
         this.analysePhysiqueService.addAnalysesPhysiquesToSblf(this.selectedSblf).subscribe(value => this.router.navigate(['/analysePhysique']))
