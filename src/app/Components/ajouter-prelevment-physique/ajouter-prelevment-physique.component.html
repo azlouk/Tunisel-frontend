@@ -40,21 +40,21 @@
 
         <p-tabView *ngIf="!isUpdateAnalysePhysique"[scrollable]="true" >
 
-          <p-tabPanel header="Bassin" *ngIf="selectedBassin">
+          <p-tabPanel header="Bassin" >
             <p-listbox [options]="bassins" [(ngModel)]="selectedBassin" optionLabel="nom" [filter]="true" [listStyle]="{'height': '87px'}"  ></p-listbox>
 
           </p-tabPanel>
-          <p-tabPanel header="Sotck non lavé" pTooltip="Enter your username" *ngIf="selectedSbnl">
+          <p-tabPanel header="Sotck non lavé" pTooltip="Enter your username">
             <p-listbox [options]="sbnls" [(ngModel)]="selectedSbnl" optionLabel="reference" [filter]="true" [listStyle]="{'height': '87px'}"  ></p-listbox>
 
           </p-tabPanel>
 
-          <p-tabPanel header="Sotck lavé" *ngIf="selectedSbl">
+          <p-tabPanel header="Sotck lavé" >
             <p-listbox [options]="sbls" [(ngModel)]="selectedSbl" optionLabel="reference" [filter]="true" [listStyle]="{'height': '87px'}" ></p-listbox>
 
           </p-tabPanel>
 
-          <p-tabPanel header="Sotck finale" *ngIf="selectedSblf">
+          <p-tabPanel header="Sotck finale" >
             <p-listbox [options]="sblfs" [(ngModel)]="selectedSblf" optionLabel="reference" [filter]="true"  [listStyle]="{'height': '87px'}" ></p-listbox>
 
           </p-tabPanel>
