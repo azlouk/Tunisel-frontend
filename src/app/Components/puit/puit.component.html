@@ -6,8 +6,8 @@
         <ng-template pTemplate="left">
           <div class="my-2  ">
             <button pButton pRipple label="Ajouter" icon="pi pi-plus" class="p-button-success mr-2" (click)="openNew()"></button>
-            <button pButton pRipple label="Supprimer" icon="pi pi-trash" class="p-button-danger" (click)="deleteSelectedPuits()" [disabled]="!selectedPuits || !selectedPuits.length"></button>
-            <button pButton pRipple label="Actualiser" icon="pi pi-trash" class="p-button-primary" (click)="getAllPuit()"  ></button>
+            <button pButton pRipple label="Supprimer" icon="pi pi-trash" class="p-button-danger mr-2" (click)="deleteSelectedPuits()" [disabled]="!selectedPuits || !selectedPuits.length"></button>
+            <button pButton pRipple label="Actualiser" icon="pi pi-refresh" class="p-button-primary mr-2" (click)="getAllPuit()"  ></button>
 
           </div>
 
@@ -17,7 +17,7 @@
 
       </p-toolbar>
 
-      <p-table #dt [value]="puits" [columns]="cols"  responsiveLayout="scroll" [rows]="10" [globalFilterFields]="['id','reference','description','dateCreation','nom','emplacement','etat','dateFermeture']" [paginator]="true" [rowsPerPageOptions]="[10,20,30]" [showCurrentPageReport]="true" currentPageReportTemplate="Affichage du  {first} au  {last} des  {totalRecords} entrées" [(selection)]="selectedPuits" selectionMode="multiple" [rowHover]="true" dataKey="id">
+      <p-table #dt [value]="puits" [columns]="cols" [loading]="loading"  responsiveLayout="scroll" [rows]="10" [globalFilterFields]="['id','reference','description','dateCreation','nom','emplacement','etat','dateFermeture']" [paginator]="true" [rowsPerPageOptions]="[10,20,30]" [showCurrentPageReport]="true" currentPageReportTemplate="Affichage du  {first} au  {last} des  {totalRecords} entrées" [(selection)]="selectedPuits" selectionMode="multiple" [rowHover]="true" dataKey="id">
         <ng-template pTemplate="caption">
           <div class="flex flex-column md:flex-row md:justify-content-between md:align-items-center">
             <h5 class="m-0">Gestion des Puits</h5>

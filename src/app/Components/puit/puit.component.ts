@@ -66,13 +66,17 @@ export class PuitComponent implements OnInit{
   selectedPuits: Puit[] = [];
 
   private isUpdateUser=false;
+  loading: boolean=false;
 
   constructor(private productService: ProductService, private messageService: MessageService,private puitService :PuitService) {}
 
   ngOnInit() {
     this.puit.dateCreation=new Date() ;
+    this.loading=true;
     this.puitService.getAllPuits().subscribe((v:  Puit[]) => {
       this.puits=v;
+      this.loading=false;
+
       console.log(new JsonPipe().transform("====================>>>>>>"+this.puits))
 
     },error => {
@@ -213,8 +217,11 @@ export class PuitComponent implements OnInit{
   }
 
   getAllPuit() {
+    this.loading=true;
     this.puitService.getAllPuits().subscribe((puits: Puit[]) => {
       this.puits = puits;
+      this.loading=false;
+
     });
   }
 }

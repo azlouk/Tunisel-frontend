@@ -79,18 +79,12 @@ export class BassinComponent implements OnInit {
   private isUpdateBassin=false;
   selectedPuit?: Puit;
 
-
+loading:boolean=false ;
 
   constructor(private productService: ProductService, private messageService: MessageService,private bassinService :BassinService,private puitService:PuitService) { }
 
   ngOnInit() {
-
-    this.bassinService.getAllBassins()
-      .subscribe((bassins: Bassin[]) => {
-        this.bassins = bassins;
-      }, error => {
-        console.log('Error fetching users:', error);
-      });
+     this.getAllBassin();
     this.puitService.getAllPuits().subscribe((v:  Puit[]) => {
       this.puits=v;
       console.log(new JsonPipe().transform("====================>>>>>>"+this.puits))
@@ -237,4 +231,18 @@ export class BassinComponent implements OnInit {
   }
 
 
+  getAllBassin() {
+    this.loading=true ;
+    this.bassinService.getAllBassins()
+      .subscribe((bassins: Bassin[]) => {
+        this.bassins = bassins;
+        this.loading=false ;
+      }, error => {
+        console.log('Error fetching users:', error);
+      });
+  }
+
+  exportrapport(bassin: Bassin) {
+    console.log(bassin)
+  }
 }
