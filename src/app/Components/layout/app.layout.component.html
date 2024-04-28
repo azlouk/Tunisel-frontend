@@ -1,7 +1,7 @@
 
 
 
-<div class="layout-wrapper" [ngClass]="containerClass">
+<div *ngIf="loginservice.isLoggedIn()"  class="layout-wrapper" [ngClass]="containerClass">
   <app-topbar></app-topbar>
     <div class="layout-sidebar">
         <app-sidebar></app-sidebar>
@@ -13,4 +13,7 @@
         <app-footer></app-footer>
     </div>
 
+</div>
+<div *ngIf="!loginservice.isLoggedIn()">
+  <router-outlet ></router-outlet>
 </div>

@@ -13,6 +13,7 @@ import {ButtonModule} from "primeng/button";
 import {RippleModule} from "primeng/ripple";
 import {ChipsModule} from "primeng/chips";
 import Swal from "sweetalert2";
+ import {JsonPipe} from "@angular/common";
 
 @Component({
   selector: 'app-login',
@@ -40,25 +41,59 @@ export class LoginComponent implements OnInit{
 
 
   ngOnInit() {
-
+    if(this.loginService.isLoggedIn()    ){
+      this.router.navigate(["/dash"])
     }
+     }
 
 
  authUser(){
   this.loginService.loggdinUser(this.user)
-.subscribe(() => {
 
-  console.log("L'utilisateur est authentifié avec succès");
-  this.router.navigate(['/dash']);
-}, error => {
-  console.log('Erreur lors de la vérification de lauthentification ');
+}
+
+getPassWord(){
   Swal.fire({
-    icon: "error",
-    title: "Erreur d'authentification",
-    text: "Utilisateur invalide ou mot de passe incorrect!",
-    // confirmButtonColor: '#d33',
-    confirmButtonText: 'Réessayer'
+    title: "Veuillez vous saisie vote numéro téléphone",
+    input: "text",
+    inputAttributes: {
+      autocapitalize: "off"
+    },
+    showCancelButton: true,
+    confirmButtonText: "Récupérer",
+    showLoaderOnConfirm: true,
+    preConfirm: async (login) => {
+      let user:User={};
+      user.telephone=Number(login)
+    this.loginService.GetPassword(user).subscribe((value:User) => {
+      if(value!==null){
+        Swal.fire({
+          title: "Récupération est bien effectué",
+          text: "Votre mot de passe :" + value.mp,
+          icon: "success"
+        });
+      }else {
+        Swal.fire({
+          title: "Récupération n'est pas effectué",
+          text: "Vérifier bien votre numéro de téléphone" ,
+          icon: "error"
+        });
+      }
+    }, error => {
+      Swal.fire({
+        title: "Récupération n'est pas effectué",
+        text: "Vérifier bien votre numéro de téléphone" ,
+        icon: "error"
+      });
+    })
+    },
+    allowOutsideClick: () => !Swal.isLoading()
+  }).then((result) => {
+    if (result.isConfirmed) {
 
+    }
   });
-});
-}}
+}
+
+
+}

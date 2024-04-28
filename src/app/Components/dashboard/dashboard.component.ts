@@ -13,6 +13,7 @@ import {Dashboard} from "../../Models/Dashboard";
 import {OrganizationChartModule} from "primeng/organizationchart";
 import {DropdownModule} from "primeng/dropdown";
 import {FormsModule} from "@angular/forms";
+import {LoginService} from "../../Services/login.service";
 
 
 @Component({
@@ -46,7 +47,7 @@ export class DashboardComponent implements OnInit, OnDestroy  {
   // puit :Puit[];
   public nbrPuits=0;
   public dashboardData: Dashboard = new Dashboard(0,0);
-  constructor(private productService: ProductService, public layoutService: LayoutService, private dashboardService:DashboardService) {
+  constructor(public loginservice:LoginService,private productService: ProductService, public layoutService: LayoutService, private dashboardService:DashboardService) {
     this.subscription = this.layoutService.configUpdate$
       .pipe(debounceTime(25))
       .subscribe((config) => {
@@ -55,7 +56,8 @@ export class DashboardComponent implements OnInit, OnDestroy  {
   }
 
   ngOnInit() {
-    this.initChart();
+
+     this.initChart();
     this.productService.getProductsSmall().then(data => this.products = data);
     this.fetchDashboardData()
 
