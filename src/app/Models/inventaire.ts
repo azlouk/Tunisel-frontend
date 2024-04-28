@@ -9,6 +9,6 @@ export interface Inventaire {
   id?: number;
   reference?: string;
   dateInventaire?: Date;
-  InventaireProduitAssociation?:InventaireProduitAssociation[];
+  inventaireProduitAssociations?:InventaireProduitAssociation[];
 
 }

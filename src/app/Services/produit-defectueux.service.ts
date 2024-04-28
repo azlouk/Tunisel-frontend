@@ -25,7 +25,7 @@ export class ProduitDefectueuxService {
   }
 
   createProduitDefectueux(produitDefectueux: ProduitDefectueux): Observable<ProduitDefectueux> {
-    console.log(new JsonPipe().transform("====================>>>>>>"+produitDefectueux))
+    console.log("produitDefectueux",produitDefectueux);
 
     return this.http.post<ProduitDefectueux>(`${this.apiUrl}/produitsDefectueux/add`, produitDefectueux);
   }

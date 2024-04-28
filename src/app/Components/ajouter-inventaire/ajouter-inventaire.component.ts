@@ -1,7 +1,7 @@
-import {Component, OnInit} from '@angular/core';
+import {ChangeDetectorRef, Component, OnInit} from '@angular/core';
 import {ButtonModule} from "primeng/button";
 import {CalendarModule} from "primeng/calendar";
-import {DatePipe, NgIf} from "@angular/common";
+import {DatePipe, JsonPipe, NgIf} from "@angular/common";
 import {DialogModule} from "primeng/dialog";
 import {FloatLabelModule} from "primeng/floatlabel";
 import {InputTextModule} from "primeng/inputtext";
@@ -10,17 +10,18 @@ import {FormsModule, ReactiveFormsModule} from "@angular/forms";
 import {SharedModule} from "primeng/api";
 import {Table, TableModule} from "primeng/table";
 import {ToolbarModule} from "primeng/toolbar";
-import {Puit} from "../../Models/puit";
-import {Bassin} from "../../Models/bassin";
-import {Sbnl} from "../../Models/sbnl";
-import {Sbl} from "../../Models/sbl";
-import {Sblf} from "../../Models/sblf";
-import {AnalysesChimique} from "../../Models/analyses-chimique";
-import {Intervention} from "../../Models/intervention";
-import {FicheVie} from "../../Models/fichevie";
+
+import {Inventaire} from "../../Models/inventaire";
 import {ActivatedRoute, Router} from "@angular/router";
 import {InterventionService} from "../../Services/intervention.service";
-import {FicheVieService} from "../../Services/fichevie.service";
+import {InventaireService} from "../../Services/inventaire.service";
+import {Produit} from "../../Models/produit";
+import { DragDropModule } from 'primeng/dragdrop';
+import {PickListModule} from "primeng/picklist";
+import {ProduitService} from "../../Services/produit.service";
+import {InventaireProduitAssociation} from "../../Models/InventaireProduitAssociation";
+import {ProduitDefectueuxService} from "../../Services/produit-defectueux.service";
+import {ProduitDefectueux} from "../../Models/produitDefectueux";
 
 @Component({
   selector: 'app-ajouter-inventaire',
@@ -38,54 +39,64 @@ import {FicheVieService} from "../../Services/fichevie.service";
     SharedModule,
     TableModule,
     ToolbarModule,
-    FormsModule
+    FormsModule,
+    DragDropModule,
+    PickListModule
+
+
   ],
   templateUrl: './ajouter-inventaire.component.html',
   styleUrl: './ajouter-inventaire.component.css'
 })
 export class AjouterInventaireComponent implements OnInit{
-  puits: Puit[] = [];
-  selectedPuit:Puit={};
-  bassins: Bassin[] = [];
-  selectedBassin: Bassin = {};
-  sbnls: Sbnl[] = [];
-  selectedSbnl:Sbnl={};
-  sbls: Sbl[] = [];
-  selectedSbl:Sbl={};
-  sblfs: Sblf[] = [];
-  selectedSblf:Sblf={};
+
   checked: boolean = false;
-  analysesChimique: AnalysesChimique={} ;
+
   cols: any[] = [];
   // ====================
   visibale:boolean=false;
-  intervention:Intervention={};
-  listeInterventions:Intervention[] =[];
+  produit:Produit={};
+  listeProduits:Produit[] =[];
 
-  ficheVie:FicheVie={};
+  inventaire:Inventaire={};
 
   // =================
-  selectedIntervention: Intervention[] = [];
-  private ficheVieId:any;
-  public  isUpdateFichVie:boolean=false;
-  constructor(private router: Router,private  interventionService:InterventionService,private ficheVieService:FicheVieService,private route:ActivatedRoute)
+  association:InventaireProduitAssociation={};
+  selectedProduit: Produit[] = [];
+  private inventaireId:any;
+  public  isUpdateInventaire:boolean=false;
+  sourceProduits!: Produit[];
+
+  targetProduits!: Produit[];
+
+  produitsDefectueux?: ProduitDefectueux[];
+  produitDefectueux: ProduitDefectueux={};
+  originalProduit : Produit={};
+
+  constructor(private router: Router,private inventaireService:InventaireService,
+              private produitService:ProduitService,private route:ActivatedRoute,
+              private cdr: ChangeDetectorRef, private produitDefectueuxService :ProduitDefectueuxService)
   {}
 
 
 
   ngOnInit(): void {
-    this.ficheVieId=this.route.snapshot.paramMap.get('id');
-    this.isUpdateFichVie=this.ficheVieId!==null;
-    this.ficheVieService.getFicheById(this.ficheVieId).subscribe(value =>{this.ficheVie=value;
-      this.listeInterventions=this.ficheVie.interventions==undefined?[]:this.ficheVie.interventions ;
-    } )
+     this.inventaire.dateInventaire=new Date() ;
+     this.inventaire.reference="Inv-"+new Date().getFullYear() ;
+    this.sourceProduits=[];
+    this.produitService.getProduit().subscribe(value => {
+      this.sourceProduits=value
+      this.listeProduits=[...value] ;
+      this.cdr.markForCheck();
+      console.log('=============>>>>>>>>    '+new JsonPipe().transform(this.sourceProduits))
 
-
+    })
+    this.targetProduits = [];
   }
 
 
   retour() {
-    this.router.navigate(['/etalonage']);
+    this.router.navigate(['/inventaire']);
   }
 
 
@@ -105,57 +116,78 @@ export class AjouterInventaireComponent implements OnInit{
 
 
 
-  saveFicheVie() {
-    if (this.isUpdateFichVie){
-      this.ficheVieService.updateFicheVie(this.ficheVie).subscribe(value =>   this.router.navigate(['/etalonage']))
+  saveInventaire() {
+    if(this.inventaire.dateInventaire && this.inventaire.reference) {
+      this.inventaire.inventaireProduitAssociations = [];
+      for (const produit of this.targetProduits) {
+        this.association.produit = this.listeProduits.find(value => value.id == produit.id);
+        this.association.quantitePI = produit.quantite;
+        this.inventaire.inventaireProduitAssociations.push(this.association);
+      }
+      this.produitsDefectueux = this.targetProduits;
+      console.log("target defectueux", this.produitsDefectueux);
+      this.inventaireService.createInventaire(this.inventaire).subscribe(value => {
+       console.log(new JsonPipe().transform(value))
+     })
+      this.createProduitDefectueux()
+      this.router.navigate(['/inventaire']);
     }
+
+
     else {
-      this.ficheVie.interventions=this.listeInterventions;
-      this.ficheVieService.createFicheVie(this.ficheVie).subscribe(value =>{this.listeInterventions=[];
-        console.log('=====emp: '+this.ficheVie.emplacement)},error =>{ console.log('=====emp: '+this.ficheVie.emplacement)});
-      this.router.navigate(['/etalonage']);}
+    }
   }
 
-  saveIntervention() {
-    if(this.isUpdateFichVie==true){
-      this.interventionService.updateIntervention(this.intervention).subscribe(value => {console.log('intervent is update');
+  createProduitDefectueux()
+  {
+    if(this.produitsDefectueux)
+    {
+      for (const produitDefect of this.produitsDefectueux)
+      {
+        if(produitDefect.id) {
+          this.produitService.getProduitById(produitDefect.id).subscribe(value => {
+            this.originalProduit = value;
+            console.log(new JsonPipe().transform(value))
+
+            if(this.originalProduit && this.originalProduit.quantite && produitDefect.quantite) {
+              produitDefect.quantite = this.originalProduit.quantite - produitDefect.quantite;
+             let  quantitedeffect=this.originalProduit.quantite - produitDefect.quantite;
+
+              console.log('pi==========================>',new JsonPipe().transform(this.association.quantitePI))
 
 
-          this.visibale=false;
-          this.ficheVieService.getFicheById(this.ficheVieId).subscribe(value =>{this.ficheVie=value;
-            this.listeInterventions=this.ficheVie.interventions==undefined?[]:this.ficheVie.interventions ;
-          } )
+            }
+
+          })
+
         }
-      )
-
-
-    }else {
-      this.listeInterventions.push(this.intervention);
-      this.visibale=false;
-      this.intervention={};
+      }
     }
-    this.ficheVieService.updateFicheVie(this.ficheVie).subscribe(value => {console.log('fiche is update')})
+
+  }
+  saveProduitClacule() {
+    this.visibale=false;
   }
   onGlobalFilter(table: Table, event: Event) {
     table.filterGlobal((event.target as HTMLInputElement).value, 'contains');
   }
 
-  deleteIntervention(intervention: Intervention) {
+  deleteIntervention(produuit: Produit) {
 
-    if (this.isUpdateFichVie==true){
-      this.interventionService.deleteIntervention(intervention.id).subscribe(value => { this.ficheVieService.getFicheById(this.ficheVieId).subscribe(value =>{this.ficheVie=value;
-        this.listeInterventions=this.ficheVie.interventions==undefined?[]:this.ficheVie.interventions ;
-      } )
-
-      })
-      this.listeInterventions = this.listeInterventions.filter(item => item !== intervention)
-    }else {
-      this.listeInterventions = this.listeInterventions.filter(item => item !== intervention);
-    }
+    // if (this.isUpdateFichVie==true){
+    //   this.interventionService.deleteIntervention(intervention.id).subscribe(value => { this.inventaireService.getFicheById(this.inventaireId).subscribe(value =>{this.inventaire=value;
+    //     this.listeInterventions=this.inventaire.interventions==undefined?[]:this.inventaire.interventions ;
+    //   } )
+    //
+    //   })
+    //   this.listeInterventions = this.listeInterventions.filter(item => item !== intervention)
+    // }else {
+    //   this.listeInterventions = this.listeInterventions.filter(item => item !== intervention);
+    // }
   }
 
-  editIntrvention(intervention: Intervention) {
-    this.intervention = { ...intervention };
+  editIntrvention(produuit: Produit) {
+    this.produit = { ...produuit };
     this.visibale=true
 
   }

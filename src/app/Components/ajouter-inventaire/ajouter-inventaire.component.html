@@ -14,139 +14,114 @@
 
 
         <p-floatLabel>
-          <input type="text" pInputText id="societe" [(ngModel)]="ficheVie.societe"/>
-          <label>Societé</label>
+          <input type="text" pInputText id="reference" [(ngModel)]="inventaire.reference"/>
+          <label>reference</label>
         </p-floatLabel>
         <p-floatLabel>
-          <input type="text" pInputText id="Designation" [(ngModel)]="ficheVie.designation"/>
-          <label>Designation</label>
+          <p-calendar id="dateReception" dateFormat="yy-mm-dd" [showIcon]="true" [(ngModel)]="inventaire.dateInventaire" ></p-calendar>
+          <label for="dateReception">Date Inventaire</label>
         </p-floatLabel>
-        <p-floatLabel>
-          <input type="text" pInputText id="Code" [(ngModel)]="ficheVie.code"/>
-          <label>Code</label>
-        </p-floatLabel>
-        <p-floatLabel>
-          <input type="text" pInputText id="Serie" [(ngModel)]="ficheVie.serie"/>
-          <label>Serie</label>
-        </p-floatLabel>
+
+
       </div>
       <div class="flex justify-content-between  align-items-center">
-        <div class="flex flex-column gap-4">
-          <p-floatLabel>
-            <p-calendar id="dateReception" dateFormat="yy-mm-dd" [showIcon]="true" [(ngModel)]="ficheVie.dateReception"></p-calendar>
-            <label for="dateReception">Date de reception</label>
-          </p-floatLabel>
-          <p-floatLabel>
-            <input type="text" pInputText id="marque" class="w-full" [(ngModel)]="ficheVie.marque"/>
-            <label>Marque</label>
-          </p-floatLabel>
-        </div>
-        <div class="flex flex-column gap-4 ">
-          <p-floatLabel>
-            <input type="text" pInputText id="etalonage" class="w-full" [(ngModel)]="ficheVie.etalonnage"/>
-            <label>Etalonage</label>
-          </p-floatLabel>
-          <p-floatLabel>
-            <input type="text" pInputText id="verification" class="w-full" [(ngModel)]="ficheVie.verification"/>
-            <label>Verification</label>
-          </p-floatLabel>
-        </div>
-        <!--        <div class="flex flex-column justify-content-between"             >-->
-        <div class="flex flex-column gap-4">
-          <label for="emplacement" class="ml-2 font-bold" id="emplacement">Emplacment</label>
 
-          <div class="flex  gap-4 " >
-            <div class="flex align-items-center">
-              <p-radioButton name="fiche" value="ParcMantenence" [(ngModel)]="ficheVie.emplacement" Id="ingredient5"></p-radioButton>
-              <label for="ingredient5" class="ml-2">Parc Maintenence</label>
-            </div>
 
-            <div class="flex align-items-center">
-              <p-radioButton name="fiche" value="Laboratoire" [(ngModel)]="ficheVie.emplacement" Id="ingredient2"></p-radioButton>
-              <label for="ingredient2" class="ml-2">Laboratoire</label>
-            </div>
-          </div>
-        </div>
 
-        <div class="flex flex-column gap-4">
-          <label for="fiche" class="ml-2 font-bold" Id="fiche" >Etat de fiche</label>
 
-          <div class="flex  gap-4 " >
-            <div class="flex align-items-center ">
-              <p-radioButton name="pizza" value="ARCHIVE" [(ngModel)]="ficheVie.etatFiche" Id="ingredient3"></p-radioButton>
-              <label for="ingredient3" class="ml-2">Archivé</label>
-            </div>
 
-            <div class="flex align-items-center">
-              <p-radioButton name="pizza" value="MISEENSERVICE" [(ngModel)]="ficheVie.etatFiche" Id="ingredient4"></p-radioButton>
-              <label for="ingredient4" class="ml-2">Mise en service</label>
-            </div>
-
-          </div>
-
-        </div>
-        <!--        </div>-->
       </div>
       <div>
         <div class=" flex col-12 justify-content-end ">
-          <button pButton label="Ajouter Inventaire" icon="pi pi-plus" class="p-button-success " (click)="showDialog()"></button>
+          <button pButton label="Ajouter Produits" icon="pi pi-plus" class="p-button-success " (click)="showDialog()"></button>
         </div>
 
-        <p-dialog [(visible)]="visibale" [style]="{width: '450px'}" header="Ajouter Inventaire" [modal]="true" class="p-fluid">
+        <p-dialog [(visible)]="visibale" [style]="{width: '1500px'}" header="Ajouter Produits"  [modal]="true" class="p-fluid">
 
-          <div class="  flex flex-column gap-4 ">
-
-            <p-floatLabel>
-              <p-calendar id="dateintervention" dateFormat="yy-mm-dd" [showIcon]="true" [(ngModel)]="intervention.dateintervention"></p-calendar>
-              <label for="dateReception">Date de Intervention</label>
-            </p-floatLabel>
-            <p-floatLabel>
-              <input type="text" pInputText id="certificat" class="w-1/2 " [(ngModel)]="intervention.certificat"/>
-              <label>Certificat</label>
-            </p-floatLabel>
-
-
-
-            <p-floatLabel>
-              <input type="text" pInputText id="qui" [(ngModel)]="intervention.qui"/>
-              <label>Qui</label>
-            </p-floatLabel>
-            <p-floatLabel>
-              <input type="text" pInputText id="nomVisa" class="w-full " [(ngModel)]="intervention.nomVisa"/>
-              <label>Nom de visa</label>
-            </p-floatLabel>
+          <div class="card">
+            <p-pickList [source]="sourceProduits" [target]="targetProduits" sourceHeader="Stock" targetHeader="Selected" [dragdrop]="true" [responsive]="true" [sourceStyle]="{ height: '150rem' }"
+                        [targetStyle]="{ height: '30rem' }" filterBy="nom" sourceFilterPlaceholder="Recherche par nom" targetFilterPlaceholder="Recherche par nom" breakpoint="1400px">
+              <ng-template let-product pTemplate="item">
+                <div class="flex flex-column gap-3 mt-4">
+                  <div class="flex align-items-center justify-content-between">
+                    <span class="font-bold">{{ product.nom }}</span>
+                    <div class="w1/3">
+                      <p-floatLabel>
+                      <input  type="text" pInputText [(ngModel)]="product.quantite" />
+                        <label>Quantité </label>
+                      </p-floatLabel>
+                    </div>
+                  </div>
+                  <div class="flex-1 flex flex-column gap-2">
 
 
+                    <div class="flex align-products-center gap-2">
+                      <i class="pi pi-tag text-sm"></i>
+                      <span>{{ product.article.nom }}</span>
 
-
-            <p-floatLabel>
-              <input type="text" pInputText id="natureAction" class="" [(ngModel)]="intervention.natureAction"/>
-              <label>Nature Action</label>
-            </p-floatLabel>
-            <p-floatLabel>
-              <input type="text" pInputText id="observation" class="w-full " [(ngModel)]="intervention.observation"/>
-              <label>Observation</label>
-            </p-floatLabel>
-
-
-
-            <p-floatLabel>
-              <input type="text" pInputText id="resultat" class="" [(ngModel)]="intervention.resultat"/>
-              <label>Resultat</label>
-            </p-floatLabel>
-
-
+                    </div>
+                  </div>
+<!--                  <span class="font-bold text-900">{{ '$' + product.price }}</span>-->
+                </div>
+              </ng-template>
+            </p-pickList>
           </div>
+
+
+
+<!--          <div class="  flex flex-column gap-4 ">-->
+
+<!--            <p-floatLabel>-->
+<!--              <p-calendar id="dateintervention" dateFormat="yy-mm-dd" [showIcon]="true" [(ngModel)]="intervention.dateintervention"></p-calendar>-->
+<!--              <label for="dateReception">Date de Intervention</label>-->
+<!--            </p-floatLabel>-->
+<!--            <p-floatLabel>-->
+<!--              <input type="text" pInputText id="certificat" class="w-1/2 " [(ngModel)]="intervention.certificat"/>-->
+<!--              <label>Certificat</label>-->
+<!--            </p-floatLabel>-->
+
+
+
+<!--            <p-floatLabel>-->
+<!--              <input type="text" pInputText id="qui" [(ngModel)]="intervention.qui"/>-->
+<!--              <label>Qui</label>-->
+<!--            </p-floatLabel>-->
+<!--            <p-floatLabel>-->
+<!--              <input type="text" pInputText id="nomVisa" class="w-full " [(ngModel)]="intervention.nomVisa"/>-->
+<!--              <label>Nom de visa</label>-->
+<!--            </p-floatLabel>-->
+
+
+
+
+<!--            <p-floatLabel>-->
+<!--              <input type="text" pInputText id="natureAction" class="" [(ngModel)]="intervention.natureAction"/>-->
+<!--              <label>Nature Action</label>-->
+<!--            </p-floatLabel>-->
+<!--            <p-floatLabel>-->
+<!--              <input type="text" pInputText id="observation" class="w-full " [(ngModel)]="intervention.observation"/>-->
+<!--              <label>Observation</label>-->
+<!--            </p-floatLabel>-->
+
+
+
+<!--            <p-floatLabel>-->
+<!--              <input type="text" pInputText id="resultat" class="" [(ngModel)]="intervention.resultat"/>-->
+<!--              <label>Resultat</label>-->
+<!--            </p-floatLabel>-->
+
+
+<!--          </div>-->
           <ng-template pTemplate="footer">
             <button pButton pRipple label="Cancel" icon="pi pi-times" class="p-button-text" (click)="hideDialog()"></button>
-            <button pButton pRipple label="Save" icon="pi pi-check" class="p-button-text" (click)="saveIntervention()"></button>
+            <button pButton pRipple label="Save" icon="pi pi-check" class="p-button-text" (click)="saveProduitClacule()"></button>
           </ng-template>
 
         </p-dialog>
-        <p-table #dt [value]="listeInterventions" [columns]="cols"  responsiveLayout="scroll" [rows]="10" [globalFilterFields]="['id','dateintervention','qui','natureAction','resultat','certificat','nomVisa','observation']" [paginator]="true" [rowsPerPageOptions]="[10,20,30]" [showCurrentPageReport]="true" currentPageReportTemplate="Affichage du  {first} au  {last} des  {totalRecords} entrées" [(selection)]="selectedIntervention" selectionMode="multiple" [rowHover]="true" dataKey="id">
+        <p-table #dt [value]="targetProduits" [columns]="cols"  responsiveLayout="scroll" [rows]="10" [globalFilterFields]="['id','nom','qui','quantite','designation','reference','article','produitDefectueux']" [paginator]="true" [rowsPerPageOptions]="[10,20,30]" [showCurrentPageReport]="true" currentPageReportTemplate="Affichage du  {first} au  {last} des  {totalRecords} entrées" [(selection)]="selectedProduit" selectionMode="multiple" [rowHover]="true" dataKey="id">
           <ng-template pTemplate="caption">
             <div class="flex flex-column md:flex-row md:justify-content-between md:align-items-center">
-              <h5 class="m-0">Gestion des fiches de vie</h5>
+              <h5 class="m-0">Inventaire des instruments</h5>
               <span class="block mt-2 md:mt-0 p-input-icon-left">
                             <i class="pi pi-search"></i>
                             <input  type="text" pInputText (input)="onGlobalFilter(dt, $event)" placeholder="Rechercher..."  class="w-full sm:w-auto"/>
@@ -159,29 +134,28 @@
           <ng-template pTemplate="header">
             <tr>
 
-              <th pSortableColumn="dateintervention">date Intervention <p-sortIcon field="dateintervention"></p-sortIcon></th>
-              <th pSortableColumn="qui">Qui <p-sortIcon field="qui"></p-sortIcon></th>
-              <th pSortableColumn="natureAction">nature Action <p-sortIcon field="natureAction"></p-sortIcon></th>
-              <th pSortableColumn="resultat">Resultat<p-sortIcon field="resultat"></p-sortIcon></th>
-              <th pSortableColumn="certificat">Certificat <p-sortIcon field="certificat"></p-sortIcon></th>
-              <th pSortableColumn="nomVisa">Nom Visa <p-sortIcon field="nomVisa"></p-sortIcon></th>
-              <th pSortableColumn="observation">Observation <p-sortIcon field="observation"></p-sortIcon></th>
+              <th pSortableColumn="nom">nom <p-sortIcon field="nom"></p-sortIcon></th>
+              <th pSortableColumn="quantite">quantite <p-sortIcon field="quantite"></p-sortIcon></th>
+              <th pSortableColumn="designation">designation <p-sortIcon field="designation"></p-sortIcon></th>
+              <th pSortableColumn="reference">reference<p-sortIcon field="reference"></p-sortIcon></th>
+              <th pSortableColumn="article">article <p-sortIcon field="article"></p-sortIcon></th>
+              <th pSortableColumn="nouveauQantite">Nouveau Qantité <p-sortIcon field="nouveauQantite"></p-sortIcon></th>
               <th></th>
             </tr>
           </ng-template>
-          <ng-template pTemplate="body" let-intervention >
+          <ng-template pTemplate="body" let-produit >
             <tr >
 
               <td style="width:14%; min-width:10rem;"><span class="p-column-title" >date Intervention</span>
-                {{intervention.dateintervention | date: "yyyy-MM-dd"}}
+                {{produit.nom }}
               </td>
               <td style="width:14%; min-width:10rem;">
                 <span class="p-column-title">Qui</span>
-                {{intervention.qui}}
+                {{produit.quantite}}
               </td>
               <td style="width:14%; min-width:10rem;">
                 <span class="p-column-title">Nature Action</span>
-                {{intervention.natureAction}}
+                {{produit.designation}}
 
 
               </td>
@@ -189,24 +163,21 @@
 
               <td style="width:14%; min-width:10rem;">
                 <span class="p-column-title">Resultat</span>
-                {{intervention.resultat}}
+                {{produit.reference}}
               </td>
               <td style="width:14%; min-width:8rem;">
                 <span class="p-column-title">Certificat</span>
-                {{intervention.certificat}}
+                {{produit.article.nom}}
               </td>
               <td style="width:14%; min-width:8rem;">
                 <span class="p-column-title">Nom Visa</span>
-                {{intervention.nomVisa}}
-              </td>
-              <td style="width:14%; min-width:8rem;">
-                <span class="p-column-title">Observation</span>
-                {{intervention.observation}}
+                {{produit.quantite}}
               </td>
 
+
               <div class="flex " >
-                <button *ngIf="isUpdateFichVie"  pButton pRipple icon="pi pi-pencil" class="p-button-rounded p-button-success mr-2" (click)="editIntrvention(intervention)"></button>
-                <button pButton pRipple icon="pi pi-trash" class="p-button-rounded p-button-warning" (click)="deleteIntervention(intervention)"></button>
+                <button *ngIf="isUpdateInventaire"  pButton pRipple icon="pi pi-pencil" class="p-button-rounded p-button-success mr-2" (click)="editIntrvention(produit)"></button>
+                <button pButton pRipple icon="pi pi-trash" class="p-button-rounded p-button-warning" (click)="deleteIntervention(produit)"></button>
               </div>
 
             </tr>
@@ -215,7 +186,7 @@
       </div>
     </div>
     <div class=" flex col-12 justify-content-end " >
-      <button pButton label="Enregisrer fiche vie" icon="pi pi-check" class=" " (click)="saveFicheVie()"></button>
+      <button pButton label="Enregisrer l'inventaire" icon="pi pi-check" class=" " (click)="saveInventaire()"></button>
     </div>
   </div>
 
