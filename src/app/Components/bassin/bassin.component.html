@@ -132,8 +132,8 @@
           <small class="ng-dirty ng-invalid" *ngIf="submitted && !bassin.etat">Telephone is required.</small>
         </div>
         <div class="field">
-          <label for="dateFermeture">Surface</label>
-          <input type="text" pInputText id="dateFermeture" class="border border-gray-300 shadow p-3 w-full rounded mb-" [(ngModel)]="bassin.surface" required autofocus [ngClass]="{'ng-invalid ng-dirty' : submitted && !bassin.surface}"/>
+          <label for="surface">Surface</label>
+          <p-inputNumber  id="surface"  [(ngModel)]="bassin.surface" [ngClass]="{'ng-invalid ng-dirty' : submitted && !bassin.surface}"></p-inputNumber>
           <small class="ng-dirty ng-invalid" *ngIf="submitted && !bassin.surface">Telephone is required.</small>
         </div>
 

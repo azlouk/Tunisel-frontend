@@ -6,8 +6,8 @@ import {BassinComponent} from "./Components/bassin/bassin.component";
 import {SblComponent} from "./Components/sbl/sbl.component";
 import {SbnlComponent} from "./Components/sbnl/sbnl.component";
 import {SblfComponent} from "./Components/sblf/sblf.component";
-import {FichevieComponent} from "./Components/fichevie/fichevie.component";
 import {InventaireComponent} from "./Components/inventaire/inventaire.component";
+import {FichevieComponent} from "./Components/fichevie/fichevie.component";
 import {AnalyseChimiqueComponent} from "./Components/analyse-chimique/analyse-chimique.component";
 import {
   AjouterPrelevmentChimiqueComponent
@@ -15,22 +15,34 @@ import {
 import {
   AjoutFichevieInterventionComponent
 } from "./Components/ajout-fichevie-intervention/ajout-fichevie-intervention.component";
+import {AnalysePhysiqueComponent} from "./Components/analyse-physique/analyse-physique.component";
+import {
+  AjouterPrelevmentPhysiqueComponent
+} from "./Components/ajouter-prelevment-physique/ajouter-prelevment-physique.component";
+import {LoginComponent} from "./Components/login/login.component";
+import {AuthGuard} from "./guard/AuthGuard";
 
 export const routes: Routes = [
-  {path:'dash', component:DashboardComponent},
-  {path:'users', component:UserComponent },
-  {path:'puits', component:PuitComponent},
-  {path:'bassins', component:BassinComponent},
-  {path:'sbls', component:SblComponent},
-  {path:'sbnls', component:SbnlComponent},
-  {path:'sblfs', component:SblfComponent},
-  {path:'inventaire', component:InventaireComponent},
-  {path:'etalonage', component:FichevieComponent},
-  {path:'ajouterFichevieIntervention', component:AjoutFichevieInterventionComponent},
-  {path:'ajouterFichevieIntervention/:id', component:AjoutFichevieInterventionComponent},
+  {path:'', component:LoginComponent},
+  {path:'dash', component:DashboardComponent, canActivate:[AuthGuard]},
+  {path:'users', component:UserComponent, canActivate:[AuthGuard] },
+  {path:'puits', component:PuitComponent, canActivate:[AuthGuard]},
+  {path:'bassins', component:BassinComponent, canActivate:[AuthGuard]},
+  {path:'sbls', component:SblComponent, canActivate:[AuthGuard]},
+  {path:'sbnls', component:SbnlComponent, canActivate:[AuthGuard]},
+  {path:'sblfs', component:SblfComponent, canActivate:[AuthGuard]},
+  {path:'login', component:LoginComponent},
+  {path:'sblfs', component:SblfComponent, canActivate:[AuthGuard]},
+  {path:'inventaire', component:InventaireComponent, canActivate:[AuthGuard]},
+  {path:'etalonage', component:FichevieComponent, canActivate:[AuthGuard]},
+  {path:'ajouterFichevieIntervention', component:AjoutFichevieInterventionComponent, canActivate:[AuthGuard]},
+  {path:'ajouterFichevieIntervention/:id', component:AjoutFichevieInterventionComponent, canActivate:[AuthGuard]},
 
-  {path:'analyseChimique', component:AnalyseChimiqueComponent},
-  {path:'ajouterPrelevmentChimique', component:AjouterPrelevmentChimiqueComponent},
-  {path:'updatePrelevmentChimique/:id', component:AjouterPrelevmentChimiqueComponent}
+  {path:'analyseChimique', component:AnalyseChimiqueComponent, canActivate:[AuthGuard]},
+  {path:'ajouterPrelevmentChimique', component:AjouterPrelevmentChimiqueComponent, canActivate:[AuthGuard]},
+  {path:'updatePrelevmentChimique/:id', component:AjouterPrelevmentChimiqueComponent, canActivate:[AuthGuard]},
 
+  {path:'analysePhysique', component:AnalysePhysiqueComponent, canActivate:[AuthGuard]},
+  {path:'ajouterPrelevmentPhysique', component:AjouterPrelevmentPhysiqueComponent, canActivate:[AuthGuard]},
+  {path:'updatePrelevmentPhysique/:id', component:AjouterPrelevmentPhysiqueComponent, canActivate:[AuthGuard]},
 ];
