@@ -1,17 +1,13 @@
 import {Component, OnInit} from '@angular/core';
-import {Puit} from "../../Models/puit";
 import {Bassin} from "../../Models/bassin";
 import {Sbnl} from "../../Models/sbnl";
 import {Sbl} from "../../Models/sbl";
 import {Sblf} from "../../Models/sblf";
 import {ActivatedRoute, Router} from "@angular/router";
-import {PuitService} from "../../Services/puit.service";
 import {BassinService} from "../../Services/bassin.service";
 import {SbnlService} from "../../Services/sbnl.service";
 import {SblService} from "../../Services/sbl.service";
 import {SblfService} from "../../Services/sblf.service";
-import {AnalyseChimiqueService} from "../../Services/analyse-chimique.service";
-import {AnalyseChimiqueComponent} from "../analyse-chimique/analyse-chimique.component";
 import {DatePipe, JsonPipe, NgForOf, NgIf} from "@angular/common";
 import {ButtonModule} from "primeng/button";
 import {CalendarModule} from "primeng/calendar";
@@ -27,10 +23,10 @@ import {TabViewModule} from "primeng/tabview";
 import {ToolbarModule} from "primeng/toolbar";
 import {TooltipModule} from "primeng/tooltip";
 import {AnalysesPhysique} from "../../Models/analyses-physique";
-import {AnalysePhysiqueService} from "../../Services/analysePhysique.service";
 import {Table, TableModule} from "primeng/table";
-import {Intervention} from "../../Models/inventaire";
 import {Tamis} from "../../Models/tamis";
+import {AnalysePhysiqueService} from "../../Services/analysePhysique.service";
+import {TamisService} from "../../Services/tamis.service";
 
 @Component({
   selector: 'app-ajouter-prelevment-physique',
@@ -76,6 +72,7 @@ export class AjouterPrelevmentPhysiqueComponent implements OnInit{
   visibale:boolean=false;
   listeTamis:Tamis[]=[];
   tamis:Tamis={};
+
   // =====================
   cols: any;
   selectedIntervention: any;
@@ -85,6 +82,7 @@ export class AjouterPrelevmentPhysiqueComponent implements OnInit{
               private sblService :SblService,
               private sblfService :SblfService,
               private analysePhysiqueService:AnalysePhysiqueService ,
+              private tamisService:TamisService ,
               private route: ActivatedRoute,
               )
   {}
@@ -102,11 +100,13 @@ export class AjouterPrelevmentPhysiqueComponent implements OnInit{
       this.selectedSbl=value.sbl;
       this.selectedSbnl=value.sbnl;
       this.selectedSblf=value.sblf ;
-      console.log(new JsonPipe().transform(value))
+      console.log(new JsonPipe().transform(value));
+
     }, error => {
 
     });
     this.analysePhysiqueService.getAnalysesPhysiquesById(this.analysePhysiqueId).subscribe(value => {this.analysesPhysique=value;
+      this.listeTamis=this.analysesPhysique.tamisList==undefined?[]:this.analysesPhysique.tamisList ;
 
     },error => error)
 
@@ -155,21 +155,25 @@ export class AjouterPrelevmentPhysiqueComponent implements OnInit{
     else{
       if(this.selectedBassin){
         this.selectedBassin.analysesPhysiques=[];
+        this.analysesPhysique.tamisList=this.listeTamis;
         this.selectedBassin.analysesPhysiques.push(this.analysesPhysique) ;
         console.log('======**********>>>>>>   '+new JsonPipe().transform(this.selectedBassin));
         this.analysePhysiqueService.addAnalysesPhysiquesToBassin(this.selectedBassin).subscribe(value => {
-          this.router.navigate(['/analysePhysique'])
+          this.router.navigate(['/analysePhysique']);
         },error => console.log(error));
       }if(this.selectedSbnl){
         this.selectedSbnl.analysesPhysiques=[];
+        this.analysesPhysique.tamisList=this.listeTamis;
         this.selectedSbnl.analysesPhysiques.push(this.analysesPhysique) ;
         this.analysePhysiqueService.addAnalysesPhysiquesToSbnl(this.selectedSbnl).subscribe(value => this.router.navigate(['/analysePhysique']))
       }if(this.selectedSbl){
         this.selectedSbl.analysesPhysiques=[];
+        this.analysesPhysique.tamisList=this.listeTamis;
         this.selectedSbl.analysesPhysiques.push(this.analysesPhysique) ;
         this.analysePhysiqueService.addAnalysesPhysiquesToSbl(this.selectedSbl).subscribe(value => this.router.navigate(['/analysePhysique']))
       }if(this.selectedSblf){
         this.selectedSblf.analysesPhysiques=[];
+        this.analysesPhysique.tamisList=this.listeTamis;
         this.selectedSblf.analysesPhysiques.push(this.analysesPhysique) ;
         this.analysePhysiqueService.addAnalysesPhysiquesToSblf(this.selectedSblf).subscribe(value => this.router.navigate(['/analysePhysique']))
       }
@@ -181,7 +185,17 @@ export class AjouterPrelevmentPhysiqueComponent implements OnInit{
     this.visibleDetails=true;
   }
 
-  deleteIntervention(intervention: any) {
+  deleteTamis(tamis: any) {
+    if (this.isUpdateAnalysePhysique==true){
+      this.tamisService.deleteTamis(tamis.id).subscribe(value => { this.analysePhysiqueService.getAnalysesPhysiquesById(this.analysePhysiqueId).subscribe(value =>{this.analysesPhysique=value;
+        this.listeTamis=this.analysesPhysique.tamisList==undefined?[]:this.analysesPhysique.tamisList ;
+      } )
+
+      })
+      this.listeTamis = this.listeTamis.filter(item => item !== tamis)
+    }else {
+      this.listeTamis = this.listeTamis.filter(item => item !== tamis);
+    }
 
   }
 
@@ -202,6 +216,8 @@ this.visibale=false;
   }
 
   saveTamis() {
-    this.listeTamis.push(this.tamis)
+    this.listeTamis.push(this.tamis);
+    this.visibale=false
+
   }
 }

@@ -40,21 +40,21 @@
 
         <p-tabView *ngIf="!isUpdateAnalysePhysique"[scrollable]="true" >
 
-          <p-tabPanel header="Bassin" *ngIf="selectedBassin">
+          <p-tabPanel header="Bassin" >
             <p-listbox [options]="bassins" [(ngModel)]="selectedBassin" optionLabel="nom" [filter]="true" [listStyle]="{'height': '87px'}"  ></p-listbox>
 
           </p-tabPanel>
-          <p-tabPanel header="Sotck non lavé" pTooltip="Enter your username" *ngIf="selectedSbnl">
+          <p-tabPanel header="Sotck non lavé" pTooltip="Enter your username">
             <p-listbox [options]="sbnls" [(ngModel)]="selectedSbnl" optionLabel="reference" [filter]="true" [listStyle]="{'height': '87px'}"  ></p-listbox>
 
           </p-tabPanel>
 
-          <p-tabPanel header="Sotck lavé" *ngIf="selectedSbl">
+          <p-tabPanel header="Sotck lavé" >
             <p-listbox [options]="sbls" [(ngModel)]="selectedSbl" optionLabel="reference" [filter]="true" [listStyle]="{'height': '87px'}" ></p-listbox>
 
           </p-tabPanel>
 
-          <p-tabPanel header="Sotck finale" *ngIf="selectedSblf">
+          <p-tabPanel header="Sotck finale" >
             <p-listbox [options]="sblfs" [(ngModel)]="selectedSblf" optionLabel="reference" [filter]="true"  [listStyle]="{'height': '87px'}" ></p-listbox>
 
           </p-tabPanel>
@@ -220,27 +220,27 @@
       <div class="  flex flex-column gap-4 ">
 
         <p-floatLabel>
-          <input type="text" pInputText id="certificat" class="w-1/2 " [(ngModel)]="tamis.calibre"/>
+          <p-inputNumber id="certificat" class="w-1/2 " [(ngModel)]="tamis.calibre"></p-inputNumber>
           <label>Calibre</label>
         </p-floatLabel>
 
         <p-floatLabel>
-          <input type="text" pInputText id="qui" [(ngModel)]="tamis.masse"/>
+          <p-inputNumber id="qui" [(ngModel)]="tamis.masse"></p-inputNumber>
           <label>Masse</label>
         </p-floatLabel>
 
         <p-floatLabel>
-          <input type="text" pInputText id="nomVisa" class="w-full " [(ngModel)]="tamis.refus"/>
+          <p-inputNumber id="nomVisa" class="w-full " [(ngModel)]="tamis.refus"></p-inputNumber>
           <label>Refus</label>
         </p-floatLabel>
 
         <p-floatLabel>
-          <input type="text" pInputText id="natureAction" class="" [(ngModel)]="tamis.refusCumulated"/>
+          <p-inputNumber id="natureAction" class="" [(ngModel)]="tamis.refusCumulated"></p-inputNumber>
           <label>Refus Cumulated</label>
         </p-floatLabel>
 
         <p-floatLabel>
-          <input type="text" pInputText id="observation" class="w-full " [(ngModel)]="tamis.passCumulated"/>
+          <p-inputNumber id="observation" class="w-full " [(ngModel)]="tamis.passCumulated"></p-inputNumber>
           <label>Pass Cumulated</label>
         </p-floatLabel>
 
@@ -307,7 +307,7 @@
 
 
           <div class="flex ">
-            <button pButton pRipple icon="pi pi-trash" class="p-button-rounded p-button-warning" (click)="deleteIntervention(tamis)"></button>
+            <button pButton pRipple icon="pi pi-trash" class="p-button-rounded p-button-warning" (click)="deleteTamis(tamis)"></button>
           </div>
 
         </tr>

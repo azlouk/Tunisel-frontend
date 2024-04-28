@@ -20,7 +20,6 @@ import {
   AjouterPrelevmentPhysiqueComponent
 } from "./Components/ajouter-prelevment-physique/ajouter-prelevment-physique.component";
 import {LoginComponent} from "./Components/login/login.component";
-import {AuthGuard} from "./guard/AuthGuard";
 
 export const routes: Routes = [
   {path:'', component:LoginComponent},
@@ -45,4 +44,8 @@ export const routes: Routes = [
   {path:'analysePhysique', component:AnalysePhysiqueComponent, canActivate:[AuthGuard]},
   {path:'ajouterPrelevmentPhysique', component:AjouterPrelevmentPhysiqueComponent, canActivate:[AuthGuard]},
   {path:'updatePrelevmentPhysique/:id', component:AjouterPrelevmentPhysiqueComponent, canActivate:[AuthGuard]},
+  {path:'articles', component:ArticleComponent, canActivate:[AuthGuard]},
+  {path:'produitdefectueux', component:ProduitDefectueuxComponent,  canActivate:[AuthGuard]},
+  {path:'ajouterInventaire', component:AjouterInventaireComponent,  canActivate:[AuthGuard]},
+
 ];
