@@ -167,3 +167,65 @@
 </div>
 
 
+
+<p-dialog header="Analyse chimique" [(visible)]="visiblePrint" [modal]="true"   [breakpoints]="{ '1199px': '75vw', '575px': '90vw' }">
+<div #pdfpuit class="pt-8 pl-4 pr-4">
+  <img src="assets/layout/images/logo.png">
+  <div class="row justify-content-end font-bold flex text-1xl"> Date de création : <span class=" text-1xl font-bold  pi pi-calendar ">{{dateToday | date :"yyyy-MM-dd"}}</span></div>
+  <div class="row    font-bold flex text-1xl   "> Identification :<span class=" text-1xl font-bold   "> {{selectedPuitPrint.reference}}</span></div>
+
+  <div class="row shadow-1 text-3xl font-bold text-center m-2 p-3" > Rapport d'analyse chemique </div>
+  <label class="text-2xl font-bold">Nom Puit :</label><span class="text-1xl">{{selectedPuitPrint.nom}}</span><br>
+  <label class="text-2xl font-bold">Réference Puit :</label><span class="text-1xl">{{selectedPuitPrint.reference}}</span><br>
+  <label class="text-2xl font-bold">Date Puit :</label><span class="text-1xl">{{selectedPuitPrint.dateCreation}}</span>
+   <p-table [value]="getAnalyseChimique()" [tableStyle]="{ 'min-width': '50rem' }">
+    <ng-template pTemplate="header">
+      <tr>
+        <th>reference</th>
+        <th>dateAnalyse</th>
+        <th>temperature</th>
+        <th>vent</th>
+        <th>densite (g/cm 3)</th>
+        <th>matiereEnSuspension</th>
+        <th>salimite</th>
+        <th>calcium</th>
+
+        <th>magnesium</th>
+        <th>sulfate</th>
+        <th>matiereInsoluble</th>
+        <th>potassium</th>
+        <th>sodium</th>
+        <th>chlorure</th>
+        <th>ph</th>
+        <th>chlorureDeSodium</th>
+        <th>ferrocyanure</th>
+
+      </tr>
+    </ng-template>
+    <ng-template pTemplate="body" let-a>
+      <tr>
+        <td>{{ a.reference }}</td>
+        <td>{{ a.dateAnalyse }}</td>
+        <td>{{ a.temperature }}</td>
+        <td>{{ a.vent }}</td>
+        <td>{{ a.densite }}</td>
+        <td>{{ a.matiereEnSuspension }}</td>
+        <td>{{ a.calcium }}</td>
+        <td>{{ a.sulfate }}</td>
+        <td>{{ a.humidite }}</td>
+        <td>{{ a.matiereInsoluble }}</td>
+        <td>{{ a.potassium }}</td>
+        <td>{{ a.sodium }}</td>
+        <td>{{ a.chlorure }}</td>
+        <td>{{ a.ph }}</td>
+        <td>{{ a.chlorureDeSodium }}</td>
+        <td>{{ a.ferrocyanure }}</td>
+
+      </tr>
+    </ng-template>
+  </p-table>
+</div>
+  <ng-template pTemplate="footer">
+    <p-button icon="pi pi-file-pdf" (click)="SavePDF()" class="text-green-50" label="PDF" pAutoFocus [autofocus]="true"  ></p-button>
+  </ng-template>
+</p-dialog>

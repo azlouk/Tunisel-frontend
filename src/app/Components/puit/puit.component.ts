@@ -1,7 +1,7 @@
-import {Component, OnInit} from '@angular/core';
+import {Component, ElementRef, OnInit, ViewChild} from '@angular/core';
 import {ButtonModule} from "primeng/button";
 import {DialogModule} from "primeng/dialog";
-import {JsonPipe, NgClass, NgIf} from "@angular/common";
+import {DatePipe, JsonPipe, NgClass, NgIf} from "@angular/common";
 import {PaginatorModule} from "primeng/paginator";
 import {PasswordModule} from "primeng/password";
 import {RadioButtonModule} from "primeng/radiobutton";
@@ -15,6 +15,10 @@ import {Puit} from "../../Models/puit";
 import {PuitService} from "../../Services/puit.service";
 import {InputTextModule} from "primeng/inputtext";
 import {CalendarModule} from "primeng/calendar";
+import Swal from "sweetalert2";
+import  jsPDF from 'jspdf';
+import html2canvas from "html2canvas";
+import {AnalysesChimique} from "../../Models/analyses-chimique";
 
 @Component({
   selector: 'app-puit',
@@ -32,7 +36,8 @@ import {CalendarModule} from "primeng/calendar";
     ToolbarModule,
     NgClass,
     InputTextModule,
-    CalendarModule
+    CalendarModule,
+    DatePipe
   ],
   templateUrl: './puit.component.html',
   styleUrl: './puit.component.css'
@@ -211,8 +216,10 @@ export class PuitComponent implements OnInit{
     table.filterGlobal((event.target as HTMLInputElement).value, 'contains');
   }
 
+  selectedPuitPrint:Puit={}
   exportrapport(puit :Puit) {
-
+    this.selectedPuitPrint=puit;
+    this.visiblePrint=true
     console.log(new JsonPipe().transform(puit)) ;
   }
 
@@ -223,5 +230,35 @@ export class PuitComponent implements OnInit{
       this.loading=false;
 
     });
+  }
+
+
+  @ViewChild("pdfpuit") htmlContent: ElementRef | undefined;
+  visiblePrint: boolean=false;
+  dateToday: Date=new Date();
+
+  public SavePDF(): void {
+
+    if(this.htmlContent) {
+      let datahtml='';
+
+      html2canvas(this.htmlContent.nativeElement,{ scale: 1 }).then((canvas) => {
+        const imgData = canvas.toDataURL('image/png');
+        const pdf = new jsPDF('p', 'mm', 'a4');
+        const imgWidth = 210; // PDF width
+        const imgHeight = (canvas.height * imgWidth) / canvas.width; // Maintain aspect ratio
+        pdf.addImage(imgData, 'png', 2, 2, imgWidth, imgHeight);
+        pdf.save('Print_'+Math.random()+'.pdf');
+      });
+
+
+    }
+
+
+
+  }
+
+  getAnalyseChimique():AnalysesChimique[] {
+    return  this.selectedPuitPrint.analysesChimiques!==undefined?this.selectedPuitPrint.analysesChimiques:[]
   }
 }
