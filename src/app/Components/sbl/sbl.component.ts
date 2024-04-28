@@ -67,17 +67,7 @@ export class SblComponent implements OnInit{
   constructor(private productService: ProductService, private messageService: MessageService,private sblService :SblService,private sbnlService:SbnlService) {}
 
   ngOnInit() {
-    this.sblService.getAllSbl().subscribe((v:  Sbl[]) => {
-      this.sbls=v;
-      // console.log(new JsonPipe().transform("====================>>>>>>"+this.sbls))
-
-    },error => {
-      console.log(error)})
-    this.sbnlService.getAllSbnls().subscribe((v:  Sbnl[]) => {
-      this.sbnls=v;
-
-    },error => {
-      console.log(error)})
+    this.getAllSbl() ;
     this.cols = [
       { field: 'id', header: 'id' },
       { field: 'reference', header: 'reference' },
@@ -181,4 +171,21 @@ export class SblComponent implements OnInit{
     table.filterGlobal((event.target as HTMLInputElement).value, 'contains');
   }
 
+  exportrapport(sbl: Sbl) {
+
+  }
+
+  getAllSbl() {
+    this.sblService.getAllSbl().subscribe((v:  Sbl[]) => {
+      this.sbls=v;
+      // console.log(new JsonPipe().transform("====================>>>>>>"+this.sbls))
+
+    },error => {
+      console.log(error)})
+    this.sbnlService.getAllSbnls().subscribe((v:  Sbnl[]) => {
+      this.sbnls=v;
+
+    },error => {
+      console.log(error)})
+  }
 }

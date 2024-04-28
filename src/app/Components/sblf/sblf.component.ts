@@ -66,18 +66,7 @@ export class SblfComponent {
   constructor(private productService: ProductService, private messageService: MessageService,private sblfService :SblfService,private sblService:SblService) {}
 
   ngOnInit() {
-    this.sblfService.getAllSblfs().subscribe((v:  Sblf[]) => {
-      this.sblfs=v;
-      console.log(new JsonPipe().transform("====================>>>>>>"+this.sblfs))
-
-    },error => {
-      console.log(error)})
-    this.sblService.getAllSbl().subscribe((v:  Sbl[]) => {
-      this.sbls=v;
-      console.log(new JsonPipe().transform("====================>>>>>>"+this.sbls))
-
-    },error => {
-      console.log(error)})
+   this.getAllSBLF() ;
     this.cols = [
       { field: 'id', header: 'id' },
       { field: 'reference', header: 'reference' },
@@ -179,4 +168,22 @@ export class SblfComponent {
     table.filterGlobal((event.target as HTMLInputElement).value, 'contains');
   }
 
+  getAllSBLF() {
+    this.sblfService.getAllSblfs().subscribe((v:  Sblf[]) => {
+      this.sblfs=v;
+      console.log(new JsonPipe().transform("====================>>>>>>"+this.sblfs))
+
+    },error => {
+      console.log(error)})
+    this.sblService.getAllSbl().subscribe((v:  Sbl[]) => {
+      this.sbls=v;
+      console.log(new JsonPipe().transform("====================>>>>>>"+this.sbls))
+
+    },error => {
+      console.log(error)})
+  }
+
+  exportrapport(sblf: Sblf) {
+
+  }
 }

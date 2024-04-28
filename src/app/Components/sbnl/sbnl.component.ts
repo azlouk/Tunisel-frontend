@@ -71,17 +71,7 @@ export class SbnlComponent implements OnInit{
   constructor(private productService: ProductService, private messageService: MessageService,private sbnlService :SbnlService,private serviceBassin:BassinService) {}
 
   ngOnInit() {
-    this.sbnlService.getAllSbnls().subscribe((v:  Sbnl[]) => {
-      this.sbnls=v;
-
-    },error => {
-      console.log(error)})
-    this.serviceBassin.getAllBassins()
-      .subscribe((bassins: Bassin[]) => {
-        this.bassins = bassins;
-      }, error => {
-        console.log('Error fetching users:', error);
-      });
+this.getsbnl()
     this.cols = [
       { field: 'id', header: 'id' },
       { field: 'reference', header: 'reference' },
@@ -206,5 +196,23 @@ export class SbnlComponent implements OnInit{
 
   onGlobalFilter(table: Table, event: Event) {
     table.filterGlobal((event.target as HTMLInputElement).value, 'contains');
+  }
+
+  getsbnl() {
+    this.sbnlService.getAllSbnls().subscribe((v:  Sbnl[]) => {
+      this.sbnls=v;
+
+    },error => {
+      console.log(error)})
+    this.serviceBassin.getAllBassins()
+      .subscribe((bassins: Bassin[]) => {
+        this.bassins = bassins;
+      }, error => {
+        console.log('Error fetching users:', error);
+      });
+  }
+
+  exportrapport(sbnl: Sbnl) {
+
   }
 }

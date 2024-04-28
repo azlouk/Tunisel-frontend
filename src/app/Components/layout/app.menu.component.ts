@@ -26,8 +26,8 @@ export class AppMenuComponent implements OnInit {
       {
         label: 'Interfaces',
         items: [
-          {label: 'Puits', icon: 'pi pi-fw pi-filter', routerLink: ['/puits']},
           {label: 'Utilisateurs', icon: 'pi pi-fw pi-user', routerLink: ['/users']},
+          {label: 'Puits', icon: 'pi pi-fw pi-filter', routerLink: ['/puits']},
           {label: 'Bassins', icon: 'pi pi-fw pi-check-square', routerLink: ['/bassins']},
 
         ]

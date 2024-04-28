@@ -6,7 +6,10 @@
         <ng-template pTemplate="left">
           <div class="my-2">
             <button pButton pRipple label="Ajouter" icon="pi pi-plus" class="p-button-success mr-2" (click)="openNew()"></button>
-            <button pButton pRipple label="Supprimer" icon="pi pi-trash" class="p-button-danger" (click)="deleteSelectedSblfs()" [disabled]="!selectedSblfs || !selectedSblfs.length"></button>
+            <button pButton pRipple label="Supprimer" icon="pi pi-trash" class="p-button-danger mr-2" (click)="deleteSelectedSblfs()" [disabled]="!selectedSblfs || !selectedSblfs.length"></button>
+            <button pButton pRipple label="Actualiser" icon="pi pi-refresh" class="p-button-primary mr-2" (click)="getAllSBLF()"  ></button>
+
+
           </div>
         </ng-template>
 
@@ -87,7 +90,9 @@
             <td>
               <div class="flex ">
                 <button pButton pRipple icon="pi pi-pencil" class="p-button-rounded p-button-success mr-2" (click)="editSblf(sblf)"></button>
-                <button pButton pRipple icon="pi pi-trash" class="p-button-rounded p-button-warning" (click)="deleteSblf(sblf)"></button>
+                <button pButton pRipple icon="pi pi-trash" class="p-button-rounded p-button-warning mr-2" (click)="deleteSblf(sblf)"></button>
+                <button pButton pRipple icon="pi pi-file-pdf" class="p-button-rounded p-button-primary mr-2"  (click)="exportrapport(sblf)"></button>
+
               </div>
             </td>
           </tr>
