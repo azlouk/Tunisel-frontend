@@ -15,23 +15,25 @@ import {Sbl} from "../../Models/sbl";
 import {SblService} from "../../Services/sbl.service";
 import {Sbnl} from "../../Models/sbnl";
 import {SbnlService} from "../../Services/sbnl.service";
+import {OverlayPanelModule} from "primeng/overlaypanel";
 
 @Component({
   selector: 'app-sbl',
   standalone: true,
-  imports: [
-    ButtonModule,
-    CalendarModule,
-    DialogModule,
-    InputTextModule,
-    NgIf,
-    PaginatorModule,
-    SharedModule,
-    TableModule,
-    ToastModule,
-    ToolbarModule,
-    NgClass
-  ],
+    imports: [
+        ButtonModule,
+        CalendarModule,
+        DialogModule,
+        InputTextModule,
+        NgIf,
+        PaginatorModule,
+        SharedModule,
+        TableModule,
+        ToastModule,
+        ToolbarModule,
+        NgClass,
+        OverlayPanelModule
+    ],
   templateUrl: './sbl.component.html',
   styleUrl: './sbl.component.css'
 })

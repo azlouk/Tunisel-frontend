@@ -15,6 +15,7 @@ import {ToastModule} from "primeng/toast";
 import {ToolbarModule} from "primeng/toolbar";
 import {InputTextModule} from "primeng/inputtext";
 import {DropdownModule} from "primeng/dropdown";
+import {OverlayPanelModule} from "primeng/overlaypanel";
 
 @Component({
   selector: 'app-sblf',
@@ -30,6 +31,7 @@ import {DropdownModule} from "primeng/dropdown";
         ToolbarModule,
         InputTextModule,
         DropdownModule,
+        OverlayPanelModule,
     ],
   templateUrl: './sblf.component.html',
   styleUrl: './sblf.component.css'

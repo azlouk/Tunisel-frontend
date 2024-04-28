@@ -18,4 +18,5 @@ export interface AnalysesChimique  {
   ph?: number|undefined;
   chlorureDeSodium?: number|undefined;
   ferrocyanure?: number|undefined;
+  ref?:string;
 }

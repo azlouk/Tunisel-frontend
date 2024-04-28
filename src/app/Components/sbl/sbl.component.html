@@ -18,7 +18,7 @@
       <p-table #dt [value]="sbls" [columns]="cols"  responsiveLayout="scroll" [rows]="10" [globalFilterFields]="['id','reference','description','dateStock','emplacement','etat','quantite','type']" [paginator]="true" [rowsPerPageOptions]="[10,20,30]" [showCurrentPageReport]="true" currentPageReportTemplate="Affichage du  {first} au  {last} des  {totalRecords} entrées" [(selection)]="selectedSbls" selectionMode="multiple" [rowHover]="true" dataKey="id">
         <ng-template pTemplate="caption">
           <div class="flex flex-column md:flex-row md:justify-content-between md:align-items-center">
-            <h5 class="m-0">Gestion des Stock Sbl</h5>
+            <h5 class="m-0">Gestion des stocks des bassins lavés</h5>
             <span class="block mt-2 md:mt-0 p-input-icon-left">
                             <i class="pi pi-search"></i>
                             <input  type="text" pInputText (input)="onGlobalFilter(dt, $event)" placeholder="Rechercher..."  class="w-full sm:w-auto"/>
@@ -40,8 +40,8 @@
             <th pSortableColumn="emplacement">Emplacement <p-sortIcon field="emplacement"></p-sortIcon></th>
             <th pSortableColumn="etat">Etat <p-sortIcon field="etat"></p-sortIcon></th>
             <th pSortableColumn="quantité">Quantité <p-sortIcon field="quantité"></p-sortIcon></th>
-            <th pSortableColumn="type">Type <p-sortIcon field="type"></p-sortIcon></th>
-
+            <th pSortableColumn="type">Stock Non laver <p-sortIcon field="type"></p-sortIcon></th>
+            <th>Action</th>
 
           </tr>
         </ng-template>
@@ -83,8 +83,19 @@
               {{sbl.quantite}}
             </td>
             <td style="width:14%; min-width:8rem;">
-              <span class="p-column-title">Type</span>
-              {{sbl.stockType}}
+
+              <span class="p-column-title">Stock Non laver</span>
+              {{sbl.sblSbnl.reference }}
+              <span class="pi pi-eye text-primary cursor-pointer m-2" (click)="opSBL.toggle($event)"  ></span>
+              <p-overlayPanel #opSBL>
+
+                <label class="text-2xl">Réf : {{sbl.sblSbnl.reference}}</label><br>
+                <label class="text-2xl">Description : {{sbl.sblSbnl.description}}
+                </label ><br>
+                <label class="text-2xl">Etat : {{sbl.sblSbnl.etat}}</label><br>
+                <label class="text-2xl">Quantité : {{sbl.sblSbnl.quantite}}</label><br>
+                <label class="text-2xl">Emplacement : {{sbl.sblSbnl.emplacement}}</label><br>
+              </p-overlayPanel>
             </td>
             <td>
               <div class="flex ">
@@ -99,10 +110,10 @@
       </p-table>
     </div>
 
-    <p-dialog [(visible)]="productDialog" [style]="{width: '450px'}" header="Product Details" [modal]="true" class="p-fluid">
+    <p-dialog [(visible)]="productDialog" [style]="{width: '450px'}" header="Nouveau stock lavé" [modal]="true" class="p-fluid">
       <ng-template pTemplate="content">
         <div class="field">
-          <label>Sbnl</label>
+          <label>Stock bassin non laver</label>
           <p-dropdown [options]="sbnls" [(ngModel)]="sbl.sblSbnl" [editable]="true" optionLabel="reference" class="w-full"></p-dropdown>
         </div>
         <div class="field">
@@ -152,30 +163,30 @@
 
 
       <ng-template pTemplate="footer">
-        <button pButton pRipple label="Cancel" icon="pi pi-times" class="p-button-text" (click)="hideDialog()"></button>
-        <button pButton pRipple label="Save" icon="pi pi-check" class="p-button-text" (click)="saveSbl()"></button>
+        <button pButton pRipple label="Annuler" icon="pi pi-times" class="p-button-text" (click)="hideDialog()"></button>
+        <button pButton pRipple label="Ajouter" icon="pi pi-check" class="p-button-text" (click)="saveSbl()"></button>
       </ng-template>
     </p-dialog>
 
-    <p-dialog [(visible)]="deleteProductDialog" header="Confirm" [modal]="true" [style]="{width:'450px'}">
+    <p-dialog [(visible)]="deleteProductDialog" header="Confirmer" [modal]="true" [style]="{width:'450px'}">
       <div class="flex align-items-center justify-content-center">
         <i class="pi pi-exclamation-triangle mr-3" style="font-size: 2rem"></i>
-        <span *ngIf="product">Are you sure you want to delete <b>{{product.name}}</b>?</span>
+        <span *ngIf="product">Êtes-vous sûr de vouloir supprimer? <b>{{product.name}}</b>?</span>
       </div>
       <ng-template pTemplate="footer">
-        <button pButton pRipple icon="pi pi-times" class="p-button-text" label="No" (click)="deleteProductDialog = false"></button>
-        <button pButton pRipple icon="pi pi-check" class="p-button-text" label="Yes" (click)="confirmDelete()"></button>
+        <button pButton pRipple icon="pi pi-times" class="p-button-text" label="Non" (click)="deleteProductDialog = false"></button>
+        <button pButton pRipple icon="pi pi-check" class="p-button-text" label="Oui" (click)="confirmDelete()"></button>
       </ng-template>
     </p-dialog>
 
     <p-dialog [(visible)]="deleteProductsDialog" header="Confirm" [modal]="true" [style]="{width:'450px'}">
       <div class="flex align-items-center justify-content-center">
         <i class="pi pi-exclamation-triangle mr-3" style="font-size: 2rem"></i>
-        <span>Are you sure you want to delete selected products?</span>
+        <span>Voulez-vous vraiment supprimer ?</span>
       </div>
       <ng-template pTemplate="footer">
-        <button pButton pRipple icon="pi pi-times" class="p-button-text" label="No" (click)="deleteProductsDialog = false"></button>
-        <button pButton pRipple icon="pi pi-check" class="p-button-text" label="Yes" (click)="confirmDeleteSelected()"></button>
+        <button pButton pRipple icon="pi pi-times" class="p-button-text" label="Non" (click)="deleteProductsDialog = false"></button>
+        <button pButton pRipple icon="pi pi-check" class="p-button-text" label="Oui" (click)="confirmDeleteSelected()"></button>
       </ng-template>
     </p-dialog>
   </div>

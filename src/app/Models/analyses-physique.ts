@@ -8,5 +8,7 @@ export interface AnalysesPhysique  {
   vent?: number;
   bande?:number;
   conformite?:string;
+  qualite?:string ;
   tamisList?:Tamis[];
+  ref?:string ;
 }

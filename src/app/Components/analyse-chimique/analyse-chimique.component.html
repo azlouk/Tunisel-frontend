@@ -15,7 +15,7 @@
 
       </p-toolbar>
 
-      <p-table #dt [value]="analysesChimiques" [columns]="cols"  responsiveLayout="scroll" [rows]="10" [globalFilterFields]="['id','reference','description','dateCreation','nom','emplacement','etat','dateFermeture']" [paginator]="true" [rowsPerPageOptions]="[10,20,30]" [showCurrentPageReport]="true" currentPageReportTemplate="Affichage du  {first} au  {last} des  {totalRecords} entrées" [(selection)]="selectedAnalysesChimiques" selectionMode="multiple" [rowHover]="true" dataKey="id">
+      <p-table #dt [value]="analysesChimiques" [columns]="cols"  responsiveLayout="scroll" [rows]="10" [globalFilterFields]="['id','reference','description','dateCreation','nom','emplacement','etat','dateFermeture','ref']" [paginator]="true" [rowsPerPageOptions]="[10,20,30]" [showCurrentPageReport]="true" currentPageReportTemplate="Affichage du  {first} au  {last} des  {totalRecords} entrées" [(selection)]="selectedAnalysesChimiques" selectionMode="multiple" [rowHover]="true" dataKey="id">
         <ng-template pTemplate="caption">
           <div class="flex flex-column md:flex-row md:justify-content-between md:align-items-center">
             <h5 class="m-0">List des prélèvements </h5>
@@ -35,13 +35,12 @@
             </th>
             <th pSortableColumn="id">Id <p-sortIcon field="id"></p-sortIcon></th>
             <th pSortableColumn="reference">Reference <p-sortIcon field="reference"></p-sortIcon></th>
-            <th pSortableColumn="description">Description <p-sortIcon field="description"></p-sortIcon></th>
-            <th pSortableColumn="dateCreation">Date Creation<p-sortIcon field="dateCreation"></p-sortIcon></th>
-            <th pSortableColumn="nom">Nom <p-sortIcon field="nom"></p-sortIcon></th>
-            <th pSortableColumn="emplacement">Emplacement <p-sortIcon field="emplacement"></p-sortIcon></th>
-            <th pSortableColumn="etat">Etat <p-sortIcon field="etat"></p-sortIcon></th>
-            <th pSortableColumn="dateFermeture">Date Fermeture <p-sortIcon field="dateFermeture"></p-sortIcon></th>
-            <th></th>
+             <th pSortableColumn="dateCreation">Date Creation<p-sortIcon field="dateCreation"></p-sortIcon></th>
+            <th pSortableColumn="temperature">temperature <p-sortIcon field="temperature"></p-sortIcon></th>
+            <th pSortableColumn="vent">vent <p-sortIcon field="vent"></p-sortIcon></th>
+            <th pSortableColumn="ref">Relatif  <p-sortIcon field="ref"></p-sortIcon></th>
+
+              <th></th>
           </tr>
         </ng-template>
         <ng-template pTemplate="body" let-analyseChimique >
@@ -53,7 +52,7 @@
               {{analyseChimique.id}}
             </td>
             <td style="width:14%; min-width:10rem;">
-              <span class="p-column-title">Reference</span>
+              <span class="p-column-title">Réference</span>
               {{analyseChimique.reference}}
             </td>
             <td style="width:14%; min-width:10rem;">
@@ -61,25 +60,20 @@
               {{analyseChimique.dateAnalyse}}
             </td>
             <td style="width:14%; min-width:10rem;">
-              <span class="p-column-title">Densite</span>
-              {{analyseChimique.densite}}
+              <span class="p-column-title">temperature</span>
+              {{analyseChimique.temperature}}
             </td>
             <td style="width:14%; min-width:8rem;">
-              <span class="p-column-title">Matiere en suspension</span>
-              {{analyseChimique.matiereEnSuspension}}
+              <span class="p-column-title">vent</span>
+              {{analyseChimique.vent}}
             </td>
-            <td style="width:14%; min-width:8rem;">
-              <span class="p-column-title">Salimite</span>
-              {{analyseChimique.salimite}}
+            <td>
+              {{ analyseChimique.ref }}
+
             </td>
-            <td style="width:14%; min-width:8rem;">
-              <span class="p-column-title">Calcium</span>
-              {{analyseChimique.calcium}}
-            </td>
-            <td style="width:14%; min-width:8rem;">
-              <span class="p-column-title">Magnesium</span>
-              {{analyseChimique.magnesium}}
-            </td>
+
+
+
             <td>
               <div class="flex ">
                 <button pButton pRipple icon="pi pi-pencil" class="p-button-rounded p-button-success mr-2" (click)="editAnalyseChimique(analyseChimique)"></button>
@@ -96,15 +90,15 @@
     <p-dialog [(visible)]="deleteProductDialog" header="Confirm" [modal]="true" [style]="{width:'450px'}">
       <div class="flex align-items-center justify-content-center">
         <i class="pi pi-exclamation-triangle mr-3" style="font-size: 2rem"></i>
-        <span *ngIf="product">Are you sure you want to delete <b>{{product.name}}</b>?</span>
+        <span *ngIf="product">Êtes-vous sûr de vouloir supprimer? <b>{{product.name}}</b>?</span>
       </div>
       <ng-template pTemplate="footer">
-        <button pButton pRipple icon="pi pi-times" class="p-button-text" label="No" (click)="deleteProductDialog = false"></button>
-        <button pButton pRipple icon="pi pi-check" class="p-button-text" label="Yes" (click)="confirmDelete()"></button>
+        <button pButton pRipple icon="pi pi-times" class="p-button-text" label="Non" (click)="deleteProductDialog = false"></button>
+        <button pButton pRipple icon="pi pi-check" class="p-button-text" label="Oui" (click)="confirmDelete()"></button>
       </ng-template>
     </p-dialog>
 
-    <p-dialog [(visible)]="deleteProductsDialog" header="Confirm" [modal]="true" [style]="{width:'450px'}">
+    <p-dialog [(visible)]="deleteProductsDialog" header="Confirmer" [modal]="true" [style]="{width:'450px'}">
       <div class="flex align-items-center justify-content-center">
         <i class="pi pi-exclamation-triangle mr-3" style="font-size: 2rem"></i>
         <span>Are you sure you want to delete selected products?</span>

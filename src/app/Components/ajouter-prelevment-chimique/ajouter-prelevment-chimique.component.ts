@@ -110,7 +110,9 @@ export class AjouterPrelevmentChimiqueComponent implements OnInit{
 
     this.analyseChimiqueId = this.route.snapshot.paramMap.get('id');
     this.isUpdateAnalyseChimique=this.analyseChimiqueId!==null
-
+if(this.isUpdateAnalyseChimique==false){
+  this.analysesChimique.dateAnalyse=new Date() ;
+}
     this.analyseChimiqueService.getElementByAnalyseChimiqueId(this.analyseChimiqueId).subscribe((value :any) => {
       this.selectedPuit=value.puit
       this.selectedBassin=value.bassin;
@@ -203,9 +205,12 @@ if(this.isUpdateAnalyseChimique){
    this.analyseChimiqueService.updateAnalyseChimique(this.analysesChimique).subscribe(value => this.router.navigate(['/analyseChimique']))
 }
 else{
+
+this.analysesChimique.id=0;
   if(this.selectedPuit){
    this.selectedPuit.analysesChimiques=[];
     this.selectedPuit.analysesChimiques.push(this.analysesChimique) ;
+   // alert(new JsonPipe().transform(this.selectedPuit))
     this.analyseChimiqueService.addAnalyseChimique(this.selectedPuit).subscribe(value => this.router.navigate(['/analyseChimique']))
   }if(this.selectedBassin){
     this.selectedBassin.analysesChimiques=[];

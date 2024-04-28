@@ -19,7 +19,7 @@
       <p-table #dt [value]="sblfs" [columns]="cols"  responsiveLayout="scroll" [rows]="10" [globalFilterFields]="['id','reference','description','dateCreation','nom','emplacement','etat','dateFermeture']" [paginator]="true" [rowsPerPageOptions]="[10,20,30]" [showCurrentPageReport]="true" currentPageReportTemplate="Affichage du  {first} au  {last} des  {totalRecords} entrées" [(selection)]="selectedSblfs" selectionMode="multiple" [rowHover]="true" dataKey="id">
         <ng-template pTemplate="caption">
           <div class="flex flex-column md:flex-row md:justify-content-between md:align-items-center">
-            <h5 class="m-0">Gestion des Stock Sbl</h5>
+            <h5 class="m-0">Gestion des stocks  des bassins   lave-finale</h5>
             <span class="block mt-2 md:mt-0 p-input-icon-left">
                             <i class="pi pi-search"></i>
                             <input  type="text" pInputText (input)="onGlobalFilter(dt, $event)" placeholder="Rechercher..."  class="w-full sm:w-auto"/>
@@ -41,7 +41,7 @@
             <th pSortableColumn="emplacement">Emplacement <p-sortIcon field="emplacement"></p-sortIcon></th>
             <th pSortableColumn="etat">Etat <p-sortIcon field="etat"></p-sortIcon></th>
             <th pSortableColumn="quantité">Quantité <p-sortIcon field="quantité"></p-sortIcon></th>
-            <th pSortableColumn="type">Type <p-sortIcon field="type"></p-sortIcon></th>
+            <th pSortableColumn="type">Stock bassin laver <p-sortIcon field="type"></p-sortIcon></th>
 
             <th></th>
           </tr>
@@ -84,8 +84,18 @@
               {{sblf.quantite}}
             </td>
             <td style="width:14%; min-width:8rem;">
-              <span class="p-column-title">Type</span>
-              {{sblf.stockType}}
+              <span class="p-column-title">Bassin</span>
+              {{sblf.sblfSbl.reference }}
+              <span class="pi pi-eye text-primary cursor-pointer m-2" (click)="opSBLf.toggle($event)"  ></span>
+              <p-overlayPanel #opSBLf>
+
+                <label class="text-2xl">Réf : {{sblf.sblfSbl.reference}}</label><br>
+                <label class="text-2xl">Description : {{sblf.sblfSbl.description}}
+                </label ><br>
+                <label class="text-2xl">Etat : {{sblf.sblfSbl.etat}}</label><br>
+                <label class="text-2xl">Quantité : {{sblf.sblfSbl.quantite}}</label><br>
+                <label class="text-2xl">Emplacement : {{sblf.sblfSbl.emplacement}}</label><br>
+              </p-overlayPanel>
             </td>
             <td>
               <div class="flex ">

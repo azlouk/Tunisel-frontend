@@ -4,7 +4,8 @@ import {AnalysesPhysique} from "./analyses-physique";
 
 export interface Sbl {
 
-  id?: number;reference?: string;
+  id?: number;
+  reference?: string;
   description?: string;
   dateStock?: Date;
   emplacement?: string;

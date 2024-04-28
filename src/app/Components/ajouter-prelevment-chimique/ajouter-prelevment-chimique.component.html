@@ -21,9 +21,17 @@
       <input type="text" pInputText [(ngModel)]="analysesChimique.reference" id="Reference" class="w-full"  />
       <label >Reference</label>
     </p-floatLabel>
-    <p-floatLabel>
-      <input type="text" pInputText  id="Qualite" class="w-full" />
-      <label >Qualite</label>
+     <p-floatLabel>
+      <input type="text" pInputText [(ngModel)]="analysesChimique.temperature"  id="temperature" class="w-full" />
+      <label >Température °C</label>
+
+
+    </p-floatLabel>
+      <p-floatLabel>
+      <input type="text" pInputText [(ngModel)]="analysesChimique.vent"  id="vent" class="w-full" />
+      <label >Vent Km/h</label>
+
+
     </p-floatLabel>
     </div>
       <div class="flex flex-column justify-content-between col-4">

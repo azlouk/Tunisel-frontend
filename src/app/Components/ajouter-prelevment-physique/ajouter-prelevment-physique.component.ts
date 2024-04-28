@@ -94,22 +94,26 @@ export class AjouterPrelevmentPhysiqueComponent implements OnInit{
     this.analysePhysiqueId = this.route.snapshot.paramMap.get('id');
     this.isUpdateAnalysePhysique=this.analysePhysiqueId!==null
 
-    this.analysePhysiqueService.getElementByAnalysesPhysiquesId(this.analysePhysiqueId).subscribe((value :any) => {
+    if(this.isUpdateAnalysePhysique==false){
+      this.analysesPhysique.dateAnalyse=new Date()
+    }
+    if(this.analysePhysiqueId){
+      this.analysePhysiqueService.getElementByAnalysesPhysiquesId(this.analysePhysiqueId).subscribe((value: any) => {
 
-      this.selectedBassin=value.bassin;
-      this.selectedSbl=value.sbl;
-      this.selectedSbnl=value.sbnl;
-      this.selectedSblf=value.sblf ;
-      console.log(new JsonPipe().transform(value));
+        this.selectedBassin = value.bassin;
+        this.selectedSbl = value.sbl;
+        this.selectedSbnl = value.sbnl;
+        this.selectedSblf = value.sblf;
 
-    }, error => {
+      }, error => {
 
-    });
+      });
+
     this.analysePhysiqueService.getAnalysesPhysiquesById(this.analysePhysiqueId).subscribe(value => {this.analysesPhysique=value;
       this.listeTamis=this.analysesPhysique.tamisList==undefined?[]:this.analysesPhysique.tamisList ;
 
     },error => error)
-
+    }
 
     this.bassinService.getAllBassins()
       .subscribe((bassins: Bassin[]) => {
@@ -126,13 +130,11 @@ export class AjouterPrelevmentPhysiqueComponent implements OnInit{
 
     this.sblService.getAllSbl().subscribe((v:  Sbl[]) => {
       this.sbls=v;
-      console.log(new JsonPipe().transform("====================>>>>>>"+this.sbls))
-    },error => {
+     },error => {
       console.log(error)})
 
     this.sblfService.getAllSblfs().subscribe((v:  Sblf[]) => {
       this.sblfs=v;
-      console.log(new JsonPipe().transform("====================>>>>>>"+this.sblfs))
 
     },error => {
       console.log(error)})

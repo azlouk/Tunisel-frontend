@@ -20,6 +20,10 @@ import {
   AjouterPrelevmentPhysiqueComponent
 } from "./Components/ajouter-prelevment-physique/ajouter-prelevment-physique.component";
 import {LoginComponent} from "./Components/login/login.component";
+import {AuthGuard} from "./guard/AuthGuard";
+import {AjouterInventaireComponent} from "./Components/ajouter-inventaire/ajouter-inventaire.component";
+import {ProduitDefectueuxComponent} from "./Components/produit-defectueux/produit-defectueux.component";
+import {ArticleComponent} from "./Components/article/article.component";
 
 export const routes: Routes = [
   {path:'', component:LoginComponent},

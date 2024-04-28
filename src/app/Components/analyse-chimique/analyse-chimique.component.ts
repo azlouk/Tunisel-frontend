@@ -4,7 +4,7 @@ import {Puit} from "../../Models/puit";
 import {ProductService} from "../../Services/product.service";
 import {MessageService, SharedModule} from "primeng/api";
 import {PuitService} from "../../Services/puit.service";
-import {JsonPipe, NgClass, NgIf} from "@angular/common";
+import {AsyncPipe, JsonPipe, NgClass, NgIf} from "@angular/common";
 import {Table, TableModule} from "primeng/table";
 import {ButtonModule} from "primeng/button";
 import {CalendarModule} from "primeng/calendar";
@@ -16,6 +16,7 @@ import {ToolbarModule} from "primeng/toolbar";
 import {Router} from "@angular/router";
 import {AnalysesChimique} from "../../Models/analyses-chimique";
 import {AnalyseChimiqueService} from "../../Services/analyse-chimique.service";
+import {Subscription} from "rxjs";
 
 @Component({
   selector: 'app-analyse-chimique',
@@ -31,7 +32,9 @@ import {AnalyseChimiqueService} from "../../Services/analyse-chimique.service";
     TableModule,
     ToastModule,
     ToolbarModule,
-    NgClass
+    NgClass,
+    AsyncPipe,
+    JsonPipe
   ],
   templateUrl: './analyse-chimique.component.html',
   styleUrl: './analyse-chimique.component.css'
@@ -154,10 +157,39 @@ export class AnalyseChimiqueComponent implements OnInit{
   getALLChimique() {
     this.analyseChimiqueService.getAllAnalysesChimiques().subscribe((analysesChimiques:  AnalysesChimique[]) => {
       this.analysesChimiques=analysesChimiques;
+      this.analysesChimiques.forEach(analysechimique => {
+        if (analysechimique.id != null) {
+          this.analyseChimiqueService.getElementByAnalyseChimiqueId(analysechimique.id).subscribe((value: any) => {
+           if(value.puit){
+             analysechimique.ref=value.puit.reference+ " "+value.puit.nom
+           }
+           if(value.bassin){
+             analysechimique.ref=value.bassin.reference+ " "+value.bassin.nom
+           }
+            if(value.sbl) {
+              analysechimique.ref=value.sbl.reference
+            }
+            if(value.sbnl) {
+                        analysechimique.ref=value.sbnl.reference
+                      }
+           if(value.sblf) {
+                                  analysechimique.ref=value.sblf.reference
+                                }
+
+
+
+            console.log(new JsonPipe().transform(value))
+          }, error => {
+
+          });
+        }
+      })
+
       console.log(new JsonPipe().transform("====================>>>>>>"+this.analysesChimiques))
 
     },error => {
       console.log(error)})
 
   }
+
 }

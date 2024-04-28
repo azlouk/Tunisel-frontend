@@ -17,6 +17,7 @@ import {Sbnl} from "../../Models/sbnl";
 import {Bassin} from "../../Models/bassin";
 import {SbnlService} from "../../Services/sbnl.service";
 import {BassinService} from "../../Services/bassin.service";
+import {OverlayPanelModule} from "primeng/overlaypanel";
 
 @Component({
   selector: 'app-sbnl',
@@ -34,7 +35,8 @@ import {BassinService} from "../../Services/bassin.service";
     ToolbarModule,
     CalendarModule,
     InputTextModule,
-    NgClass
+    NgClass,
+    OverlayPanelModule
   ],
   templateUrl: './sbnl.component.html',
   styleUrl: './sbnl.component.css'
@@ -213,6 +215,10 @@ this.getsbnl()
   }
 
   exportrapport(sbnl: Sbnl) {
+
+  }
+
+  Detailsbnl(sbnl: Sbnl) {
 
   }
 }
