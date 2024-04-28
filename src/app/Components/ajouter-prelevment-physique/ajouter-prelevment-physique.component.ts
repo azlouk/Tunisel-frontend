@@ -27,6 +27,7 @@ import {Table, TableModule} from "primeng/table";
 import {Tamis} from "../../Models/tamis";
 import {AnalysePhysiqueService} from "../../Services/analysePhysique.service";
 import {TamisService} from "../../Services/tamis.service";
+import Swal from "sweetalert2";
 
 @Component({
   selector: 'app-ajouter-prelevment-physique',
@@ -72,6 +73,7 @@ export class AjouterPrelevmentPhysiqueComponent implements OnInit{
   visibale:boolean=false;
   listeTamis:Tamis[]=[];
   tamis:Tamis={};
+  isUpdateTamis:boolean=false ;
 
   // =====================
   cols: any;
@@ -90,7 +92,7 @@ export class AjouterPrelevmentPhysiqueComponent implements OnInit{
 
 
   ngOnInit(): void {
-
+    this.isUpdateTamis=false ;
     this.analysePhysiqueId = this.route.snapshot.paramMap.get('id');
     this.isUpdateAnalysePhysique=this.analysePhysiqueId!==null
 
@@ -214,12 +216,59 @@ this.visibale=false;
 
 
   ajouterTamis() {
+    this.tamis={}
     this.visibale=true;
+    this.isUpdateTamis=false ;
   }
 
   saveTamis() {
-    this.listeTamis.push(this.tamis);
-    this.visibale=false
+     if(this.isUpdateTamis){
 
+      const tamis=this.listeTamis.findIndex((tt:Tamis)=>tt.id==this.tamis.id)
+         if(tamis!==-1){
+         this.listeTamis[tamis]= {...this.tamis} ;
+           this.visibale=false
+
+         }
+    }else {
+      const tamis=this.listeTamis.findIndex((t:Tamis)=>t.calibre===this.tamis.calibre)
+       if(tamis!==-1){
+        this.visibale=false
+        Swal.fire({
+          title: "Duplication?",
+          text: "Calibre déja exist les valeur sera modifié!",
+          icon: "warning",
+          showCancelButton: true,
+          confirmButtonColor: "#3085d6",
+          cancelButtonColor: "#d33",
+          confirmButtonText: "Oui, modifié!",
+          cancelButtonText:"Annuler"
+        }).then((result) => {
+          if (result.isConfirmed) {
+            this.listeTamis[tamis].calibre=this.tamis.calibre ;
+            this.listeTamis[tamis].masse=this.tamis.masse ;
+            this.listeTamis[tamis].refus=this.tamis.refus ;
+            this.listeTamis[tamis].refusCumulated=this.tamis.refusCumulated ;
+            this.listeTamis[tamis].passCumulated=this.tamis.passCumulated ;
+            this.visibale=false
+          }
+        });
+
+
+      }
+      else {
+        this.listeTamis.push({...this.tamis});
+        this.visibale=false
+      }
+    }
+
+
+
+  }
+
+  editTamis(tamis: Tamis) {
+    this.visibale=true;
+     this.tamis={...tamis}
+    this.isUpdateTamis=true ;
   }
 }

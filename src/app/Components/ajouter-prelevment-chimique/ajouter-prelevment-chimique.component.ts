@@ -74,25 +74,26 @@ export class AjouterPrelevmentChimiqueComponent implements OnInit{
   analysesChimique: AnalysesChimique={} ;
   analysePuit:Puit={};
   attributs: any[] = [
-    {name:'d',checked:false,label:'Densité', value:this.analysesChimique.densite},
-    {name:'MS',checked:false,label:'Matiére en suspension', value:this.analysesChimique.matiereEnSuspension},
-    {name:'S',checked:false,label:'Salimité', value:this.analysesChimique.salimite},
-    {name:'Ca',checked:false,label:'Calcium', value:this.analysesChimique.calcium},
-    {name:'Mg',checked:false,label:'Magnésium', value:this.analysesChimique.magnesium},
-    {name:'SO',checked:false,label:'Sulfate', value:this.analysesChimique.sulfate},
-    {name:'H2o',checked:false,label:'Humidité', value:this.analysesChimique.humidite},
-    {name:'Mi',checked:false,label:'Matiére insoluble', value:this.analysesChimique.matiereInsoluble},
-    {name:'K',checked:false,label:'Potassium', value:this.analysesChimique.potassium},
-    {name:'Na',checked:false,label:'Sodium', value:this.analysesChimique.sodium},
-    {name:'Cl',checked:false,label:'Chlorure', value:this.analysesChimique.chlorure},
-    {name:'PH',checked:false,label:'PH', value:this.analysesChimique.ph},
-    {name:'Nacl',checked:false,label:'Chlorure de sodium', value:this.analysesChimique.chlorureDeSodium},
-    {name:'Fe',checked:false,label:'Frrocyanure', value:this.analysesChimique.ferrocyanure},
+    {name:'d',checked:false,label:'Densité', value:this.analysesChimique.densite,unite:'g/cm 3'},
+    {name:'MS',checked:false,label:'Matiére en suspension', value:this.analysesChimique.matiereEnSuspension ,unite:'mg/L'},
+    {name:'S',checked:false,label:'Salimité', value:this.analysesChimique.salimite,unite:'psu'},
+    {name:'Ca',checked:false,label:'Calcium', value:this.analysesChimique.calcium,unite:'mmol/L'},
+    {name:'Mg',checked:false,label:'Magnésium', value:this.analysesChimique.magnesium,unite:'Mg'},
+    {name:'SO',checked:false,label:'Sulfate', value:this.analysesChimique.sulfate,unite:'g'},
+    {name:'H2o',checked:false,label:'Humidité', value:this.analysesChimique.humidite,unite:'g/cm 3'},
+    {name:'Mi',checked:false,label:'Matiére insoluble', value:this.analysesChimique.matiereInsoluble,unite:'g'},
+    {name:'K',checked:false,label:'Potassium', value:this.analysesChimique.potassium,unite:'mmol/L'},
+    {name:'Na',checked:false,label:'Sodium', value:this.analysesChimique.sodium,unite:'mmol'},
+    {name:'Cl',checked:false,label:'Chlorure', value:this.analysesChimique.chlorure,unite:'meq · L–1'},
+    {name:'PH',checked:false,label:'PH', value:this.analysesChimique.ph,unite:'pH'},
+    {name:'Nacl',checked:false,label:'Chlorure de sodium', value:this.analysesChimique.chlorureDeSodium,unite:'g'},
+    {name:'Fe',checked:false,label:'Frrocyanure', value:this.analysesChimique.ferrocyanure,unite:'g/mol'},
 
   ];
   private analyseChimiqueId: any;
   public isUpdateAnalyseChimique=false;
   visibleDetails: boolean=false;
+  SelectAll: boolean=false;
   constructor(private router: Router,
               private puitService :PuitService,
               private bassinService :BassinService,
@@ -237,5 +238,11 @@ this.analysesChimique.id=0;
 
   openNew() {
     this.visibleDetails=true;
+  }
+
+  SelectAllCheck() {
+    this.attributs.forEach(value => {
+      value.checked=this.SelectAll ;
+    })
   }
 }

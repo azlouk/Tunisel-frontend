@@ -105,7 +105,6 @@ export class AnalyseChimiqueComponent implements OnInit{
     this.isUpdateAnalyseChimique=true;
     this.analyseChimique = { ...analyseChimique };
     this.updateAnalyseChimique = { ...analyseChimique };
-    console.log('======>>>> hhffhfhfhfffhhf  '+new JsonPipe().transform(this.updateAnalyseChimique))
 
     this.productDialog = true;
   }
@@ -130,7 +129,7 @@ export class AnalyseChimiqueComponent implements OnInit{
       );
     });
 
-    this.messageService.add({ severity: 'success', summary: 'Successful', detail: 'User Deleted', life: 3000 });
+    this.messageService.add({ severity: 'success', summary: 'réussi', detail: 'supprimé', life: 3000 });
     this.selectedAnalysesChimiques = [];
   }
 
@@ -138,9 +137,9 @@ export class AnalyseChimiqueComponent implements OnInit{
     this.deleteProductDialog = false;
     this.analysesChimiques = this.analysesChimiques.filter(val => val.id !== this.analyseChimique.id);
     if (this.analyseChimique.id!= null) {
-      this.analyseChimiqueService.deleteAnalyseChimique(this.analyseChimique.id).subscribe(() => console.log("analyse Chimique deleted"));
+      this.analyseChimiqueService.deleteAnalyseChimique(this.analyseChimique.id).subscribe(() => console.log("analyse Chimique est bien supprimé"));
     }
-    this.messageService.add({ severity: 'success', summary: 'Successful', detail: 'Analyse Chimique Deleted', life: 3000 });
+    this.messageService.add({ severity: 'success', summary: 'réussi', detail: 'Analyse Chimique supprimé', life: 3000 });
     this.analyseChimique ;
   }
 
