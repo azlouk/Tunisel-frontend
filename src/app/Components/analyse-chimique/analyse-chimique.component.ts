@@ -71,13 +71,7 @@ export class AnalyseChimiqueComponent implements OnInit{
   constructor(private router: Router,private productService: ProductService, private messageService: MessageService,private analyseChimiqueService :AnalyseChimiqueService) {}
 
   ngOnInit() {
-    this.analyseChimiqueService.getAllAnalysesChimiques().subscribe((analysesChimiques:  AnalysesChimique[]) => {
-      this.analysesChimiques=analysesChimiques;
-      console.log(new JsonPipe().transform("====================>>>>>>"+this.analysesChimiques))
-
-    },error => {
-      console.log(error)})
-
+    this.getALLChimique();
     this.cols = [
       { field: 'id', header: 'id' },
       { field: 'reference', header: 'reference' },
@@ -155,5 +149,15 @@ export class AnalyseChimiqueComponent implements OnInit{
 
   onGlobalFilter(table: Table, event: Event) {
     table.filterGlobal((event.target as HTMLInputElement).value, 'contains');
+  }
+
+  getALLChimique() {
+    this.analyseChimiqueService.getAllAnalysesChimiques().subscribe((analysesChimiques:  AnalysesChimique[]) => {
+      this.analysesChimiques=analysesChimiques;
+      console.log(new JsonPipe().transform("====================>>>>>>"+this.analysesChimiques))
+
+    },error => {
+      console.log(error)})
+
   }
 }

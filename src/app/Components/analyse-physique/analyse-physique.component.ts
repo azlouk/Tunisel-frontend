@@ -61,12 +61,7 @@ export class AnalysePhysiqueComponent implements OnInit{
   constructor(private router: Router,private productService: ProductService, private messageService: MessageService,private analysePhysiqueService :AnalysePhysiqueService) {}
 
   ngOnInit() {
-    this.analysePhysiqueService.getAllAnalysesPhysiques().subscribe((analysesPhysiques:  AnalysesPhysique[]) => {
-      this.analysesPhysiques=analysesPhysiques;
-      console.log(new JsonPipe().transform("====================>>>>>>"+this.analysesPhysiques))
-
-    },error => {
-      console.log(error)})
+this.getALLphysique() ;
 
     this.cols = [
       { field: 'id', header: 'id' },
@@ -146,4 +141,12 @@ export class AnalysePhysiqueComponent implements OnInit{
     table.filterGlobal((event.target as HTMLInputElement).value, 'contains');
   }
 
+  getALLphysique() {
+    this.analysePhysiqueService.getAllAnalysesPhysiques().subscribe((analysesPhysiques:  AnalysesPhysique[]) => {
+      this.analysesPhysiques=analysesPhysiques;
+      console.log(new JsonPipe().transform("====================>>>>>>"+this.analysesPhysiques))
+
+    },error => {
+      console.log(error)})
+  }
 }
