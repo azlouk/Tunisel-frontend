@@ -187,3 +187,111 @@
 </div>
 
 
+<p-dialog header="Analyse chimique et granulométrique" [(visible)]="visiblePrint" [modal]="true"   [breakpoints]="{ '1199px': '75vw', '575px': '90vw' }">
+  <div class="shadow-1 p-2" >Filtrage :
+
+    <div class="card flex justify-content-evenly ">
+      <div class="gap-1 flex align-items-center">Date début Analyse  :<p-calendar [(ngModel)]="DatefiltrageStart"  ></p-calendar>
+      </div>
+      <div class="gap-1  flex align-items-center">
+        Date Fin Analyse  :<p-calendar [(ngModel)]="DatefiltrageEnd"  ></p-calendar>
+      </div>
+      <p-button (click)="filtredate()" class=" " icon="pi pi-search" label="Rechercher"></p-button>
+      <p-button (click)="Viderfiltredate()" class=" " icon="pi pi-search" label="Effacer"></p-button>
+
+    </div>
+    <th *ngFor="let c of colsfiltre">
+
+      <p-checkbox [(ngModel)]="c.hide" label=" {{ c.header}}" [binary]="true" inputId="binary"></p-checkbox>
+
+    </th>
+  </div>
+
+  <hr>
+  <div #pdfpuit class="pt-8 pl-4 pr-4">
+    <img src="assets/layout/images/logo.png">
+    <div class="row justify-content-end font-bold flex text-1xl"> Creation date: <span class=" text-1xl font-bold  pi pi-calendar ">{{dateToday | date :"yyyy-MM-dd"}}</span></div>
+    <div class="row    font-bold flex text-1xl   "> Identification :<span class=" text-1xl font-bold   "> {{selectedPuitPrint.reference}}</span></div>
+
+    <div class="row   text-3xl font-bold text-center m-2 p-3" > Analysis Report </div>
+    <div class="mt-5 mb-5">
+
+      <label class="text-2xl font-bold">Name borehole :</label><span class=" ml-2 text-2xl">{{selectedPuitPrint.nom}}</span><br>
+      <label class="text-2xl font-bold">Reference  :</label><span class="ml-2 text-2xl">{{selectedPuitPrint.reference}}</span><br>
+      <label class="text-2xl font-bold">Date creation :</label><span class=" ml-2 text-2xl">{{selectedPuitPrint.dateCreation}}</span>
+    </div>
+
+    <p-table #dt1 [value]="getAnalyse()" [tableStyle]="{ 'min-width': '50rem' }"
+             dataKey="id"
+             [showCurrentPageReport]="true"
+             [globalFilterFields]="['dateAnalyse']"
+
+
+
+    >
+
+
+      <ng-template pTemplate="header">
+        <tr>
+
+          <th *ngFor="let c of getColsfiltr()">
+            {{ c.header}}
+          </th>
+
+
+          <!--       <th>-->
+          <!--         <p-columnFilter type="date" field="dateAnalyse" display="menu"></p-columnFilter>-->
+
+          <!--         Date Analyse</th>-->
+
+
+          <!--        <th>Temperature °C</th>-->
+          <!--        <th>wind (km/h)</th>-->
+          <!--        <th>humidity  </th>-->
+          <!--        <th>Densite (g/cm 3)</th>-->
+          <!--        <th>Suspended Matter (g)</th>-->
+          <!--        <th>Salimite (psu)</th>-->
+          <!--        <th>Calcium (mmol/L)</th>-->
+          <!--        <th>Magnesium (g)</th>-->
+          <!--        <th>Sulfate (g)</th>-->
+          <!--        <th>Insoluble matter (g)</th>-->
+          <!--        <th>Potassium (mmol/L)</th>-->
+          <!--        <th>Sodium (mmol)</th>-->
+          <!--        <th>Chlorure (meq · L–1)</th>-->
+          <!--        <th>pH</th>-->
+          <!--        <th>sodium chloride (g)</th>-->
+          <!--        <th>Ferrocyanure (g/mol)</th>-->
+
+        </tr>
+      </ng-template>
+      <ng-template pTemplate="body" let-a>
+        <tr>
+
+
+          <td *ngIf="colsfiltre[0].hide" >{{ a.reference==undefined?'-':a.reference }}</td>
+          <td *ngIf="colsfiltre[1].hide">{{ a.dateAnalyse | date: 'MM/dd/yyyy'}}</td>
+          <td *ngIf="colsfiltre[2].hide">{{ a.temperature==undefined?'-':a.temperature }}</td>
+          <td *ngIf="colsfiltre[3].hide">{{ a.vent ==undefined?'-':a.vent}}</td>
+          <td *ngIf="colsfiltre[4].hide">{{ a.humidite==undefined?'-':a.humidite }}</td>
+          <td *ngIf="colsfiltre[5].hide">{{ a.densite ==undefined?'-':a.densite}}</td>
+          <td *ngIf="colsfiltre[6].hide">{{ a.matiereEnSuspension==undefined?'-':a.matiereEnSuspension }}</td>
+          <td *ngIf="colsfiltre[7].hide">{{ a.salimite ==undefined?'-':a.salimite}}</td>
+          <td *ngIf="colsfiltre[8].hide">{{ a.calcium==undefined?'-':a.calcium }}</td>
+          <td *ngIf="colsfiltre[9].hide" >{{ a.magnesium ==undefined?'-':a.magnesium}}</td>
+          <td *ngIf="colsfiltre[10].hide">{{ a.sulfate==undefined?'-':a.sulfate }}</td>
+          <td *ngIf="colsfiltre[11].hide">{{ a.matiereInsoluble ==undefined?'-':a.matiereInsoluble}}</td>
+          <td *ngIf="colsfiltre[12].hide">{{ a.potassium==undefined?'-':a.potassium }}</td>
+          <td *ngIf="colsfiltre[13].hide">{{ a.sodium ==undefined?'-':a.sodium}}</td>
+          <td *ngIf="colsfiltre[14].hide">{{ a.chlorure==undefined?'-':a.chlorure }}</td>
+          <td *ngIf="colsfiltre[15].hide">{{ a.ph ==undefined?'-':a.ph}}</td>
+          <td *ngIf="colsfiltre[16].hide">{{ a.chlorureDeSodium ==undefined?'-':a.chlorureDeSodium}}</td>
+          <td *ngIf="colsfiltre[17].hide">{{ a.ferrocyanure ==undefined?'-':a.ferrocyanure}}</td>
+
+        </tr>
+      </ng-template>
+    </p-table>
+  </div>
+  <ng-template pTemplate="footer">
+    <p-button icon="pi pi-file-pdf" (click)="SavePDF()" class="text-green-50" label="PDF" pAutoFocus [autofocus]="true"  ></p-button>
+  </ng-template>
+</p-dialog>

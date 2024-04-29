@@ -70,6 +70,7 @@ export class SbnlComponent implements OnInit{
 
   private isUpdatesbnl=false;
   bassins: Bassin[] = [];
+  visiblePrint: boolean=false;
   constructor(private productService: ProductService, private messageService: MessageService,private sbnlService :SbnlService,private serviceBassin:BassinService) {}
 
   ngOnInit() {
