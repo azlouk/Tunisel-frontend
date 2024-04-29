@@ -152,50 +152,6 @@ export class AnalyseChimiqueComponent implements OnInit{
     this.submitted = false;
   }
 
-  // savePuit() {
-  //   this.submitted = false;
-  //   this.productDialog=false
-  //   // alert(new JsonPipe().transform(this.puit))
-  //   if(this.isUpdateUser==true) {
-  //     this.puitService.updatePuit(this.puit).subscribe(() =>{
-  //       this.puitService.getAllPuits().subscribe((puits: Puit[]) => {
-  //         this.puits = puits;
-  //       });
-  //     });
-  //     console.log('Puit updated');
-  //     this.isUpdateUser=false;
-  //   }
-  //   else
-  //   {
-  //     this.puitService.addPuit(this.puit).subscribe(() => {
-  //       this.puitService.getAllPuits().subscribe((puits: Puit[]) => {
-  //         this.puits = puits;
-  //       });
-  //     });
-  //     console.log('Puit added');
-  //   }
-  // }
-
-  findIndexById(id: string): number {
-    let index = -1;
-    for (let i = 0; i < this.products.length; i++) {
-      if (this.products[i].id === id) {
-        index = i;
-        break;
-      }
-    }
-
-    return index;
-  }
-
-  createId(): string {
-    let id = '';
-    const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
-    for (let i = 0; i < 5; i++) {
-      id += chars.charAt(Math.floor(Math.random() * chars.length));
-    }
-    return id;
-  }
 
   onGlobalFilter(table: Table, event: Event) {
     table.filterGlobal((event.target as HTMLInputElement).value, 'contains');

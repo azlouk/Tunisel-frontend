@@ -47,6 +47,7 @@ export class AppMenuComponent implements OnInit {
         label: 'Analyses ',
         items: [
           {label: 'Prélèvement Chimique', icon: 'pi pi-fw pi-check-circle', routerLink: ['/analyseChimique']},
+          {label: 'Prélèvement Physique', icon: 'pi pi-fw pi-check-circle', routerLink: ['/analysePhysique']},
         ]
       },
       {
