@@ -1,4 +1,4 @@
-import {Component, OnInit} from '@angular/core';
+import {Component, Input, OnInit} from '@angular/core';
 import {ButtonModule} from "primeng/button";
 import {MessageService, SharedModule} from "primeng/api";
 import {ToolbarModule} from "primeng/toolbar";
@@ -90,10 +90,17 @@ export class AjouterPrelevmentChimiqueComponent implements OnInit{
     {name:'Fe(cn)6',checked:false,label:'Frrocyanure', value:this.analysesChimique.ferrocyanure,unite:'g/mol'},
 
   ];
+
+
   private analyseChimiqueId: any;
   public isUpdateAnalyseChimique=false;
   visibleDetails: boolean=false;
   SelectAll: boolean=false;
+
+  cols: any[]=[];
+
+
+
   constructor(private router: Router,
               private puitService :PuitService,
               private bassinService :BassinService,

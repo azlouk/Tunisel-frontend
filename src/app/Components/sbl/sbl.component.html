@@ -149,8 +149,9 @@
         </div>
         <div class="field">
           <label for="quantite">Quantité</label>
-          <input type="text" pInputText id="quantite"  [(ngModel)]="sbl.quantite" required autofocus [ngClass]="{'ng-invalid ng-dirty' : submitted && !sbl.etat}"/>
-          <small class="ng-dirty ng-invalid" *ngIf="submitted && !sbl.etat">Telephone is required.</small>
+          <p-inputNumber Id="quantite" mode="decimal" [minFractionDigits]="3" [(ngModel)]="sbl.quantite"   [ngClass]="{'ng-invalid ng-dirty' : submitted && !sbl.quantite}" ></p-inputNumber>
+
+           <small class="ng-dirty ng-invalid" *ngIf="submitted && !sbl.etat">Telephone is required.</small>
         </div>
 
 

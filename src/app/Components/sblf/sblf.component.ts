@@ -16,23 +16,25 @@ import {ToolbarModule} from "primeng/toolbar";
 import {InputTextModule} from "primeng/inputtext";
 import {DropdownModule} from "primeng/dropdown";
 import {OverlayPanelModule} from "primeng/overlaypanel";
+import {InputNumberModule} from "primeng/inputnumber";
 
 @Component({
   selector: 'app-sblf',
   standalone: true,
-    imports: [
-        TableModule,
-        DialogModule,
-        NgClass,
-        FormsModule,
-        NgIf,
-        CalendarModule,
-        ToastModule,
-        ToolbarModule,
-        InputTextModule,
-        DropdownModule,
-        OverlayPanelModule,
-    ],
+  imports: [
+    TableModule,
+    DialogModule,
+    NgClass,
+    FormsModule,
+    NgIf,
+    CalendarModule,
+    ToastModule,
+    ToolbarModule,
+    InputTextModule,
+    DropdownModule,
+    OverlayPanelModule,
+    InputNumberModule,
+  ],
   templateUrl: './sblf.component.html',
   styleUrl: './sblf.component.css'
 })

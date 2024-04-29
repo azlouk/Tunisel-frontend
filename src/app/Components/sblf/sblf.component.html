@@ -149,8 +149,9 @@
         </div>
         <div class="field">
           <label for="quantite">Quantité</label>
-          <input type="text" pInputText id="quantite"  [(ngModel)]="sblf.quantite" required autofocus [ngClass]="{'ng-invalid ng-dirty' : submitted && !sblf.etat}"/>
-          <small class="ng-dirty ng-invalid" *ngIf="submitted && !sblf.etat">Telephone is required.</small>
+          <p-inputNumber Id="quantite" mode="decimal" [minFractionDigits]="3" [(ngModel)]="sblf.quantite"   [ngClass]="{'ng-invalid ng-dirty' : submitted && !sblf.quantite}" ></p-inputNumber>
+
+           <small class="ng-dirty ng-invalid" *ngIf="submitted && !sblf.etat">Telephone is required.</small>
         </div>
 
 
@@ -171,18 +172,18 @@
     <p-dialog [(visible)]="deleteProductDialog" header="Confirm" [modal]="true" [style]="{width:'450px'}">
       <div class="flex align-items-center justify-content-center">
         <i class="pi pi-exclamation-triangle mr-3" style="font-size: 2rem"></i>
-        <span *ngIf="product">Are you sure you want to delete <b>{{product.name}}</b>?</span>
+        <span *ngIf="product">Êtes-vous sûr de vouloir supprimer? <b>{{product.name}}</b>?</span>
       </div>
       <ng-template pTemplate="footer">
-        <button pButton pRipple icon="pi pi-times" class="p-button-text" label="No" (click)="deleteProductDialog = false"></button>
-        <button pButton pRipple icon="pi pi-check" class="p-button-text" label="Yes" (click)="confirmDelete()"></button>
+        <button pButton pRipple icon="pi pi-times" class="p-button-text" label="Non" (click)="deleteProductDialog = false"></button>
+        <button pButton pRipple icon="pi pi-check" class="p-button-text" label="Oui" (click)="confirmDelete()"></button>
       </ng-template>
     </p-dialog>
 
     <p-dialog [(visible)]="deleteProductsDialog" header="Confirm" [modal]="true" [style]="{width:'450px'}">
       <div class="flex align-items-center justify-content-center">
         <i class="pi pi-exclamation-triangle mr-3" style="font-size: 2rem"></i>
-        <span>Are you sure you want to delete selected products?</span>
+        <span>Voulez-vous vraiment supprimer   ?</span>
       </div>
       <ng-template pTemplate="footer">
         <button pButton pRipple icon="pi pi-times" class="p-button-text" label="No" (click)="deleteProductsDialog = false"></button>

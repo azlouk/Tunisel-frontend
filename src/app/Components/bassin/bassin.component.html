@@ -137,7 +137,7 @@
         </div>
         <div class="field">
           <label for="surface">Surface</label>
-          <p-inputNumber  id="surface"  [(ngModel)]="bassin.surface" [ngClass]="{'ng-invalid ng-dirty' : submitted && !bassin.surface}"></p-inputNumber>
+          <p-inputNumber  id="surface"  [(ngModel)]="bassin.surface" mode="decimal" [minFractionDigits]="3" [ngClass]="{'ng-invalid ng-dirty' : submitted && !bassin.surface}"></p-inputNumber>
           <small class="ng-dirty ng-invalid" *ngIf="submitted && !bassin.surface">Telephone is required.</small>
         </div>
 

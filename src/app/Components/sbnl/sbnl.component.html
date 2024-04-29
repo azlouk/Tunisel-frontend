@@ -146,7 +146,7 @@
         </div>
         <div class="field">
           <label for="quantite">Quantite</label>
-          <p-inputNumber Id="quantite" [(ngModel)]="sbnl.quantite"  [ngClass]="{'ng-invalid ng-dirty' : submitted && !sbnl.quantite}" ></p-inputNumber>
+          <p-inputNumber Id="quantite" mode="decimal" [minFractionDigits]="3" [(ngModel)]="sbnl.quantite"  [ngClass]="{'ng-invalid ng-dirty' : submitted && !sbnl.quantite}" ></p-inputNumber>
           <small class="ng-dirty ng-invalid" *ngIf="submitted && !sbnl.quantite">Telephone is required.</small>
         </div>
 

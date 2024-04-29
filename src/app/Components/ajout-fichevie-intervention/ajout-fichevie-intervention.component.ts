@@ -57,18 +57,12 @@ import {log} from "@angular-devkit/build-angular/src/builders/ssr-dev-server";
 })
 export class AjoutFichevieInterventionComponent implements  OnInit{
   puits: Puit[] = [];
-  selectedPuit:Puit={};
-  bassins: Bassin[] = [];
-  selectedBassin: Bassin = {};
-  sbnls: Sbnl[] = [];
-  selectedSbnl:Sbnl={};
-  sbls: Sbl[] = [];
-  selectedSbl:Sbl={};
-  sblfs: Sblf[] = [];
-  selectedSblf:Sblf={};
-  checked: boolean = false;
-  analysesChimique: AnalysesChimique={} ;
-  cols: any[] = [];
+   bassins: Bassin[] = [];
+   sbnls: Sbnl[] = [];
+   sbls: Sbl[] = [];
+   sblfs: Sblf[] = [];
+   checked: boolean = false;
+   cols: any[] = [];
   // ====================
   visibale:boolean=false;
  intervention:Intervention={};
