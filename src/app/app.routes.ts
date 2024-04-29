@@ -21,8 +21,8 @@ import {
 } from "./Components/ajouter-prelevment-physique/ajouter-prelevment-physique.component";
 import {LoginComponent} from "./Components/login/login.component";
 import {AjouterInventaireComponent} from "./Components/ajouter-inventaire/ajouter-inventaire.component";
-import {ProduitDefectueuxComponent} from "./Components/produit-defectueux/produit-defectueux.component";
 import {ArticleComponent} from "./Components/article/article.component";
+import {ProduitComponent} from "./Components/produit/produit.component";
 
 export const routes: Routes = [
   {path:'dash', component:DashboardComponent},
@@ -48,6 +48,8 @@ export const routes: Routes = [
   {path:'updatePrelevmentPhysique/:id', component:AjouterPrelevmentPhysiqueComponent},
 
   {path:'articles', component:ArticleComponent},
-  {path:'produitdefectueux', component:ProduitDefectueuxComponent},
+  {path:'produit', component:ProduitComponent},
   {path:'ajouterInventaire', component:AjouterInventaireComponent},
+  {path:'editInventaire/:id', component:AjouterInventaireComponent},
+
 ];

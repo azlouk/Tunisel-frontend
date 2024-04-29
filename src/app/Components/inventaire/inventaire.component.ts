@@ -105,7 +105,7 @@ export class InventaireComponent implements OnInit{
 
   editInventaire(inventaire: Inventaire) {
     this.isUpdateInventaire=true;
-    this.router.navigate(['/ajouterFichevieIntervention/'+inventaire.id]);
+    this.router.navigate(['/editInventaire/'+inventaire.id]);
 
 
     this.inventaire = { ...inventaire };
@@ -133,7 +133,7 @@ export class InventaireComponent implements OnInit{
       );
     });
 
-    this.messageService.add({ severity: 'success', summary: 'Successful', detail: 'fiche de vie Deleted', life: 3000 });
+    this.messageService.add({ severity: 'success', summary: 'réussi', detail: 'inventaire supprimé', life: 3000 });
     this.selectedInventaire = [];
   }
 
@@ -143,7 +143,7 @@ export class InventaireComponent implements OnInit{
     if (this.inventaire.id!= null) {
       this.inventaireService.deleteInventaire(this.inventaire.id).subscribe(() => console.log("fiche vie deleted"));
     }
-    this.messageService.add({ severity: 'success', summary: 'Successful', detail: 'Fiche vie Deleted', life: 3000 });
+    this.messageService.add({ severity: 'success', summary: 'réussi', detail: 'inventaire supprimé', life: 3000 });
     this.inventaire ;
   }
 
@@ -152,50 +152,12 @@ export class InventaireComponent implements OnInit{
     this.submitted = false;
   }
 
-  saveInventaire() {
-    // this.submitted = false;
-    // this.productDialog=false
-    // // alert(new JsonPipe().transform(this.puit))
-    // if(this.isUpdateInventaire==true) {
-    //   this.inventaireService.updateInventaire(this.inventaire).subscribe(() =>{
-    //     this.inventaireService.getFichesVies().subscribe((inventaires: Inventaire[]) => {
-    //       this.inventaires = inventaires;
-    //     });
-    //   });
-    //   console.log('Puit updated');
-    //   this.isUpdateInventaire=false;
-    // }
-    // else
-    // {
-    //   this.inventaireService.(this.inventaire).subscribe(() => {
-    //     this.inventaireService.getFichesVies().subscribe((inventaires: Inventaire[]) => {
-    //       this.inventaires = inventaires;
-    //     });
-    //   });
-    //   console.log('Puit added');
-    // }
-  }
 
-  findIndexById(id: string): number {
-    let index = -1;
-    for (let i = 0; i < this.products.length; i++) {
-      if (this.products[i].id === id) {
-        index = i;
-        break;
-      }
-    }
 
-    return index;
-  }
 
-  createId(): string {
-    let id = '';
-    const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
-    for (let i = 0; i < 5; i++) {
-      id += chars.charAt(Math.floor(Math.random() * chars.length));
-    }
-    return id;
-  }
+
+
+
 
   onGlobalFilter(table: Table, event: Event) {
     table.filterGlobal((event.target as HTMLInputElement).value, 'contains');
