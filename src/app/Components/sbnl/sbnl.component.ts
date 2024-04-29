@@ -23,6 +23,9 @@ import {Puit} from "../../Models/puit";
 import html2canvas from "html2canvas";
 import jsPDF from "jspdf";
 import {CheckboxModule} from "primeng/checkbox";
+import {AnalysesPhysique} from "../../Models/analyses-physique";
+import {Tamis} from "../../Models/tamis";
+import {ListboxModule} from "primeng/listbox";
 
 @Component({
   selector: 'app-sbnl',
@@ -44,7 +47,8 @@ import {CheckboxModule} from "primeng/checkbox";
     OverlayPanelModule,
     DatePipe,
     CheckboxModule,
-    CommonModule
+    CommonModule,
+    ListboxModule
   ],
   templateUrl: './sbnl.component.html',
   styleUrl: './sbnl.component.css'
@@ -260,7 +264,7 @@ this.getsbnl()
 
     this.selectedSbnl = sbnl;
     this.visiblePrint = true
-    console.log("---->"+new JsonPipe().transform(this.sbnl));
+    console.log("---->"+new JsonPipe().transform(this.selectedSbnl));
   }
 
   Detailsbnl(sbnl: Sbnl) {
@@ -269,7 +273,7 @@ this.getsbnl()
 
 
   filtredate() {
-
+this.Viderfiltredate()
     const data=this.selectedSbnl.analysesChimiques !== undefined ? this.selectedSbnl.analysesChimiques : []
     const newAnalyse:AnalysesChimique[] =[]
     data.forEach(v => {
@@ -279,7 +283,7 @@ this.getsbnl()
         const d=v.dateAnalyse+"";
         const dateana:Date=new Date(d)
         console.log("-D-->" + dateana)
-        if (dateana>this.DatefiltrageStart && dateana<this.DatefiltrageEnd) {
+        if (dateana>=this.DatefiltrageStart && dateana<=this.DatefiltrageEnd) {
           newAnalyse.push(v);
         } else {
           console.log("no compare")
@@ -313,11 +317,37 @@ this.getsbnl()
   }
 
   getAnalyse() {
-    return this.selectedSbnl.analysesChimiques !== undefined ? this.selectedSbnl.analysesChimiques : []
+    return this.selectedSbnl.analysesPhysiques !== undefined ? this.selectedSbnl.analysesPhysiques : []
+  }
+  getAnalyseGranoli() {
+    const data=this.selectedSbnl.analysesPhysiques !== undefined ? this.selectedSbnl.analysesPhysiques : []
+    const newAnalyse:AnalysesPhysique[] =[]
+    data.forEach(v => {
+
+      if(v.dateAnalyse!==undefined){
+        console.log(typeof v.dateAnalyse )
+        const d=v.dateAnalyse+"";
+        const dateana:Date=new Date(d)
+        console.log("-D-->" + dateana)
+        if (dateana>this.DatefiltrageStart && dateana<this.DatefiltrageEnd) {
+          newAnalyse.push(v);
+        } else {
+          console.log("no compare")
+        }
+
+
+      }
+
+    })
+    this.selectedSbnl.analysesPhysiques=[...newAnalyse] ;
+
+    return this.selectedSbnl.analysesPhysiques !== undefined ? this.selectedSbnl.analysesPhysiques : []
   }
 
 
   colsfiltre: any[] = [];
+  ListTamisSelected: Tamis={};
+  SelectedsbnlPrintAnalyse: AnalysesPhysique={};
   getColsfiltr() {
     return this.colsfiltre.filter(value => value.hide==true)
   }
@@ -345,4 +375,7 @@ this.getsbnl()
   }
 
 
+  getTamisFiltred() {
+    return this.SelectedsbnlPrintAnalyse.tamisList==undefined?[]:this.SelectedsbnlPrintAnalyse.tamisList
+  }
 }

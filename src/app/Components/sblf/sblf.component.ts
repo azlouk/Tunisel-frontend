@@ -1,10 +1,10 @@
-import { Component } from '@angular/core';
+import {Component, ElementRef, Input, ViewChild} from '@angular/core';
 import {Product} from "../../Models/product";
 import {Sbl} from "../../Models/sbl";
 import {ProductService} from "../../Services/product.service";
 import {MessageService} from "primeng/api";
 import {SblService} from "../../Services/sbl.service";
-import {JsonPipe, NgClass, NgIf} from "@angular/common";
+import {CommonModule, DatePipe, JsonPipe, NgClass, NgIf} from "@angular/common";
 import {Table, TableModule} from "primeng/table";
 import {Sblf} from "../../Models/sblf";
 import {SblfService} from "../../Services/sblf.service";
@@ -17,6 +17,14 @@ import {InputTextModule} from "primeng/inputtext";
 import {DropdownModule} from "primeng/dropdown";
 import {OverlayPanelModule} from "primeng/overlaypanel";
 import {InputNumberModule} from "primeng/inputnumber";
+import {Sbnl} from "../../Models/sbnl";
+import {AnalysesChimique} from "../../Models/analyses-chimique";
+import {AnalysesPhysique} from "../../Models/analyses-physique";
+import {Tamis} from "../../Models/tamis";
+import html2canvas from "html2canvas";
+import jsPDF from "jspdf";
+import {ListboxModule} from "primeng/listbox";
+import {CheckboxModule} from "primeng/checkbox";
 
 @Component({
   selector: 'app-sblf',
@@ -34,6 +42,10 @@ import {InputNumberModule} from "primeng/inputnumber";
     DropdownModule,
     OverlayPanelModule,
     InputNumberModule,
+    DatePipe,
+    ListboxModule,
+    CheckboxModule,    CommonModule,
+
   ],
   templateUrl: './sblf.component.html',
   styleUrl: './sblf.component.css'
@@ -66,10 +78,46 @@ export class SblfComponent {
   selectedSblfs: Sblf[] = [];
   sbls: Sbl[] = [];
   private isUpdateSblf=false;
+  @ViewChild("pdfpuit") htmlContent: ElementRef | undefined;
+  visiblePrint: boolean = false;
+  dateToday: Date = new Date();
 
+  DatefiltrageStart: Date = new Date();
+  DatefiltrageEnd: Date = new Date();
+  public  _selectedColumns: any[]=[];
+    selectedSblf: Sblf={};
+  @Input() get selectedColumns(): any[] {
+    return this._selectedColumns;
+  }
   constructor(private productService: ProductService, private messageService: MessageService,private sblfService :SblfService,private sblService:SblService) {}
 
   ngOnInit() {
+
+    this.colsfiltre = [
+      {id:0, field: 'reference', header: 'reference' ,hide:true},
+      { id:1, field: 'dateAnalyse', header: 'Date Analyse' ,hide:false},
+      {id:2,  field: 'temperature', header: 'Temperature °C' ,hide:false},
+      { id:3, field: 'vent', header: 'wind (km/h)' ,hide:false},
+      { id:4, field: 'humidite', header: 'humidity' ,hide:false},
+      {id:5,  field: 'densite', header: 'Densite (g/cm 3)',hide:false },
+      {id:6,  field: 'matiereEnSuspension', header: 'Suspended Matter (g)',hide:false },
+      { id:7, field: 'salimite', header: 'Salimite (psu)' ,hide:false},
+      {id:8,  field: 'calcium', header: 'Calcium (mmol/L)' ,hide:false},
+      { id:9, field: 'magnesium', header: 'Magnesium (g)' ,hide:false},
+      { id:10, field: 'sulfate', header: 'Sulfate (g)' ,hide:false},
+      { id:11, field: 'matiereInsoluble', header: 'Insoluble matter (g)',hide:false },
+      { id:12, field: 'potassium', header: 'Potassium (mmol/L)' ,hide:false},
+      { id:13, field: 'sodium', header: 'Sodium (mmol)' ,hide:false},
+      {id:14,  field: 'chlorure', header: 'Chlorure (meq · L–1)' ,hide:false},
+      { id:15, field: 'ph', header: 'pH' ,hide:false},
+      { id:16, field: 'chlorureDeSodium', header: 'sodium chloride (g)' ,hide:false},
+      {id:17,  field: 'ferrocyanure', header: 'Ferrocyanure (g/mol)' ,hide:false},
+    ];
+
+    this._selectedColumns = this.colsfiltre;
+
+
+
    this.getAllSBLF() ;
     this.cols = [
       { field: 'id', header: 'id' },
@@ -187,7 +235,129 @@ export class SblfComponent {
       console.log(error)})
   }
 
-  exportrapport(sblf: Sblf) {
+  exportrapport(sbnl: Sbnl) {
+
+    this.selectedSblf = sbnl;
+    this.visiblePrint = true
+    console.log("---->"+new JsonPipe().transform(this.selectedSblf));
+  }
+
+  Detailsbnl(sbnl: Sbnl) {
 
   }
+
+
+  filtredate() {
+    this.Viderfiltredate()
+    const data=this.selectedSblf.analysesChimiques !== undefined ? this.selectedSblf.analysesChimiques : []
+    const newAnalyse:AnalysesChimique[] =[]
+    data.forEach(v => {
+
+      if(v.dateAnalyse!==undefined){
+        console.log(typeof v.dateAnalyse )
+        const d=v.dateAnalyse+"";
+        const dateana:Date=new Date(d)
+        console.log("-D-->" + dateana)
+        if (dateana>=this.DatefiltrageStart && dateana<=this.DatefiltrageEnd) {
+          newAnalyse.push(v);
+        } else {
+          console.log("no compare")
+        }
+
+
+      }
+
+    })
+    this.selectedSblf.analysesChimiques=[...newAnalyse] ;
+    // console.log(new JsonPipe().transform(data))
+
+
+
+  }
+
+  clear(dt1: Table) {
+    dt1.clear() ;
+  }
+
+  Viderfiltredate() {
+
+    this.sblfService.getAllSblfs().subscribe((Sblf: Sblf[]) => {
+      this.sblfs = Sblf;
+
+      const sbnlfsbnlf: Sblf | undefined = this.sblfs.find(value => this.selectedSblf.id == value.id)
+      if (sbnlfsbnlf)
+        this.selectedSblf = sbnlfsbnlf;
+
+    });
+  }
+
+  getAnalyse() {
+    return this.selectedSblf.analysesPhysiques !== undefined ? this.selectedSblf.analysesPhysiques : []
+  }
+  getAnalyseGranoli() {
+    const data=this.selectedSblf.analysesPhysiques !== undefined ? this.selectedSblf.analysesPhysiques : []
+    const newAnalyse:AnalysesPhysique[] =[]
+    data.forEach(v => {
+
+      if(v.dateAnalyse!==undefined){
+        console.log(typeof v.dateAnalyse )
+        const d=v.dateAnalyse+"";
+        const dateana:Date=new Date(d)
+        console.log("-D-->" + dateana)
+        if (dateana>this.DatefiltrageStart && dateana<this.DatefiltrageEnd) {
+          newAnalyse.push(v);
+        } else {
+          console.log("no compare")
+        }
+
+
+      }
+
+    })
+    this.selectedSblf.analysesPhysiques=[...newAnalyse] ;
+
+    return this.selectedSblf.analysesPhysiques !== undefined ? this.selectedSblf.analysesPhysiques : []
+  }
+
+
+  colsfiltre: any[] = [];
+  ListTamisSelected: Tamis={};
+  SelectedsbnlPrintAnalyse: AnalysesPhysique={};
+  getColsfiltr() {
+    return this.colsfiltre.filter(value => value.hide==true)
+  }
+
+
+
+  public SavePDF(): void {
+
+    if (this.htmlContent) {
+
+
+      html2canvas(this.htmlContent.nativeElement, {scale: 1}).then((canvas) => {
+        const imgData = canvas.toDataURL('image/png');
+        const pdf = new jsPDF('p', 'mm', 'a4');
+        const imgWidth = 210; // PDF width
+        const imgHeight = (canvas.height * imgWidth) / canvas.width; // Maintain aspect ratio
+        pdf.addImage(imgData, 'png', 2, 2, imgWidth, imgHeight);
+        pdf.save('Print_' + Math.random() + '.pdf');
+      });
+
+
+    }
+
+
+  }
+
+
+  getTamisFiltred() {
+    return this.SelectedsbnlPrintAnalyse.tamisList==undefined?[]:this.SelectedsbnlPrintAnalyse.tamisList
+  }
+
+
+
+
+
+
+
 }

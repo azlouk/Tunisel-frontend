@@ -194,3 +194,185 @@
 </div>
 
 
+<p-dialog header="Analyse chimique et granulométrique" [(visible)]="visiblePrint" [modal]="true"   [breakpoints]="{ '1199px': '75vw', '575px': '90vw' }">
+  <div class="shadow-1 p-2  " >Filtrage Chimique  :
+
+    <div class="card flex justify-content-evenly ">
+      <div class="gap-1 flex align-items-center">Date début Analyse  :<p-calendar [(ngModel)]="DatefiltrageStart"  ></p-calendar>
+      </div>
+      <div class="gap-1    flex align-items-center">
+        Date Fin Analyse  :<p-calendar [(ngModel)]="DatefiltrageEnd"  ></p-calendar>
+      </div>
+      <p-button (click)="filtredate()" class=" " icon="pi pi-search" label="Rechercher"></p-button>
+      <p-button (click)="Viderfiltredate()" class=" " icon="pi pi-refresh" label="Actualiser"></p-button>
+
+    </div>
+    <div class="shadow-1 p-2">
+      <th *ngFor="let c of colsfiltre">
+
+        <p-checkbox [(ngModel)]="c.hide" label=" {{ c.header}}" [binary]="true" inputId="binary"></p-checkbox>
+
+      </th>
+    </div>
+    <br>
+    <div class="shadow-1 p-2 gap-1 text-3xl flex inline-flex justify-content-evenly" >Filtrage Granulométrique  :<br>
+      <p-listbox [options]="getAnalyseGranoli()" [(ngModel)]="SelectedsbnlPrintAnalyse" optionLabel="reference" [filter]="true" [style]="{ width: '15rem' }" [listStyle]="{'max-height': '220px'}"></p-listbox>
+      <div *ngIf="SelectedsbnlPrintAnalyse.hasOwnProperty('id')" class="p-2">
+        <label class="text-2xl font-bold">Reference  :</label><span class="ml-2 text-2xl">{{SelectedsbnlPrintAnalyse.dateAnalyse}}</span><br>
+        <label class="text-2xl font-bold">Relative :</label><span class=" ml-2 text-2xl">{{SelectedsbnlPrintAnalyse.matiere}}</span><br>
+        <label class="text-2xl font-bold">Temperature :</label><span class=" ml-2 text-2xl">{{SelectedsbnlPrintAnalyse.temperature}} °C</span><br>
+      </div>
+    </div>
+  </div>
+
+  <hr>
+  <div #pdfpuit class="pt-8 pl-4 pr-4">
+    <img src="assets/layout/images/logo.png">
+    <div class="row justify-content-end font-bold flex text-1xl"> Creation date: <span class=" text-1xl font-bold  pi pi-calendar ">{{dateToday | date :"yyyy-MM-dd"}}</span></div>
+    <div class="row    font-bold flex text-1xl   "> Identification :<span class=" text-1xl font-bold   "> {{selectedSblf.reference}}</span></div>
+
+    <div class="row   text-8xl font-bold text-center m-2 p-3" > Analysis Report </div>
+    <div class="mt-5 mb-5">
+
+      <label class="font-bold text-5xl  ">Chemical analysis</label>
+      <br><br><br><br>
+      <label class="text-2xl font-bold">Reference  :</label><span class="ml-2 text-2xl">{{selectedSblf.reference}}</span><br>
+      <label class="text-2xl font-bold">Date creation :</label><span class=" ml-2 text-2xl">{{selectedSblf.dateStock}}</span><br>
+
+    </div>
+
+    <p-table #dt1 [value]="getAnalyse()" [tableStyle]="{ 'min-width': '50rem' }"
+             dataKey="id"
+             [showCurrentPageReport]="true"
+             [globalFilterFields]="['dateAnalyse']"
+
+
+
+    >
+
+
+      <ng-template pTemplate="header">
+        <tr>
+
+          <ng-container *ngFor="let c of getColsfiltr()">
+            <th>{{ c.header }}</th>
+          </ng-container>
+
+
+          <!--       <th>-->
+          <!--         <p-columnFilter type="date" field="dateAnalyse" display="menu"></p-columnFilter>-->
+
+          <!--         Date Analyse</th>-->
+
+
+          <!--        <th>Temperature °C</th>-->
+          <!--        <th>wind (km/h)</th>-->
+          <!--        <th>humidity  </th>-->
+          <!--        <th>Densite (g/cm 3)</th>-->
+          <!--        <th>Suspended Matter (g)</th>-->
+          <!--        <th>Salimite (psu)</th>-->
+          <!--        <th>Calcium (mmol/L)</th>-->
+          <!--        <th>Magnesium (g)</th>-->
+          <!--        <th>Sulfate (g)</th>-->
+          <!--        <th>Insoluble matter (g)</th>-->
+          <!--        <th>Potassium (mmol/L)</th>-->
+          <!--        <th>Sodium (mmol)</th>-->
+          <!--        <th>Chlorure (meq · L–1)</th>-->
+          <!--        <th>pH</th>-->
+          <!--        <th>sodium chloride (g)</th>-->
+          <!--        <th>Ferrocyanure (g/mol)</th>-->
+
+        </tr>
+      </ng-template>
+      <ng-template pTemplate="body" let-a>
+        <tr>
+
+
+          <td *ngIf="colsfiltre[0].hide" >{{ a.reference==undefined?'-':a.reference }}</td>
+          <td *ngIf="colsfiltre[1].hide">{{ a.dateAnalyse | date: 'MM/dd/yyyy'}}</td>
+          <td *ngIf="colsfiltre[2].hide">{{ a.temperature==undefined?'-':a.temperature }}</td>
+          <td *ngIf="colsfiltre[3].hide">{{ a.vent ==undefined?'-':a.vent}}</td>
+          <td *ngIf="colsfiltre[4].hide">{{ a.humidite==undefined?'-':a.humidite }}</td>
+          <td *ngIf="colsfiltre[5].hide">{{ a.densite ==undefined?'-':a.densite}}</td>
+          <td *ngIf="colsfiltre[6].hide">{{ a.matiereEnSuspension==undefined?'-':a.matiereEnSuspension }}</td>
+          <td *ngIf="colsfiltre[7].hide">{{ a.salimite ==undefined?'-':a.salimite}}</td>
+          <td *ngIf="colsfiltre[8].hide">{{ a.calcium==undefined?'-':a.calcium }}</td>
+          <td *ngIf="colsfiltre[9].hide" >{{ a.magnesium ==undefined?'-':a.magnesium}}</td>
+          <td *ngIf="colsfiltre[10].hide">{{ a.sulfate==undefined?'-':a.sulfate }}</td>
+          <td *ngIf="colsfiltre[11].hide">{{ a.matiereInsoluble ==undefined?'-':a.matiereInsoluble}}</td>
+          <td *ngIf="colsfiltre[12].hide">{{ a.potassium==undefined?'-':a.potassium }}</td>
+          <td *ngIf="colsfiltre[13].hide">{{ a.sodium ==undefined?'-':a.sodium}}</td>
+          <td *ngIf="colsfiltre[14].hide">{{ a.chlorure==undefined?'-':a.chlorure }}</td>
+          <td *ngIf="colsfiltre[15].hide">{{ a.ph ==undefined?'-':a.ph}}</td>
+          <td *ngIf="colsfiltre[16].hide">{{ a.chlorureDeSodium ==undefined?'-':a.chlorureDeSodium}}</td>
+          <td *ngIf="colsfiltre[17].hide">{{ a.ferrocyanure ==undefined?'-':a.ferrocyanure}}</td>
+
+        </tr>
+      </ng-template>
+    </p-table>
+    <br><br><br><br>
+
+    <label class="font-bold top-5 text-5xl">Grain Size</label>
+    <br><br><br><br>
+    <div class=" top-5 bottom-5">
+      <label class="text-2xl font-bold">Date   :</label><span class="ml-2 text-2xl">{{SelectedsbnlPrintAnalyse.dateAnalyse}}</span><br>
+      <label class="text-2xl font-bold">Reference  :</label><span class="ml-2 text-2xl">{{SelectedsbnlPrintAnalyse.reference}}</span><br>
+      <label class="text-2xl font-bold">Relative :</label><span class=" ml-2 text-2xl">{{SelectedsbnlPrintAnalyse.matiere}}</span><br>
+      <label class="text-2xl font-bold">Temperature :</label><span class=" ml-2 text-2xl">{{SelectedsbnlPrintAnalyse.temperature}} °C</span><br>
+    </div>
+    <br><br><br>
+    <p-table class=" " #dt [value]="getTamisFiltred()" [columns]="cols"  responsiveLayout="scroll"       dataKey="id">
+
+      <ng-template pTemplate="header">
+        <tr>
+
+          <th pSortableColumn="dateintervention">Calibre <p-sortIcon field="dateintervention"></p-sortIcon></th>
+          <th pSortableColumn="qui">Masse <p-sortIcon field="qui"></p-sortIcon></th>
+          <th pSortableColumn="natureAction">Refus <p-sortIcon field="natureAction"></p-sortIcon></th>
+          <th pSortableColumn="resultat">Refus Cumulated<p-sortIcon field="resultat"></p-sortIcon></th>
+          <th pSortableColumn="certificat">pass Cumulated <p-sortIcon field="certificat"></p-sortIcon></th>
+          <th></th>
+        </tr>
+      </ng-template>
+      <ng-template pTemplate="body" let-tamis >
+        <tr >
+
+          <td ><span class="p-column-title" >Calibre</span>
+            {{tamis.calibre}}
+          </td>
+          <td>
+            <span class="p-column-title">Masse</span>
+            {{tamis.masse}}
+          </td>
+          <td >
+            <span class="p-column-title">Refus</span>
+            {{tamis.refus}}
+
+
+          </td>
+
+
+          <td >
+            <span class="p-column-title">Refus Cumulated</span>
+            {{tamis.refusCumulated}}
+          </td>
+          <td>
+            <span class="p-column-title">pass Cumulated</span>
+            {{tamis.passCumulated}}
+          </td>
+
+
+
+
+
+        </tr>
+      </ng-template>
+    </p-table>
+
+
+
+  </div>
+  <ng-template pTemplate="footer">
+    <p-button icon="pi pi-file-pdf" (click)="SavePDF()" class="text-green-50" label="PDF" pAutoFocus [autofocus]="true"  ></p-button>
+  </ng-template>
+</p-dialog>

@@ -97,9 +97,8 @@ export class AjouterPrelevmentPhysiqueComponent implements OnInit{
     this.isUpdateAnalysePhysique=this.analysePhysiqueId!==null
     this.analysesPhysique.reference="Gr-"+new Date().getFullYear()+"_"+new Date().getMonth()+"_"+new Date().getDay()
 
-    if(this.isUpdateAnalysePhysique==false){
-      this.analysesPhysique.dateAnalyse=new Date()
-    }
+
+
     if(this.analysePhysiqueId){
       this.analysePhysiqueService.getElementByAnalysesPhysiquesId(this.analysePhysiqueId).subscribe((value: any) => {
 

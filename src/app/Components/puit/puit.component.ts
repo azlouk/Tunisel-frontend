@@ -323,7 +323,7 @@ export class PuitComponent implements OnInit {
          const d=v.dateAnalyse+"";
          const dateana:Date=new Date(d)
          console.log("-D-->" + dateana)
-         if (dateana>this.DatefiltrageStart && dateana<this.DatefiltrageEnd) {
+         if (dateana>=this.DatefiltrageStart && dateana<=this.DatefiltrageEnd) {
            newAnalyse.push(v);
          } else {
            console.log("no compare")
