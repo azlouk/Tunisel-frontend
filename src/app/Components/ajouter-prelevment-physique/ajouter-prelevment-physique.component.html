@@ -34,7 +34,12 @@
           <input type="text" pInputText [(ngModel)]="analysesPhysique.conformite"  id="conformite" />
           <label >Conformite</label>
         </p-floatLabel>
+        <p-floatLabel>
+          <input type="text" pInputText [(ngModel)]="analysesPhysique.matiere"  id="matiere" placeholder="Exp saumure , sel ..." class="w-full" />
+          <label >Matiére</label>
 
+
+        </p-floatLabel>
       </div>
       <div class="  ">
 
@@ -44,7 +49,7 @@
             <p-listbox [options]="bassins" [(ngModel)]="selectedBassin" optionLabel="nom" [filter]="true" [listStyle]="{'height': '87px'}"  ></p-listbox>
 
           </p-tabPanel>
-          <p-tabPanel header="Sotck non lavé" pTooltip="Enter your username">
+          <p-tabPanel header="Sotck non lavé" pTooltip="Sotck non lavé">
             <p-listbox [options]="sbnls" [(ngModel)]="selectedSbnl" optionLabel="reference" [filter]="true" [listStyle]="{'height': '87px'}"  ></p-listbox>
 
           </p-tabPanel>

@@ -1,4 +1,5 @@
 export interface AnalysesChimique  {
+  matiere?: string;
   id?: number;
   reference?: string;
   dateAnalyse?: Date;

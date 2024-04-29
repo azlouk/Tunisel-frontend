@@ -95,6 +95,7 @@ export class AjouterPrelevmentPhysiqueComponent implements OnInit{
     this.isUpdateTamis=false ;
     this.analysePhysiqueId = this.route.snapshot.paramMap.get('id');
     this.isUpdateAnalysePhysique=this.analysePhysiqueId!==null
+    this.analysesPhysique.reference="Gr-"+new Date().getFullYear()+"_"+new Date().getMonth()+"_"+new Date().getDay()
 
     if(this.isUpdateAnalysePhysique==false){
       this.analysesPhysique.dateAnalyse=new Date()
@@ -157,7 +158,7 @@ export class AjouterPrelevmentPhysiqueComponent implements OnInit{
       this.analysePhysiqueService.updateAnalysesPhysiques(this.analysesPhysique).subscribe(value => this.router.navigate(['/analysePhysique']))
     }
     else{
-      if(this.selectedBassin){
+      if(this.selectedBassin.hasOwnProperty('id')){
         this.selectedBassin.analysesPhysiques=[];
         this.analysesPhysique.tamisList=this.listeTamis;
         this.selectedBassin.analysesPhysiques.push(this.analysesPhysique) ;
@@ -165,21 +166,27 @@ export class AjouterPrelevmentPhysiqueComponent implements OnInit{
         this.analysePhysiqueService.addAnalysesPhysiquesToBassin(this.selectedBassin).subscribe(value => {
           this.router.navigate(['/analysePhysique']);
         },error => console.log(error));
-      }if(this.selectedSbnl){
+      }
+      else if(this.selectedSbnl.hasOwnProperty('id')){
         this.selectedSbnl.analysesPhysiques=[];
         this.analysesPhysique.tamisList=this.listeTamis;
         this.selectedSbnl.analysesPhysiques.push(this.analysesPhysique) ;
         this.analysePhysiqueService.addAnalysesPhysiquesToSbnl(this.selectedSbnl).subscribe(value => this.router.navigate(['/analysePhysique']))
-      }if(this.selectedSbl){
+      }
+      else if(this.selectedSbl.hasOwnProperty('id')){
         this.selectedSbl.analysesPhysiques=[];
         this.analysesPhysique.tamisList=this.listeTamis;
         this.selectedSbl.analysesPhysiques.push(this.analysesPhysique) ;
         this.analysePhysiqueService.addAnalysesPhysiquesToSbl(this.selectedSbl).subscribe(value => this.router.navigate(['/analysePhysique']))
-      }if(this.selectedSblf){
+      }
+      else if(this.selectedSblf.hasOwnProperty('id')){
         this.selectedSblf.analysesPhysiques=[];
         this.analysesPhysique.tamisList=this.listeTamis;
         this.selectedSblf.analysesPhysiques.push(this.analysesPhysique) ;
         this.analysePhysiqueService.addAnalysesPhysiquesToSblf(this.selectedSblf).subscribe(value => this.router.navigate(['/analysePhysique']))
+      }
+      else {
+
       }
     }}
 

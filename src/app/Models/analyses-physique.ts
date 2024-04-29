@@ -1,6 +1,7 @@
 import {Tamis} from "./tamis";
 
 export interface AnalysesPhysique  {
+  matiere?: string;
   id?: number;
   reference?: string;
   dateAnalyse?: Date;

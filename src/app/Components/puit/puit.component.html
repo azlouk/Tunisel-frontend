@@ -182,23 +182,23 @@
     <ng-template pTemplate="header">
       <tr>
         <th>reference</th>
-        <th>dateAnalyse</th>
-        <th>temperature</th>
-        <th>vent</th>
-        <th>densite (g/cm 3)</th>
-        <th>matiereEnSuspension</th>
-        <th>salimite</th>
-        <th>calcium</th>
-
-        <th>magnesium</th>
-        <th>sulfate</th>
-        <th>matiereInsoluble</th>
-        <th>potassium</th>
-        <th>sodium</th>
-        <th>chlorure</th>
-        <th>ph</th>
-        <th>chlorureDeSodium</th>
-        <th>ferrocyanure</th>
+        <th>Date Analyse</th>
+        <th>Temperature °C</th>
+        <th>Vent (km/h)</th>
+        <th>humidite  </th>
+        <th>Densite (g/cm 3)</th>
+        <th>Matiere En Suspension (g)</th>
+        <th>Salimite (psu)</th>
+        <th>Calcium (mmol/L)</th>
+        <th>Magnesium (g)</th>
+        <th>Sulfate (g)</th>
+        <th>Matiére Insoluble (g)</th>
+        <th>Potassium (mmol/L)</th>
+        <th>Sodium (mmol)</th>
+        <th>Chlorure (meq · L–1)</th>
+        <th>pH</th>
+        <th>Chlorure De Sodium (g)</th>
+        <th>Ferrocyanure (g/mol)</th>
 
       </tr>
     </ng-template>
@@ -208,11 +208,13 @@
         <td>{{ a.dateAnalyse }}</td>
         <td>{{ a.temperature }}</td>
         <td>{{ a.vent }}</td>
+        <td>{{ a.humidite }}</td>
         <td>{{ a.densite }}</td>
         <td>{{ a.matiereEnSuspension }}</td>
+        <td>{{ a.salimite }}</td>
         <td>{{ a.calcium }}</td>
+        <td>{{ a.magnesium }}</td>
         <td>{{ a.sulfate }}</td>
-        <td>{{ a.humidite }}</td>
         <td>{{ a.matiereInsoluble }}</td>
         <td>{{ a.potassium }}</td>
         <td>{{ a.sodium }}</td>
