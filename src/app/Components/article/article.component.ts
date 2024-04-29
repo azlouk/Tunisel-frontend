@@ -162,6 +162,7 @@ this.article.unite=Unite.PIECE
       });
       console.log('article added');
     }
+    this.article={}
   }
 
 

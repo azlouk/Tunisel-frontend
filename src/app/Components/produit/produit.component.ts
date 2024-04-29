@@ -164,8 +164,10 @@ export class ProduitComponent implements OnInit{
           this.produits = produits;
         });
       });
-      console.log('produit updated');
+      console.log('produit mis ajour');
       this.isUpdateProduit=false;
+      this.produit={}
+
     }
     else
     {
@@ -179,6 +181,7 @@ export class ProduitComponent implements OnInit{
       this.produit={}
       console.log('produit ajouter');
     }
+
   }
 
 
