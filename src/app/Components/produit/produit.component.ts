@@ -14,6 +14,9 @@ import {ToolbarModule} from "primeng/toolbar";
 import {CalendarModule} from "primeng/calendar";
 import {Produit} from "../../Models/produit";
 import {ProduitService} from "../../Services/produit.service";
+import {Article} from "../../Models/article";
+import {ArticleService} from "../../Services/article.service";
+import {Bassin} from "../../Models/bassin";
 
 @Component({
   selector: 'app-produit',
@@ -59,15 +62,22 @@ export class ProduitComponent implements OnInit{
   selectedProduit: Produit[] = [];
 
   private isUpdateProduit=false;
+  articles: Article[]=[];
 
 
 
 
-  constructor( private messageService: MessageService,private produitService :ProduitService) {}
+
+  constructor( private messageService: MessageService,private produitService :ProduitService,private articleService :ArticleService) {}
 
   ngOnInit() {
 
-
+    this.articleService.getAllArticles()
+      .subscribe((a: Article[]) => {
+        this.articles = a;
+      }, error => {
+        console.log('Error fetching users:', error);
+      });
     this.produitService.getProduit().subscribe(value => {this.produits=value},
       error => {console.log(error)})
 
@@ -159,7 +169,6 @@ export class ProduitComponent implements OnInit{
     }
     else
     {
-      console.log(new JsonPipe().transform("====================>>>>>>"+this.produit))
 
       this.produitService.createProduit(this.produit).subscribe(() => {
 
@@ -168,7 +177,7 @@ export class ProduitComponent implements OnInit{
         });
       });
       this.produit={}
-      console.log('produit added');
+      console.log('produit ajouter');
     }
   }
 

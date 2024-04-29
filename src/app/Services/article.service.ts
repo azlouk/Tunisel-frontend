@@ -4,6 +4,7 @@ import {environment} from "../environment/environment";
 import {HttpClient} from "@angular/common/http";
 import {Observable} from "rxjs";
 import {ProduitDefectueux} from "../Models/produitDefectueux";
+import {Puit} from "../Models/puit";
 
 @Injectable({
   providedIn: 'root'
@@ -16,6 +17,8 @@ export class ArticleService {
   getAllArticles(): Observable<Article[]> {
     return this.http.get<Article[]>(`${this.apiUrl}/articles/read`);
   }
+
+
 
   getArticleById(id: number): Observable<Article> {
     const url = `${this.apiUrl}/articles/${id}`;

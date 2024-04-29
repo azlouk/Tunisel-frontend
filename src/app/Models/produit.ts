@@ -8,5 +8,4 @@ export interface Produit {
   designation?: string;
   reference?: string;
   article?: Article;
-  //produitDefectueux?: ProduitDefectueux;
 }
