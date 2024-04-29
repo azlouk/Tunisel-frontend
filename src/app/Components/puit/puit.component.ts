@@ -362,9 +362,7 @@ export class PuitComponent implements OnInit {
     return this.selectedPuitPrint.analysesChimiques !== undefined ? this.selectedPuitPrint.analysesChimiques : []
   }
 
-  getValuesFrom(field: any) {
-    console.log(this.getAnalyse()[field])
-  }
+
 
   getColsfiltr() {
     return this.colsfiltre.filter(value => value.hide==true)

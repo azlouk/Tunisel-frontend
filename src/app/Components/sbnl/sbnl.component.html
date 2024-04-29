@@ -197,7 +197,7 @@
         Date Fin Analyse  :<p-calendar [(ngModel)]="DatefiltrageEnd"  ></p-calendar>
       </div>
       <p-button (click)="filtredate()" class=" " icon="pi pi-search" label="Rechercher"></p-button>
-      <p-button (click)="Viderfiltredate()" class=" " icon="pi pi-search" label="Effacer"></p-button>
+      <p-button (click)="Viderfiltredate()" class=" " icon="pi pi-refresh" label="Actualiser"></p-button>
 
     </div>
     <th *ngFor="let c of colsfiltre">
@@ -211,14 +211,14 @@
   <div #pdfpuit class="pt-8 pl-4 pr-4">
     <img src="assets/layout/images/logo.png">
     <div class="row justify-content-end font-bold flex text-1xl"> Creation date: <span class=" text-1xl font-bold  pi pi-calendar ">{{dateToday | date :"yyyy-MM-dd"}}</span></div>
-    <div class="row    font-bold flex text-1xl   "> Identification :<span class=" text-1xl font-bold   "> {{selectedPuitPrint.reference}}</span></div>
+    <div class="row    font-bold flex text-1xl   "> Identification :<span class=" text-1xl font-bold   "> {{selectedSbnl.reference}}</span></div>
 
     <div class="row   text-3xl font-bold text-center m-2 p-3" > Analysis Report </div>
     <div class="mt-5 mb-5">
 
-      <label class="text-2xl font-bold">Name borehole :</label><span class=" ml-2 text-2xl">{{selectedPuitPrint.nom}}</span><br>
-      <label class="text-2xl font-bold">Reference  :</label><span class="ml-2 text-2xl">{{selectedPuitPrint.reference}}</span><br>
-      <label class="text-2xl font-bold">Date creation :</label><span class=" ml-2 text-2xl">{{selectedPuitPrint.dateCreation}}</span>
+
+      <label class="text-2xl font-bold">Reference  :</label><span class="ml-2 text-2xl">{{selectedSbnl.reference}}</span><br>
+      <label class="text-2xl font-bold">Date creation :</label><span class=" ml-2 text-2xl">{{selectedSbnl.dateStock}}</span>
     </div>
 
     <p-table #dt1 [value]="getAnalyse()" [tableStyle]="{ 'min-width': '50rem' }"
@@ -234,9 +234,9 @@
       <ng-template pTemplate="header">
         <tr>
 
-          <th *ngFor="let c of getColsfiltr()">
-            {{ c.header}}
-          </th>
+          <ng-container *ngFor="let c of getColsfiltr()">
+            <th>{{ c.header }}</th>
+          </ng-container>
 
 
           <!--       <th>-->
