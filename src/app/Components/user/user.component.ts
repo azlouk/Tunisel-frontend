@@ -16,6 +16,7 @@ import {User} from "../../Models/user";
 import {PasswordModule} from "primeng/password";
 import {UserType} from "../../Enum/user-type";
 import {InputTextModule} from "primeng/inputtext";
+import {Employer} from "../../Models/employer";
 
 
 @Component({
@@ -71,9 +72,7 @@ export class UserComponent implements OnInit{
   constructor(private productService: ProductService, private messageService: MessageService,private userService :UserService) { }
 
   ngOnInit() {
-    this.userService.getAllUsers().subscribe((v:  User[]) => {
-      this.users=v;},error => {console.log(error)})
-
+    this.getAllUsers();
     this.cols = [
       { field: 'product', header: 'Product' },
       { field: 'price', header: 'Price' },
@@ -88,9 +87,14 @@ export class UserComponent implements OnInit{
       { label: 'OUTOFSTOCK', value: 'outofstock' }
     ];
   }
-
+getAllUsers(){
+  this.userService.getAllUsers().subscribe((v:  User[]) => {
+    this.users=v;},error => {console.log(error)})
+}
   openNew() {
-    this.user = {};
+
+
+    this.user = {userType:"ADMIN"};
     this.submitted = false;
     this.productDialog = true;
   }
@@ -137,7 +141,7 @@ console.log(this.selectedUsers.length)
     if (this.user.id!= null) {
       this.userService.deleteUser(this.user.id).subscribe(() => console.log("user deleted"));
     }
-    this.messageService.add({ severity: 'success', summary: 'Successful', detail: 'Product Deleted', life: 3000 });
+    this.messageService.add({ severity: 'success', summary: 'réussi', detail: 'Utilisateur supprimé', life: 3000 });
     this.user = {};
   }
 
@@ -148,30 +152,31 @@ console.log(this.selectedUsers.length)
 
 
   saveUser() {
-    this.submitted = false;
-    this.productDialog=false
+
+    this.submitted = true;
+
+    if (this.user.pseudo?.trim()&&this.user.mp?.trim()){
     if(this.isUpdateUser==true) {
       console.log(new JsonPipe().transform(this.user) )
       this.userService.saveUser(this.user).subscribe(() => {
-        console.log("user Updated");this.userService.getAllUsers().subscribe((v:  User[]) => {
-          this.users=v;},error => {console.log(error)})
+        console.log("user Updated");this.getAllUsers();
       });
       this.isUpdateUser=false;
     }
     else
     {
-      if (this.user.userType && this.user.userType === UserType.ADMIN){
-        this.userService.addAdmin(this.user).subscribe(() => console.log("Admin Added")
-        );this.userService.getAllUsers().subscribe((v:  User[]) => {
-          this.users=v;},error => {console.log(error)})
+      if (this.user.userType === "ADMIN"){
+        this.userService.addAdmin(this.user).subscribe(() => {
+          console.log("Admin Added");this.getAllUsers();
+        })
       }
       if(this.user.userType=="EMPLOYER") {
         this.userService.AddEmployer(this.user).subscribe(() => {
-          console.log("Employer Added");this.userService.getAllUsers().subscribe((v:  User[]) => {
-            this.users=v;},error => {console.log(error)})
+          console.log("Employer Added");this.getAllUsers();
         });
       }
-
+      this.productDialog=false
+    }
     }
   }
 
@@ -182,5 +187,6 @@ console.log(this.selectedUsers.length)
     table.filterGlobal((event.target as HTMLInputElement).value, 'contains');
   }
 
-  protected readonly UserType = UserType;
+
+
 }

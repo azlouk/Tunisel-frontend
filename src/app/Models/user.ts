@@ -1,4 +1,3 @@
-import {UserType} from "../Enum/user-type";
 
 export interface User {
   id?: number;
@@ -7,6 +6,6 @@ export interface User {
   poste?: string;
   pseudo?: string;
   mp?: string;
- userType?: UserType;
+ userType?: String;
 }
 

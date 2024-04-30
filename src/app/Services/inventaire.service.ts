@@ -20,8 +20,8 @@ export class InventaireService {
     return this.http.get<Inventaire>(`${this.apiUrl}/inventaires/`+inventaireid);
   }
 
-  createInventaire(inventaire: Inventaire): Observable<Inventaire> {
-    return this.http.post<Inventaire>(`${this.apiUrl}/inventaires/add`, inventaire);
+  createInventaire(newIinventaire: Inventaire): Observable<Inventaire> {
+    return this.http.post<Inventaire>(`${this.apiUrl}/inventaires/add`, newIinventaire);
   }
 
   updateInventaire(inventaire: Inventaire): Observable<Inventaire> {

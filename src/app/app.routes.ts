@@ -51,5 +51,6 @@ export const routes: Routes = [
   {path:'articles', component:ArticleComponent, canActivate:[AuthGuard]},
   {path:'produitdefectueux', component:ProduitDefectueuxComponent,  canActivate:[AuthGuard]},
   {path:'ajouterInventaire', component:AjouterInventaireComponent,  canActivate:[AuthGuard]},
-
+  {path:'ajouterInventaire', component:AjouterInventaireComponent , canActivate:[AuthGuard]},
+  {path:'editInventaire/:id', component:AjouterInventaireComponent,  canActivate:[AuthGuard]},
 ];
