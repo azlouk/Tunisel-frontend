@@ -256,4 +256,14 @@ this.visibale=false;
     return qty ;
 
      }
+
+  onRowEditSave(p: any) {
+
+  }
+
+
+
+  onRowEditInit(p: any) {
+
+  }
 }
