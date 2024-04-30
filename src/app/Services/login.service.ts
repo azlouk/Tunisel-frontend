@@ -23,10 +23,21 @@ export class LoginService {
   loggdinUser(user: User) {
 
     console.log(new JsonPipe().transform(user))
-      this.http.post<any>(`${this.apiUrl}/users/login`, user).subscribe((token:any) => {
-        console.log("response data :"+token)
-        localStorage.setItem(this.tokenKey, token.id);
-        this.router.navigate(['dash']);
+      this.http.post<any>(`${this.apiUrl}/users/login`, user).subscribe((token:User) => {
+        console.log("response data :"+new JsonPipe().transform(token))
+        if(token!=null && token.userType!=undefined) {
+          localStorage.setItem(this.tokenKey, token.userType.toString());
+          this.router.navigate(['dash']);
+        }else {
+          Swal.fire({
+            icon: "error",
+            title: "Erreur d'authentification",
+            text: "Utilisateur invalide ou mot de passe incorrect!",
+            // confirmButtonColor: '#d33',
+            confirmButtonText: 'Réessayer'
+
+          });
+        }
     }, error => {
         Swal.fire({
           icon: "error",
