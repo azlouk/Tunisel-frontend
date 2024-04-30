@@ -123,10 +123,18 @@
                 {{p.produit.article.nom}}
               </td>
               <td style="width:14%; min-width:8rem;">
-                <span class="p-column-title">quantite restant</span>
-                {{p.quantitePI}}
-              </td>
+<!--                <span class="p-column-title">quantite restant</span>-->
+<!--                {{p.quantitePI}}-->
 
+                <p-cellEditor>
+                  <ng-template pTemplate="input">
+                    <p-inputNumber [(ngModel)]="p.quantitePI"></p-inputNumber>
+                  </ng-template>
+                  <ng-template pTemplate="output">
+                    {{p.quantitePI }}
+                  </ng-template>
+                </p-cellEditor>
+              </td>
 
               <div class="flex " >
                 <button *ngIf="isUpdateInventaire"  pButton pRipple icon="pi pi-pencil" class="p-button-rounded p-button-success mr-2" (click)="editIntrvention(produit)"></button>

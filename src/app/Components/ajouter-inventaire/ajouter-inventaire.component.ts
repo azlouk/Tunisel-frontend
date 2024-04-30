@@ -22,6 +22,7 @@ import {ProduitService} from "../../Services/produit.service";
 import {InventaireProduitAssociation} from "../../Models/InventaireProduitAssociation";
 import {ProduitDefectueuxService} from "../../Services/produit-defectueux.service";
 import {ProduitDefectueux} from "../../Models/produitDefectueux";
+import {PaginatorModule} from "primeng/paginator";
 
 @Component({
   selector: 'app-ajouter-inventaire',
@@ -41,7 +42,8 @@ import {ProduitDefectueux} from "../../Models/produitDefectueux";
     ToolbarModule,
     FormsModule,
     DragDropModule,
-    PickListModule
+    PickListModule,
+    PaginatorModule
 
 
   ],
@@ -146,10 +148,7 @@ this.visibale=false;
         console.log(error)
       })
 
-
     }
-
-
     else {
     }
   }
