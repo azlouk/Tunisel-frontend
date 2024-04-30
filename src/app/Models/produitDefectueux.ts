@@ -1,9 +1,12 @@
 import {Article} from "./article";
 import {Produit} from "./produit";
 
-export interface ProduitDefectueux extends Produit {
-  quantiteDef?: number;
- //produitDefectueux?: ProduitDefectueux;
+export interface ProduitDefectueux{
+  id?: number;
+  nom?:string;
+  idProduit?: number;
+  idInventaire?: number;
+  quantiteDefectueux?: number;
   description?: string;
-  dateDeffectation?: Date;
+  dateDeffectuation?: Date;
 }

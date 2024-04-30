@@ -137,11 +137,15 @@ this.visibale=false;
 
       // this.produitsDefectueux = this.targetProduits;
      // console.log("target defectueux", this.produitsDefectueux);
-      this.inventaireService.createInventaire(this.inventaire).subscribe(value => {this.router.navigate(['/inventaire']);
-     },error => {
+      this.inventaireService.createInventaire(this.inventaire).subscribe(
+        value => {this.router.navigate(['/inventaire']);
+          this.inventaire = value;
+          this.createProduitDefectueux(this.inventaire);
+
+        },error => {
         console.log(error)
       })
-      // this.createProduitDefectueux()
+
 
     }
 
@@ -150,33 +154,53 @@ this.visibale=false;
     }
   }
 
-  createProduitDefectueux()
-  {
-    if(this.produitsDefectueux)
-    {
-      for (const produitDefect of this.produitsDefectueux)
-      {
-        if(produitDefect.id) {
-          this.produitService.getProduitById(produitDefect.id).subscribe(value => {
-            this.originalProduit = value;
-            console.log(new JsonPipe().transform(value))
+  // createProduitDefectueux(inventaire : Inventaire)
+  // {
+  //   if(inventaire && inventaire.inventaireProduitAssociations && inventaire.inventaireProduitAssociations.length >0) {
+  //     for (const association of inventaire.inventaireProduitAssociations) {
+  //       let produitDefect: ProduitDefectueux = {};
+  //       produitDefect.idInventaire = inventaire.id;
+  //       produitDefect.idProduit = association.produit?.id;
+  //       if (association.produit?.id)
+  //         this.produitService.getProduitById(association.produit?.id).subscribe(value => {
+  //           this.originalProduit = value;
+  //           if (this.originalProduit?.quantite && association.quantitePI)
+  //             produitDefect.quantiteDefectueux = this.originalProduit?.quantite - association.quantitePI;
+  //
+  //         });
+  //
+  //       this.produitDefectueuxService.createProduitDefectueux(produitDefect).subscribe(value => {
+  //       });
+  //     }
+  //   }
+  // }
 
-            if(this.originalProduit && this.originalProduit.quantite && produitDefect.quantite) {
-              produitDefect.quantite = this.originalProduit.quantite - produitDefect.quantite;
-             let  quantitedeffect=this.originalProduit.quantite - produitDefect.quantite;
+  createProduitDefectueux(inventaire: Inventaire) {
+    if (inventaire && inventaire.inventaireProduitAssociations && inventaire.inventaireProduitAssociations.length > 0) {
 
-              console.log('pi==========================>',new JsonPipe().transform(this.association.quantitePI))
-
-
-            }
-
-          })
-
+      for (const association of inventaire.inventaireProduitAssociations) {
+        if (association.produit?.id) {
+          this.produitService.getProduitById(association.produit.id)
+            .toPromise() // Convertir l'Observable en Promise
+            .then(originalProduit => {
+              const produitDefect: ProduitDefectueux = {};
+              produitDefect.idInventaire = inventaire.id;
+              if(association.produit?.id)
+              produitDefect.idProduit = association.produit.id;
+              if (originalProduit && originalProduit.quantite && association.quantitePI) {
+                produitDefect.quantiteDefectueux = originalProduit.quantite - association.quantitePI;
+                this.produitDefectueuxService.createProduitDefectueux(produitDefect).subscribe(value => {
+                });
+              }
+            })
+            .catch(error => {
+              console.error("Une erreur s'est produite lors de la récupération du produit :", error);
+            });
         }
       }
     }
-
   }
+
   saveProduitClacule() {
     this.inventaire.inventaireProduitAssociations = [];
     for (const produit of [...this.targetProduits]) {
