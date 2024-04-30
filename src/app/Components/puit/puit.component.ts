@@ -319,11 +319,12 @@ export class PuitComponent implements OnInit {
      data.forEach(v => {
 
        if(v.dateAnalyse!==undefined){
-         console.log(typeof v.dateAnalyse )
+
          const d=v.dateAnalyse+"";
          const dateana:Date=new Date(d)
-         console.log("-D-->" + dateana)
-         if (dateana>=this.DatefiltrageStart && dateana<=this.DatefiltrageEnd) {
+         console.log("-D-->" +this.AfterTodate(dateana,this.DatefiltrageStart)  )
+
+         if (  this.AfterTodate(this.DatefiltrageStart,dateana) &&  this.AfterTodate(dateana,this.DatefiltrageEnd)) {
            newAnalyse.push(v);
          } else {
            console.log("no compare")
@@ -367,4 +368,11 @@ export class PuitComponent implements OnInit {
   getColsfiltr() {
     return this.colsfiltre.filter(value => value.hide==true)
   }
+
+  AfterTodate(date1:Date , date2:Date):boolean{
+    console.log(date1+"<"+date2)
+    return date1.getDay()<=date2.getDay() && date1.getMonth()<=date2.getMonth() && date1.getFullYear()<=date2.getFullYear()
+  }
+
+
 }

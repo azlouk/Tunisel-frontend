@@ -4,7 +4,7 @@ import {HttpClient} from "@angular/common/http";
 import {Observable} from "rxjs";
 import {Puit} from "../Models/puit";
 import {AnalysesChimique} from "../Models/analyses-chimique";
-import {JsonPipe} from "@angular/common";
+import { JsonPipe} from "@angular/common";
 import {Bassin} from "../Models/bassin";
 import {Sbnl} from "../Models/sbnl";
 import {Sbl} from "../Models/sbl";
@@ -16,7 +16,7 @@ import {Sblf} from "../Models/sblf";
 export class AnalyseChimiqueService {
 
   apiUrl=environment.apiUrl
-  constructor(private http: HttpClient) { }
+  constructor(private http: HttpClient , ) { }
 
   getAllAnalysesChimiques(): Observable<AnalysesChimique[]> {
     return this.http.get<AnalysesChimique[]>(`${this.apiUrl}/analysechimiques/read`) ;
@@ -27,6 +27,8 @@ export class AnalyseChimiqueService {
   }
   updateAnalyseChimique(analyse: AnalysesChimique): Observable<AnalysesChimique> {
     console.log("analyse:    "+new JsonPipe().transform(analyse));
+
+
     return this.http.put<AnalysesChimique>(`${this.apiUrl}/analysechimiques/update`, analyse);
   }
 

@@ -110,7 +110,7 @@
       </p-table>
     </div>
 
-    <p-dialog [(visible)]="productDialog" [style]="{width: '450px'}" header="Product Details" [modal]="true" class="p-fluid">
+    <p-dialog [(visible)]="productDialog" [style]="{width: '450px'}" header="Stock bassin laver final" [modal]="true" class="p-fluid">
       <ng-template pTemplate="content">
         <div class="field">
           <label>Sbl</label>
@@ -164,8 +164,8 @@
 
 
       <ng-template pTemplate="footer">
-        <button pButton pRipple label="Cancel" icon="pi pi-times" class="p-button-text" (click)="hideDialog()"></button>
-        <button pButton pRipple label="Save" icon="pi pi-check" class="p-button-text" (click)="saveSblf()"></button>
+        <button pButton pRipple label="Annuler" icon="pi pi-times" class="p-button-text" (click)="hideDialog()"></button>
+        <button pButton pRipple label="Ajouter" icon="pi pi-check" class="p-button-text" (click)="saveSblf()"></button>
       </ng-template>
     </p-dialog>
 

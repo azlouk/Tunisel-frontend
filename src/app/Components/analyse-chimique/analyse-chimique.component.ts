@@ -4,7 +4,7 @@ import {Puit} from "../../Models/puit";
 import {ProductService} from "../../Services/product.service";
 import {MessageService, SharedModule} from "primeng/api";
 import {PuitService} from "../../Services/puit.service";
-import {AsyncPipe, JsonPipe, NgClass, NgIf} from "@angular/common";
+import {AsyncPipe, DatePipe, JsonPipe, NgClass, NgIf} from "@angular/common";
 import {Table, TableModule} from "primeng/table";
 import {ButtonModule} from "primeng/button";
 import {CalendarModule} from "primeng/calendar";
@@ -34,7 +34,8 @@ import {Subscription} from "rxjs";
     ToolbarModule,
     NgClass,
     AsyncPipe,
-    JsonPipe
+    JsonPipe,
+    DatePipe
   ],
   templateUrl: './analyse-chimique.component.html',
   styleUrl: './analyse-chimique.component.css'

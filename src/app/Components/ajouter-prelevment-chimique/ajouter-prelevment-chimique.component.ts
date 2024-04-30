@@ -198,6 +198,7 @@ this.analyseChimiqueService.getAnalyseChimiqueById(this.analyseChimiqueId).subsc
 
 
   saveAnalyseChimique() {
+   // alert(this.analysesChimique.dateAnalyse)
     this.analysesChimique.densite=this.attributs[0].value;
     this.analysesChimique.matiereEnSuspension=this.attributs[1].value;
     this.analysesChimique.salimite=this.attributs[2].value;

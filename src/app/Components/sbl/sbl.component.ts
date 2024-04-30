@@ -257,7 +257,7 @@ export class SblComponent implements OnInit{
         const d=v.dateAnalyse+"";
         const dateana:Date=new Date(d)
         console.log("-D-->" + dateana)
-        if (dateana>=this.DatefiltrageStart && dateana<=this.DatefiltrageEnd) {
+        if (  this.AfterTodate(this.DatefiltrageStart,dateana) &&  this.AfterTodate(dateana,this.DatefiltrageEnd)) {
           newAnalyse.push(v);
         } else {
           console.log("no compare")
@@ -303,12 +303,11 @@ export class SblComponent implements OnInit{
         const d=v.dateAnalyse+"";
         const dateana:Date=new Date(d)
         console.log("-D-->" + dateana)
-        if (dateana>this.DatefiltrageStart && dateana<this.DatefiltrageEnd) {
+        if (  this.AfterTodate(this.DatefiltrageStart,dateana) &&  this.AfterTodate(dateana,this.DatefiltrageEnd)) {
           newAnalyse.push(v);
         } else {
           console.log("no compare")
         }
-
 
       }
 
@@ -351,6 +350,10 @@ export class SblComponent implements OnInit{
 
   getTamisFiltred() {
     return this.SelectedsbnlPrintAnalyse.tamisList==undefined?[]:this.SelectedsbnlPrintAnalyse.tamisList
+  }
+  AfterTodate(date1:Date , date2:Date):boolean{
+    console.log(date1+"<"+date2)
+    return date1.getDay()<=date2.getDay() && date1.getMonth()<=date2.getMonth() && date1.getFullYear()<=date2.getFullYear()
   }
 
 }
