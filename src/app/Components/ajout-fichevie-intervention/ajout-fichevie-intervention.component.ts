@@ -141,6 +141,8 @@ this.ficheVieService.updateFicheVie(this.ficheVie).subscribe(value =>   this.rou
     this.intervention={};
   }
     this.ficheVieService.updateFicheVie(this.ficheVie).subscribe(value => {console.log('fiche is update')})
+
+
     }
   onGlobalFilter(table: Table, event: Event) {
     table.filterGlobal((event.target as HTMLInputElement).value, 'contains');

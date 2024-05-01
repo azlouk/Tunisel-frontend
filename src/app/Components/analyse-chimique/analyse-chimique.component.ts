@@ -1,10 +1,8 @@
 import {Component, Injectable, OnInit} from '@angular/core';
 import {Product} from "../../Models/product";
-import {Puit} from "../../Models/puit";
-import {ProductService} from "../../Services/product.service";
+ import {ProductService} from "../../Services/product.service";
 import {MessageService, SharedModule} from "primeng/api";
-import {PuitService} from "../../Services/puit.service";
-import {AsyncPipe, DatePipe, JsonPipe, NgClass, NgIf} from "@angular/common";
+ import {AsyncPipe, DatePipe, JsonPipe, NgClass, NgIf} from "@angular/common";
 import {Table, TableModule} from "primeng/table";
 import {ButtonModule} from "primeng/button";
 import {CalendarModule} from "primeng/calendar";
@@ -16,7 +14,6 @@ import {ToolbarModule} from "primeng/toolbar";
 import {Router} from "@angular/router";
 import {AnalysesChimique} from "../../Models/analyses-chimique";
 import {AnalyseChimiqueService} from "../../Services/analyse-chimique.service";
-import {Subscription} from "rxjs";
 
 @Component({
   selector: 'app-analyse-chimique',
@@ -67,7 +64,7 @@ export class AnalyseChimiqueComponent implements OnInit{
 
   analysesChimiques:AnalysesChimique[] = [];
 
-  analyseChimique:AnalysesChimique={};
+  analyseChimique:AnalysesChimique={dateAnalyse:new Date()};
   public updateAnalyseChimique:AnalysesChimique={};
   selectedAnalysesChimiques: AnalysesChimique[] = [];
   private isUpdateAnalyseChimique=false;

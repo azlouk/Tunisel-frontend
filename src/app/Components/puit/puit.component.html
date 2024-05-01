@@ -156,7 +156,7 @@
     <p-dialog [(visible)]="deleteProductsDialog" header="Confirmer" [modal]="true" [style]="{width:'450px'}">
       <div class="flex align-items-center justify-content-center">
         <i class="pi pi-exclamation-triangle mr-3" style="font-size: 2rem"></i>
-        <span>Voulez-vous vraiment supprimer des produits sélectionnés ?</span>
+        <span>Voulez-vous vraiment supprimer  sélectionnés ?</span>
       </div>
       <ng-template pTemplate="footer">
         <button pButton pRipple icon="pi pi-times" class="p-button-text" label="Non" (click)="deleteProductsDialog = false"></button>
@@ -174,11 +174,15 @@
 <div class="shadow-1 p-2" >Filtrage :
 
   <div class="card flex justify-content-evenly ">
-   <div class="gap-1 flex align-items-center">Date début Analyse  :<p-calendar [(ngModel)]="DatefiltrageStart"  ></p-calendar>
-   </div>
-    <div class="gap-1  flex align-items-center">
-    Date Fin Analyse  :<p-calendar [(ngModel)]="DatefiltrageEnd"  ></p-calendar>
+   <div class="gap-1 flex align-items-center">Date début Analyse  :
+     <input  class="p-2 shadow-1" type="date" pInputText    [(ngModel)]="DatefiltrageStart" [value]="DatefiltrageStart" />
+
     </div>
+    <div class="gap-1  flex align-items-center">
+    Date Fin Analyse  :
+      <input  class="p-2 shadow-1" type="date"  pInputText   [(ngModel)]="DatefiltrageEnd" [value]="DatefiltrageEnd" />
+
+     </div>
     <p-button (click)="filtredate()" class=" " icon="pi pi-search" label="Rechercher"></p-button>
     <p-button (click)="Viderfiltredate()" class=" " icon="pi pi-eye" label="Afficher Tout"></p-button>
 
@@ -192,19 +196,44 @@
 
   <hr>
   <div #pdfpuit class="pt-8 pl-4 pr-4">
-  <img src="assets/layout/images/logo.png">
-  <div class="row justify-content-end font-bold flex text-1xl"> Creation date: <span class=" text-1xl font-bold  pi pi-calendar ">{{dateToday | date :"yyyy-MM-dd"}}</span></div>
-  <div class="row    font-bold flex text-1xl   "> Identification :<span class=" text-1xl font-bold   "> {{selectedPuitPrint.reference}}</span></div>
 
-  <div class="row   text-3xl font-bold text-center m-2 p-3" > Analysis Report </div>
- <div class="mt-5 mb-5">
+    <div class="flex border-1 w-full justify-content-between">
+      <div class="flex-initial flex align-items-center justify-content-center   font-bold m-2 px-5 py-3 border-round">
+        <img src="assets/layout/images/logo.png">
 
-  <label class="text-2xl font-bold">Name borehole :</label><span class=" ml-2 text-2xl">{{selectedPuitPrint.nom}}</span><br>
-  <label class="text-2xl font-bold">Reference  :</label><span class="ml-2 text-2xl">{{selectedPuitPrint.reference}}</span><br>
-  <label class="text-2xl font-bold">Date creation :</label><span class=" ml-2 text-2xl">{{selectedPuitPrint.dateCreation}}</span>
+      </div>
+      <div class="flex-initial flex align-items-center justify-content-center  text-6xl font-bold m-2 px-5 py-3 border-round">
+        Analysis Report
+      </div>
+      <div class="flex-initial border-1 flex     w-25  font-bold m-2 px-5 py-3  ">
+        <div class="col   ">
+          <div class="row  mb-2    w-full  ">BEN GUERDANE, TUNISIA  </div>
+          <div class="row mb-2   w-full text-center    text-1xl font-bold  pi pi-calendar ">{{dateToday | date :"yyyy-MM-dd hh:ss a"}}</div>
+
+        </div>
+      </div>
+    </div>
+
+
+
+
+
+
+ <div class="mt-5 mb-5 flex flex-column gap-2">
+
+  <div>
+    <label class="text-2xl    font-bold">Name borehole :</label><span class=" ml-2 text-2xl">{{selectedPuitPrint.nom}}</span>
  </div>
+   <div>
+    <label class="text-2xl    font-bold">Reference pool  :</label><span class="ml-2 text-2xl">{{selectedPuitPrint.reference}}</span>
+   </div>
+    <div>
+     <label class="text-2xl  font-bold">Date creation :</label><span class=" ml-2 text-2xl">{{selectedPuitPrint.dateCreation}}</span>
+    </div>
+    </div>
+    <label class=" mt-2   text-2xl font-bold">Reported by </label><span class=" ml-2 font-bold text-1xl">{{ReportedBy}}</span>
 
-  <p-table #dt1 [value]="getAnalyse()" [tableStyle]="{ 'min-width': '50rem' }"
+  <p-table #dt1 [value]="getAnalyse()"  styleClass="p-datatable-gridlines" [tableStyle]="{ 'min-width': '50rem' ,'margin-top':'5rem' }"
            dataKey="id"
            [showCurrentPageReport]="true"
            [globalFilterFields]="['dateAnalyse']"

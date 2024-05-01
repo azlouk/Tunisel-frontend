@@ -21,6 +21,8 @@ import html2canvas from "html2canvas";
 import {AnalysesChimique} from "../../Models/analyses-chimique";
 import {MultiSelectModule} from "primeng/multiselect";
 import {CheckboxModule} from "primeng/checkbox";
+import {AutoFocusModule} from "primeng/autofocus";
+import {LoginService} from "../../Services/login.service";
 
 @Component({
   selector: 'app-puit',
@@ -42,7 +44,8 @@ import {CheckboxModule} from "primeng/checkbox";
     DatePipe,
     MultiSelectModule,
     NgForOf,
-    CheckboxModule
+    CheckboxModule,
+    AutoFocusModule
   ],
   templateUrl: './puit.component.html',
   styleUrl: './puit.component.css'
@@ -77,7 +80,7 @@ export class PuitComponent implements OnInit {
 
   private isUpdateUser = false;
   loading: boolean = false;
-
+  ReportedBy:any={}
 
   public  _selectedColumns: any[]=[];
   @Input() get selectedColumns(): any[] {
@@ -89,12 +92,12 @@ export class PuitComponent implements OnInit {
   }
 
 
-  constructor(private productService: ProductService, private messageService: MessageService, private puitService: PuitService) {
+  constructor(private Loginservice:LoginService,private productService: ProductService, private messageService: MessageService, private puitService: PuitService) {
   }
 
   ngOnInit() {
 
-
+this.ReportedBy=this.Loginservice.getToken()
     this.colsfiltre = [
       {id:0, field: 'reference', header: 'reference' ,hide:true},
       { id:1, field: 'dateAnalyse', header: 'Date Analyse' ,hide:false},
@@ -322,9 +325,8 @@ export class PuitComponent implements OnInit {
 
          const d=v.dateAnalyse+"";
          const dateana:Date=new Date(d)
-         console.log("-D-->" +this.AfterTodate(dateana,this.DatefiltrageStart)  )
 
-         if (  this.AfterTodate(this.DatefiltrageStart,dateana) &&  this.AfterTodate(dateana,this.DatefiltrageEnd)) {
+         if (  this.AfterTodate(new Date(this.DatefiltrageStart+""),dateana) &&  this.AfterTodate(dateana,new Date(this.DatefiltrageEnd))) {
            newAnalyse.push(v);
          } else {
            console.log("no compare")
@@ -370,7 +372,8 @@ export class PuitComponent implements OnInit {
   }
 
   AfterTodate(date1:Date , date2:Date):boolean{
-    console.log(date1+"<"+date2)
+    console.log("Date 1"+typeof  date1,date1)
+    console.log("Date 2"+typeof  date2,date2)
     return date1.getDay()<=date2.getDay() && date1.getMonth()<=date2.getMonth() && date1.getFullYear()<=date2.getFullYear()
   }
 
