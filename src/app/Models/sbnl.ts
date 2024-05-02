@@ -6,7 +6,8 @@ import {Bassin} from "./bassin";
 
 export interface Sbnl {
 
-  id?: number;reference?: string;
+  id?: number;
+  reference?: string;
   description?: string;
   dateStock?: Date;
   emplacement?: string;

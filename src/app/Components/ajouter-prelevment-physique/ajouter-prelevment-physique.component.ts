@@ -28,6 +28,8 @@ import {Tamis} from "../../Models/tamis";
 import {AnalysePhysiqueService} from "../../Services/analysePhysique.service";
 import {TamisService} from "../../Services/tamis.service";
 import Swal from "sweetalert2";
+import {Bande} from "../../Models/bande";
+import {BandeService} from "../../Services/bande.service";
 
 @Component({
   selector: 'app-ajouter-prelevment-physique',
@@ -59,6 +61,8 @@ export class AjouterPrelevmentPhysiqueComponent implements OnInit{
   selectedBassin: Bassin = {};
   sbnls: Sbnl[] = [];
   selectedSbnl:Sbnl={};
+  bandes: Bande[] = [];
+  selectedBande:Bande={};
   sbls: Sbl[] = [];
   selectedSbl:Sbl={};
   sblfs: Sblf[] = [];
@@ -86,6 +90,7 @@ export class AjouterPrelevmentPhysiqueComponent implements OnInit{
               private analysePhysiqueService:AnalysePhysiqueService ,
               private tamisService:TamisService ,
               private route: ActivatedRoute,
+              private bandeService:BandeService
               )
   {}
 
@@ -106,6 +111,7 @@ export class AjouterPrelevmentPhysiqueComponent implements OnInit{
         this.selectedSbl = value.sbl;
         this.selectedSbnl = value.sbnl;
         this.selectedSblf = value.sblf;
+        this.selectedBande = value.bande;
 
       }, error => {
 
@@ -126,6 +132,12 @@ export class AjouterPrelevmentPhysiqueComponent implements OnInit{
 
     this.sbnlService.getAllSbnls().subscribe((v:  Sbnl[]) => {
       this.sbnls=v;
+
+    },error => {
+      console.log(error)});
+
+    this.bandeService.getAllBandes().subscribe((v:  Bande[]) => {
+      this.bandes=v;
 
     },error => {
       console.log(error)})
@@ -171,6 +183,12 @@ export class AjouterPrelevmentPhysiqueComponent implements OnInit{
         this.analysesPhysique.tamisList=this.listeTamis;
         this.selectedSbnl.analysesPhysiques.push(this.analysesPhysique) ;
         this.analysePhysiqueService.addAnalysesPhysiquesToSbnl(this.selectedSbnl).subscribe(value => this.router.navigate(['/analysePhysique']))
+      }
+      else if(this.selectedBande.hasOwnProperty('id')){
+        this.selectedBande.analysesPhysiques=[];
+        this.analysesPhysique.tamisList=this.listeTamis;
+        this.selectedBande.analysesPhysiques.push(this.analysesPhysique) ;
+        this.analysePhysiqueService.addAnalysesPhysiquesToBande(this.selectedBande).subscribe(value => this.router.navigate(['/analysePhysique']))
       }
       else if(this.selectedSbl.hasOwnProperty('id')){
         this.selectedSbl.analysesPhysiques=[];

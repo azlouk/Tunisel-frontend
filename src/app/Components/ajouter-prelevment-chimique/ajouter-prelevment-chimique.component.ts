@@ -30,6 +30,8 @@ import {AnalyseChimiqueService} from "../../Services/analyse-chimique.service";
 import {AnalyseChimiqueComponent} from "../analyse-chimique/analyse-chimique.component";
 import {DialogModule} from "primeng/dialog";
 import {DropdownModule} from "primeng/dropdown";
+import {Bande} from "../../Models/bande";
+import {BandeService} from "../../Services/bande.service";
 
 @Component({
   selector: 'app-ajouter-prelevment-chimique',
@@ -66,6 +68,8 @@ export class AjouterPrelevmentChimiqueComponent implements OnInit{
   selectedBassin: Bassin = {};
   sbnls: Sbnl[] = [];
   selectedSbnl:Sbnl={};
+  bandes: Bande[] = [];
+  selectedBande:Bande={};
   sbls: Sbl[] = [];
   selectedSbl:Sbl={};
   sblfs: Sblf[] = [];
@@ -109,7 +113,7 @@ export class AjouterPrelevmentChimiqueComponent implements OnInit{
               private sblfService :SblfService,
               private analyseChimiqueService:AnalyseChimiqueService ,
               private route: ActivatedRoute,
-              private analyse:AnalyseChimiqueComponent)
+              private bandeService:BandeService)
   {}
 
 
@@ -123,14 +127,15 @@ export class AjouterPrelevmentChimiqueComponent implements OnInit{
     if(this.isUpdateAnalyseChimique==false){
   this.analysesChimique.dateAnalyse=new Date() ;
 }
-
+if(this.isUpdateAnalyseChimique==true){
     this.analyseChimiqueService.getElementByAnalyseChimiqueId(this.analyseChimiqueId).subscribe((value :any) => {
       this.selectedPuit=value.puit
       this.selectedBassin=value.bassin;
       this.selectedSbl=value.sbl;
       this.selectedSbnl=value.sbnl;
       this.selectedSblf=value.sblf ;
-      console.log(new JsonPipe().transform(value))
+      this.selectedBande=value.bande;
+      console.log('ooooooooooooooooo  ',new JsonPipe().transform(value))
     }, error => {
 
     });
@@ -153,7 +158,7 @@ this.analyseChimiqueService.getAnalyseChimiqueById(this.analyseChimiqueId).subsc
     attribut.checked = attribut.value != null;
   }
 
-  },error => error)
+  },error => error)}
     this.puitService.getAllPuits().subscribe((v:  Puit[]) => {
       this.puits=v;
       console.log(new JsonPipe().transform("====================>>>>>>"+this.puits))
@@ -170,6 +175,11 @@ this.analyseChimiqueService.getAnalyseChimiqueById(this.analyseChimiqueId).subsc
 
     this.sbnlService.getAllSbnls().subscribe((v:  Sbnl[]) => {
       this.sbnls=v;
+
+    },error => {
+      console.log(error)});
+    this.bandeService.getAllBandes().subscribe((v:  Bande[]) => {
+      this.bandes=v;
 
     },error => {
       console.log(error)})
@@ -219,7 +229,7 @@ if(this.isUpdateAnalyseChimique){
 else{
 
 this.analysesChimique.id=0;
-  console.error("Data analyse Chimique:"+new JsonPipe().transform(this.analysesChimique))
+  // console.error("Data analyse Chimique:"+new JsonPipe().transform(this.analysesChimique))
 
   if(this.selectedPuit.hasOwnProperty('id')){
    this.selectedPuit.analysesChimiques=[];
@@ -236,6 +246,11 @@ this.analysesChimique.id=0;
     this.selectedSbnl.analysesChimiques=[];
     this.selectedSbnl.analysesChimiques.push(this.analysesChimique) ;
     this.analyseChimiqueService.addAnalyseChimiqueToSbnl(this.selectedSbnl).subscribe(value => this.router.navigate(['/analyseChimique']))
+  }
+  else if(this.selectedBande.hasOwnProperty('id')){
+    this.selectedBande.analysesChimiques=[];
+    this.selectedBande.analysesChimiques.push(this.analysesChimique) ;
+    this.analyseChimiqueService.addAnalyseChimiqueToBande(this.selectedBande).subscribe(value => this.router.navigate(['/analyseChimique']))
   }
   else if(this.selectedSbl.hasOwnProperty('id')){
     this.selectedSbl.analysesChimiques=[];

@@ -37,6 +37,7 @@ export class AppMenuComponent implements OnInit {
         label: 'Stock',
         items: [
           {label: 'Stock Non Lavé', icon: 'pi pi-fw pi-box', routerLink: ['sbnls']},
+          {label: 'Bande', icon: 'pi pi-fw pi-box', routerLink: ['bandes']},
           {label: 'Stock Lavé', icon: 'pi pi-fw pi-box', routerLink: ['/sbls']},
           {label: 'Stock Lavé Finale', icon: 'pi pi-fw pi-box', routerLink: ['/sblfs']},
 

@@ -6,8 +6,8 @@
         <ng-template pTemplate="left">
           <div class="my-2">
             <button pButton pRipple label="Ajouter" icon="pi pi-plus" class="p-button-success mr-2" (click)="openNew()"></button>
-            <button pButton pRipple label="Supprimer" icon="pi pi-trash" class="p-button-danger mr-2" (click)="deleteSelectedSbls()" [disabled]="!selectedSbls || !selectedSbls.length"></button>
-            <button pButton pRipple label="Actualiser" icon="pi pi-refresh" class="p-button-primary mr-2" (click)="getAllSbl()"  ></button>
+            <button pButton pRipple label="Supprimer" icon="pi pi-trash" class="p-button-danger mr-2" (click)="deleteSelectedBandes()" [disabled]="!selectedBandes || !selectedBandes.length"></button>
+            <button pButton pRipple label="Actualiser" icon="pi pi-refresh" class="p-button-primary mr-2" (click)="getBande()"  ></button>
 
           </div>
         </ng-template>
@@ -15,10 +15,10 @@
 
       </p-toolbar>
 
-      <p-table #dt [value]="sbls" [columns]="cols"  responsiveLayout="scroll" [rows]="10" [globalFilterFields]="['id','reference','description','dateStock','emplacement','etat','quantite','type']" [paginator]="true" [rowsPerPageOptions]="[10,20,30]" [showCurrentPageReport]="true" currentPageReportTemplate="Affichage du  {first} au  {last} des  {totalRecords} entrées" [(selection)]="selectedSbls" selectionMode="multiple" [rowHover]="true" dataKey="id">
+      <p-table #dt [value]="bandes" [columns]="cols"  responsiveLayout="scroll" [rows]="10" [globalFilterFields]="['id','reference','description','dateCreation','nom','emplacement','etat','dateFermeture']" [paginator]="true" [rowsPerPageOptions]="[10,20,30]" [showCurrentPageReport]="true" currentPageReportTemplate="Affichage du  {first} au  {last} des  {totalRecords} entrées" [(selection)]="selectedBandes" selectionMode="multiple" [rowHover]="true" dataKey="id">
         <ng-template pTemplate="caption">
           <div class="flex flex-column md:flex-row md:justify-content-between md:align-items-center">
-            <h5 class="m-0">Gestion des stocks des bassins lavés</h5>
+            <h5 class="m-0">Gestion des stocks Bandes</h5>
             <span class="block mt-2 md:mt-0 p-input-icon-left">
                             <i class="pi pi-search"></i>
                             <input  type="text" pInputText (input)="onGlobalFilter(dt, $event)" placeholder="Rechercher..."  class="w-full sm:w-auto"/>
@@ -36,72 +36,81 @@
             <th pSortableColumn="id">Id <p-sortIcon field="id"></p-sortIcon></th>
             <th pSortableColumn="reference">Reference <p-sortIcon field="reference"></p-sortIcon></th>
             <th pSortableColumn="description">Description <p-sortIcon field="description"></p-sortIcon></th>
-            <th pSortableColumn="dateStock">Date Stock<p-sortIcon field="dateStock"></p-sortIcon></th>
-            <th pSortableColumn="emplacement">Emplacement <p-sortIcon field="emplacement"></p-sortIcon></th>
+            <th pSortableColumn="dateCreation">Date Stock<p-sortIcon field="dateCreation"></p-sortIcon></th>
             <th pSortableColumn="etat">Etat <p-sortIcon field="etat"></p-sortIcon></th>
-            <th pSortableColumn="quantité">Quantité <p-sortIcon field="quantité"></p-sortIcon></th>
-            <th pSortableColumn="type">Stock Non laver <p-sortIcon field="type"></p-sortIcon></th>
-            <th>Action</th>
+            <th pSortableColumn="etat">Quantite Totale<p-sortIcon field="etat"></p-sortIcon></th>
+            <th pSortableColumn="emplacement">Quantite Refus<p-sortIcon field="emplacement"></p-sortIcon></th>
+            <th pSortableColumn="bandeSbnl">Sbnl <p-sortIcon field="bandeSbnl"></p-sortIcon></th>
 
+
+            <th></th>
           </tr>
         </ng-template>
-        <ng-template pTemplate="body" let-sbl >
+        <ng-template pTemplate="body" let-b >
           <tr >
             <td>
-              <p-tableCheckbox [value]="sbl"></p-tableCheckbox>
+              <p-tableCheckbox [value]="b"></p-tableCheckbox>
             </td>
             <td style="width:14%; min-width:10rem;"><span class="p-column-title">Id</span>
-              {{sbl.id}}
+              {{b.id}}
             </td>
             <td style="width:14%; min-width:10rem;">
               <span class="p-column-title">Reference</span>
-              {{sbl.reference}}
+              {{b.reference}}
             </td>
             <td style="width:14%; min-width:10rem;">
               <span class="p-column-title">Description</span>
-              {{sbl.description}}
-
+              {{b.description}}
 
             </td>
-
-
             <td style="width:14%; min-width:10rem;">
               <span class="p-column-title">Date Stock</span>
-              {{sbl.dateStock}}
+              {{b.dateStock}}
             </td>
 
-            <td style="width:14%; min-width:8rem;">
-              <span class="p-column-title">Emplacement</span>
-              {{sbl.emplacement}}
-            </td>
+
             <td style="width:14%; min-width:8rem;">
               <span class="p-column-title">Etat</span>
-              {{sbl.etat}}
+              {{b.etat}}
             </td>
             <td style="width:14%; min-width:8rem;">
-              <span class="p-column-title">Quantité</span>
-              {{sbl.quantite}}
+              <span class="p-column-title">Quantite Totale</span>
+              {{b.quantite}}
             </td>
             <td style="width:14%; min-width:8rem;">
-
-              <span class="p-column-title">Bande</span>
-              {{sbl.sblBande.reference }}
-              <span class="pi pi-eye text-primary cursor-pointer m-2" (click)="opSBL.toggle($event)"  ></span>
-              <p-overlayPanel #opSBL>
-
-                <label class="text-2xl">Réf : {{sbl.sblBande.reference}}</label><br>
-                <label class="text-2xl">Description : {{sbl.sblBande.description}}
+              <span class="p-column-title">Quantite Refus</span>
+              {{b.quantiteRefus}}
+            </td>
+            <td style="width:14%; min-width:8rem;" class="surface-overlay       ">
+              <span class="p-column-title">Sbnl</span>
+              {{b.bandeSbnl?.reference }}
+              <span class="pi pi-eye text-primary cursor-pointer m-2" (click)="opSBNL.toggle($event)"  ></span>
+              <p-overlayPanel #opSBNL>
+                <label class="text-2xl">Réf : {{b.bandeSbnl?.reference}}</label><br>
+                <label class="text-2xl">Description : {{b.bandeSbnl?.description}}
                 </label ><br>
-                <label class="text-2xl">Etat : {{sbl.sblBande.etat}}</label><br>
-                <label class="text-2xl">Quantité : {{sbl.sblBande.quantite}}</label><br>
-                <label class="text-2xl">Emplacement : {{sbl.sblBande.emplacement}}</label><br>
+                <label class="text-2xl">Etat : {{b.bandeSbnl?.etat}}</label><br>
+                <label class="text-2xl">Quantité : {{b.bandeSbnl?.quantite}}</label><br>
+                <label class="text-2xl">Emplacement : {{b.bandeSbnl?.emplacement}}</label><br>
               </p-overlayPanel>
+
+              <p-dialog [(visible)]="deleteProductDialog" header="Confirmer" [modal]="true" [style]="{width:'450px'}">
+                <div class="flex align-items-center justify-content-center">
+                  <i class="pi pi-exclamation-triangle mr-3" style="font-size: 2rem"></i>
+                  <span *ngIf="bande">Êtes-vous sûr de vouloir supprimer? <b>{{bande.reference}}</b>?</span>
+                </div>
+                <ng-template pTemplate="footer">
+                  <button pButton pRipple icon="pi pi-times" class="p-button-text" label="Non" (click)="deleteProductDialog = false"></button>
+                  <button pButton pRipple icon="pi pi-check" class="p-button-text" label="Oui" (click)="confirmDelete(b)"></button>
+                </ng-template>
+              </p-dialog>
+
             </td>
             <td>
               <div class="flex ">
-                <button pButton pRipple icon="pi pi-pencil" class="p-button-rounded p-button-success mr-2" (click)="editSbl(sbl)"></button>
-                <button pButton pRipple icon="pi pi-trash" class="p-button-rounded p-button-warning" (click)="deleteSbl(sbl)"></button>
-                <button pButton pRipple icon="pi pi-file-pdf" class="p-button-rounded p-button-primary mr-2"  (click)="exportrapport(sbl)"></button>
+                <button pButton pRipple icon="pi pi-pencil" class="p-button-rounded p-button-success mr-2" (click)="editBande(b)"></button>
+                <button pButton pRipple icon="pi pi-trash" class="p-button-rounded p-button-warning" (click)="deleteBande()"></button>
+                <button pButton pRipple icon="pi pi-file-pdf" class="p-button-rounded p-button-primary mr-2"  (click)="exportrapport(b)"></button>
 
               </div>
             </td>
@@ -110,53 +119,39 @@
       </p-table>
     </div>
 
-    <p-dialog [(visible)]="productDialog" [style]="{width: '450px'}" header="Nouveau stock lavé" [modal]="true" class="p-fluid">
+    <p-dialog [(visible)]="productDialog" [style]="{width: '450px'}" header="Nouveau stock bassin Non Lavé" [modal]="true" class="p-fluid">
       <ng-template pTemplate="content">
         <div class="field">
-          <label>Bande</label>
-          <p-dropdown [options]="bandes" [(ngModel)]="sbl.sblBande" [editable]="true" optionLabel="reference" class="w-full"></p-dropdown>
+          <label for="name">Sbnl</label>
+          <p-dropdown [options]="sbnls" [(ngModel)]="bande.bandeSbnl" [editable]="true" optionLabel="reference" class="w-full"></p-dropdown>
         </div>
         <div class="field">
-          <label for="reference">Reference</label>
-          <input type="text" pInputText id="reference"  [(ngModel)]="sbl.reference" required autofocus [ngClass]="{'ng-invalid ng-dirty' : submitted && !sbl.reference}"/>
-          <small class="ng-dirty ng-invalid" *ngIf="submitted && !sbl.reference">reference is required.</small>
+          <label for="name">Reference</label>
+          <input type="text" pInputText id="name"  [(ngModel)]="bande.reference" required autofocus [ngClass]="{'ng-invalid ng-dirty' : submitted && !bande.reference}"/>
         </div>
         <div class="field">
           <label for="Description">Description</label>
-          <input type="text" pInputText id="Description"  [(ngModel)]="sbl.description" required autofocus [ngClass]="{'ng-invalid ng-dirty' : submitted && !sbl.description}"/>
-          <small class="ng-dirty ng-invalid" *ngIf="submitted && !sbl.description">Pseudo is required.</small>
+          <input type="text" pInputText id="Description"  [(ngModel)]="bande.description" required autofocus [ngClass]="{'ng-invalid ng-dirty' : submitted && !bande.description}"/>
         </div>
 
         <div class="field">
-          <label for="dateStock">Date Stock</label>
-          <p-calendar dateFormat="yy-mm-dd" id="dateStock" [(ngModel)]="sbl.dateStock"  [ngClass]="{'ng-invalid ng-dirty' : submitted && !sbl.dateStock}" [showIcon]="true"></p-calendar>
-          <small class="ng-dirty ng-invalid" *ngIf="submitted && !sbl.dateStock">poste is required.</small>
+          <label for="dateCreation">Date Stock</label>
+          <p-calendar dateFormat="yy-mm-dd" id="dateCreation" [(ngModel)]="bande.dateStock"  [ngClass]="{'ng-invalid ng-dirty' : submitted && !bande.dateStock}" [showIcon]="true"></p-calendar>
         </div>
-
-        <div class="field">
-
-          <label for="emplacement">Emplacement</label>
-          <input type="text" pInputText id="emplacement"  [(ngModel)]="sbl.emplacement" required autofocus [ngClass]="{'ng-invalid ng-dirty' : submitted && !sbl.emplacement}"/>
-          <small class="ng-dirty ng-invalid" *ngIf="submitted && !sbl.emplacement">Telephone is required.</small>
-        </div>
-
 
 
         <div class="field">
           <label for="etat">Etat</label>
-          <input type="text" pInputText id="etat"  [(ngModel)]="sbl.etat" required autofocus [ngClass]="{'ng-invalid ng-dirty' : submitted && !sbl.etat}"/>
-          <small class="ng-dirty ng-invalid" *ngIf="submitted && !sbl.etat">Telephone is required.</small>
+          <input type="text" pInputText id="etat"  [(ngModel)]="bande.etat" required autofocus [ngClass]="{'ng-invalid ng-dirty' : submitted && !bande.etat}"/>
         </div>
         <div class="field">
-          <label for="quantite">Quantité</label>
-          <p-inputNumber Id="quantite" mode="decimal" [minFractionDigits]="3" [(ngModel)]="sbl.quantite"   [ngClass]="{'ng-invalid ng-dirty' : submitted && !sbl.quantite}" ></p-inputNumber>
-
-           <small class="ng-dirty ng-invalid" *ngIf="submitted && !sbl.etat">Telephone is required.</small>
+          <label for="quantite">Quantite Totale</label>
+          <p-inputNumber Id="quantite" mode="decimal" [minFractionDigits]="3" [(ngModel)]="bande.quantite"  [ngClass]="{'ng-invalid ng-dirty' : submitted && !bande.quantite}" ></p-inputNumber>
         </div>
-
-
-
-
+        <div class="field">
+          <label for="quantiterefus">Quantite Refus</label>
+          <p-inputNumber Id="quantiterefus"  mode="decimal"  [(ngModel)]="bande.quantiteRefus"  [ngClass]="{'ng-invalid ng-dirty' : submitted && !bande.quantiteRefus}"></p-inputNumber>
+        </div>
 
       </ng-template>
 
@@ -165,29 +160,20 @@
 
       <ng-template pTemplate="footer">
         <button pButton pRipple label="Annuler" icon="pi pi-times" class="p-button-text" (click)="hideDialog()"></button>
-        <button pButton pRipple label="Ajouter" icon="pi pi-check" class="p-button-text" (click)="saveSbl()"></button>
+        <button pButton pRipple label="Ajouter" icon="pi pi-check" class="p-button-text" (click)="saveBande()"></button>
       </ng-template>
     </p-dialog>
 
-    <p-dialog [(visible)]="deleteProductDialog" header="Confirmer" [modal]="true" [style]="{width:'450px'}">
-      <div class="flex align-items-center justify-content-center">
-        <i class="pi pi-exclamation-triangle mr-3" style="font-size: 2rem"></i>
-        <span *ngIf="product">Êtes-vous sûr de vouloir supprimer? <b>{{product.name}}</b>?</span>
-      </div>
-      <ng-template pTemplate="footer">
-        <button pButton pRipple icon="pi pi-times" class="p-button-text" label="Non" (click)="deleteProductDialog = false"></button>
-        <button pButton pRipple icon="pi pi-check" class="p-button-text" label="Oui" (click)="confirmDelete()"></button>
-      </ng-template>
-    </p-dialog>
+
 
     <p-dialog [(visible)]="deleteProductsDialog" header="Confirm" [modal]="true" [style]="{width:'450px'}">
       <div class="flex align-items-center justify-content-center">
         <i class="pi pi-exclamation-triangle mr-3" style="font-size: 2rem"></i>
-        <span>Voulez-vous vraiment supprimer ?</span>
+        <span>Voulez-vous vraiment supprimer  sélectionnés ?</span>
       </div>
       <ng-template pTemplate="footer">
-        <button pButton pRipple icon="pi pi-times" class="p-button-text" label="Non" (click)="deleteProductsDialog = false"></button>
-        <button pButton pRipple icon="pi pi-check" class="p-button-text" label="Oui" (click)="confirmDeleteSelected()"></button>
+        <button pButton pRipple icon="pi pi-times" class="p-button-text" label="No" (click)="deleteProductsDialog = false"></button>
+        <button pButton pRipple icon="pi pi-check" class="p-button-text" label="Yes" (click)="confirmDeleteSelected()"></button>
       </ng-template>
     </p-dialog>
   </div>
@@ -216,11 +202,11 @@
     </div>
     <br>
     <div class="shadow-1 p-2 gap-1 text-3xl flex inline-flex justify-content-evenly" >Filtrage Granulométrique  :<br>
-      <p-listbox [options]="getAnalyseGranoli()" [(ngModel)]="SelectedsbnlPrintAnalyse" optionLabel="reference" [filter]="true" [style]="{ width: '15rem' }" [listStyle]="{'max-height': '220px'}"></p-listbox>
-      <div *ngIf="SelectedsbnlPrintAnalyse.hasOwnProperty('id')" class="p-2">
-        <label class="text-2xl font-bold">Reference  :</label><span class="ml-2 text-2xl">{{SelectedsbnlPrintAnalyse.dateAnalyse}}</span><br>
-        <label class="text-2xl font-bold">Relative :</label><span class=" ml-2 text-2xl">{{SelectedsbnlPrintAnalyse.matiere}}</span><br>
-        <label class="text-2xl font-bold">Temperature :</label><span class=" ml-2 text-2xl">{{SelectedsbnlPrintAnalyse.temperature}} °C</span><br>
+      <p-listbox [options]="getAnalyseGranoli()" [(ngModel)]="SelectedBandePrintAnalyse" optionLabel="reference" [filter]="true" [style]="{ width: '15rem' }" [listStyle]="{'max-height': '220px'}"></p-listbox>
+      <div *ngIf="SelectedBandePrintAnalyse.hasOwnProperty('id')" class="p-2">
+        <label class="text-2xl font-bold">Reference  :</label><span class="ml-2 text-2xl">{{SelectedBandePrintAnalyse.dateAnalyse}}</span><br>
+        <label class="text-2xl font-bold">Relative :</label><span class=" ml-2 text-2xl">{{SelectedBandePrintAnalyse.matiere}}</span><br>
+        <label class="text-2xl font-bold">Temperature :</label><span class=" ml-2 text-2xl">{{SelectedBandePrintAnalyse.temperature}} °C</span><br>
       </div>
     </div>
   </div>
@@ -229,15 +215,15 @@
   <div #pdfpuit class="pt-8 pl-4 pr-4">
     <img src="assets/layout/images/logo.png">
     <div class="row justify-content-end font-bold flex text-1xl"> Creation date: <span class=" text-1xl font-bold  pi pi-calendar ">{{dateToday | date :"yyyy-MM-dd"}}</span></div>
-    <div class="row    font-bold flex text-1xl   "> Identification :<span class=" text-1xl font-bold   "> {{Selectetsbl.reference}}</span></div>
+    <div class="row    font-bold flex text-1xl   "> Identification :<span class=" text-1xl font-bold   "> {{selectedBande.reference}}</span></div>
 
     <div class="row   text-8xl font-bold text-center m-2 p-3" > Analysis Report </div>
     <div class="mt-5 mb-5">
 
       <label class="font-bold text-5xl  ">Chemical analysis</label>
       <br><br><br><br>
-      <label class="text-2xl font-bold">Reference  :</label><span class="ml-2 text-2xl">{{Selectetsbl.reference}}</span><br>
-      <label class="text-2xl font-bold">Date creation :</label><span class=" ml-2 text-2xl">{{Selectetsbl.dateStock}}</span><br>
+      <label class="text-2xl font-bold">Reference  :</label><span class="ml-2 text-2xl">{{selectedBande.reference}}</span><br>
+      <label class="text-2xl font-bold">Date creation :</label><span class=" ml-2 text-2xl">{{selectedBande.dateStock}}</span><br>
 
     </div>
 
@@ -258,29 +244,6 @@
             <th>{{ c.header }}</th>
           </ng-container>
 
-
-          <!--       <th>-->
-          <!--         <p-columnFilter type="date" field="dateAnalyse" display="menu"></p-columnFilter>-->
-
-          <!--         Date Analyse</th>-->
-
-
-          <!--        <th>Temperature °C</th>-->
-          <!--        <th>wind (km/h)</th>-->
-          <!--        <th>humidity  </th>-->
-          <!--        <th>Densite (g/cm 3)</th>-->
-          <!--        <th>Suspended Matter (g)</th>-->
-          <!--        <th>Salimite (psu)</th>-->
-          <!--        <th>Calcium (mmol/L)</th>-->
-          <!--        <th>Magnesium (g)</th>-->
-          <!--        <th>Sulfate (g)</th>-->
-          <!--        <th>Insoluble matter (g)</th>-->
-          <!--        <th>Potassium (mmol/L)</th>-->
-          <!--        <th>Sodium (mmol)</th>-->
-          <!--        <th>Chlorure (meq · L–1)</th>-->
-          <!--        <th>pH</th>-->
-          <!--        <th>sodium chloride (g)</th>-->
-          <!--        <th>Ferrocyanure (g/mol)</th>-->
 
         </tr>
       </ng-template>
@@ -315,10 +278,10 @@
     <label class="font-bold top-5 text-5xl">Grain Size</label>
     <br><br><br><br>
     <div class=" top-5 bottom-5">
-      <label class="text-2xl font-bold">Date   :</label><span class="ml-2 text-2xl">{{SelectedsbnlPrintAnalyse.dateAnalyse}}</span><br>
-      <label class="text-2xl font-bold">Reference  :</label><span class="ml-2 text-2xl">{{SelectedsbnlPrintAnalyse.reference}}</span><br>
-      <label class="text-2xl font-bold">Relative :</label><span class=" ml-2 text-2xl">{{SelectedsbnlPrintAnalyse.matiere}}</span><br>
-      <label class="text-2xl font-bold">Temperature :</label><span class=" ml-2 text-2xl">{{SelectedsbnlPrintAnalyse.temperature}} °C</span><br>
+      <label class="text-2xl font-bold">Date   :</label><span class="ml-2 text-2xl">{{SelectedBandePrintAnalyse.dateAnalyse}}</span><br>
+      <label class="text-2xl font-bold">Reference  :</label><span class="ml-2 text-2xl">{{SelectedBandePrintAnalyse.reference}}</span><br>
+      <label class="text-2xl font-bold">Relative :</label><span class=" ml-2 text-2xl">{{SelectedBandePrintAnalyse.matiere}}</span><br>
+      <label class="text-2xl font-bold">Temperature :</label><span class=" ml-2 text-2xl">{{SelectedBandePrintAnalyse.temperature}} °C</span><br>
     </div>
     <br><br><br>
     <p-table class=" " #dt [value]="getTamisFiltred()" [columns]="cols"  responsiveLayout="scroll"       dataKey="id">
@@ -376,3 +339,4 @@
     <p-button icon="pi pi-file-pdf" (click)="SavePDF()" class="text-green-50" label="PDF" pAutoFocus [autofocus]="true"  ></p-button>
   </ng-template>
 </p-dialog>
+

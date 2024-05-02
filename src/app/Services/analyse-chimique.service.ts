@@ -9,6 +9,7 @@ import {Bassin} from "../Models/bassin";
 import {Sbnl} from "../Models/sbnl";
 import {Sbl} from "../Models/sbl";
 import {Sblf} from "../Models/sblf";
+import {Bande} from "../Models/bande";
 
 @Injectable({
   providedIn: 'root'
@@ -54,6 +55,9 @@ export class AnalyseChimiqueService {
 
   addAnalyseChimiqueToSbnl(sbnl:Sbnl) : Observable<void>{
     return this.http.put<void>(`${this.apiUrl}/analysechimiques/Addanalyse/sbnl`, sbnl);
+  }
+  addAnalyseChimiqueToBande(bande:Bande) : Observable<void>{
+    return this.http.put<void>(`${this.apiUrl}/analysechimiques/Addanalyse/bande`, bande);
   }
   addAnalyseChimiqueToSbl(sbl:Sbl) : Observable<void>{
     return this.http.put<void>(`${this.apiUrl}/analysechimiques/Addanalyse/sbl`, sbl);
