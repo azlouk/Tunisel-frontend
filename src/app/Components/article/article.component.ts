@@ -12,23 +12,25 @@ import {ToolbarModule} from "primeng/toolbar";
 import {Article} from "../../Models/article";
 import {ArticleService} from "../../Services/article.service";
 import {Unite} from "../../Enum/unite";
+import {ListboxModule} from "primeng/listbox";
 
 @Component({
   selector: 'app-article',
   standalone: true,
-  imports: [
-    ButtonModule,
-    CalendarModule,
-    DialogModule,
-    InputTextModule,
-    NgIf,
-    PaginatorModule,
-    SharedModule,
-    TableModule,
-    ToastModule,
-    ToolbarModule,
-    NgClass
-  ],
+    imports: [
+        ButtonModule,
+        CalendarModule,
+        DialogModule,
+        InputTextModule,
+        NgIf,
+        PaginatorModule,
+        SharedModule,
+        TableModule,
+        ToastModule,
+        ToolbarModule,
+        NgClass,
+        ListboxModule
+    ],
   templateUrl: './article.component.html',
   styleUrl: './article.component.css'
 })

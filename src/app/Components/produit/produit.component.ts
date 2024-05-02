@@ -17,6 +17,7 @@ import {ProduitService} from "../../Services/produit.service";
 import {Article} from "../../Models/article";
 import {ArticleService} from "../../Services/article.service";
 import {Bassin} from "../../Models/bassin";
+import {ListboxModule} from "primeng/listbox";
 
 @Component({
   selector: 'app-produit',
@@ -33,7 +34,8 @@ import {Bassin} from "../../Models/bassin";
     ToastModule,
     ToolbarModule,
     NgClass,
-    CalendarModule
+    CalendarModule,
+    ListboxModule
   ],
   templateUrl: './produit.component.html',
   styleUrl: './produit.component.css'

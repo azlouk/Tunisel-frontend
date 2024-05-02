@@ -91,6 +91,7 @@ export class AjouterInventaireComponent implements OnInit{
     this.sourceProduits=[];
     this.produitService.getProduit().subscribe(value => {
       this.sourceProduits=[...value]
+
       this.listeProduits=[...value] ;
       this.cdr.markForCheck();
       console.log('=============>>>>>>>>    '+new JsonPipe().transform(this.sourceProduits))

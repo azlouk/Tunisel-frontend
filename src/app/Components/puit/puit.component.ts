@@ -296,8 +296,6 @@ this.ReportedBy=this.Loginservice.getToken()
   public SavePDF(): void {
 
     if (this.htmlContent) {
-      let datahtml = '';
-
       html2canvas(this.htmlContent.nativeElement, {scale: 1}).then((canvas) => {
         const imgData = canvas.toDataURL('image/png');
         const pdf = new jsPDF('p', 'mm', 'a4');

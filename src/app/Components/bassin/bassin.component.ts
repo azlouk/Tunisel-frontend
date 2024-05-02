@@ -31,6 +31,7 @@ import html2canvas from "html2canvas";
 import jsPDF from "jspdf";
 import {CheckboxModule} from "primeng/checkbox";
 import {ListboxModule} from "primeng/listbox";
+import {AutoFocusModule} from "primeng/autofocus";
 
 @Component({
   selector: 'app-bassin',
@@ -55,7 +56,7 @@ import {ListboxModule} from "primeng/listbox";
     MultiSelectModule,
     DatePipe,
     CheckboxModule,
-    ListboxModule,CommonModule
+    ListboxModule, CommonModule, AutoFocusModule
   ],
   templateUrl: './bassin.component.html',
   styleUrl: './bassin.component.css'

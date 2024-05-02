@@ -39,7 +39,7 @@
         <p-dialog [(visible)]="visibale" [style]="{width: '1500px'}" header="Ajouter Produits"  [modal]="true" class="p-fluid">
 
           <div class="card">
-            <p-pickList [source]="sourceProduits" [target]="targetProduits" sourceHeader="Stock" targetHeader="Selected" [dragdrop]="true" [responsive]="true" [sourceStyle]="{ height: '150rem' }"
+            <p-pickList [source]="sourceProduits" [target]="targetProduits" sourceHeader="Stock disponible" targetHeader="Stock à inventorier" [dragdrop]="true" [responsive]="true" [sourceStyle]="{ height: '150rem' }"
                         [targetStyle]="{ height: '30rem' }" filterBy="nom" sourceFilterPlaceholder="Recherche par nom" targetFilterPlaceholder="Recherche par nom" breakpoint="1400px">
               <ng-template let-product pTemplate="item">
                 <div class="flex flex-column gap-3 mt-4">

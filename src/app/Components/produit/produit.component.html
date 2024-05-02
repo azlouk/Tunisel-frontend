@@ -90,7 +90,7 @@
       </p-table>
     </div>
 
-    <p-dialog [(visible)]="productDialog" [style]="{width: '450px' , height:'600px'}" header="details de produit" [modal]="true" class="p-fluid">
+    <p-dialog [(visible)]="productDialog" [style]="{width: '450px' , height:'700px'}" header="Nouveau produit" [modal]="true" class="p-fluid">
       <ng-template pTemplate="content">
         <div class="field">
           <label for="nom">Nom</label>
@@ -115,9 +115,10 @@
           <small class="ng-dirty ng-invalid" *ngIf="submitted && !produit.reference">Pseudo is required.</small>
         </div>
 
-        <div class="field">
-          <p-dropdown [options]="articles" [(ngModel)]="produit.article" optionLabel="nom" [showClear]="true" placeholder="Select a Article"></p-dropdown>
-          <small class="ng-dirty ng-invalid" *ngIf="submitted && !produit.article">Pseudo is required.</small>
+        <div class="field  ">
+          <label for="reference">Article </label>
+           <small class="ng-dirty ng-invalid" *ngIf="submitted && !produit.article">Article obligatoire</small>
+          <p-listbox [options]="articles" [(ngModel)]="produit.article" optionLabel="nom" [filter]="true" [style]="{ width: 'auto' }" [listStyle]="{'max-height': '120px'}"></p-listbox>
 
         </div>
 
