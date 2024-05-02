@@ -24,6 +24,7 @@ import {AuthGuard} from "./guard/AuthGuard";
 import {AjouterInventaireComponent} from "./Components/ajouter-inventaire/ajouter-inventaire.component";
 // import {ProduitDefectueuxComponent} from "./Components/produit-defectueux/produit-defectueux.component";
 import {ArticleComponent} from "./Components/article/article.component";
+import {BandeComponent} from "./Components/bande/bande.component";
 import {ProduitComponent} from "./Components/produit/produit.component";
 
 export const routes: Routes = [
@@ -34,6 +35,7 @@ export const routes: Routes = [
   {path:'bassins', component:BassinComponent, canActivate:[AuthGuard]},
   {path:'sbls', component:SblComponent, canActivate:[AuthGuard]},
   {path:'sbnls', component:SbnlComponent, canActivate:[AuthGuard]},
+  {path:'bandes', component:BandeComponent, canActivate:[AuthGuard]},
   {path:'sblfs', component:SblfComponent, canActivate:[AuthGuard]},
   {path:'login', component:LoginComponent},
   {path:'sblfs', component:SblfComponent, canActivate:[AuthGuard]},
@@ -52,7 +54,6 @@ export const routes: Routes = [
   {path:'articles', component:ArticleComponent, canActivate:[AuthGuard]},
   // {path:'produitdefectueux', component:ProduitDefectueuxComponent,  canActivate:[AuthGuard]},
   {path:'ajouterInventaire', component:AjouterInventaireComponent,  canActivate:[AuthGuard]},
-  {path:'ajouterInventaire', component:AjouterInventaireComponent , canActivate:[AuthGuard]},
   {path:'produit', component:ProduitComponent , canActivate:[AuthGuard]},
   {path:'editInventaire/:id', component:AjouterInventaireComponent,  canActivate:[AuthGuard]},
 ];

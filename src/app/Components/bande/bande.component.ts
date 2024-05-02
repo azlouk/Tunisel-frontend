@@ -1,56 +1,65 @@
-import {Component, ElementRef, Input, OnInit, ViewChild} from '@angular/core';
+import {Component, ElementRef, Input, ViewChild} from '@angular/core';
 import {ButtonModule} from "primeng/button";
 import {CalendarModule} from "primeng/calendar";
+import {CheckboxModule} from "primeng/checkbox";
+import {CommonModule, DatePipe, JsonPipe, NgClass, NgForOf, NgIf} from "@angular/common";
 import {DialogModule} from "primeng/dialog";
+import {DropdownModule} from "primeng/dropdown";
+import {InputNumberModule} from "primeng/inputnumber";
 import {InputTextModule} from "primeng/inputtext";
-import {CommonModule, DatePipe, JsonPipe, NgClass, NgIf} from "@angular/common";
+import {ListboxModule} from "primeng/listbox";
+import {OverlayPanelModule} from "primeng/overlaypanel";
 import {PaginatorModule} from "primeng/paginator";
 import {MessageService, SharedModule} from "primeng/api";
 import {Table, TableModule} from "primeng/table";
 import {ToastModule} from "primeng/toast";
 import {ToolbarModule} from "primeng/toolbar";
 import {Product} from "../../Models/product";
-import {ProductService} from "../../Services/product.service";
-import {Sbl} from "../../Models/sbl";
-import {SblService} from "../../Services/sbl.service";
 import {Sbnl} from "../../Models/sbnl";
+import {ProductService} from "../../Services/product.service";
 import {SbnlService} from "../../Services/sbnl.service";
-import {OverlayPanelModule} from "primeng/overlaypanel";
 import {AnalysesChimique} from "../../Models/analyses-chimique";
 import {AnalysesPhysique} from "../../Models/analyses-physique";
 import {Tamis} from "../../Models/tamis";
 import html2canvas from "html2canvas";
 import jsPDF from "jspdf";
-import {CheckboxModule} from "primeng/checkbox";
-import {ListboxModule} from "primeng/listbox";
 import {Bande} from "../../Models/bande";
 import {BandeService} from "../../Services/bande.service";
+import {AutoFocusModule} from "primeng/autofocus";
+import {PasswordModule} from "primeng/password";
+import {RadioButtonModule} from "primeng/radiobutton";
+import {error} from "@angular/compiler-cli/src/transformers/util";
+import Swal from "sweetalert2";
 
 @Component({
-  selector: 'app-sbl',
+  selector: 'app-bande',
   standalone: true,
   imports: [
     ButtonModule,
-    CalendarModule,
     DialogModule,
-    InputTextModule,
     NgIf,
     PaginatorModule,
+    PasswordModule,
+    RadioButtonModule,
     SharedModule,
     TableModule,
     ToastModule,
     ToolbarModule,
+    CalendarModule,
+    InputTextModule,
     NgClass,
     OverlayPanelModule,
+    DatePipe,
     CheckboxModule,
+    CommonModule,
     ListboxModule,
-    DatePipe,    CommonModule,
+    AutoFocusModule
 
   ],
-  templateUrl: './sbl.component.html',
-  styleUrl: './sbl.component.css'
+  templateUrl: './bande.component.html',
+  styleUrl: './bande.component.css'
 })
-export class SblComponent implements OnInit{
+export class BandeComponent {
   productDialog: boolean = false;
 
   deleteProductDialog: boolean = false;
@@ -61,24 +70,24 @@ export class SblComponent implements OnInit{
 
   product: Product = {};
 
-  selectedProducts: Product[] = [];
 
   submitted: boolean = false;
 
   cols: any[] = [];
 
-  statuS: any[] = [];
+  statuses: any[] = [];
 
   rowsPerPageOptions = [5, 10, 20];
   // ======********============
-  sbls: Sbl[] = [];
-
-  sbl:Sbl={};
-
-  selectedSbls: Sbl[] = [];
   bandes: Bande[] = [];
-  Selectetsbl:Sbl={}
-  private isUpdateSbl=false;
+
+  bande:Bande={};
+
+  selectedBandes: Bande[] = [];
+  selectedBande:Bande={}
+  private isUpdatebande=false;
+  sbnls: Sbnl[] = [];
+
 
   @ViewChild("pdfpuit") htmlContent: ElementRef | undefined;
   visiblePrint: boolean = false;
@@ -90,7 +99,7 @@ export class SblComponent implements OnInit{
   @Input() get selectedColumns(): any[] {
     return this._selectedColumns;
   }
-  constructor(private productService: ProductService, private messageService: MessageService,private sblService :SblService,private bandeService:BandeService) {}
+  constructor(private productService: ProductService, private messageService: MessageService,private sbnlService :SbnlService,private bandeService:BandeService) {}
 
   ngOnInit() {
     this.colsfiltre = [
@@ -115,7 +124,7 @@ export class SblComponent implements OnInit{
     ];
 
     this._selectedColumns = this.colsfiltre;
-    this.getAllSbl() ;
+    this.getBande()
     this.cols = [
       { field: 'id', header: 'id' },
       { field: 'reference', header: 'reference' },
@@ -131,55 +140,62 @@ export class SblComponent implements OnInit{
   }
 
   openNew() {
-    this.sbl ;
+    this.bande;
     this.submitted = false;
     this.productDialog = true;
   }
 
-  deleteSelectedSbls() {
+  deleteSelectedBandes() {
 
     this.deleteProductsDialog = true;
 
   }
 
-  editSbl(sbl: Sbl) {
-    this.isUpdateSbl=true;
-    this.sbl= {...sbl} ;
+  editBande(bande: Bande) {
+    this.isUpdatebande=true;
+
+
+    this.bande = { ...bande };
     this.productDialog = true;
   }
 
-  deleteSbl(sbl: Sbl) {
+  deleteBande() {
     this.deleteProductDialog = true;
-    this.sbl= {...sbl} ;
+
+
   }
 
   confirmDeleteSelected() {
     this.deleteProductsDialog = false;
-    console.log(this.selectedSbls.length)
-    this.selectedSbls.forEach(selectedSbl => {
-      this.sblService.deleteSbl(selectedSbl.id).subscribe(
+    console.log(this.selectedBandes.length)
+    this.selectedBandes.forEach(selectedBande => {
+      this.bandeService.deleteBande(selectedBande.id).subscribe(
         () => {
-          this.sbls = this.sbls.filter(sbl =>sbl.id !== selectedSbl.id);
+          this.bandes = this.bandes.filter(bande =>bande.id !== selectedBande.id);
         },
         (error) => {
-          console.error('Error deleting Sbl:', error);
+          console.error('Error deleting bande:', error);
         }
       );
     });
 
-    this.messageService.add({ severity: 'success', summary: 'Successful', detail: 'Sbl Deleted', life: 3000 });
-    this.selectedSbls = [];
+    this.messageService.add({ severity: 'success', summary: 'réussi', detail: 'Bande Supprimer', life: 3000 });
+    this.selectedBandes = [];
   }
 
-  confirmDelete() {
+  confirmDelete(bande :Bande) {
     this.deleteProductDialog = false;
-    console.log("this.sbl.id", this.sbl.id);
-    this.sbls = this.sbls.filter(val => val.id !== this.sbl.id);
-    if (this.sbl.id!= null) {
-      this.sblService.deleteSbl(this.sbl.id).subscribe(() => console.log("Sbl deleted"));
+
+    if (bande.id!= null) {
+      this.bandeService.deleteBande(bande.id).subscribe(() => { this.bandes = this.bandes.filter(val => val.id !== bande.id);
+        console.log("bande deleted")
+        this.messageService.add({ severity: 'success', summary: 'réussi', detail: 'Bande Supprimer', life: 3000 });
+
+      },error1 => {
+        Swal.fire({title:"Erreur",icon:"error", text:"SVP   supprimer stock laver puis tout  les analyses (Chimique et granulométrique) "})
+      });
     }
-    this.messageService.add({ severity: 'success', summary: 'Successful', detail: 'Sbl Deleted', life: 3000 });
-    this.sbl ;
+
   }
 
   hideDialog() {
@@ -187,30 +203,24 @@ export class SblComponent implements OnInit{
     this.submitted = false;
   }
 
-  saveSbl() {
+  saveBande() {
     this.submitted = false;
     this.productDialog=false
-    if(this.isUpdateSbl==true) {
-      this.sblService.updateSbl(this.sbl).subscribe(() =>{
-        this.sblService.getAllSbl().subscribe((sbls: Sbl[]) => {
-          this.sbls = sbls;
 
-        });
+    if(this.isUpdatebande==true) {
+      this.bandeService.updateBande(this.bande).subscribe(() =>{
+        this.getBande();
       });
-      console.log('Sbl updated');
-      this.isUpdateSbl=false;
+      console.log('Bande updated');
+      this.isUpdatebande=false;
     }
     else
     {
-      this.sblService.addSbl(this.sbl).subscribe(() => {
-        this.sblService.getAllSbl().subscribe((sbls: Sbl[]) => {
-          this.sbls = sbls;
-        });
-      });
-      console.log('Sbl added');
+      this.bandeService.addBande(this.bande).subscribe(() => {this.getBande();});
+
+
     }
   }
-
 
 
 
@@ -219,39 +229,33 @@ export class SblComponent implements OnInit{
     table.filterGlobal((event.target as HTMLInputElement).value, 'contains');
   }
 
-
-
-  getAllSbl() {
-    this.sblService.getAllSbl().subscribe((v:  Sbl[]) => {
-      this.sbls=v;
-      // console.log(new JsonPipe().transform("====================>>>>>>"+this.sbls))
-
-    },error => {
-      console.log(error)})
-    this.bandeService.getAllBandes().subscribe((v:  Sbnl[]) => {
+  getBande() {
+    this.bandeService.getAllBandes().subscribe((v:  Bande[]) => {
       this.bandes=v;
 
     },error => {
       console.log(error)})
+    this.sbnlService.getAllSbnls()
+      .subscribe((sbnls: Sbnl[]) => {
+        this.sbnls = sbnls;
+      }, error => {
+        console.log('Error fetching users:', error);
+      });
   }
 
-
-  exportrapport(Sbl: Sbl) {
-
-    this.Selectetsbl = Sbl;
+  exportrapport(bande: Bande) {
+console.log('=====>>>>> export: ',new JsonPipe().transform(bande))
+    this.selectedBande = bande;
     this.visiblePrint = true
-    console.log("---->"+new JsonPipe().transform(this.Selectetsbl));
+    console.log("---->"+new JsonPipe().transform(this.selectedBande));
   }
-
-
 
 
   filtredate() {
     this.Viderfiltredate()
-    const data=this.Selectetsbl.analysesChimiques !== undefined ? this.Selectetsbl.analysesChimiques : []
+    const data=this.selectedBande.analysesChimiques !== undefined ? this.selectedBande.analysesChimiques : []
     const newAnalyse:AnalysesChimique[] =[]
     data.forEach(v => {
-
       if(v.dateAnalyse!==undefined){
         console.log(typeof v.dateAnalyse )
         const d=v.dateAnalyse+"";
@@ -262,15 +266,9 @@ export class SblComponent implements OnInit{
         } else {
           console.log("no compare")
         }
-
-
       }
-
     })
-    this.Selectetsbl.analysesChimiques=[...newAnalyse] ;
-    // console.log(new JsonPipe().transform(data))
-
-
+    this.selectedBande.analysesChimiques=[...newAnalyse] ;
 
   }
 
@@ -280,24 +278,24 @@ export class SblComponent implements OnInit{
 
   Viderfiltredate() {
 
-    this.sblService.getAllSbl().subscribe((sbl: Sbl[]) => {
-      this.sbls = sbl;
+    this.bandeService.getAllBandes().subscribe((bande: Bande[]) => {
+      this.bandes = bande;
 
-      const sblsbl: Sbl | undefined = this.sbls.find(value => this.Selectetsbl.id == value.id)
-      if (sblsbl)
-        this.Selectetsbl = sblsbl;
+      const bandeBande: Bande | undefined = this.bandes.find(value => this.selectedBande.id == value.id)
+      if (bandeBande)
+        this.selectedBande = bandeBande;
 
     });
   }
 
   getAnalyse() {
-    return this.Selectetsbl.analysesPhysiques !== undefined ? this.Selectetsbl.analysesPhysiques : []
+
+    return this.selectedBande.analysesChimiques !== undefined ? this.selectedBande.analysesChimiques : []
   }
   getAnalyseGranoli() {
-    const data=this.Selectetsbl.analysesPhysiques !== undefined ? this.Selectetsbl.analysesPhysiques : []
+    const data=this.selectedBande.analysesPhysiques !== undefined ? this.selectedBande.analysesPhysiques : []
     const newAnalyse:AnalysesPhysique[] =[]
     data.forEach(v => {
-
       if(v.dateAnalyse!==undefined){
         console.log(typeof v.dateAnalyse )
         const d=v.dateAnalyse+"";
@@ -305,22 +303,23 @@ export class SblComponent implements OnInit{
         console.log("-D-->" + dateana)
         if (  this.AfterTodate(this.DatefiltrageStart,dateana) &&  this.AfterTodate(dateana,this.DatefiltrageEnd)) {
           newAnalyse.push(v);
+          console.log('ffffffffffff: ',v)
         } else {
           console.log("no compare")
         }
-
       }
-
     })
-    this.Selectetsbl.analysesPhysiques=[...newAnalyse] ;
+    console.log('getAnalysePH: ',new JsonPipe().transform(newAnalyse))
 
-    return this.Selectetsbl.analysesPhysiques !== undefined ? this.Selectetsbl.analysesPhysiques : []
+    this.selectedBande.analysesPhysiques=[...newAnalyse] ;
+    // console.log('getAnalysePH: ',new JsonPipe().transform(this.selectedBande.analysesPhysiques))
+    return this.selectedBande.analysesPhysiques !== undefined ? this.selectedBande.analysesPhysiques : []
   }
 
 
   colsfiltre: any[] = [];
   ListTamisSelected: Tamis={};
-  SelectedsbnlPrintAnalyse: AnalysesPhysique={};
+  SelectedBandePrintAnalyse: AnalysesPhysique={};
   getColsfiltr() {
     return this.colsfiltre.filter(value => value.hide==true)
   }
@@ -340,20 +339,16 @@ export class SblComponent implements OnInit{
         pdf.addImage(imgData, 'png', 2, 2, imgWidth, imgHeight);
         pdf.save('Print_' + Math.random() + '.pdf');
       });
-
-
     }
-
-
   }
 
 
   getTamisFiltred() {
-    return this.SelectedsbnlPrintAnalyse.tamisList==undefined?[]:this.SelectedsbnlPrintAnalyse.tamisList
+    return this.SelectedBandePrintAnalyse.tamisList==undefined?[]:this.SelectedBandePrintAnalyse.tamisList
   }
+
   AfterTodate(date1:Date , date2:Date):boolean{
     console.log(date1+"<"+date2)
     return date1.getDay()<=date2.getDay() && date1.getMonth()<=date2.getMonth() && date1.getFullYear()<=date2.getFullYear()
   }
-
 }

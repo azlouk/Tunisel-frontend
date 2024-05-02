@@ -9,6 +9,7 @@ import {Sbnl} from "../Models/sbnl";
 import {Sbl} from "../Models/sbl";
 import {Sblf} from "../Models/sblf";
 import {AnalysesPhysique} from "../Models/analyses-physique";
+import {Bande} from "../Models/bande";
 
 @Injectable({
   providedIn: 'root'
@@ -47,6 +48,9 @@ export class AnalysePhysiqueService {
 
   addAnalysesPhysiquesToSbnl(sbnl:Sbnl) : Observable<void>{
     return this.http.put<void>(`${this.apiUrl}/analysesPhysiques/AddanalysePhysique/sbnl`, sbnl);
+  }
+  addAnalysesPhysiquesToBande(bande:Bande) : Observable<void>{
+    return this.http.put<void>(`${this.apiUrl}/analysesPhysiques/AddanalysePhysique/bande`, bande);
   }
   addAnalysesPhysiquesToSbl(sbl:Sbl) : Observable<void>{
     return this.http.put<void>(`${this.apiUrl}/analysesPhysiques/AddanalysePhysique/sbl`, sbl);
