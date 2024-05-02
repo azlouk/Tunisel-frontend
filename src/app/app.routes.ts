@@ -23,6 +23,7 @@ import {LoginComponent} from "./Components/login/login.component";
 import {AjouterInventaireComponent} from "./Components/ajouter-inventaire/ajouter-inventaire.component";
 import {ArticleComponent} from "./Components/article/article.component";
 import {ProduitComponent} from "./Components/produit/produit.component";
+import {ProduitDefectueuxComponent} from "./Components/produit-defectueux/produit-defectueux.component";
 
 export const routes: Routes = [
   {path:'dash', component:DashboardComponent},
@@ -51,5 +52,7 @@ export const routes: Routes = [
   {path:'produit', component:ProduitComponent},
   {path:'ajouterInventaire', component:AjouterInventaireComponent},
   {path:'editInventaire/:id', component:AjouterInventaireComponent},
+  {path:'produitDefectueux', component:ProduitDefectueuxComponent},
+
 
 ];

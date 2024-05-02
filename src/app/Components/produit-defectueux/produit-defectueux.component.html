@@ -1,0 +1,171 @@
+<p>produit-defectueux works!</p>
+<div class="grid">
+  <div class="col-12">
+    <div class="card px-6 py-6">
+      <p-toast></p-toast>
+      <p-toolbar styleClass="mb-4">
+        <ng-template pTemplate="left">
+          <div class="my-2">
+            <button pButton pRipple label="Ajouter" icon="pi pi-plus" class="p-button-success mr-2" (click)="openNew()"></button>
+            <button pButton pRipple label="Supprimer" icon="pi pi-trash" class="p-button-danger" (click)="deleteSelectedProduitDefectueuxs()" [disabled]="!selectedProduitdefectueux || !selectedProduitdefectueux.length"></button>
+          </div>
+        </ng-template>
+
+
+      </p-toolbar>
+
+      <p-table #dt [value]="produitsdefectueux" [columns]="cols"  responsiveLayout="scroll" [rows]="10" [globalFilterFields]="['id','nom','description','unite']" [paginator]="true" [rowsPerPageOptions]="[10,20,30]" [showCurrentPageReport]="true" currentPageReportTemplate="Affichage du  {first} au  {last} des  {totalRecords} entrées" [(selection)]="selectedProduitdefectueux" selectionMode="multiple" [rowHover]="true" dataKey="id">
+        <ng-template pTemplate="caption">
+          <div class="flex flex-column md:flex-row md:justify-content-between md:align-items-center">
+            <h5 class="m-0">Gestion des ProduitDefectueuxs</h5>
+            <span class="block mt-2 md:mt-0 p-input-icon-left">
+                            <i class="pi pi-search"></i>
+                            <input  type="text" pInputText (input)="onGlobalFilter(dt, $event)" placeholder="Rechercher..."  class="w-full sm:w-auto"/>
+                        </span>
+
+
+
+          </div>
+        </ng-template>
+        <ng-template pTemplate="header">
+          <tr>
+            <th style="width: 3rem">
+              <p-tableHeaderCheckbox></p-tableHeaderCheckbox>
+            </th>
+            <th pSortableColumn="id">Id <p-sortIcon field="id"></p-sortIcon></th>
+            <th pSortableColumn="nom">Nom <p-sortIcon field="nom"></p-sortIcon></th>
+            <th pSortableColumn="idProduit">idProduit <p-sortIcon field="idProduit"></p-sortIcon></th>
+            <th pSortableColumn="idInventaire">idInventaire <p-sortIcon field="idInventaire"></p-sortIcon></th>
+            <th pSortableColumn="quantiteDefectueux">quantiteDefectueux <p-sortIcon field="quantiteDefectueux"></p-sortIcon></th>
+
+            <th pSortableColumn="description">Description <p-sortIcon field="description"></p-sortIcon></th>
+            <th pSortableColumn="dateDeffectuation">dateDeffectuation<p-sortIcon field="dateDeffectuation"></p-sortIcon></th>
+
+            <th></th>
+          </tr>
+        </ng-template>
+        <ng-template pTemplate="body" let-produitdefectueux >
+          <tr >
+            <td>
+              <p-tableCheckbox [value]="produitdefectueux"></p-tableCheckbox>
+            </td>
+            <td style="width:14%; min-width:10rem;"><span class="p-column-title">Id</span>
+              {{produitdefectueux.id}}
+            </td>
+            <td style="width:14%; min-width:10rem;">
+              <span class="p-column-title">Nom</span>
+              {{produitdefectueux.nom}}
+            </td>
+
+            <td style="width:14%; min-width:10rem;">
+              <span class="p-column-title">idProduit</span>
+              {{produitdefectueux.idProduit}}
+            </td>
+            <td style="width:14%; min-width:10rem;">
+            <span class="p-column-title">idInventaire</span>
+            {{produitdefectueux.idInventaire}}
+          </td>
+            <td style="width:14%; min-width:10rem;">
+              <span class="p-column-title">quantiteDefectueux</span>
+              {{produitdefectueux.quantiteDefectueux}}
+            </td>
+            <td style="width:14%; min-width:10rem;">
+              <span class="p-column-title">Description</span>
+              {{produitdefectueux.description}}
+            </td>
+
+
+            <td style="width:14%; min-width:10rem;">
+              <span class="p-column-title">date de deffectuation</span>
+              {{produitdefectueux.dateDeffectuation}}
+            </td>
+
+            <td>
+              <div class="flex ">
+                <button pButton pRipple icon="pi pi-pencil" class="p-button-rounded p-button-success mr-2" (click)="editProduitDefectueux(produitdefectueux)"></button>
+                <button pButton pRipple icon="pi pi-trash" class="p-button-rounded p-button-warning" (click)="deleteProduitDefectueux(produitdefectueux)"></button>
+              </div>
+            </td>
+          </tr>
+        </ng-template>
+      </p-table>
+    </div>
+
+    <p-dialog [(visible)]="productDialog" [style]="{width: '450px' , height:'500px'}" header="Product Details" [modal]="true" class="p-fluid">
+      <ng-template pTemplate="content">
+<!--        <div class="field">-->
+<!--          <label for="id">id</label>-->
+<!--          <input type="text" pInputText id="id"  [(ngModel)]="produitdefectueux.id" required autofocus [ngClass]="{'ng-invalid ng-dirty' : submitted && !produitdefectueux.id}"/>-->
+<!--          <small class="ng-dirty ng-invalid" *ngIf="submitted && !produitdefectueux.id">id is required.</small>-->
+<!--        </div>-->
+        <div class="field">
+          <label for="name">nom</label>
+          <input type="text" pInputText id="name"  [(ngModel)]="produitdefectueux.nom" required autofocus [ngClass]="{'ng-invalid ng-dirty' : submitted && !produitdefectueux.nom}"/>
+          <small class="ng-dirty ng-invalid" *ngIf="submitted && !produitdefectueux.nom">Name is required.</small>
+        </div>
+        <div class="field">
+          <label for="idProduit">idProduit</label>
+          <input type="text" pInputText id="idProduit"  [(ngModel)]="produitdefectueux.idProduit" required autofocus [ngClass]="{'ng-invalid ng-dirty' : submitted && !produitdefectueux.idProduit}"/>
+          <small class="ng-dirty ng-invalid" *ngIf="submitted && !produitdefectueux.idProduit">idProduit is required.</small>
+        </div>
+        <div class="field">
+          <label for="idInventaire">idInventaire</label>
+          <input type="text" pInputText id="idInventaire"  [(ngModel)]="produitdefectueux.idInventaire" required autofocus [ngClass]="{'ng-invalid ng-dirty' : submitted && !produitdefectueux.idInventaire}"/>
+          <small class="ng-dirty ng-invalid" *ngIf="submitted && !produitdefectueux.idInventaire">idInventaire is required.</small>
+        </div>
+        <div class="field">
+          <label for="quantiteDefectueux">quantiteDefectueux</label>
+          <input type="text" pInputText id="quantiteDefectueux"  [(ngModel)]="produitdefectueux.quantiteDefectueux" required autofocus [ngClass]="{'ng-invalid ng-dirty' : submitted && !produitdefectueux.quantiteDefectueux}"/>
+          <small class="ng-dirty ng-invalid" *ngIf="submitted && !produitdefectueux.quantiteDefectueux">quantiteDefectueux is required.</small>
+        </div>
+        <div class="field">
+          <label for="Description">Description</label>
+          <textarea rows="3" cols="30" type="text" pInputText id="Description"  [(ngModel)]="produitdefectueux.description" required autofocus [ngClass]="{'ng-invalid ng-dirty' : submitted && !produitdefectueux.description}"></textarea>
+          <small class="ng-dirty ng-invalid" *ngIf="submitted && !produitdefectueux.description">Pseudo is required.</small>
+        </div>
+
+
+        <div class="field">
+          <label for="dateDeffectuation">dateDeffectuation</label>
+          <p-calendar id="dateDeffectuation" dateFormat="yy-mm-dd" [(ngModel)]="produitdefectueux.dateDeffectuation"  [ngClass]="{'ng-invalid ng-dirty' : submitted && !produitdefectueux.dateDeffectuation}" [showIcon]="true"></p-calendar>
+          <small class="ng-dirty ng-invalid" *ngIf="submitted && !produitdefectueux.dateDeffectuation">dateDeffectuation is required.</small>
+        </div>
+
+
+
+      </ng-template>
+
+
+
+
+      <ng-template pTemplate="footer">
+        <button pButton pRipple label="Cancel" icon="pi pi-times" class="p-button-text" (click)="hideDialog()"></button>
+        <button pButton pRipple label="Save" icon="pi pi-check" class="p-button-text" (click)="saveProduitDefectuation()"></button>
+      </ng-template>
+    </p-dialog>
+    <p-dialog [(visible)]="deleteProductDialog" header="Confirm" [modal]="true" [style]="{width:'450px'}">
+      <div class="flex align-items-center justify-content-center">
+        <i class="pi pi-exclamation-triangle mr-3" style="font-size: 2rem"></i>
+        <span *ngIf="produitdefectueux">Are you sure you want to delete <b>{{produitdefectueux.nom}}</b>?</span>
+      </div>
+      <ng-template pTemplate="footer">
+        <button pButton pRipple icon="pi pi-times" class="p-button-text" label="No" (click)="deleteProductDialog = false"></button>
+        <button pButton pRipple icon="pi pi-check" class="p-button-text" label="Yes" (click)="confirmDelete()"></button>
+      </ng-template>
+    </p-dialog>
+    <p-dialog [(visible)]="deleteProductsDialog" header="Confirm" [modal]="true" [style]="{width:'450px'}">
+      <div class="flex align-items-center justify-content-center">
+        <i class="pi pi-exclamation-triangle mr-3" style="font-size: 2rem"></i>
+        <span>Are you sure you want to delete selected ProduitDefectueuxs?</span>
+      </div>
+      <ng-template pTemplate="footer">
+        <button pButton pRipple icon="pi pi-times" class="p-button-text" label="No" (click)="deleteProductsDialog = false"></button>
+        <button pButton pRipple icon="pi pi-check" class="p-button-text" label="Yes" (click)="confirmDeleteSelected()"></button>
+      </ng-template>
+    </p-dialog>
+
+
+  </div>
+</div>
+
+
