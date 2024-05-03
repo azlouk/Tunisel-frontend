@@ -260,7 +260,7 @@ if(this.isUpdateAnalyseChimique==true){
           this.selectedSbnl.analysesChimiques.push(this.analysesChimique);
           this.analyseChimiqueService.addAnalyseChimiqueToSbnl(this.selectedSbnl).subscribe(value => this.router.navigate(['/analyseChimique']))
         } else if (this.selectedBande.hasOwnProperty('id')==true) {
-          alert(new JsonPipe().transform(this.selectedBande))
+         // alert(new JsonPipe().transform(this.selectedBande))
           this.selectedBande.analysesChimiques = [];
           this.selectedBande.analysesChimiques.push(this.analysesChimique);
           this.analyseChimiqueService.addAnalyseChimiqueToBande(this.selectedBande).subscribe(value => this.router.navigate(['/analyseChimique']))
@@ -300,7 +300,7 @@ if(this.isUpdateAnalyseChimique==true){
   protected readonly Date = Date;
 
   selectPuit() {
-    alert(new JsonPipe().transform(this.selectedPuit))
+   // alert(new JsonPipe().transform(this.selectedPuit))
     this.selectedBassin={};
     this.selectedSbnl={};
     this.selectedBande={};
@@ -308,7 +308,7 @@ if(this.isUpdateAnalyseChimique==true){
     this.selectedSblf={};
 
   }  selectBassin() {
-    alert(new JsonPipe().transform(this.selectedBassin))
+    //alert(new JsonPipe().transform(this.selectedBassin))
 
     this.selectedPuit={};
     this.selectedSbnl={};
@@ -317,7 +317,7 @@ if(this.isUpdateAnalyseChimique==true){
     this.selectedSblf={};
 
   }  selectSBNL() {
-    alert(new JsonPipe().transform(this.selectedSbnl))
+    //alert(new JsonPipe().transform(this.selectedSbnl))
 
     this.selectedBassin={};
     this.selectedPuit={};
@@ -326,7 +326,7 @@ if(this.isUpdateAnalyseChimique==true){
     this.selectedSblf={};
 
   }  selectBande() {
-    alert(new JsonPipe().transform(this.selectedBande))
+   //alert(new JsonPipe().transform(this.selectedBande))
 
     this.selectedBassin={};
     this.selectedSbnl={};
@@ -335,7 +335,7 @@ if(this.isUpdateAnalyseChimique==true){
     this.selectedSblf={};
 
   }  selectSBL() {
-    alert(new JsonPipe().transform(this.selectedSbl))
+   // alert(new JsonPipe().transform(this.selectedSbl))
 
     this.selectedBassin={};
     this.selectedSbnl={};
@@ -345,7 +345,7 @@ if(this.isUpdateAnalyseChimique==true){
 
   }
   selectSBLF() {
-    alert(new JsonPipe().transform(this.selectedSblf))
+   // alert(new JsonPipe().transform(this.selectedSblf))
 
     this.selectedBassin={};
     this.selectedSbnl={};
