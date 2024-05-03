@@ -218,7 +218,8 @@ if(this.isUpdateAnalyseChimique==true){
 
 
   saveAnalyseChimique() {
-    // alert(this.analysesChimique.dateAnalyse)
+
+
     this.analysesChimique.densite = this.attributs[0].value;
     this.analysesChimique.matiereEnSuspension = this.attributs[1].value;
     this.analysesChimique.salimite = this.attributs[2].value;
@@ -234,7 +235,8 @@ if(this.isUpdateAnalyseChimique==true){
     this.analysesChimique.chlorureDeSodium = this.attributs[12].value;
     this.analysesChimique.ferrocyanure = this.attributs[13].value;
     //Test Select Of Stock
-    if (this.selectedPuit.hasOwnProperty('id') || this.selectedSbnl.hasOwnProperty("id") || this.selectedBassin.hasOwnProperty("id") || this.selectedSbl.hasOwnProperty("id") || this.selectedSblf.hasOwnProperty("id")) {
+    try {
+    if (this.selectedPuit.hasOwnProperty('id') || this.selectedSbnl.hasOwnProperty("id") || this.selectedBassin.hasOwnProperty("id") || this.selectedSbl.hasOwnProperty("id") || this.selectedSblf.hasOwnProperty("id")|| this.selectedBande.hasOwnProperty("id")) {
       if (this.isUpdateAnalyseChimique) {
         this.analyseChimiqueService.updateAnalyseChimique(this.analysesChimique).subscribe(value => this.router.navigate(['/analyseChimique']))
       } else {
@@ -242,12 +244,14 @@ if(this.isUpdateAnalyseChimique==true){
         this.analysesChimique.id = 0;
         //console.error("Data analyse Chimique:" + new JsonPipe().transform(this.analysesChimique))
 
+
+
         if (this.selectedPuit.hasOwnProperty('id')) {
           this.selectedPuit.analysesChimiques = [];
           this.selectedPuit.analysesChimiques.push(this.analysesChimique);
           // alert(new JsonPipe().transform(this.selectedPuit))
           this.analyseChimiqueService.addAnalyseChimique(this.selectedPuit).subscribe(value => this.router.navigate(['/analyseChimique']))
-        } else if (this.selectedBassin.hasOwnProperty('id')) {
+        } else if ( this.selectedBassin.hasOwnProperty('id')) {
           this.selectedBassin.analysesChimiques = [];
           this.selectedBassin.analysesChimiques.push(this.analysesChimique);
           this.analyseChimiqueService.addAnalyseChimiqueToBassin(this.selectedBassin).subscribe(value => this.router.navigate(['/analyseChimique']))
@@ -255,7 +259,8 @@ if(this.isUpdateAnalyseChimique==true){
           this.selectedSbnl.analysesChimiques = [];
           this.selectedSbnl.analysesChimiques.push(this.analysesChimique);
           this.analyseChimiqueService.addAnalyseChimiqueToSbnl(this.selectedSbnl).subscribe(value => this.router.navigate(['/analyseChimique']))
-        } else if (this.selectedBande.hasOwnProperty('id')) {
+        } else if (this.selectedBande.hasOwnProperty('id')==true) {
+          alert(new JsonPipe().transform(this.selectedBande))
           this.selectedBande.analysesChimiques = [];
           this.selectedBande.analysesChimiques.push(this.analysesChimique);
           this.analyseChimiqueService.addAnalyseChimiqueToBande(this.selectedBande).subscribe(value => this.router.navigate(['/analyseChimique']))
@@ -269,6 +274,12 @@ if(this.isUpdateAnalyseChimique==true){
           this.analyseChimiqueService.addAnalyseChimiqueToSblf(this.selectedSblf).subscribe(value => this.router.navigate(['/analyseChimique']))
         }
       }
+
+      }
+
+    }
+    catch (e){
+      Swal.fire({title:"Erreur de séléction",icon:"error", text:"Sélectionner puit, bassin ,bande ,sbnl ,sbln ou sblf"})
     }
   }
   getattributs():any {
@@ -287,4 +298,60 @@ if(this.isUpdateAnalyseChimique==true){
 
 
   protected readonly Date = Date;
+
+  selectPuit() {
+    alert(new JsonPipe().transform(this.selectedPuit))
+    this.selectedBassin={};
+    this.selectedSbnl={};
+    this.selectedBande={};
+    this.selectedSbl={};
+    this.selectedSblf={};
+
+  }  selectBassin() {
+    alert(new JsonPipe().transform(this.selectedBassin))
+
+    this.selectedPuit={};
+    this.selectedSbnl={};
+    this.selectedBande={};
+    this.selectedSbl={};
+    this.selectedSblf={};
+
+  }  selectSBNL() {
+    alert(new JsonPipe().transform(this.selectedSbnl))
+
+    this.selectedBassin={};
+    this.selectedPuit={};
+    this.selectedBande={};
+    this.selectedSbl={};
+    this.selectedSblf={};
+
+  }  selectBande() {
+    alert(new JsonPipe().transform(this.selectedBande))
+
+    this.selectedBassin={};
+    this.selectedSbnl={};
+    this.selectedPuit={};
+    this.selectedSbl={};
+    this.selectedSblf={};
+
+  }  selectSBL() {
+    alert(new JsonPipe().transform(this.selectedSbl))
+
+    this.selectedBassin={};
+    this.selectedSbnl={};
+    this.selectedBande={};
+    this.selectedPuit={};
+    this.selectedSblf={};
+
+  }
+  selectSBLF() {
+    alert(new JsonPipe().transform(this.selectedSblf))
+
+    this.selectedBassin={};
+    this.selectedSbnl={};
+    this.selectedBande={};
+    this.selectedSbl={};
+    this.selectedPuit={};
+
+  }
 }
