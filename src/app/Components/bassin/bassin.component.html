@@ -40,7 +40,7 @@
             <th pSortableColumn="nom">Nom <p-sortIcon field="nom"></p-sortIcon></th>
             <th pSortableColumn="emplacement">Emplacement <p-sortIcon field="emplacement"></p-sortIcon></th>
             <th pSortableColumn="etat">Etat <p-sortIcon field="etat"></p-sortIcon></th>
-            <th pSortableColumn="surface">Surface <p-sortIcon field="surface"></p-sortIcon></th>
+            <th pSortableColumn="surface">Surface m² <p-sortIcon field="surface"></p-sortIcon></th>
             <th></th>
           </tr>
         </ng-template>
@@ -81,7 +81,7 @@
               {{bassin.etat}}
             </td>
             <td style="width:14%; min-width:8rem;">
-              <span class="p-column-title">Surface</span>
+              <span class="p-column-title">Surface m²</span>
               {{bassin.surface}}
             </td>
             <td>
@@ -136,7 +136,7 @@
           <small class="ng-dirty ng-invalid" *ngIf="submitted && !bassin.etat">Telephone is required.</small>
         </div>
         <div class="field">
-          <label for="surface">Surface</label>
+          <label for="surface">Surface m²</label>
           <p-inputNumber  id="surface"  [(ngModel)]="bassin.surface" mode="decimal" [minFractionDigits]="3" [ngClass]="{'ng-invalid ng-dirty' : submitted && !bassin.surface}"></p-inputNumber>
           <small class="ng-dirty ng-invalid" *ngIf="submitted && !bassin.surface">Telephone is required.</small>
         </div>
