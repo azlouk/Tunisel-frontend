@@ -1,8 +1,8 @@
   services:
-    Tunisel-frontend:
+    Tunisel-frontendcontainer:
       container_name: Tunisel-frontendcontainer
       build: .
-      image: tuniselfrontend:v1
+      image: nginx
       ports:
         - 80:80
       expose :
