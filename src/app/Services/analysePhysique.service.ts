@@ -26,7 +26,6 @@ export class AnalysePhysiqueService {
     return this.http.delete(`${this.apiUrl}/analysesPhysiques/${analysesPhysiqueId}`);
   }
   updateAnalysesPhysiques(analyse: AnalysesPhysique): Observable<AnalysesPhysique> {
-    console.log("analyse:    "+new JsonPipe().transform(analyse));
     return this.http.put<AnalysesPhysique>(`${this.apiUrl}/analysesPhysiques/update`, analyse);
   }
 

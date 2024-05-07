@@ -39,17 +39,22 @@
         <p-dialog [(visible)]="visibale" [style]="{width: '1500px'}" header="Ajouter Produits"  [modal]="true" class="p-fluid">
 
           <div class="card">
-            <p-pickList [source]="sourceProduits" [target]="targetProduits" sourceHeader="Stock disponible" targetHeader="Stock à inventorier" [dragdrop]="true" [responsive]="true" [sourceStyle]="{ height: '150rem' }"
-                        [targetStyle]="{ height: '30rem' }" filterBy="nom" sourceFilterPlaceholder="Recherche par nom" targetFilterPlaceholder="Recherche par nom" breakpoint="1400px">
+            <p-pickList  *ngIf="!isUpdateInventaire " [source]="sourceProduits" [target]="targetProduits" sourceHeader="Stock disponible" targetHeader="Stock à inventorier" [dragdrop]="true" [responsive]="true" [sourceStyle]="{ height: '150rem' }"
+                        [targetStyle]="{ height: '30rem' }" filterBy="nom" sourceFilterPlaceholder="Recherche par nom" targetFilterPlaceholder="Recherche par nom" breakpoint="1400px" >
               <ng-template let-product pTemplate="item">
                 <div class="flex flex-column gap-3 mt-4">
                   <div class="flex align-items-center justify-content-between">
                     <span class="font-bold">{{ product.nom }}</span>
                     <div class="w1/3">
+<!--                      <p-floatLabel>-->
+<!--                      <input  type="text" pInputText [(ngModel)]="product.quantite" />-->
+<!--                        <label>Quantité </label>-->
+<!--                      </p-floatLabel>-->
                       <p-floatLabel>
                       <input  type="text" pInputText [(ngModel)]="product.quantite" />
                         <label>Quantité </label>
                       </p-floatLabel>
+
                     </div>
                   </div>
                   <div class="flex-1 flex flex-column gap-2">
@@ -64,16 +69,45 @@
                 </div>
               </ng-template>
             </p-pickList>
-          </div>
 
+          </div>
+<div>
+
+  <p-pickList *ngIf="isUpdateInventaire " [source]="sourceUpdate" [target]="targetUpdate" sourceHeader="Autre Produits disponible" targetHeader="Autre Produits à inventorier" [dragdrop]="true" [responsive]="true" [sourceStyle]="{ height: '150rem' }"
+              [targetStyle]="{ height: '30rem' }" filterBy="nom" sourceFilterPlaceholder="Recherche par nom" targetFilterPlaceholder="Recherche par nom" breakpoint="1400px">
+    <ng-template let-product pTemplate="item">
+      <div class="flex flex-column gap-3 mt-4">
+        <div class="flex align-items-center justify-content-between">
+          <span class="font-bold">{{ product.nom }}</span>
+          <div class="w1/3">
+            <p-floatLabel>
+              <input  type="text" pInputText [(ngModel)]="product.quantite" />
+              <label>Quantité </label>
+            </p-floatLabel>
+          </div>
+        </div>
+        <div class="flex-1 flex flex-column gap-2">
+
+
+          <div class="flex align-products-center gap-2">
+            <i class="pi pi-tag text-sm"></i>
+            <span>{{ product.article.nom }}</span>
+
+          </div>
+        </div>
+      </div>
+    </ng-template>
+
+  </p-pickList>
+</div>
 
           <ng-template pTemplate="footer">
             <button pButton pRipple label="Annuler" icon="pi pi-times" class="p-button-text" (click)="hideDialog()"></button>
-            <button pButton pRipple label="Enregistrer" icon="pi pi-check" class="p-button-text" (click)="saveProduitClacule()"></button>
+            <button pButton pRipple label="Enregistrer" icon="pi pi-check"  class="p-button-text" (click)="saveProduitClacule()"></button>
           </ng-template>
 
         </p-dialog>
-        <p-table #dt [value]="inventaire.inventaireProduitAssociations!==undefined?inventaire.inventaireProduitAssociations:[] " [columns]="cols" editMode="row" responsiveLayout="scroll" [rows]="10" [globalFilterFields]="['id','nom','qui','quantite','designation','reference','article','produitDefectueux']" [paginator]="true" [rowsPerPageOptions]="[10,20,30]" [showCurrentPageReport]="true" currentPageReportTemplate="Affichage du  {first} au  {last} des  {totalRecords} entrées" [(selection)]="selectedProduit" selectionMode="multiple" [rowHover]="true" dataKey="id">
+        <p-table #dt [value]="inventaire.inventaireProduitAssociations!==undefined?inventaire.inventaireProduitAssociations:[] " [columns]="cols" editMode="row" responsiveLayout="scroll" [rows]="10" [globalFilterFields]="['id','p.produit.nom','quantite','designation','reference','article','quantiteRestant']" [paginator]="true" [rowsPerPageOptions]="[10,20,30]" [showCurrentPageReport]="true" currentPageReportTemplate="Affichage du  {first} au  {last} des  {totalRecords} entrées" [(selection)]="selectedProduit" selectionMode="multiple" [rowHover]="true" dataKey="id">
           <ng-template pTemplate="caption">
             <div class="flex flex-column md:flex-row md:justify-content-between md:align-items-center">
               <h5 class="m-0">Inventaire des instruments</h5>
@@ -105,7 +139,10 @@
               </td>
               <td style="width:14%; min-width:10rem;">
                 <span class="p-column-title">quantite</span>
-                {{p.produit.quantite}}
+                {{this.p.produit.quantite }}
+<!--                {{this.sourceProduits[p.produit.id].quantite}}-->
+<!--                {{this.sourceProduits[p.produit.id].nom}}-->
+<!--                {{this.sourceProduits.length}}-->
               </td>
               <td style="width:14%; min-width:10rem;">
                 <span class="p-column-title">designation</span>
@@ -141,7 +178,7 @@
                   <button *ngIf="editing" pButton pRipple type="button" pSaveEditableRow icon="pi pi-check" (click)="onRowEditSave(p)" class="p-button-rounded p-button-text p-button-success mr-2"></button>
                 </div>
 <!--                <button *ngIf="isUpdateInventaire"  pButton pRipple icon="pi pi-pencil" class="p-button-rounded p-button-success mr-2" (click)="editIntrvention(produit)"></button>-->
-                <button pButton pRipple icon="pi pi-trash" class="p-button-rounded p-button-warning" (click)="deleteIntervention(produit)"></button>
+                <button pButton pRipple icon="pi pi-trash" class="p-button-rounded p-button-warning" (click)="deleteProduitFromInventaire(p.produit)"></button>
               </div>
 
             </tr>

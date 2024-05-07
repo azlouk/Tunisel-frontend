@@ -22,7 +22,6 @@ export class SblfService {
     return this.http.delete(`${this.apiUrl}/sblfs/delete/${sblfId}`);
   }
   updateSblf(sblf: Sblf): Observable<Sblf> {
-    console.log("update");
     return this.http.put<Sblf>(`${this.apiUrl}/sblfs/${sblf.id}`, sblf);
   }
 

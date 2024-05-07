@@ -18,11 +18,9 @@ export class PuitService {
   }
 
   deletePuit(puitId: number | undefined): Observable<any> {
-    console.log(`${this.apiUrl}/puits/${puitId}`)
     return this.http.delete(`${this.apiUrl}/puits/${puitId}`);
   }
   updatePuit(puit: Puit): Observable<Puit> {
-    console.log("update");
     return this.http.put<Puit>(`${this.apiUrl}/puits/${puit.id}`, puit);
   }
 

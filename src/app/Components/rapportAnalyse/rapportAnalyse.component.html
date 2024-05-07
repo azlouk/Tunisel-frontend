@@ -1,3 +1,5 @@
+
+
 <div class="grid">
   <div class="col-12 card px-6 py-6 ">
     <p-toolbar styleClass="mb-4" >
@@ -82,7 +84,7 @@
 
     </div>
     <div  *ngIf="checkedChimique" class="border-1 border-round border-gray-300 p-6 mt-8 bg-gray-200">
-      <label class="font-bold text-3xl">Analyqe chimique </label>
+      <label class="font-bold text-3xl">Analyse chimique </label>
     <div class="   flex  gap-3  mt-8      ">
       <div   class="card gap-3  flex flex-column       justify-content-between  ">
         <label class="font-bold">Climatique</label>
@@ -119,8 +121,13 @@
       <div class="row flex flex-wrap justify-content-evenly">
 
         <div *ngFor="let attribut of getattributs()"  class="m-3   ">
-          <p-floatLabel>
-            <p-inputNumber class="" [(ngModel)]="attribut.value"  inputId="mile" suffix="  {{attribut.unite}}" mode="decimal" locale="en-US" [minFractionDigits]="3" [name]="attribut.name"></p-inputNumber>
+          <p-floatLabel *ngIf="attribut.name !== 'Fe(CN)₆'">
+            <p-inputNumber class="" [(ngModel)]="attribut.value" inputId="mile" suffix="  {{attribut.unite}}" mode="decimal" locale="en-US" [minFractionDigits]="2" [name]="attribut.name"></p-inputNumber>
+            <label>{{attribut.label}}</label>
+          </p-floatLabel>
+
+          <p-floatLabel *ngIf="attribut.name === 'Fe(CN)₆'">
+            <p-inputNumber class="" [(ngModel)]="attribut.value" inputId="mile" suffix="  {{attribut.unite}}" mode="decimal" locale="en-US" [minFractionDigits]="0" [name]="attribut.name"></p-inputNumber>
             <label>{{attribut.label}}</label>
           </p-floatLabel>
 

@@ -3,6 +3,7 @@ import {environment} from "../environment/environment";
 import {HttpClient} from "@angular/common/http";
 import {Observable} from "rxjs";
 import {Inventaire} from "../Models/inventaire";
+import {Produit} from "../Models/produit";
 
 
 @Injectable({
@@ -25,11 +26,14 @@ export class InventaireService {
   }
 
   updateInventaire(inventaire: Inventaire): Observable<Inventaire> {
-    return this.http.put<Inventaire>(`${this.apiUrl}/inventaires/${inventaire.id}`, inventaire);
+    return this.http.put<Inventaire>(`${this.apiUrl}/inventaires/update/${inventaire.id}`, inventaire);
 
   }
 
   deleteInventaire(inventaireId: number | undefined): Observable<any> {
     return this.http.delete(`${this.apiUrl}/inventaires/delete/${inventaireId}`);
+  }
+  getProduitFiltre(inventaireId:number): Observable<Produit[]> {
+    return this.http.get<Produit[]>(`${this.apiUrl}/inventaires/${inventaireId}/difference`);
   }
 }

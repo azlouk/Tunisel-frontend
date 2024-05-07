@@ -151,6 +151,8 @@ export class AnalyseChimiqueComponent implements OnInit{
     table.filterGlobal((event.target as HTMLInputElement).value, 'contains');
   }
 
+
+
   getALLChimique() {
     this.analyseChimiqueService.getAllAnalysesChimiques().subscribe((analysesChimiques:  AnalysesChimique[]) => {
       this.analysesChimiques=analysesChimiques;

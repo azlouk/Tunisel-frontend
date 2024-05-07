@@ -124,7 +124,6 @@ export class ProduitComponent implements OnInit{
 
   confirmDeleteSelected() {
     this.deleteProductsDialog = false;
-    console.log(this.selectedProduit.length)
     this.selectedProduit.forEach(selectedProduit => {
       this.produitService.deleteProduit(selectedProduit.id).subscribe(
         () => {
@@ -142,7 +141,6 @@ export class ProduitComponent implements OnInit{
 
   confirmDelete() {
     this.deleteProductDialog = false;
-    console.log("this.produit.id", this.produit.id);
     this.produits = this.produits.filter(val => val.id !== this.produit.id);
     if (this.produit.id!= null) {
       this.produitService.deleteProduit(this.produit.id).subscribe(() => console.log("produit deleted"));
@@ -157,32 +155,32 @@ export class ProduitComponent implements OnInit{
   }
 
   saveProduit() {
-    this.submitted = false;
-    this.productDialog=false
-    // alert(new JsonPipe().transform(this.produit))
-    if(this.isUpdateProduit==true) {
-      this.produitService.updateProduit(this.produit).subscribe(() =>{
-        this.produitService.getProduit().subscribe((produits: Produit[]) => {
-          this.produits = produits;
+    this.submitted = true;
+    if (this.produit.reference?.trim() && this.produit.article){
+      this.productDialog=false;
+      if(this.isUpdateProduit==true) {
+        this.produitService.updateProduit(this.produit).subscribe(() =>{
+          this.produitService.getProduit().subscribe((produits: Produit[]) => {
+            this.produits = produits;
+          });
         });
-      });
-      console.log('produit mis ajour');
-      this.isUpdateProduit=false;
-      this.produit={}
+        this.isUpdateProduit=false;
+        this.produit={}
 
-    }
-    else
-    {
+      }
+      else
+      {
 
-      this.produitService.createProduit(this.produit).subscribe(() => {
+        this.produitService.createProduit(this.produit).subscribe(() => {
 
-        this.produitService.getProduit().subscribe((produits: Produit[]) => {
-          this.produits = produits;
+          this.produitService.getProduit().subscribe((produits: Produit[]) => {
+            this.produits = produits;
+          });
         });
-      });
-      this.produit={}
-      console.log('produit ajouter');
+        this.produit={}
+      }
     }
+
 
   }
 

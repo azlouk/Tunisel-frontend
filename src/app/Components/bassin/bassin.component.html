@@ -101,44 +101,45 @@
       <ng-template pTemplate="content">
         <div class="field">
         <label for="name">Puit</label>
-          <p-dropdown [options]="puits" [(ngModel)]="bassin.bassinPuit" [editable]="true" optionLabel="reference" class="w-full"></p-dropdown>
+          <p-dropdown [options]="puits" [(ngModel)]="bassin.bassinPuit" [editable]="true" optionLabel="reference" class="w-full"  [ngClass]="{'ng-invalid ng-dirty' : submitted && !bassin.bassinPuit}"></p-dropdown>
+          <small class="ng-dirty ng-invalid" *ngIf="submitted && !bassin.bassinPuit">Puit est requis.</small>
         </div>
 
         <div class="field">
           <label for="name">Reference</label>
           <input type="text" pInputText id="name"  [(ngModel)]="bassin.reference" required autofocus [ngClass]="{'ng-invalid ng-dirty' : submitted && !bassin.reference}"/>
-          <small class="ng-dirty ng-invalid" *ngIf="submitted && !bassin.reference">Name is required.</small>
+          <small class="ng-dirty ng-invalid" *ngIf="submitted && !bassin.reference">Reference est requis.</small>
         </div>
         <div class="field">
           <label for="Description">Description</label>
-          <input type="text" pInputText id="Description"  [(ngModel)]="bassin.description" required autofocus [ngClass]="{'ng-invalid ng-dirty' : submitted && !bassin.description}"/>
-          <small class="ng-dirty ng-invalid" *ngIf="submitted && !bassin.description">Pseudo is required.</small>
+          <input type="text" pInputText id="Description"  [(ngModel)]="bassin.description" />
+<!--          <small class="ng-dirty ng-invalid" *ngIf="submitted && !bassin.description">Pseudo is required.</small>-->
         </div>
 
         <div class="field">
           <label for="dateCreation">Date Creation</label>
-          <p-calendar id="dateCreation" dateFormat="yy-mm-dd" [(ngModel)]="bassin.dateCreation"  [ngClass]="{'ng-invalid ng-dirty' : submitted && !bassin.dateCreation}" [showIcon]="true"></p-calendar>
-          <small class="ng-dirty ng-invalid" *ngIf="submitted && !bassin.dateCreation">poste is required.</small>
+          <p-calendar id="dateCreation" dateFormat="yy-mm-dd" [(ngModel)]="bassin.dateCreation"  [showIcon]="true"></p-calendar>
+<!--          <small class="ng-dirty ng-invalid" *ngIf="submitted && !bassin.dateCreation">Date de Creation est requis.</small>-->
         </div>
         <div class="field">
           <label for="nom">Nom</label>
           <input type="text" pInputText id="nom"  [(ngModel)]="bassin.nom" required autofocus [ngClass]="{'ng-invalid ng-dirty' : submitted && !bassin.nom}"/>
-          <small class="ng-dirty ng-invalid" *ngIf="submitted && !bassin.nom">Telephone is required.</small>
+          <small class="ng-dirty ng-invalid" *ngIf="submitted && !bassin.nom">Nom est requis.</small>
         </div>
         <div class="field">
           <label for="emplacement">Emplacement</label>
-          <input type="text" pInputText id="emplacement"  [(ngModel)]="bassin.emplacement" required autofocus [ngClass]="{'ng-invalid ng-dirty' : submitted && !bassin.emplacement}"/>
-          <small class="ng-dirty ng-invalid" *ngIf="submitted && !bassin.emplacement">Telephone is required.</small>
+          <input type="text" pInputText id="emplacement"  [(ngModel)]="bassin.emplacement" required autofocus />
+<!--          <small class="ng-dirty ng-invalid" *ngIf="submitted && !bassin.emplacement">Telephone is required.</small>-->
         </div>
         <div class="field">
           <label for="etat">Etat</label>
-          <input type="text" pInputText id="etat"  [(ngModel)]="bassin.etat" required autofocus [ngClass]="{'ng-invalid ng-dirty' : submitted && !bassin.etat}"/>
-          <small class="ng-dirty ng-invalid" *ngIf="submitted && !bassin.etat">Telephone is required.</small>
+          <input type="text" pInputText id="etat"  [(ngModel)]="bassin.etat" />
+<!--          <small class="ng-dirty ng-invalid" *ngIf="submitted && !bassin.etat">Telephone is required.</small>-->
         </div>
         <div class="field">
           <label for="surface">Surface m²</label>
-          <p-inputNumber  id="surface"  [(ngModel)]="bassin.surface" mode="decimal" [minFractionDigits]="3" [ngClass]="{'ng-invalid ng-dirty' : submitted && !bassin.surface}"></p-inputNumber>
-          <small class="ng-dirty ng-invalid" *ngIf="submitted && !bassin.surface">Telephone is required.</small>
+          <p-inputNumber  id="surface"  [(ngModel)]="bassin.surface" mode="decimal" [minFractionDigits]="3" ></p-inputNumber>
+<!--          <small class="ng-dirty ng-invalid" *ngIf="submitted && !bassin.surface">Telephone is required.</small>-->
         </div>
 
       </ng-template>
@@ -155,7 +156,7 @@
     <p-dialog [(visible)]="deleteProductDialog" header="Confirm" [modal]="true" [style]="{width:'450px'}">
       <div class="flex align-items-center justify-content-center">
         <i class="pi pi-exclamation-triangle mr-3" style="font-size: 2rem"></i>
-        <span *ngIf="product">Êtes-vous sûr de vouloir supprimer? <b>{{product.name}}</b>?</span>
+        <span *ngIf="product">Are you sure you want to delete <b>{{product.name}}</b>?</span>
       </div>
       <ng-template pTemplate="footer">
         <button pButton pRipple icon="pi pi-times" class="p-button-text" label="Non" (click)="deleteProductDialog = false"></button>
@@ -179,23 +180,19 @@
 
 
 <p-dialog header="Analyse chimique et granulométrique" [(visible)]="visiblePrint" [modal]="true"   [breakpoints]="{ '1199px': '75vw', '575px': '90vw' }">
-  <div class="card   p-2     " ><label class="text-3xl ">Filtrage Chimique  :</label>
+  <div class="shadow-1 p-2  " >Filtrage Chimique  :
 
-    <div class="  flex justify-content-evenly ">
-      <div class="gap-1 flex align-items-center">Date début Analyse  :
-        <input  class="p-2 shadow-1" type="date" pInputText    [(ngModel)]="DatefiltrageStart" [value]="DatefiltrageStart" />
-
+    <div class="card flex justify-content-evenly ">
+      <div class="gap-1 flex align-items-center">Date début Analyse  :<p-calendar [(ngModel)]="DatefiltrageStart"  ></p-calendar>
       </div>
-      <div class="gap-1  flex align-items-center">
-        Date Fin Analyse  :
-        <input  class="p-2 shadow-1" type="date"  pInputText   [(ngModel)]="DatefiltrageEnd" [value]="DatefiltrageEnd" />
-
+      <div class="gap-1    flex align-items-center">
+        Date Fin Analyse  :<p-calendar [(ngModel)]="DatefiltrageEnd"  ></p-calendar>
       </div>
       <p-button (click)="filtredate()" class=" " icon="pi pi-search" label="Rechercher"></p-button>
-      <p-button (click)="Viderfiltredate()" class=" " icon="pi pi-eye" label="Afficher Tout"></p-button>
+      <p-button (click)="Viderfiltredate()" class=" " icon="pi pi-refresh" label="Actualiser"></p-button>
 
     </div>
-    <div class="shadow-1 p-2 m-2">
+    <div class="shadow-1 p-2">
       <th *ngFor="let c of colsfiltre">
 
         <p-checkbox [(ngModel)]="c.hide" label=" {{ c.header}}" [binary]="true" inputId="binary"></p-checkbox>
@@ -204,10 +201,10 @@
     </div>
     <br>
     <div class="shadow-1 p-2 gap-1 text-3xl flex inline-flex justify-content-evenly" >Filtrage Granulométrique  :<br>
-      <p-listbox [options]="SelectetBassin.analysesPhysiques!==undefined?SelectetBassin.analysesPhysiques:[]" [(ngModel)]="SelectedsbnlPrintAnalyse" optionLabel="reference" [filter]="true" [style]="{ width: '15rem' }" [listStyle]="{'max-height': '220px'}"></p-listbox>
+      <p-listbox [options]="getAnalyseGranoli()" [(ngModel)]="SelectedsbnlPrintAnalyse" optionLabel="reference" [filter]="true" [style]="{ width: '15rem' }" [listStyle]="{'max-height': '220px'}"></p-listbox>
       <div *ngIf="SelectedsbnlPrintAnalyse.hasOwnProperty('id')" class="p-2">
         <label class="text-2xl font-bold">Reference  :</label><span class="ml-2 text-2xl">{{SelectedsbnlPrintAnalyse.dateAnalyse}}</span><br>
-        <label class="text-2xl font-bold">Quality :</label><span class=" ml-2 text-2xl">{{SelectedsbnlPrintAnalyse.matiere}}</span><br>
+        <label class="text-2xl font-bold">Relative :</label><span class=" ml-2 text-2xl">{{SelectedsbnlPrintAnalyse.matiere}}</span><br>
         <label class="text-2xl font-bold">Temperature :</label><span class=" ml-2 text-2xl">{{SelectedsbnlPrintAnalyse.temperature}} °C</span><br>
       </div>
     </div>
@@ -217,7 +214,7 @@
   <div #pdfpuit class="pt-8 pl-4 pr-4">
     <img src="assets/layout/images/logo.png">
     <div class="row justify-content-end font-bold flex text-1xl"> Creation date: <span class=" text-1xl font-bold  pi pi-calendar ">{{dateToday | date :"yyyy-MM-dd"}}</span></div>
-    <div class="row    font-bold flex text-1xl   "> Identification :<span class=" text-1xl font-bold   "> {{SelectedsbnlPrintAnalyse.reference}}</span></div>
+    <div class="row    font-bold flex text-1xl   "> Identification :<span class=" text-1xl font-bold   "> {{SelectetBassin.reference}}</span></div>
 
     <div class="row   text-8xl font-bold text-center m-2 p-3" > Analysis Report </div>
     <div class="mt-5 mb-5">
@@ -226,7 +223,7 @@
       <br><br><br><br>
       <label class="text-2xl font-bold">Reference  :</label><span class="ml-2 text-2xl">{{SelectetBassin.reference}}</span><br>
       <label class="text-2xl font-bold">Date creation :</label><span class=" ml-2 text-2xl">{{SelectetBassin.dateCreation}}</span><br>
-      <label class="text-2xl font-bold">Pool :</label><span class=" ml-2 text-2xl">{{SelectetBassin.bassinPuit==undefined?"-":SelectetBassin.reference}}</span><br>
+      <label class="text-2xl font-bold">Pool :</label><span class=" ml-2 text-2xl">{{SelectetBassin.bassinPuit==undefined?"-":SelectetBassin.bassinPuit}}</span><br>
 
     </div>
 
@@ -305,7 +302,8 @@
     <br><br><br><br>
     <div class=" top-5 bottom-5">
       <label class="text-2xl font-bold">Date   :</label><span class="ml-2 text-2xl">{{SelectedsbnlPrintAnalyse.dateAnalyse}}</span><br>
-       <label class="text-2xl font-bold">Quality :</label><span class=" ml-2 text-2xl">{{SelectedsbnlPrintAnalyse.matiere}}</span><br>
+      <label class="text-2xl font-bold">Reference  :</label><span class="ml-2 text-2xl">{{SelectedsbnlPrintAnalyse.reference}}</span><br>
+      <label class="text-2xl font-bold">Relative :</label><span class=" ml-2 text-2xl">{{SelectedsbnlPrintAnalyse.matiere}}</span><br>
       <label class="text-2xl font-bold">Temperature :</label><span class=" ml-2 text-2xl">{{SelectedsbnlPrintAnalyse.temperature}} °C</span><br>
     </div>
     <br><br><br>

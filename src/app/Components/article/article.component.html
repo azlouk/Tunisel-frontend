@@ -80,20 +80,20 @@
         <div class="field">
           <label for="name">nom</label>
           <input type="text" pInputText id="name"  [(ngModel)]="article.nom" required autofocus [ngClass]="{'ng-invalid ng-dirty' : submitted && !article.nom}"/>
-          <small class="ng-dirty ng-invalid" *ngIf="submitted && !article.nom">Name is required.</small>
+          <small class="ng-dirty ng-invalid" *ngIf="submitted && !article.nom">Nom is required.</small>
         </div>
         <div class="field">
           <label for="Description">Description</label>
-          <textarea rows="3" cols="30" type="text" pInputText id="Description"  [(ngModel)]="article.description" required autofocus [ngClass]="{'ng-invalid ng-dirty' : submitted && !article.description}"></textarea>
-          <small class="ng-dirty ng-invalid" *ngIf="submitted && !article.description">Pseudo is required.</small>
+          <textarea rows="3" cols="30" type="text" pInputText id="Description"  [(ngModel)]="article.description" required autofocus ></textarea>
+<!--          <small class="ng-dirty ng-invalid" *ngIf="submitted && !article.description">Description is required.</small>-->
         </div>
 
 
 
         <div class="field">
           <label for="name">Unité</label>
-           <p-listbox [options]="getUnite()" [(ngModel)]="article.unite" optionLabel="" [filter]="true" [style]="{ width: '15rem' }" [listStyle]="{'max-height': '220px'}"></p-listbox>
-
+           <p-listbox [options]="getUnite()" [(ngModel)]="article.unite" optionLabel="" [filter]="true"  required autofocus [ngClass]="{'ng-invalid ng-dirty' : submitted && !article.unite}"[style]="{ width: '15rem' }" [listStyle]="{'max-height': '220px'}"></p-listbox>
+          <small class="ng-dirty ng-invalid" *ngIf="submitted && !article.unite">Unité is required.</small>
 
         </div>
 

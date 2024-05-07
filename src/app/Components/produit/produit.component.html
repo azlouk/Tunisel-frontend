@@ -94,31 +94,31 @@
       <ng-template pTemplate="content">
         <div class="field">
           <label for="nom">Nom</label>
-          <input type="text" pInputText id="nom"  [(ngModel)]="produit.nom" required autofocus [ngClass]="{'ng-invalid ng-dirty' : submitted && !produit.nom}"/>
-          <small class="ng-dirty ng-invalid" *ngIf="submitted && !produit.nom">Name is required.</small>
+          <input type="text" pInputText id="nom"  [(ngModel)]="produit.nom" required autofocus />
+<!--          <small class="ng-dirty ng-invalid" *ngIf="submitted && !produit.nom">Name is required.</small>-->
         </div>
 
         <div class="field">
           <label for="quantite">Quantité</label>
-          <input type="text" pInputText id="quantite"  [(ngModel)]="produit.quantite" required autofocus [ngClass]="{'ng-invalid ng-dirty' : submitted && !produit.quantite}"/>
-          <small class="ng-dirty ng-invalid" *ngIf="submitted && !produit.quantite">Pseudo is required.</small>
+          <input type="text" pInputText id="quantite"  [(ngModel)]="produit.quantite" required autofocus />
+<!--          <small class="ng-dirty ng-invalid" *ngIf="submitted && !produit.quantite">Pseudo is required.</small>-->
         </div>
 
         <div class="field">
           <label for="Description">Description</label>
-          <input type="text" pInputText id="Description"  [(ngModel)]="produit.designation" required autofocus [ngClass]="{'ng-invalid ng-dirty' : submitted && !produit.designation}"/>
-          <small class="ng-dirty ng-invalid" *ngIf="submitted && !produit.designation">Pseudo is required.</small>
+          <input type="text" pInputText id="Description"  [(ngModel)]="produit.designation" required autofocus />
+<!--          <small class="ng-dirty ng-invalid" *ngIf="submitted && !produit.designation">Description is required.</small>-->
         </div>
         <div class="field">
           <label for="reference">Reference</label>
           <input type="text" pInputText id="reference"  [(ngModel)]="produit.reference" required autofocus [ngClass]="{'ng-invalid ng-dirty' : submitted && !produit.reference}"/>
-          <small class="ng-dirty ng-invalid" *ngIf="submitted && !produit.reference">Pseudo is required.</small>
+          <small class="ng-dirty ng-invalid" *ngIf="submitted && !produit.reference">Reference is required.</small>
         </div>
 
         <div class="field  ">
           <label for="reference">Article </label>
-           <small class="ng-dirty ng-invalid" *ngIf="submitted && !produit.article">Article obligatoire</small>
-          <p-listbox [options]="articles" [(ngModel)]="produit.article" optionLabel="nom" [filter]="true" [style]="{ width: 'auto' }" [listStyle]="{'max-height': '120px'}"></p-listbox>
+           <small class="ng-dirty ng-invalid" *ngIf="submitted && !produit.article"></small>
+          <p-listbox [options]="articles" [(ngModel)]="produit.article" optionLabel="nom" [filter]="true" [ngClass]="{'ng-invalid ng-dirty' : submitted && !produit.article}" [style]="{ width: 'auto' }" [listStyle]="{'max-height': '120px'}"></p-listbox>
 
         </div>
 

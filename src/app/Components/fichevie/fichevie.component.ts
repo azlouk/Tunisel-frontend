@@ -37,7 +37,7 @@ import {FicheVieService} from "../../Services/fichevie.service";
   templateUrl: './fichevie.component.html',
   styleUrl: './fichevie.component.css'
 })
-export class FichevieComponent implements  OnInit{
+export class FichevieComponent implements OnInit {
   productDialog: boolean = false;
 
   deleteProductDialog: boolean = false;
@@ -60,34 +60,35 @@ export class FichevieComponent implements  OnInit{
   // ======********============
   ficheVies: FicheVie[] = [];
 
-  ficheVie:FicheVie={};
+  ficheVie: FicheVie = {};
 
   selectedFicheVie: FicheVie[] = [];
 
-  private isUpdateFicheVie=false;
+  private isUpdateFicheVie = false;
 
 
-  constructor(private router: Router,private productService: ProductService, private messageService: MessageService,private ficheVieService :FicheVieService) {}
+  constructor(private router: Router, private productService: ProductService, private messageService: MessageService, private ficheVieService: FicheVieService) {
+  }
 
   ngOnInit() {
-    this.ficheVieService.getFichesVies().subscribe((v:  FicheVie[]) => {
-      this.ficheVies=v;
-      console.log(new JsonPipe().transform("====================>>>>>>"+this.ficheVies))
+    this.ficheVieService.getFichesVies().subscribe((v: FicheVie[]) => {
+      this.ficheVies = v;
 
-    },error => {
-      console.log(error)})
+    }, error => {
+      console.log(error)
+    })
 
     this.cols = [
-      { field: 'id', header: 'id' },
-      { field: 'societe', header: 'societe' },
-      { field: 'designation', header: 'designation' },
-      { field: 'code', header: 'code' },
-      { field: 'serie', header: 'serie' },
-      { field: 'marque', header: 'marque' },
-      { field: 'verification', header: 'verification' },
-      { field: 'dateReception', header: 'dateReception' },
-      { field: 'etatFiche', header: 'etatFiche' },
-      { field: 'emplacement', header: 'emplacement' },
+      {field: 'id', header: 'id'},
+      {field: 'societe', header: 'societe'},
+      {field: 'designation', header: 'designation'},
+      {field: 'code', header: 'code'},
+      {field: 'serie', header: 'serie'},
+      {field: 'marque', header: 'marque'},
+      {field: 'verification', header: 'verification'},
+      {field: 'dateReception', header: 'dateReception'},
+      {field: 'etatFiche', header: 'etatFiche'},
+      {field: 'emplacement', header: 'emplacement'},
 
     ];
 
@@ -106,47 +107,46 @@ export class FichevieComponent implements  OnInit{
   }
 
   editFicheVie(ficheVie: FicheVie) {
-    this.isUpdateFicheVie=true;
-    this.router.navigate(['/ajouterFichevieIntervention/'+ficheVie.id]);
+    this.isUpdateFicheVie = true;
+    this.router.navigate(['/ajouterFichevieIntervention/' + ficheVie.id]);
 
 
-    this.ficheVie = { ...ficheVie };
+    this.ficheVie = {...ficheVie};
     this.productDialog = true;
   }
 
-  deleteFicheVie(ficheVie:FicheVie) {
+  deleteFicheVie(ficheVie: FicheVie) {
     this.deleteProductDialog = true;
 
-    this.ficheVie = { ...ficheVie };
+    this.ficheVie = {...ficheVie};
   }
 
   confirmDeleteSelected() {
     this.deleteProductsDialog = false;
-    console.log(this.selectedFicheVie.length)
     this.selectedFicheVie.forEach(selectedFicheVie => {
       this.ficheVieService.deleteFicheVie(selectedFicheVie.id).subscribe(
         () => {
-          this.ficheVies = this.ficheVies.filter(ficheVie =>ficheVie.id !== selectedFicheVie.id);
+          this.ficheVies = this.ficheVies.filter(ficheVie => ficheVie.id !== selectedFicheVie.id);
 
         },
         (error) => {
-          console.error('Error deleting fiche de vie:', error);
+          console.error('Erreur suppression de  fiche de vie:', error);
         }
       );
     });
 
-    this.messageService.add({ severity: 'success', summary: 'Successful', detail: 'fiche de vie Deleted', life: 3000 });
+    this.messageService.add({severity: 'success', summary: 'Réussie', detail: 'fiche de vie supprimé', life: 3000});
     this.selectedFicheVie = [];
   }
 
   confirmDelete() {
     this.deleteProductDialog = false;
     this.ficheVies = this.ficheVies.filter(val => val.id !== this.ficheVie.id);
-    if (this.ficheVie.id!= null) {
-      this.ficheVieService.deleteFicheVie(this.ficheVie.id).subscribe(() => console.log("fiche vie deleted"));
+    if (this.ficheVie.id != null) {
+      this.ficheVieService.deleteFicheVie(this.ficheVie.id).subscribe(() => console.log("fiche vie supprimé!"));
     }
-    this.messageService.add({ severity: 'success', summary: 'Successful', detail: 'Fiche vie Deleted', life: 3000 });
-    this.ficheVie ;
+    this.messageService.add({severity: 'success', summary: 'Réussie', detail: 'Fiche vie supprimé', life: 3000});
+    this.ficheVie;
   }
 
   hideDialog() {

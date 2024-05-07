@@ -33,7 +33,7 @@ import {LoginService} from "../../Services/login.service";
   templateUrl: './dashboard.component.html',
   styleUrl: './dashboard.component.css'
 })
-export class DashboardComponent implements OnInit, OnDestroy  {
+export class DashboardComponent implements OnInit, OnDestroy {
   items!: MenuItem[];
 
   products!: Product[];
@@ -45,9 +45,10 @@ export class DashboardComponent implements OnInit, OnDestroy  {
 
   subscription!: Subscription;
   // puit :Puit[];
-  public nbrPuits=0;
-  public dashboardData: Dashboard = new Dashboard(0,0);
-  constructor(public loginservice:LoginService,private productService: ProductService, public layoutService: LayoutService, private dashboardService:DashboardService) {
+  public nbrPuits = 0;
+  public dashboardData: Dashboard = new Dashboard(0, 0);
+
+  constructor(public loginservice: LoginService, private productService: ProductService, public layoutService: LayoutService, private dashboardService: DashboardService) {
     this.subscription = this.layoutService.configUpdate$
       .pipe(debounceTime(25))
       .subscribe((config) => {
@@ -57,13 +58,13 @@ export class DashboardComponent implements OnInit, OnDestroy  {
 
   ngOnInit() {
 
-     this.initChart();
+    this.initChart();
     this.productService.getProductsSmall().then(data => this.products = data);
     this.fetchDashboardData()
 
     this.items = [
-      { label: 'Add New', icon: 'pi pi-fw pi-plus' },
-      { label: 'Remove', icon: 'pi pi-fw pi-minus' }
+      {label: 'Add New', icon: 'pi pi-fw pi-plus'},
+      {label: 'Remove', icon: 'pi pi-fw pi-minus'}
     ];
   }
 
@@ -71,7 +72,6 @@ export class DashboardComponent implements OnInit, OnDestroy  {
     this.dashboardService.getDashboardData().subscribe(
       (data: Dashboard) => {
         this.dashboardData = data;
-        console.log('Données du tableau de bord récupérées :', data);
       },
       (error) => {
         console.error('Erreur lors de la récupération des données du tableau de bord :', error);
@@ -86,11 +86,11 @@ export class DashboardComponent implements OnInit, OnDestroy  {
     const surfaceBorder = documentStyle.getPropertyValue('--surface-border');
 
     this.chartDataAnalyse = {
-      labels: ['Janvier', 'Février', 'Mars', 'Avril', 'Mai', 'Juin', 'Juillet','Août','septembre','octobre','novembre','décembre'],
+      labels: ['Janvier', 'Février', 'Mars', 'Avril', 'Mai', 'Juin', 'Juillet', 'Août', 'septembre', 'octobre', 'novembre', 'décembre'],
       datasets: [
         {
           label: 'Chimique',
-          data: [65, 59, 80, 81, 56, 55, 40,45,70,56,89,69],
+          data: [65, 59, 80, 81, 56, 55, 40, 45, 70, 56, 89, 69],
           fill: false,
           backgroundColor: documentStyle.getPropertyValue('--bluegray-700'),
           borderColor: documentStyle.getPropertyValue('--bluegray-700'),
@@ -98,7 +98,7 @@ export class DashboardComponent implements OnInit, OnDestroy  {
         },
         {
           label: 'Granulométrique',
-          data: [28, 48, 40, 19, 86, 27, 90,58,85,45,53,46],
+          data: [28, 48, 40, 19, 86, 27, 90, 58, 85, 45, 53, 46],
           fill: false,
           backgroundColor: documentStyle.getPropertyValue('--green-600'),
           borderColor: documentStyle.getPropertyValue('--green-600'),
@@ -137,7 +137,6 @@ export class DashboardComponent implements OnInit, OnDestroy  {
       }
     };
   }
-  // =====================================================================================================
 
 
   selectedNodes!: TreeNode[];
@@ -147,7 +146,7 @@ export class DashboardComponent implements OnInit, OnDestroy  {
       expanded: true,
       type: 'person',
       data: {
-       icon:'pi-filter',
+        icon: 'pi-filter',
         name: 'Puit',
         title: ''
       },
@@ -159,12 +158,12 @@ export class DashboardComponent implements OnInit, OnDestroy  {
             image: 'https://primefaces.org/cdn/primeng/images/demo/avatar/annafali.png',
             name: 'Bassin1',
             title: '',
-            icon:'pi-receipt'
+            icon: 'pi-receipt'
           },
           children: [
             {
               label: 'SBNL',
-              icon:'pi-wave-pulse',
+              icon: 'pi-wave-pulse',
               children: [
                 {
                   label: 'SBL',
@@ -178,7 +177,6 @@ export class DashboardComponent implements OnInit, OnDestroy  {
           ]
 
 
-
         },
         {
           expanded: true,
@@ -187,12 +185,12 @@ export class DashboardComponent implements OnInit, OnDestroy  {
             image: 'https://primefaces.org/cdn/primeng/images/demo/avatar/stephenshaw.png',
             name: 'Bassin2',
             title: '',
-            icon:'pi-receipt'
+            icon: 'pi-receipt'
           },
           children: [
             {
               label: 'SBNL',
-              icon:'pi-wave-pulse'
+              icon: 'pi-wave-pulse'
               ,
               children: [
                 {
@@ -211,15 +209,6 @@ export class DashboardComponent implements OnInit, OnDestroy  {
       ]
     }
   ];
-
-
-
-
-
-
-
-
-
 
 
   ngOnDestroy() {

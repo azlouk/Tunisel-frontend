@@ -19,11 +19,9 @@ export class SblService {
   }
 
   deleteSbl(sblId: number | undefined): Observable<any> {
-    console.log(`${this.apiUrl}/sbls/${sblId}`)
     return this.http.delete(`${this.apiUrl}/sbls/delete/${sblId}`);
   }
   updateSbl(sbl: Sbl): Observable<Sbl> {
-    console.log("update");
     return this.http.put<Sbl>(`${this.apiUrl}/sbls/${sbl.id}`, sbl);
   }
 
