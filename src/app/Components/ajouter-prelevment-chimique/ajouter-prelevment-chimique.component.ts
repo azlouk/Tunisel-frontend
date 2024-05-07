@@ -136,12 +136,12 @@ this.selectedPuit={};this.selectedBassin={} ;this.selectedSbnl={} ;this.selected
 
 if(this.isUpdateAnalyseChimique==true){
     this.analyseChimiqueService.getElementByAnalyseChimiqueId(this.analyseChimiqueId).subscribe((value :any) => {
-      this.selectedPuit=value.puit
-      this.selectedBassin=value.bassin;
-      this.selectedSbl=value.sbl;
-      this.selectedSbnl=value.sbnl;
-      this.selectedSblf=value.sblf ;
-      this.selectedBande=value.bande;
+      this.selectedPuit=value.puit==undefined?{}:value.puit
+      this.selectedBassin=value.bassin==undefined?{}:value.bassin;
+      this.selectedSbl=value.sbl==undefined?{}:value.sbl;
+      this.selectedSbnl=value.sbnl==undefined?{}:value.sbnl;
+      this.selectedSblf=value.sblf ==undefined?{}:value.sblf;
+      this.selectedBande=value.bande==undefined?{}:value.bande;
       console.log('ooooooooooooooooo  ',new JsonPipe().transform(value))
     }, error => {
 
@@ -279,6 +279,7 @@ if(this.isUpdateAnalyseChimique==true){
 
     }
     catch (e){
+      console.log(e)
       Swal.fire({title:"Erreur de séléction",icon:"error", text:"Sélectionner puit, bassin ,bande ,sbnl ,sbln ou sblf"})
     }
   }

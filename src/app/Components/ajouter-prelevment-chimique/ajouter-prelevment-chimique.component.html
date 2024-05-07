@@ -69,7 +69,7 @@
           </p-tabPanel>
         </p-tabView>
         <div >
-          <div class="border-1 border-round border-gray-300 p-2 " *ngIf="isUpdateAnalyseChimique&&selectedPuit">
+          <div class="border-1 border-round border-gray-300 p-2 " *ngIf="isUpdateAnalyseChimique&&selectedPuit && selectedPuit.hasOwnProperty('id')">
             <p class="font-bold">
               Puit
             </p>
@@ -113,7 +113,7 @@
             </p-dialog>
           </div>
 <!--          =========-->
-          <div class="border-1 border-round border-gray-300 p-2 " *ngIf="isUpdateAnalyseChimique&&selectedBassin">
+          <div class="border-1 border-round border-gray-300 p-2 " *ngIf="isUpdateAnalyseChimique&&(selectedBassin!=undefined && selectedBassin.hasOwnProperty('id'))">
             <p class="font-bold">
               Bassin
             </p>
@@ -157,7 +157,7 @@
 
 <!--          =========-->
 <!--          =========-->
-          <div class="border-1 border-round border-gray-300 p-2 " *ngIf="isUpdateAnalyseChimique&&selectedSbnl">
+          <div class="border-1 border-round border-gray-300 p-2 " *ngIf="isUpdateAnalyseChimique&&(selectedSbnl!=undefined && selectedSbnl.hasOwnProperty('id'))">
             <p class="font-bold">
               Sbnl
             </p>
@@ -202,7 +202,7 @@
           <!--          =========-->
 
           <!--          =========-->
-          <div class="border-1 border-round border-gray-300 p-2 " *ngIf="isUpdateAnalyseChimique&&selectedBande">
+          <div class="border-1 border-round border-gray-300 p-2 " *ngIf="isUpdateAnalyseChimique && selectedBande!=undefined && selectedBande.hasOwnProperty('id')">
             <p class="font-bold">
               Bande
             </p>
@@ -246,7 +246,7 @@
 
           <!--          =========-->
           <!--          =========-->
-          <div class="border-1 border-round border-gray-300 p-2 " *ngIf="isUpdateAnalyseChimique&&selectedSbl">
+          <div class="border-1 border-round border-gray-300 p-2 " *ngIf="isUpdateAnalyseChimique&&selectedSbl!=undefined && selectedSbl.hasOwnProperty('id')">
             <p class="font-bold">
               Sbl
             </p>
@@ -279,7 +279,7 @@
           </div>
           <!--          =========-->
           <!--          =========-->
-          <div class="border-1 border-round border-gray-300 p-2 " *ngIf="isUpdateAnalyseChimique&&selectedSblf">
+          <div class="border-1 border-round border-gray-300 p-2 " *ngIf="isUpdateAnalyseChimique&&selectedSblf !=undefined && selectedSblf.hasOwnProperty('id') ">
             <p class="font-bold">
               Sblf
             </p>

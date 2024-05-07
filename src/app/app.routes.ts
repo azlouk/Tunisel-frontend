@@ -26,6 +26,7 @@ import {AjouterInventaireComponent} from "./Components/ajouter-inventaire/ajoute
 import {ArticleComponent} from "./Components/article/article.component";
 import {BandeComponent} from "./Components/bande/bande.component";
 import {ProduitComponent} from "./Components/produit/produit.component";
+import {RapportAnalyseComponent} from "./Components/rapportAnalyse/rapportAnalyse.component";
 
 export const routes: Routes = [
   {path:'', component:LoginComponent},
@@ -56,4 +57,5 @@ export const routes: Routes = [
   {path:'ajouterInventaire', component:AjouterInventaireComponent,  canActivate:[AuthGuard]},
   {path:'produit', component:ProduitComponent , canActivate:[AuthGuard]},
   {path:'editInventaire/:id', component:AjouterInventaireComponent,  canActivate:[AuthGuard]},
+  {path:'rapport', component:RapportAnalyseComponent,  canActivate:[AuthGuard]},
 ];

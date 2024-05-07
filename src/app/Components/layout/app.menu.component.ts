@@ -34,12 +34,12 @@ export class AppMenuComponent implements OnInit {
 
       },
       {
-        label: 'Stock',
+        label: 'Stock Bassin',
         items: [
-          {label: 'Stock Non Lavé', icon: 'pi pi-fw pi-box', routerLink: ['sbnls']},
+          {label: 'Non Lavé', icon: 'pi pi-fw pi-box', routerLink: ['sbnls']},
           {label: 'Bande', icon: 'pi pi-fw pi-box', routerLink: ['bandes']},
-          {label: 'Stock Lavé', icon: 'pi pi-fw pi-box', routerLink: ['/sbls']},
-          {label: 'Stock Lavé Finale', icon: 'pi pi-fw pi-box', routerLink: ['/sblfs']},
+          {label: 'Lavé', icon: 'pi pi-fw pi-box', routerLink: ['/sbls']},
+          {label: 'Lavé Finale (navire)', icon: 'pi pi-fw pi-box', routerLink: ['/sblfs']},
 
         ]
 
@@ -47,8 +47,9 @@ export class AppMenuComponent implements OnInit {
       {
         label: 'Analyses ',
         items: [
-          {label: 'Analyse Chimique', icon: 'pi pi-fw pi-check-circle', routerLink: ['/analyseChimique']},
-          {label: 'Analyse Granulométrique', icon: 'pi pi-fw pi-check-circle', routerLink: ['/analysePhysique']},
+          {label: 'Ajouter Rapport Analyse', icon: 'pi pi-fw pi-check-circle', routerLink: ['/rapport']},
+          {label: 'Ajouter Analyse Chimique', icon: 'pi pi-fw pi-check-circle', routerLink: ['/analyseChimique']},
+          {label: 'Ajouter Analyse Granulométrique', icon: 'pi pi-fw pi-check-circle', routerLink: ['/analysePhysique']},
         ]
       },
       {

@@ -107,7 +107,7 @@ loading:boolean=false ;
 
   ngOnInit() {
 
-
+this.SelectetBassin={analysesPhysiques:[]}
     this.colsfiltre = [
       {id:0, field: 'reference', header: 'reference' ,hide:true},
       { id:1, field: 'dateAnalyse', header: 'Date Analyse' ,hide:false},
@@ -197,30 +197,7 @@ loading:boolean=false ;
     this.submitted = false;
   }
 
-  saveProduct() {
-    this.submitted = true;
 
-    if (this.product.name?.trim()) {
-      if (this.product.id) {
-        // @ts-ignore
-        this.product.inventoryStatus = this.product.inventoryStatus.value ? this.product.inventoryStatus.value : this.product.inventoryStatus;
-        this.products[this.findIndexById(this.product.id)] = this.product;
-        this.messageService.add({ severity: 'success', summary: 'Successful', detail: 'Product Updated', life: 3000 });
-      } else {
-        this.product.id = this.createId();
-        this.product.code = this.createId();
-        this.product.image = 'product-placeholder.svg';
-        // @ts-ignore
-        this.product.inventoryStatus = this.product.inventoryStatus ? this.product.inventoryStatus.value : 'INSTOCK';
-        this.products.push(this.product);
-        this.messageService.add({ severity: 'success', summary: 'Successful', detail: 'Product Created', life: 3000 });
-      }
-
-      this.products = [...this.products];
-      this.productDialog = false;
-      this.product = {};
-    }
-  }
   saveBassin() {
     this.submitted = false;
     this.productDialog=false
@@ -291,7 +268,8 @@ loading:boolean=false ;
 
   exportrapport(SelectetBassin: Bassin) {
 
-    this.SelectetBassin = SelectetBassin;
+    this.SelectetBassin = {...SelectetBassin};
+    this.getAnalyseGranoli() ;
     this.visiblePrint = true
     console.log("---->"+new JsonPipe().transform(this.SelectetBassin));
   }
@@ -306,7 +284,8 @@ loading:boolean=false ;
         const d=v.dateAnalyse+"";
         const dateana:Date=new Date(d)
         console.log("-D-->" + dateana)
-        if (  this.AfterTodate(this.DatefiltrageStart,dateana) &&  this.AfterTodate(dateana,this.DatefiltrageEnd)) {
+        if (  this.AfterTodate(new Date(this.DatefiltrageStart+""),dateana) &&  this.AfterTodate(dateana,new Date(this.DatefiltrageEnd))) {
+
           newAnalyse.push(v);
         } else {
           console.log("no compare")
@@ -345,6 +324,7 @@ loading:boolean=false ;
   getAnalyseGranoli() {
     const data=this.SelectetBassin.analysesPhysiques !== undefined ? this.SelectetBassin.analysesPhysiques : []
     const newAnalyse:AnalysesPhysique[] =[]
+    console.log("PhysiqueAnana"+new JsonPipe().transform(data))
     data.forEach(v => {
 
       if(v.dateAnalyse!==undefined){
@@ -352,8 +332,9 @@ loading:boolean=false ;
         const d=v.dateAnalyse+"";
         const dateana:Date=new Date(d)
         console.log("-D-->" + dateana)
-        if (  this.AfterTodate(this.DatefiltrageStart,dateana) &&  this.AfterTodate(dateana,this.DatefiltrageEnd)) {
-          newAnalyse.push(v);
+        if (  this.AfterTodate(new Date(this.DatefiltrageStart+""),dateana) &&  this.AfterTodate(dateana,new Date(this.DatefiltrageEnd))) {
+
+           newAnalyse.push(v);
         } else {
           console.log("no compare")
         }
@@ -363,7 +344,7 @@ loading:boolean=false ;
     })
     this.SelectetBassin.analysesPhysiques=[...newAnalyse] ;
 
-    return this.SelectetBassin.analysesPhysiques !== undefined ? this.SelectetBassin.analysesPhysiques : []
+
   }
 
 
