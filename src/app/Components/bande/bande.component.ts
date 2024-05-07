@@ -318,7 +318,7 @@ console.log('=====>>>>> export: ',new JsonPipe().transform(bande))
 
 
   colsfiltre: any[] = [];
-  ListTamisSelected: Tamis={};
+  // ListTamisSelected: Tamis={};
   SelectedBandePrintAnalyse: AnalysesPhysique={};
   getColsfiltr() {
     return this.colsfiltre.filter(value => value.hide==true)

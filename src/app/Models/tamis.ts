@@ -4,7 +4,7 @@ export interface Tamis {
   calibre?: number;
   masse?: number;
   refus?: number;
-  refusCumulated?: number;
+  refusCumulated: number;
   passCumulated?: number;
 
 }

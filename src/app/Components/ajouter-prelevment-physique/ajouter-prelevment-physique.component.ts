@@ -76,7 +76,10 @@ export class AjouterPrelevmentPhysiqueComponent implements OnInit{
   // ======================
   visibale:boolean=false;
   listeTamis:Tamis[]=[];
-  tamis:Tamis={};
+  tamis: Tamis = {
+    refusCumulated: 0,
+
+  };
   isUpdateTamis:boolean=false ;
 
   // =====================
@@ -97,6 +100,7 @@ export class AjouterPrelevmentPhysiqueComponent implements OnInit{
 
 
   ngOnInit(): void {
+
     this.isUpdateTamis=false ;
     this.analysePhysiqueId = this.route.snapshot.paramMap.get('id');
     this.isUpdateAnalysePhysique=this.analysePhysiqueId!==null
@@ -205,7 +209,9 @@ export class AjouterPrelevmentPhysiqueComponent implements OnInit{
       else {
 
       }
-    }}
+    }
+
+  }
 
 
 
@@ -240,9 +246,14 @@ this.visibale=false;
 
 
   ajouterTamis() {
-    this.tamis={}
+
+    this.tamis = {
+      refusCumulated: 0,
+    };
     this.visibale=true;
     this.isUpdateTamis=false ;
+
+
   }
 
   saveTamis() {
@@ -252,7 +263,6 @@ this.visibale=false;
          if(tamis!==-1){
          this.listeTamis[tamis]= {...this.tamis} ;
            this.visibale=false
-
          }
     }else {
       const tamis=this.listeTamis.findIndex((t:Tamis)=>t.calibre===this.tamis.calibre)
@@ -275,14 +285,22 @@ this.visibale=false;
             this.listeTamis[tamis].refusCumulated=this.tamis.refusCumulated ;
             this.listeTamis[tamis].passCumulated=this.tamis.passCumulated ;
             this.visibale=false
+
           }
         });
 
 
       }
       else {
+
         this.listeTamis.push({...this.tamis});
+         this.listeTamis.sort((a, b) => {
+           // Compare the 'refusCumulated' property of each object
+           // @ts-ignore
+           return b.calibre - a.calibre;
+         });
         this.visibale=false
+
       }
     }
 
@@ -295,4 +313,55 @@ this.visibale=false;
      this.tamis={...tamis}
     this.isUpdateTamis=true ;
   }
+
+  calculateTotalMass(): number {
+    let totalMasse = 0;
+    for (const tamis of this.listeTamis) {
+      if (tamis.masse){
+      totalMasse += tamis.masse;
+
+    }}
+    console.log('=========>>>>>>>>>>totle Masse: ',totalMasse);
+    return totalMasse;
+  }
+  calculateRefus(total:number) {
+
+for (let tamis of this.listeTamis){
+  tamis.refus=0;
+  if(tamis.masse!==undefined){
+
+    tamis.refus = parseFloat((tamis.masse * 100 / total).toFixed(2));  }else {
+
+  }
+
+}
+
+  }
+
+  calculateRefusCumulated() {
+for (let i=0;i<this.listeTamis.length;i++){
+  this.listeTamis[i].refusCumulated=0;
+  let cumulativeRejection = this.listeTamis[i].refus;
+  if(i==0&&cumulativeRejection){
+    this.listeTamis[i].refusCumulated=cumulativeRejection
+  }
+  else if(cumulativeRejection&&this.listeTamis[i].refusCumulated!==undefined&&i>0){
+
+    Math.round(this.listeTamis[i].refusCumulated=this.listeTamis[i-1].refusCumulated+cumulativeRejection);
+  }
+}
+  }
+
+  calculatePassCumulated() {
+for(let tamis of this.listeTamis){
+  if(tamis.refus){
+ Math.round(tamis.passCumulated=100-tamis.refusCumulated);
+}}
+  }
+calculateTamis(){
+let total:number=this.calculateTotalMass();
+this.calculateRefus(total);
+this.calculateRefusCumulated();
+  this.calculatePassCumulated();
+}
 }
