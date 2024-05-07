@@ -34,7 +34,7 @@ import {InventaireService} from "../../Services/inventaire.service";
   templateUrl: './inventaire.component.html',
   styleUrl: './inventaire.component.css'
 })
-export class InventaireComponent implements OnInit{
+export class InventaireComponent implements OnInit {
 
   productDialog: boolean = false;
 
@@ -58,34 +58,35 @@ export class InventaireComponent implements OnInit{
   // ======********============
   inventaires: Inventaire[] = [];
 
-  inventaire:Inventaire={};
+  inventaire: Inventaire = {};
 
   selectedInventaire: Inventaire[] = [];
 
-  private isUpdateInventaire=false;
+  private isUpdateInventaire = false;
 
 
-  constructor(private router: Router,private productService: ProductService, private messageService: MessageService,private inventaireService :InventaireService) {}
+  constructor(private router: Router, private productService: ProductService, private messageService: MessageService, private inventaireService: InventaireService) {
+  }
 
   ngOnInit() {
-    this.inventaireService.getInventaires().subscribe((v:  Inventaire[]) => {
-      this.inventaires=v;
-      console.log(new JsonPipe().transform("====================>>>>>>"+this.inventaires))
+    this.inventaireService.getInventaires().subscribe((v: Inventaire[]) => {
+      this.inventaires = v;
 
-    },error => {
-      console.log(error)})
+    }, error => {
+      console.log(error)
+    })
 
     this.cols = [
-      { field: 'id', header: 'id' },
-      { field: 'reference', header: 'reference' },
-      { field: 'designation', header: 'designation' },
-      { field: 'code', header: 'code' },
-      { field: 'serie', header: 'serie' },
-      { field: 'marque', header: 'marque' },
-      { field: 'verification', header: 'verification' },
-      { field: 'dateInventaire', header: 'dateInventaire' },
-      { field: 'etatFiche', header: 'etatFiche' },
-      { field: 'emplacement', header: 'emplacement' },
+      {field: 'id', header: 'id'},
+      {field: 'reference', header: 'reference'},
+      {field: 'designation', header: 'designation'},
+      {field: 'code', header: 'code'},
+      {field: 'serie', header: 'serie'},
+      {field: 'marque', header: 'marque'},
+      {field: 'verification', header: 'verification'},
+      {field: 'dateInventaire', header: 'dateInventaire'},
+      {field: 'etatFiche', header: 'etatFiche'},
+      {field: 'emplacement', header: 'emplacement'},
 
     ];
 
@@ -104,27 +105,26 @@ export class InventaireComponent implements OnInit{
   }
 
   editInventaire(inventaire: Inventaire) {
-    this.isUpdateInventaire=true;
-    this.router.navigate(['/editInventaire/'+inventaire.id]);
+    this.isUpdateInventaire = true;
+    this.router.navigate(['/editInventaire/' + inventaire.id]);
 
 
-    this.inventaire = { ...inventaire };
+    this.inventaire = {...inventaire};
     this.productDialog = true;
   }
 
-  deleteInventaire(inventaire:Inventaire) {
+  deleteInventaire(inventaire: Inventaire) {
     this.deleteProductDialog = true;
 
-    this.inventaire = { ...inventaire };
+    this.inventaire = {...inventaire};
   }
 
   confirmDeleteSelected() {
     this.deleteProductsDialog = false;
-    console.log(this.selectedInventaire.length)
     this.selectedInventaire.forEach(selectedInventaire => {
       this.inventaireService.deleteInventaire(selectedInventaire.id).subscribe(
         () => {
-          this.inventaires = this.inventaires.filter(inventaire =>inventaire.id !== selectedInventaire.id);
+          this.inventaires = this.inventaires.filter(inventaire => inventaire.id !== selectedInventaire.id);
 
         },
         (error) => {
@@ -133,30 +133,24 @@ export class InventaireComponent implements OnInit{
       );
     });
 
-    this.messageService.add({ severity: 'success', summary: 'réussi', detail: 'inventaire supprimé', life: 3000 });
+    this.messageService.add({severity: 'success', summary: 'réussi', detail: 'inventaire supprimé', life: 3000});
     this.selectedInventaire = [];
   }
 
   confirmDelete() {
     this.deleteProductDialog = false;
     this.inventaires = this.inventaires.filter(val => val.id !== this.inventaire.id);
-    if (this.inventaire.id!= null) {
+    if (this.inventaire.id != null) {
       this.inventaireService.deleteInventaire(this.inventaire.id).subscribe(() => console.log("fiche vie deleted"));
     }
-    this.messageService.add({ severity: 'success', summary: 'réussi', detail: 'inventaire supprimé', life: 3000 });
-    this.inventaire ;
+    this.messageService.add({severity: 'success', summary: 'réussi', detail: 'inventaire supprimé', life: 3000});
+    this.inventaire;
   }
 
   hideDialog() {
     this.productDialog = false;
     this.submitted = false;
   }
-
-
-
-
-
-
 
 
   onGlobalFilter(table: Table, event: Event) {

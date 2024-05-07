@@ -55,7 +55,6 @@ export class LoginService {
 
   GetPassword(user: User):Observable<User> {
 
-    console.log(new JsonPipe().transform(user))
       return this.http.post<User>(`${this.apiUrl}/users/pass`, user) ;
 
 

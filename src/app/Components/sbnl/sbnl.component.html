@@ -115,39 +115,41 @@
       <ng-template pTemplate="content">
         <div class="field">
           <label for="name">Bassin</label>
-          <p-dropdown [options]="bassins" [(ngModel)]="sbnl.sbnlBassin" [editable]="true" optionLabel="reference" class="w-full"></p-dropdown>
+          <p-dropdown [options]="bassins" [(ngModel)]="sbnl.sbnlBassin" [editable]="true" optionLabel="reference" class="w-full" [ngClass]="{'ng-invalid ng-dirty' : submitted && !sbnl.sbnlBassin}"></p-dropdown>
+          <small class="ng-dirty ng-invalid" *ngIf="submitted && !sbnl.sbnlBassin">Bassin est requis.</small>
+
         </div>
         <div class="field">
           <label for="name">Reference</label>
           <input type="text" pInputText id="name"  [(ngModel)]="sbnl.reference" required autofocus [ngClass]="{'ng-invalid ng-dirty' : submitted && !sbnl.reference}"/>
-          <small class="ng-dirty ng-invalid" *ngIf="submitted && !sbnl.reference">Name is required.</small>
+          <small class="ng-dirty ng-invalid" *ngIf="submitted && !sbnl.reference">Reference est requis.</small>
         </div>
         <div class="field">
           <label for="Description">Description</label>
-          <input type="text" pInputText id="Description"  [(ngModel)]="sbnl.description" required autofocus [ngClass]="{'ng-invalid ng-dirty' : submitted && !sbnl.description}"/>
-          <small class="ng-dirty ng-invalid" *ngIf="submitted && !sbnl.description">Pseudo is required.</small>
+          <input type="text" pInputText id="Description"  [(ngModel)]="sbnl.description" required autofocus />
+<!--          <small class="ng-dirty ng-invalid" *ngIf="submitted && !sbnl.description">Pseudo is required.</small>-->
         </div>
 
         <div class="field">
           <label for="dateCreation">Date Stock</label>
-          <p-calendar dateFormat="yy-mm-dd" id="dateCreation" [(ngModel)]="sbnl.dateStock"  [ngClass]="{'ng-invalid ng-dirty' : submitted && !sbnl.dateStock}" [showIcon]="true"></p-calendar>
-          <small class="ng-dirty ng-invalid" *ngIf="submitted && !sbnl.dateStock">poste is required.</small>
+          <p-calendar dateFormat="yy-mm-dd" id="dateCreation" [(ngModel)]="sbnl.dateStock"  ></p-calendar>
+<!--          <small class="ng-dirty ng-invalid" *ngIf="submitted && !sbnl.dateStock">poste is required.</small>-->
         </div>
 
         <div class="field">
           <label for="emplacement">Emplacement</label>
-          <input type="text" pInputText id="emplacement"  [(ngModel)]="sbnl.emplacement" required autofocus [ngClass]="{'ng-invalid ng-dirty' : submitted && !sbnl.emplacement}"/>
-          <small class="ng-dirty ng-invalid" *ngIf="submitted && !sbnl.emplacement">Telephone is required.</small>
+          <input type="text" pInputText id="emplacement"  [(ngModel)]="sbnl.emplacement" required autofocus />
+<!--          <small class="ng-dirty ng-invalid" *ngIf="submitted && !sbnl.emplacement">Telephone is required.</small>-->
         </div>
         <div class="field">
           <label for="etat">Etat</label>
-          <input type="text" pInputText id="etat"  [(ngModel)]="sbnl.etat" required autofocus [ngClass]="{'ng-invalid ng-dirty' : submitted && !sbnl.etat}"/>
-          <small class="ng-dirty ng-invalid" *ngIf="submitted && !sbnl.etat">Telephone is required.</small>
+          <input type="text" pInputText id="etat"  [(ngModel)]="sbnl.etat" required autofocus/>
+<!--          <small class="ng-dirty ng-invalid" *ngIf="submitted && !sbnl.etat">Telephone is required.</small>-->
         </div>
         <div class="field">
           <label for="quantite">Quantite</label>
-          <p-inputNumber Id="quantite" mode="decimal" [minFractionDigits]="3" [(ngModel)]="sbnl.quantite"  [ngClass]="{'ng-invalid ng-dirty' : submitted && !sbnl.quantite}" ></p-inputNumber>
-          <small class="ng-dirty ng-invalid" *ngIf="submitted && !sbnl.quantite">Telephone is required.</small>
+          <p-inputNumber Id="quantite" mode="decimal" [minFractionDigits]="3" [(ngModel)]="sbnl.quantite"  ></p-inputNumber>
+<!--          <small class="ng-dirty ng-invalid" *ngIf="submitted && !sbnl.quantite">Telephone is required.</small>-->
         </div>
 
 

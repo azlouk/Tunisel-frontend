@@ -135,7 +135,7 @@ this.getsbnl()
   }
 
   openNew() {
-    this.sbnl;
+    this.sbnl = {};
     this.submitted = false;
     this.productDialog = true;
   }
@@ -197,27 +197,30 @@ this.getsbnl()
   }
 
   saveSbnl() {
-    this.submitted = false;
-    this.productDialog=false
+    this.submitted = true;
 
-    if(this.isUpdatesbnl==true) {
-      this.sbnlService.updateSbnl(this.sbnl).subscribe(() =>{
-        this.sbnlService.getAllSbnls().subscribe((sbnls: Sbnl[]) => {
-          this.sbnls= sbnls;
+    if (this.sbnl.reference?.trim()&&this.sbnl.sbnlBassin) {
+
+      this.productDialog = false
+
+      if (this.isUpdatesbnl == true) {
+        this.sbnlService.updateSbnl(this.sbnl).subscribe(() => {
+          this.sbnlService.getAllSbnls().subscribe((sbnls: Sbnl[]) => {
+            this.sbnls = sbnls;
+          });
         });
-      });
-      console.log('Sbnl updated');
-      this.isUpdatesbnl=false;
-    }
-    else
-    {
-      this.sbnlService.addSbnl(this.sbnl).subscribe(() => {this.sbnlService.getAllSbnls()
-        .subscribe((sbnls: Sbnl[]) => {
-          this.sbnls = sbnls;
-        } );});
+        console.log('Sbnl updated');
+        this.isUpdatesbnl = false;
+      } else {
+        this.sbnlService.addSbnl(this.sbnl).subscribe(() => {
+          this.sbnlService.getAllSbnls()
+            .subscribe((sbnls: Sbnl[]) => {
+              this.sbnls = sbnls;
+            });
+        });
 
 
-
+      }
     }
   }
 

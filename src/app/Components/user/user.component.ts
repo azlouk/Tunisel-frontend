@@ -40,7 +40,7 @@ import {Employer} from "../../Models/employer";
   templateUrl: './user.component.html',
   styleUrl: './user.component.css'
 })
-export class UserComponent implements OnInit{
+export class UserComponent implements OnInit {
   productDialog: boolean = false;
 
   deleteProductDialog: boolean = false;
@@ -67,34 +67,40 @@ export class UserComponent implements OnInit{
 
   selectedUsers: User[] = [];
 
-  private isUpdateUser=false;
+  private isUpdateUser = false;
 
-  constructor(private productService: ProductService, private messageService: MessageService,private userService :UserService) { }
+  constructor(private productService: ProductService, private messageService: MessageService, private userService: UserService) {
+  }
 
   ngOnInit() {
     this.getAllUsers();
     this.cols = [
-      { field: 'product', header: 'Product' },
-      { field: 'price', header: 'Price' },
-      { field: 'category', header: 'Category' },
-      { field: 'rating', header: 'Reviews' },
-      { field: 'inventoryStatus', header: 'Status' }
+      {field: 'product', header: 'Product'},
+      {field: 'price', header: 'Price'},
+      {field: 'category', header: 'Category'},
+      {field: 'rating', header: 'Reviews'},
+      {field: 'inventoryStatus', header: 'Status'}
     ];
 
     this.statuses = [
-      { label: 'INSTOCK', value: 'instock' },
-      { label: 'LOWSTOCK', value: 'lowstock' },
-      { label: 'OUTOFSTOCK', value: 'outofstock' }
+      {label: 'INSTOCK', value: 'instock'},
+      {label: 'LOWSTOCK', value: 'lowstock'},
+      {label: 'OUTOFSTOCK', value: 'outofstock'}
     ];
   }
-getAllUsers(){
-  this.userService.getAllUsers().subscribe((v:  User[]) => {
-    this.users=v;},error => {console.log(error)})
-}
+
+  getAllUsers() {
+    this.userService.getAllUsers().subscribe((v: User[]) => {
+      this.users = v;
+    }, error => {
+      console.log(error)
+    })
+  }
+
   openNew() {
 
 
-    this.user = {userType:"ADMIN"};
+    this.user = {userType: "ADMIN"};
     this.submitted = false;
     this.productDialog = true;
   }
@@ -106,19 +112,18 @@ getAllUsers(){
   }
 
   editProduct(user: User) {
-    this.isUpdateUser=true;
-    this.user = { ...user };
+    this.isUpdateUser = true;
+    this.user = {...user};
     this.productDialog = true;
   }
 
   deleteProduct(user: User) {
     this.deleteProductDialog = true;
-    this.user = { ...user };
+    this.user = {...user};
   }
 
   confirmDeleteSelected() {
     this.deleteProductsDialog = false;
-console.log(this.selectedUsers.length)
     this.selectedUsers.forEach(selectedUser => {
       this.userService.deleteUser(selectedUser.id).subscribe(
         () => {
@@ -130,18 +135,17 @@ console.log(this.selectedUsers.length)
       );
     });
 
-    this.messageService.add({ severity: 'success', summary: 'Successful', detail: 'User Deleted', life: 3000 });
+    this.messageService.add({severity: 'success', summary: 'Successful', detail: 'User Deleted', life: 3000});
     this.selectedUsers = [];
   }
 
   confirmDelete() {
     this.deleteProductDialog = false;
-    console.log("this.user.id", this.user.id);
     this.users = this.users.filter(val => val.id !== this.user.id);
-    if (this.user.id!= null) {
+    if (this.user.id != null) {
       this.userService.deleteUser(this.user.id).subscribe(() => console.log("user deleted"));
     }
-    this.messageService.add({ severity: 'success', summary: 'réussi', detail: 'Utilisateur supprimé', life: 3000 });
+    this.messageService.add({severity: 'success', summary: 'réussi', detail: 'Utilisateur supprimé', life: 3000});
     this.user = {};
   }
 
@@ -155,38 +159,31 @@ console.log(this.selectedUsers.length)
 
     this.submitted = true;
 
-    if (this.user.pseudo?.trim()&&this.user.mp?.trim()){
-    if(this.isUpdateUser==true) {
-      console.log(new JsonPipe().transform(this.user) )
-      this.userService.saveUser(this.user).subscribe(() => {
-        console.log("user Updated");this.getAllUsers();
-      });
-      this.isUpdateUser=false;
-    }
-    else
-    {
-      if (this.user.userType === "ADMIN"){
-        this.userService.addAdmin(this.user).subscribe(() => {
-          console.log("Admin Added");this.getAllUsers();
-        })
-      }
-      if(this.user.userType=="EMPLOYER") {
-        this.userService.AddEmployer(this.user).subscribe(() => {
-          console.log("Employer Added");this.getAllUsers();
+    if (this.user.pseudo?.trim() && this.user.mp?.trim()) {
+      if (this.isUpdateUser == true) {
+        this.userService.saveUser(this.user).subscribe(() => {
         });
+        this.isUpdateUser = false;
+      } else {
+        if (this.user.userType === "ADMIN") {
+          this.userService.addAdmin(this.user).subscribe(() => {
+            this.getAllUsers();
+          })
+        }
+        if (this.user.userType == "EMPLOYER") {
+          this.userService.AddEmployer(this.user).subscribe(() => {
+            this.getAllUsers();
+          });
+        }
+        this.productDialog = false
       }
-      this.productDialog=false
-    }
     }
   }
-
-
 
 
   onGlobalFilter(table: Table, event: Event) {
     table.filterGlobal((event.target as HTMLInputElement).value, 'contains');
   }
-
 
 
 }

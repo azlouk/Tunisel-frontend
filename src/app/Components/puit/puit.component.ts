@@ -129,7 +129,6 @@ this.ReportedBy=this.Loginservice.getToken()
       this.puits = v;
       this.loading = false;
 
-      console.log(new JsonPipe().transform("====================>>>>>>" + this.puits))
 
     }, error => {
       console.log(error)
@@ -178,7 +177,6 @@ this.ReportedBy=this.Loginservice.getToken()
 
   confirmDeleteSelected() {
     this.deleteProductsDialog = false;
-    console.log(this.selectedPuits.length)
     this.selectedPuits.forEach(selectedPuit => {
       this.puitService.deletePuit(selectedPuit.id).subscribe(
         () => {
@@ -196,7 +194,6 @@ this.ReportedBy=this.Loginservice.getToken()
 
   confirmDelete() {
     this.deleteProductDialog = false;
-    console.log("this.puit.id", this.puit.id);
     this.puits = this.puits.filter(val => val.id !== this.puit.id);
     if (this.puit.id != null) {
       this.puitService.deletePuit(this.puit.id).subscribe(() => console.log("puit deleted"));
@@ -234,7 +231,6 @@ this.ReportedBy=this.Loginservice.getToken()
             this.puits = puits;
           });
         });
-        console.log('Puit added');
       }
     }
   }
@@ -269,7 +265,6 @@ this.ReportedBy=this.Loginservice.getToken()
   exportrapport(puit: Puit) {
     this.selectedPuitPrint = puit;
     this.visiblePrint = true
-    console.log(new JsonPipe().transform(puit));
   }
 
   getAllPuit() {
@@ -327,7 +322,6 @@ this.ReportedBy=this.Loginservice.getToken()
          if (  this.AfterTodate(new Date(this.DatefiltrageStart+""),dateana) &&  this.AfterTodate(dateana,new Date(this.DatefiltrageEnd))) {
            newAnalyse.push(v);
          } else {
-           console.log("no compare")
          }
 
 
@@ -335,10 +329,7 @@ this.ReportedBy=this.Loginservice.getToken()
 
      })
     this.selectedPuitPrint.analysesChimiques=[...newAnalyse] ;
-   // console.log(new JsonPipe().transform(data))
 
-    console.log(this.DatefiltrageStart)
-    console.log(this.DatefiltrageEnd)
 
 
   }
@@ -370,10 +361,10 @@ this.ReportedBy=this.Loginservice.getToken()
   }
 
   AfterTodate(date1:Date , date2:Date):boolean{
-    console.log("Date 1"+typeof  date1,date1)
-    console.log("Date 2"+typeof  date2,date2)
+
     return date1.getDay()<=date2.getDay() && date1.getMonth()<=date2.getMonth() && date1.getFullYear()<=date2.getFullYear()
   }
+
 
 
 }

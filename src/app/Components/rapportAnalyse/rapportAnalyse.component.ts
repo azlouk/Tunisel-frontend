@@ -158,20 +158,20 @@ export class RapportAnalyseComponent {
 
 //Init de attributs
     this.attributs= [
-      {name:'d',checked:false,label:'Densité', value:this.analysesChimique.densite,unite:'g/cm 3'},
+      {name:'d',checked:false,label:'Densité', value:this.analysesChimique.densite,unite:''},
       {name:'MS',checked:false,label:'Matiére en suspension', value:this.analysesChimique.matiereEnSuspension ,unite:'mg/L'},
       {name:'S',checked:false,label:'Salinité', value:this.analysesChimique.salimite,unite:'g/L'},
-      {name:'Ca',checked:false,label:'Calcium', value:this.analysesChimique.calcium,unite:'ppm'},
-      {name:'Mg',checked:false,label:'Magnésium', value:this.analysesChimique.magnesium,unite:'ppm'},
-      {name:'SO4',checked:false,label:'Sulfate', value:this.analysesChimique.sulfate,unite:'ppm'},
-      {name:'H2o',checked:false,label:'Humidité', value:this.analysesChimique.humidite,unite:'% '},
-      {name:'Mi',checked:false,label:'Matiére insoluble', value:this.analysesChimique.matiereInsoluble,unite:'ppm'},
-      {name:'K',checked:false,label:'Potassium', value:this.analysesChimique.potassium,unite:'mmol/L'},
-      {name:'Na',checked:false,label:'Sodium', value:this.analysesChimique.sodium,unite:'mmol'},
-      {name:'Cl',checked:false,label:'Chlorure', value:this.analysesChimique.chlorure,unite:'meq · L–1'},
-      {name:'PH',checked:false,label:'PH', value:this.analysesChimique.ph,unite:'pH'},
-      {name:'Nacl',checked:false,label:'Chlorure de sodium', value:this.analysesChimique.chlorureDeSodium,unite:'%'},
-      {name:'Fe(cn)6',checked:false,label:'Frrocyanure', value:this.analysesChimique.ferrocyanure,unite:'ppm'},
+      {name:'Ca',checked:false,label:'Calcium', value:this.analysesChimique.calcium,unite:'% ppm'},
+      {name:'Mg',checked:false,label:'Magnésium', value:this.analysesChimique.magnesium,unite:'% ppm'},
+      {name:'SO₄',checked:false,label:'Sulfate', value:this.analysesChimique.sulfate,unite:'% ppm'},
+      {name:'H₂O',checked:false,label:'Humidité', value:this.analysesChimique.humidite,unite:'% '},
+      {name:'MI',checked:false,label:'Matiére insoluble', value:this.analysesChimique.matiereInsoluble,unite:'% ppm'},
+      {name:'K',checked:false,label:'Potassium', value:this.analysesChimique.potassium,unite:'% ppm'},
+      {name:'Na',checked:false,label:'Sodium', value:this.analysesChimique.sodium,unite:'% ppm'},
+      {name:'Cl',checked:false,label:'Chlorure', value:this.analysesChimique.chlorure,unite:'% ppm'},
+      {name:'pH',checked:false,label:'pH', value:this.analysesChimique.ph,unite:''},
+      {name:'NaCL',checked:false,label:'Chlorure de sodium', value:this.analysesChimique.chlorureDeSodium,unite:'%'},
+      {name:'Fe(CN)₆',checked:false,label:'Ferrocyanure', value:this.analysesChimique.ferrocyanure,unite:'ppm'},
 
     ]
     this.selectedPuit={};this.selectedBassin={} ;this.selectedSbnl={} ;this.selectedSbl={} ;this.selectedSblf={}
@@ -196,7 +196,6 @@ export class RapportAnalyseComponent {
         this.selectedSbnl=value.sbnl;
         this.selectedSblf=value.sblf ;
         this.selectedBande=value.bande;
-        console.log('ooooooooooooooooo  ',new JsonPipe().transform(value))
       }, error => {
 
       });
@@ -393,8 +392,11 @@ export class RapportAnalyseComponent {
       Swal.fire({title:"Erreur de séléction",icon:"error", text:"Sélectionner puit, bassin ,bande ,sbnl ,sbln ou sblf"})
     }
   }
+
+
   getattributs():any {
     return   this.attributs.filter(value => value.checked==true);
+
   }
 
   openNew() {

@@ -87,63 +87,66 @@ export class BassinComponent implements OnInit {
   bassin: Bassin = {};
 
   selectedBassins: Bassin[] = [];
-  SelectetBassin:Bassin={}
+  SelectetBassin: Bassin = {}
   puits: Puit[] = [];
-  private isUpdateBassin=false;
+  private isUpdateBassin = false;
   selectedPuit?: Puit;
 
-loading:boolean=false ;
+  loading: boolean = false;
   @ViewChild("pdfpuit") htmlContent: ElementRef | undefined;
   visiblePrint: boolean = false;
   dateToday: Date = new Date();
 
   DatefiltrageStart: Date = new Date();
   DatefiltrageEnd: Date = new Date();
-  public  _selectedColumns: any[]=[];
+  public _selectedColumns: any[] = [];
   @Input() get selectedColumns(): any[] {
     return this._selectedColumns;
   }
-  constructor(private productService: ProductService, private messageService: MessageService,private bassinService :BassinService,private puitService:PuitService) { }
+
+  constructor(private productService: ProductService, private messageService: MessageService, private bassinService: BassinService, private puitService: PuitService) {
+  }
 
   ngOnInit() {
 
-this.SelectetBassin={analysesPhysiques:[]}
+
     this.colsfiltre = [
-      {id:0, field: 'reference', header: 'reference' ,hide:true},
-      { id:1, field: 'dateAnalyse', header: 'Date Analyse' ,hide:false},
-      {id:2,  field: 'temperature', header: 'Temperature °C' ,hide:false},
-      { id:3, field: 'vent', header: 'wind (km/h)' ,hide:false},
-      { id:4, field: 'humidite', header: 'humidity' ,hide:false},
-      {id:5,  field: 'densite', header: 'Densite (g/cm 3)',hide:false },
-      {id:6,  field: 'matiereEnSuspension', header: 'Suspended Matter (g)',hide:false },
-      { id:7, field: 'salimite', header: 'Salimite (psu)' ,hide:false},
-      {id:8,  field: 'calcium', header: 'Calcium (mmol/L)' ,hide:false},
-      { id:9, field: 'magnesium', header: 'Magnesium (g)' ,hide:false},
-      { id:10, field: 'sulfate', header: 'Sulfate (g)' ,hide:false},
-      { id:11, field: 'matiereInsoluble', header: 'Insoluble matter (g)',hide:false },
-      { id:12, field: 'potassium', header: 'Potassium (mmol/L)' ,hide:false},
-      { id:13, field: 'sodium', header: 'Sodium (mmol)' ,hide:false},
-      {id:14,  field: 'chlorure', header: 'Chlorure (meq · L–1)' ,hide:false},
-      { id:15, field: 'ph', header: 'pH' ,hide:false},
-      { id:16, field: 'chlorureDeSodium', header: 'sodium chloride (g)' ,hide:false},
-      {id:17,  field: 'ferrocyanure', header: 'Ferrocyanure (g/mol)' ,hide:false},
+      {id: 0, field: 'reference', header: 'reference', hide: true},
+      {id: 1, field: 'dateAnalyse', header: 'Date Analyse', hide: false},
+      {id: 2, field: 'temperature', header: 'Temperature °C', hide: false},
+      {id: 3, field: 'vent', header: 'wind (km/h)', hide: false},
+      {id: 4, field: 'humidite', header: 'humidity', hide: false},
+      {id: 5, field: 'densite', header: 'Densite (g/cm 3)', hide: false},
+      {id: 6, field: 'matiereEnSuspension', header: 'Suspended Matter (g)', hide: false},
+      {id: 7, field: 'salimite', header: 'Salimite (psu)', hide: false},
+      {id: 8, field: 'calcium', header: 'Calcium (mmol/L)', hide: false},
+      {id: 9, field: 'magnesium', header: 'Magnesium (g)', hide: false},
+      {id: 10, field: 'sulfate', header: 'Sulfate (g)', hide: false},
+      {id: 11, field: 'matiereInsoluble', header: 'Insoluble matter (g)', hide: false},
+      {id: 12, field: 'potassium', header: 'Potassium (mmol/L)', hide: false},
+      {id: 13, field: 'sodium', header: 'Sodium (mmol)', hide: false},
+      {id: 14, field: 'chlorure', header: 'Chlorure (meq · L–1)', hide: false},
+      {id: 15, field: 'ph', header: 'pH', hide: false},
+      {id: 16, field: 'chlorureDeSodium', header: 'sodium chloride (g)', hide: false},
+      {id: 17, field: 'ferrocyanure', header: 'Ferrocyanure (g/mol)', hide: false},
     ];
 
     this._selectedColumns = this.colsfiltre;
 
-     this.getAllBassin();
-    this.puitService.getAllPuits().subscribe((v:  Puit[]) => {
-      this.puits=v;
-      console.log(new JsonPipe().transform("====================>>>>>>"+this.puits))
+    this.getAllBassin();
+    this.puitService.getAllPuits().subscribe((v: Puit[]) => {
+      this.puits = v;
 
-    },error => {
-      console.log(error)})
+    }, error => {
+      console.log(error)
+    })
   }
 
   openNew() {
     this.bassin = {};
     this.submitted = false;
     this.productDialog = true;
+
   }
 
   deleteSelectedBassins() {
@@ -154,18 +157,17 @@ this.SelectetBassin={analysesPhysiques:[]}
 
   editBassin(bassin: Bassin) {
     // this.isUpdateUser=true;
-    this.bassin = { ...bassin };
+    this.bassin = {...bassin};
     this.productDialog = true;
   }
 
   deleteBassin(bassin: Bassin) {
     this.deleteProductDialog = true;
-    this.bassin = { ...bassin };
+    this.bassin = {...bassin};
   }
 
   confirmDeleteSelected() {
     this.deleteProductsDialog = false;
-    console.log(this.selectedBassins.length)
     this.selectedBassins.forEach(selectedUser => {
       this.bassinService.deleteBassin(selectedUser.id).subscribe(
         () => {
@@ -177,7 +179,7 @@ this.SelectetBassin={analysesPhysiques:[]}
       );
     });
 
-    this.messageService.add({ severity: 'success', summary: 'Successful', detail: 'User Deleted', life: 3000 });
+    this.messageService.add({severity: 'success', summary: 'Successful', detail: 'User Deleted', life: 3000});
     this.selectedBassins = [];
   }
 
@@ -185,10 +187,10 @@ this.SelectetBassin={analysesPhysiques:[]}
     this.deleteProductDialog = false;
     console.log("this.bassin.id", this.bassin.id);
     this.bassins = this.bassins.filter(val => val.id !== this.bassin.id);
-    if (this.bassin.id!= null) {
+    if (this.bassin.id != null) {
       this.bassinService.deleteBassin(this.bassin.id).subscribe(() => console.log("bassin deleted"));
     }
-    this.messageService.add({ severity: 'success', summary: 'Successful', detail: 'Bassin Deleted', life: 3000 });
+    this.messageService.add({severity: 'success', summary: 'Successful', detail: 'Bassin Deleted', life: 3000});
     this.bassin = {};
   }
 
@@ -197,35 +199,63 @@ this.SelectetBassin={analysesPhysiques:[]}
     this.submitted = false;
   }
 
+  saveProduct() {
+    this.submitted = true;
+
+    if (this.product.name?.trim()) {
+      if (this.product.id) {
+        // @ts-ignore
+        this.product.inventoryStatus = this.product.inventoryStatus.value ? this.product.inventoryStatus.value : this.product.inventoryStatus;
+        this.products[this.findIndexById(this.product.id)] = this.product;
+        this.messageService.add({severity: 'success', summary: 'Successful', detail: 'Product Updated', life: 3000});
+      } else {
+        this.product.id = this.createId();
+        this.product.code = this.createId();
+        this.product.image = 'product-placeholder.svg';
+        // @ts-ignore
+        this.product.inventoryStatus = this.product.inventoryStatus ? this.product.inventoryStatus.value : 'INSTOCK';
+        this.products.push(this.product);
+        this.messageService.add({severity: 'success', summary: 'Successful', detail: 'Product Created', life: 3000});
+      }
+
+      this.products = [...this.products];
+      this.productDialog = false;
+      this.product = {};
+    }
+  }
 
   saveBassin() {
-    this.submitted = false;
-    this.productDialog=false
+    this.submitted = true;
 
-    if(this.isUpdateBassin==true) {
 
-      if (this.bassin) {
+    if (this.bassin.bassinPuit && this.bassin.reference?.trim() && this.bassin.nom?.trim()) {
+      this.productDialog = false
+      if (this.isUpdateBassin == true) {
 
-        this.bassinService.updateBassin(this.bassin).subscribe(() =>{ this.bassinService.getAllBassins()
-          .subscribe((bassins: Bassin[]) => {
-            this.bassins = bassins;
-          } );});
-        console.log('bassin updated')
+        if (this.bassin) {
+
+          this.bassinService.updateBassin(this.bassin).subscribe(() => {
+            this.bassinService.getAllBassins()
+              .subscribe((bassins: Bassin[]) => {
+                this.bassins = bassins;
+              });
+          });
+          console.log('bassin updated')
+
+        }
+        this.isUpdateBassin = false;
+      } else {
+
+
+        this.bassinService.addBassin(this.bassin).subscribe(() => {
+          this.bassinService.getAllBassins()
+            .subscribe((bassins: Bassin[]) => {
+              this.bassins = bassins;
+            });
+        });
+
 
       }
-      this.isUpdateBassin=false;
-    }
-    else
-    {
-
-
-        this.bassinService.addBassin(this.bassin).subscribe(() =>{ this.bassinService.getAllBassins()
-          .subscribe((bassins: Bassin[]) => {
-            this.bassins = bassins;
-          } );});
-      console.log('bassin added');
-      console.log(new JsonPipe().transform(this.bassin));
-
     }
   }
 
@@ -256,11 +286,11 @@ this.SelectetBassin={analysesPhysiques:[]}
 
 
   getAllBassin() {
-    this.loading=true ;
+    this.loading = true;
     this.bassinService.getAllBassins()
       .subscribe((bassins: Bassin[]) => {
         this.bassins = bassins;
-        this.loading=false ;
+        this.loading = false;
       }, error => {
         console.log('Error fetching users:', error);
       });
@@ -268,42 +298,35 @@ this.SelectetBassin={analysesPhysiques:[]}
 
   exportrapport(SelectetBassin: Bassin) {
 
-    this.SelectetBassin = {...SelectetBassin};
-    this.getAnalyseGranoli() ;
+    this.SelectetBassin = SelectetBassin;
     this.visiblePrint = true
-    console.log("---->"+new JsonPipe().transform(this.SelectetBassin));
   }
+
   filtredate() {
     this.Viderfiltredate()
-    const data=this.SelectetBassin.analysesChimiques !== undefined ? this.SelectetBassin.analysesChimiques : []
-    const newAnalyse:AnalysesChimique[] =[]
+    const data = this.SelectetBassin.analysesChimiques !== undefined ? this.SelectetBassin.analysesChimiques : []
+    const newAnalyse: AnalysesChimique[] = []
     data.forEach(v => {
 
-      if(v.dateAnalyse!==undefined){
-        console.log(typeof v.dateAnalyse )
-        const d=v.dateAnalyse+"";
-        const dateana:Date=new Date(d)
-        console.log("-D-->" + dateana)
-        if (  this.AfterTodate(new Date(this.DatefiltrageStart+""),dateana) &&  this.AfterTodate(dateana,new Date(this.DatefiltrageEnd))) {
-
+      if (v.dateAnalyse !== undefined) {
+        const d = v.dateAnalyse + "";
+        const dateana: Date = new Date(d)
+        if (this.AfterTodate(this.DatefiltrageStart, dateana) && this.AfterTodate(dateana, this.DatefiltrageEnd)) {
           newAnalyse.push(v);
         } else {
-          console.log("no compare")
         }
 
 
       }
 
     })
-    this.SelectetBassin.analysesChimiques=[...newAnalyse] ;
-    // console.log(new JsonPipe().transform(data))
-
+    this.SelectetBassin.analysesChimiques = [...newAnalyse];
 
 
   }
 
   clear(dt1: Table) {
-    dt1.clear() ;
+    dt1.clear();
   }
 
   Viderfiltredate() {
@@ -321,40 +344,36 @@ this.SelectetBassin={analysesPhysiques:[]}
   getAnalyse() {
     return this.SelectetBassin.analysesChimiques !== undefined ? this.SelectetBassin.analysesChimiques : []
   }
+
   getAnalyseGranoli() {
-    const data=this.SelectetBassin.analysesPhysiques !== undefined ? this.SelectetBassin.analysesPhysiques : []
-    const newAnalyse:AnalysesPhysique[] =[]
-    console.log("PhysiqueAnana"+new JsonPipe().transform(data))
+    const data = this.SelectetBassin.analysesPhysiques !== undefined ? this.SelectetBassin.analysesPhysiques : []
+    const newAnalyse: AnalysesPhysique[] = []
     data.forEach(v => {
 
-      if(v.dateAnalyse!==undefined){
-        console.log(typeof v.dateAnalyse )
-        const d=v.dateAnalyse+"";
-        const dateana:Date=new Date(d)
-        console.log("-D-->" + dateana)
-        if (  this.AfterTodate(new Date(this.DatefiltrageStart+""),dateana) &&  this.AfterTodate(dateana,new Date(this.DatefiltrageEnd))) {
-
-           newAnalyse.push(v);
+      if (v.dateAnalyse !== undefined) {
+        const d = v.dateAnalyse + "";
+        const dateana: Date = new Date(d)
+        if (this.AfterTodate(this.DatefiltrageStart, dateana) && this.AfterTodate(dateana, this.DatefiltrageEnd)) {
+          newAnalyse.push(v);
         } else {
-          console.log("no compare")
         }
 
       }
 
     })
-    this.SelectetBassin.analysesPhysiques=[...newAnalyse] ;
+    this.SelectetBassin.analysesPhysiques = [...newAnalyse];
 
-
+    return this.SelectetBassin.analysesPhysiques !== undefined ? this.SelectetBassin.analysesPhysiques : []
   }
 
 
   colsfiltre: any[] = [];
-  ListTamisSelected: Tamis={};
-  SelectedsbnlPrintAnalyse: AnalysesPhysique={};
-  getColsfiltr() {
-    return this.colsfiltre.filter(value => value.hide==true)
-  }
+  ListTamisSelected: Tamis = {};
+  SelectedsbnlPrintAnalyse: AnalysesPhysique = {};
 
+  getColsfiltr() {
+    return this.colsfiltre.filter(value => value.hide == true)
+  }
 
 
   public SavePDF(): void {
@@ -379,11 +398,11 @@ this.SelectetBassin={analysesPhysiques:[]}
 
 
   getTamisFiltred() {
-    return this.SelectedsbnlPrintAnalyse.tamisList==undefined?[]:this.SelectedsbnlPrintAnalyse.tamisList
+    return this.SelectedsbnlPrintAnalyse.tamisList == undefined ? [] : this.SelectedsbnlPrintAnalyse.tamisList
   }
-  AfterTodate(date1:Date , date2:Date):boolean{
-    console.log(date1+"<"+date2)
-    return date1.getDay()<=date2.getDay() && date1.getMonth()<=date2.getMonth() && date1.getFullYear()<=date2.getFullYear()
+
+  AfterTodate(date1: Date, date2: Date): boolean {
+    return date1.getDay() <= date2.getDay() && date1.getMonth() <= date2.getMonth() && date1.getFullYear() <= date2.getFullYear()
   }
 
 

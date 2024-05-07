@@ -27,7 +27,6 @@ export class AnalyseChimiqueService {
     return this.http.delete(`${this.apiUrl}/analysechimiques/${analysesChimiqueId}`);
   }
   updateAnalyseChimique(analyse: AnalysesChimique): Observable<AnalysesChimique> {
-    console.log("analyse----Chimique  "+new JsonPipe().transform(analyse));
 
 
     return this.http.put<AnalysesChimique>(`${this.apiUrl}/analysechimiques/update`, analyse);

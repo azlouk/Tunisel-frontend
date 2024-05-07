@@ -25,6 +25,7 @@ import html2canvas from "html2canvas";
 import jsPDF from "jspdf";
 import {ListboxModule} from "primeng/listbox";
 import {CheckboxModule} from "primeng/checkbox";
+import {AutoFocusModule} from "primeng/autofocus";
 
 @Component({
   selector: 'app-sblf',
@@ -44,7 +45,7 @@ import {CheckboxModule} from "primeng/checkbox";
     InputNumberModule,
     DatePipe,
     ListboxModule,
-    CheckboxModule,    CommonModule,
+    CheckboxModule, CommonModule, AutoFocusModule,
 
   ],
   templateUrl: './sblf.component.html',
@@ -134,7 +135,7 @@ export class SblfComponent {
   }
 
   openNew() {
-    this.sblf ;
+    this.sblf={} ;
     this.submitted = false;
     this.productDialog = true;
   }
@@ -191,29 +192,29 @@ export class SblfComponent {
   }
 
   saveSblf() {
-    this.submitted = false;
-    this.productDialog=false
-    if(this.isUpdateSblf==true) {
-      this.sblfService.updateSblf(this.sblf).subscribe(() =>{
-        this.sblfService.getAllSblfs().subscribe((sblfs: Sblf[]) => {
-          this.sblfs = sblfs;
+    this.submitted = true;
+    if (this.sblf.reference?.trim() && this.sblf.sblfSbl) {
+
+      this.productDialog = false
+      if (this.isUpdateSblf == true) {
+        this.sblfService.updateSblf(this.sblf).subscribe(() => {
+          this.sblfService.getAllSblfs().subscribe((sblfs: Sblf[]) => {
+            this.sblfs = sblfs;
+          });
         });
-      });
-      console.log('Sbl updated');
-      this.isUpdateSblf=false;
-    }
-    else
-    {
-      this.sblfService.addSblf(this.sblf).subscribe(() => {
-        this.sblfService.getAllSblfs().subscribe((sblfs: Sblf[]) => {
-          this.sblfs = sblfs;
+        console.log('Sbl updated');
+        this.isUpdateSblf = false;
+      } else {
+        this.sblfService.addSblf(this.sblf).subscribe(() => {
+          this.sblfService.getAllSblfs().subscribe((sblfs: Sblf[]) => {
+            this.sblfs = sblfs;
+          });
         });
-      });
-      console.log('Sblf added');
+        console.log('Sblf added');
+      }
     }
+
   }
-
-
 
 
   onGlobalFilter(table: Table, event: Event) {

@@ -82,7 +82,7 @@ this.article.unite=Unite.PIECE
   }
 
   openNew() {
-    this.article;
+    this.article={}
     this.submitted = false;
     this.productDialog = true;
   }
@@ -142,29 +142,33 @@ this.article.unite=Unite.PIECE
   }
 
   saveProduitDefectuation() {
-    this.submitted = false;
-    this.productDialog=false
-    // alert(new JsonPipe().transform(this.article))
-    if(this.isUpdateProduitDefectuation==true) {
-      this.articleService.updateArticle(this.article).subscribe(() =>{
-        this.articleService.getAllArticles().subscribe((articles: Article[]) => {
-          this.articles = articles;
+    this.submitted = true;
+    if (this.article.nom?.trim() && this.article.unite){
+      this.productDialog=false
+      // alert(new JsonPipe().transform(this.article))
+      if(this.isUpdateProduitDefectuation==true) {
+        this.articleService.updateArticle(this.article).subscribe(() =>{
+          this.articleService.getAllArticles().subscribe((articles: Article[]) => {
+            this.articles = articles;
+          });
         });
-      });
-      console.log('article updated');
-      this.isUpdateProduitDefectuation=false;
-    }
-    else
-    {
-      this.articleService.addArticle(this.article).subscribe(() => {
+        console.log('article updated');
+        this.isUpdateProduitDefectuation=false;
+      }
+      else
+      {
+        this.articleService.addArticle(this.article).subscribe(() => {
 
-        this.articleService.getAllArticles().subscribe((articles: Article[]) => {
-          this.articles = articles;
+          this.articleService.getAllArticles().subscribe((articles: Article[]) => {
+            this.articles = articles;
+          });
         });
-      });
-      console.log('article added');
+        console.log('article added');
+      }
+      this.article={}
+
     }
-    this.article={}
+
   }
 
 

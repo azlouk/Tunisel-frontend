@@ -20,7 +20,6 @@ export class SbnlService {
   }
 
   deleteSbnl(sbnlId: number | undefined): Observable<any> {
-    console.log(`${this.apiUrl}/puits/${sbnlId}`)
     return this.http.delete(`${this.apiUrl}/sbnls/delete/${sbnlId}`);
   }
   updateSbnl(sbnl: Sbnl): Observable<Sbnl> {
@@ -34,7 +33,6 @@ export class SbnlService {
     const headers = new HttpHeaders().set("Content-Type", "application/json; charset=utf8");
 
 
-    //console.error(JSON.parse(JSON.stringify(sbnl)));
 
     return this.http.post<Sbnl>(`${this.apiUrl}/sbnls/add`,JSON.parse(JSON.stringify(sbnl)),{headers});
 

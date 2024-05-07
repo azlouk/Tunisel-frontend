@@ -14,7 +14,9 @@
 
 
         <p-floatLabel>
-          <input type="text" pInputText id="societe" [(ngModel)]="ficheVie.societe"/>
+          <input type="text" pInputText id="societe" [(ngModel)]="ficheVie.societe" />
+
+
           <label>Societé</label>
         </p-floatLabel>
         <p-floatLabel>
@@ -51,7 +53,6 @@
             <label>Verification</label>
           </p-floatLabel>
         </div>
-<!--        <div class="flex flex-column justify-content-between"             >-->
           <div class="flex flex-column gap-4">
             <label for="emplacement" class="ml-2 font-bold" id="emplacement">Emplacment</label>
 
@@ -97,8 +98,9 @@
         <div class="  flex flex-column gap-4 ">
 
             <p-floatLabel>
-              <p-calendar id="dateintervention" dateFormat="yy-mm-dd" [showIcon]="true" [(ngModel)]="intervention.dateintervention"></p-calendar>
+              <p-calendar id="dateintervention" dateFormat="yy-mm-dd" [showIcon]="true" [(ngModel)]="intervention.dateintervention" [ngClass]="{'ng-invalid ng-dirty' : submitted && !intervention.dateintervention}"></p-calendar>
               <label for="dateReception">Date de Intervention</label>
+               <small class="ng-dirty ng-invalid" *ngIf="submitted && !!intervention.dateintervention">Nom est requis.</small>
             </p-floatLabel>
             <p-floatLabel>
               <input type="text" pInputText id="certificat" class="w-1/2 " [(ngModel)]="intervention.certificat"/>
@@ -138,8 +140,8 @@
 
         </div>
         <ng-template pTemplate="footer">
-          <button pButton pRipple label="Cancel" icon="pi pi-times" class="p-button-text" (click)="hideDialog()"></button>
-          <button pButton pRipple label="Save" icon="pi pi-check" class="p-button-text" (click)="saveIntervention()"></button>
+          <button pButton pRipple label="Annuler" icon="pi pi-times" class="p-button-text" (click)="hideDialog()"></button>
+          <button pButton pRipple label="Ajouter" icon="pi pi-check" class="p-button-text" (click)="saveIntervention()"></button>
         </ng-template>
 
       </p-dialog>

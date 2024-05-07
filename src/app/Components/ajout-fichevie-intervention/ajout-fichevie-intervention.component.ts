@@ -6,7 +6,7 @@ import {FloatLabelModule} from "primeng/floatlabel";
 import {InputNumberModule} from "primeng/inputnumber";
 import {InputTextModule} from "primeng/inputtext";
 import {ListboxModule} from "primeng/listbox";
-import {DatePipe, JsonPipe, NgForOf, NgIf} from "@angular/common";
+import {DatePipe, JsonPipe, NgClass, NgForOf, NgIf} from "@angular/common";
 import {SharedModule} from "primeng/api";
 import {TabViewModule} from "primeng/tabview";
 import {ToolbarModule} from "primeng/toolbar";
@@ -50,41 +50,47 @@ import {log} from "@angular-devkit/build-angular/src/builders/ssr-dev-server";
     DialogModule,
     TableModule,
     DatePipe,
-    NgIf
+    NgIf,
+    NgClass
   ],
   templateUrl: './ajout-fichevie-intervention.component.html',
   styleUrl: './ajout-fichevie-intervention.component.css'
 })
-export class AjoutFichevieInterventionComponent implements  OnInit{
+export class AjoutFichevieInterventionComponent implements OnInit {
   puits: Puit[] = [];
-   bassins: Bassin[] = [];
-   sbnls: Sbnl[] = [];
-   sbls: Sbl[] = [];
-   sblfs: Sblf[] = [];
-   checked: boolean = false;
-   cols: any[] = [];
+  bassins: Bassin[] = [];
+  sbnls: Sbnl[] = [];
+  sbls: Sbl[] = [];
+  sblfs: Sblf[] = [];
+  checked: boolean = false;
+  cols: any[] = [];
   // ====================
-  visibale:boolean=false;
- intervention:Intervention={};
-listeInterventions:Intervention[] =[];
+  visibale: boolean = false;
+  intervention: Intervention = {};
+  listeInterventions: Intervention[] = [];
 
-  ficheVie:FicheVie={};
+  ficheVie: FicheVie = {};
 
-  // =================
   selectedIntervention: Intervention[] = [];
-private ficheVieId:any;
-public  isUpdateFichVie:boolean=false;
-  constructor(private router: Router,private  interventionService:InterventionService,private ficheVieService:FicheVieService,private route:ActivatedRoute)
-  {}
+  ficheVieId: any | null;
+  public isUpdateFichVie: boolean = false;
+  submitted: boolean=false;
 
+  constructor(private router: Router, private interventionService: InterventionService, private ficheVieService: FicheVieService, private route: ActivatedRoute) {
+  }
 
 
   ngOnInit(): void {
-this.ficheVieId=this.route.snapshot.paramMap.get('id');
-this.isUpdateFichVie=this.ficheVieId!==null;
-this.ficheVieService.getFicheById(this.ficheVieId).subscribe(value =>{this.ficheVie=value;
-this.listeInterventions=this.ficheVie.interventions==undefined?[]:this.ficheVie.interventions ;
-} )
+
+    this.ficheVieId = this.route.snapshot.paramMap.get('id');
+    this.isUpdateFichVie = this.ficheVieId !== null;
+    if (this.ficheVieId !== null) {
+      this.ficheVieService.getFicheById(this.ficheVieId).subscribe(value => {
+        this.ficheVie = value;
+        this.listeInterventions = this.ficheVie.interventions === undefined ? [] : this.ficheVie.interventions;
+      });
+    } else {
+    }
 
 
   }
@@ -95,11 +101,8 @@ this.listeInterventions=this.ficheVie.interventions==undefined?[]:this.ficheVie.
   }
 
 
-
-
-
   showDialog() {
-    this.visibale=true;
+    this.visibale = true;
 
   }
 
@@ -108,63 +111,60 @@ this.listeInterventions=this.ficheVie.interventions==undefined?[]:this.ficheVie.
   }
 
 
-
-
-
   saveFicheVie() {
-    if (this.isUpdateFichVie){
-this.ficheVieService.updateFicheVie(this.ficheVie).subscribe(value =>   this.router.navigate(['/etalonage']))
+    if(this.intervention.dateintervention)
+    {
+      this.submitted=true;
+    } else
+    {
+      this.ficheVie.interventions = this.listeInterventions
+      if (this.isUpdateFichVie) {
+
+        this.ficheVieService.updateFicheVie(this.ficheVie).subscribe(value => this.router.navigate(['/etalonage']))
+      } else {
+
+        this.ficheVieService.createFicheVie(this.ficheVie).subscribe(value => {
+          this.listeInterventions = [];
+        }, error => {
+        });
+      }
+      this.router.navigate(['/etalonage']);
     }
-    else {
-    this.ficheVie.interventions=this.listeInterventions;
-    this.ficheVieService.createFicheVie(this.ficheVie).subscribe(value =>{this.listeInterventions=[];
-    console.log('=====emp: '+this.ficheVie.emplacement)},error =>{ console.log('=====emp: '+this.ficheVie.emplacement)});
-    this.router.navigate(['/etalonage']);}
- }
+
+  }
 
   saveIntervention() {
-    if(this.isUpdateFichVie==true){
-      this.interventionService.updateIntervention(this.intervention).subscribe(value => {console.log('intervent is update');
-
-
-          this.visibale=false;
-        this.ficheVieService.getFicheById(this.ficheVieId).subscribe(value =>{this.ficheVie=value;
-          this.listeInterventions=this.ficheVie.interventions==undefined?[]:this.ficheVie.interventions ;
-        } )
-      }
-    )
-
-
-    }else {
     this.listeInterventions.push(this.intervention);
-    this.visibale=false;
-    this.intervention={};
+      this.visibale = false;
+      this.intervention={}
+
   }
-    this.ficheVieService.updateFicheVie(this.ficheVie).subscribe(value => {console.log('fiche is update')})
 
 
-    }
+
   onGlobalFilter(table: Table, event: Event) {
     table.filterGlobal((event.target as HTMLInputElement).value, 'contains');
   }
 
   deleteIntervention(intervention: Intervention) {
 
-if (this.isUpdateFichVie==true){
-  this.interventionService.deleteIntervention(intervention.id).subscribe(value => { this.ficheVieService.getFicheById(this.ficheVieId).subscribe(value =>{this.ficheVie=value;
-    this.listeInterventions=this.ficheVie.interventions==undefined?[]:this.ficheVie.interventions ;
-  } )
+    if (this.isUpdateFichVie == true) {
+      this.interventionService.deleteIntervention(intervention.id).subscribe(value => {
+        this.ficheVieService.getFicheById(this.ficheVieId).subscribe(value => {
+          this.ficheVie = value;
+          this.listeInterventions = this.ficheVie.interventions == undefined ? [] : this.ficheVie.interventions;
+        })
 
-  })
-  this.listeInterventions = this.listeInterventions.filter(item => item !== intervention)
-}else {
-  this.listeInterventions = this.listeInterventions.filter(item => item !== intervention);
-}
+      })
+      this.listeInterventions = this.listeInterventions.filter(item => item !== intervention)
+    } else {
+      this.listeInterventions = this.listeInterventions.filter(item => item !== intervention);
+    }
   }
 
   editIntrvention(intervention: Intervention) {
-    this.intervention = { ...intervention };
-    this.visibale=true
+    this.intervention = {...intervention};
+    this.visibale = true
 
   }
 }
