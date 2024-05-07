@@ -157,45 +157,44 @@
 
         </div>
 
+        <p-dialog [(visible)]="visibale" [style]="{width: '450px'}" header="Ajouter Tamis" [modal]="true" class="p-fluid">
 
-      <p-dialog [(visible)]="visibale" [style]="{width: '450px'}" header="Ajouter Tamis" [modal]="true" class="p-fluid">
+          <div class="  flex flex-column gap-4 ">
 
-        <div class="  flex flex-column gap-4 ">
+            <p-floatLabel>
+              <p-inputNumber id="certificat" class="w-1/2 " [(ngModel)]="tamis.calibre"  mode="decimal" locale="en-US" [minFractionDigits]="3"></p-inputNumber>
+              <label>Calibre</label>
+            </p-floatLabel>
 
-          <p-floatLabel>
-            <p-inputNumber id="certificat" class="w-1/2 " [(ngModel)]="tamis.calibre"  mode="decimal" locale="en-US" [minFractionDigits]="3"></p-inputNumber>
-            <label>Calibre</label>
-          </p-floatLabel>
+            <p-floatLabel>
+              <p-inputNumber id="qui" [(ngModel)]="tamis.masse"   mode="decimal" locale="en-US" [minFractionDigits]="3"></p-inputNumber>
+              <label>Masse</label>
+            </p-floatLabel>
 
-          <p-floatLabel>
-            <p-inputNumber id="qui" [(ngModel)]="tamis.masse"   mode="decimal" locale="en-US" [minFractionDigits]="3"></p-inputNumber>
-            <label>Masse</label>
-          </p-floatLabel>
+            <!--        <p-floatLabel>-->
+            <!--          <p-inputNumber id="nomVisa" class="w-full " [(ngModel)]="tamis.refus" mode="decimal" locale="en-US" [minFractionDigits]="3"></p-inputNumber>-->
+            <!--          <label>Refus</label>-->
+            <!--        </p-floatLabel>-->
 
-          <p-floatLabel>
-            <p-inputNumber id="nomVisa" class="w-full " [(ngModel)]="tamis.refus" mode="decimal" locale="en-US" [minFractionDigits]="3"></p-inputNumber>
-            <label>Refus</label>
-          </p-floatLabel>
+            <!--        <p-floatLabel>-->
+            <!--          <p-inputNumber id="natureAction" class="" [(ngModel)]="tamis.refusCumulated" mode="decimal" locale="en-US" [minFractionDigits]="3"></p-inputNumber>-->
+            <!--          <label>Refus Cumulated</label>-->
+            <!--        </p-floatLabel>-->
 
-          <p-floatLabel>
-            <p-inputNumber id="natureAction" class="" [(ngModel)]="tamis.refusCumulated" mode="decimal" locale="en-US" [minFractionDigits]="3"></p-inputNumber>
-            <label>Refus Cumulated</label>
-          </p-floatLabel>
-
-          <p-floatLabel>
-            <p-inputNumber id="observation" class="w-full " [(ngModel)]="tamis.passCumulated"  mode="decimal" locale="en-US" [minFractionDigits]="3"></p-inputNumber>
-            <label>Pass Cumulated</label>
-          </p-floatLabel>
-
+            <!--        <p-floatLabel>-->
+            <!--          <p-inputNumber id="observation" class="w-full " [(ngModel)]="tamis.passCumulated"  mode="decimal" locale="en-US" [minFractionDigits]="3"></p-inputNumber>-->
+            <!--          <label>Pass Cumulated</label>-->
+            <!--        </p-floatLabel>-->
 
 
-        </div>
-        <ng-template pTemplate="footer">
-          <button pButton pRipple label="Annuler" icon="pi pi-times" class="p-button-text" (click)="hideDialog()"></button>
-          <button pButton pRipple label="Ajouter" icon="pi pi-check" class="p-button-text" (click)="saveTamis()"></button>
-        </ng-template>
 
-      </p-dialog>
+          </div>
+          <ng-template pTemplate="footer">
+            <button pButton pRipple label="Annuler" icon="pi pi-times" class="p-button-text" (click)="hideDialog()"></button>
+            <button pButton pRipple label="Ajouter" icon="pi pi-check" class="p-button-text" (click)="saveTamis()"></button>
+          </ng-template>
+
+        </p-dialog>
 
       <p-table #dt [value]="listeTamis" [columns]="cols"  responsiveLayout="scroll" [rows]="10" [globalFilterFields]="['id','dateintervention','qui','natureAction','resultat','certificat','nomVisa','observation']" [paginator]="true" [rowsPerPageOptions]="[10,20,30,100,200]" [showCurrentPageReport]="true" currentPageReportTemplate="Affichage du  {first} au  {last} des  {totalRecords} entrées" [(selection)]="selectedIntervention" selectionMode="multiple" [rowHover]="true" dataKey="id">
         <ng-template pTemplate="caption">
@@ -213,11 +212,11 @@
         <ng-template pTemplate="header">
           <tr>
 
-            <th pSortableColumn="dateintervention">Calibre <p-sortIcon field="dateintervention"></p-sortIcon></th>
-            <th pSortableColumn="qui">Masse <p-sortIcon field="qui"></p-sortIcon></th>
-            <th pSortableColumn="natureAction">Refus <p-sortIcon field="natureAction"></p-sortIcon></th>
-            <th pSortableColumn="resultat">Refus Cumulated<p-sortIcon field="resultat"></p-sortIcon></th>
-            <th pSortableColumn="certificat">pass Cumulated <p-sortIcon field="certificat"></p-sortIcon></th>
+            <th  >Calibre  </th>
+            <th  >Masse  </th>
+            <th pSortableColumn="natureAction">Refus  </th>
+            <th pSortableColumn="resultat">Refus Cumulated </th>
+            <th pSortableColumn="certificat">pass Cumulated </th>
             <th></th>
           </tr>
         </ng-template>
@@ -269,7 +268,9 @@
 <!--========================physique========-->
 
 
-
+  <div class=" flex col-12 justify-content-end">
+    <button pButton label="Calculer" icon="pi pi-check" class=" " (click)="calculateTamis()"></button>
+  </div>
 <!---->
 <div class=" flex col-12 justify-content-end">
   <button pButton label="Enregisrer" icon="pi pi-check" class=" " (click)="saveRapport()"></button>
