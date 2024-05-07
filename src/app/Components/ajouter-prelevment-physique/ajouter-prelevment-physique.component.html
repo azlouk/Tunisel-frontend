@@ -275,20 +275,20 @@
           <label>Masse</label>
         </p-floatLabel>
 
-        <p-floatLabel>
-          <p-inputNumber id="nomVisa" class="w-full " [(ngModel)]="tamis.refus" mode="decimal" locale="en-US" [minFractionDigits]="3"></p-inputNumber>
-          <label>Refus</label>
-        </p-floatLabel>
+<!--        <p-floatLabel>-->
+<!--          <p-inputNumber id="nomVisa" class="w-full " [(ngModel)]="tamis.refus" mode="decimal" locale="en-US" [minFractionDigits]="3"></p-inputNumber>-->
+<!--          <label>Refus</label>-->
+<!--        </p-floatLabel>-->
 
-        <p-floatLabel>
-          <p-inputNumber id="natureAction" class="" [(ngModel)]="tamis.refusCumulated" mode="decimal" locale="en-US" [minFractionDigits]="3"></p-inputNumber>
-          <label>Refus Cumulated</label>
-        </p-floatLabel>
+<!--        <p-floatLabel>-->
+<!--          <p-inputNumber id="natureAction" class="" [(ngModel)]="tamis.refusCumulated" mode="decimal" locale="en-US" [minFractionDigits]="3"></p-inputNumber>-->
+<!--          <label>Refus Cumulated</label>-->
+<!--        </p-floatLabel>-->
 
-        <p-floatLabel>
-          <p-inputNumber id="observation" class="w-full " [(ngModel)]="tamis.passCumulated"  mode="decimal" locale="en-US" [minFractionDigits]="3"></p-inputNumber>
-          <label>Pass Cumulated</label>
-        </p-floatLabel>
+<!--        <p-floatLabel>-->
+<!--          <p-inputNumber id="observation" class="w-full " [(ngModel)]="tamis.passCumulated"  mode="decimal" locale="en-US" [minFractionDigits]="3"></p-inputNumber>-->
+<!--          <label>Pass Cumulated</label>-->
+<!--        </p-floatLabel>-->
 
 
 
@@ -299,7 +299,7 @@
       </ng-template>
 
     </p-dialog>
-    <p-table #dt [value]="listeTamis" [columns]="cols"  responsiveLayout="scroll" [rows]="10" [globalFilterFields]="['id','dateintervention','qui','natureAction','resultat','certificat','nomVisa','observation']" [paginator]="true" [rowsPerPageOptions]="[10,20,30,100,200]" [showCurrentPageReport]="true" currentPageReportTemplate="Affichage du  {first} au  {last} des  {totalRecords} entrées" [(selection)]="selectedIntervention" selectionMode="multiple" [rowHover]="true" dataKey="id">
+    <p-table #dt [value]="listeTamis" [columns]="cols"  responsiveLayout="scroll" [rows]="10" [globalFilterFields]="['calibre']" [paginator]="true" [rowsPerPageOptions]="[10,20,30,100,200]" [showCurrentPageReport]="true" currentPageReportTemplate="Affichage du  {first} au  {last} des  {totalRecords} entrées" [(selection)]="selectedIntervention" selectionMode="multiple" [rowHover]="true" dataKey="id">
       <ng-template pTemplate="caption">
         <div class="flex flex-column md:flex-row md:justify-content-between md:align-items-center">
           <h5 class="m-0">Gestion des fiches de vie</h5>
@@ -315,11 +315,11 @@
       <ng-template pTemplate="header">
         <tr>
 
-          <th pSortableColumn="dateintervention">Calibre <p-sortIcon field="dateintervention"></p-sortIcon></th>
-          <th pSortableColumn="qui">Masse <p-sortIcon field="qui"></p-sortIcon></th>
-          <th pSortableColumn="natureAction">Refus <p-sortIcon field="natureAction"></p-sortIcon></th>
-          <th pSortableColumn="resultat">Refus Cumulated<p-sortIcon field="resultat"></p-sortIcon></th>
-          <th pSortableColumn="certificat">pass Cumulated <p-sortIcon field="certificat"></p-sortIcon></th>
+          <th >Calibre </th>
+          <th >Masse </th>
+          <th >Refus </th>
+          <th >Refus Cumulated</th>
+          <th >pass Cumulated </th>
           <th></th>
         </tr>
       </ng-template>
@@ -361,6 +361,9 @@
       </ng-template>
     </p-table>
   </div>
+</div>
+<div class=" flex col-12 justify-content-end">
+  <button pButton label="Calculer" icon="pi pi-check" class=" " (click)="calculateTamis()"></button>
 </div>
     <!---->
     <div class=" flex col-12 justify-content-end">

@@ -319,7 +319,7 @@ export class SblComponent implements OnInit{
 
 
   colsfiltre: any[] = [];
-  ListTamisSelected: Tamis={};
+  // ListTamisSelected: Tamis={};
   SelectedsbnlPrintAnalyse: AnalysesPhysique={};
   getColsfiltr() {
     return this.colsfiltre.filter(value => value.hide==true)
