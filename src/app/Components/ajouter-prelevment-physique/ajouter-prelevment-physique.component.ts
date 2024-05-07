@@ -347,6 +347,7 @@ for (let i=0;i<this.listeTamis.length;i++){
   }
   else if(cumulativeRejection&&this.listeTamis[i].refusCumulated!==undefined&&i>0){
 
+    // @ts-ignore
     Math.round(this.listeTamis[i].refusCumulated=this.listeTamis[i-1].refusCumulated+cumulativeRejection);
   }
 }
@@ -355,7 +356,8 @@ for (let i=0;i<this.listeTamis.length;i++){
   calculatePassCumulated() {
 for(let tamis of this.listeTamis){
   if(tamis.refus){
- Math.round(tamis.passCumulated=100-tamis.refusCumulated);
+ // @ts-ignore
+    Math.round(tamis.passCumulated=100-tamis.refusCumulated);
 }}
   }
 calculateTamis(){
