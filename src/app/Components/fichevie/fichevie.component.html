@@ -4,9 +4,10 @@
       <p-toast></p-toast>
       <p-toolbar styleClass="mb-4">
         <ng-template pTemplate="left">
-          <div class="my-2">
+          <div class="my-2 gap-2">
             <button pButton pRipple label="Ajouter" icon="pi pi-plus" class="p-button-success mr-2" (click)="openNew()"></button>
-            <button pButton pRipple label="Supprimer" icon="pi pi-trash" class="p-button-danger" (click)="deleteSelectedFicheVie()" [disabled]="!selectedFicheVie || !selectedFicheVie.length"></button>
+            <button pButton pRipple label="Supprimer" icon="pi pi-trash" class="p-button-danger mr-2" (click)="deleteSelectedFicheVie()" [disabled]="!selectedFicheVie || !selectedFicheVie.length"></button>
+            <button pButton pRipple label="Actualiser" icon="pi pi-refresh" class="p-button-primary mr-2" (click)="getAllVie()"  ></button>
           </div>
         </ng-template>
 

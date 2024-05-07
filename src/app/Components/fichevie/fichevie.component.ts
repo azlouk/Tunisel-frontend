@@ -18,6 +18,7 @@ import {PuitService} from "../../Services/puit.service";
 import {FicheVie} from "../../Models/fichevie";
 import {FicheVieService} from "../../Services/fichevie.service";
 
+
 @Component({
   selector: 'app-fichevie',
   standalone: true,
@@ -69,14 +70,17 @@ export class FichevieComponent implements OnInit {
 
   constructor(private router: Router, private productService: ProductService, private messageService: MessageService, private ficheVieService: FicheVieService) {
   }
-
-  ngOnInit() {
+  getAllVie() {
     this.ficheVieService.getFichesVies().subscribe((v: FicheVie[]) => {
       this.ficheVies = v;
 
     }, error => {
       console.log(error)
     })
+  }
+
+  ngOnInit() {
+   this.getAllVie()
 
     this.cols = [
       {field: 'id', header: 'id'},
