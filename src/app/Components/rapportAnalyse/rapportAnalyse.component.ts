@@ -117,7 +117,10 @@ export class RapportAnalyseComponent {
   selectedIntervention: any;
   // ================Physique===============
   datasel: any = [];
+
   filtereddatasel: any[] = [];
+  dataMatiere: any = [];
+  filtereddataMatire: any[]=[]
 
   constructor(private router: Router,
               private puitService: PuitService,
@@ -156,7 +159,7 @@ export class RapportAnalyseComponent {
       , " Sel Navire"
 
     ]
-
+     this.dataMatiere=["Sel","Saumure"];
 //Init de attributs
     this.attributs= [
       {name:'d',checked:false,label:'Densité', value:this.analysesChimique.densite,unite:''},
@@ -503,7 +506,9 @@ export class RapportAnalyseComponent {
 
     if (this.selectedBassin!=null && this.selectedBassin.hasOwnProperty('id')) {
       this.analysesPhysique.reference = this.analysesChimique.reference;
-      this.analysesChimique.matiere = this.analysesPhysique.matiere
+      this.analysesPhysique.matiere=this.analysesChimique.matiere
+      this.analysesPhysique.dateAnalyse=this.analysesChimique.dateAnalyse
+
       this.selectedBassin.analysesChimiques = [];
       if (this.checkedChimique == true) {
         this.selectedBassin.analysesChimiques.push(this.analysesChimique);
@@ -688,6 +693,20 @@ export class RapportAnalyseComponent {
     this.calculatePassCumulated();
   }
 
+  filterMatiere(event: AutoCompleteCompleteEvent) {
+    let filtered: any[] = [];
+
+    let query = event.query;
+
+    for (let i = 0; i < (this.dataMatiere as any[]).length; i++) {
+      let country = (this.dataMatiere as any[])[i];
+      if (country.toLowerCase().indexOf(query.toLowerCase()) == 0) {
+        filtered.push(country);
+      }
+    }
+
+    this.filtereddataMatire = filtered;
+  }
 }
 interface AutoCompleteCompleteEvent {
   originalEvent: Event;
