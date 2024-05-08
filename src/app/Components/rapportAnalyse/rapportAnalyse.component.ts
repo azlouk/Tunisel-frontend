@@ -500,11 +500,8 @@ export class RapportAnalyseComponent {
 
   saveRapport() {
     console.log(JSON.stringify(this.selectedBassin))
-    // if(this.isUpdateAnalysePhysique){
-    //   this.analysePhysiqueService.updateAnalysesPhysiques(this.analysesPhysique).subscribe(value => this.router.navigate(['/analysePhysique']))
-    // }
-    // else{
-    if (this.selectedBassin.hasOwnProperty('id')) {
+
+    if (this.selectedBassin!=null && this.selectedBassin.hasOwnProperty('id')) {
       this.analysesPhysique.reference = this.analysesChimique.reference;
       this.analysesChimique.matiere = this.analysesPhysique.matiere
       this.selectedBassin.analysesChimiques = [];
@@ -521,34 +518,10 @@ export class RapportAnalyseComponent {
         this.router.navigate(['/analysePhysique']);
       }, error => console.log(error));
     }
-      // else if(this.selectedSbnl.hasOwnProperty('id')){
-      //   this.selectedSbnl.analysesPhysiques=[];
-      //   this.analysesPhysique.tamisList=this.listeTamis;
-      //   this.selectedSbnl.analysesPhysiques.push(this.analysesPhysique) ;
-      //   this.analysePhysiqueService.addAnalysesPhysiquesToSbnl(this.selectedSbnl).subscribe(value => this.router.navigate(['/analysePhysique']))
-      // }
-      // else if(this.selectedBande.hasOwnProperty('id')){
-      //   this.selectedBande.analysesPhysiques=[];
-      //   this.analysesPhysique.tamisList=this.listeTamis;
-      //   this.selectedBande.analysesPhysiques.push(this.analysesPhysique) ;
-      //   this.analysePhysiqueService.addAnalysesPhysiquesToBande(this.selectedBande).subscribe(value => this.router.navigate(['/analysePhysique']))
-      // }
-      // else if(this.selectedSbl.hasOwnProperty('id')){
-      //   this.selectedSbl.analysesPhysiques=[];
-      //   this.analysesPhysique.tamisList=this.listeTamis;
-      //   this.selectedSbl.analysesPhysiques.push(this.analysesPhysique) ;
-      //   this.analysePhysiqueService.addAnalysesPhysiquesToSbl(this.selectedSbl).subscribe(value => this.router.navigate(['/analysePhysique']))
-      // }
-      // else if(this.selectedSblf.hasOwnProperty('id')){
-      //   this.selectedSblf.analysesPhysiques=[];
-      //   this.analysesPhysique.tamisList=this.listeTamis;
-      //   this.selectedSblf.analysesPhysiques.push(this.analysesPhysique) ;
-      //   this.analysePhysiqueService.addAnalysesPhysiquesToSblf(this.selectedSblf).subscribe(value => this.router.navigate(['/analysePhysique']))
-    // }
     else {
       Swal.fire({
         title: "error?",
-        text: "Séléctionner analyse chimique ou Granulométrique!",
+        text: "Séléctionner Bassin SVP!",
         icon: "warning"
       });
     }
