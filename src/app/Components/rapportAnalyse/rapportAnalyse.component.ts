@@ -163,16 +163,16 @@ export class RapportAnalyseComponent {
 //Init de attributs
     this.attributs= [
       {name:'d',checked:false,label:'Densité', value:this.analysesChimique.densite,unite:''},
-      {name:'MS',checked:false,label:'Matiére en suspension', value:this.analysesChimique.matiereEnSuspension ,unite:'mg/L'},
+      {name:'MS',checked:false,label:'Matiére en suspension', value:this.analysesChimique.matiereEnSuspension ,unite:'%'},
       {name:'S',checked:false,label:'Salinité', value:this.analysesChimique.salimite,unite:'g/L'},
-      {name:'Ca',checked:false,label:'Calcium', value:this.analysesChimique.calcium,unite:'% ppm'},
-      {name:'Mg',checked:false,label:'Magnésium', value:this.analysesChimique.magnesium,unite:'% ppm'},
-      {name:'SO₄',checked:false,label:'Sulfate', value:this.analysesChimique.sulfate,unite:'% ppm'},
-      {name:'H₂O',checked:false,label:'Humidité', value:this.analysesChimique.humidite,unite:'% '},
-      {name:'MI',checked:false,label:'Matiére insoluble', value:this.analysesChimique.matiereInsoluble,unite:'% ppm'},
-      {name:'K',checked:false,label:'Potassium', value:this.analysesChimique.potassium,unite:'% ppm'},
-      {name:'Na',checked:false,label:'Sodium', value:this.analysesChimique.sodium,unite:'% ppm'},
-      {name:'Cl',checked:false,label:'Chlorure', value:this.analysesChimique.chlorure,unite:'% ppm'},
+      {name:'Ca',checked:false,label:'Calcium', value:this.analysesChimique.calcium,unite:'%'},
+      {name:'Mg',checked:false,label:'Magnésium', value:this.analysesChimique.magnesium,unite:'%'},
+      {name:'SO₄',checked:false,label:'Sulfate', value:this.analysesChimique.sulfate,unite:'%'},
+      {name:'H₂O',checked:false,label:'Humidité', value:this.analysesChimique.humidite,unite:'%'},
+      {name:'MI',checked:false,label:'Matiére insoluble', value:this.analysesChimique.matiereInsoluble,unite:'%'},
+      {name:'K',checked:false,label:'Potassium', value:this.analysesChimique.potassium,unite:'%'},
+      {name:'Na',checked:false,label:'Sodium', value:this.analysesChimique.sodium,unite:'%'},
+      {name:'Cl',checked:false,label:'Chlorure', value:this.analysesChimique.chlorure,unite:' %'},
       {name:'pH',checked:false,label:'pH', value:this.analysesChimique.ph,unite:''},
       {name:'NaCL',checked:false,label:'Chlorure de sodium', value:this.analysesChimique.chlorureDeSodium,unite:'%'},
       {name:'Fe(CN)₆',checked:false,label:'Ferrocyanure', value:this.analysesChimique.ferrocyanure,unite:'ppm'},
@@ -502,6 +502,21 @@ export class RapportAnalyseComponent {
 
 
   saveRapport() {
+
+    this.analysesChimique.densite=this.attributs[0].value;
+    this.analysesChimique.matiereEnSuspension=this.attributs[1].value;
+    this.analysesChimique.salimite=this.attributs[2].value;
+    this.analysesChimique.calcium=this.attributs[3].value;
+    this.analysesChimique.magnesium=this.attributs[4].value;
+    this.analysesChimique.sulfate=this.attributs[5].value;
+    this.analysesChimique.humidite=this.attributs[6].value;
+    this.analysesChimique.matiereInsoluble=this.attributs[7].value;
+    this.analysesChimique.potassium=this.attributs[8].value;
+    this.analysesChimique.sodium=this.attributs[9].value;
+    this.analysesChimique.chlorure=this.attributs[10].value;
+    this.analysesChimique.ph=this.attributs[11].value;
+    this.analysesChimique.chlorureDeSodium=this.attributs[12].value;
+    this.analysesChimique.ferrocyanure=this.attributs[13].value;
     console.log(JSON.stringify(this.selectedBassin))
 
     if (this.selectedBassin!=null && this.selectedBassin.hasOwnProperty('id')) {
@@ -512,6 +527,7 @@ export class RapportAnalyseComponent {
       this.selectedBassin.analysesChimiques = [];
       if (this.checkedChimique == true) {
         this.selectedBassin.analysesChimiques.push(this.analysesChimique);
+        console.error(this.analysesChimique)
       }
       this.selectedBassin.analysesPhysiques = [];
       if (this.checkedPhysique == true) {
@@ -572,6 +588,7 @@ export class RapportAnalyseComponent {
   }
 
   saveTamis() {
+
     if (this.isUpdateTamis) {
 
       const tamis = this.listeTamis.findIndex((tt: Tamis) => tt.id == this.tamis.id)

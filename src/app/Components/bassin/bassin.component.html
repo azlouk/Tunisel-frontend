@@ -156,7 +156,7 @@
     <p-dialog [(visible)]="deleteProductDialog" header="Confirm" [modal]="true" [style]="{width:'450px'}">
       <div class="flex align-items-center justify-content-center">
         <i class="pi pi-exclamation-triangle mr-3" style="font-size: 2rem"></i>
-        <span *ngIf="product">Are you sure you want to delete <b>{{product.name}}</b>?</span>
+        <span *ngIf="product">Êtes-vous sûr de vouloir supprimer <b>{{product.name}}</b>?</span>
       </div>
       <ng-template pTemplate="footer">
         <button pButton pRipple icon="pi pi-times" class="p-button-text" label="Non" (click)="deleteProductDialog = false"></button>
@@ -179,7 +179,7 @@
 
 
 
-<p-dialog header="Analyse chimique et granulométrique" [(visible)]="visiblePrint" [modal]="true"   [breakpoints]="{ '1199px': '75vw', '575px': '90vw' }">
+<p-dialog header="Analyse chimique et granulométrique" [(visible)]="visiblePrint" [modal]="true"   [breakpoints]="{ '800px': '75vw', '575px': '90vw' }">
   <div class="shadow-1 p-2  " >Filtrage Chimique  :
 
     <div class="card flex justify-content-evenly ">
@@ -203,9 +203,10 @@
     <div class="shadow-1 p-2 gap-1 text-3xl flex inline-flex justify-content-evenly" >Filtrage Granulométrique  :<br>
       <p-listbox [options]="SelectetBassin.analysesPhysiques!==undefined?SelectetBassin.analysesPhysiques:[]" [(ngModel)]="SelectedsbnlPrintAnalyse" optionLabel="reference" [filter]="true" [style]="{ width: '15rem' }" [listStyle]="{'max-height': '220px'}"></p-listbox>
       <div *ngIf="SelectedsbnlPrintAnalyse.hasOwnProperty('id')" class="p-2">
-        <label class="text-2xl font-bold">Reference  :</label><span class="ml-2 text-2xl">{{SelectedsbnlPrintAnalyse.dateAnalyse}}</span><br>
+        <label class="text-2xl font-bold">Reference  :</label><span class="ml-2 text-2xl">{{SelectedsbnlPrintAnalyse.reference}}</span><br>
         <label class="text-2xl font-bold">Relative :</label><span class=" ml-2 text-2xl">{{SelectedsbnlPrintAnalyse.matiere}}</span><br>
         <label class="text-2xl font-bold">Temperature :</label><span class=" ml-2 text-2xl">{{SelectedsbnlPrintAnalyse.temperature}} °C</span><br>
+        <label class="text-2xl font-bold">Date </label><span class=" ml-2 text-2xl">{{SelectedsbnlPrintAnalyse.dateAnalyse}}</span><br>
       </div>
     </div>
   </div>
@@ -223,7 +224,6 @@
       <br><br><br><br>
       <label class="text-2xl font-bold">Reference  :</label><span class="ml-2 text-2xl">{{SelectetBassin.reference}}</span><br>
       <label class="text-2xl font-bold">Date creation :</label><span class=" ml-2 text-2xl">{{SelectetBassin.dateCreation}}</span><br>
-      <label class="text-2xl font-bold">Pool :</label><span class=" ml-2 text-2xl">{{SelectetBassin.bassinPuit==undefined?"-":SelectetBassin.bassinPuit?.reference}}</span><br>
 
     </div>
 
