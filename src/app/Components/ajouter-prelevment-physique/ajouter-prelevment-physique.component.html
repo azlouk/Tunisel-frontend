@@ -34,14 +34,15 @@
         <p-floatLabel>
           <input type="text" pInputText [(ngModel)]="analysesPhysique.matiere"  id="matiere" placeholder="Exp saumure , sel ..." class="w-full" />
           <label >Matiére</label>
-
-
+        </p-floatLabel>
+        <p-floatLabel>
+          <textarea rows="3" cols="20" pInputTextarea [(ngModel)]="analysesPhysique.description"  id="description"  class="w-full" ></textarea>
+          <label >Description</label>
         </p-floatLabel>
       </div>
       <div class="  ">
 
         <p-tabView *ngIf="!isUpdateAnalysePhysique"[scrollable]="true" >
-
           <p-tabPanel header="Bassin" >
             <p-listbox [options]="bassins" [(ngModel)]="selectedBassin" optionLabel="nom" [filter]="true" [listStyle]="{'height': '87px'}"  ></p-listbox>
 

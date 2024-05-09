@@ -30,6 +30,7 @@ import {TamisService} from "../../Services/tamis.service";
 import Swal from "sweetalert2";
 import {Bande} from "../../Models/bande";
 import {BandeService} from "../../Services/bande.service";
+import {InputTextareaModule} from "primeng/inputtextarea";
 
 @Component({
   selector: 'app-ajouter-prelevment-physique',
@@ -51,7 +52,8 @@ import {BandeService} from "../../Services/bande.service";
     ToolbarModule,
     TooltipModule,
     DatePipe,
-    TableModule
+    TableModule,
+    InputTextareaModule
   ],
   templateUrl: './ajouter-prelevment-physique.component.html',
   styleUrl: './ajouter-prelevment-physique.component.css'
@@ -348,7 +350,7 @@ for (let i=0;i<this.listeTamis.length;i++){
   else if(cumulativeRejection&&this.listeTamis[i].refusCumulated!==undefined&&i>0){
 
     // @ts-ignore
-    Math.round(this.listeTamis[i].refusCumulated=this.listeTamis[i-1].refusCumulated+cumulativeRejection);
+    this.listeTamis[i].refusCumulated=parseFloat((this.listeTamis[i-1].refusCumulated+cumulativeRejection).toFixed(2));
   }
 }
   }
@@ -357,7 +359,7 @@ for (let i=0;i<this.listeTamis.length;i++){
 for(let tamis of this.listeTamis){
   if(tamis.refus){
  // @ts-ignore
-    Math.round(tamis.passCumulated=100-tamis.refusCumulated);
+    tamis.passCumulated=parseFloat((100-tamis.refusCumulated).toFixed(2));
 }}
   }
 calculateTamis(){

@@ -2,7 +2,7 @@ import { Component } from '@angular/core';
 import {AjouterPrelevmentChimiqueComponent} from "../ajouter-prelevment-chimique/ajouter-prelevment-chimique.component";
 import {AjouterPrelevmentPhysiqueComponent} from "../ajouter-prelevment-physique/ajouter-prelevment-physique.component";
 import {ButtonModule} from "primeng/button";
-import {MessageService, SharedModule} from "primeng/api";
+import {SharedModule} from "primeng/api";
 import {ToolbarModule} from "primeng/toolbar";
 import {InputNumberModule} from "primeng/inputnumber";
 import {FormsModule} from "@angular/forms";
@@ -33,15 +33,14 @@ import {SblfService} from "../../Services/sblf.service";
 import {AnalyseChimiqueService} from "../../Services/analyse-chimique.service";
 import {BandeService} from "../../Services/bande.service";
 import Swal from "sweetalert2";
-import {ProductService} from "../../Services/product.service";
 import {AnalysePhysiqueService} from "../../Services/analysePhysique.service";
 import {AnalysesPhysique} from "../../Models/analyses-physique";
 import {Table, TableModule} from "primeng/table";
-import {Product} from "../../Models/product";
 import {ToastModule} from "primeng/toast";
 import {Tamis} from "../../Models/tamis";
 import {TamisService} from "../../Services/tamis.service";
 import {AutoCompleteModule} from "primeng/autocomplete";
+import {InputTextareaModule} from "primeng/inputtextarea";
 
 @Component({
   selector: 'app-analyse',
@@ -71,6 +70,7 @@ import {AutoCompleteModule} from "primeng/autocomplete";
     TableModule,
     ToastModule,
     AutoCompleteModule,
+    InputTextareaModule
   ],
   templateUrl: './rapportAnalyse.component.html',
   styleUrl: './rapportAnalyse.component.css'
@@ -691,7 +691,7 @@ export class RapportAnalyseComponent {
       else if(cumulativeRejection&&this.listeTamis[i].refusCumulated!==undefined&&i>0){
 
         // @ts-ignore
-        Math.round(this.listeTamis[i].refusCumulated=this.listeTamis[i-1].refusCumulated+cumulativeRejection);
+        this.listeTamis[i].refusCumulated=parseFloat((this.listeTamis[i-1].refusCumulated+cumulativeRejection).toFixed(2));
       }
     }
   }
@@ -700,7 +700,7 @@ export class RapportAnalyseComponent {
     for(let tamis of this.listeTamis){
       if(tamis.refus){
         // @ts-ignore
-        Math.round(tamis.passCumulated=100-tamis.refusCumulated);
+        tamis.passCumulated=parseFloat((100-tamis.refusCumulated).toFixed(2));
       }}
   }
   calculateTamis(){

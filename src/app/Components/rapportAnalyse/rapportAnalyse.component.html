@@ -87,10 +87,11 @@
         <p-floatLabel>
           <input type="text" pInputText [(ngModel)]="analysesChimique.vent"  id="vent" class="w-full" />
           <label >Vent Km/h</label>
-
-
         </p-floatLabel>
-
+        <p-floatLabel>
+          <textarea rows="3" cols="30" pInputTextarea [(ngModel)]="analysesChimique.description"  id="description" class="w-full" ></textarea>
+          <label >Description</label>
+        </p-floatLabel>
       </div>
 
       <div   class=" card  flex w-full  flex-column    ">
@@ -143,8 +144,12 @@
 
     <div *ngIf="checkedPhysique" class="border-1 border-round border-gray-300 p-6 mt-8 bg-gray-200  ">
       <label class="font-bold text-3xl">Analyse granulométrique</label>
-      <div class="card flex justify-content-between    mt-8 border-1 border-round border-gray-300 p-6   ">
+      <div class="card flex justify-content-between  align-items-center  mt-8 border-1 border-round border-gray-300 p-6   ">
 
+        <p-floatLabel>
+          <textarea rows="3" cols="30" pInputTextarea [(ngModel)]="analysesPhysique.description"   class="w-full" ></textarea>
+          <label >Description</label>
+        </p-floatLabel>
 
         <p-floatLabel>
           <input type="text" pInputText [(ngModel)]="analysesPhysique.conformite"  id="conformite" />
