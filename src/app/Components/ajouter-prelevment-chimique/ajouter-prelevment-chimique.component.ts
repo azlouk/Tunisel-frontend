@@ -32,6 +32,7 @@ import {DropdownModule} from "primeng/dropdown";
 import Swal from "sweetalert2";
 import {Bande} from "../../Models/bande";
 import {BandeService} from "../../Services/bande.service";
+import {InputTextareaModule} from "primeng/inputtextarea";
 
 @Component({
   selector: 'app-ajouter-prelevment-chimique',
@@ -56,6 +57,7 @@ import {BandeService} from "../../Services/bande.service";
     DialogModule,
     DropdownModule,
     NgClass,
+    InputTextareaModule
 
   ],
   templateUrl: './ajouter-prelevment-chimique.component.html',

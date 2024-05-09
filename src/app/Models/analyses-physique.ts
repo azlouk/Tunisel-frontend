@@ -7,7 +7,7 @@ export interface AnalysesPhysique  {
   dateAnalyse?: Date;
   temperature?: number;
   vent?: number;
-
+  description?: string;
   conformite?:string;
   qualite?:string ;
   tamisList?:Tamis[];

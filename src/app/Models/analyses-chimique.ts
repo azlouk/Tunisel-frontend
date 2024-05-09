@@ -5,6 +5,7 @@ export interface AnalysesChimique  {
   dateAnalyse?: Date  ;
   temperature?: number;
   vent?: number;
+  description?: string;
   densite?: number|undefined;
   matiereEnSuspension?: number|undefined;
   salimite?: number|undefined;
