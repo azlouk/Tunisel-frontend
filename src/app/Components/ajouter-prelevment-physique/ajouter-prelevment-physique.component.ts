@@ -343,11 +343,11 @@ for (let i=0;i<this.listeTamis.length;i++){
   this.listeTamis[i].refusCumulated=0;
   let cumulativeRejection = this.listeTamis[i].refus;
   if(i==0&&cumulativeRejection){
-    this.listeTamis[i].refusCumulated=cumulativeRejection
+    this.listeTamis[i].refusCumulated=parseFloat ((cumulativeRejection).toFixed(2))
   }
   else if(cumulativeRejection&&this.listeTamis[i].refusCumulated!==undefined&&i>0){
 
-    Math.round(this.listeTamis[i].refusCumulated=this.listeTamis[i-1].refusCumulated+cumulativeRejection);
+    this.listeTamis[i].refusCumulated=parseFloat ((this.listeTamis[i-1].refusCumulated+cumulativeRejection).toFixed(2));
   }
 }
   }
@@ -355,7 +355,7 @@ for (let i=0;i<this.listeTamis.length;i++){
   calculatePassCumulated() {
 for(let tamis of this.listeTamis){
   if(tamis.refus){
- Math.round(tamis.passCumulated=100-tamis.refusCumulated);
+   tamis.passCumulated= parseFloat ((100-tamis.refusCumulated).toFixed(2)) ;
 }}
   }
 calculateTamis(){

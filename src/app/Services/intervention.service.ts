@@ -22,7 +22,7 @@ export class InterventionService {
   }
 
   updateIntervention(intervention: Intervention): Observable<Intervention> {
-    return this.http.put<Intervention>(`${this.apiUrl}/interventions/${intervention.id}`, intervention);
+    return this.http.put<Intervention>(`${this.apiUrl}/interventions/update`, intervention);
 
   }
 

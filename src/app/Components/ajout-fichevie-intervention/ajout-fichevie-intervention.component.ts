@@ -82,10 +82,11 @@ public  isUpdateFichVie:boolean=false;
   ngOnInit(): void {
 this.ficheVieId=this.route.snapshot.paramMap.get('id');
 this.isUpdateFichVie=this.ficheVieId!==null;
+if(this.isUpdateFichVie==true){
 this.ficheVieService.getFicheById(this.ficheVieId).subscribe(value =>{this.ficheVie=value;
 this.listeInterventions=this.ficheVie.interventions==undefined?[]:this.ficheVie.interventions ;
 } )
-
+}
 
   }
 
@@ -135,13 +136,10 @@ this.ficheVieService.updateFicheVie(this.ficheVie).subscribe(value =>   this.rou
     )
 
 
-    }else {
+    }
     this.listeInterventions.push(this.intervention);
     this.visibale=false;
-    this.intervention={};
-  }
-    this.ficheVieService.updateFicheVie(this.ficheVie).subscribe(value => {console.log('fiche is update')})
-
+    // this.intervention={};
 
     }
   onGlobalFilter(table: Table, event: Event) {

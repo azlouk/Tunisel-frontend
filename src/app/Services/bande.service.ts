@@ -21,7 +21,7 @@ export class BandeService {
   }
   updateBande(bande: Bande): Observable<Bande> {
     console.log("update");
-    return this.http.put<Bande>(`${this.apiUrl}/bandes/${bande.id}`, bande);
+    return this.http.put<Bande>(`${this.apiUrl}/bandes/update`, bande);
   }
 
 
