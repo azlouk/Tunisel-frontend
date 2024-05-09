@@ -183,10 +183,14 @@
   <div class="shadow-1 p-2  " >Filtrage Chimique  :
 
     <div class="card flex justify-content-evenly ">
-      <div class="gap-1 flex align-items-center">Date début Analyse  :<p-calendar [(ngModel)]="DatefiltrageStart"  ></p-calendar>
+      <div class="gap-1 flex align-items-center">Date début Analyse  :
+        <input  class="p-2 shadow-1" type="date" pInputText    [(ngModel)]="DatefiltrageStart" [value]="DatefiltrageStart" />
+
       </div>
-      <div class="gap-1    flex align-items-center">
-        Date Fin Analyse  :<p-calendar [(ngModel)]="DatefiltrageEnd"  ></p-calendar>
+      <div class="gap-1  flex align-items-center">
+        Date Fin Analyse  :
+        <input  class="p-2 shadow-1" type="date"  pInputText   [(ngModel)]="DatefiltrageEnd" [value]="DatefiltrageEnd" />
+
       </div>
       <p-button (click)="filtredate()" class=" " icon="pi pi-search" label="Rechercher"></p-button>
       <p-button (click)="Viderfiltredate()" class=" " icon="pi pi-refresh" label="Actualiser"></p-button>
@@ -225,9 +229,10 @@
       <label class="text-2xl font-bold">Reference  :</label><span class="ml-2 text-2xl">{{SelectetBassin.reference}}</span><br>
       <label class="text-2xl font-bold">Date creation :</label><span class=" ml-2 text-2xl">{{SelectetBassin.dateCreation}}</span><br>
 
+
     </div>
 
-    <p-table #dt1 [value]="getAnalyse()" [tableStyle]="{ 'min-width': '50rem' }"
+    <p-table #dt1 [value]="this.SelectetBassin.analysesChimiques !== undefined ? this.SelectetBassin.analysesChimiques : []" [tableStyle]="{ 'min-width': '50rem' }"
              dataKey="id"
              [showCurrentPageReport]="true"
              [globalFilterFields]="['dateAnalyse']"
@@ -275,6 +280,7 @@
 
 
           <td *ngIf="colsfiltre[0].hide" >{{ a.reference==undefined?'-':a.reference }}</td>
+
           <td *ngIf="colsfiltre[1].hide">{{ a.dateAnalyse | date: 'MM/dd/yyyy'}}</td>
           <td *ngIf="colsfiltre[2].hide">{{ a.temperature==undefined?'-':a.temperature }}</td>
           <td *ngIf="colsfiltre[3].hide">{{ a.vent ==undefined?'-':a.vent}}</td>
@@ -292,7 +298,7 @@
           <td *ngIf="colsfiltre[15].hide">{{ a.ph ==undefined?'-':a.ph}}</td>
           <td *ngIf="colsfiltre[16].hide">{{ a.chlorureDeSodium ==undefined?'-':a.chlorureDeSodium}}</td>
           <td *ngIf="colsfiltre[17].hide">{{ a.ferrocyanure ==undefined?'-':a.ferrocyanure}}</td>
-
+          <td *ngIf="colsfiltre[18].hide" >{{ a.description==undefined?'-':a.description }}</td>
         </tr>
       </ng-template>
     </p-table>
@@ -305,6 +311,7 @@
       <label class="text-2xl font-bold">Reference  :</label><span class="ml-2 text-2xl">{{SelectedsbnlPrintAnalyse.reference}}</span><br>
       <label class="text-2xl font-bold">Relative :</label><span class=" ml-2 text-2xl">{{SelectedsbnlPrintAnalyse.matiere}}</span><br>
       <label class="text-2xl font-bold">Temperature :</label><span class=" ml-2 text-2xl">{{SelectedsbnlPrintAnalyse.temperature}} °C</span><br>
+      <label class="text-2xl font-bold">Description :</label><span class=" ml-2 text-2xl">{{SelectedsbnlPrintAnalyse.description}} </span><br>
     </div>
     <br><br><br>
     <p-table class=" " #dt [value]="getTamisFiltred()" [columns]="cols"  responsiveLayout="scroll"       dataKey="id">

@@ -127,6 +127,8 @@ this.SelectetBassin={analysesPhysiques:[]}
       { id:15, field: 'ph', header: 'pH' ,hide:false},
       { id:16, field: 'chlorureDeSodium', header: 'sodium chloride ' ,hide:false},
       {id:17,  field: 'ferrocyanure', header: 'Ferrocyanure ' ,hide:false},
+      {id:18, field: 'description ', header: 'description ' ,hide:false},
+
     ];
 
     this._selectedColumns = this.colsfiltre;
@@ -269,11 +271,11 @@ this.SelectetBassin={analysesPhysiques:[]}
   exportrapport(SelectetBassin: Bassin) {
 
     this.SelectetBassin = {...SelectetBassin};
-    this.getAnalyseGranoli() ;
+
     this.visiblePrint = true
   }
   filtredate() {
-    this.Viderfiltredate()
+    //this.Viderfiltredate()
     const data=this.SelectetBassin.analysesChimiques !== undefined ? this.SelectetBassin.analysesChimiques : []
     const newAnalyse:AnalysesChimique[] =[]
     data.forEach(v => {
@@ -283,7 +285,7 @@ this.SelectetBassin={analysesPhysiques:[]}
         const d=v.dateAnalyse+"";
         const dateana:Date=new Date(d)
         console.log("-D-->" + dateana)
-        if (  this.AfterTodate(new Date(this.DatefiltrageStart+""),dateana) &&  this.AfterTodate(dateana,new Date(this.DatefiltrageEnd))) {
+        if (  this.AfterTodate(new Date(this.DatefiltrageStart+""),new Date(dateana+"")) &&  this.AfterTodate(new Date(dateana+""),new Date(this.DatefiltrageEnd+""))) {
 
           newAnalyse.push(v);
         } else {
@@ -294,10 +296,10 @@ this.SelectetBassin={analysesPhysiques:[]}
       }
 
     })
-    this.SelectetBassin.analysesChimiques=[...newAnalyse] ;
-    // console.log(new JsonPipe().transform(data))
+    this.SelectetBassin.analysesChimiques=newAnalyse;
+  console.log("Chimique"+new JsonPipe().transform(newAnalyse))
 
-
+    this.getAnalyseGranoli() ;
 
   }
 
@@ -323,7 +325,6 @@ this.SelectetBassin={analysesPhysiques:[]}
   getAnalyseGranoli() {
     const data=this.SelectetBassin.analysesPhysiques !== undefined ? this.SelectetBassin.analysesPhysiques : []
     const newAnalyse:AnalysesPhysique[] =[]
-    console.log("PhysiqueAnana"+new JsonPipe().transform(data))
     data.forEach(v => {
 
       if(v.dateAnalyse!==undefined){
@@ -341,6 +342,10 @@ this.SelectetBassin={analysesPhysiques:[]}
       }
 
     })
+
+
+    console.log("Physique--->"+new JsonPipe().transform(newAnalyse))
+
     this.SelectetBassin.analysesPhysiques=[...newAnalyse] ;
 
 
@@ -382,7 +387,7 @@ this.SelectetBassin={analysesPhysiques:[]}
   }
   AfterTodate(date1:Date , date2:Date):boolean{
     console.log(date1+"<"+date2)
-    return date1.getDay()<=date2.getDay() && date1.getMonth()<=date2.getMonth() && date1.getFullYear()<=date2.getFullYear()
+    return date1.getTime()<=date2.getTime()
   }
 
 

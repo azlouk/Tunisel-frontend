@@ -254,7 +254,7 @@ export class AjouterPrelevmentChimiqueComponent implements OnInit {
         if (this.selectedPuit.hasOwnProperty('id')) {
           this.selectedPuit.analysesChimiques = [];
           this.selectedPuit.analysesChimiques.push(this.analysesChimique);
-          // alert(new JsonPipe().transform(this.selectedPuit))
+         alert(new JsonPipe().transform(this.analysesChimique.description))
           this.analyseChimiqueService.addAnalyseChimique(this.selectedPuit).subscribe(value => this.router.navigate(['/analyseChimique']))
         } else if (this.selectedBassin.hasOwnProperty('id')) {
           this.selectedBassin.analysesChimiques = [];
@@ -277,6 +277,7 @@ export class AjouterPrelevmentChimiqueComponent implements OnInit {
           this.selectedSblf.analysesChimiques = [];
           this.selectedSblf.analysesChimiques.push(this.analysesChimique);
           this.analyseChimiqueService.addAnalyseChimiqueToSblf(this.selectedSblf).subscribe(value => this.router.navigate(['/analyseChimique']))
+
         }
       }
 
