@@ -107,15 +107,13 @@ export class AjoutFichevieInterventionComponent implements OnInit {
   }
 
   hideDialog() {
-
+this.visibale=false
   }
 
 
   saveFicheVie() {
-    if(this.intervention.dateintervention)
-    {
       this.submitted=true;
-    } else
+    if(this.ficheVie.societe?.trim())
     {
       this.ficheVie.interventions = this.listeInterventions
       if (this.isUpdateFichVie) {
@@ -134,10 +132,12 @@ export class AjoutFichevieInterventionComponent implements OnInit {
   }
 
   saveIntervention() {
-    this.listeInterventions.push(this.intervention);
+    this.submitted = true;
+    if (this.intervention.dateintervention) {
+      this.listeInterventions.push(this.intervention);
       this.visibale = false;
-      this.intervention={}
-
+      this.intervention = {}
+    }
   }
 
 

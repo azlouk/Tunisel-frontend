@@ -162,20 +162,20 @@ export class RapportAnalyseComponent {
      this.dataMatiere=["Sel","Saumure"];
 //Init de attributs
     this.attributs= [
-      {name:'d',checked:false,label:'Densité', value:this.analysesChimique.densite,unite:''},
-      {name:'MS',checked:false,label:'Matiére en suspension', value:this.analysesChimique.matiereEnSuspension ,unite:'%'},
-      {name:'S',checked:false,label:'Salinité', value:this.analysesChimique.salimite,unite:'g/L'},
-      {name:'Ca',checked:false,label:'Calcium', value:this.analysesChimique.calcium,unite:'%'},
-      {name:'Mg',checked:false,label:'Magnésium', value:this.analysesChimique.magnesium,unite:'%'},
-      {name:'SO₄',checked:false,label:'Sulfate', value:this.analysesChimique.sulfate,unite:'%'},
-      {name:'H₂O',checked:false,label:'Humidité', value:this.analysesChimique.humidite,unite:'%'},
-      {name:'MI',checked:false,label:'Matiére insoluble', value:this.analysesChimique.matiereInsoluble,unite:'%'},
-      {name:'K',checked:false,label:'Potassium', value:this.analysesChimique.potassium,unite:'%'},
-      {name:'Na',checked:false,label:'Sodium', value:this.analysesChimique.sodium,unite:'%'},
-      {name:'Cl',checked:false,label:'Chlorure', value:this.analysesChimique.chlorure,unite:' %'},
-      {name:'pH',checked:false,label:'pH', value:this.analysesChimique.ph,unite:''},
-      {name:'NaCL',checked:false,label:'Chlorure de sodium', value:this.analysesChimique.chlorureDeSodium,unite:'%'},
-      {name:'Fe(CN)₆',checked:false,label:'Ferrocyanure', value:this.analysesChimique.ferrocyanure,unite:'ppm'},
+      {name:'d',checked:false,label:'Densité', value:this.analysesChimique.densite},
+      {name:'MS',checked:false,label:'Matiére en suspension', value:this.analysesChimique.matiereEnSuspension },
+      {name:'S',checked:false,label:'Salinité', value:this.analysesChimique.salimite},
+      {name:'Ca',checked:false,label:'Calcium', value:this.analysesChimique.calcium},
+      {name:'Mg',checked:false,label:'Magnésium', value:this.analysesChimique.magnesium},
+      {name:'SO₄',checked:false,label:'Sulfate', value:this.analysesChimique.sulfate},
+      {name:'H₂O',checked:false,label:'Humidité', value:this.analysesChimique.humidite},
+      {name:'MI',checked:false,label:'Matiére insoluble', value:this.analysesChimique.matiereInsoluble},
+      {name:'K',checked:false,label:'Potassium', value:this.analysesChimique.potassium},
+      {name:'Na',checked:false,label:'Sodium', value:this.analysesChimique.sodium},
+      {name:'Cl',checked:false,label:'Chlorure', value:this.analysesChimique.chlorure},
+      {name:'pH',checked:false,label:'pH', value:this.analysesChimique.ph},
+      {name:'NaCL',checked:false,label:'Chlorure de sodium', value:this.analysesChimique.chlorureDeSodium},
+      {name:'Fe(CN)₆',checked:false,label:'Ferrocyanure', value:this.analysesChimique.ferrocyanure},
 
     ]
     this.selectedPuit = {};

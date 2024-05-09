@@ -46,7 +46,7 @@ export class DashboardComponent implements OnInit, OnDestroy {
   subscription!: Subscription;
   // puit :Puit[];
   public nbrPuits = 0;
-  public dashboardData: Dashboard = new Dashboard(0, 0);
+  public dashboardData: Dashboard = new Dashboard(0, 0,0,0);
 
   constructor(public loginservice: LoginService, private productService: ProductService, public layoutService: LayoutService, private dashboardService: DashboardService) {
     this.subscription = this.layoutService.configUpdate$

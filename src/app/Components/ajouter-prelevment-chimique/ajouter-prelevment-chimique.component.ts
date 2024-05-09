@@ -102,20 +102,20 @@ export class AjouterPrelevmentChimiqueComponent implements OnInit {
   ngOnInit(): void {
 
     this.attributs= [
-      {name:'d',checked:false,label:'Densité', value:this.analysesChimique.densite,unite:''},
-      {name:'MS',checked:false,label:'Matiére en suspension', value:this.analysesChimique.matiereEnSuspension ,unite:'mg/L'},
-      {name:'S',checked:false,label:'Salinité', value:this.analysesChimique.salimite,unite:'g/L'},
-      {name:'Ca',checked:false,label:'Calcium', value:this.analysesChimique.calcium,unite:'% ppm'},
-      {name:'Mg',checked:false,label:'Magnésium', value:this.analysesChimique.magnesium,unite:'% ppm'},
-      {name:'SO₄',checked:false,label:'Sulfate', value:this.analysesChimique.sulfate,unite:'% ppm'},
-      {name:'H₂O',checked:false,label:'Humidité', value:this.analysesChimique.humidite,unite:'% '},
-      {name:'MI',checked:false,label:'Matiére insoluble', value:this.analysesChimique.matiereInsoluble,unite:'% ppm'},
-      {name:'K',checked:false,label:'Potassium', value:this.analysesChimique.potassium,unite:'% ppm'},
-      {name:'Na',checked:false,label:'Sodium', value:this.analysesChimique.sodium,unite:'% ppm'},
-      {name:'Cl',checked:false,label:'Chlorure', value:this.analysesChimique.chlorure,unite:'% ppm'},
-      {name:'pH',checked:false,label:'pH', value:this.analysesChimique.ph,unite:''},
-      {name:'NaCL',checked:false,label:'Chlorure de sodium', value:this.analysesChimique.chlorureDeSodium,unite:'%'},
-      {name:'Fe(CN)₆',checked:false,label:'Ferrocyanure', value:this.analysesChimique.ferrocyanure,unite:'ppm'},
+      {name:'d',checked:false,label:'Densité', value:this.analysesChimique.densite},
+      {name:'MS',checked:false,label:'Matiére en suspension', value:this.analysesChimique.matiereEnSuspension },
+      {name:'S',checked:false,label:'Salinité', value:this.analysesChimique.salimite},
+      {name:'Ca',checked:false,label:'Calcium', value:this.analysesChimique.calcium},
+      {name:'Mg',checked:false,label:'Magnésium', value:this.analysesChimique.magnesium},
+      {name:'SO₄',checked:false,label:'Sulfate', value:this.analysesChimique.sulfate},
+      {name:'H₂O',checked:false,label:'Humidité', value:this.analysesChimique.humidite},
+      {name:'MI',checked:false,label:'Matiére insoluble', value:this.analysesChimique.matiereInsoluble},
+      {name:'K',checked:false,label:'Potassium', value:this.analysesChimique.potassium},
+      {name:'Na',checked:false,label:'Sodium', value:this.analysesChimique.sodium},
+      {name:'Cl',checked:false,label:'Chlorure', value:this.analysesChimique.chlorure},
+      {name:'pH',checked:false,label:'pH', value:this.analysesChimique.ph},
+      {name:'NaCL',checked:false,label:'Chlorure de sodium', value:this.analysesChimique.chlorureDeSodium},
+      {name:'Fe(CN)₆',checked:false,label:'Ferrocyanure', value:this.analysesChimique.ferrocyanure},
 
     ]
     this.selectedPuit = {};
@@ -263,7 +263,7 @@ export class AjouterPrelevmentChimiqueComponent implements OnInit {
           this.selectedSbnl.analysesChimiques.push(this.analysesChimique);
           this.analyseChimiqueService.addAnalyseChimiqueToSbnl(this.selectedSbnl).subscribe(value => this.router.navigate(['/analyseChimique']))
         } else if (this.selectedBande.hasOwnProperty('id') == true) {
-          alert(new JsonPipe().transform(this.selectedBande))
+          // alert(new JsonPipe().transform(this.selectedBande))
           this.selectedBande.analysesChimiques = [];
           this.selectedBande.analysesChimiques.push(this.analysesChimique);
           this.analyseChimiqueService.addAnalyseChimiqueToBande(this.selectedBande).subscribe(value => this.router.navigate(['/analyseChimique']))
@@ -301,7 +301,7 @@ export class AjouterPrelevmentChimiqueComponent implements OnInit {
   protected readonly Date = Date;
 
   selectPuit() {
-    alert(new JsonPipe().transform(this.selectedPuit))
+    // alert(new JsonPipe().transform(this.selectedPuit))
     this.selectedBassin = {};
     this.selectedSbnl = {};
     this.selectedBande = {};
@@ -311,7 +311,7 @@ export class AjouterPrelevmentChimiqueComponent implements OnInit {
   }
 
   selectBassin() {
-    alert(new JsonPipe().transform(this.selectedBassin))
+    // alert(new JsonPipe().transform(this.selectedBassin))
 
     this.selectedPuit = {};
     this.selectedSbnl = {};
@@ -333,7 +333,7 @@ export class AjouterPrelevmentChimiqueComponent implements OnInit {
   }
 
   selectBande() {
-    alert(new JsonPipe().transform(this.selectedBande))
+    // alert(new JsonPipe().transform(this.selectedBande))
 
     this.selectedBassin = {};
     this.selectedSbnl = {};
@@ -344,7 +344,7 @@ export class AjouterPrelevmentChimiqueComponent implements OnInit {
   }
 
   selectSBL() {
-    alert(new JsonPipe().transform(this.selectedSbl))
+    // alert(new JsonPipe().transform(this.selectedSbl))
 
     this.selectedBassin = {};
     this.selectedSbnl = {};
@@ -355,7 +355,7 @@ export class AjouterPrelevmentChimiqueComponent implements OnInit {
   }
 
   selectSBLF() {
-    alert(new JsonPipe().transform(this.selectedSblf))
+    // alert(new JsonPipe().transform(this.selectedSblf))
 
     this.selectedBassin = {};
     this.selectedSbnl = {};

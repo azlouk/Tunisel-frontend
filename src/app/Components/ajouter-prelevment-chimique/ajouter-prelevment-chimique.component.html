@@ -333,7 +333,9 @@
         <div *ngFor="let attribut of getattributs()"  class="m-3   ">
 
             <p-floatLabel>
-              <p-inputNumber class="" [(ngModel)]="attribut.value"  inputId="mile" suffix="  {{attribut.unite}}" mode="decimal" locale="en-US" [minFractionDigits]="3" [name]="attribut.name"></p-inputNumber>
+              <input type="text" pInputText [(ngModel)]="attribut.value"  id="check" class="w-full" [name]="attribut.name"/>
+
+<!--              <p-inputNumber class="" [(ngModel)]="attribut.value"  inputId="mile" suffix="  {{attribut.unite}}" mode="decimal" locale="en-US" [minFractionDigits]="3" [name]="attribut.name"></p-inputNumber>-->
               <label>{{attribut.label}}</label>
             </p-floatLabel>
 

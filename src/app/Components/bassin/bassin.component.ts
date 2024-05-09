@@ -111,22 +111,22 @@ this.SelectetBassin={analysesPhysiques:[]}
     this.colsfiltre = [
       {id:0, field: 'reference', header: 'reference' ,hide:true},
       { id:1, field: 'dateAnalyse', header: 'Date Analyse' ,hide:false},
-      {id:2,  field: 'temperature', header: 'Temperature °C' ,hide:false},
-      { id:3, field: 'vent', header: 'wind (km/h)' ,hide:false},
-      { id:4, field: 'humidite', header: 'humidity %' ,hide:false},
+      {id:2,  field: 'temperature', header: 'Temperature ' ,hide:false},
+      { id:3, field: 'vent', header: 'wind ' ,hide:false},
+      { id:4, field: 'humidite', header: 'humidity ' ,hide:false},
       {id:5,  field: 'densite', header: 'Densite  ',hide:false },
-      {id:6,  field: 'matiereEnSuspension', header: 'Suspended Matter %',hide:false },
-      { id:7, field: 'salimite', header: 'Salinite (g/L)' ,hide:false},
-      {id:8,  field: 'calcium', header: 'Calcium %' ,hide:false},
-      { id:9, field: 'magnesium', header: 'Magnesium %' ,hide:false},
-      { id:10, field: 'sulfate', header: 'Sulfate %' ,hide:false},
-      { id:11, field: 'matiereInsoluble', header: 'Insoluble matter %',hide:false },
-      { id:12, field: 'potassium', header: 'Potassium %' ,hide:false},
-      { id:13, field: 'sodium', header: 'Sodium %' ,hide:false},
-      {id:14,  field: 'chlorure', header: 'Chlorure %' ,hide:false},
+      {id:6,  field: 'matiereEnSuspension', header: 'Suspended Matter ',hide:false },
+      { id:7, field: 'salimite', header: 'Salinite ' ,hide:false},
+      {id:8,  field: 'calcium', header: 'Calcium ' ,hide:false},
+      { id:9, field: 'magnesium', header: 'Magnesium ' ,hide:false},
+      { id:10, field: 'sulfate', header: 'Sulfate ' ,hide:false},
+      { id:11, field: 'matiereInsoluble', header: 'Insoluble matter ',hide:false },
+      { id:12, field: 'potassium', header: 'Potassium ' ,hide:false},
+      { id:13, field: 'sodium', header: 'Sodium ' ,hide:false},
+      {id:14,  field: 'chlorure', header: 'Chlorure ' ,hide:false},
       { id:15, field: 'ph', header: 'pH' ,hide:false},
-      { id:16, field: 'chlorureDeSodium', header: 'sodium chloride %' ,hide:false},
-      {id:17,  field: 'ferrocyanure', header: 'Ferrocyanure ppm' ,hide:false},
+      { id:16, field: 'chlorureDeSodium', header: 'sodium chloride ' ,hide:false},
+      {id:17,  field: 'ferrocyanure', header: 'Ferrocyanure ' ,hide:false},
     ];
 
     this._selectedColumns = this.colsfiltre;
@@ -271,7 +271,6 @@ this.SelectetBassin={analysesPhysiques:[]}
     this.SelectetBassin = {...SelectetBassin};
     this.getAnalyseGranoli() ;
     this.visiblePrint = true
-    console.log("---->"+new JsonPipe().transform(this.SelectetBassin));
   }
   filtredate() {
     this.Viderfiltredate()

@@ -14,10 +14,11 @@
 
 
         <p-floatLabel>
-          <input type="text" pInputText id="societe" [(ngModel)]="ficheVie.societe" />
-
-
-          <label>Societé</label>
+          <div class="flex flex-column">
+            <input type="text" pInputText id="societe" [(ngModel)]="ficheVie.societe" [ngClass]="{'ng-invalid ng-dirty' : submitted && !ficheVie.societe}"/>
+            <label>Societé</label>
+            <small class="ng-dirty ng-invalid" *ngIf="submitted && !ficheVie.societe">Societé est requis.</small>
+          </div>
         </p-floatLabel>
         <p-floatLabel>
           <input type="text" pInputText id="Designation" [(ngModel)]="ficheVie.designation"/>
@@ -100,7 +101,8 @@
             <p-floatLabel>
               <p-calendar id="dateintervention" dateFormat="yy-mm-dd" [showIcon]="true" [(ngModel)]="intervention.dateintervention" [ngClass]="{'ng-invalid ng-dirty' : submitted && !intervention.dateintervention}"></p-calendar>
               <label for="dateReception">Date de Intervention</label>
-               <small class="ng-dirty ng-invalid" *ngIf="submitted && !!intervention.dateintervention">Nom est requis.</small>
+              <small class="ng-dirty ng-invalid" *ngIf="submitted && !intervention.dateintervention">Date est requis.</small>
+
             </p-floatLabel>
             <p-floatLabel>
               <input type="text" pInputText id="certificat" class="w-1/2 " [(ngModel)]="intervention.certificat"/>
