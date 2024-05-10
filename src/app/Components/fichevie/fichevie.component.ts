@@ -1,11 +1,11 @@
-import {Component, OnInit} from '@angular/core';
+import {Component, ElementRef, OnInit, ViewChild} from '@angular/core';
 import {ButtonModule} from "primeng/button";
 import {CalendarModule} from "primeng/calendar";
 import {DialogModule} from "primeng/dialog";
 import {DropdownModule} from "primeng/dropdown";
 import {InputTextModule} from "primeng/inputtext";
-import {JsonPipe, NgIf} from "@angular/common";
-import {ReactiveFormsModule} from "@angular/forms";
+import {DatePipe, JsonPipe, NgClass, NgForOf, NgIf} from "@angular/common";
+import {FormsModule, ReactiveFormsModule} from "@angular/forms";
 import {MessageService, SharedModule} from "primeng/api";
 import {Table, TableModule} from "primeng/table";
 import {ToastModule} from "primeng/toast";
@@ -17,6 +17,12 @@ import {ProductService} from "../../Services/product.service";
 import {PuitService} from "../../Services/puit.service";
 import {FicheVie} from "../../Models/fichevie";
 import {FicheVieService} from "../../Services/fichevie.service";
+import html2canvas from "html2canvas";
+import jsPDF from "jspdf";
+import {AutoFocusModule} from "primeng/autofocus";
+import {CheckboxModule} from "primeng/checkbox";
+import {FloatLabelModule} from "primeng/floatlabel";
+import {RadioButtonModule} from "primeng/radiobutton";
 
 
 @Component({
@@ -33,7 +39,15 @@ import {FicheVieService} from "../../Services/fichevie.service";
     SharedModule,
     TableModule,
     ToastModule,
-    ToolbarModule
+    ToolbarModule,
+    AutoFocusModule,
+    CheckboxModule,
+    DatePipe,
+    NgForOf,
+    FormsModule,
+    FloatLabelModule,
+    RadioButtonModule,
+    NgClass
   ],
   templateUrl: './fichevie.component.html',
   styleUrl: './fichevie.component.css'
@@ -205,5 +219,40 @@ export class FichevieComponent implements OnInit {
 
   onGlobalFilter(table: Table, event: Event) {
     table.filterGlobal((event.target as HTMLInputElement).value, 'contains');
+  }
+
+
+//   ===========Print PDF==========================
+  @ViewChild("pdfFicheVie") htmlContent: ElementRef | undefined;
+  visiblePrint: boolean = false;
+  dateToday: Date = new Date();
+
+  // DatefiltrageStart: Date = new Date();
+  // DatefiltrageEnd: Date = new Date();
+  // SearchDate: any;
+
+
+  selectedFicheViePrint: FicheVie = {}
+  exportrapport(ficheVie: FicheVie) {
+    this.selectedFicheViePrint = ficheVie;
+    this.visiblePrint = true
+  }
+
+  public SavePDF(): void {
+
+    if (this.htmlContent) {
+      html2canvas(this.htmlContent.nativeElement, {scale: 1}).then((canvas) => {
+        const imgData = canvas.toDataURL('image/png');
+        const pdf = new jsPDF('p', 'mm', 'a4');
+        const imgWidth = 210; // PDF width
+        const imgHeight = (canvas.height * imgWidth) / canvas.width; // Maintain aspect ratio
+        pdf.addImage(imgData, 'png', 2, 2, imgWidth, imgHeight);
+        pdf.save('Print_' + Math.random() + '.pdf');
+      });
+
+
+    }
+
+
   }
 }

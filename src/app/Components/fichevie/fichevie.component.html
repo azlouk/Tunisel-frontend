@@ -103,6 +103,8 @@
               <div class="flex ">
                 <button pButton pRipple icon="pi pi-pencil" class="p-button-rounded p-button-success mr-2" (click)="editFicheVie(fichevie)"></button>
                 <button pButton pRipple icon="pi pi-trash" class="p-button-rounded p-button-warning" (click)="deleteFicheVie(fichevie)"></button>
+                <button pButton pRipple icon="pi pi-file-pdf" class="p-button-rounded p-button-primary mr-2"  (click)="exportrapport(fichevie)"></button>
+
               </div>
             </td>
           </tr>
@@ -137,5 +139,128 @@
   </div>
 </div>
 
+<!--PrintPDF Rapport-->
+
+<p-dialog header="Etalonage" [(visible)]="visiblePrint" [modal]="true"   [breakpoints]="{ '1199px': '75vw', '575px': '90vw' }">
+
+
+  <div #pdfFicheVie class="pt-8 pl-4 pr-4">
+
+    <div class="flex border-1 w-full justify-content-between">
+      <div class="flex-initial flex align-items-center justify-content-center   font-bold m-2 px-5 py-3 border-round">
+        <img src="assets/layout/images/logo.png">
+
+      </div>
+      <div class="flex-initial flex align-items-center justify-content-center  text-6xl font-bold m-2 px-5 py-3 border-round">
+        Fiche de vie instrument de mesure
+      </div>
+      <div class="flex-initial border-1 flex     w-25  font-bold m-2 px-5 py-3  ">
+        <div class="col   ">
+          <div class="row  mb-2    w-full  ">BEN GUERDANE, TUNISIA  </div>
+          <div class="row mb-2   w-full text-center    text-1xl font-bold  pi pi-calendar ">{{dateToday | date :"yyyy-MM-dd hh:ss a"}}</div>
+
+        </div>
+      </div>
+    </div>
+
+
+<!--=============fichieVie-->
+    <div class="flex flex-column  mt-8 border-1 border-round border-gray-300 p-6 gap-8  ">
+      <div class="border-1 border-round border-gray-30 p-6 flex flex-column gap-5 ">
+        <div class="  flex   align-items-center ">
+
+          <label style="margin-right: 420px;"><span class="font-bold text-2xl ">Societé: </span>{{selectedFicheViePrint.societe}}</label>
+          <label><span class="font-bold text-2xl w-1/3">Designation: </span>{{selectedFicheViePrint.designation}}</label>
+
+        </div>
+        <div class="flex justify-content-between  align-items-center">
+          <div class="flex flex-column gap-4">
+
+            <label><span class="font-bold text-2xl">Code: </span>{{selectedFicheViePrint.code}}</label>
+            <label><span class="font-bold text-2xl">Serie: </span>{{selectedFicheViePrint.serie}}</label>
+            <label><span class="font-bold text-2xl">Date de reception: </span>{{selectedFicheViePrint.dateReception|date:"yyyy:mm:dd"}}</label>
+            <label><span class="font-bold text-2xl">Mise en Service: </span>{{selectedFicheViePrint.etatFiche}}</label>
+
+          </div>
+
+          <div class="flex flex-column gap-4">
+
+            <label><span class="font-bold text-2xl">Marque: </span>{{selectedFicheViePrint.marque}}</label>
+            <label><span class="font-bold text-2xl">Emplacement: </span>{{selectedFicheViePrint.emplacement}}</label>
+            <label><span class="font-bold text-2xl">Etalonage: </span>{{selectedFicheViePrint.etalonnage}}</label>
+            <label><span class="font-bold text-2xl">Verification: </span>{{selectedFicheViePrint.verification}}</label>
+
+          </div>
+
+        </div>
+      </div>
+
+      <div>
+
+        <p-table #dt [value]="selectedFicheViePrint.interventions!==undefined?selectedFicheViePrint.interventions:[]" [columns]="cols"  responsiveLayout="scroll" [rows]="10"  [paginator]="false"  [showCurrentPageReport]="false"   [rowHover]="false" dataKey="id">
+          <ng-template pTemplate="caption">
+            <div class="flex flex-column md:flex-row md:justify-content-between md:align-items-center">
+              <h5 class="text-center font-bold text-3xl">Interventions</h5>
+            </div>
+          </ng-template>
+          <ng-template pTemplate="header">
+            <tr>
+              <th >Date</th>
+              <th >Qui</th>
+              <th >Nature d'action</th>
+              <th >Resultat</th>
+              <th >N° Certificat</th>
+              <th >Nom et Visa</th>
+              <th >Observation</th>
+              <th></th>
+            </tr>
+          </ng-template>
+          <ng-template pTemplate="body" let-intervention >
+            <tr >
+
+              <td style="width:14%; min-width:10rem;"><span class="p-column-title" >date Intervention</span>
+                {{intervention.dateintervention | date: "yyyy-MM-dd"}}
+              </td>
+              <td style="width:14%; min-width:10rem;">
+                <span class="p-column-title">Qui</span>
+                {{intervention.qui}}
+              </td>
+              <td style="width:14%; min-width:10rem;">
+                <span class="p-column-title">Nature Action</span>
+                {{intervention.natureAction}}
+              </td>
+              <td style="width:14%; min-width:10rem;">
+                <span class="p-column-title">Resultat</span>
+                {{intervention.resultat}}
+              </td>
+              <td style="width:14%; min-width:8rem;">
+                <span class="p-column-title">Certificat</span>
+                {{intervention.certificat}}
+              </td>
+              <td style="width:14%; min-width:8rem;">
+                <span class="p-column-title">Nom Visa</span>
+                {{intervention.nomVisa}}
+              </td>
+              <td style="width:14%; min-width:8rem;">
+                <span class="p-column-title">Observation</span>
+                {{intervention.observation}}
+              </td>
+
+            </tr>
+          </ng-template>
+        </p-table>
+      </div>
+    </div>
+
+    <!--=============fichieVie-->
+
+
+
+
+  </div>
+  <ng-template pTemplate="footer">
+    <p-button icon="pi pi-file-pdf" (click)="SavePDF()" class="text-green-50" label="PDF" pAutoFocus [autofocus]="true"  ></p-button>
+  </ng-template>
+</p-dialog>
 
 
