@@ -124,7 +124,7 @@
             <tr>
 
               <th pSortableColumn="nom">nom <p-sortIcon field="nom"></p-sortIcon></th>
-              <th pSortableColumn="quantite">quantite <p-sortIcon field="quantite"></p-sortIcon></th>
+              <th *ngIf="isUpdateInventaire" pSortableColumn="quantite">quantite <p-sortIcon field="quantite"></p-sortIcon></th>
               <th pSortableColumn="designation">designation <p-sortIcon field="designation"></p-sortIcon></th>
               <th pSortableColumn="reference">reference<p-sortIcon field="reference"></p-sortIcon></th>
               <th pSortableColumn="article">article <p-sortIcon field="article"></p-sortIcon></th>
@@ -137,7 +137,7 @@
               <td style="width:14%; min-width:10rem;"><span class="p-column-title" >date Intervention</span>
                 {{p.produit.nom }}
               </td>
-              <td style="width:14%; min-width:10rem;">
+              <td *ngIf="isUpdateInventaire" style="width:14%; min-width:10rem;">
                 <span class="p-column-title">quantite</span>
                 {{this.p.produit.quantite }}
 <!--                {{this.sourceProduits[p.produit.id].quantite}}-->
