@@ -264,7 +264,7 @@ this.ReportedBy=this.Loginservice.getToken()
 
   exportrapport(puit: Puit) {
     this.selectedPuitPrint = puit;
-    this.visiblePrint = true
+    this.visiblePrint = true;
   }
 
   getAllPuit() {

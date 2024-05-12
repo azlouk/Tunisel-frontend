@@ -136,7 +136,6 @@ this.SelectetBassin={analysesPhysiques:[]}
      this.getAllBassin();
     this.puitService.getAllPuits().subscribe((v:  Puit[]) => {
       this.puits=v;
-      console.log(new JsonPipe().transform("====================>>>>>>"+this.puits))
 
     },error => {
       console.log(error)})
@@ -212,7 +211,6 @@ this.SelectetBassin={analysesPhysiques:[]}
           .subscribe((bassins: Bassin[]) => {
             this.bassins = bassins;
           } );});
-        console.log('bassin updated')
 
       }
       this.isUpdateBassin=false;
@@ -225,7 +223,6 @@ this.SelectetBassin={analysesPhysiques:[]}
           .subscribe((bassins: Bassin[]) => {
             this.bassins = bassins;
           } );});
-      console.log('bassin added');
       console.log(new JsonPipe().transform(this.bassin));
 
     }
