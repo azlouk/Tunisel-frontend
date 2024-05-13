@@ -80,7 +80,7 @@ export class AjouterInventaireComponent implements OnInit {
   targetUpdate!: Produit[];
   produitsDefectueux?: ProduitDefectueux[];
   produitDefectueux: ProduitDefectueux = {};
-   association: any = {};
+  association: any = {};
 
 
   constructor(private router: Router, private inventaireService: InventaireService,
@@ -91,22 +91,22 @@ export class AjouterInventaireComponent implements OnInit {
 
   ngOnInit(): void {
 
-this.listeProduits
+    this.listeProduits
     this.inventaireId = this.route.snapshot.paramMap.get('id');
     this.isUpdateInventaire = this.inventaireId !== null;
     this.inventaire.dateInventaire = new Date();
     this.inventaire.inventaireProduitAssociations = []
     this.inventaire.reference = "Inv-" + new Date().getFullYear();
     this.sourceProduits = [];
-this.sourceUpdate = [];
-      this.produitService.getProduit().subscribe(value => {
-        this.sourceProduits = [...value]
+    this.sourceUpdate = [];
+    this.produitService.getProduit().subscribe(value => {
+      this.sourceProduits = [...value]
 
-        this.listeProduits = [...value];
+      this.listeProduits = [...value];
 
-        this.cdr.markForCheck();
-console.log("on init", this.sourceUpdate)
-      })
+      this.cdr.markForCheck();
+      console.log("on init", this.sourceUpdate)
+    })
 
     if (this.isUpdateInventaire) {
 
@@ -117,19 +117,18 @@ console.log("on init", this.sourceUpdate)
     }
 
     this.targetProduits = [];
-  if(this.isUpdateInventaire){
-    this.getInventaireById();
+    if (this.isUpdateInventaire) {
+      this.getInventaireById();
 
-  }
+    }
 
 
   }
 
   getInventaireById() {
-    if(!this.isUpdateInventaire){
+    if (!this.isUpdateInventaire) {
       this.targetProduits = [];
-    }
-    else{
+    } else {
       this.targetUpdate = [];
     }
     this.inventaireService.getInventaireById(this.inventaireId).subscribe(value => {
@@ -138,17 +137,17 @@ console.log("on init", this.sourceUpdate)
         this.inventaire.inventaireProduitAssociations.forEach((value1: InventaireProduitAssociation) => {
           if (value1.produit) {
             // const newP: Produit = {id: value1.produit.id, nom: value1.produit.nom}
-            const newP=value1.produit
+            const newP = value1.produit
             // if(!this.isUpdateInventaire){
             // this.targetProduits.push(newP)
             //   console.log("createnewP"+newP)
             // }
             // else{
 
-              // console.log("updatenewP"+newP)
+            // console.log("updatenewP"+newP)
 
-              this.targetUpdate.push(newP)
-            console.log('new listeUpdated: ',JSON.stringify(this.targetUpdate))
+            this.targetUpdate.push(newP)
+            console.log('new listeUpdated: ', JSON.stringify(this.targetUpdate))
             // }
           }
         })
@@ -157,6 +156,7 @@ console.log("on init", this.sourceUpdate)
     })
 
   }
+
   retour() {
     this.router.navigate(['/inventaire']);
   }
@@ -165,12 +165,14 @@ console.log("on init", this.sourceUpdate)
   showDialog() {
     this.isAjoutProduit = true;
     this.visibale = true;
-     this.targetUpdate = [];
+    this.targetUpdate = [];
+
 
     if (this.isUpdateInventaire) {
 
       this.inventaireService.getProduitFiltre(this.inventaireId).subscribe(value => {
         this.targetProduits = [...value];
+        console.log(this.targetProduits);
       });
     }
   }
@@ -211,8 +213,6 @@ console.log("on init", this.sourceUpdate)
   }
 
 
-
-
   createProduitDefectueux(inventaire: Inventaire) {
     if (inventaire && inventaire.inventaireProduitAssociations && inventaire.inventaireProduitAssociations.length > 0) {
 
@@ -239,30 +239,16 @@ console.log("on init", this.sourceUpdate)
     }
   }
 
-  // saveProduitClacule() {
-  //   let TargetListProduit = [];
-  //   if (this.isUpdateInventaire) {
-  //     TargetListProduit = [...this.targetUpdate];
-  //   } else {
-  //     this.inventaire.inventaireProduitAssociations = [];
-  //     TargetListProduit = [...this.targetProduits];
-  //   }
-  //   for (const produit of TargetListProduit) {
-  //     this.association.quantitePI = produit.quantite;
-  //     this.association.produit = this.listeProduits.find(value => produit.id === value.id);
-  //     this.produit.quantite = this.listeProduits.find(value => produit.id === value.id ? value.quantite : 0);
-  //     this.inventaire.inventaireProduitAssociations?.push(this.association);
-  //   }
-  //   this.visibale = false;
-  // }
 
   saveProduitClacule() {
     let TargetListProduit = [];
     if (this.isUpdateInventaire) {
       TargetListProduit = [...this.targetUpdate];
+
     } else {
       this.inventaire.inventaireProduitAssociations = [];
       TargetListProduit = [...this.targetProduits];
+
     }
     for (const produit of TargetListProduit) {
       this.association.quantitePI = produit.quantite;
@@ -272,11 +258,18 @@ console.log("on init", this.sourceUpdate)
       const foundProduit = this.listeProduits.find(value => produit.id === value.id);
       if (foundProduit) {
         this.produit.quantite = foundProduit.quantite;
+
       } else {
         this.produit.quantite = 0;
       }
-      this.inventaire.inventaireProduitAssociations?.push(this.association);
+
+
+      this.inventaire.inventaireProduitAssociations?.push({...this.association});
+
+
     }
+
+
     this.visibale = false;
   }
 
@@ -332,7 +325,6 @@ console.log("on init", this.sourceUpdate)
 
   filterSource(): Produit[] {
     if (this.isUpdateInventaire == true) {
-
 
 
       const newListFiltre: Produit[] = [...this.sourceProduits.filter((p: Produit) =>

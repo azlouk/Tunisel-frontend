@@ -5,21 +5,29 @@
       <p-toolbar styleClass="mb-4">
         <ng-template pTemplate="left">
           <div class="my-2">
-            <button pButton pRipple label="Ajouter" icon="pi pi-plus" class="p-button-success mr-2" (click)="openNew()"></button>
-            <button pButton pRipple label="Supprimer" icon="pi pi-trash" class="p-button-danger" (click)="deleteSelectedInventaire()" [disabled]="!selectedInventaire || !selectedInventaire.length"></button>
+            <button pButton pRipple label="Ajouter" icon="pi pi-plus" class="p-button-success mr-2"
+                    (click)="openNew()"></button>
+            <button pButton pRipple label="Supprimer" icon="pi pi-trash" class="p-button-danger"
+                    (click)="deleteSelectedInventaire()"
+                    [disabled]="!selectedInventaire || !selectedInventaire.length"></button>
           </div>
         </ng-template>
 
 
       </p-toolbar>
 
-      <p-table #dt [value]="inventaires" [columns]="cols"  responsiveLayout="scroll" [rows]="10" [globalFilterFields]="['id','reference','dateInventaire']" [paginator]="true" [rowsPerPageOptions]="[10,20,30]" [showCurrentPageReport]="true" currentPageReportTemplate="Affichage du  {first} au  {last} des  {totalRecords} entrées" [(selection)]="selectedInventaire" selectionMode="multiple" [rowHover]="true" dataKey="id">
+      <p-table #dt [value]="inventaires" [columns]="cols" responsiveLayout="scroll" [rows]="10"
+               [globalFilterFields]="['id','reference','dateInventaire']" [paginator]="true"
+               [rowsPerPageOptions]="[10,20,30]" [showCurrentPageReport]="true"
+               currentPageReportTemplate="Affichage du  {first} au  {last} des  {totalRecords} entrées"
+               [(selection)]="selectedInventaire" selectionMode="multiple" [rowHover]="true" dataKey="id">
         <ng-template pTemplate="caption">
           <div class="flex flex-column md:flex-row md:justify-content-between md:align-items-center">
             <h5 class="m-0">Gestion des Inventaire</h5>
             <span class="block mt-2 md:mt-0 p-input-icon-left">
                             <i class="pi pi-search"></i>
-                            <input  type="text" pInputText (input)="onGlobalFilter(dt, $event)" placeholder="Rechercher..."  class="w-full sm:w-auto"/>
+                            <input type="text" pInputText (input)="onGlobalFilter(dt, $event)"
+                                   placeholder="Rechercher..." class="w-full sm:w-auto"/>
                         </span>
           </div>
         </ng-template>
@@ -28,15 +36,21 @@
             <th style="width: 2rem">
               <p-tableHeaderCheckbox></p-tableHeaderCheckbox>
             </th>
-            <th pSortableColumn="id">Id <p-sortIcon field="id"></p-sortIcon></th>
-            <th pSortableColumn="reference">Reference <p-sortIcon field="reference"></p-sortIcon></th>
-            <th pSortableColumn="dateInventaire">Date Inventaire <p-sortIcon field="dateInventaire"></p-sortIcon></th>
+            <th pSortableColumn="id">Id
+              <p-sortIcon field="id"></p-sortIcon>
+            </th>
+            <th pSortableColumn="reference">Reference
+              <p-sortIcon field="reference"></p-sortIcon>
+            </th>
+            <th pSortableColumn="dateInventaire">Date Inventaire
+              <p-sortIcon field="dateInventaire"></p-sortIcon>
+            </th>
 
             <th></th>
           </tr>
         </ng-template>
-        <ng-template pTemplate="body" let-inventaire >
-          <tr >
+        <ng-template pTemplate="body" let-inventaire>
+          <tr>
             <td>
               <p-tableCheckbox [value]="inventaire"></p-tableCheckbox>
             </td>
@@ -49,24 +63,27 @@
             </td>
 
 
-
-
             <td style="width:14%; min-width:8rem;">
               <span class="p-column-title">Date Reception</span>
               {{inventaire.dateInventaire}}
             </td>
 
             <td>
-              <div class="flex ">
-                <button pButton pRipple icon="pi pi-pencil" class="p-button-rounded p-button-success mr-2" (click)="editInventaire(inventaire)"></button>
-                <button pButton pRipple icon="pi pi-trash" class="p-button-rounded p-button-warning" (click)="deleteInventaire(inventaire)"></button>
+              <div class="flex gap-2">
+                <button pButton pRipple icon="pi pi-pencil" class="p-button-rounded p-button-success mr-2"
+                        (click)="editInventaire(inventaire)"></button>
+                <button pButton pRipple icon="pi pi-trash" class="p-button-rounded p-button-warning"
+                        (click)="deleteInventaire(inventaire)"></button>
+                <button pButton pRipple icon="pi pi-file-pdf" class="p-button-rounded p-button-primary mr-2"
+                        (click)="exportrapport(inventaire)"></button>
+
               </div>
+
             </td>
           </tr>
         </ng-template>
       </p-table>
     </div>
-
 
 
     <p-dialog [(visible)]="deleteProductDialog" header="Confirm" [modal]="true" [style]="{width:'450px'}">
@@ -76,7 +93,8 @@
         <span *ngIf="inventaire">Êtes-vous sûr de vouloir supprimer <b>{{inventaire.reference}}</b>?</span>
       </div>
       <ng-template pTemplate="footer">
-        <button pButton pRipple icon="pi pi-times" class="p-button-text" label="Non" (click)="deleteProductDialog = false"></button>
+        <button pButton pRipple icon="pi pi-times" class="p-button-text" label="Non"
+                (click)="deleteProductDialog = false"></button>
         <button pButton pRipple icon="pi pi-check" class="p-button-text" label="Oui" (click)="confirmDelete()"></button>
       </ng-template>
     </p-dialog>
@@ -87,12 +105,122 @@
         <span>Êtes-vous sûr de vouloir supprimer?</span>
       </div>
       <ng-template pTemplate="footer">
-        <button pButton pRipple icon="pi pi-times" class="p-button-text" label="Non" (click)="deleteProductsDialog = false"></button>
-        <button pButton pRipple icon="pi pi-check" class="p-button-text" label="Oui" (click)="confirmDeleteSelected()"></button>
+        <button pButton pRipple icon="pi pi-times" class="p-button-text" label="Non"
+                (click)="deleteProductsDialog = false"></button>
+        <button pButton pRipple icon="pi pi-check" class="p-button-text" label="Oui"
+                (click)="confirmDeleteSelected()"></button>
       </ng-template>
     </p-dialog>
   </div>
 </div>
 
 
+<!--//////////////////////////////////////////////////////////////////////////////////////printInventaire/////////////////////////////////////////////////////-->
 
+<p-dialog header="Inventaire" [(visible)]="visiblePrint" [modal]="true"
+          [breakpoints]="{ '1199px': '75vw', '575px': '90vw' }">
+  <div class="shadow-1 p-2">
+
+
+  </div>
+
+  <hr>
+  <div #pdfinventaire class="pt-8 pl-4 pr-4">
+
+    <div class="flex border-1 w-full justify-content-between">
+      <div class="flex-initial flex align-items-center justify-content-center   font-bold m-2 px-5 py-3 border-round">
+        <img src="assets/layout/images/logo.png">
+
+      </div>
+      <div
+        class="flex-initial flex align-items-center justify-content-center  text-6xl font-bold m-2 px-5 py-3 border-round">
+        Inventaire physique :
+        <div>{{selectedInventairePrint.dateInventaire}}</div>
+      </div>
+      <div class="flex-initial border-1 flex     w-25  font-bold m-2 px-5 py-3  ">
+        <div class="col   ">
+          <div class="row  mb-2    w-full  ">BEN GUERDANE, TUNISIA</div>
+          <div
+            class="row mb-2   w-full text-center    text-1xl font-bold  pi pi-calendar ">{{dateToday | date :"yyyy-MM-dd hh:ss a"}}</div>
+
+        </div>
+      </div>
+    </div>
+<div class="border-1 border-round border-gray-500 p-6 mt-8">
+  <div *ngFor="let a of articles" class="flex flex-column mb-8"  >
+
+<!--    <p-table [value]="getInventaire()" styleClass="p-datatable-gridlines"-->
+<!--             [tableStyle]="{ 'min-width': '50rem' ,'margin-top':'5rem' } "*ngIf="existeArticle(a)"-->
+<!--             dataKey="id">-->
+
+<!--      <ng-template pTemplate="header">-->
+
+<!--        <div class="flex flex-column md:flex-row md:justify-content-between md:align-items-center">-->
+<!--          <h5 class="text-center font-bold text-3xl">{{a.nom}}</h5>-->
+<!--        </div>-->
+
+<!--        <tr>-->
+<!--          <th>Nom</th>-->
+<!--          <th>Designation</th>-->
+<!--          <th>Quantité</th>-->
+<!--        </tr>-->
+<!--      </ng-template>-->
+<!--      <ng-template pTemplate="body" let-association>-->
+<!--        <ng-container *ngIf="a.nom==association.produit.article.nom "  >-->
+<!--          <td>-->
+<!--            {{association.produit.nom}}-->
+<!--          </td>-->
+<!--          <td>-->
+<!--            {{association.produit.designation}}-->
+<!--          </td>-->
+<!--          <td>-->
+<!--            {{association.quantitePI}}-->
+<!--          </td>-->
+<!--        </ng-container>-->
+<!--      </ng-template>-->
+<!--    </p-table>-->
+
+    <p-table #dt [value]="getInventaire()"  styleClass="p-datatable-gridlines"  dataKey="id" *ngIf="existeArticle(a)">
+      <ng-template pTemplate="caption" >
+        <div class="flex ">
+          <h5 class=" font-bold text-3xl">{{a.nom}}</h5>
+        </div>
+      </ng-template>
+      <ng-template pTemplate="header">
+
+        <tr>
+          <th >Nom</th>
+          <th >Designation</th>
+          <th >Quantité</th>
+
+        </tr>
+      </ng-template>
+      <ng-template pTemplate="body" let-association>
+        <ng-container *ngIf="a.nom==association.produit.article.nom "  >
+          <tr>
+          <td >
+            {{association.produit.nom}}
+          </td>  <td >
+            {{association.produit.designation}}
+          </td>
+          <td>
+            {{association.quantitePI}}
+          </td>
+
+          </tr>
+        </ng-container>
+      </ng-template>
+    </p-table>
+
+  </div>
+</div>
+
+
+
+
+  </div>
+  <ng-template pTemplate="footer">
+    <p-button icon="pi pi-file-pdf" (click)="SavePDF()" class="text-green-50" label="PDF" pAutoFocus
+              [autofocus]="true"></p-button>
+  </ng-template>
+</p-dialog>
