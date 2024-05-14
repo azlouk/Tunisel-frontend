@@ -182,8 +182,9 @@
 
     <p-table #dt [value]="getInventaire()"  styleClass="p-datatable-gridlines"  dataKey="id" *ngIf="existeArticle(a)">
       <ng-template pTemplate="caption" >
-        <div class="flex ">
+        <div class="flex gap-2 ">
           <h5 class=" font-bold text-3xl">{{a.nom}}</h5>
+<!--          <span class=" font-bold ">{{a.unite}}</span>-->
         </div>
       </ng-template>
       <ng-template pTemplate="header">
