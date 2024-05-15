@@ -91,7 +91,7 @@ export class BassinComponent implements OnInit {
   puits: Puit[] = [];
   private isUpdateBassin=false;
   selectedPuit?: Puit;
-
+  SelectAll: boolean = false;
 loading:boolean=false ;
   @ViewChild("pdfpuit") htmlContent: ElementRef | undefined;
   visiblePrint: boolean = false;
@@ -390,5 +390,9 @@ this.SelectetBassin={analysesPhysiques:[]}
     return date1.getTime()<=date2.getTime()
   }
 
-
+  SelectAllCheck() {
+    this.colsfiltre.forEach(value => {
+      value.hide = this.SelectAll;
+    })
+  }
 }
