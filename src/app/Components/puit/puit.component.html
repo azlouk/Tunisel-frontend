@@ -187,6 +187,8 @@
     <p-button (click)="Viderfiltredate()" class=" " icon="pi pi-eye" label="Afficher Tout"></p-button>
 
   </div>
+  <p-checkbox [(ngModel)]="SelectAll" (ngModelChange)="SelectAllCheck()" [binary]="true" inputId="binary" class="text-primary" label="Tout"></p-checkbox>
+
   <th *ngFor="let c of colsfiltre">
 
     <p-checkbox [(ngModel)]="c.hide" label=" {{ c.header}}" [binary]="true" inputId="binary"></p-checkbox>
@@ -233,7 +235,7 @@
     </div>
     <label class=" mt-2   text-2xl font-bold">Reported by </label><span class=" ml-2 font-bold text-1xl">{{ReportedBy}}</span>
 
-  <p-table #dt1 [value]="getAnalyse()"  styleClass="p-datatable-gridlines" [tableStyle]="{ 'min-width': '50rem' ,'margin-top':'5rem' }"
+  <p-table #dt1 [value]="getAnalyse()"  id="EXCEL" styleClass="p-datatable-gridlines" [tableStyle]="{ 'min-width': '50rem' ,'margin-top':'5rem' }"
            dataKey="id"
            [showCurrentPageReport]="true"
            [globalFilterFields]="['dateAnalyse']"
@@ -305,5 +307,7 @@
 </div>
   <ng-template pTemplate="footer">
     <p-button icon="pi pi-file-pdf" (click)="SavePDF()" class="text-green-50" label="PDF" pAutoFocus [autofocus]="true"  ></p-button>
+    <p-button icon="pi pi-file-excel" (click)="SaveExcel()" class="text-green-50" label="EXCEL" pAutoFocus [autofocus]="true"  ></p-button>
+
   </ng-template>
 </p-dialog>

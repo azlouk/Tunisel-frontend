@@ -11,10 +11,8 @@ import {Table, TableModule} from "primeng/table";
 import {ToastModule} from "primeng/toast";
 import {ToolbarModule} from "primeng/toolbar";
 import {Product} from "../../Models/product";
-import {Puit} from "../../Models/puit";
 import {Router} from "@angular/router";
 import {ProductService} from "../../Services/product.service";
-import {PuitService} from "../../Services/puit.service";
 import {FicheVie} from "../../Models/fichevie";
 import {FicheVieService} from "../../Services/fichevie.service";
 import html2canvas from "html2canvas";
@@ -23,7 +21,6 @@ import {AutoFocusModule} from "primeng/autofocus";
 import {CheckboxModule} from "primeng/checkbox";
 import {FloatLabelModule} from "primeng/floatlabel";
 import {RadioButtonModule} from "primeng/radiobutton";
-
 
 @Component({
   selector: 'app-fichevie',
@@ -227,9 +224,7 @@ export class FichevieComponent implements OnInit {
   visiblePrint: boolean = false;
   dateToday: Date = new Date();
 
-  // DatefiltrageStart: Date = new Date();
-  // DatefiltrageEnd: Date = new Date();
-  // SearchDate: any;
+
 
 
   selectedFicheViePrint: FicheVie = {}
@@ -255,4 +250,9 @@ export class FichevieComponent implements OnInit {
 
 
   }
+
+
+
+
+
 }
