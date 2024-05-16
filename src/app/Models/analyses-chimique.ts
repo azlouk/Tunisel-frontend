@@ -21,4 +21,5 @@ export interface AnalysesChimique  {
   chlorureDeSodium?: number|undefined;
   ferrocyanure?: number|undefined;
   ref?:string;
+
 }

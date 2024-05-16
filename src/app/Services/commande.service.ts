@@ -32,4 +32,9 @@ export class CommandeService {
     return this.http.post<Commande>(`${this.apiUrl}/commandes/add`,commande);
 
   }
+
+
+  getLignesCommandes(bassinId:number): Observable<LineCommande[]> {
+    return this.http.get<LineCommande[]>(`${this.apiUrl}/commandes/linesCommandes/${bassinId}`) ;
+  }
 }

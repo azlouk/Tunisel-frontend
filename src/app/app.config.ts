@@ -7,9 +7,10 @@ import {CommonModule} from "@angular/common";
 import {FormsModule, ReactiveFormsModule} from "@angular/forms";
 
 
+
 export const appConfig: ApplicationConfig = {
   providers: [provideRouter(routes),
-    provideHttpClient(),provideAnimationsAsync(),CommonModule,ReactiveFormsModule,FormsModule
-
+    provideHttpClient(),provideAnimationsAsync(),CommonModule,ReactiveFormsModule,FormsModule,
   ]
+
 };

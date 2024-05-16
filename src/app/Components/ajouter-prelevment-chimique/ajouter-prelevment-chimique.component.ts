@@ -242,38 +242,39 @@ export class AjouterPrelevmentChimiqueComponent implements OnInit {
     this.analysesChimique.ferrocyanure = this.attributs[13].value;
     //Test Select Of Stock
 
-    if (this.selectedPuit.hasOwnProperty('id') || this.selectedSbnl.hasOwnProperty("id") || this.selectedBassin.hasOwnProperty("id") || this.selectedSbl.hasOwnProperty("id") || this.selectedSblf.hasOwnProperty("id") || this.selectedBande.hasOwnProperty("id")) {
+
       if (this.isUpdateAnalyseChimique) {
         this.analyseChimiqueService.updateAnalyseChimique(this.analysesChimique).subscribe(value => this.router.navigate(['/analyseChimique']))
-      } else {
+      }
+      else {
 
         this.analysesChimique.id = 0;
         //console.error("Data analyse Chimique:" + new JsonPipe().transform(this.analysesChimique))
 
 
-        if (this.selectedPuit.hasOwnProperty('id')) {
+        if (this.selectedPuit!==null &&  this.selectedPuit.hasOwnProperty('id')) {
           this.selectedPuit.analysesChimiques = [];
           this.selectedPuit.analysesChimiques.push(this.analysesChimique);
-         alert(new JsonPipe().transform(this.analysesChimique.description))
+
           this.analyseChimiqueService.addAnalyseChimique(this.selectedPuit).subscribe(value => this.router.navigate(['/analyseChimique']))
-        } else if (this.selectedBassin.hasOwnProperty('id')) {
+        } else if (  this.selectedBassin!==null &&  this.selectedBassin.hasOwnProperty('id')) {
           this.selectedBassin.analysesChimiques = [];
           this.selectedBassin.analysesChimiques.push(this.analysesChimique);
           this.analyseChimiqueService.addAnalyseChimiqueToBassin(this.selectedBassin).subscribe(value => this.router.navigate(['/analyseChimique']))
-        } else if (this.selectedSbnl.hasOwnProperty('id')) {
+        } else if (this.selectedSbnl!==null && this.selectedSbnl.hasOwnProperty('id')) {
           this.selectedSbnl.analysesChimiques = [];
           this.selectedSbnl.analysesChimiques.push(this.analysesChimique);
           this.analyseChimiqueService.addAnalyseChimiqueToSbnl(this.selectedSbnl).subscribe(value => this.router.navigate(['/analyseChimique']))
-        } else if (this.selectedBande.hasOwnProperty('id') == true) {
+        } else if (this.selectedBande!==null && this.selectedBande.hasOwnProperty('id') == true) {
           // alert(new JsonPipe().transform(this.selectedBande))
           this.selectedBande.analysesChimiques = [];
           this.selectedBande.analysesChimiques.push(this.analysesChimique);
           this.analyseChimiqueService.addAnalyseChimiqueToBande(this.selectedBande).subscribe(value => this.router.navigate(['/analyseChimique']))
-        } else if (this.selectedSbl.hasOwnProperty('id')) {
+        } else if (this.selectedSbl!==null && this.selectedSbl.hasOwnProperty('id')) {
           this.selectedSbl.analysesChimiques = [];
           this.selectedSbl.analysesChimiques.push(this.analysesChimique);
           this.analyseChimiqueService.addAnalyseChimiqueToSbl(this.selectedSbl).subscribe(value => this.router.navigate(['/analyseChimique']))
-        } else if (this.selectedSblf.hasOwnProperty('id')) {
+        } else if (this.selectedSblf!==null && this.selectedSblf.hasOwnProperty('id')) {
           this.selectedSblf.analysesChimiques = [];
           this.selectedSblf.analysesChimiques.push(this.analysesChimique);
           this.analyseChimiqueService.addAnalyseChimiqueToSblf(this.selectedSblf).subscribe(value => this.router.navigate(['/analyseChimique']))
@@ -281,7 +282,7 @@ export class AjouterPrelevmentChimiqueComponent implements OnInit {
         }
       }
 
-    }
+
 
 
   }

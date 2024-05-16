@@ -2,34 +2,34 @@ import {Component, OnInit} from '@angular/core';
 import {ButtonModule} from "primeng/button";
 import {DialogModule} from "primeng/dialog";
 import {InputTextModule} from "primeng/inputtext";
-import {JsonPipe, NgIf} from "@angular/common";
+import {NgIf} from "@angular/common";
 import {MessageService, SharedModule} from "primeng/api";
 import {Table, TableModule} from "primeng/table";
 import {ToastModule} from "primeng/toast";
 import {ToolbarModule} from "primeng/toolbar";
 import {Product} from "../../Models/product";
+import {AnalysesPhysique} from "../../Models/analyses-physique";
 import {Router} from "@angular/router";
 import {ProductService} from "../../Services/product.service";
 import {AnalysePhysiqueService} from "../../Services/analysePhysique.service";
-import {AnalysesPhysique} from "../../Models/analyses-physique";
 
 @Component({
-  selector: 'app-analyse-physique',
+  selector: 'app-commande',
   standalone: true,
-    imports: [
-        ButtonModule,
-        DialogModule,
-        InputTextModule,
-        NgIf,
-        SharedModule,
-        TableModule,
-        ToastModule,
-        ToolbarModule
-    ],
-  templateUrl: './analyse-physique.component.html',
-  styleUrl: './analyse-physique.component.css'
+  imports: [
+    ButtonModule,
+    DialogModule,
+    InputTextModule,
+    NgIf,
+    SharedModule,
+    TableModule,
+    ToastModule,
+    ToolbarModule
+  ],
+  templateUrl: './commande.component.html',
+  styleUrl: './commande.component.css'
 })
-export class AnalysePhysiqueComponent implements OnInit{
+export class CommandeComponent implements OnInit{
   productDialog: boolean = false;
 
   deleteProductDialog: boolean = false;
@@ -59,7 +59,7 @@ export class AnalysePhysiqueComponent implements OnInit{
   constructor(private router: Router,private productService: ProductService, private messageService: MessageService,private analysePhysiqueService :AnalysePhysiqueService) {}
 
   ngOnInit() {
-this.getALLphysique() ;
+    this.getALLphysique() ;
 
     this.cols = [
       { field: 'id', header: 'id' },
@@ -77,7 +77,7 @@ this.getALLphysique() ;
 
   openNew() {
 
-    this.router.navigate(['/ajouterPrelevmentPhysique']);
+    this.router.navigate(['/ajouterCommande']);
   }
 
   deleteSelectedAnalysesPhysiques() {
@@ -142,7 +142,7 @@ this.getALLphysique() ;
   getALLphysique() {
     this.analysePhysiqueService.getAllAnalysesPhysiques().subscribe((analysesPhysiques:  AnalysesPhysique[]) => {
       this.analysesPhysiques=analysesPhysiques;
-       this.analysesPhysiques.forEach(analysephysique => {
+      this.analysesPhysiques.forEach(analysephysique => {
         if (analysephysique.id != null) {
           this.analysePhysiqueService.getElementByAnalysesPhysiquesId(analysephysique.id).subscribe((value: any) => {
             // if(value.puit){
@@ -151,7 +151,7 @@ this.getALLphysique() ;
             if(value.bassin){
               analysephysique.ref=value.bassin.reference+ " "+value.bassin.nom
             }
-             if(value.sbl) {
+            if(value.sbl) {
               analysephysique.ref=value.sbl.reference
             }
             if(value.sbnl) {
