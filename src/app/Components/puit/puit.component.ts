@@ -24,6 +24,8 @@ import {CheckboxModule} from "primeng/checkbox";
 import {AutoFocusModule} from "primeng/autofocus";
 import {LoginService} from "../../Services/login.service";
 import * as XLSX from 'xlsx';
+import {TranslateModule} from "@ngx-translate/core";
+import {BrowserAnimationsModule} from "@angular/platform-browser/animations";
 
 @Component({
   selector: 'app-puit',
@@ -46,7 +48,9 @@ import * as XLSX from 'xlsx';
     MultiSelectModule,
     NgForOf,
     CheckboxModule,
-    AutoFocusModule
+    AutoFocusModule,
+    TranslateModule,
+
   ],
   templateUrl: './puit.component.html',
   styleUrl: './puit.component.css'

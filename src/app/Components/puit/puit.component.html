@@ -5,9 +5,9 @@
       <p-toolbar styleClass="mb-4">
         <ng-template pTemplate="left">
           <div class="my-2  ">
-            <button pButton pRipple label="Ajouter" icon="pi pi-plus" class="p-button-success mr-2" (click)="openNew()"></button>
-            <button pButton pRipple label="Supprimer" icon="pi pi-trash" class="p-button-danger mr-2" (click)="deleteSelectedPuits()" [disabled]="!selectedPuits || !selectedPuits.length"></button>
-            <button pButton pRipple label="Actualiser" icon="pi pi-refresh" class="p-button-primary mr-2" (click)="getAllPuit()"  ></button>
+            <button pButton pRipple label="{{ 'puits.ajouter' | translate }}" icon="pi pi-plus" class="p-button-success mr-2" (click)="openNew()"></button>
+            <button pButton pRipple label="{{ 'puits.supprimer' | translate }}" icon="pi pi-trash" class="p-button-danger mr-2" (click)="deleteSelectedPuits()" [disabled]="!selectedPuits || !selectedPuits.length"></button>
+            <button pButton pRipple label="{{ 'puits.actualiser' | translate }}" icon="pi pi-refresh" class="p-button-primary mr-2" (click)="getAllPuit()"  ></button>
 
           </div>
 
@@ -20,7 +20,7 @@
       <p-table #dt [value]="puits" [columns]="cols" [loading]="loading"  responsiveLayout="scroll" [rows]="10" [globalFilterFields]="['id','reference','description','dateCreation','nom','emplacement','etat','dateFermeture']" [paginator]="true" [rowsPerPageOptions]="[10,20,30]" [showCurrentPageReport]="true" currentPageReportTemplate="Affichage du  {first} au  {last} des  {totalRecords} entrées" [(selection)]="selectedPuits" selectionMode="multiple" [rowHover]="true" dataKey="id">
         <ng-template pTemplate="caption">
           <div class="flex flex-column md:flex-row md:justify-content-between md:align-items-center">
-            <h5 class="m-0">Gestion des Puits</h5>
+            <h5 class="m-0">{{ 'puits.gestionPuits' | translate }}</h5>
             <span class="block mt-2 md:mt-0 p-input-icon-left">
                             <i class="pi pi-search"></i>
                             <input  type="text" pInputText (input)="onGlobalFilter(dt, $event)" placeholder="Rechercher..."  class="w-full sm:w-auto"/>
@@ -35,13 +35,13 @@
             <th style="width: 3rem">
               <p-tableHeaderCheckbox></p-tableHeaderCheckbox>
             </th>
-             <th pSortableColumn="reference">Reference <p-sortIcon field="reference"></p-sortIcon></th>
-            <th pSortableColumn="description">Description <p-sortIcon field="description"></p-sortIcon></th>
-            <th pSortableColumn="dateCreation">Date Creation<p-sortIcon field="dateCreation"></p-sortIcon></th>
-            <th pSortableColumn="nom">Nom <p-sortIcon field="nom"></p-sortIcon></th>
-            <th pSortableColumn="emplacement">Emplacement <p-sortIcon field="emplacement"></p-sortIcon></th>
-            <th pSortableColumn="etat">Etat <p-sortIcon field="etat"></p-sortIcon></th>
-            <th pSortableColumn="dateFermeture">Date Fermeture <p-sortIcon field="dateFermeture"></p-sortIcon></th>
+             <th pSortableColumn="reference">{{ 'puits.reference' | translate }} <p-sortIcon field="reference"></p-sortIcon></th>
+            <th pSortableColumn="description">{{ 'puits.description' | translate }}<p-sortIcon field="description"></p-sortIcon></th>
+            <th pSortableColumn="dateCreation">{{ 'puits.dateCreation' | translate }}<p-sortIcon field="dateCreation"></p-sortIcon></th>
+            <th pSortableColumn="nom">{{ 'puits.nom' | translate }} <p-sortIcon field="nom"></p-sortIcon></th>
+            <th pSortableColumn="emplacement">{{ 'puits.emplacement' | translate }} <p-sortIcon field="emplacement"></p-sortIcon></th>
+            <th pSortableColumn="etat">{{ 'puits.etat' | translate }} <p-sortIcon field="etat"></p-sortIcon></th>
+            <th pSortableColumn="dateFermeture">{{ 'puits.dateFermeture' | translate }} <p-sortIcon field="dateFermeture"></p-sortIcon></th>
             <th></th>
           </tr>
         </ng-template>
@@ -52,11 +52,11 @@
             </td>
 
             <td style="width:14%; min-width:10rem;">
-              <span class="p-column-title">Reference</span>
+              <span class="p-column-title">{{ 'puits.reference' | translate }}</span>
               {{puit.reference}}
             </td>
             <td style="width:14%; min-width:10rem;">
-              <span class="p-column-title">Description</span>
+              <span class="p-column-title">{{ 'puits.description' | translate }}</span>
               {{puit.description}}
 
 
@@ -64,15 +64,15 @@
 
 
             <td style="width:14%; min-width:10rem;">
-              <span class="p-column-title">Date Creation</span>
+              <span class="p-column-title">{{ 'puits.dateCreation' | translate }}</span>
               {{puit.dateCreation}}
             </td>
             <td style="width:14%; min-width:8rem;">
-              <span class="p-column-title">Nom</span>
+              <span class="p-column-title">{{ 'puits.nom' | translate }}</span>
               {{puit.nom}}
             </td>
             <td style="width:14%; min-width:8rem;">
-              <span class="p-column-title">Emplacement</span>
+              <span class="p-column-title">{{ 'puits.emplacement' | translate }}</span>
               {{puit.emplacement}}
             </td>
             <td style="width:14%; min-width:8rem;">
@@ -238,11 +238,7 @@
   <p-table #dt1 [value]="getAnalyse()"  id="EXCEL" styleClass="p-datatable-gridlines" [tableStyle]="{ 'min-width': '50rem' ,'margin-top':'5rem' }"
            dataKey="id"
            [showCurrentPageReport]="true"
-           [globalFilterFields]="['dateAnalyse']"
-
-
-
-   >
+           [globalFilterFields]="['dateAnalyse']">
 
 
     <ng-template pTemplate="header">
@@ -253,28 +249,7 @@
         </th>
 
 
-<!--       <th>-->
-<!--         <p-columnFilter type="date" field="dateAnalyse" display="menu"></p-columnFilter>-->
 
-<!--         Date Analyse</th>-->
-
-
-<!--        <th>Temperature °C</th>-->
-<!--        <th>wind (km/h)</th>-->
-<!--        <th>humidity  </th>-->
-<!--        <th>Densite (g/cm 3)</th>-->
-<!--        <th>Suspended Matter (g)</th>-->
-<!--        <th>Salimite (psu)</th>-->
-<!--        <th>Calcium (mmol/L)</th>-->
-<!--        <th>Magnesium (g)</th>-->
-<!--        <th>Sulfate (g)</th>-->
-<!--        <th>Insoluble matter (g)</th>-->
-<!--        <th>Potassium (mmol/L)</th>-->
-<!--        <th>Sodium (mmol)</th>-->
-<!--        <th>Chlorure (meq · L–1)</th>-->
-<!--        <th>pH</th>-->
-<!--        <th>sodium chloride (g)</th>-->
-<!--        <th>Ferrocyanure (g/mol)</th>-->
 
       </tr>
     </ng-template>

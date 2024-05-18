@@ -1,0 +1,28 @@
+{
+  "dashboard": {
+    "puits": "Puits",
+    "bassins": "Bassins",
+    "articles": "Articles",
+    "equipements": "Équipements",
+    "analysesParMois": "Analyses par mois"
+  },
+  "puits": {
+    "gestionPuits": "Gestion des puits",
+    "reference": "Référence",
+    "description": "Description",
+    "dateCreation": "Date de création",
+    "nom": "Nom",
+    "emplacement": "Emplacement",
+    "etat": "État",
+    "dateFermeture": "Date de fermeture",
+    "ajouter": "Ajouter",
+    "supprimer": "Supprimer",
+    "actualiser": "Actualiser",
+    "nouveauPuit": "Nouveau puits",
+    "recherche": "Rechercher...",
+    "annuler": "Annuler",
+    "confirmerSuppression": "Confirmer la suppression",
+    "oui": "Oui",
+    "non": "Non"
+  }
+}

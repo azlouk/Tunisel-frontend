@@ -1,0 +1,29 @@
+{
+  "dashboard": {
+    "puits": "Wells",
+    "bassins": "Basins",
+    "articles": "Articles",
+    "equipements": "Equipments",
+    "analysesParMois": "Analyses per month"
+  },
+  "puits": {
+    "ajouter": "Add",
+    "supprimer": "Delete",
+    "actualiser": "Refresh",
+
+    "gestionPuits": "Puits Management",
+    "reference": "Reference",
+    "description": "Description",
+    "dateCreation": "Creation Date",
+    "nom": "Name",
+    "emplacement": "Location",
+    "etat": "State",
+    "dateFermeture": "Closure Date",
+    "nouveauPuit": "New Well",
+    "recherche": "Search...",
+    "annuler": "Cancel",
+    "confirmerSuppression": "Confirm Deletion",
+    "oui": "Yes",
+    "non": "No"
+  }
+}

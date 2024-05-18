@@ -1,6 +1,6 @@
 import { NgModule } from '@angular/core';
 // import { BrowserModule } from '@angular/platform-browser';
-import { FormsModule } from '@angular/forms';
+import {FormsModule, ReactiveFormsModule} from '@angular/forms';
 // import { HttpClientModule } from '@angular/common/http';
 // import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { InputTextModule } from 'primeng/inputtext';
@@ -18,6 +18,8 @@ import { AppConfigModule } from './config/config.module';
 import { AppSidebarComponent } from "./app.sidebar.component";
 import { AppLayoutComponent } from "./app.layout.component";
 import {NgClass, NgForOf, NgIf} from "@angular/common";
+import {SplitButtonModule} from "primeng/splitbutton";
+import {SelectButtonModule} from "primeng/selectbutton";
 
 @NgModule({
     declarations: [
@@ -43,7 +45,10 @@ import {NgClass, NgForOf, NgIf} from "@angular/common";
     AppConfigModule,
     NgClass,
     NgForOf,
-    NgIf
+    NgIf,
+    SplitButtonModule,
+    ReactiveFormsModule,
+    SelectButtonModule
   ],
     exports: [AppLayoutComponent]
 })

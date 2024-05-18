@@ -14,6 +14,7 @@ import {OrganizationChartModule} from "primeng/organizationchart";
 import {DropdownModule} from "primeng/dropdown";
 import {FormsModule} from "@angular/forms";
 import {LoginService} from "../../Services/login.service";
+import {TranslateModule} from "@ngx-translate/core";
 
 
 @Component({
@@ -28,6 +29,7 @@ import {LoginService} from "../../Services/login.service";
     OrganizationChartModule,
     DropdownModule,
     FormsModule,
+    TranslateModule,
 
   ],
   templateUrl: './dashboard.component.html',
