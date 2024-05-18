@@ -35,6 +35,7 @@ import {MultiSelectModule} from "primeng/multiselect";
 import {RippleModule} from "primeng/ripple";
 import {CommandeService} from "../../Services/commande.service";
 import {LineCommande} from "../../Models/lineCommande";
+import {DropdownModule} from "primeng/dropdown";
 
 interface Column {
   id:number;
@@ -62,7 +63,8 @@ interface Column {
     TooltipModule,
     NgForOf,
     MultiSelectModule,
-    RippleModule
+    RippleModule,
+    DropdownModule
   ],
   templateUrl: './ajouter-commande.component.html',
   styleUrl: './ajouter-commande.component.css'
@@ -102,6 +104,9 @@ export class AjouterCommandeComponent implements OnInit{
 
   selectedColumns!: Column[];
   listeLignesCommandes:LineCommande[]=[];
+
+  listcalibre:Column[]=[];
+  selectedColumnsCalibre!: Column;
   constructor(private router: Router,
               private bassinService :BassinService,
               private sbnlService :SbnlService,
@@ -119,8 +124,8 @@ export class AjouterCommandeComponent implements OnInit{
 
   ngOnInit(): void {
     // =============================================
-
     this.cols = [
+
       {id:0, field: 'dateAnalyse', header: 'Prelevelment date' },
       {id:1, field: 'reference', header: 'Reference' },
       {id:2,field: 'matiere', header: 'Matter' },
@@ -148,6 +153,18 @@ export class AjouterCommandeComponent implements OnInit{
       {id:24, field: 'refus', header: 'Refusal '},
       {id:25, field: 'refusCumulated', header: 'Refusal Cumulateds '},
       {id:26, field: 'passCumulated', header: 'Cumulated Pass'},
+      {id:27, field: 'quantityRecolte', header: 'Recolte'},
+      {id:28, field: 'quantityProduction', header: 'Production'},
+      {id:29, field: 'quantityPluieBengarden', header: 'Pluie Bengarden'},
+      {id:30, field: 'quantityPluieZarzis', header: 'Pluie Zarzis'},
+      {id:31, field: 'quantiteTransfert', header: 'Transfert'},
+      {id:32, field: 'decisionTransfert', header: 'Decision Transfert'},
+      {id:33, field: 'numeroLot', header: 'Numero Lot'},
+      {id:34, field: 'poidsLot', header: 'Poids Lot'},
+      {id:35, field: 'emplassementLot', header: 'Emplassement Lot'},
+      {id:36, field: 'lieuxPrelevement', header: 'Lieux Prelevement'},
+      {id:37, field: 'matCamion', header: 'Mat Camion'},
+      {id:38, field: 'conformite', header: 'Conformite'},
 
     ];
 
@@ -298,90 +315,23 @@ export class AjouterCommandeComponent implements OnInit{
 
 
 
-  ajouterTamis() {
-
-    this.tamis = {
-      refusCumulated: 0,
-    };
-    this.visibale=true;
-    this.isUpdateTamis=false ;
 
 
+
+  getCalibre() {
+
+    this.tamisService.getDistinctCalibres().subscribe(value => {
+      value.forEach((value1: number) => {
+        if(this.listcalibre.length<value.length){
+        this.listcalibre.push({ id: value1, field: '', header: value1.toString() });}
+
+      });
+      // console.log('List Calibre: '+new JsonPipe().transform(this.listcalibre))
+    });
   }
-
-  saveTamis() {
-    if(this.isUpdateTamis){
-
-      const tamis=this.listeTamis.findIndex((tt:Tamis)=>tt.id==this.tamis.id)
-      if(tamis!==-1){
-        this.listeTamis[tamis]= {...this.tamis} ;
-        this.visibale=false
-      }
-    }else {
-      const tamis=this.listeTamis.findIndex((t:Tamis)=>t.calibre===this.tamis.calibre)
-      if(tamis!==-1){
-        this.visibale=false
-        Swal.fire({
-          title: "Duplication?",
-          text: "Calibre déja exist les valeur sera modifié!",
-          icon: "warning",
-          showCancelButton: true,
-          confirmButtonColor: "#3085d6",
-          cancelButtonColor: "#d33",
-          confirmButtonText: "Oui, modifié!",
-          cancelButtonText:"Annuler"
-        }).then((result) => {
-          if (result.isConfirmed) {
-            this.listeTamis[tamis].calibre=this.tamis.calibre ;
-            this.listeTamis[tamis].masse=this.tamis.masse ;
-            this.listeTamis[tamis].refus=this.tamis.refus ;
-            this.listeTamis[tamis].refusCumulated=this.tamis.refusCumulated ;
-            this.listeTamis[tamis].passCumulated=this.tamis.passCumulated ;
-            this.visibale=false
-
-          }
-        });
-
-
-      }
-      else {
-
-        this.listeTamis.push({...this.tamis});
-        this.listeTamis.sort((a, b) => {
-          // Compare the 'refusCumulated' property of each object
-          // @ts-ignore
-          return b.calibre - a.calibre;
-        });
-        this.visibale=false
-
-      }
-    }
-
-
-
-  }
-
-  editTamis(tamis: Tamis) {
-    this.visibale=true;
-    this.tamis={...tamis}
-    this.isUpdateTamis=true ;
-  }
-
 
   getLine() {
-  //   if (this.selectedBassin!==null) {
-  //
-  //   const id :number =this.selectedBassin.id!==undefined?this.selectedBassin.id:-1;
-  //   alert(id)
-  //   if(id!==-1){
-  //     this.commandeService.getLignesCommandes(id).subscribe(value => {
-  //       this.listeLignesCommandes = value;
-  //       console.log('size  : ' + this.listeLignesCommandes.length);
-  //     },error =>{
-  //       console.log(error);
-  //       console.log('error size  : ' + this.listeLignesCommandes.length);});
-  //   }
-  //   }
+
     if(this.selectedBassin!==null){
 
       const id :number =this.selectedBassin.id!==undefined?this.selectedBassin.id:-1;
@@ -389,11 +339,85 @@ export class AjouterCommandeComponent implements OnInit{
         if(id!==-1){
           this.commandeService.getLignesCommandes(id).subscribe(value => {
             this.listeLignesCommandes = value;
+            this.listeLignesCommandes[0].quantiteTransfert=2343;
             console.log('size  : ' + this.listeLignesCommandes.length);
+              this.getCalibre();
           },error =>{
             console.log(error);
             console.log('error size  : ' + this.listeLignesCommandes.length);});
         }
   }}
 
+  // getValueOfligneCommande(col: any,ligneCommande:any):any {
+  //
+  //
+  // if(col.id<20){
+  //
+  // return    ligneCommande.analyseChimique !==null?ligneCommande.analyseChimique[col.field]:'-';
+  // }
+  // else if(col.id>19 && col.id<22){
+  // return     ligneCommande.analysePhysique!==null?ligneCommande.analysePhysique[col.field]:'-';
+  // }
+  // else if(col.id>21 && col.id<26){
+  //   if(ligneCommande.analysePhysique!==null){
+  // ligneCommande.analysePhysique.tamisList.forEach((tamis:any)=> {
+  //   if(this.listcalibre.length<ligneCommande.analysePhysique.tamisList.length){
+  //
+  //
+  //   }
+  //
+  // })
+  //
+  // }}
+  // else{
+  //   return     ligneCommande==!null?ligneCommande[col.field]:'-';
+  // }
+  // }
+  getValueOfligneCommande(col: any, ligneCommande: any): any {
+    if (col.id < 20) {
+      return ligneCommande.analyseChimique!==null ? ligneCommande.analyseChimique[col.field] : '-';
+    } else if (col.id > 19 && col.id < 22) {
+      return ligneCommande.analysePhysique!==null  ? ligneCommande.analysePhysique[col.field] : '-';
+    }
+
+
+
+    // ===================================
+    // else if (col.id > 21 && col.id < 26 && this.selectedColumnsCalibre.header) {
+    //   if (ligneCommande.analysePhysique!==null  && ligneCommande.analysePhysique.tamisList) {
+    //     return ligneCommande.analysePhysique.tamisList.filter((tamis: any) => {tamis.calibre===this.selectedColumnsCalibre.header});
+    //   } else {
+    //     return '-';
+    //   }
+    // }
+    // ===================================
+    //************************************
+    else if(col.id > 21 && col.id < 26 && this.selectedColumnsCalibre && this.selectedColumnsCalibre.header) {
+      if (ligneCommande.analysePhysique !== null && ligneCommande.analysePhysique.tamisList) {
+        // Use filter to find matching items in tamisList
+        const filteredTamisList = ligneCommande.analysePhysique.tamisList.filter((tamis: any) => {
+          return tamis.calibre === this.selectedColumnsCalibre.header;
+        });
+
+        // Check if filteredTamisList is not empty and return it, otherwise return '-'
+        return filteredTamisList.length > 0 ? filteredTamisList : '-';
+      } else {
+        return '-';
+      }
+    }
+    //************************************
+
+
+    else {
+      return ligneCommande!==null  ? ligneCommande[col.field] : '-';
+    }
+  }
+
+  changeCalibre() {
+    if (this.selectedColumnsCalibre) {
+      alert(`Selected Calibre: ${this.selectedColumnsCalibre.header}`);
+    } else {
+      alert('No Calibre selected');
+    }
+  }
 }

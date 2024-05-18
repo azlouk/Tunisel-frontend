@@ -110,7 +110,7 @@ export class BandeComponent {
       { id:4, field: 'humidite', header: 'humidity' ,hide:false},
       {id:5,  field: 'densite', header: 'Densite ',hide:false },
       {id:6,  field: 'matiereEnSuspension', header: 'Suspended Matter',hide:false },
-      { id:7, field: 'salimite', header: 'Salimite ' ,hide:false},
+      { id:7, field: 'salinite', header: 'salinite ' ,hide:false},
       {id:8,  field: 'calcium', header: 'Calcium ' ,hide:false},
       { id:9, field: 'magnesium', header: 'Magnesium ' ,hide:false},
       { id:10, field: 'sulfate', header: 'Sulfate ' ,hide:false},

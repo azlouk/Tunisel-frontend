@@ -384,20 +384,30 @@
             selectedItemsLabel="{0} columns selected"
             [style]="{'min-width': '200px'}"
             placeholder="Choose Columns" />
+
+          <p-dropdown
+            [options]="listcalibre"
+            [(ngModel)]="selectedColumnsCalibre"
+            optionLabel="header"
+            [showClear]="true"
+            (onChange)="changeCalibre()"
+            placeholder="Choose Calibre" />
+
         </ng-template>
         <ng-template pTemplate="header" let-columns>
           <tr>
-            <th>id</th>
+
             <th *ngFor="let col of columns">
               {{col.header}}
             </th>
+
           </tr>
         </ng-template>
+
         <ng-template pTemplate="body" let-lineCommande let-columns="columns">
           <tr >
-            <td *ngIf="lineCommande.analyseChimique!==null">{{lineCommande.analyseChimique.id}}</td>
             <td *ngFor="let col of columns">
-              {{lineCommande[col.field]}}
+              {{getValueOfligneCommande(col,lineCommande)}}
             </td>
           </tr>
         </ng-template>
