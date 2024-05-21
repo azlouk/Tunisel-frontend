@@ -11,7 +11,8 @@ import {Product} from "../../Models/product";
 import {AnalysesPhysique} from "../../Models/analyses-physique";
 import {Router} from "@angular/router";
 import {ProductService} from "../../Services/product.service";
-import {AnalysePhysiqueService} from "../../Services/analysePhysique.service";
+import {Commande} from "../../Models/commande";
+import {CommandeService} from "../../Services/commande.service";
 
 @Component({
   selector: 'app-commande',
@@ -49,17 +50,17 @@ export class CommandeComponent implements OnInit{
   rowsPerPageOptions = [5, 10, 20];
   // ======********============
 
-  analysesPhysiques:AnalysesPhysique[] = [];
+  comanndes:Commande[] = [];
 
-  analysePhysique:AnalysesPhysique={};
-  public updateAnalysePhysique:AnalysesPhysique={};
-  selectedAnalysesPhysiques: AnalysesPhysique[] = [];
-  private isUpdateAnalysePhysique=false;
+  commande:Commande={};
+ updateCommande:Commande={};
+  selectedCommandes:Commande[] = [];
+isUpdateCommande:boolean=false;
 
-  constructor(private router: Router,private productService: ProductService, private messageService: MessageService,private analysePhysiqueService :AnalysePhysiqueService) {}
+  constructor(private router: Router,private productService: ProductService, private messageService: MessageService,private commandeService :CommandeService) {}
 
   ngOnInit() {
-    this.getALLphysique() ;
+    this. getAllCommandes() ;
 
     this.cols = [
       { field: 'id', header: 'id' },
@@ -86,28 +87,26 @@ export class CommandeComponent implements OnInit{
 
   }
 
-  editAnalysePhysique(analysePhysique: AnalysesPhysique) {
-    this.router.navigate([`/updatePrelevmentPhysique/${analysePhysique.id}`]);
-    this.isUpdateAnalysePhysique=true;
-    this.analysePhysique = { ...analysePhysique };
-    this.updateAnalysePhysique = { ...analysePhysique };
+  editCommande(commande: Commande) {
+    this.router.navigate([`/updateCommande/${commande.id}`]);
+    this.isUpdateCommande=true;
+    this.commande = { ...commande };
+    this.updateCommande = { ...commande };
 
-    this.productDialog = true;
   }
 
-  deleteAnalysePhysique(analysePhysique: AnalysesPhysique) {
+  deleteCommande(commande: Commande) {
     this.deleteProductDialog = true;
-
-    this.analysePhysique = { ...analysePhysique };
+    this.commande = { ...commande };
   }
 
   confirmDeleteSelected() {
     this.deleteProductsDialog = false;
-    console.log(this.selectedAnalysesPhysiques.length)
-    this.selectedAnalysesPhysiques.forEach(selectedAnalysePhysique => {
-      this.analysePhysiqueService.deleteAnalysesPhysiques(selectedAnalysePhysique.id).subscribe(
+    console.log(this.selectedCommandes.length)
+    this.selectedCommandes.forEach(selectedCommandes => {
+      this.commandeService.deleteCommande(selectedCommandes.id).subscribe(
         () => {
-          this.analysesPhysiques = this.analysesPhysiques.filter(analysePhysique =>analysePhysique.id !== selectedAnalysePhysique.id);
+          this.comanndes = this.comanndes.filter(commande =>commande.id !== selectedCommandes.id);
         },
         (error) => {
           console.error('Error deleting user:', error);
@@ -116,17 +115,17 @@ export class CommandeComponent implements OnInit{
     });
 
     this.messageService.add({ severity: 'success', summary: 'Successful', detail: 'User Deleted', life: 3000 });
-    this.selectedAnalysesPhysiques = [];
+    this.selectedCommandes = [];
   }
 
   confirmDelete() {
     this.deleteProductDialog = false;
-    this.analysesPhysiques = this.analysesPhysiques.filter(val => val.id !== this.analysePhysique.id);
-    if (this.analysePhysique.id!= null) {
-      this.analysePhysiqueService.deleteAnalysesPhysiques(this.analysePhysique.id).subscribe(() => console.log("analyse Chimique deleted"));
+    this.comanndes = this.comanndes.filter(val => val.id !== this.commande.id);
+    if (this.commande.id!= null) {
+      this.commandeService.deleteCommande(this.commande.id).subscribe(() => console.log("Command Deleted"));
     }
-    this.messageService.add({ severity: 'success', summary: 'Successful', detail: 'Analyse Chimique Deleted', life: 3000 });
-    this.analysePhysique ;
+    this.messageService.add({ severity: 'success', summary: 'Successful', detail: 'Command Deleted', life: 3000 });
+    this.commande ;
   }
 
   hideDialog() {
@@ -139,39 +138,17 @@ export class CommandeComponent implements OnInit{
     table.filterGlobal((event.target as HTMLInputElement).value, 'contains');
   }
 
-  getALLphysique() {
-    this.analysePhysiqueService.getAllAnalysesPhysiques().subscribe((analysesPhysiques:  AnalysesPhysique[]) => {
-      this.analysesPhysiques=analysesPhysiques;
-      this.analysesPhysiques.forEach(analysephysique => {
-        if (analysephysique.id != null) {
-          this.analysePhysiqueService.getElementByAnalysesPhysiquesId(analysephysique.id).subscribe((value: any) => {
-            // if(value.puit){
-            //   analysephysique.ref=value.puit.reference+ " "+value.puit.nom
-            // }
-            if(value.bassin){
-              analysephysique.ref=value.bassin.reference+ " "+value.bassin.nom
-            }
-            if(value.sbl) {
-              analysephysique.ref=value.sbl.reference
-            }
-            if(value.sbnl) {
-              analysephysique.ref=value.sbnl.reference
-            }
-            if(value.sblf) {
-              analysephysique.ref=value.sblf.reference
-            }
-
-
-
-
-          }, error => {
-
-          });
+  getAllCommandes() {
+    this.commandeService.getAllCommande().subscribe((ListCommande:  Commande[]) => {
+      this.comanndes=ListCommande;}, error => {
+      console.log(error)});
         }
-      })
 
 
-    },error => {
-      console.log(error)})
-  }
+
+
+
+
+
+
 }

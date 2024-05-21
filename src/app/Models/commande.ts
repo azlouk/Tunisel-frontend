@@ -1,4 +1,5 @@
 import {LineCommande} from "./lineCommande";
+import {Bassin} from "./bassin";
 
 
 export interface Commande {
@@ -7,4 +8,5 @@ export interface Commande {
   etat?: string;
   dateCommande?: Date;
   ligneCommandes?:LineCommande[];
+  bassin?:Bassin;
 }

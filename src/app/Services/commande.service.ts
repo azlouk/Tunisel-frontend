@@ -18,7 +18,7 @@ export class CommandeService {
     return this.http.get<Commande[]>(`${this.apiUrl}/commandes/read`) ;
   }
   getCommandeById(commandeId:number): Observable<Commande> {
-    return this.http.get<Commande>(`${this.apiUrl}/lineCommandes/`+commandeId);
+    return this.http.get<Commande>(`${this.apiUrl}/commandes/`+commandeId);
   }
   deleteCommande(CommandeId: number | undefined): Observable<any> {
     return this.http.delete(`${this.apiUrl}/commandes/delete/${CommandeId}`);

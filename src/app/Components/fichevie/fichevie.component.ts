@@ -21,6 +21,8 @@ import {AutoFocusModule} from "primeng/autofocus";
 import {CheckboxModule} from "primeng/checkbox";
 import {FloatLabelModule} from "primeng/floatlabel";
 import {RadioButtonModule} from "primeng/radiobutton";
+import {utils, writeFile} from "xlsx";
+import * as XLSX from 'xlsx';
 
 @Component({
   selector: 'app-fichevie',
@@ -245,14 +247,60 @@ export class FichevieComponent implements OnInit {
         pdf.save('Print_' + Math.random() + '.pdf');
       });
 
-
     }
-
 
   }
 
+csvExport() {
+  const tableName = this.ficheVie.designation; // Nom du tableau
+  const headings = [
+    ['id', '', 'societe', '', 'designation', '', 'code', '', 'serie', '', 'marque', '', 'etalonnage', '', 'verification', '', 'dateReception', '', 'etatFiche', '', 'emplacement', ''],
+    ['Interventions', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '']
+  ];
+  const interventionHeadings = [
+    ['id', 'dateIntervention', 'who', 'natureAction', 'resultat', 'certificat', 'nomVisa', 'observation']
+  ];
+  const wb = utils.book_new();
+  const ws = utils.json_to_sheet([]);
+  // Ajouter le nom du tableau en A1
+  utils.sheet_add_aoa(ws, [[tableName]], { origin: 'A1' });
+  // Ajouter les en-têtes de colonne à partir de A2
+
+  utils.sheet_add_aoa(ws, headings, { origin: 'A2' });
+
+  // Préparer les données formatées pour les fiches de vie et leurs interventions
+
+  const formattedData = this.ficheVies.map(fiche => {
+    const ficheData = [
+      fiche.id, '', fiche.societe, '', fiche.designation, '', fiche.code, '', fiche.serie, '', fiche.marque, '', fiche.etalonnage, '', fiche.verification, '',
+      fiche.dateReception, '', fiche.etatFiche, '', fiche.emplacement, ''
+    ];
+
+    const interventionsData = fiche.interventions!.map(intervention => [
+      intervention.id, intervention.dateintervention, intervention.qui, intervention.natureAction, intervention.resultat, intervention.certificat, intervention.nomVisa, intervention.observation
+    ]);
+    return [ficheData, ...interventionsData];
+  }).flat();
+
+  // Ajouter les données à partir de A3
+  utils.sheet_add_json(ws, formattedData, {
+    origin: 'A4',
+    skipHeader: true,
+  });
 
 
+  utils.book_append_sheet(wb, ws, 'Fiche de Vie');
+  writeFile(wb, 'FicheVie Report.xlsx');
+}
 
-
+// SaveExcel(): void {
+//     const element = document.getElementById('EXCEL');
+//     if (element) {
+//       const ws: XLSX.WorkSheet = XLSX.utils.table_to_sheet(element, { raw: true });
+//
+//       const wb: XLSX.WorkBook = XLSX.utils.book_new();
+//       XLSX.utils.book_append_sheet(wb, ws, 'Sheet1');
+//       XLSX.writeFile(wb, 'Export_' + new Date().getTime() + '.xlsx');
+//     }
+//   }
 }

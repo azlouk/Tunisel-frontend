@@ -62,4 +62,5 @@ export const routes: Routes = [
   {path:'rapport', component:RapportAnalyseComponent,  canActivate:[AuthGuard]},
   {path:'commande', component:CommandeComponent,  canActivate:[AuthGuard]},
   {path:'ajouterCommande', component:AjouterCommandeComponent,  canActivate:[AuthGuard]},
+  {path:'updateCommande/:id', component:AjouterCommandeComponent,  canActivate:[AuthGuard]},
 ];

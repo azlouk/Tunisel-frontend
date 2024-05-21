@@ -6,8 +6,8 @@
         <ng-template pTemplate="left">
           <div class="my-2">
             <button pButton pRipple label="Ajouter" icon="pi pi-plus" class="p-button-success mr-2" (click)="openNew()"></button>
-            <button pButton pRipple label="Supprimer" icon="pi pi-trash" class="p-button-danger mr-2" (click)="deleteSelectedAnalysesPhysiques()" [disabled]="!selectedAnalysesPhysiques || !selectedAnalysesPhysiques.length"></button>
-            <button pButton pRipple label="Actualiser" icon="pi pi-refresh" class="p-button-primary mr-2" (click)="getALLphysique()"  ></button>
+            <button pButton pRipple label="Supprimer" icon="pi pi-trash" class="p-button-danger mr-2" (click)="deleteSelectedAnalysesPhysiques()" [disabled]="!selectedCommandes || !selectedCommandes.length"></button>
+            <button pButton pRipple label="Actualiser" icon="pi pi-refresh" class="p-button-primary mr-2" (click)="getAllCommandes()"  ></button>
 
           </div>
         </ng-template>
@@ -15,7 +15,7 @@
 
       </p-toolbar>
 
-      <p-table #dt [value]="analysesPhysiques" [columns]="cols"  responsiveLayout="scroll" [rows]="10" [globalFilterFields]="['id','reference','description','dateCreation','nom','emplacement','etat','dateFermeture','ref']" [paginator]="true" [rowsPerPageOptions]="[10,20,30]" [showCurrentPageReport]="true" currentPageReportTemplate="Affichage du  {first} au  {last} des  {totalRecords} entrées" [(selection)]="selectedAnalysesPhysiques" selectionMode="multiple" [rowHover]="true" dataKey="id">
+      <p-table #dt [value]="comanndes" [columns]="cols"  responsiveLayout="scroll" [rows]="10" [globalFilterFields]="['id','nom','etat']" [paginator]="true" [rowsPerPageOptions]="[10,20,30]" [showCurrentPageReport]="true" currentPageReportTemplate="Affichage du  {first} au  {last} des  {totalRecords} entrées" [(selection)]="selectedCommandes" selectionMode="multiple" [rowHover]="true" dataKey="id">
         <ng-template pTemplate="caption">
           <div class="flex flex-column md:flex-row md:justify-content-between md:align-items-center">
             <h5 class="m-0">List des prélèvements grainilo </h5>
@@ -33,62 +33,33 @@
             <th style="width: 3rem">
               <p-tableHeaderCheckbox></p-tableHeaderCheckbox>
             </th>
-            <th pSortableColumn="id">Id <p-sortIcon field="id"></p-sortIcon></th>
-            <th pSortableColumn="reference">Référence <p-sortIcon field="reference"></p-sortIcon></th>
-            <th pSortableColumn="dateCreation">Date Creation<p-sortIcon field="dateAnalyse"></p-sortIcon></th>
-            <th pSortableColumn="matiere">Matiére<p-sortIcon field="matiere"></p-sortIcon></th>
-            <th pSortableColumn="conformite">Conformite <p-sortIcon field="conformite"></p-sortIcon></th>
-            <th pSortableColumn="qualite">Qualité <p-sortIcon field="qualite"></p-sortIcon></th>
-
-            <th pSortableColumn="ref">Relatif <p-sortIcon field="ref"></p-sortIcon></th>
-            <th pSortableColumn="description">Déscription <p-sortIcon field="description"></p-sortIcon></th>
+            <th pSortableColumn="id">ID<p-sortIcon field="id"></p-sortIcon></th>
+            <th pSortableColumn="nom">Nom <p-sortIcon field="nom"></p-sortIcon></th>
+            <th pSortableColumn="etat">Etat<p-sortIcon field="etat"></p-sortIcon></th>
             <th></th>
           </tr>
         </ng-template>
-        <ng-template pTemplate="body" let-analysePhysique >
+        <ng-template pTemplate="body" let-commande >
           <tr >
             <td>
-              <p-tableCheckbox [value]="analysePhysique"></p-tableCheckbox>
+              <p-tableCheckbox [value]="commande"></p-tableCheckbox>
             </td>
-            <td style="width:14%; min-width:10rem;"><span class="p-column-title">Id</span>
-              {{analysePhysique.id}}
+            <td style="width:20%; min-width:10rem;">
+              <span class="p-column-title">ID</span>
+              {{commande.id}}
             </td>
-            <td style="width:14%; min-width:10rem;">
-              <span class="p-column-title">Référence</span>
-              {{analysePhysique.reference}}
+            <td style="width:50%; min-width:10rem;">
+              <span class="p-column-title">Nom</span>
+              {{commande.nom}}
             </td>
-            <td style="width:14%; min-width:10rem;">
-              <span class="p-column-title">Date Analyse</span>
-              {{analysePhysique.dateAnalyse}}
+            <td style="width:20%; min-width:10rem;">
+              <span class="p-column-title">Etat</span>
+              {{commande.etat}}
             </td>
-            <td style="width:14%; min-width:10rem;">
-              <span class="p-column-title">Matiére</span>
-              {{analysePhysique.matiere}}
-            </td>
-
-            <td style="width:14%; min-width:8rem;">
-              <span class="p-column-title">Conformite</span>
-              {{analysePhysique.conformite}}
-            </td>
-            <td style="width:14%; min-width:8rem;">
-              <span class="p-column-title">Qualité</span>
-              {{analysePhysique.qualite}}
-            </td>
-
-            <td style="width:14%; min-width:8rem;">
-              <span class="p-column-title">Relatif</span>
-              {{analysePhysique.ref}}
-            </td>
-
-            <td style="width:14%; min-width:8rem;">
-              <span class="p-column-title">Déscription</span>
-              {{analysePhysique.description}}
-            </td>
-
-            <td>
-              <div class="flex ">
-                <button pButton pRipple icon="pi pi-pencil" class="p-button-rounded p-button-success mr-2" (click)="editAnalysePhysique(analysePhysique)"></button>
-                <button pButton pRipple icon="pi pi-trash" class="p-button-rounded p-button-warning" (click)="deleteAnalysePhysique(analysePhysique)"></button>
+            <td style="width:10%; min-width:10rem;">
+              <div class="flex justify-content-end mr-8">
+                <button pButton pRipple icon="pi pi-pencil" class="p-button-rounded p-button-success mr-2" (click)="editCommande(commande)"></button>
+                <button pButton pRipple icon="pi pi-trash" class="p-button-rounded p-button-warning" (click)="deleteCommande(commande)"></button>
               </div>
             </td>
           </tr>
@@ -101,18 +72,18 @@
     <p-dialog [(visible)]="deleteProductDialog" header="Confirmer" [modal]="true" [style]="{width:'450px'}">
       <div class="flex align-items-center justify-content-center">
         <i class="pi pi-exclamation-triangle mr-3" style="font-size: 2rem"></i>
-        <span *ngIf="product">Êtes-vous sûr de vouloir supprimer? <b>{{product.name}}</b>?</span>
+        <span >Are you sure you want to delete ?</span>
       </div>
       <ng-template pTemplate="footer">
-        <button pButton pRipple icon="pi pi-times" class="p-button-text" label="Non" (click)="deleteProductDialog = false"></button>
-        <button pButton pRipple icon="pi pi-check" class="p-button-text" label="Oui" (click)="confirmDelete()"></button>
+        <button pButton pRipple icon="pi pi-times" class="p-button-text" label="No" (click)="deleteProductDialog = false"></button>
+        <button pButton pRipple icon="pi pi-check" class="p-button-text" label="Yes" (click)="confirmDelete()"></button>
       </ng-template>
     </p-dialog>
 
     <p-dialog [(visible)]="deleteProductsDialog" header="Confirm" [modal]="true" [style]="{width:'450px'}">
       <div class="flex align-items-center justify-content-center">
         <i class="pi pi-exclamation-triangle mr-3" style="font-size: 2rem"></i>
-        <span>Voulez-vous vraiment supprimer?</span>
+        <span>Are you sure you want to delete selected commands</span>
       </div>
       <ng-template pTemplate="footer">
         <button pButton pRipple icon="pi pi-times" class="p-button-text" label="No" (click)="deleteProductsDialog = false"></button>

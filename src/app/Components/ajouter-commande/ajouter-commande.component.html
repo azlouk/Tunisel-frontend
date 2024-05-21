@@ -24,33 +24,12 @@
           <label for="etat">State</label>
         </p-floatLabel>
       </div>
-      <div class="flex flex-column" *ngIf="selectedBassin!==null">
-
-        <div class="field ">
-          <p><span class="font-bold"> Reference: </span>{{selectedBassin.reference}}</p>
-        </div>
-        <div class="field">
-          <p><span class="font-bold"> Description: </span>{{selectedBassin.description}}</p>
-        </div><div class="field">
-        <p><span class="font-bold"> Name: </span>{{selectedBassin.nom}}</p>
-      </div>
-        <div class="field">
-          <p><span class="font-bold"> Location: </span>{{selectedBassin.emplacement}}</p>
-        </div>
-        <div class="field">
-          <p><span class="font-bold"> State: </span>{{selectedBassin.etat}}</p>
-        </div>
-        <div class="field">
-          <p><span class="font-bold"> Creation Date: </span>{{selectedBassin.dateCreation}}</p>
-        </div>
-
-      </div>
 
       <div class="  ">
 
-        <p-tabView *ngIf="!isUpdateAnalysePhysique"[scrollable]="true" >
+        <p-tabView *ngIf="!isUpdateCommande"[scrollable]="true" >
           <p-tabPanel header="Pond" >
-            <p-listbox [options]="bassins" [(ngModel)]="selectedBassin" (click)="getLine()" optionLabel="nom" [filter]="true" [listStyle]="{'height': '87px'}"  ></p-listbox>
+            <p-listbox [options]="bassins" [(ngModel)]="commande.bassin" (click)="getLine()" optionLabel="nom" [filter]="true" [listStyle]="{'height': '87px'}"  ></p-listbox>
 
           </p-tabPanel>
 <!--          <p-tabPanel header="Sotck non lavé" pTooltip="Sotck non lavé">-->
@@ -73,300 +52,44 @@
 
         </p-tabView>
         <div >
-          <!--          =========-->
-          <div class="border-1 border-round border-gray-300 p-2 " *ngIf="isUpdateAnalysePhysique&&selectedBassin">
-            <p class="font-bold">
-              Pond
-            </p>
-            <div class="flex flex-column ">
-
-              <p><span class="font-bold"> Reference: </span>{{selectedBassin.reference}}</p>
-              <p><span class="font-bold"> Name: </span>{{selectedBassin.nom}}</p>
-              <div class=" flex justify-content-end">
-                <button pButton pRipple label="Details" icon="pi pi-eye" class="p-button-primary mr-2 " (click)="openNew()"></button>
-              </div>
-
-            </div>
-            <p-dialog [(visible)]="visibleDetails" [style]="{width: '450px'}" header="Details de Bassin" [modal]="true" class="p-fluid">
-              <ng-template pTemplate="content">
-                <div class="field">
-                  <p><span class="font-bold"> Reference: </span>{{selectedBassin.reference}}</p>
-                </div>
-                <div class="field">
-                  <p><span class="font-bold"> Description: </span>{{selectedBassin.description}}</p>
-                </div><div class="field">
-                <p><span class="font-bold"> Name: </span>{{selectedBassin.nom}}</p>
-              </div>
-                <div class="field">
-                  <p><span class="font-bold"> Location: </span>{{selectedBassin.emplacement}}</p>
-                </div>
-                <div class="field">
-                  <p><span class="font-bold"> State: </span>{{selectedBassin.etat}}</p>
-                </div>
-                <div class="field">
-                  <p><span class="font-bold"> Creation Date: </span>{{selectedBassin.dateCreation}}</p>
-                </div>
-
-              </ng-template>
-
-            </p-dialog>
-          </div>
-
-          <!--          =========-->
-          <!--          =========-->
-<!--          <div class="border-1 border-round border-gray-300 p-2 " *ngIf="isUpdateAnalysePhysique&&selectedSbnl">-->
-<!--            <p class="font-bold">-->
-<!--              Sbnl-->
-<!--            </p>-->
-<!--            <div class="flex flex-column ">-->
-
-<!--              <p><span class="font-bold"> Reference: </span>{{selectedSbnl.reference}}</p>-->
-<!--              <p><span class="font-bold">  Emplacement: </span>{{selectedSbnl.emplacement}}</p>-->
-<!--              <div class=" flex justify-content-end">-->
-<!--                <button pButton pRipple label="Details" icon="pi pi-eye" class="p-button-primary mr-2 " (click)="openNew()"></button>-->
-<!--              </div>-->
-
-<!--            </div>-->
-<!--            <p-dialog [(visible)]="visibleDetails" [style]="{width: '450px'}" header="Details de Sbnl" [modal]="true" class="p-fluid">-->
-<!--              <ng-template pTemplate="content">-->
-<!--                <div class="field">-->
-<!--                  <p><span class="font-bold"> Reference: </span>{{selectedBassin.reference}}</p>-->
-<!--                </div>-->
-<!--                <div class="field">-->
-<!--                  <p><span class="font-bold">  Emplacement: </span>{{selectedSbnl.emplacement}}</p>-->
-<!--                </div>-->
-<!--                <div class="field">-->
-<!--                  <p><span class="font-bold"> Description: </span>{{selectedSbnl.description}}</p>-->
-<!--                </div>-->
-<!--                <div class="field">-->
-<!--                  <p><span class="font-bold"> Quantite: </span>{{selectedSbnl.quantite}}</p>-->
-<!--                </div>-->
-
-<!--                <div class="field">-->
-<!--                  <p><span class="font-bold"> Etat: </span>{{selectedSbnl.etat}}</p>-->
-<!--                </div>-->
-
-<!--              </ng-template>-->
-<!--            </p-dialog>-->
-<!--          </div>-->
-
-          <!--          =========-->
-
-          <!--          =========-->
-<!--          <div class="border-1 border-round border-gray-300 p-2 " *ngIf="isUpdateAnalysePhysique&&selectedBande">-->
-<!--            <p class="font-bold">-->
-<!--              Bande-->
-<!--            </p>-->
-<!--            <div class="flex flex-column ">-->
-
-<!--              <p><span class="font-bold"> Reference: </span>{{selectedBande.reference}}</p>-->
-<!--              <p><span class="font-bold">  Etat: </span>{{selectedBande.etat}}</p>-->
-<!--              <div class=" flex justify-content-end">-->
-<!--                <button pButton pRipple label="Details" icon="pi pi-eye" class="p-button-primary mr-2 " (click)="openNew()"></button>-->
-<!--              </div>-->
-
-<!--            </div>-->
-<!--            <p-dialog [(visible)]="visibleDetails" [style]="{width: '450px'}" header="Details de Sbnl" [modal]="true" class="p-fluid">-->
-<!--              <ng-template pTemplate="content">-->
-<!--                <div class="field">-->
-<!--                  <p><span class="font-bold"> Reference: </span>{{selectedBande.reference}}</p>-->
-<!--                </div>-->
-
-<!--                <div class="field">-->
-<!--                  <p><span class="font-bold"> Description: </span>{{selectedBande.description}}</p>-->
-<!--                </div>-->
-<!--                <div class="field">-->
-<!--                  <p><span class="font-bold"> Etat: </span>{{selectedBande.etat}}</p>-->
-<!--                </div>-->
-<!--                <div class="field">-->
-<!--                  <p><span class="font-bold"> Quantite Totale: </span>{{selectedBande.quantite}}</p>-->
-<!--                </div>-->
-<!--                <div class="field">-->
-<!--                  <p><span class="font-bold"> Quantite Refus: </span>{{selectedBande.quantiteRefus}}</p>-->
-<!--                </div>-->
 
 
-<!--              </ng-template>-->
-<!--            </p-dialog>-->
-<!--          </div>-->
 
-          <!--          =========-->
-          <!--          =========-->
-<!--          <div class="border-1 border-round border-gray-300 p-2 " *ngIf="isUpdateAnalysePhysique&&selectedSbl">-->
-<!--            <p class="font-bold">-->
-<!--              Sbl-->
-<!--            </p>-->
-<!--            <div class="flex flex-column ">-->
-<!--              <p><span class="font-bold"> Reference: </span>{{selectedSbl.reference}}</p>-->
-<!--              <p><span class="font-bold">  Emplacement: </span>{{selectedSbl.emplacement}}</p>-->
-<!--              <div class=" flex justify-content-end">-->
-<!--                <button pButton pRipple label="Details" icon="pi pi-eye" class="p-button-primary mr-2 " (click)="openNew()"></button>-->
-<!--              </div>-->
-<!--            </div>-->
-<!--            <p-dialog [(visible)]="visibleDetails" [style]="{width: '450px'}" header="Details de Sbl" [modal]="true" class="p-fluid">-->
-<!--              <ng-template pTemplate="content">-->
-<!--                <div class="field">-->
-<!--                  <p><span class="font-bold"> Reference: </span>{{selectedSbl.reference}}</p>-->
-<!--                </div>-->
-<!--                <div class="field">-->
-<!--                  <p><span class="font-bold">  Emplacement: </span>{{selectedSbl.emplacement}}</p>-->
-<!--                </div>-->
-<!--                <div class="field">-->
-<!--                  <p><span class="font-bold"> Description: </span>{{selectedSbl.description}}</p>-->
-<!--                </div>-->
-<!--                <div class="field">-->
-<!--                  <p><span class="font-bold"> Quantite: </span>{{selectedSbl.quantite}}</p>-->
-<!--                </div>-->
-<!--                <div class="field">-->
-<!--                  <p><span class="font-bold"> Etat: </span>{{selectedSbl.etat}}</p>-->
-<!--                </div>-->
-<!--              </ng-template>-->
-<!--            </p-dialog>-->
-<!--          </div>-->
-          <!--          =========-->
-          <!--          =========-->
-<!--          <div class="border-1 border-round border-gray-300 p-2 " *ngIf="isUpdateAnalysePhysique&&selectedSblf">-->
-<!--            <p class="font-bold">-->
-<!--              Sblf-->
-<!--            </p>-->
-<!--            <div class="flex flex-column ">-->
-<!--              <p><span class="font-bold"> Reference: </span>{{selectedSblf.reference}}</p>-->
-<!--              <p><span class="font-bold">  Emplacement: </span>{{selectedSblf.emplacement}}</p>-->
-<!--              <div class=" flex justify-content-end">-->
-<!--                <button pButton pRipple label="Details" icon="pi pi-eye" class="p-button-primary mr-2 " (click)="openNew()"></button>-->
-<!--              </div>-->
-<!--            </div>-->
-
-<!--            <p-dialog [(visible)]="visibleDetails" [style]="{width: '450px'}" header="Details de Sblf" [modal]="true" class="p-fluid">-->
-<!--              <ng-template pTemplate="content">-->
-<!--                <div class="field">-->
-<!--                  <p><span class="font-bold"> Reference: </span>{{selectedSblf.reference}}</p>-->
-<!--                </div>-->
-<!--                <div class="field">-->
-<!--                  <p><span class="font-bold">  Emplacement: </span>{{selectedSblf.emplacement}}</p>-->
-<!--                </div>-->
-<!--                <div class="field">-->
-<!--                  <p><span class="font-bold"> Description: </span>{{selectedSblf.description}}</p>-->
-<!--                </div>-->
-<!--                <div class="field">-->
-<!--                  <p><span class="font-bold"> Quantite: </span>{{selectedSblf.quantite}}</p>-->
-<!--                </div>-->
-<!--                <div class="field">-->
-<!--                  <p><span class="font-bold"> Etat: </span>{{selectedSblf.etat}}</p>-->
-<!--                </div>-->
-<!--              </ng-template>-->
-<!--            </p-dialog>-->
-<!--          </div>-->
-          <!--          =========-->
         </div>
       </div>
 
+      <div class="flex flex-column border-1 border-round border-gray-300 p-4" *ngIf="commande.bassin">
+
+  <div class="field " >
+    <p><span class="font-bold"> Reference: </span>{{commande.bassin.reference}}</p>
+  </div>
+  <div class="field">
+    <p><span class="font-bold"> Description: </span>{{commande.bassin.description}}</p>
+  </div><div class="field">
+  <p><span class="font-bold"> Name: </span>{{commande.bassin.nom}}</p>
+</div>
+  <div class="field">
+    <p><span class="font-bold"> Location: </span>{{commande.bassin.emplacement}}</p>
+  </div>
+  <div class="field">
+    <p><span class="font-bold"> State: </span>{{commande.bassin.etat}}</p>
+  </div>
+  <div class="field">
+    <p><span class="font-bold"> Creation Date: </span>{{commande.bassin.dateCreation}}</p>
+  </div>
+
+
+
+      </div>
 
     </div>
 
-<!--    <div class=" flex col-12 justify-content-end mt-6 ">-->
-<!--      <button pButton label="Ajouter Tamis" icon="pi pi-plus" class="p-button-success " (click)="ajouterTamis()"></button>-->
-<!--    </div>-->
+<div class="flex  mt-4 mb-4 justify-content-between">
+  <button pButton pRipple label="Analyse" icon="pi pi-search" class="p-button-secondary mr-2" (click)="getLine()"  *ngIf="!isUpdateCommande"></button>
 
-<!--    <p-dialog [(visible)]="visibale" [style]="{width: '450px'}" header="Ajouter Tamis" [modal]="true" class="p-fluid">-->
+  <button pButton pRipple label="Reset Default" icon="pi pi-refresh" class="p-button-primary mr-2" (click)="getCommandeById()"  ></button>
 
-<!--      <div class="  flex flex-column gap-4 ">-->
-
-<!--        <p-floatLabel>-->
-<!--          <p-inputNumber id="certificat" class="w-1/2 " [(ngModel)]="tamis.calibre"  mode="decimal" locale="en-US" [minFractionDigits]="3"></p-inputNumber>-->
-<!--          <label>Calibre</label>-->
-<!--        </p-floatLabel>-->
-
-<!--        <p-floatLabel>-->
-<!--          <p-inputNumber id="qui" [(ngModel)]="tamis.masse"   mode="decimal" locale="en-US" [minFractionDigits]="3"></p-inputNumber>-->
-<!--          <label>Masse</label>-->
-<!--        </p-floatLabel>-->
-
-<!--        &lt;!&ndash;        <p-floatLabel>&ndash;&gt;-->
-<!--        &lt;!&ndash;          <p-inputNumber id="nomVisa" class="w-full " [(ngModel)]="tamis.refus" mode="decimal" locale="en-US" [minFractionDigits]="3"></p-inputNumber>&ndash;&gt;-->
-<!--        &lt;!&ndash;          <label>Refus</label>&ndash;&gt;-->
-<!--        &lt;!&ndash;        </p-floatLabel>&ndash;&gt;-->
-
-<!--        &lt;!&ndash;        <p-floatLabel>&ndash;&gt;-->
-<!--        &lt;!&ndash;          <p-inputNumber id="natureAction" class="" [(ngModel)]="tamis.refusCumulated" mode="decimal" locale="en-US" [minFractionDigits]="3"></p-inputNumber>&ndash;&gt;-->
-<!--        &lt;!&ndash;          <label>Refus Cumulated</label>&ndash;&gt;-->
-<!--        &lt;!&ndash;        </p-floatLabel>&ndash;&gt;-->
-
-<!--        &lt;!&ndash;        <p-floatLabel>&ndash;&gt;-->
-<!--        &lt;!&ndash;          <p-inputNumber id="observation" class="w-full " [(ngModel)]="tamis.passCumulated"  mode="decimal" locale="en-US" [minFractionDigits]="3"></p-inputNumber>&ndash;&gt;-->
-<!--        &lt;!&ndash;          <label>Pass Cumulated</label>&ndash;&gt;-->
-<!--        &lt;!&ndash;        </p-floatLabel>&ndash;&gt;-->
-
-
-
-<!--      </div>-->
-<!--      <ng-template pTemplate="footer">-->
-<!--        <button pButton pRipple label="Annuler" icon="pi pi-times" class="p-button-text" (click)="hideDialog()"></button>-->
-<!--        <button pButton pRipple label="Ajouter" icon="pi pi-check" class="p-button-text" (click)="saveTamis()"></button>-->
-<!--      </ng-template>-->
-
-<!--    </p-dialog>-->
-<!--    <p-table #dt [value]="listeTamis" [columns]="cols"  responsiveLayout="scroll" [rows]="10" [globalFilterFields]="['calibre']" [paginator]="true" [rowsPerPageOptions]="[10,20,30,100,200]" [showCurrentPageReport]="true" currentPageReportTemplate="Affichage du  {first} au  {last} des  {totalRecords} entrées" [(selection)]="selectedIntervention" selectionMode="multiple" [rowHover]="true" dataKey="id">-->
-<!--      <ng-template pTemplate="caption">-->
-<!--        <div class="flex flex-column md:flex-row md:justify-content-between md:align-items-center">-->
-<!--          <h5 class="m-0">Gestion des Tamis</h5>-->
-<!--          <span class="block mt-2 md:mt-0 p-input-icon-left">-->
-<!--                            <i class="pi pi-search"></i>-->
-<!--                            <input  type="text" pInputText (input)="onGlobalFilter(dt, $event)" placeholder="Rechercher..."  class="w-full sm:w-auto"/>-->
-<!--                        </span>-->
-
-
-
-<!--        </div>-->
-<!--      </ng-template>-->
-<!--      <ng-template pTemplate="header">-->
-<!--        <tr>-->
-
-<!--          <th >Calibre </th>-->
-<!--          <th >Masse </th>-->
-<!--          <th >Refus </th>-->
-<!--          <th >Refus Cumulated</th>-->
-<!--          <th >pass Cumulated </th>-->
-<!--          <th></th>-->
-<!--        </tr>-->
-<!--      </ng-template>-->
-<!--      <ng-template pTemplate="body" let-tamis >-->
-<!--        <tr >-->
-
-<!--          <td ><span class="p-column-title" >Calibre</span>-->
-<!--            {{tamis.calibre}}-->
-<!--          </td>-->
-<!--          <td>-->
-<!--            <span class="p-column-title">Masse</span>-->
-<!--            {{tamis.masse}}-->
-<!--          </td>-->
-<!--          <td >-->
-<!--            <span class="p-column-title">Refus</span>-->
-<!--            {{tamis.refus}}-->
-
-
-<!--          </td>-->
-
-
-<!--          <td >-->
-<!--            <span class="p-column-title">Refus Cumulated</span>-->
-<!--            {{tamis.refusCumulated}}-->
-<!--          </td>-->
-<!--          <td>-->
-<!--            <span class="p-column-title">pass Cumulated</span>-->
-<!--            {{tamis.passCumulated}}-->
-<!--          </td>-->
-
-
-
-<!--          <div class="flex ">-->
-<!--            <button pButton pRipple icon="pi pi-trash" class="p-button-rounded p-button-warning" (click)="deleteTamis(tamis)"></button>-->
-<!--            <button pButton pRipple icon="pi pi-pencil" class="p-button-rounded p-button-success" (click)="editTamis(tamis)"></button>-->
-<!--          </div>-->
-
-<!--        </tr>-->
-<!--      </ng-template>-->
-<!--    </p-table>-->
+</div>
 
 
 
@@ -374,7 +97,10 @@
       <p-table
         [columns]="selectedColumns"
         [value]="listeLignesCommandes"
-        [tableStyle]="{'min-width': '50rem'}">
+        [tableStyle]="{'min-width': '50rem'}"
+        editMode="row"
+      >
+
         <ng-template pTemplate="caption">
           <p-multiSelect
             display="chip"
@@ -400,24 +126,82 @@
             <th *ngFor="let col of columns">
               {{col.header}}
             </th>
-
+          <th></th>
           </tr>
         </ng-template>
 
-        <ng-template pTemplate="body" let-lineCommande let-columns="columns">
-          <tr >
-            <td *ngFor="let col of columns">
-              {{getValueOfligneCommande(col,lineCommande)}}
+        <ng-template pTemplate="body" let-lineCommande let-columns="columns" let-editing="editing" let-ri="rowIndex">
+          <tr [pEditableRow]="lineCommande">
+            <ng-container *ngFor="let col of columns">
+              <td *ngIf="col.id>26 && col.id<39">
+                <p-cellEditor>
+                  <ng-template pTemplate="input">
+                    <input type="text"   pInputText [placeholder]="col.header" [(ngModel)]="lineCommande[col.field]  "(ngModelChange)="CalculeTotal()"/>
+                  </ng-template>
+                  <ng-template pTemplate="output">
+                    {{getValueOfligneCommande(col,lineCommande)}}
+                    {{CalculeTotal()}}
+                  </ng-template>
+                </p-cellEditor>
+
+              </td>
+
+              <td  *ngIf="col.id>=0 && col.id<27">
+
+                {{getValueOfligneCommande(col,lineCommande)}}
+              </td>
+
+            </ng-container>
+
+
+            <td>
+              <div class="flex align-items-center gap-2" >
+                <div class="flex align-items-center justify-content-center gap-2">
+                  <button *ngIf="!editing" pButton pRipple type="button" pInitEditableRow icon="pi pi-pencil" (click)="onRowEditInit(lineCommande)" class="p-button-rounded p-button-success mr-2"></button>
+                  <button *ngIf="editing" pButton pRipple type="button" pSaveEditableRow icon="pi pi-check" (click)="onRowEditSave(lineCommande)" class="p-button-rounded p-button-text p-button-success mr-2"></button>
+                </div>
+              <div >
+              <button pButton pRipple icon="pi pi-trash" class="p-button-rounded p-button-warning mr-2" (click)="deleteLineCommande(lineCommande)"></button>
+            </div>
+              </div>
             </td>
           </tr>
         </ng-template>
       </p-table>
     </div>
+<div class=" flex justify-content-end  ">
+  <div class="flex flex-column gap-3 border-1 border-round border-gray-400 p-3">
+    <div class="flex align-items-center gap-3 justify-content-between ">
+      <label for="stock" class="font-bold">Total Harvset in(T) :</label>
 
+      <p-inputNumber  id="stock"  [(ngModel)]="TotalHarv" mode="decimal" [minFractionDigits]="3" ></p-inputNumber>
+    </div>
+    <div class="flex align-items-center gap-3 justify-content-between">
+      <label for="stock1" class="font-bold">Total Production in(T) :</label>
+      <p-inputNumber  id="stock1"  [(ngModel)]="TotalProd" mode="decimal" [minFractionDigits]="3" ></p-inputNumber>
+
+    </div>
+    <div class="flex align-items-center gap-3 justify-content-between">
+      <label for="stock2" class="font-bold">Total Transfer Quantity :</label>
+      <p-inputNumber  id="stock2"  [(ngModel)]="TotalTrQu" mode="decimal" [minFractionDigits]="3" ></p-inputNumber>
+
+    </div>
+  </div>
+
+</div>
 
   </div>
 </div>
-
+<p-dialog [(visible)]="deleteLineCommandeDialog" header="Confirmer" [modal]="true" [style]="{width:'450px'}">
+  <div class="flex align-items-center justify-content-center">
+    <i class="pi pi-exclamation-triangle mr-3" style="font-size: 2rem"></i>
+    <span >Are you sure you want to delete ?</span>
+  </div>
+  <ng-template pTemplate="footer">
+    <button pButton pRipple icon="pi pi-times" class="p-button-text" label="No" (click)="deleteLineCommandeDialog = false"></button>
+    <button pButton pRipple icon="pi pi-check" class="p-button-text" label="Yes" (click)="confirmDelete()"></button>
+  </ng-template>
+</p-dialog>
 <!---->
 <div class=" flex col-12 justify-content-end">
   <button pButton label="Save" icon="pi pi-check" class=" " (click)="saveCommande()"></button>
