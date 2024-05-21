@@ -348,31 +348,7 @@ export class AjouterCommandeComponent implements OnInit{
         }
   }}
 
-  // getValueOfligneCommande(col: any,ligneCommande:any):any {
-  //
-  //
-  // if(col.id<20){
-  //
-  // return    ligneCommande.analyseChimique !==null?ligneCommande.analyseChimique[col.field]:'-';
-  // }
-  // else if(col.id>19 && col.id<22){
-  // return     ligneCommande.analysePhysique!==null?ligneCommande.analysePhysique[col.field]:'-';
-  // }
-  // else if(col.id>21 && col.id<26){
-  //   if(ligneCommande.analysePhysique!==null){
-  // ligneCommande.analysePhysique.tamisList.forEach((tamis:any)=> {
-  //   if(this.listcalibre.length<ligneCommande.analysePhysique.tamisList.length){
-  //
-  //
-  //   }
-  //
-  // })
-  //
-  // }}
-  // else{
-  //   return     ligneCommande==!null?ligneCommande[col.field]:'-';
-  // }
-  // }
+
   getValueOfligneCommande(col: any, ligneCommande: any): any {
     if (col.id < 20) {
       return ligneCommande.analyseChimique!==null ? ligneCommande.analyseChimique[col.field] : '-';
@@ -382,29 +358,23 @@ export class AjouterCommandeComponent implements OnInit{
 
 
 
-    // ===================================
-    // else if (col.id > 21 && col.id < 26 && this.selectedColumnsCalibre.header) {
-    //   if (ligneCommande.analysePhysique!==null  && ligneCommande.analysePhysique.tamisList) {
-    //     return ligneCommande.analysePhysique.tamisList.filter((tamis: any) => {tamis.calibre===this.selectedColumnsCalibre.header});
-    //   } else {
-    //     return '-';
-    //   }
-    // }
-    // ===================================
+
     //************************************
-    else if(col.id > 21 && col.id < 26 && this.selectedColumnsCalibre && this.selectedColumnsCalibre.header) {
+    else if (col.id > 21 && col.id < 27 && this.selectedColumnsCalibre && this.selectedColumnsCalibre.header) {
       if (ligneCommande.analysePhysique !== null && ligneCommande.analysePhysique.tamisList) {
-        // Use filter to find matching items in tamisList
-        const filteredTamisList = ligneCommande.analysePhysique.tamisList.filter((tamis: any) => {
-          return tamis.calibre === this.selectedColumnsCalibre.header;
-        });
+        // Use filter to find matching items in tamisList and add checks for undefined items
+        const filteredTamis:any = ligneCommande.analysePhysique.tamisList.find((tamis: any) =>
+           tamis && tamis.calibre == this.selectedColumnsCalibre.header
+        );
 
         // Check if filteredTamisList is not empty and return it, otherwise return '-'
-        return filteredTamisList.length > 0 ? filteredTamisList : '-';
+
+        return filteredTamis!==undefined? filteredTamis[col.field]  : '-';
       } else {
         return '-';
       }
     }
+
     //************************************
 
 
