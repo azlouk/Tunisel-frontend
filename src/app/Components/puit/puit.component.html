@@ -5,9 +5,9 @@
       <p-toolbar styleClass="mb-4">
         <ng-template pTemplate="left">
           <div class="my-2  ">
-            <button pButton pRipple label="Ajouter" icon="pi pi-plus" class="p-button-success mr-2" (click)="openNew()"></button>
-            <button pButton pRipple label="Supprimer" icon="pi pi-trash" class="p-button-danger mr-2" (click)="deleteSelectedPuits()" [disabled]="!selectedPuits || !selectedPuits.length"></button>
-            <button pButton pRipple label="Actualiser" icon="pi pi-refresh" class="p-button-primary mr-2" (click)="getAllPuit()"  ></button>
+            <button pButton pRipple label="Add" icon="pi pi-plus" class="p-button-success mr-2" (click)="openNew()"></button>
+            <button pButton pRipple label="Delete" icon="pi pi-trash" class="p-button-danger mr-2" (click)="deleteSelectedPuits()" [disabled]="!selectedPuits || !selectedPuits.length"></button>
+            <button pButton pRipple label="Refresh" icon="pi pi-refresh" class="p-button-primary mr-2" (click)="getAllPuit()"  ></button>
 
           </div>
 
@@ -17,13 +17,13 @@
 
       </p-toolbar>
 
-      <p-table #dt [value]="puits" [columns]="cols" [loading]="loading"  responsiveLayout="scroll" [rows]="10" [globalFilterFields]="['id','reference','description','dateCreation','nom','emplacement','etat','dateFermeture']" [paginator]="true" [rowsPerPageOptions]="[10,20,30]" [showCurrentPageReport]="true" currentPageReportTemplate="Affichage du  {first} au  {last} des  {totalRecords} entrées" [(selection)]="selectedPuits" selectionMode="multiple" [rowHover]="true" dataKey="id">
+      <p-table #dt [value]="puits" [columns]="cols" [loading]="loading"  responsiveLayout="scroll" [rows]="10" [globalFilterFields]="['id','reference','description','dateCreation','nom','emplacement','etat','dateFermeture']" [paginator]="true" [rowsPerPageOptions]="[10,20,30]" [showCurrentPageReport]="true" currentPageReportTemplate="Display  {first} to  {last} of  {totalRecords} entries" [(selection)]="selectedPuits" selectionMode="multiple" [rowHover]="true" dataKey="id">
         <ng-template pTemplate="caption">
           <div class="flex flex-column md:flex-row md:justify-content-between md:align-items-center">
-            <h5 class="m-0">Gestion des Puits</h5>
+            <h5 class="m-0">well management</h5>
             <span class="block mt-2 md:mt-0 p-input-icon-left">
                             <i class="pi pi-search"></i>
-                            <input  type="text" pInputText (input)="onGlobalFilter(dt, $event)" placeholder="Rechercher..."  class="w-full sm:w-auto"/>
+                            <input  type="text" pInputText (input)="onGlobalFilter(dt, $event)" placeholder="Search..."  class="w-full sm:w-auto"/>
                         </span>
 
 
@@ -37,11 +37,11 @@
             </th>
              <th pSortableColumn="reference">Reference <p-sortIcon field="reference"></p-sortIcon></th>
             <th pSortableColumn="description">Description <p-sortIcon field="description"></p-sortIcon></th>
-            <th pSortableColumn="dateCreation">Date Creation<p-sortIcon field="dateCreation"></p-sortIcon></th>
-            <th pSortableColumn="nom">Nom <p-sortIcon field="nom"></p-sortIcon></th>
-            <th pSortableColumn="emplacement">Emplacement <p-sortIcon field="emplacement"></p-sortIcon></th>
-            <th pSortableColumn="etat">Etat <p-sortIcon field="etat"></p-sortIcon></th>
-            <th pSortableColumn="dateFermeture">Date Fermeture <p-sortIcon field="dateFermeture"></p-sortIcon></th>
+            <th pSortableColumn="dateCreation">Creation Date<p-sortIcon field="dateCreation"></p-sortIcon></th>
+            <th pSortableColumn="nom">Name <p-sortIcon field="nom"></p-sortIcon></th>
+            <th pSortableColumn="emplacement">Location <p-sortIcon field="emplacement"></p-sortIcon></th>
+            <th pSortableColumn="etat">State <p-sortIcon field="etat"></p-sortIcon></th>
+            <th pSortableColumn="dateFermeture">Closing Date <p-sortIcon field="dateFermeture"></p-sortIcon></th>
             <th></th>
           </tr>
         </ng-template>
@@ -64,23 +64,23 @@
 
 
             <td style="width:14%; min-width:10rem;">
-              <span class="p-column-title">Date Creation</span>
+              <span class="p-column-title">Creation Date</span>
               {{puit.dateCreation}}
             </td>
             <td style="width:14%; min-width:8rem;">
-              <span class="p-column-title">Nom</span>
+              <span class="p-column-title">Name</span>
               {{puit.nom}}
             </td>
             <td style="width:14%; min-width:8rem;">
-              <span class="p-column-title">Emplacement</span>
+              <span class="p-column-title">Location</span>
               {{puit.emplacement}}
             </td>
             <td style="width:14%; min-width:8rem;">
-              <span class="p-column-title">Etat</span>
+              <span class="p-column-title">State</span>
               {{puit.etat}}
             </td>
             <td style="width:14%; min-width:8rem;">
-              <span class="p-column-title">Date Fermeture</span>
+              <span class="p-column-title">Closing Date</span>
               {{puit.dateFermeture}}
             </td>
             <td>
@@ -95,12 +95,12 @@
       </p-table>
     </div>
 
-    <p-dialog [(visible)]="productDialog" [style]="{width: '450px'}" header="Nouveau puit " [modal]="true" class="p-fluid">
+    <p-dialog [(visible)]="productDialog" [style]="{width: '450px'}" header="New well" [modal]="true" class="p-fluid">
       <ng-template pTemplate="content">
         <div class="field">
           <label for="name">Référence</label>
           <input type="text" pInputText id="name"  [(ngModel)]="puit.reference" required autofocus [ngClass]="{'ng-invalid ng-dirty' : submitted && !puit.reference}"/>
-          <small class="ng-dirty ng-invalid" *ngIf="submitted && !puit.reference">Réference obligatoire</small>
+          <small class="ng-dirty ng-invalid" *ngIf="submitted && !puit.reference">Mandatory reference</small>
         </div>
         <div class="field">
           <label for="Description">Description</label>
@@ -108,26 +108,26 @@
          </div>
 
         <div class="field">
-          <label for="dateCreation">Date Creation</label>
+          <label for="dateCreation">Creation Date</label>
           <p-calendar dateFormat="yy-mm-dd" id="dateCreation" [(ngModel)]="puit.dateCreation"    [showIcon]="true"></p-calendar>
 <!--          <input type="text" pInputText id="dateCreation"  [(ngModel)]="puit.dateCreation" required autofocus [ngClass]="{'ng-invalid ng-dirty' : submitted && !puit.dateCreation}"/>-->
          </div>
         <div class="field">
-          <label for="nom">Nom</label>
+          <label for="nom">Name</label>
           <input type="text" pInputText id="nom"  [(ngModel)]="puit.nom" required autofocus [ngClass]="{'ng-invalid ng-dirty' : submitted && !puit.nom}"/>
-          <small class="ng-dirty ng-invalid" *ngIf="submitted && !puit.nom">Nom obligatoire.</small>
+          <small class="ng-dirty ng-invalid" *ngIf="submitted && !puit.nom">Name required.</small>
         </div>
         <div class="field">
 
-          <label for="emplacement">Emplacement</label>
+          <label for="emplacement">Location</label>
           <input type="text" pInputText id="emplacement"  [(ngModel)]="puit.emplacement" required autofocus  />
          </div>
         <div class="field">
-          <label for="etat">Etat</label>
+          <label for="etat">State</label>
           <input type="text" pInputText id="etat"  [(ngModel)]="puit.etat" required autofocus  />
          </div>
         <div class="field">
-          <label for="dateFermeture">Date Fermeture</label>
+          <label for="dateFermeture">Closing Date</label>
           <p-calendar dateFormat="yy-mm-dd" id="dateFermeture" class="border border-gray-300 shadow p-3 w-full rounded mb-" [(ngModel)]="puit.dateFermeture"    [showIcon]="true"></p-calendar>
          </div>
 
@@ -137,15 +137,15 @@
 
 
       <ng-template pTemplate="footer">
-        <button pButton pRipple label="Annuler" icon="pi pi-times" class="p-button-text" (click)="hideDialog()"></button>
-        <button pButton pRipple label="Ajouter" icon="pi pi-check" class="p-button-text" (click)="savePuit()"></button>
+        <button pButton pRipple label="Cancel" icon="pi pi-times" class="p-button-text" (click)="hideDialog()"></button>
+        <button pButton pRipple label="Add" icon="pi pi-check" class="p-button-text" (click)="savePuit()"></button>
       </ng-template>
     </p-dialog>
 
-    <p-dialog [(visible)]="deleteProductDialog" header="Confirmer" [modal]="true" [style]="{width:'450px'}">
+    <p-dialog [(visible)]="deleteProductDialog" header="Confirm" [modal]="true" [style]="{width:'450px'}">
       <div class="flex align-items-center justify-content-center">
         <i class="pi pi-exclamation-triangle mr-3" style="font-size: 2rem"></i>
-        <span *ngIf="product">Êtes-vous sûr de vouloir supprimer <b>{{product.name}}</b>?</span>
+        <span *ngIf="product">Are you sure you want to delete? <b>{{product.name}}</b>?</span>
       </div>
       <ng-template pTemplate="footer">
         <button pButton pRipple icon="pi pi-times" class="p-button-text" label="Non" (click)="deleteProductDialog = false"></button>
@@ -153,10 +153,10 @@
       </ng-template>
     </p-dialog>
 
-    <p-dialog [(visible)]="deleteProductsDialog" header="Confirmer" [modal]="true" [style]="{width:'450px'}">
+    <p-dialog [(visible)]="deleteProductsDialog" header="Confirm" [modal]="true" [style]="{width:'450px'}">
       <div class="flex align-items-center justify-content-center">
         <i class="pi pi-exclamation-triangle mr-3" style="font-size: 2rem"></i>
-        <span>Voulez-vous vraiment supprimer  sélectionnés ?</span>
+        <span>Do you really want to delete selected?</span>
       </div>
       <ng-template pTemplate="footer">
         <button pButton pRipple icon="pi pi-times" class="p-button-text" label="Non" (click)="deleteProductsDialog = false"></button>
@@ -171,23 +171,23 @@
 <!--PrintPDF Rapport-->
 
 <p-dialog header="Analyse chimique" [(visible)]="visiblePrint" [modal]="true"   [breakpoints]="{ '1199px': '75vw', '575px': '90vw' }">
-<div class="shadow-1 p-2" >Filtrage :
+<div class="shadow-1 p-2" >filtrate :
 
   <div class="card flex justify-content-evenly ">
-   <div class="gap-1 flex align-items-center">Date début Analyse  :
+   <div class="gap-1 flex align-items-center">Analysis start date  :
      <input  class="p-2 shadow-1" type="date" pInputText    [(ngModel)]="DatefiltrageStart" [value]="DatefiltrageStart" />
 
     </div>
     <div class="gap-1  flex align-items-center">
-    Date Fin Analyse  :
+    Date End Analysis  :
       <input  class="p-2 shadow-1" type="date"  pInputText   [(ngModel)]="DatefiltrageEnd" [value]="DatefiltrageEnd" />
 
      </div>
-    <p-button (click)="filtredate()" class=" " icon="pi pi-search" label="Rechercher"></p-button>
-    <p-button (click)="Viderfiltredate()" class=" " icon="pi pi-eye" label="Afficher Tout"></p-button>
+    <p-button (click)="filtredate()" class=" " icon="pi pi-search" label="Search"></p-button>
+    <p-button (click)="Viderfiltredate()" class=" " icon="pi pi-eye" label="View all"></p-button>
 
   </div>
-  <p-checkbox [(ngModel)]="SelectAll" (ngModelChange)="SelectAllCheck()" [binary]="true" inputId="binary" class="text-primary" label="Tout"></p-checkbox>
+  <p-checkbox [(ngModel)]="SelectAll" (ngModelChange)="SelectAllCheck()" [binary]="true" inputId="binary" class="text-primary" label="All"></p-checkbox>
 
   <th *ngFor="let c of colsfiltre">
 
@@ -256,7 +256,7 @@
 <!--       <th>-->
 <!--         <p-columnFilter type="date" field="dateAnalyse" display="menu"></p-columnFilter>-->
 
-<!--         Date Analyse</th>-->
+<!--         Analysis Date</th>-->
 
 
 <!--        <th>Temperature °C</th>-->

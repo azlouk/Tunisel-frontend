@@ -278,7 +278,7 @@ this.visibale=false;
           confirmButtonColor: "#3085d6",
           cancelButtonColor: "#d33",
           confirmButtonText: "Oui, modifié!",
-          cancelButtonText:"Annuler"
+          cancelButtonText:"Cancel"
         }).then((result) => {
           if (result.isConfirmed) {
             this.listeTamis[tamis].calibre=this.tamis.calibre ;
@@ -323,7 +323,7 @@ this.visibale=false;
       totalMasse += tamis.masse;
 
     }}
-    console.log('=========>>>>>>>>>>totle Masse: ',totalMasse);
+    console.log('=========>>>>>>>>>>totle Weight: ',totalMasse);
     return totalMasse;
   }
   calculateRefus(total:number) {

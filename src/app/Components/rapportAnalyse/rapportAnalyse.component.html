@@ -6,16 +6,16 @@
       <ng-template pTemplate="end"  >
         <div class=" my-2 " >
 
-          <button pButton pRipple label="Retour" icon="pi pi-arrow-left" class="p-button-success mr-2 " (click)="retour()"></button>
+          <button pButton pRipple label="Back" icon="pi pi-arrow-left" class="p-button-success mr-2 " (click)="retour()"></button>
         </div>
       </ng-template>
-      <h4>Ajouter rapport d'analyse</h4>
+      <h4>Add analysis report</h4>
     </p-toolbar>
     <div  class=" flex gap-5  mt-8 border-1 border-round border-gray-300 p-6   ">
       <div class=" gap-5  flex flex-column   card  justify-content-between  ">
         <p-floatLabel >
           <input  class="p-2 shadow-1" type="date" pInputText id="dateCreationph"  [(ngModel)]="analysesChimique.dateAnalyse" [value]="analysesChimique.dateAnalyse" />
-          <label for="dateCreationph">Date création</label>
+          <label for="dateCreationph">date created</label>
           <!--        <p-calendar id="dateCreation" dateFormat="yy-mm-dd" [(ngModel)]="bassin.dateCreation"  [ngClass]="{'ng-invalid ng-dirty' : submitted && !bassin.dateCreation}" [showIcon]="true"></p-calendar>-->
           <!--        <small class="ng-dirty ng-invalid" *ngIf="submitted && !bassin.dateCreation">poste is required.</small>-->
         </p-floatLabel>
@@ -32,7 +32,7 @@
             (completeMethod)="filterMatiere($event)"
             field="" />
 
-          <label  >Matiére</label>
+          <label  >Matter</label>
         </p-floatLabel>
         <p-floatLabel>
            <p-autoComplete
@@ -42,7 +42,7 @@
             (completeMethod)="filterCountry($event)"
             field="" />
 
-          <label >Qualité d'analyse</label>
+          <label >date created</label>
 
         </p-floatLabel>
 
@@ -50,7 +50,7 @@
 
       <div class="card">
         <p-tabView *ngIf="!isUpdateAnalyseChimique"[scrollable]="true">
-          <p-tabPanel header="Bassin" >
+          <p-tabPanel header="Basin" >
             <p-listbox [options]="bassins" [(ngModel)]="selectedBassin" optionLabel="nom" (ngModelChange)="selectBassin()"[filter]="true" [listStyle]="{'height': '87px'}"  ></p-listbox>
 
           </p-tabPanel>
@@ -63,22 +63,22 @@
 
       <div class="flex align-items-center  gap-1 " >
         <p-checkbox [(ngModel)]="checkedChimique" [binary]="true" Id="ch"></p-checkbox>
-        <label for="ny" class="font-bold">Analyse Chimique</label>
+        <label for="ny" class="font-bold">Chemical analysis</label>
       </div>
 
       <div class="flex align-items-center  gap-1 " >
         <p-checkbox  [(ngModel)]="checkedPhysique" [binary]="true" Id="ph"></p-checkbox>
-        <label for="ny" class="font-bold">Analyse Physique</label>
+        <label for="ny" class="font-bold">Physical analysis</label>
       </div>
 
 
 
     </div>
     <div  *ngIf="checkedChimique" class="border-1 border-round border-gray-300 p-6 mt-8 bg-gray-200">
-      <label class="font-bold text-3xl">Analyse chimique </label>
+      <label class="font-bold text-3xl">Chemical analysis </label>
     <div class="   flex  gap-3  mt-8      ">
       <div   class="card gap-3  flex flex-column       justify-content-between  ">
-        <label class="font-bold">Climatique</label>
+        <label class="font-bold">climatical</label>
          <p-floatLabel>
           <input type="text" pInputText [(ngModel)]="analysesChimique.temperature"  id="temperature" class="w-full" />
           <label >Température °C</label>
@@ -86,7 +86,7 @@
 
         <p-floatLabel>
           <input type="text" pInputText [(ngModel)]="analysesChimique.vent"  id="vent" class="w-full" />
-          <label >Vent Km/h</label>
+          <label >Wind Km/h</label>
         </p-floatLabel>
         <p-floatLabel>
           <textarea rows="3" cols="30" pInputTextarea [(ngModel)]="analysesChimique.description"  id="description" class="w-full" ></textarea>
@@ -95,7 +95,7 @@
       </div>
 
       <div   class=" card  flex w-full  flex-column    ">
-        <label class="font-bold">Les composants chimiques </label>
+        <label class="font-bold">Chemical components </label>
 
         <div class="flex   gap-5   flex-wrap  overflow-auto  ">
           <p-checkbox [(ngModel)]="SelectAll" (ngModelChange)="SelectAllCheck()" [binary]="true" inputId="binary" class="text-primary" label="Tout"></p-checkbox>
@@ -138,12 +138,12 @@
     </div>
     </div>
 <!--    <div class=" flex col-12 justify-content-end">-->
-<!--      <button pButton label="Enregisrer" icon="pi pi-check" class=" " (click)="saveAnalyseChimique()"></button>-->
+<!--      <button pButton label="Save" icon="pi pi-check" class=" " (click)="saveAnalyseChimique()"></button>-->
 <!--    </div>-->
 
 
     <div *ngIf="checkedPhysique" class="border-1 border-round border-gray-300 p-6 mt-8 bg-gray-200  ">
-      <label class="font-bold text-3xl">Analyse granulométrique</label>
+      <label class="font-bold text-3xl">Grain size analysis</label>
       <div class="card flex justify-content-between  align-items-center  mt-8 border-1 border-round border-gray-300 p-6   ">
 
         <p-floatLabel>
@@ -153,7 +153,7 @@
 
         <p-floatLabel>
           <input type="text" pInputText [(ngModel)]="analysesPhysique.conformite"  id="conformite" />
-          <label >Conformite</label>
+          <label >Compliance</label>
         </p-floatLabel>
 
 
@@ -162,11 +162,11 @@
 
       <div class="card  flex  flex-column gap-2 justify-content-end mt-6 ">
         <div class="flex col-12 justify-content-end">
-          <button pButton label="Ajouter Tamis" icon="pi pi-plus" class="p-button-success   w-2  " (click)="ajouterTamis()"></button>
+          <button pButton label="Add Sieve" icon="pi pi-plus" class="p-button-success   w-2  " (click)="ajouterTamis()"></button>
 
         </div>
 
-        <p-dialog [(visible)]="visibale" [style]="{width: '450px'}" header="Ajouter Tamis" [modal]="true" class="p-fluid">
+        <p-dialog [(visible)]="visibale" [style]="{width: '450px'}" header="Add Sieve" [modal]="true" class="p-fluid">
 
           <div class="  flex flex-column gap-4 ">
 
@@ -177,7 +177,7 @@
 
             <p-floatLabel>
               <p-inputNumber id="qui" [(ngModel)]="tamis.masse"   mode="decimal" locale="en-US" [minFractionDigits]="3"></p-inputNumber>
-              <label>Masse</label>
+              <label>Weight</label>
             </p-floatLabel>
 
             <!--        <p-floatLabel>-->
@@ -199,19 +199,19 @@
 
           </div>
           <ng-template pTemplate="footer">
-            <button pButton pRipple label="Annuler" icon="pi pi-times" class="p-button-text" (click)="hideDialog()"></button>
-            <button pButton pRipple label="Ajouter" icon="pi pi-check" class="p-button-text" (click)="saveTamis()"></button>
+            <button pButton pRipple label="Cancel" icon="pi pi-times" class="p-button-text" (click)="hideDialog()"></button>
+            <button pButton pRipple label="Add" icon="pi pi-check" class="p-button-text" (click)="saveTamis()"></button>
           </ng-template>
 
         </p-dialog>
 
-      <p-table #dt [value]="listeTamis" [columns]="cols"  responsiveLayout="scroll" [rows]="10" [globalFilterFields]="['id','dateintervention','qui','natureAction','resultat','certificat','nomVisa','observation']" [paginator]="true" [rowsPerPageOptions]="[10,20,30,100,200]" [showCurrentPageReport]="true" currentPageReportTemplate="Affichage du  {first} au  {last} des  {totalRecords} entrées" [(selection)]="selectedIntervention" selectionMode="multiple" [rowHover]="true" dataKey="id">
+      <p-table #dt [value]="listeTamis" [columns]="cols"  responsiveLayout="scroll" [rows]="10" [globalFilterFields]="['id','dateintervention','qui','natureAction','resultat','certificat','nomVisa','observation']" [paginator]="true" [rowsPerPageOptions]="[10,20,30,100,200]" [showCurrentPageReport]="true" currentPageReportTemplate="Display  {first} to  {last} of  {totalRecords} entries" [(selection)]="selectedIntervention" selectionMode="multiple" [rowHover]="true" dataKey="id">
         <ng-template pTemplate="caption">
           <div class="flex flex-column md:flex-row md:justify-content-between md:align-items-center">
-            <h5 class="m-0">Gestion des tamis</h5>
+            <h5 class="m-0">Sieve management</h5>
             <span class="block mt-2 md:mt-0 p-input-icon-left">
                             <i class="pi pi-search"></i>
-                            <input  type="text" pInputText (input)="onGlobalFilter(dt, $event)" placeholder="Rechercher..."  class="w-full sm:w-auto"/>
+                            <input  type="text" pInputText (input)="onGlobalFilter(dt, $event)" placeholder="Search..."  class="w-full sm:w-auto"/>
                         </span>
 
 
@@ -222,7 +222,7 @@
           <tr>
 
             <th  >Calibre  </th>
-            <th  >Masse  </th>
+            <th  >Weight  </th>
             <th pSortableColumn="natureAction">Refus  </th>
             <th pSortableColumn="resultat">Refus Cumulated </th>
             <th pSortableColumn="certificat">pass Cumulated </th>
@@ -236,7 +236,7 @@
               {{tamis.calibre}}
             </td>
             <td>
-              <span class="p-column-title">Masse</span>
+              <span class="p-column-title">Weight</span>
               {{tamis.masse}}
             </td>
             <td >
@@ -268,7 +268,7 @@
       </p-table>
       </div>
       <div class=" flex col-12 justify-content-end">
-        <button pButton label="Calculer" icon="pi pi-check" class=" " (click)="calculateTamis()"></button>
+        <button pButton label="calculate" icon="pi pi-check" class=" " (click)="calculateTamis()"></button>
       </div>
       </div>
 
@@ -283,7 +283,7 @@
 
 <!---->
 <div class=" flex col-12 justify-content-end">
-  <button pButton label="Enregisrer" icon="pi pi-check" class=" " (click)="saveRapport()"></button>
+  <button pButton label="Save" icon="pi pi-check" class=" " (click)="saveRapport()"></button>
 </div>
 <!--========================physique========-->
 </div>

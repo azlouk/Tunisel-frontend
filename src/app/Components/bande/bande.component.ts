@@ -179,7 +179,7 @@ export class BandeComponent {
       );
     });
 
-    this.messageService.add({ severity: 'success', summary: 'réussi', detail: 'Bande Supprimer', life: 3000 });
+    this.messageService.add({ severity: 'success', summary: 'réussi', detail: 'Bande Delete', life: 3000 });
     this.selectedBandes = [];
   }
 
@@ -211,7 +211,7 @@ export class BandeComponent {
       this.bandeService.updateBande(this.bande).subscribe(() =>{
         this.getBande();
       });
-      console.log('Bande updated');
+      console.log('Band updated');
       this.isUpdatebande=false;
     }
     else

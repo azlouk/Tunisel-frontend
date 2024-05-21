@@ -5,9 +5,9 @@
       <p-toolbar styleClass="mb-4">
         <ng-template pTemplate="left">
           <div class="my-2">
-            <button pButton pRipple label="Ajouter" icon="pi pi-plus" class="p-button-success mr-2" (click)="openNew()"></button>
-            <button pButton pRipple label="Supprimer" icon="pi pi-trash" class="p-button-danger mr-2" (click)="deleteSelectedSblfs()" [disabled]="!selectedSblfs || !selectedSblfs.length"></button>
-            <button pButton pRipple label="Actualiser" icon="pi pi-refresh" class="p-button-primary mr-2" (click)="getAllSBLF()"  ></button>
+            <button pButton pRipple label="Add" icon="pi pi-plus" class="p-button-success mr-2" (click)="openNew()"></button>
+            <button pButton pRipple label="Delete" icon="pi pi-trash" class="p-button-danger mr-2" (click)="deleteSelectedSblfs()" [disabled]="!selectedSblfs || !selectedSblfs.length"></button>
+            <button pButton pRipple label="Refresh" icon="pi pi-refresh" class="p-button-primary mr-2" (click)="getAllSBLF()"  ></button>
 
 
           </div>
@@ -16,13 +16,13 @@
 
       </p-toolbar>
 
-      <p-table #dt [value]="sblfs" [columns]="cols"  responsiveLayout="scroll" [rows]="10" [globalFilterFields]="['id','reference','description','dateCreation','nom','emplacement','etat','dateFermeture']" [paginator]="true" [rowsPerPageOptions]="[10,20,30]" [showCurrentPageReport]="true" currentPageReportTemplate="Affichage du  {first} au  {last} des  {totalRecords} entrées" [(selection)]="selectedSblfs" selectionMode="multiple" [rowHover]="true" dataKey="id">
+      <p-table #dt [value]="sblfs" [columns]="cols"  responsiveLayout="scroll" [rows]="10" [globalFilterFields]="['id','reference','description','dateCreation','nom','emplacement','etat','dateFermeture']" [paginator]="true" [rowsPerPageOptions]="[10,20,30]" [showCurrentPageReport]="true" currentPageReportTemplate="Display  {first} to  {last} of  {totalRecords} entries" [(selection)]="selectedSblfs" selectionMode="multiple" [rowHover]="true" dataKey="id">
         <ng-template pTemplate="caption">
           <div class="flex flex-column md:flex-row md:justify-content-between md:align-items-center">
-            <h5 class="m-0">Gestion des stocks  des bassins   lave-finale</h5>
+            <h5 class="m-0">Management of final lava basin stocks</h5>
             <span class="block mt-2 md:mt-0 p-input-icon-left">
                             <i class="pi pi-search"></i>
-                            <input  type="text" pInputText (input)="onGlobalFilter(dt, $event)" placeholder="Rechercher..."  class="w-full sm:w-auto"/>
+                            <input  type="text" pInputText (input)="onGlobalFilter(dt, $event)" placeholder="Search..."  class="w-full sm:w-auto"/>
                         </span>
 
 
@@ -38,9 +38,9 @@
             <th pSortableColumn="reference">Reference <p-sortIcon field="reference"></p-sortIcon></th>
             <th pSortableColumn="description">Description <p-sortIcon field="description"></p-sortIcon></th>
             <th pSortableColumn="dateStock">Date Stock<p-sortIcon field="dateStock"></p-sortIcon></th>
-            <th pSortableColumn="emplacement">Emplacement <p-sortIcon field="emplacement"></p-sortIcon></th>
-            <th pSortableColumn="etat">Etat <p-sortIcon field="etat"></p-sortIcon></th>
-            <th pSortableColumn="quantité">Quantité <p-sortIcon field="quantité"></p-sortIcon></th>
+            <th pSortableColumn="emplacement">Location <p-sortIcon field="emplacement"></p-sortIcon></th>
+            <th pSortableColumn="etat">State <p-sortIcon field="etat"></p-sortIcon></th>
+            <th pSortableColumn="quantité">Quantity <p-sortIcon field="quantité"></p-sortIcon></th>
             <th pSortableColumn="type">Stock bassin laver <p-sortIcon field="type"></p-sortIcon></th>
 
             <th></th>
@@ -72,19 +72,19 @@
             </td>
 
             <td style="width:14%; min-width:8rem;">
-              <span class="p-column-title">Emplacement</span>
+              <span class="p-column-title">Location</span>
               {{sblf.emplacement}}
             </td>
             <td style="width:14%; min-width:8rem;">
-              <span class="p-column-title">Etat</span>
+              <span class="p-column-title">State</span>
               {{sblf.etat}}
             </td>
             <td style="width:14%; min-width:8rem;">
-              <span class="p-column-title">Quantité</span>
+              <span class="p-column-title">Quantity</span>
               {{sblf.quantite}}
             </td>
             <td style="width:14%; min-width:8rem;">
-              <span class="p-column-title">Bassin</span>
+              <span class="p-column-title">Basin</span>
               {{sblf.sblfSbl.reference }}
               <span class="pi pi-eye text-primary cursor-pointer m-2" (click)="opSBLf.toggle($event)"  ></span>
               <p-overlayPanel #opSBLf>
@@ -92,9 +92,9 @@
                 <label class="text-2xl">Réf : {{sblf.sblfSbl.reference}}</label><br>
                 <label class="text-2xl">Description : {{sblf.sblfSbl.description}}
                 </label ><br>
-                <label class="text-2xl">Etat : {{sblf.sblfSbl.etat}}</label><br>
-                <label class="text-2xl">Quantité : {{sblf.sblfSbl.quantite}}</label><br>
-                <label class="text-2xl">Emplacement : {{sblf.sblfSbl.emplacement}}</label><br>
+                <label class="text-2xl">State : {{sblf.sblfSbl.etat}}</label><br>
+                <label class="text-2xl">Quantity : {{sblf.sblfSbl.quantite}}</label><br>
+                <label class="text-2xl">Location : {{sblf.sblfSbl.emplacement}}</label><br>
               </p-overlayPanel>
             </td>
             <td>
@@ -115,13 +115,13 @@
         <div class="field">
           <label>Sbl</label>
           <p-dropdown [options]="sbls" [(ngModel)]="sblf.sblfSbl" [editable]="true" optionLabel="reference" class="w-full" [ngClass]="{'ng-invalid ng-dirty' : submitted && !sblf.sblfSbl}"></p-dropdown>
-          <small class="ng-dirty ng-invalid" *ngIf="submitted && !sblf.sblfSbl">Stock lavé est requis.</small>
+          <small class="ng-dirty ng-invalid" *ngIf="submitted && !sblf.sblfSbl">Washed stock is required.</small>
 
         </div>
         <div class="field">
           <label for="reference">Reference</label>
           <input type="text" pInputText id="reference"  [(ngModel)]="sblf.reference" required autofocus [ngClass]="{'ng-invalid ng-dirty' : submitted && !sblf.reference}"/>
-          <small class="ng-dirty ng-invalid" *ngIf="submitted && !sblf.reference">reference est requis.</small>
+          <small class="ng-dirty ng-invalid" *ngIf="submitted && !sblf.reference">reference is required.</small>
         </div>
         <div class="field">
           <label for="Description">Description</label>
@@ -137,7 +137,7 @@
 
         <div class="field">
 
-          <label for="emplacement">Emplacement</label>
+          <label for="emplacement">Location</label>
           <input type="text" pInputText id="emplacement"  [(ngModel)]="sblf.emplacement" required autofocus />
 <!--          <small class="ng-dirty ng-invalid" *ngIf="submitted && !sblf.emplacement">Telephone is required.</small>-->
         </div>
@@ -145,12 +145,12 @@
 
 
         <div class="field">
-          <label for="etat">Etat</label>
+          <label for="etat">State</label>
           <input type="text" pInputText id="etat"  [(ngModel)]="sblf.etat" required autofocus />
 <!--          <small class="ng-dirty ng-invalid" *ngIf="submitted && !sblf.etat">Telephone is required.</small>-->
         </div>
         <div class="field">
-          <label for="quantite">Quantité</label>
+          <label for="quantite">Quantity</label>
           <p-inputNumber Id="quantite" mode="decimal" [minFractionDigits]="3" [(ngModel)]="sblf.quantite"   ></p-inputNumber>
 
 <!--           <small class="ng-dirty ng-invalid" *ngIf="submitted && !sblf.etat">Telephone is required.</small>-->
@@ -166,15 +166,15 @@
 
 
       <ng-template pTemplate="footer">
-        <button pButton pRipple label="Annuler" icon="pi pi-times" class="p-button-text" (click)="hideDialog()"></button>
-        <button pButton pRipple label="Ajouter" icon="pi pi-check" class="p-button-text" (click)="saveSblf()"></button>
+        <button pButton pRipple label="Cancel" icon="pi pi-times" class="p-button-text" (click)="hideDialog()"></button>
+        <button pButton pRipple label="Add" icon="pi pi-check" class="p-button-text" (click)="saveSblf()"></button>
       </ng-template>
     </p-dialog>
 
     <p-dialog [(visible)]="deleteProductDialog" header="Confirm" [modal]="true" [style]="{width:'450px'}">
       <div class="flex align-items-center justify-content-center">
         <i class="pi pi-exclamation-triangle mr-3" style="font-size: 2rem"></i>
-        <span *ngIf="product">Êtes-vous sûr de vouloir supprimer? <b>{{product.name}}</b>?</span>
+        <span *ngIf="product">Are you sure you want to delete?<b>{{product.name}}</b>?</span>
       </div>
       <ng-template pTemplate="footer">
         <button pButton pRipple icon="pi pi-times" class="p-button-text" label="Non" (click)="deleteProductDialog = false"></button>
@@ -185,7 +185,7 @@
     <p-dialog [(visible)]="deleteProductsDialog" header="Confirm" [modal]="true" [style]="{width:'450px'}">
       <div class="flex align-items-center justify-content-center">
         <i class="pi pi-exclamation-triangle mr-3" style="font-size: 2rem"></i>
-        <span>Voulez-vous vraiment supprimer   ?</span>
+        <span>Do you want to delete   ?</span>
       </div>
       <ng-template pTemplate="footer">
         <button pButton pRipple icon="pi pi-times" class="p-button-text" label="No" (click)="deleteProductsDialog = false"></button>
@@ -196,17 +196,17 @@
 </div>
 
 
-<p-dialog header="Analyse chimique et granulométrique" [(visible)]="visiblePrint" [modal]="true"   [breakpoints]="{ '1199px': '75vw', '575px': '90vw' }">
-  <div class="shadow-1 p-2  " >Filtrage Chimique  :
+<p-dialog header="Chemical and particle size analysis" [(visible)]="visiblePrint" [modal]="true"   [breakpoints]="{ '1199px': '75vw', '575px': '90vw' }">
+  <div class="shadow-1 p-2  " >chemical filtration  :
 
     <div class="card flex justify-content-evenly ">
-      <div class="gap-1 flex align-items-center">Date début Analyse  :<p-calendar [(ngModel)]="DatefiltrageStart"  ></p-calendar>
+      <div class="gap-1 flex align-items-center">Analysis start date  :<p-calendar [(ngModel)]="DatefiltrageStart"  ></p-calendar>
       </div>
       <div class="gap-1    flex align-items-center">
-        Date Fin Analyse  :<p-calendar [(ngModel)]="DatefiltrageEnd"  ></p-calendar>
+        Date End Analysis  :<p-calendar [(ngModel)]="DatefiltrageEnd"  ></p-calendar>
       </div>
-      <p-button (click)="filtredate()" class=" " icon="pi pi-search" label="Rechercher"></p-button>
-      <p-button (click)="Viderfiltredate()" class=" " icon="pi pi-refresh" label="Actualiser"></p-button>
+      <p-button (click)="filtredate()" class=" " icon="pi pi-search" label="Search"></p-button>
+      <p-button (click)="Viderfiltredate()" class=" " icon="pi pi-refresh" label="Refresh"></p-button>
 
     </div>
     <div class="shadow-1 p-2">
@@ -217,7 +217,7 @@
       </th>
     </div>
     <br>
-    <div class="shadow-1 p-2 gap-1 text-3xl flex inline-flex justify-content-evenly" >Filtrage Granulométrique  :<br>
+    <div class="shadow-1 p-2 gap-1 text-3xl flex inline-flex justify-content-evenly" >filtrate Grain size  :<br>
       <p-listbox [options]="getAnalyseGranoli()" [(ngModel)]="SelectedsbnlPrintAnalyse" optionLabel="reference" [filter]="true" [style]="{ width: '15rem' }" [listStyle]="{'max-height': '220px'}"></p-listbox>
       <div *ngIf="SelectedsbnlPrintAnalyse.hasOwnProperty('id')" class="p-2">
         <label class="text-2xl font-bold">Reference  :</label><span class="ml-2 text-2xl">{{SelectedsbnlPrintAnalyse.dateAnalyse}}</span><br>
@@ -329,7 +329,7 @@
         <tr>
 
           <th pSortableColumn="dateintervention">Calibre <p-sortIcon field="dateintervention"></p-sortIcon></th>
-          <th pSortableColumn="qui">Masse <p-sortIcon field="qui"></p-sortIcon></th>
+          <th pSortableColumn="qui">Weight <p-sortIcon field="qui"></p-sortIcon></th>
           <th pSortableColumn="natureAction">Refus <p-sortIcon field="natureAction"></p-sortIcon></th>
           <th pSortableColumn="resultat">Refus Cumulated<p-sortIcon field="resultat"></p-sortIcon></th>
           <th pSortableColumn="certificat">pass Cumulated <p-sortIcon field="certificat"></p-sortIcon></th>
@@ -343,7 +343,7 @@
             {{tamis.calibre}}
           </td>
           <td>
-            <span class="p-column-title">Masse</span>
+            <span class="p-column-title">Weight</span>
             {{tamis.masse}}
           </td>
           <td >
