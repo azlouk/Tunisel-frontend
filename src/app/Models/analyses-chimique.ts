@@ -8,7 +8,7 @@ export interface AnalysesChimique  {
   description?: string;
   densite?: number|undefined;
   matiereEnSuspension?: number|undefined;
-  salimite?: number|undefined;
+  salinite?: number|undefined;
   calcium?: number|undefined;
   magnesium?: number|undefined;
   sulfate?: number|undefined;
@@ -21,4 +21,5 @@ export interface AnalysesChimique  {
   chlorureDeSodium?: number|undefined;
   ferrocyanure?: number|undefined;
   ref?:string;
+
 }

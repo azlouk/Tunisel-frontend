@@ -27,6 +27,8 @@ import {ArticleComponent} from "./Components/article/article.component";
 import {BandeComponent} from "./Components/bande/bande.component";
 import {ProduitComponent} from "./Components/produit/produit.component";
 import {RapportAnalyseComponent} from "./Components/rapportAnalyse/rapportAnalyse.component";
+import {CommandeComponent} from "./Components/commande/commande.component";
+import {AjouterCommandeComponent} from "./Components/ajouter-commande/ajouter-commande.component";
 
 export const routes: Routes = [
   {path:'', component:LoginComponent},
@@ -58,4 +60,7 @@ export const routes: Routes = [
   {path:'produit', component:ProduitComponent , canActivate:[AuthGuard]},
   {path:'editInventaire/:id', component:AjouterInventaireComponent,  canActivate:[AuthGuard]},
   {path:'rapport', component:RapportAnalyseComponent,  canActivate:[AuthGuard]},
+  {path:'commande', component:CommandeComponent,  canActivate:[AuthGuard]},
+  {path:'ajouterCommande', component:AjouterCommandeComponent,  canActivate:[AuthGuard]},
+  {path:'updateCommande/:id', component:AjouterCommandeComponent,  canActivate:[AuthGuard]},
 ];

@@ -8,10 +8,8 @@ import {Table, TableModule} from "primeng/table";
 import {ToastModule} from "primeng/toast";
 import {ToolbarModule} from "primeng/toolbar";
 import {Product} from "../../Models/product";
-import {AnalysesChimique} from "../../Models/analyses-chimique";
 import {Router} from "@angular/router";
 import {ProductService} from "../../Services/product.service";
-import {AnalyseChimiqueService} from "../../Services/analyse-chimique.service";
 import {AnalysePhysiqueService} from "../../Services/analysePhysique.service";
 import {AnalysesPhysique} from "../../Models/analyses-physique";
 

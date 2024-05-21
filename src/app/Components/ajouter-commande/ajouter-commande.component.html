@@ -1,0 +1,214 @@
+<div class="grid">
+  <div class="col-12 card px-6 py-6 ">
+    <p-toolbar styleClass="mb-4" >
+      <ng-template pTemplate="end"  >
+        <div class=" my-2 " >
+
+          <button pButton pRipple label="Back" icon="pi pi-arrow-left" class="p-button-success mr-2 " (click)="retour()"></button>
+        </div>
+      </ng-template>
+      <h4>Add Command</h4>
+    </p-toolbar>
+    <div class=" flex justify-content-between  mt-8 border-1 border-round border-gray-300 p-6  h-22rem">
+      <div class="  flex flex-column   justify-content-between ">
+        <p-floatLabel >
+          <p-calendar   id="dateCommande" [(ngModel)]="commande.dateCommande" dateFormat="yy-MM-dd"  [showIcon]="true"></p-calendar>
+          <label for="dateCommande">Command Date</label>
+        </p-floatLabel>
+        <p-floatLabel>
+          <input type="text" pInputText [(ngModel)]="commande.nom" id="nom" class="w-full"  />
+          <label for="nom">Name</label>
+        </p-floatLabel>
+        <p-floatLabel>
+          <input type="text" pInputText [(ngModel)]="commande.etat"    id="etat" class="w-full" />
+          <label for="etat">State</label>
+        </p-floatLabel>
+      </div>
+
+      <div class="  ">
+
+        <p-tabView *ngIf="!isUpdateCommande"[scrollable]="true" >
+          <p-tabPanel header="Pond" >
+            <p-listbox [options]="bassins" [(ngModel)]="commande.bassin" (click)="getLine()" optionLabel="nom" [filter]="true" [listStyle]="{'height': '87px'}"  ></p-listbox>
+
+          </p-tabPanel>
+<!--          <p-tabPanel header="Sotck non lavé" pTooltip="Sotck non lavé">-->
+<!--            <p-listbox [options]="sbnls" [(ngModel)]="selectedSbnl" optionLabel="reference" [filter]="true" [listStyle]="{'height': '87px'}"  ></p-listbox>-->
+
+<!--          </p-tabPanel>-->
+<!--          <p-tabPanel header="Bande" pTooltip="Sotck non lavé">-->
+<!--            <p-listbox [options]="bandes" [(ngModel)]="selectedBande" optionLabel="reference" [filter]="true" [listStyle]="{'height': '87px'}"  ></p-listbox>-->
+
+<!--          </p-tabPanel>-->
+
+<!--          <p-tabPanel header="Sotck lavé" >-->
+<!--            <p-listbox [options]="sbls" [(ngModel)]="selectedSbl" optionLabel="reference" [filter]="true" [listStyle]="{'height': '87px'}" ></p-listbox>-->
+
+<!--          </p-tabPanel>-->
+
+<!--          <p-tabPanel header="Sotck finale" >-->
+<!--            <p-listbox [options]="sblfs" [(ngModel)]="selectedSblf" optionLabel="reference" [filter]="true"  [listStyle]="{'height': '87px'}" ></p-listbox>-->
+<!--          </p-tabPanel>-->
+
+        </p-tabView>
+        <div >
+
+
+
+        </div>
+      </div>
+
+      <div class="flex flex-column border-1 border-round border-gray-300 p-4" *ngIf="commande.bassin">
+
+  <div class="field " >
+    <p><span class="font-bold"> Reference: </span>{{commande.bassin.reference}}</p>
+  </div>
+  <div class="field">
+    <p><span class="font-bold"> Description: </span>{{commande.bassin.description}}</p>
+  </div><div class="field">
+  <p><span class="font-bold"> Name: </span>{{commande.bassin.nom}}</p>
+</div>
+  <div class="field">
+    <p><span class="font-bold"> Location: </span>{{commande.bassin.emplacement}}</p>
+  </div>
+  <div class="field">
+    <p><span class="font-bold"> State: </span>{{commande.bassin.etat}}</p>
+  </div>
+  <div class="field">
+    <p><span class="font-bold"> Creation Date: </span>{{commande.bassin.dateCreation}}</p>
+  </div>
+
+
+
+      </div>
+
+    </div>
+
+<div class="flex  mt-4 mb-4 justify-content-between">
+  <button pButton pRipple label="Analyse" icon="pi pi-search" class="p-button-secondary mr-2" (click)="getLine()"  *ngIf="!isUpdateCommande"></button>
+
+  <button pButton pRipple label="Reset Default" icon="pi pi-refresh" class="p-button-primary mr-2" (click)="getCommandeById()"  ></button>
+
+</div>
+
+
+
+    <div class="card">
+      <p-table
+        [columns]="selectedColumns"
+        [value]="listeLignesCommandes"
+        [tableStyle]="{'min-width': '50rem'}"
+        editMode="row"
+      >
+
+        <ng-template pTemplate="caption">
+          <p-multiSelect
+            display="chip"
+            [options]="cols"
+            [(ngModel)]="selectedColumns"
+            optionLabel="header"
+            selectedItemsLabel="{0} columns selected"
+            [style]="{'min-width': '200px'}"
+            placeholder="Choose Columns" />
+
+          <p-dropdown
+            [options]="listcalibre"
+            [(ngModel)]="selectedColumnsCalibre"
+            optionLabel="header"
+            [showClear]="true"
+
+            placeholder="Choose Calibre" />
+
+        </ng-template>
+        <ng-template pTemplate="header" let-columns>
+          <tr>
+
+            <th *ngFor="let col of columns">
+              {{col.header}}
+            </th>
+          <th></th>
+          </tr>
+        </ng-template>
+
+        <ng-template pTemplate="body" let-lineCommande let-columns="columns" let-editing="editing" let-ri="rowIndex">
+          <tr [pEditableRow]="lineCommande">
+            <ng-container *ngFor="let col of columns">
+              <td *ngIf="col.id>26 && col.id<39">
+                <p-cellEditor>
+                  <ng-template pTemplate="input">
+                    <input type="text"   pInputText [placeholder]="col.header" [(ngModel)]="lineCommande[col.field]  "(ngModelChange)="CalculeTotal()"/>
+                  </ng-template>
+                  <ng-template pTemplate="output">
+                    {{getValueOfligneCommande(col,lineCommande)}}
+                    {{CalculeTotal()}}
+                  </ng-template>
+                </p-cellEditor>
+
+              </td>
+
+              <td  *ngIf="col.id>=0 && col.id<27">
+
+                {{getValueOfligneCommande(col,lineCommande)}}
+              </td>
+
+            </ng-container>
+
+
+            <td>
+              <div class="flex align-items-center gap-2" >
+                <div class="flex align-items-center justify-content-center gap-2">
+                  <button *ngIf="!editing" pButton pRipple type="button" pInitEditableRow icon="pi pi-pencil" (click)="onRowEditInit(lineCommande)" class="p-button-rounded p-button-success mr-2"></button>
+                  <button *ngIf="editing" pButton pRipple type="button" pSaveEditableRow icon="pi pi-check" (click)="onRowEditSave(lineCommande)" class="p-button-rounded p-button-text p-button-success mr-2"></button>
+                </div>
+              <div >
+              <button pButton pRipple icon="pi pi-trash" class="p-button-rounded p-button-warning mr-2" (click)="deleteLineCommande(lineCommande)"></button>
+            </div>
+              </div>
+            </td>
+          </tr>
+        </ng-template>
+      </p-table>
+    </div>
+<div class=" flex justify-content-end  ">
+  <div class="flex flex-column gap-3 border-1 border-round border-gray-400 p-3">
+    <div class="flex align-items-center gap-3 justify-content-between ">
+      <label for="stock" class="font-bold">Total Harvset in(T) :</label>
+
+      <p-inputNumber  id="stock"  [(ngModel)]="TotalHarv" mode="decimal" [minFractionDigits]="3" ></p-inputNumber>
+    </div>
+    <div class="flex align-items-center gap-3 justify-content-between">
+      <label for="stock1" class="font-bold">Total Production in(T) :</label>
+      <p-inputNumber  id="stock1"  [(ngModel)]="TotalProd" mode="decimal" [minFractionDigits]="3" ></p-inputNumber>
+
+    </div>
+    <div class="flex align-items-center gap-3 justify-content-between">
+      <label for="stock2" class="font-bold">Total Transfer Quantity :</label>
+      <p-inputNumber  id="stock2"  [(ngModel)]="TotalTrQu" mode="decimal" [minFractionDigits]="3" ></p-inputNumber>
+
+    </div>
+  </div>
+
+</div>
+
+  </div>
+</div>
+<p-dialog [(visible)]="deleteLineCommandeDialog" header="Confirmer" [modal]="true" [style]="{width:'450px'}">
+  <div class="flex align-items-center justify-content-center">
+    <i class="pi pi-exclamation-triangle mr-3" style="font-size: 2rem"></i>
+    <span >Are you sure you want to delete ?</span>
+  </div>
+  <ng-template pTemplate="footer">
+    <button pButton pRipple icon="pi pi-times" class="p-button-text" label="No" (click)="deleteLineCommandeDialog = false"></button>
+    <button pButton pRipple icon="pi pi-check" class="p-button-text" label="Yes" (click)="confirmDelete()"></button>
+  </ng-template>
+</p-dialog>
+<!---->
+<div class=" flex col-12 justify-content-end">
+  <button pButton label="Save" icon="pi pi-check" class=" " (click)="saveCommande()"></button>
+</div>
+
+
+
+
+
+

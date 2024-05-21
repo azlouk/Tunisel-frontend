@@ -23,6 +23,7 @@ import {MultiSelectModule} from "primeng/multiselect";
 import {CheckboxModule} from "primeng/checkbox";
 import {AutoFocusModule} from "primeng/autofocus";
 import {LoginService} from "../../Services/login.service";
+import * as XLSX from 'xlsx';
 
 @Component({
   selector: 'app-puit',
@@ -52,6 +53,8 @@ import {LoginService} from "../../Services/login.service";
 
 })
 export class PuitComponent implements OnInit {
+
+
   productDialog: boolean = false;
 
   deleteProductDialog: boolean = false;
@@ -77,7 +80,7 @@ export class PuitComponent implements OnInit {
   puit: Puit = {};
 
   selectedPuits: Puit[] = [];
-
+  SelectAll: boolean = false;
   private isUpdateUser = false;
   loading: boolean = false;
   ReportedBy:any={}
@@ -95,6 +98,7 @@ export class PuitComponent implements OnInit {
   constructor(private Loginservice:LoginService,private productService: ProductService, private messageService: MessageService, private puitService: PuitService) {
   }
 
+
   ngOnInit() {
 
 this.ReportedBy=this.Loginservice.getToken()
@@ -106,7 +110,7 @@ this.ReportedBy=this.Loginservice.getToken()
       { id:4, field: 'humidite', header: 'humidity' ,hide:false},
       {id:5,  field: 'densite', header: 'Densite ',hide:false },
       {id:6,  field: 'matiereEnSuspension', header: 'Suspended Matter ',hide:false },
-      { id:7, field: 'salimite', header: 'Salimite ' ,hide:false},
+      { id:7, field: 'salinite', header: 'salinite ' ,hide:false},
       {id:8,  field: 'calcium', header: 'Calcium ' ,hide:false},
       { id:9, field: 'magnesium', header: 'Magnesium ' ,hide:false},
       { id:10, field: 'sulfate', header: 'Sulfate ' ,hide:false},
@@ -266,6 +270,10 @@ this.ReportedBy=this.Loginservice.getToken()
     this.selectedPuitPrint = puit;
     this.visiblePrint = true;
   }
+  exportexcel(puit: Puit) {
+    this.selectedPuitPrint = puit;
+    this.visiblePrint = true
+  }
 
   getAllPuit() {
     this.loading = true;
@@ -365,6 +373,54 @@ this.ReportedBy=this.Loginservice.getToken()
     return date1.getDay()<=date2.getDay() && date1.getMonth()<=date2.getMonth() && date1.getFullYear()<=date2.getFullYear()
   }
 
+  SelectAllCheck() {
+    this.colsfiltre.forEach(value => {
+      value.hide = this.SelectAll;
+    })
+  }
+  // =====================================
 
 
+  SaveExcel(): void {
+    const element = document.getElementById('EXCEL');
+    if (element) {
+      const ws: XLSX.WorkSheet = XLSX.utils.table_to_sheet(element);
+      const wb: XLSX.WorkBook = XLSX.utils.book_new();
+      XLSX.utils.book_append_sheet(wb, ws, 'Sheet1');
+      XLSX.writeFile(wb, 'Export_' + new Date().getTime() + '.xlsx');
+    }
+  }
+
+
+  // SaveExcel(): void {
+  //   const element = document.getElementById('EXCEL');
+  //   if (element) {
+  //     const ws: XLSX.WorkSheet = XLSX.utils.table_to_sheet(element, { raw: true });
+  //
+  //     // Appliquer le style de fond et de bordure à toutes les cellules
+  //     const range = XLSX.utils.decode_range(ws['!ref']);
+  //     for (let R = range.s.r; R <= range.e.r; ++R) {
+  //       for (let C = range.s.c; C <= range.e.c; ++C) {
+  //         const cellAddress = { c: C, r: R };
+  //         const cellRef = XLSX.utils.encode_cell(cellAddress);
+  //         if (cellRef) { // Vérifier si cellRef est défini
+  //           if (!ws[cellRef]) continue;
+  //           ws[cellRef].s = {
+  //             fill: { fgColor: { rgb: "FFFF00" } }, // Couleur de fond jaune
+  //             border: { // Bordure
+  //               top: { style: 'thin', color: { rgb: "000000" } },
+  //               bottom: { style: 'thin', color: { rgb: "000000" } },
+  //               left: { style: 'thin', color: { rgb: "000000" } },
+  //               right: { style: 'thin', color: { rgb: "000000" } }
+  //             }
+  //           };
+  //         }
+  //       }
+  //     }
+  //
+  //     const wb: XLSX.WorkBook = XLSX.utils.book_new();
+  //     XLSX.utils.book_append_sheet(wb, ws, 'Sheet1');
+  //     XLSX.writeFile(wb, 'Export_' + new Date().getTime() + '.xlsx');
+  //   }
+  // }
 }

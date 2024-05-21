@@ -1,11 +1,8 @@
 import {Component, ElementRef, Input, OnInit, ViewChild} from '@angular/core';
 import {Product} from "../../Models/product";
-import {User} from "../../Models/user";
 import {ProductService} from "../../Services/product.service";
 import {MessageService, SharedModule} from "primeng/api";
-import {UserService} from "../../Services/user.service";
 import {CommonModule, DatePipe, JsonPipe, NgClass, NgIf} from "@angular/common";
-import {UserType} from "../../Enum/user-type";
 import {Table, TableModule} from "primeng/table";
 import {Puit} from "../../Models/puit";
 import {BassinService} from "../../Services/bassin.service";
@@ -24,9 +21,7 @@ import {CalendarModule} from "primeng/calendar";
 import {MultiSelectModule} from "primeng/multiselect";
 import {PuitService} from "../../Services/puit.service";
 import {AnalysesChimique} from "../../Models/analyses-chimique";
-import {Sbl} from "../../Models/sbl";
 import {AnalysesPhysique} from "../../Models/analyses-physique";
-import {Tamis} from "../../Models/tamis";
 import html2canvas from "html2canvas";
 import jsPDF from "jspdf";
 import {CheckboxModule} from "primeng/checkbox";
@@ -91,7 +86,7 @@ export class BassinComponent implements OnInit {
   puits: Puit[] = [];
   private isUpdateBassin=false;
   selectedPuit?: Puit;
-
+  SelectAll: boolean = false;
 loading:boolean=false ;
   @ViewChild("pdfpuit") htmlContent: ElementRef | undefined;
   visiblePrint: boolean = false;
@@ -116,7 +111,7 @@ this.SelectetBassin={analysesPhysiques:[]}
       { id:4, field: 'humidite', header: 'humidity ' ,hide:false},
       {id:5,  field: 'densite', header: 'Densite  ',hide:false },
       {id:6,  field: 'matiereEnSuspension', header: 'Suspended Matter ',hide:false },
-      { id:7, field: 'salimite', header: 'Salinite ' ,hide:false},
+      { id:7, field: 'salinite', header: 'Salinite ' ,hide:false},
       {id:8,  field: 'calcium', header: 'Calcium ' ,hide:false},
       { id:9, field: 'magnesium', header: 'Magnesium ' ,hide:false},
       { id:10, field: 'sulfate', header: 'Sulfate ' ,hide:false},
@@ -387,5 +382,9 @@ this.SelectetBassin={analysesPhysiques:[]}
     return date1.getTime()<=date2.getTime()
   }
 
-
+  SelectAllCheck() {
+    this.colsfiltre.forEach(value => {
+      value.hide = this.SelectAll;
+    })
+  }
 }

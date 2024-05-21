@@ -106,7 +106,7 @@ export class AjouterPrelevmentChimiqueComponent implements OnInit {
     this.attributs= [
       {name:'d',checked:false,label:'Densité', value:this.analysesChimique.densite},
       {name:'MS',checked:false,label:'Matiére en suspension', value:this.analysesChimique.matiereEnSuspension },
-      {name:'S',checked:false,label:'Salinité', value:this.analysesChimique.salimite},
+      {name:'S',checked:false,label:'Salinité', value:this.analysesChimique.salinite},
       {name:'Ca',checked:false,label:'Calcium', value:this.analysesChimique.calcium},
       {name:'Mg',checked:false,label:'Magnésium', value:this.analysesChimique.magnesium},
       {name:'SO₄',checked:false,label:'Sulfate', value:this.analysesChimique.sulfate},
@@ -152,7 +152,7 @@ export class AjouterPrelevmentChimiqueComponent implements OnInit {
         this.analysesChimique = value;
         this.attributs[0].value = this.analysesChimique.densite;
         this.attributs[1].value = this.analysesChimique.matiereEnSuspension;
-        this.attributs[2].value = this.analysesChimique.salimite;
+        this.attributs[2].value = this.analysesChimique.salinite;
         this.attributs[3].value = this.analysesChimique.calcium;
         this.attributs[4].value = this.analysesChimique.magnesium;
         this.attributs[5].value = this.analysesChimique.sulfate;
@@ -228,7 +228,7 @@ export class AjouterPrelevmentChimiqueComponent implements OnInit {
 
     this.analysesChimique.densite = this.attributs[0].value;
     this.analysesChimique.matiereEnSuspension = this.attributs[1].value;
-    this.analysesChimique.salimite = this.attributs[2].value;
+    this.analysesChimique.salinite = this.attributs[2].value;
     this.analysesChimique.calcium = this.attributs[3].value;
     this.analysesChimique.magnesium = this.attributs[4].value;
     this.analysesChimique.sulfate = this.attributs[5].value;
@@ -242,38 +242,39 @@ export class AjouterPrelevmentChimiqueComponent implements OnInit {
     this.analysesChimique.ferrocyanure = this.attributs[13].value;
     //Test Select Of Stock
 
-    if (this.selectedPuit.hasOwnProperty('id') || this.selectedSbnl.hasOwnProperty("id") || this.selectedBassin.hasOwnProperty("id") || this.selectedSbl.hasOwnProperty("id") || this.selectedSblf.hasOwnProperty("id") || this.selectedBande.hasOwnProperty("id")) {
+
       if (this.isUpdateAnalyseChimique) {
         this.analyseChimiqueService.updateAnalyseChimique(this.analysesChimique).subscribe(value => this.router.navigate(['/analyseChimique']))
-      } else {
+      }
+      else {
 
         this.analysesChimique.id = 0;
         //console.error("Data analyse Chimique:" + new JsonPipe().transform(this.analysesChimique))
 
 
-        if (this.selectedPuit.hasOwnProperty('id')) {
+        if (this.selectedPuit!==null &&  this.selectedPuit.hasOwnProperty('id')) {
           this.selectedPuit.analysesChimiques = [];
           this.selectedPuit.analysesChimiques.push(this.analysesChimique);
-         alert(new JsonPipe().transform(this.analysesChimique.description))
+
           this.analyseChimiqueService.addAnalyseChimique(this.selectedPuit).subscribe(value => this.router.navigate(['/analyseChimique']))
-        } else if (this.selectedBassin.hasOwnProperty('id')) {
+        } else if (  this.selectedBassin!==null &&  this.selectedBassin.hasOwnProperty('id')) {
           this.selectedBassin.analysesChimiques = [];
           this.selectedBassin.analysesChimiques.push(this.analysesChimique);
           this.analyseChimiqueService.addAnalyseChimiqueToBassin(this.selectedBassin).subscribe(value => this.router.navigate(['/analyseChimique']))
-        } else if (this.selectedSbnl.hasOwnProperty('id')) {
+        } else if (this.selectedSbnl!==null && this.selectedSbnl.hasOwnProperty('id')) {
           this.selectedSbnl.analysesChimiques = [];
           this.selectedSbnl.analysesChimiques.push(this.analysesChimique);
           this.analyseChimiqueService.addAnalyseChimiqueToSbnl(this.selectedSbnl).subscribe(value => this.router.navigate(['/analyseChimique']))
-        } else if (this.selectedBande.hasOwnProperty('id') == true) {
+        } else if (this.selectedBande!==null && this.selectedBande.hasOwnProperty('id') == true) {
           // alert(new JsonPipe().transform(this.selectedBande))
           this.selectedBande.analysesChimiques = [];
           this.selectedBande.analysesChimiques.push(this.analysesChimique);
           this.analyseChimiqueService.addAnalyseChimiqueToBande(this.selectedBande).subscribe(value => this.router.navigate(['/analyseChimique']))
-        } else if (this.selectedSbl.hasOwnProperty('id')) {
+        } else if (this.selectedSbl!==null && this.selectedSbl.hasOwnProperty('id')) {
           this.selectedSbl.analysesChimiques = [];
           this.selectedSbl.analysesChimiques.push(this.analysesChimique);
           this.analyseChimiqueService.addAnalyseChimiqueToSbl(this.selectedSbl).subscribe(value => this.router.navigate(['/analyseChimique']))
-        } else if (this.selectedSblf.hasOwnProperty('id')) {
+        } else if (this.selectedSblf!==null && this.selectedSblf.hasOwnProperty('id')) {
           this.selectedSblf.analysesChimiques = [];
           this.selectedSblf.analysesChimiques.push(this.analysesChimique);
           this.analyseChimiqueService.addAnalyseChimiqueToSblf(this.selectedSblf).subscribe(value => this.router.navigate(['/analyseChimique']))
@@ -281,7 +282,7 @@ export class AjouterPrelevmentChimiqueComponent implements OnInit {
         }
       }
 
-    }
+
 
 
   }

@@ -164,7 +164,7 @@ export class RapportAnalyseComponent {
     this.attributs= [
       {name:'d',checked:false,label:'Densité', value:this.analysesChimique.densite},
       {name:'MS',checked:false,label:'Matiére en suspension', value:this.analysesChimique.matiereEnSuspension },
-      {name:'S',checked:false,label:'Salinité', value:this.analysesChimique.salimite},
+      {name:'S',checked:false,label:'Salinité', value:this.analysesChimique.salinite},
       {name:'Ca',checked:false,label:'Calcium', value:this.analysesChimique.calcium},
       {name:'Mg',checked:false,label:'Magnésium', value:this.analysesChimique.magnesium},
       {name:'SO₄',checked:false,label:'Sulfate', value:this.analysesChimique.sulfate},
@@ -210,7 +210,7 @@ export class RapportAnalyseComponent {
         this.analysesChimique = value;
         this.attributs[0].value = this.analysesChimique.densite;
         this.attributs[1].value = this.analysesChimique.matiereEnSuspension;
-        this.attributs[2].value = this.analysesChimique.salimite;
+        this.attributs[2].value = this.analysesChimique.salinite;
         this.attributs[3].value = this.analysesChimique.calcium;
         this.attributs[4].value = this.analysesChimique.magnesium;
         this.attributs[5].value = this.analysesChimique.sulfate;
@@ -347,7 +347,7 @@ export class RapportAnalyseComponent {
 
     this.analysesChimique.densite = this.attributs[0].value;
     this.analysesChimique.matiereEnSuspension = this.attributs[1].value;
-    this.analysesChimique.salimite = this.attributs[2].value;
+    this.analysesChimique.salinite = this.attributs[2].value;
     this.analysesChimique.calcium = this.attributs[3].value;
     this.analysesChimique.magnesium = this.attributs[4].value;
     this.analysesChimique.sulfate = this.attributs[5].value;
@@ -505,7 +505,7 @@ export class RapportAnalyseComponent {
 
     this.analysesChimique.densite=this.attributs[0].value;
     this.analysesChimique.matiereEnSuspension=this.attributs[1].value;
-    this.analysesChimique.salimite=this.attributs[2].value;
+    this.analysesChimique.salinite=this.attributs[2].value;
     this.analysesChimique.calcium=this.attributs[3].value;
     this.analysesChimique.magnesium=this.attributs[4].value;
     this.analysesChimique.sulfate=this.attributs[5].value;
