@@ -85,9 +85,9 @@
     </div>
 
 <div class="flex  mt-4 mb-4 justify-content-between">
-  <button pButton pRipple label="Analyse" icon="pi pi-search" class="p-button-secondary mr-2" (click)="getLine()"  *ngIf="!isUpdateCommande"></button>
+  <button pButton pRipple label="Analyse" icon="pi pi-search" class="p-button-secondary mr-2" (click)="getLine()"  ></button>
 
-  <button pButton pRipple label="Reset Default" icon="pi pi-refresh" class="p-button-primary mr-2" (click)="getCommandeById()"  ></button>
+  <button pButton pRipple label="Reset Default" icon="pi pi-refresh" class="p-button-primary mr-2" *ngIf="isUpdateCommande" (click)="getCommandeById()"  ></button>
 
 </div>
 

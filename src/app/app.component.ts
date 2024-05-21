@@ -1,4 +1,4 @@
-import {Component, CUSTOM_ELEMENTS_SCHEMA, NO_ERRORS_SCHEMA, OnInit} from '@angular/core';
+import {Component, CUSTOM_ELEMENTS_SCHEMA, inject, NO_ERRORS_SCHEMA, OnInit} from '@angular/core';
 import {Router, RouterLink, RouterOutlet} from '@angular/router';
 import {ProductService} from "./Services/product.service";
 import {ButtonModule} from "primeng/button";
@@ -6,6 +6,8 @@ import {ButtonModule} from "primeng/button";
 import {MessageService} from "primeng/api";
 import {AppLayoutModule} from "./Components/layout/app.layout.module";
 import {LoginService} from "./Services/login.service";
+import {TranslateLoader, TranslatePipe, TranslateService, TranslateStore} from "@ngx-translate/core";
+import {forkJoin} from "rxjs";
 
 
 @Component({
@@ -20,8 +22,9 @@ import {LoginService} from "./Services/login.service";
     NO_ERRORS_SCHEMA
   ]
 })
+
 export class AppComponent implements OnInit{
-  title = 'tuniselfrontend';
+     title = 'tuniselfrontend';
 constructor(public loginservice:LoginService, public route:Router) {
 }
 
