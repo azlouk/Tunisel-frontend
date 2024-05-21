@@ -2,194 +2,151 @@
   <div class="col-12 card px-6 py-6 ">
     <p-toolbar styleClass="mb-4">
       <ng-template pTemplate="end">
-        <div class=" my-2 ">
-          <button pButton pRipple label="Retour" icon="pi pi-arrow-left" class="p-button-success mr-2 "
-                  (click)="retour()"></button>
+        <div class="my-2">
+          <button pButton pRipple label="Back" icon="pi pi-arrow-left" class="p-button-success mr-2" (click)="retour()"></button>
         </div>
       </ng-template>
-      <h4>Ajouter Inventaire</h4>
+      <h4>Add Inventory</h4>
     </p-toolbar>
-    <div class="flex flex-column  mt-8 border-1 border-round border-gray-300 p-6 gap-8  ">
-      <div class="  flex    justify-content-between  ">
-
-
+    <div class="flex flex-column mt-8 border-1 border-round border-gray-300 p-6 gap-8">
+      <div class="flex justify-content-between">
         <p-floatLabel>
           <input type="text" pInputText id="reference" [(ngModel)]="inventaire.reference"/>
-          <label>reference</label>
+          <label>Reference</label>
         </p-floatLabel>
         <p-floatLabel>
-          <p-calendar id="dateReception" dateFormat="yy-mm-dd" [showIcon]="true" [(ngModel)]="inventaire.dateInventaire" ></p-calendar>
-          <label for="dateReception">Date Inventaire</label>
+          <p-calendar id="dateReception" dateFormat="yy-mm-dd" [showIcon]="true" [(ngModel)]="inventaire.dateInventaire"></p-calendar>
+          <label for="dateReception">Inventory Date</label>
         </p-floatLabel>
-
-
       </div>
-      <div class="flex justify-content-between  align-items-center">
-
-
-
-
-
-      </div>
+      <div class="flex justify-content-between align-items-center"></div>
       <div>
-        <div class=" flex col-12 justify-content-end ">
-          <button pButton label="Ajouter Produits" icon="pi pi-plus" class="p-button-success " (click)="showDialog()"></button>
+        <div class="flex col-12 justify-content-end">
+          <button pButton label="Add Products" icon="pi pi-plus" class="p-button-success" (click)="showDialog()"></button>
         </div>
 
-        <p-dialog [(visible)]="visibale" [style]="{width: '1500px'}" header="Ajouter Produits"  [modal]="true" class="p-fluid">
-
+        <p-dialog [(visible)]="visibale" [style]="{width: '1500px'}" header="Add Products" [modal]="true" class="p-fluid">
           <div class="card">
-            <p-pickList  *ngIf="!isUpdateInventaire " [source]="sourceProduits" [target]="targetProduits" sourceHeader="Stock disponible" targetHeader="Stock à inventorier" [dragdrop]="true" [responsive]="true" [sourceStyle]="{ height: '150rem' }"
-                        [targetStyle]="{ height: '30rem' }" filterBy="nom" sourceFilterPlaceholder="Recherche par nom" targetFilterPlaceholder="Recherche par nom" breakpoint="1400px" >
+            <p-pickList *ngIf="!isUpdateInventaire" [source]="sourceProduits" [target]="targetProduits" sourceHeader="Available Stock" targetHeader="Inventory Stock" [dragdrop]="true" [responsive]="true" [sourceStyle]="{ height: '150rem' }" [targetStyle]="{ height: '30rem' }" filterBy="nom" sourceFilterPlaceholder="Search by name" targetFilterPlaceholder="Search by name" breakpoint="1400px">
               <ng-template let-product pTemplate="item">
                 <div class="flex flex-column gap-3 mt-4">
                   <div class="flex align-items-center justify-content-between">
                     <span class="font-bold">{{ product.nom }}</span>
                     <div class="w1/3">
-<!--                      <p-floatLabel>-->
-<!--                      <input  type="text" pInputText [(ngModel)]="product.quantite" />-->
-<!--                        <label>Quantité </label>-->
-<!--                      </p-floatLabel>-->
                       <p-floatLabel>
-                      <input  type="text" pInputText [(ngModel)]="product.quantite" />
-                        <label>Quantité </label>
+                        <input type="text" pInputText [(ngModel)]="product.quantite"/>
+                        <label>Quantity</label>
                       </p-floatLabel>
-
                     </div>
                   </div>
                   <div class="flex-1 flex flex-column gap-2">
-
-
-                    <div class="flex align-products-center gap-2">
+                    <div class="flex align-items-center gap-2">
                       <i class="pi pi-tag text-sm"></i>
                       <span>{{ product.article.nom }}</span>
-
                     </div>
                   </div>
                 </div>
               </ng-template>
             </p-pickList>
-
           </div>
-<div>
 
-  <p-pickList *ngIf="isUpdateInventaire " [source]="sourceUpdate" [target]="targetUpdate" sourceHeader="Autre Produits disponible" targetHeader="Autre Produits à inventorier" [dragdrop]="true" [responsive]="true" [sourceStyle]="{ height: '150rem' }"
-              [targetStyle]="{ height: '30rem' }" filterBy="nom" sourceFilterPlaceholder="Recherche par nom" targetFilterPlaceholder="Recherche par nom" breakpoint="1400px">
-    <ng-template let-product pTemplate="item">
-      <div class="flex flex-column gap-3 mt-4">
-        <div class="flex align-items-center justify-content-between">
-          <span class="font-bold">{{ product.nom }}</span>
-          <div class="w1/3">
-            <p-floatLabel>
-              <input  type="text" pInputText [(ngModel)]="product.quantite" />
-              <label>Quantité </label>
-            </p-floatLabel>
+          <div>
+            <p-pickList *ngIf="isUpdateInventaire" [source]="sourceUpdate" [target]="targetUpdate" sourceHeader="Other Available Products" targetHeader="Other Inventory Products" [dragdrop]="true" [responsive]="true" [sourceStyle]="{ height: '150rem' }" [targetStyle]="{ height: '30rem' }" filterBy="nom" sourceFilterPlaceholder="Search by name" targetFilterPlaceholder="Search by name" breakpoint="1400px">
+              <ng-template let-product pTemplate="item">
+                <div class="flex flex-column gap-3 mt-4">
+                  <div class="flex align-items-center justify-content-between">
+                    <span class="font-bold">{{ product.nom }}</span>
+                    <div class="w1/3">
+                      <p-floatLabel>
+                        <input type="text" pInputText [(ngModel)]="product.quantite"/>
+                        <label>Quantity</label>
+                      </p-floatLabel>
+                    </div>
+                  </div>
+                  <div class="flex-1 flex flex-column gap-2">
+                    <div class="flex align-items-center gap-2">
+                      <i class="pi pi-tag text-sm"></i>
+                      <span>{{ product.article.nom }}</span>
+                    </div>
+                  </div>
+                </div>
+              </ng-template>
+            </p-pickList>
           </div>
-        </div>
-        <div class="flex-1 flex flex-column gap-2">
-
-
-          <div class="flex align-products-center gap-2">
-            <i class="pi pi-tag text-sm"></i>
-            <span>{{ product.article.nom }}</span>
-
-          </div>
-        </div>
-      </div>
-    </ng-template>
-
-  </p-pickList>
-</div>
 
           <ng-template pTemplate="footer">
-            <button pButton pRipple label="Annuler" icon="pi pi-times" class="p-button-text" (click)="hideDialog()"></button>
-            <button pButton pRipple label="Enregistrer" icon="pi pi-check"  class="p-button-text" (click)="saveProduitClacule()"></button>
+            <button pButton pRipple label="Cancel" icon="pi pi-times" class="p-button-text" (click)="hideDialog()"></button>
+            <button pButton pRipple label="Save" icon="pi pi-check" class="p-button-text" (click)="saveProduitClacule()"></button>
           </ng-template>
-
         </p-dialog>
-        <p-table #dt [value]="inventaire.inventaireProduitAssociations!==undefined?inventaire.inventaireProduitAssociations:[] " [columns]="cols" editMode="row" responsiveLayout="scroll" [rows]="10" [globalFilterFields]="['id','p.produit.nom','quantite','designation','reference','article','quantiteRestant']" [paginator]="true" [rowsPerPageOptions]="[10,20,30]" [showCurrentPageReport]="true" currentPageReportTemplate="Affichage du  {first} au  {last} des  {totalRecords} entrées" [(selection)]="selectedProduit" selectionMode="multiple" [rowHover]="true" dataKey="id">
+
+        <p-table #dt [value]="inventaire.inventaireProduitAssociations !== undefined ? inventaire.inventaireProduitAssociations : []" [columns]="cols" editMode="row" responsiveLayout="scroll" [rows]="10" [globalFilterFields]="['id','p.produit.nom','quantite','designation','reference','article','quantiteRestant']" [paginator]="true" [rowsPerPageOptions]="[10,20,30]" [showCurrentPageReport]="true" currentPageReportTemplate="Showing {first} to {last} of {totalRecords} entries" [(selection)]="selectedProduit" selectionMode="multiple" [rowHover]="true" dataKey="id">
           <ng-template pTemplate="caption">
             <div class="flex flex-column md:flex-row md:justify-content-between md:align-items-center">
-              <h5 class="m-0">Inventaire des instruments</h5>
+              <h5 class="m-0">Product Inventory</h5>
               <span class="block mt-2 md:mt-0 p-input-icon-left">
-                            <i class="pi pi-search"></i>
-                            <input  type="text" pInputText (input)="onGlobalFilter(dt, $event)" placeholder="Rechercher..."  class="w-full sm:w-auto"/>
-                        </span>
-
-
-
+                <i class="pi pi-search"></i>
+                <input type="text" pInputText (input)="onGlobalFilter(dt, $event)" placeholder="Search..." class="w-full sm:w-auto"/>
+              </span>
             </div>
           </ng-template>
           <ng-template pTemplate="header">
             <tr>
-
-              <th pSortableColumn="nom">nom <p-sortIcon field="nom"></p-sortIcon></th>
-              <th *ngIf="isUpdateInventaire" pSortableColumn="quantite">quantite <p-sortIcon field="quantite"></p-sortIcon></th>
-              <th pSortableColumn="designation">designation <p-sortIcon field="designation"></p-sortIcon></th>
-              <th pSortableColumn="reference">reference<p-sortIcon field="reference"></p-sortIcon></th>
-              <th pSortableColumn="article">article <p-sortIcon field="article"></p-sortIcon></th>
-              <th pSortableColumn="nouveauQantite">Qantité restant<p-sortIcon field="nouveauQantite"></p-sortIcon></th>
+              <th pSortableColumn="nom">Name <p-sortIcon field="nom"></p-sortIcon></th>
+              <th *ngIf="isUpdateInventaire" pSortableColumn="quantite">Quantity <p-sortIcon field="quantite"></p-sortIcon></th>
+              <th pSortableColumn="designation">Designation <p-sortIcon field="designation"></p-sortIcon></th>
+              <th pSortableColumn="reference">Reference <p-sortIcon field="reference"></p-sortIcon></th>
+              <th pSortableColumn="article">Article <p-sortIcon field="article"></p-sortIcon></th>
+              <th pSortableColumn="nouveauQantite">Remaining Quantity <p-sortIcon field="nouveauQantite"></p-sortIcon></th>
               <th></th>
             </tr>
           </ng-template>
           <ng-template pTemplate="body" let-p let-editing="editing" let-ri="rowIndex">
             <tr [pEditableRow]="p">
-              <td style="width:14%; min-width:10rem;"><span class="p-column-title" >date Intervention</span>
-                {{p.produit.nom }}
+              <td style="width:14%; min-width:10rem;">
+                <span class="p-column-title">Name</span>
+                {{p.produit.nom}}
               </td>
               <td *ngIf="isUpdateInventaire" style="width:14%; min-width:10rem;">
-                <span class="p-column-title">quantite</span>
-                {{this.p.produit.quantite }}
-<!--                {{this.sourceProduits[p.produit.id].quantite}}-->
-<!--                {{this.sourceProduits[p.produit.id].nom}}-->
-<!--                {{this.sourceProduits.length}}-->
+                <span class="p-column-title">Quantity</span>
+                {{p.produit.quantite}}
               </td>
               <td style="width:14%; min-width:10rem;">
-                <span class="p-column-title">designation</span>
+                <span class="p-column-title">Designation</span>
                 {{p.produit.designation}}
-
-
               </td>
               <td style="width:14%; min-width:10rem;">
                 <span class="p-column-title">Reference</span>
                 {{p.produit.reference}}
               </td>
               <td style="width:14%; min-width:8rem;">
-                <span class="p-column-title">nom</span>
+                <span class="p-column-title">Article</span>
                 {{p.produit.article.nom}}
               </td>
               <td style="width:14%; min-width:8rem;">
-<!--                <span class="p-column-title">quantite restant</span>-->
-<!--                {{p.quantitePI}}-->
-
                 <p-cellEditor>
                   <ng-template pTemplate="input">
                     <p-inputNumber [(ngModel)]="p.quantitePI"></p-inputNumber>
                   </ng-template>
                   <ng-template pTemplate="output">
-                    {{p.quantitePI }}
+                    {{p.quantitePI}}
                   </ng-template>
                 </p-cellEditor>
               </td>
-
-              <div class="flex align-items-center gap-2" >
+              <td class="flex align-items-center gap-2">
                 <div class="flex align-items-center justify-content-center gap-2">
                   <button *ngIf="!editing" pButton pRipple type="button" pInitEditableRow icon="pi pi-pencil" (click)="onRowEditInit(p)" class="p-button-rounded p-button-success mr-2"></button>
                   <button *ngIf="editing" pButton pRipple type="button" pSaveEditableRow icon="pi pi-check" (click)="onRowEditSave(p)" class="p-button-rounded p-button-text p-button-success mr-2"></button>
                 </div>
-<!--                <button *ngIf="isUpdateInventaire"  pButton pRipple icon="pi pi-pencil" class="p-button-rounded p-button-success mr-2" (click)="editIntrvention(produit)"></button>-->
                 <button pButton pRipple icon="pi pi-trash" class="p-button-rounded p-button-warning" (click)="deleteProduitFromInventaire(p.produit)"></button>
-              </div>
-
+              </td>
             </tr>
           </ng-template>
         </p-table>
       </div>
     </div>
-    <div class=" flex col-12 justify-content-end " >
-      <button pButton label="Enregisrer l'inventaire" icon="pi pi-check" class=" " (click)="saveInventaire()"></button>
+    <div class="flex col-12 justify-content-end">
+      <button pButton label="Save Inventory" icon="pi pi-check" (click)="saveInventaire()"></button>
     </div>
   </div>
-
-
 </div>

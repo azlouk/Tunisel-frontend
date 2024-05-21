@@ -140,36 +140,36 @@ export class RapportAnalyseComponent {
   ngOnInit(): void {
 
     this.datasel = [
-      "Sel BNL (Brut Non Lavé)",
-      "Sel Lavé",
-      "Sel Lavé 0-4 Bande 01"
-      , "Sel Lavé 0-6 Bande 02"
-      , "Sel Gros (Refus)"
-      , "Sel 0-8"
-      , "Sel 0-4 Stock"
-      , "Sel 0-6 Stock"
-      , "Sel 0-8 Stock"
-      , "Sel Gros Stock"
-      , "Sel Concassé"
-      , "Sel 0-6 Crible Vert"
-      , "Sel 0-8 Crible Vert"
-      , "Sel 0-4 Stock Zarzis"
-      , "Sel 0-6 Stock Zarzis"
-      , "Sel 0-8 Stock Zarzis"
+      "Unwashed salt",
+      "Washed salt",
+      "Washed salt sieved 0-4 "
+      , "Washed salt sieved "
+      , "Big salt (Refus)"
+      , "salt 0-8"
+      , "salt 0-4 Stock"
+      , "salt 0-6 Stock"
+      , "salt 0-8 Stock"
+      , "Big salt Stock"
+      , "crushed salt"
+      , "salt 0-6 Cribble "
+      , "salt 0-8 Cribble "
+      , "salt 0-4 Stock Zarzis"
+      , "salt 0-6 Stock Zarzis"
+      , "salt 0-8 Stock Zarzis"
       , " Sel Navire"
 
     ]
-     this.dataMatiere=["Sel","Saumure"];
+     this.dataMatiere=["Salt","Brine"];
 //Init de attributs
     this.attributs= [
       {name:'d',checked:false,label:'Densité', value:this.analysesChimique.densite},
-      {name:'MS',checked:false,label:'Matiére en suspension', value:this.analysesChimique.matiereEnSuspension },
+      {name:'MS',checked:false,label:'Matter en suspension', value:this.analysesChimique.matiereEnSuspension },
       {name:'S',checked:false,label:'Salinité', value:this.analysesChimique.salinite},
       {name:'Ca',checked:false,label:'Calcium', value:this.analysesChimique.calcium},
       {name:'Mg',checked:false,label:'Magnésium', value:this.analysesChimique.magnesium},
       {name:'SO₄',checked:false,label:'Sulfate', value:this.analysesChimique.sulfate},
       {name:'H₂O',checked:false,label:'Humidité', value:this.analysesChimique.humidite},
-      {name:'MI',checked:false,label:'Matiére insoluble', value:this.analysesChimique.matiereInsoluble},
+      {name:'MI',checked:false,label:'Matter insoluble', value:this.analysesChimique.matiereInsoluble},
       {name:'K',checked:false,label:'Potassium', value:this.analysesChimique.potassium},
       {name:'Na',checked:false,label:'Sodium', value:this.analysesChimique.sodium},
       {name:'Cl',checked:false,label:'Chlorure', value:this.analysesChimique.chlorure},
@@ -609,7 +609,7 @@ export class RapportAnalyseComponent {
           confirmButtonColor: "#3085d6",
           cancelButtonColor: "#d33",
           confirmButtonText: "Oui, modifié!",
-          cancelButtonText: "Annuler"
+          cancelButtonText: "Cancel"
         }).then((result) => {
           if (result.isConfirmed) {
             this.listeTamis[tamis].calibre = this.tamis.calibre;
@@ -664,7 +664,7 @@ export class RapportAnalyseComponent {
         totalMasse += tamis.masse;
 
       }}
-    console.log('=========>>>>>>>>>>totle Masse: ',totalMasse);
+    console.log('=========>>>>>>>>>>totle Weight: ',totalMasse);
     return totalMasse;
   }
   calculateRefus(total:number) {

@@ -18,57 +18,56 @@ export class AppMenuComponent implements OnInit {
     this.model = [
       {
 
-        label: 'Principal',
+        label: 'Main',
         items: [
-          {label: 'Tableau de bord', icon: 'pi pi-fw pi-home', routerLink: ['/dash']},
-          {label: 'Commande', icon: 'pi pi-fw pi-home', routerLink: ['/commande']}
+          {label: 'Dashboard', icon: 'pi pi-fw pi-home', routerLink: ['/dash']},
+          {label: 'Command', icon: 'pi pi-fw pi-home', routerLink: ['/commande']}
         ]
       },
       {
         label: 'Interfaces',
         items: [
-          {label: 'Utilisateurs', icon: 'pi pi-fw pi-user', routerLink: ['/users']},
-          {label: 'Puits', icon: 'pi pi-fw pi-filter', routerLink: ['/puits']},
-          {label: 'Bassins', icon: 'pi pi-fw pi-check-square', routerLink: ['/bassins']},
+          {label: 'Users', icon: 'pi pi-fw pi-user', routerLink: ['/users']},
+          {label: 'Well', icon: 'pi pi-fw pi-filter', routerLink: ['/puits']},
+          {label: 'Pond', icon: 'pi pi-fw pi-check-square', routerLink: ['/bassins']},
 
         ]
 
       },
       {
-        label: 'Stock Bassin',
+        label: 'Stock Basin',
         items: [
-          {label: 'Non Lavé', icon: 'pi pi-fw pi-box', routerLink: ['sbnls']},
-          {label: 'Bande', icon: 'pi pi-fw pi-box', routerLink: ['bandes']},
-          {label: 'Lavé', icon: 'pi pi-fw pi-box', routerLink: ['/sbls']},
-          {label: 'Lavé Finale (navire)', icon: 'pi pi-fw pi-box', routerLink: ['/sblfs']},
+          {label: 'Unwashed', icon: 'pi pi-fw pi-box', routerLink: ['sbnls']},
+          {label: 'Band', icon: 'pi pi-fw pi-box', routerLink: ['bandes']},
+          {label: 'Washed', icon: 'pi pi-fw pi-box', routerLink: ['/sbls']},
+          {label: 'Washed Ship', icon: 'pi pi-fw pi-box', routerLink: ['/sblfs']},
 
         ]
 
       },
       {
-        label: 'Analyses ',
+        label: 'Analysis ',
         items: [
-          {label: 'Ajouter Rapport Analyse', icon: 'pi pi-fw pi-check-circle', routerLink: ['/rapport']},
-          {label: 'Ajouter Analyse Chimique', icon: 'pi pi-fw pi-check-circle', routerLink: ['/analyseChimique']},
-          {label: 'Ajouter Analyse Granulométrique', icon: 'pi pi-fw pi-check-circle', routerLink: ['/analysePhysique']},
+          {label: 'Analysis Report', icon: 'pi pi-fw pi-check-circle', routerLink: ['/rapport']},
+          {label: 'Chemical Analysis', icon: 'pi pi-fw pi-check-circle', routerLink: ['/analyseChimique']},
+          {label: 'Physical Analysis', icon: 'pi pi-fw pi-check-circle', routerLink: ['/analysePhysique']},
         ]
       },
       {
-        label: 'Gestion Des Instruments',
+        label: 'Instrument management',
         items: [
-          {label: 'Etalonage', icon: 'pi pi-fw pi-clipboard', routerLink: ['/etalonage']},
+          {label: 'Calibration', icon: 'pi pi-fw pi-clipboard', routerLink: ['/etalonage']},
 
 
     ]
       },
 
       {
-        label: 'Gestion De Laboratoire',
+        label: 'Laboratory management',
         items: [
-          {label: 'Article', icon: 'pi pi-fw pi-clipboard', routerLink: ['/articles']},
-          {label: 'Produits', icon: 'pi pi-fw pi-clipboard', routerLink: ['/produit']},
-
-          {label: 'Inventaire', icon: 'pi pi-fw pi-clipboard', routerLink: ['/inventaire']},
+          {label: 'Items', icon: 'pi pi-fw pi-clipboard', routerLink: ['/articles']},
+          {label: 'Products', icon: 'pi pi-fw pi-clipboard', routerLink: ['/produit']},
+          {label: 'Inventory', icon: 'pi pi-fw pi-clipboard', routerLink: ['/inventaire']},
 
 
         ]
