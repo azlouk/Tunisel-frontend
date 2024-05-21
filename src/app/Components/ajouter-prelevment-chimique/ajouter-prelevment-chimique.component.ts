@@ -105,13 +105,13 @@ export class AjouterPrelevmentChimiqueComponent implements OnInit {
 
     this.attributs= [
       {name:'d',checked:false,label:'Densité', value:this.analysesChimique.densite},
-      {name:'MS',checked:false,label:'Matiére en suspension', value:this.analysesChimique.matiereEnSuspension },
+      {name:'MS',checked:false,label:'Matter en suspension', value:this.analysesChimique.matiereEnSuspension },
       {name:'S',checked:false,label:'Salinité', value:this.analysesChimique.salinite},
       {name:'Ca',checked:false,label:'Calcium', value:this.analysesChimique.calcium},
       {name:'Mg',checked:false,label:'Magnésium', value:this.analysesChimique.magnesium},
       {name:'SO₄',checked:false,label:'Sulfate', value:this.analysesChimique.sulfate},
       {name:'H₂O',checked:false,label:'Humidité', value:this.analysesChimique.humidite},
-      {name:'MI',checked:false,label:'Matiére insoluble', value:this.analysesChimique.matiereInsoluble},
+      {name:'MI',checked:false,label:'Matter insoluble', value:this.analysesChimique.matiereInsoluble},
       {name:'K',checked:false,label:'Potassium', value:this.analysesChimique.potassium},
       {name:'Na',checked:false,label:'Sodium', value:this.analysesChimique.sodium},
       {name:'Cl',checked:false,label:'Chlorure', value:this.analysesChimique.chlorure},

@@ -5,9 +5,9 @@
       <p-toolbar styleClass="mb-4">
         <ng-template pTemplate="left">
           <div class="my-2">
-            <button pButton pRipple label="Ajouter" icon="pi pi-plus" class="p-button-success mr-2" (click)="openNew()"></button>
-            <button pButton pRipple label="Supprimer" icon="pi pi-trash" class="p-button-danger mr-2" (click)="deleteSelectedAnalysesPhysiques()" [disabled]="!selectedAnalysesPhysiques || !selectedAnalysesPhysiques.length"></button>
-            <button pButton pRipple label="Actualiser" icon="pi pi-refresh" class="p-button-primary mr-2" (click)="getALLphysique()"  ></button>
+            <button pButton pRipple label="Add" icon="pi pi-plus" class="p-button-success mr-2" (click)="openNew()"></button>
+            <button pButton pRipple label="Delete" icon="pi pi-trash" class="p-button-danger mr-2" (click)="deleteSelectedAnalysesPhysiques()" [disabled]="!selectedAnalysesPhysiques || !selectedAnalysesPhysiques.length"></button>
+            <button pButton pRipple label="Refresh" icon="pi pi-refresh" class="p-button-primary mr-2" (click)="getALLphysique()"  ></button>
 
           </div>
         </ng-template>
@@ -15,13 +15,13 @@
 
       </p-toolbar>
 
-      <p-table #dt [value]="analysesPhysiques" [columns]="cols"  responsiveLayout="scroll" [rows]="10" [globalFilterFields]="['id','reference','description','dateCreation','nom','emplacement','etat','dateFermeture','ref']" [paginator]="true" [rowsPerPageOptions]="[10,20,30]" [showCurrentPageReport]="true" currentPageReportTemplate="Affichage du  {first} au  {last} des  {totalRecords} entrées" [(selection)]="selectedAnalysesPhysiques" selectionMode="multiple" [rowHover]="true" dataKey="id">
+      <p-table #dt [value]="analysesPhysiques" [columns]="cols"  responsiveLayout="scroll" [rows]="10" [globalFilterFields]="['id','reference','description','dateCreation','nom','emplacement','etat','dateFermeture','ref']" [paginator]="true" [rowsPerPageOptions]="[10,20,30]" [showCurrentPageReport]="true" currentPageReportTemplate="Display  {first} to  {last} of  {totalRecords} entries" [(selection)]="selectedAnalysesPhysiques" selectionMode="multiple" [rowHover]="true" dataKey="id">
         <ng-template pTemplate="caption">
           <div class="flex flex-column md:flex-row md:justify-content-between md:align-items-center">
-            <h5 class="m-0">List des prélèvements grainilo </h5>
+            <h5 class="m-0">List of grainilo samples </h5>
             <span class="block mt-2 md:mt-0 p-input-icon-left">
                             <i class="pi pi-search"></i>
-                            <input  type="text" pInputText (input)="onGlobalFilter(dt, $event)" placeholder="Rechercher..."  class="w-full sm:w-auto"/>
+                            <input  type="text" pInputText (input)="onGlobalFilter(dt, $event)" placeholder="Search..."  class="w-full sm:w-auto"/>
                         </span>
 
 
@@ -35,10 +35,10 @@
             </th>
             <th pSortableColumn="id">Id <p-sortIcon field="id"></p-sortIcon></th>
             <th pSortableColumn="reference">Référence <p-sortIcon field="reference"></p-sortIcon></th>
-            <th pSortableColumn="dateCreation">Date Creation<p-sortIcon field="dateAnalyse"></p-sortIcon></th>
-            <th pSortableColumn="matiere">Matiére<p-sortIcon field="matiere"></p-sortIcon></th>
-            <th pSortableColumn="conformite">Conformite <p-sortIcon field="conformite"></p-sortIcon></th>
-            <th pSortableColumn="qualite">Qualité <p-sortIcon field="qualite"></p-sortIcon></th>
+            <th pSortableColumn="dateCreation">Creation Date<p-sortIcon field="dateAnalyse"></p-sortIcon></th>
+            <th pSortableColumn="matiere">Matter<p-sortIcon field="matiere"></p-sortIcon></th>
+            <th pSortableColumn="conformite">Compliance <p-sortIcon field="conformite"></p-sortIcon></th>
+            <th pSortableColumn="qualite">Quality <p-sortIcon field="qualite"></p-sortIcon></th>
 
             <th pSortableColumn="ref">Relatif <p-sortIcon field="ref"></p-sortIcon></th>
             <th pSortableColumn="description">Déscription <p-sortIcon field="description"></p-sortIcon></th>
@@ -58,20 +58,20 @@
               {{analysePhysique.reference}}
             </td>
             <td style="width:14%; min-width:10rem;">
-              <span class="p-column-title">Date Analyse</span>
+              <span class="p-column-title">Analysis Date</span>
               {{analysePhysique.dateAnalyse}}
             </td>
             <td style="width:14%; min-width:10rem;">
-              <span class="p-column-title">Matiére</span>
+              <span class="p-column-title">Matter</span>
               {{analysePhysique.matiere}}
             </td>
 
             <td style="width:14%; min-width:8rem;">
-              <span class="p-column-title">Conformite</span>
+              <span class="p-column-title">Compliance</span>
               {{analysePhysique.conformite}}
             </td>
             <td style="width:14%; min-width:8rem;">
-              <span class="p-column-title">Qualité</span>
+              <span class="p-column-title">Quality</span>
               {{analysePhysique.qualite}}
             </td>
 
@@ -98,10 +98,10 @@
 
 
 
-    <p-dialog [(visible)]="deleteProductDialog" header="Confirmer" [modal]="true" [style]="{width:'450px'}">
+    <p-dialog [(visible)]="deleteProductDialog" header="Confirm" [modal]="true" [style]="{width:'450px'}">
       <div class="flex align-items-center justify-content-center">
         <i class="pi pi-exclamation-triangle mr-3" style="font-size: 2rem"></i>
-        <span *ngIf="product">Êtes-vous sûr de vouloir supprimer? <b>{{product.name}}</b>?</span>
+        <span *ngIf="product">Are you sure you want to delete?<b>{{product.name}}</b>?</span>
       </div>
       <ng-template pTemplate="footer">
         <button pButton pRipple icon="pi pi-times" class="p-button-text" label="Non" (click)="deleteProductDialog = false"></button>
@@ -112,7 +112,7 @@
     <p-dialog [(visible)]="deleteProductsDialog" header="Confirm" [modal]="true" [style]="{width:'450px'}">
       <div class="flex align-items-center justify-content-center">
         <i class="pi pi-exclamation-triangle mr-3" style="font-size: 2rem"></i>
-        <span>Voulez-vous vraiment supprimer?</span>
+        <span>Do you really want to delete?</span>
       </div>
       <ng-template pTemplate="footer">
         <button pButton pRipple icon="pi pi-times" class="p-button-text" label="No" (click)="deleteProductsDialog = false"></button>

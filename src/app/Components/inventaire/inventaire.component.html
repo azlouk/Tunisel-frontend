@@ -5,9 +5,9 @@
       <p-toolbar styleClass="mb-4">
         <ng-template pTemplate="left">
           <div class="my-2">
-            <button pButton pRipple label="Ajouter" icon="pi pi-plus" class="p-button-success mr-2"
+            <button pButton pRipple label="Add" icon="pi pi-plus" class="p-button-success mr-2"
                     (click)="openNew()"></button>
-            <button pButton pRipple label="Supprimer" icon="pi pi-trash" class="p-button-danger"
+            <button pButton pRipple label="Delete" icon="pi pi-trash" class="p-button-danger"
                     (click)="deleteSelectedInventaire()"
                     [disabled]="!selectedInventaire || !selectedInventaire.length"></button>
           </div>
@@ -19,15 +19,15 @@
       <p-table #dt [value]="inventaires" [columns]="cols" responsiveLayout="scroll" [rows]="10"
                [globalFilterFields]="['id','reference','dateInventaire']" [paginator]="true"
                [rowsPerPageOptions]="[10,20,30]" [showCurrentPageReport]="true"
-               currentPageReportTemplate="Affichage du  {first} au  {last} des  {totalRecords} entrées"
+               currentPageReportTemplate="Display  {first} to  {last} of  {totalRecords} entries"
                [(selection)]="selectedInventaire" selectionMode="multiple" [rowHover]="true" dataKey="id">
         <ng-template pTemplate="caption">
           <div class="flex flex-column md:flex-row md:justify-content-between md:align-items-center">
-            <h5 class="m-0">Gestion des Inventaire</h5>
+            <h5 class="m-0">Inventory Management</h5>
             <span class="block mt-2 md:mt-0 p-input-icon-left">
                             <i class="pi pi-search"></i>
                             <input type="text" pInputText (input)="onGlobalFilter(dt, $event)"
-                                   placeholder="Rechercher..." class="w-full sm:w-auto"/>
+                                   placeholder="Search..." class="w-full sm:w-auto"/>
                         </span>
           </div>
         </ng-template>
@@ -58,7 +58,7 @@
               {{inventaire.id}}
             </td>
             <td style="width:14%; min-width:10rem;">
-              <span class="p-column-title">Societé</span>
+              <span class="p-column-title">society</span>
               {{inventaire.reference}}
             </td>
 
@@ -90,7 +90,7 @@
 
       <div class="flex align-items-center justify-content-center">
         <i class="pi pi-exclamation-triangle mr-3" style="font-size: 2rem"></i>
-        <span *ngIf="inventaire">Êtes-vous sûr de vouloir supprimer <b>{{inventaire.reference}}</b>?</span>
+        <span *ngIf="inventaire">Are you sure you want to delete? <b>{{inventaire.reference}}</b>?</span>
       </div>
       <ng-template pTemplate="footer">
         <button pButton pRipple icon="pi pi-times" class="p-button-text" label="Non"
@@ -102,7 +102,7 @@
     <p-dialog [(visible)]="deleteProductsDialog" header="Confirm" [modal]="true" [style]="{width:'450px'}">
       <div class="flex align-items-center justify-content-center">
         <i class="pi pi-exclamation-triangle mr-3" style="font-size: 2rem"></i>
-        <span>Êtes-vous sûr de vouloir supprimer?</span>
+        <span>Are you sure you want to delete??</span>
       </div>
       <ng-template pTemplate="footer">
         <button pButton pRipple icon="pi pi-times" class="p-button-text" label="Non"
@@ -160,9 +160,9 @@
 <!--        </div>-->
 
 <!--        <tr>-->
-<!--          <th>Nom</th>-->
+<!--          <th>Name</th>-->
 <!--          <th>Designation</th>-->
-<!--          <th>Quantité</th>-->
+<!--          <th>Quantity</th>-->
 <!--        </tr>-->
 <!--      </ng-template>-->
 <!--      <ng-template pTemplate="body" let-association>-->
@@ -190,9 +190,9 @@
       <ng-template pTemplate="header">
 
         <tr>
-          <th >Nom</th>
+          <th >Name</th>
           <th >Designation</th>
-          <th >Quantité</th>
+          <th >Quantity</th>
 
         </tr>
       </ng-template>
@@ -223,5 +223,7 @@
   <ng-template pTemplate="footer">
     <p-button icon="pi pi-file-pdf" (click)="SavePDF()" class="text-green-50" label="PDF" pAutoFocus
               [autofocus]="true"></p-button>
+    <p-button icon="pi pi-file-pdf" (click)="csvExport()" class="text-green-50" label="EXCEL" pAutoFocus [autofocus]="true"  ></p-button>
+
   </ng-template>
 </p-dialog>

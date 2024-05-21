@@ -86,10 +86,10 @@ export class DashboardComponent implements OnInit, OnDestroy {
     const surfaceBorder = documentStyle.getPropertyValue('--surface-border');
 
     this.chartDataAnalyse = {
-      labels: ['Janvier', 'Février', 'Mars', 'Avril', 'Mai', 'Juin', 'Juillet', 'Août', 'septembre', 'octobre', 'novembre', 'décembre'],
+      labels: ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'],
       datasets: [
         {
-          label: 'Chimique',
+          label: 'Chemical',
           data: [65, 59, 80, 81, 56, 55, 40, 45, 70, 56, 89, 69],
           fill: false,
           backgroundColor: documentStyle.getPropertyValue('--bluegray-700'),
@@ -97,7 +97,7 @@ export class DashboardComponent implements OnInit, OnDestroy {
           tension: .4
         },
         {
-          label: 'Granulométrique',
+          label: 'Granulometric',
           data: [28, 48, 40, 19, 86, 27, 90, 58, 85, 45, 53, 46],
           fill: false,
           backgroundColor: documentStyle.getPropertyValue('--green-600'),

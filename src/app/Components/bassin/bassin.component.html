@@ -5,9 +5,9 @@
       <p-toolbar styleClass="mb-4">
         <ng-template pTemplate="left">
           <div class="my-2">
-            <button pButton pRipple label="Ajouter" icon="pi pi-plus" class="p-button-success mr-2" (click)="openNew()"></button>
-            <button pButton pRipple label="Supprimer" icon="pi pi-trash" class="p-button-danger mr-2" (click)="deleteSelectedBassins()" [disabled]="!selectedBassins || !selectedBassins.length"></button>
-            <button pButton pRipple label="Actualiser" icon="pi pi-refresh" class="p-button-primary mr-2" (click)="getAllBassin()"  ></button>
+            <button pButton pRipple label="Add" icon="pi pi-plus" class="p-button-success mr-2" (click)="openNew()"></button>
+            <button pButton pRipple label="Delete" icon="pi pi-trash" class="p-button-danger mr-2" (click)="deleteSelectedBassins()" [disabled]="!selectedBassins || !selectedBassins.length"></button>
+            <button pButton pRipple label="Refresh" icon="pi pi-refresh" class="p-button-primary mr-2" (click)="getAllBassin()"  ></button>
 
           </div>
         </ng-template>
@@ -15,13 +15,13 @@
 
       </p-toolbar>
 
-      <p-table #dt [value]="bassins" [columns]="cols"  responsiveLayout="scroll" [rows]="10" [globalFilterFields]="['surface','etat','id','emplacement','nom','dateCreation','reference','description']" [paginator]="true" [rowsPerPageOptions]="[10,20,30]" [showCurrentPageReport]="true" currentPageReportTemplate="Affichage du  {first} au  {last} des  {totalRecords} entrées" [(selection)]="selectedBassins" selectionMode="multiple" [rowHover]="true" dataKey="id">
+      <p-table #dt [value]="bassins" [columns]="cols"  responsiveLayout="scroll" [rows]="10" [globalFilterFields]="['surface','etat','id','emplacement','nom','dateCreation','reference','description']" [paginator]="true" [rowsPerPageOptions]="[10,20,30]" [showCurrentPageReport]="true" currentPageReportTemplate="Display  {first} to  {last} of  {totalRecords} entries" [(selection)]="selectedBassins" selectionMode="multiple" [rowHover]="true" dataKey="id">
         <ng-template pTemplate="caption">
           <div class="flex flex-column md:flex-row md:justify-content-between md:align-items-center">
-            <h5 class="m-0">Gestion des Bassins</h5>
+            <h5 class="m-0">Basin management</h5>
             <span class="block mt-2 md:mt-0 p-input-icon-left">
                             <i class="pi pi-search"></i>
-                            <input  type="text" pInputText (input)="onGlobalFilter(dt, $event)" placeholder="Rechercher..."  class="w-full sm:w-auto"/>
+                            <input  type="text" pInputText (input)="onGlobalFilter(dt, $event)" placeholder="Search..."  class="w-full sm:w-auto"/>
                         </span>
 
 
@@ -36,10 +36,10 @@
             <th pSortableColumn="id">Id <p-sortIcon field="id"></p-sortIcon></th>
             <th pSortableColumn="reference">Reference <p-sortIcon field="reference"></p-sortIcon></th>
             <th pSortableColumn="description">Description <p-sortIcon field="description"></p-sortIcon></th>
-            <th pSortableColumn="dateCreation">Date Creation<p-sortIcon field="dateCreation"></p-sortIcon></th>
-            <th pSortableColumn="nom">Nom <p-sortIcon field="nom"></p-sortIcon></th>
-            <th pSortableColumn="emplacement">Emplacement <p-sortIcon field="emplacement"></p-sortIcon></th>
-            <th pSortableColumn="etat">Etat <p-sortIcon field="etat"></p-sortIcon></th>
+            <th pSortableColumn="dateCreation">Creation Date<p-sortIcon field="dateCreation"></p-sortIcon></th>
+            <th pSortableColumn="nom">Name <p-sortIcon field="nom"></p-sortIcon></th>
+            <th pSortableColumn="emplacement">Location <p-sortIcon field="emplacement"></p-sortIcon></th>
+            <th pSortableColumn="etat">State <p-sortIcon field="etat"></p-sortIcon></th>
             <th pSortableColumn="surface">Surface m² <p-sortIcon field="surface"></p-sortIcon></th>
             <th></th>
           </tr>
@@ -65,19 +65,19 @@
 
 
             <td style="width:14%; min-width:10rem;">
-              <span class="p-column-title">Date Creation</span>
+              <span class="p-column-title">Creation Date</span>
               {{bassin.dateCreation}}
             </td>
             <td style="width:14%; min-width:8rem;">
-              <span class="p-column-title">Nom</span>
+              <span class="p-column-title">Name</span>
               {{bassin.nom}}
             </td>
             <td style="width:14%; min-width:8rem;">
-              <span class="p-column-title">Emplacement</span>
+              <span class="p-column-title">Location</span>
               {{bassin.emplacement}}
             </td>
             <td style="width:14%; min-width:8rem;">
-              <span class="p-column-title">Etat</span>
+              <span class="p-column-title">State</span>
               {{bassin.etat}}
             </td>
             <td style="width:14%; min-width:8rem;">
@@ -97,10 +97,10 @@
       </p-table>
     </div>
 
-    <p-dialog [(visible)]="productDialog" [style]="{width: '450px'}" header="details de Bassin" [modal]="true" class="p-fluid">
+    <p-dialog [(visible)]="productDialog" [style]="{width: '450px'}" header="basin details" [modal]="true" class="p-fluid">
       <ng-template pTemplate="content">
         <div class="field">
-        <label for="name">Puit</label>
+        <label for="name">Well</label>
           <p-dropdown [options]="puits" [(ngModel)]="bassin.bassinPuit" [editable]="true" optionLabel="reference" class="w-full"  [ngClass]="{'ng-invalid ng-dirty' : submitted && !bassin.bassinPuit}"></p-dropdown>
           <small class="ng-dirty ng-invalid" *ngIf="submitted && !bassin.bassinPuit">Puit est requis.</small>
         </div>
@@ -117,22 +117,22 @@
         </div>
 
         <div class="field">
-          <label for="dateCreation">Date Creation</label>
+          <label for="dateCreation">Creation Date</label>
           <p-calendar id="dateCreation" dateFormat="yy-mm-dd" [(ngModel)]="bassin.dateCreation"  [showIcon]="true"></p-calendar>
-<!--          <small class="ng-dirty ng-invalid" *ngIf="submitted && !bassin.dateCreation">Date de Creation est requis.</small>-->
+<!--          <small class="ng-dirty ng-invalid" *ngIf="submitted && !bassin.dateCreation">Creation date est requis.</small>-->
         </div>
         <div class="field">
-          <label for="nom">Nom</label>
+          <label for="nom">Name</label>
           <input type="text" pInputText id="nom"  [(ngModel)]="bassin.nom" required autofocus [ngClass]="{'ng-invalid ng-dirty' : submitted && !bassin.nom}"/>
-          <small class="ng-dirty ng-invalid" *ngIf="submitted && !bassin.nom">Nom est requis.</small>
+          <small class="ng-dirty ng-invalid" *ngIf="submitted && !bassin.nom">Name est requis.</small>
         </div>
         <div class="field">
-          <label for="emplacement">Emplacement</label>
+          <label for="emplacement">Location</label>
           <input type="text" pInputText id="emplacement"  [(ngModel)]="bassin.emplacement" required autofocus />
 <!--          <small class="ng-dirty ng-invalid" *ngIf="submitted && !bassin.emplacement">Telephone is required.</small>-->
         </div>
         <div class="field">
-          <label for="etat">Etat</label>
+          <label for="etat">State</label>
           <input type="text" pInputText id="etat"  [(ngModel)]="bassin.etat" />
 <!--          <small class="ng-dirty ng-invalid" *ngIf="submitted && !bassin.etat">Telephone is required.</small>-->
         </div>
@@ -148,26 +148,26 @@
 
 
       <ng-template pTemplate="footer">
-        <button pButton pRipple label="Annuler" icon="pi pi-times" class="p-button-text" (click)="hideDialog()"></button>
-        <button pButton pRipple label="Enregisrer" icon="pi pi-check" class="p-button-text" (click)="saveBassin()"></button>
+        <button pButton pRipple label="Cancel" icon="pi pi-times" class="p-button-text" (click)="hideDialog()"></button>
+        <button pButton pRipple label="Save" icon="pi pi-check" class="p-button-text" (click)="saveBassin()"></button>
       </ng-template>
     </p-dialog>
 
     <p-dialog [(visible)]="deleteProductDialog" header="Confirm" [modal]="true" [style]="{width:'450px'}">
       <div class="flex align-items-center justify-content-center">
         <i class="pi pi-exclamation-triangle mr-3" style="font-size: 2rem"></i>
-        <span *ngIf="product">Êtes-vous sûr de vouloir supprimer <b>{{product.name}}</b>?</span>
+        <span *ngIf="product">Are you sure you want to delete? <b>{{product.name}}</b>?</span>
       </div>
       <ng-template pTemplate="footer">
-        <button pButton pRipple icon="pi pi-times" class="p-button-text" label="Non" (click)="deleteProductDialog = false"></button>
-        <button pButton pRipple icon="pi pi-check" class="p-button-text" label="Oui" (click)="confirmDelete()"></button>
+        <button pButton pRipple icon="pi pi-times" class="p-button-text" label="No" (click)="deleteProductDialog = false"></button>
+        <button pButton pRipple icon="pi pi-check" class="p-button-text" label="Yes" (click)="confirmDelete()"></button>
       </ng-template>
     </p-dialog>
 
     <p-dialog [(visible)]="deleteProductsDialog" header="Confirm" [modal]="true" [style]="{width:'450px'}">
       <div class="flex align-items-center justify-content-center">
         <i class="pi pi-exclamation-triangle mr-3" style="font-size: 2rem"></i>
-        <span>Êtes-vous sûr de vouloir supprimer les produits sélectionnés ?</span>
+        <span>Are you sure you want to delete? les produits sélectionnés ?</span>
       </div>
       <ng-template pTemplate="footer">
         <button pButton pRipple icon="pi pi-times" class="p-button-text" label="No" (click)="deleteProductsDialog = false"></button>
@@ -179,21 +179,21 @@
 
 
 
-<p-dialog header="Analyse chimique et granulométrique" [(visible)]="visiblePrint" [modal]="true"   [breakpoints]="{ '800px': '75vw', '575px': '90vw' }">
-  <div class="shadow-1 p-2  " >Filtrage Chimique  :
+<p-dialog header="Chemical and particle size analysis" [(visible)]="visiblePrint" [modal]="true"   [breakpoints]="{ '800px': '75vw', '575px': '90vw' }">
+  <div class="shadow-1 p-2  " >chemical filtration  :
 
     <div class="card flex justify-content-evenly ">
-      <div class="gap-1 flex align-items-center">Date début Analyse  :
+      <div class="gap-1 flex align-items-center">Analysis start date  :
         <input  class="p-2 shadow-1" type="date" pInputText    [(ngModel)]="DatefiltrageStart" [value]="DatefiltrageStart" />
 
       </div>
       <div class="gap-1  flex align-items-center">
-        Date Fin Analyse  :
+        Date End Analysis  :
         <input  class="p-2 shadow-1" type="date"  pInputText   [(ngModel)]="DatefiltrageEnd" [value]="DatefiltrageEnd" />
 
       </div>
-      <p-button (click)="filtredate()" class=" " icon="pi pi-search" label="Rechercher"></p-button>
-      <p-button (click)="Viderfiltredate()" class=" " icon="pi pi-refresh" label="Actualiser"></p-button>
+      <p-button (click)="filtredate()" class=" " icon="pi pi-search" label="Search"></p-button>
+      <p-button (click)="Viderfiltredate()" class=" " icon="pi pi-refresh" label="Refresh"></p-button>
 
     </div>
     <div class="shadow-1 p-2">
@@ -206,7 +206,7 @@
       </th>
     </div>
     <br>
-    <div class="shadow-1 p-2 gap-1 text-3xl flex inline-flex justify-content-evenly" >Filtrage Granulométrique  :<br>
+    <div class="shadow-1 p-2 gap-1 text-3xl flex inline-flex justify-content-evenly" >filtrate Grain size  :<br>
       <p-listbox [options]="SelectetBassin.analysesPhysiques!==undefined?SelectetBassin.analysesPhysiques:[]" [(ngModel)]="SelectedsbnlPrintAnalyse" optionLabel="reference" [filter]="true" [style]="{ width: '15rem' }" [listStyle]="{'max-height': '220px'}"></p-listbox>
       <div *ngIf="SelectedsbnlPrintAnalyse.hasOwnProperty('id')" class="p-2">
         <label class="text-2xl font-bold">Reference  :</label><span class="ml-2 text-2xl">{{SelectedsbnlPrintAnalyse.reference}}</span><br>
@@ -255,7 +255,7 @@
           <!--       <th>-->
           <!--         <p-columnFilter type="date" field="dateAnalyse" display="menu"></p-columnFilter>-->
 
-          <!--         Date Analyse</th>-->
+          <!--         Analysis Date</th>-->
 
 
           <!--        <th>Temperature °C</th>-->
@@ -322,7 +322,7 @@
         <tr>
 
           <th pSortableColumn="dateintervention">Calibre <p-sortIcon field="dateintervention"></p-sortIcon></th>
-          <th pSortableColumn="qui">Masse <p-sortIcon field="qui"></p-sortIcon></th>
+          <th pSortableColumn="qui">Weight <p-sortIcon field="qui"></p-sortIcon></th>
           <th pSortableColumn="natureAction">Refus <p-sortIcon field="natureAction"></p-sortIcon></th>
           <th pSortableColumn="resultat">Refus Cumulated<p-sortIcon field="resultat"></p-sortIcon></th>
           <th pSortableColumn="certificat">pass Cumulated <p-sortIcon field="certificat"></p-sortIcon></th>
@@ -336,7 +336,7 @@
             {{tamis.calibre}}
           </td>
           <td>
-            <span class="p-column-title">Masse</span>
+            <span class="p-column-title">Weight</span>
             {{tamis.masse}}
           </td>
           <td >
@@ -369,5 +369,6 @@
   </div>
   <ng-template pTemplate="footer">
     <p-button icon="pi pi-file-pdf" (click)="SavePDF()" class="text-green-50" label="PDF" pAutoFocus [autofocus]="true"  ></p-button>
+    <p-button icon="pi pi-file-pdf" (click)="csvExport()" class="text-green-50" label="EXCEL" pAutoFocus [autofocus]="true"  ></p-button>
   </ng-template>
 </p-dialog>

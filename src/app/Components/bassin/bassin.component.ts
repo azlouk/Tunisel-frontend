@@ -32,6 +32,7 @@ import jsPDF from "jspdf";
 import {CheckboxModule} from "primeng/checkbox";
 import {ListboxModule} from "primeng/listbox";
 import {AutoFocusModule} from "primeng/autofocus";
+import {utils, writeFile} from "xlsx";
 
 @Component({
   selector: 'app-bassin',
@@ -391,5 +392,47 @@ this.SelectetBassin={analysesPhysiques:[]}
     this.colsfiltre.forEach(value => {
       value.hide = this.SelectAll;
     })
+  }
+
+ //  csvExport() {
+ //     const headings=[['reference','description','dateCreation','nom','emplacement','etat','surface','idPuit']];
+ // const wb = utils.book_new();
+ // const ws:any=utils.json_to_sheet([]);
+ // utils.sheet_add_aoa(ws,headings);
+ // utils.sheet_add_json(ws,this.bassins,{
+ //   origin: 'A2',
+ //   skipHeader:true,
+ // });
+ // utils.book_append_sheet(wb,ws,'Bassins');
+ // writeFile(wb,'Bassins Report.xlsx');
+ //
+ //  }
+
+  csvExport() {
+    const headings = [['reference', '', 'description', '', 'dateCreation', '', 'nom', '', 'emplacement', '', 'etat', '', 'surface', '',]];
+
+    const wb = utils.book_new();
+    const ws = utils.json_to_sheet([]);
+    utils.sheet_add_aoa(ws, headings);
+
+    const formattedData = this.bassins.map(record => {
+      return [
+        record.reference, '',
+        record.description, '',
+        record.dateCreation, '',
+        record.nom, '',
+        record.emplacement, '',
+        record.etat, '',
+        record.surface, '',
+      ];
+    });
+
+    utils.sheet_add_json(ws, formattedData, {
+      origin: 'A2',
+      skipHeader: true,
+    });
+
+    utils.book_append_sheet(wb, ws, 'Bassins');
+    writeFile(wb, 'Bassins Report.xlsx');
   }
 }
