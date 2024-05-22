@@ -31,30 +31,32 @@ import Swal from "sweetalert2";
 import {Bande} from "../../Models/bande";
 import {BandeService} from "../../Services/bande.service";
 import {InputTextareaModule} from "primeng/inputtextarea";
+import {AutoCompleteCompleteEvent, AutoCompleteModule} from "primeng/autocomplete";
 
 @Component({
   selector: 'app-ajouter-prelevment-physique',
   standalone: true,
-  imports: [
-    ButtonModule,
-    CalendarModule,
-    CheckboxModule,
-    DialogModule,
-    FloatLabelModule,
-    FormsModule,
-    InputNumberModule,
-    InputTextModule,
-    ListboxModule,
-    NgForOf,
-    NgIf,
-    SharedModule,
-    TabViewModule,
-    ToolbarModule,
-    TooltipModule,
-    DatePipe,
-    TableModule,
-    InputTextareaModule
-  ],
+    imports: [
+        ButtonModule,
+        CalendarModule,
+        CheckboxModule,
+        DialogModule,
+        FloatLabelModule,
+        FormsModule,
+        InputNumberModule,
+        InputTextModule,
+        ListboxModule,
+        NgForOf,
+        NgIf,
+        SharedModule,
+        TabViewModule,
+        ToolbarModule,
+        TooltipModule,
+        DatePipe,
+        TableModule,
+        InputTextareaModule,
+        AutoCompleteModule
+    ],
   templateUrl: './ajouter-prelevment-physique.component.html',
   styleUrl: './ajouter-prelevment-physique.component.css'
 })
@@ -70,7 +72,9 @@ export class AjouterPrelevmentPhysiqueComponent implements OnInit{
   sblfs: Sblf[] = [];
   selectedSblf:Sblf={};
   analysesPhysique: AnalysesPhysique={} ;
+  datasel: any []= [];
 
+  filtereddatasel: any[] = [];
   private analysePhysiqueId: any;
   public isUpdateAnalysePhysique=false;
   visibleDetails: boolean=false;
@@ -102,7 +106,26 @@ export class AjouterPrelevmentPhysiqueComponent implements OnInit{
 
 
   ngOnInit(): void {
+    this.datasel = [
+      "Unwashed salt",
+      "Washed salt",
+      "Washed salt sieved 0-4 "
+      , "Washed salt sieved "
+      , "Big salt (Refus)"
+      , "salt 0-8"
+      , "salt 0-4 Stock"
+      , "salt 0-6 Stock"
+      , "salt 0-8 Stock"
+      , "Big salt Stock"
+      , "crushed salt"
+      , "salt 0-6 Cribble "
+      , "salt 0-8 Cribble "
+      , "salt 0-4 Stock Zarzis"
+      , "salt 0-6 Stock Zarzis"
+      , "salt 0-8 Stock Zarzis"
+      , " Sel Navire"
 
+    ]
     this.isUpdateTamis=false ;
     this.analysePhysiqueId = this.route.snapshot.paramMap.get('id');
     this.isUpdateAnalysePhysique=this.analysePhysiqueId!==null
@@ -114,6 +137,7 @@ export class AjouterPrelevmentPhysiqueComponent implements OnInit{
       this.analysePhysiqueService.getElementByAnalysesPhysiquesId(this.analysePhysiqueId).subscribe((value: any) => {
 
         this.selectedBassin = value.bassin;
+
         this.selectedSbl = value.sbl;
         this.selectedSbnl = value.sbnl;
         this.selectedSblf = value.sblf;
@@ -124,6 +148,7 @@ export class AjouterPrelevmentPhysiqueComponent implements OnInit{
       });
 
     this.analysePhysiqueService.getAnalysesPhysiquesById(this.analysePhysiqueId).subscribe(value => {this.analysesPhysique=value;
+     // alert(value.dateAnalyse)
       this.listeTamis=this.analysesPhysique.tamisList==undefined?[]:this.analysesPhysique.tamisList ;
 
     },error => error)
@@ -368,4 +393,20 @@ this.calculateRefus(total);
 this.calculateRefusCumulated();
   this.calculatePassCumulated();
 }
+
+
+  filterCountry(event: AutoCompleteCompleteEvent) {
+    let filtered: any[] = [];
+    let query = event.query;
+
+    for (let i = 0; i < (this.datasel as any[]).length; i++) {
+      let country = (this.datasel as any[])[i];
+      if (country.toLowerCase().indexOf(query.toLowerCase()) == 0) {
+        filtered.push(country);
+      }
+    }
+
+    this.filtereddatasel = filtered;
+  }
+
 }

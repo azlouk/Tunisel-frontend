@@ -9,9 +9,9 @@
       </ng-template>
       <h4>Add Chemical Analysis</h4>
     </p-toolbar>
-    <div class=" flex justify-content-between  mt-8 border-1 border-round border-gray-300 p-6  h-30rem">
-    <div class=" gap-3  flex flex-column    justify-content-between col-3 ">
-      <p-floatLabel >
+    <div class=" flex justify-content-between  mt-8 border-1 border-round border-gray-300 p-6  ">
+    <div class=" gap-4  flex flex-column    justify-content-between   ">
+    <p-floatLabel >
         <input  class="p-2 shadow-1" type="date" pInputText id="dateCreation"  [(ngModel)]="analysesChimique.dateAnalyse" [value]="analysesChimique.dateAnalyse" />
         <label for="dateCreation">Creation Date</label>
 <!--        <p-calendar id="dateCreation" dateFormat="yy-mm-dd" [(ngModel)]="bassin.dateCreation"  [ngClass]="{'ng-invalid ng-dirty' : submitted && !bassin.dateCreation}" [showIcon]="true"></p-calendar>-->
@@ -35,7 +35,7 @@
     </p-floatLabel>
       <p-floatLabel>
         <input type="text" pInputText [(ngModel)]="analysesChimique.matiere"  id="matiere" placeholder="Exp saumure , sel ..." class="w-full" />
-        <label >Material</label>
+        <label >Matter</label>
 
       </p-floatLabel>
       <p-floatLabel>
@@ -319,14 +319,19 @@
         </div>
       </div>
 
-      <div class="card flex col-4 ">
+      <div class="card flex col-4  ">
         <div class="flex flex-column gap-5 h-full flex-wrap ">
           <p-checkbox [(ngModel)]="SelectAll" (ngModelChange)="SelectAllCheck()" [binary]="true" inputId="binary" class="text-primary" label="Tout"></p-checkbox>
+<div class="grid">
 
-          <div class="flex align-items-center  gap-1 " *ngFor="let attribut of attributs">
+
+          <div class="col-2 " *ngFor="let attribut of attributs">
+
             <p-checkbox [(ngModel)]="attribut.checked" [binary]="true" Id="ny"></p-checkbox>
-            <label for="ny" class="font-bold">{{attribut.name}}</label>
+            <label for="ny" class="font-bold  ">{{attribut.name}}</label>
+
           </div>
+</div>
         </div>
 
       </div>
