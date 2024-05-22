@@ -26,12 +26,17 @@ import {LineCommande} from "../../Models/lineCommande";
 import {DropdownModule} from "primeng/dropdown";
 import {LineCommandeService} from "../../Services/line-commande.service";
 import {KeyFilterModule} from "primeng/keyfilter";
+import {AutoCompleteCompleteEvent, AutoCompleteModule} from "primeng/autocomplete";
+import {Analyse} from "../../Models/analyse";
 
 interface Column {
   id:number;
   field: string;
   header: string;
 }
+
+
+
 @Component({
   selector: 'app-ajouter-commande',
   standalone: true,
@@ -55,6 +60,7 @@ interface Column {
     MultiSelectModule,
     RippleModule,
     DropdownModule,
+    AutoCompleteModule,
 
   ],
   templateUrl: './ajouter-commande.component.html',
@@ -90,6 +96,11 @@ export class AjouterCommandeComponent implements OnInit{
   TotalHarv: number=0;
   TotalProd: number=0;
   TotalTrQu: number=0;
+  DatefiltrageStart: any;
+  DatefiltrageEnd: any;
+  private datasel: string[]=[];
+  filtereddatasel: any[]=[];
+  matter: any;
   constructor(private router: Router,
               private bassinService :BassinService,
               private tamisService:TamisService ,
@@ -104,6 +115,26 @@ export class AjouterCommandeComponent implements OnInit{
 
   ngOnInit(): void {
     // =============================================
+    this.datasel = [
+      "Unwashed salt",
+      "Washed salt",
+      "Washed salt sieved 0-4 "
+      , "Washed salt sieved "
+      , "Big salt (Refus)"
+      , "salt 0-8"
+      , "salt 0-4 Stock"
+      , "salt 0-6 Stock"
+      , "salt 0-8 Stock"
+      , "Big salt Stock"
+      , "crushed salt"
+      , "salt 0-6 Cribble "
+      , "salt 0-8 Cribble "
+      , "salt 0-4 Stock Zarzis"
+      , "salt 0-6 Stock Zarzis"
+      , "salt 0-8 Stock Zarzis"
+      , " Sel Navire"
+
+    ]
     this.cols = [
 
       {id:0, field: 'dateAnalyse', header: 'Prelevelment date' },
@@ -240,6 +271,8 @@ getCommandeById(){
 
   getValueOfligneCommande(col: any, ligneCommande: any): any {
     if (col.id < 20) {
+      if(col.id==0)
+        return ligneCommande.analyseChimique!==null ? this.pipedate(ligneCommande.analyseChimique[col.field]) : '-'
       return ligneCommande.analyseChimique!==null ? ligneCommande.analyseChimique[col.field] : '-';
     } else if (col.id > 19 && col.id < 22) {
       return ligneCommande.analysePhysique!==null  ? ligneCommande.analysePhysique[col.field] : '-';
@@ -263,6 +296,8 @@ getCommandeById(){
     else {
       return ligneCommande!==null  ? ligneCommande[col.field] : '-';
     }
+
+
   }
 
   changeCalibre() {
@@ -322,4 +357,68 @@ getCommandeById(){
 
     })
   }
+  searchAnalyse(l: LineCommande):boolean {
+
+    if(l.analyseChimique){
+      return this.AfterTodate(new Date(this.DatefiltrageStart+""),new Date(l.analyseChimique.dateAnalyse+"")) &&  this.AfterTodate(new Date(l.analyseChimique.dateAnalyse+""),new Date(this.DatefiltrageEnd+""))
+    } else if(l.analysePhysique){
+      return this.AfterTodate(new Date(this.DatefiltrageStart+""),new Date(l.analysePhysique.dateAnalyse+"")) &&  this.AfterTodate(new Date(l.analysePhysique.dateAnalyse+""),new Date(this.DatefiltrageEnd+""))
+    }
+    return false;
+  }
+  filtredate() {
+
+
+    //this.Viderfiltredate()
+    const data=this.listeLignesCommandes.filter(l => this.searchAnalyse(l)==true );
+
+    this.listeLignesCommandes=[...data]
+
+
+  }
+
+  Viderfiltredate() {
+this.getLine()
+  }
+
+  filterCountry(event: AutoCompleteCompleteEvent) {
+    let filtered: any[] = [];
+    let query = event.query;
+
+    for (let i = 0; i < (this.datasel as any[]).length; i++) {
+      let country = (this.datasel as any[])[i];
+      if (country.toLowerCase().indexOf(query.toLowerCase()) == 0) {
+        filtered.push(country);
+      }
+    }
+
+    this.filtereddatasel = filtered;
+  }
+
+  AfterTodate(date1:Date , date2:Date):boolean{
+    console.log(date1+"<"+date2)
+    return date1.getTime()<=date2.getTime()
+  }
+    pipedate(analyseChimiqueElement: any) {
+     const date:Date=new Date(analyseChimiqueElement+"");
+      const day = String(date.getDate()).padStart(2, '0');
+      const month = String(date.getMonth() + 1).padStart(2, '0'); // Month is 0-indexed
+      const year = date.getFullYear();
+
+      return `${day}-${month}-${year}`;
+
+  }
+    chechMatter(l: LineCommande):boolean {
+   if(l.analysePhysique)
+    return  l.analysePhysique.qualite?.indexOf(this.matter)!==-1;
+
+  return  false ;
+  }
+  filterMatter() {
+
+
+    const data = this.listeLignesCommandes.filter(l => this.chechMatter(l)==true);
+   this.listeLignesCommandes=[...data];
+  }
+
 }
