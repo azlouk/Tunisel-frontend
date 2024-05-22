@@ -107,37 +107,40 @@ export class AjoutFichevieInterventionComponent implements OnInit {
   }
 
   hideDialog() {
-this.visibale=false
+    this.visibale=false
   }
 
 
   saveFicheVie() {
-      this.submitted=true;
+    this.submitted=true;
     if(this.ficheVie.societe?.trim())
     {
-      this.ficheVie.interventions = this.listeInterventions
+      this.ficheVie.interventions = this.listeInterventions;
+      this.listeInterventions = [];
+
       if (this.isUpdateFichVie) {
 
         this.ficheVieService.updateFicheVie(this.ficheVie).subscribe(value => this.router.navigate(['/etalonage']))
       } else {
 
         this.ficheVieService.createFicheVie(this.ficheVie).subscribe(value => {
-          this.listeInterventions = [];
+          this.router.navigate(['/etalonage']);
         }, error => {
+          console.log('eroooooooorrrrr')
         });
       }
-      this.router.navigate(['/etalonage']);
+
     }
 
   }
 
   saveIntervention() {
     this.submitted = true;
-    if (this.intervention.dateintervention) {
+
       this.listeInterventions.push(this.intervention);
       this.visibale = false;
       this.intervention = {}
-    }
+
   }
 
 

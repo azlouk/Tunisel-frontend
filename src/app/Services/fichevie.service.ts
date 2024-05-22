@@ -26,7 +26,7 @@ export class FicheVieService {
   }
 
   updateFicheVie(ficheVie: FicheVie): Observable<FicheVie> {
-    return this.http.put<FicheVie>(`${this.apiUrl}/fichesvies/${ficheVie.id}`, ficheVie);
+    return this.http.put<FicheVie>(`${this.apiUrl}/fichesvies/update`, ficheVie);
 
   }
 
