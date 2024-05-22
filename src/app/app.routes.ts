@@ -12,13 +12,8 @@ import {AnalyseChimiqueComponent} from "./Components/analyse-chimique/analyse-ch
 import {
   AjouterPrelevmentChimiqueComponent
 } from "./Components/ajouter-prelevment-chimique/ajouter-prelevment-chimique.component";
-import {
-  AjoutFichevieInterventionComponent
-} from "./Components/ajout-fichevie-intervention/ajout-fichevie-intervention.component";
 import {AnalysePhysiqueComponent} from "./Components/analyse-physique/analyse-physique.component";
-import {
-  AjouterPrelevmentPhysiqueComponent
-} from "./Components/ajouter-prelevment-physique/ajouter-prelevment-physique.component";
+import {AjouterPrelevmentPhysiqueComponent} from "./Components/ajouter-prelevment-physique/ajouter-prelevment-physique.component";
 import {LoginComponent} from "./Components/login/login.component";
 import {AuthGuard} from "./guard/AuthGuard";
 import {AjouterInventaireComponent} from "./Components/ajouter-inventaire/ajouter-inventaire.component";
@@ -29,6 +24,9 @@ import {ProduitComponent} from "./Components/produit/produit.component";
 import {RapportAnalyseComponent} from "./Components/rapportAnalyse/rapportAnalyse.component";
 import {CommandeComponent} from "./Components/commande/commande.component";
 import {AjouterCommandeComponent} from "./Components/ajouter-commande/ajouter-commande.component";
+import {
+  AjoutFichevieInterventionComponent
+} from "./Components/ajout-fichevie-intervention/ajout-fichevie-intervention.component";
 
 export const routes: Routes = [
   {path:'', component:LoginComponent},
