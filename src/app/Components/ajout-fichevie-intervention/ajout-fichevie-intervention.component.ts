@@ -119,7 +119,7 @@ export class AjoutFichevieInterventionComponent implements OnInit {
       this.listeInterventions = [];
 
       if (this.isUpdateFichVie) {
-
+        console.log(new JsonPipe().transform(this.ficheVie))
         this.ficheVieService.updateFicheVie(this.ficheVie).subscribe(value => this.router.navigate(['/etalonage']))
       } else {
 
