@@ -10,8 +10,7 @@ import {Table, TableModule} from "primeng/table";
 import {ToastModule} from "primeng/toast";
 import {ToolbarModule} from "primeng/toolbar";
 import {Product} from "../../Models/product";
-import {ProductService} from "../../Services/product.service";
-import {Puit} from "../../Models/puit";
+ import {Puit} from "../../Models/puit";
 import {PuitService} from "../../Services/puit.service";
 import {InputTextModule} from "primeng/inputtext";
 import {CalendarModule} from "primeng/calendar";
@@ -24,6 +23,7 @@ import {CheckboxModule} from "primeng/checkbox";
 import {AutoFocusModule} from "primeng/autofocus";
 import {LoginService} from "../../Services/login.service";
 import * as XLSX from 'xlsx';
+import {getToken} from "../../../main";
 
 @Component({
   selector: 'app-puit',
@@ -95,7 +95,7 @@ export class PuitComponent implements OnInit {
   }
 
 
-  constructor(private Loginservice:LoginService,private productService: ProductService, private messageService: MessageService, private puitService: PuitService) {
+  constructor(private Loginservice:LoginService,  private messageService: MessageService, private puitService: PuitService) {
   }
 
 
@@ -423,4 +423,5 @@ this.ReportedBy=this.Loginservice.getToken()
   //     XLSX.writeFile(wb, 'Export_' + new Date().getTime() + '.xlsx');
   //   }
   // }
+  protected readonly getToken = getToken;
 }

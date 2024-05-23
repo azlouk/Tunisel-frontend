@@ -15,7 +15,14 @@
     </button>
 
     <div #topbarmenu class="layout-topbar-menu  " [ngClass]="{'layout-topbar-menu-mobile-active': layoutService.state.profileSidebarVisible}">
+      <div class=" flex align-items-center">
 
+        <p-avatar
+          image="./assets/utilisateur.png"
+          styleClass="flex align-items-center justify-content-center mr-2"
+            />
+        {{getToken()}}
+      </div>
 
         <button class="p-link layout-topbar-button  " (click)="dec()">
             <i class="pi pi-sign-out text-red-400 "> </i>

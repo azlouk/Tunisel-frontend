@@ -18,4 +18,12 @@ export class DashboardService {
   getDashboardData(): Observable<Dashboard> {
     return this.http.get<Dashboard>(`${this.apiUrl}/dashboard/data`);
   }
+
+  getCountAnalyseChemique(): Observable<any[]> {
+    return this.http.get<any[]>(`${this.apiUrl}/analysechimiques/count-by-month`);
+  }
+
+  getCountAnalyseChemiqueBassin(): Observable<any[]> {
+    return this.http.get<any[]>(`${this.apiUrl}/bassins/count-by-month-bassin`);
+  }
 }

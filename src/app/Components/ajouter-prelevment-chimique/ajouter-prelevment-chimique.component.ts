@@ -33,6 +33,7 @@ import Swal from "sweetalert2";
 import {Bande} from "../../Models/bande";
 import {BandeService} from "../../Services/bande.service";
 import {InputTextareaModule} from "primeng/inputtextarea";
+import {getToken} from "../../../main";
 
 @Component({
   selector: 'app-ajouter-prelevment-chimique',
@@ -104,20 +105,20 @@ export class AjouterPrelevmentChimiqueComponent implements OnInit {
   ngOnInit(): void {
 
     this.attributs= [
-      {name:'d',checked:false,label:'Densité', value:this.analysesChimique.densite},
-      {name:'MS',checked:false,label:'Matter en suspension', value:this.analysesChimique.matiereEnSuspension },
-      {name:'S',checked:false,label:'Salinité', value:this.analysesChimique.salinite},
-      {name:'Ca',checked:false,label:'Calcium', value:this.analysesChimique.calcium},
-      {name:'Mg',checked:false,label:'Magnésium', value:this.analysesChimique.magnesium},
-      {name:'SO₄',checked:false,label:'Sulfate', value:this.analysesChimique.sulfate},
-      {name:'H₂O',checked:false,label:'Humidité', value:this.analysesChimique.humidite},
+      {name:'d',checked:false,label:'density', value:this.analysesChimique.densite},
+      {name:'MS',checked:false,label:'Suspended matter', value:this.analysesChimique.matiereEnSuspension },
+      {name:'S',checked:false,label:'salinity', value:this.analysesChimique.salinite},
+      {name:'Ca',checked:false,label:'calcium', value:this.analysesChimique.calcium},
+      {name:'Mg',checked:false,label:'magnesium', value:this.analysesChimique.magnesium},
+      {name:'SO₄',checked:false,label:'sulfate', value:this.analysesChimique.sulfate},
+      {name:'H₂O',checked:false,label:'moisture', value:this.analysesChimique.humidite},
       {name:'MI',checked:false,label:'Matter insoluble', value:this.analysesChimique.matiereInsoluble},
       {name:'K',checked:false,label:'Potassium', value:this.analysesChimique.potassium},
       {name:'Na',checked:false,label:'Sodium', value:this.analysesChimique.sodium},
-      {name:'Cl',checked:false,label:'Chlorure', value:this.analysesChimique.chlorure},
+      {name:'Cl',checked:false,label:'chloride', value:this.analysesChimique.chlorure},
       {name:'pH',checked:false,label:'pH', value:this.analysesChimique.ph},
-      {name:'NaCL',checked:false,label:'Chlorure de sodium', value:this.analysesChimique.chlorureDeSodium},
-      {name:'Fe(CN)₆',checked:false,label:'Ferrocyanure', value:this.analysesChimique.ferrocyanure},
+      {name:'NaCL',checked:false,label:'chlorure de sodium', value:this.analysesChimique.chlorureDeSodium},
+      {name:'Fe(CN)₆',checked:false,label:'ferrocyanure ', value:this.analysesChimique.ferrocyanure},
 
     ]
     this.selectedPuit = {};
@@ -368,4 +369,6 @@ export class AjouterPrelevmentChimiqueComponent implements OnInit {
     this.selectedPuit = {};
 
   }
+
+  protected readonly getToken = getToken;
 }

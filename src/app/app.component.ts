@@ -1,7 +1,6 @@
 import {Component, CUSTOM_ELEMENTS_SCHEMA, inject, NO_ERRORS_SCHEMA, OnInit} from '@angular/core';
 import {Router, RouterLink, RouterOutlet} from '@angular/router';
-import {ProductService} from "./Services/product.service";
-import {ButtonModule} from "primeng/button";
+ import {ButtonModule} from "primeng/button";
 
 import {MessageService} from "primeng/api";
 import {AppLayoutModule} from "./Components/layout/app.layout.module";
@@ -16,7 +15,7 @@ import {forkJoin} from "rxjs";
   imports: [RouterOutlet, RouterLink, ButtonModule, AppLayoutModule],
   templateUrl: './app.component.html',
   styleUrl: './app.component.css',
-  providers: [ProductService,MessageService],
+  providers: [ MessageService],
   schemas: [
     CUSTOM_ELEMENTS_SCHEMA,
     NO_ERRORS_SCHEMA
@@ -29,7 +28,6 @@ constructor(public loginservice:LoginService, public route:Router) {
 }
 
   ngOnInit(): void {
-
   }
 
 }

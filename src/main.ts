@@ -5,3 +5,8 @@ import { AppComponent } from './app/app.component';
 bootstrapApplication(AppComponent, appConfig)
   .catch((err) => console.error(err));
 
+export function  getToken(){
+  if(localStorage.getItem("token"))
+return localStorage.getItem("token")
+ return ""
+}

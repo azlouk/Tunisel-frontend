@@ -4,6 +4,7 @@ import { LayoutService } from "./service/app.layout.service";
 import {LoginService} from "../../Services/login.service";
 import {Router} from "@angular/router";
 import Swal from "sweetalert2";
+import {getToken} from "../../../main";
 
 @Component({
     selector: 'app-topbar',
@@ -23,14 +24,14 @@ export class AppTopBarComponent {
 
   dec() {
     Swal.fire({
-      title: "Tu es sûr ?",
-      text: "Vous pouvez connecter autre fois avec votre identifiant et mot de passe",
+      title: "Are you sure?",
+      text: "You can log in again with your username and password",
       icon: "warning",
       showCancelButton: true,
       confirmButtonColor: "#3085d6",
       cancelButtonColor: "#d33",
-      confirmButtonText: "Oui, Déconnecter",
-      cancelButtonText:"Rester"
+      confirmButtonText: "Yes, Disconnect",
+      cancelButtonText:"keep"
     }).then((result) => {
       if (result.isConfirmed) {
         this.loginservice.logout()
@@ -39,4 +40,6 @@ export class AppTopBarComponent {
 
 
   }
+
+  protected readonly getToken = getToken;
 }

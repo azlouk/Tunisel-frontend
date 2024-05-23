@@ -13,6 +13,9 @@ import {Article} from "../../Models/article";
 import {ArticleService} from "../../Services/article.service";
 import {Unite} from "../../Enum/unite";
 import {ListboxModule} from "primeng/listbox";
+import {getToken} from "../../../main";
+
+
 
 @Component({
   selector: 'app-article',
@@ -67,8 +70,7 @@ export class ArticleComponent implements OnInit{
   ngOnInit() {
 this.article.unite=Unite.PIECE
 
-    this.articleService.getAllArticles().subscribe(value => {this.articles=value},
-      error => {console.log(error)})
+this.getAllarticles()
 
     this.cols = [
       { field: 'id', header: 'id' },
@@ -184,4 +186,11 @@ this.article.unite=Unite.PIECE
   }
 
   protected readonly Unite = Unite;
+    protected readonly getToken = getToken;
+
+
+  getAllarticles() {
+    this.articleService.getAllArticles().subscribe(value => {this.articles=value},
+      error => {console.log(error)})
+  }
 }

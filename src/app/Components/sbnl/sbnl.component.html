@@ -5,8 +5,8 @@
       <p-toolbar styleClass="mb-4">
         <ng-template pTemplate="left">
           <div class="my-2">
-            <button pButton pRipple label="Add" icon="pi pi-plus" class="p-button-success mr-2" (click)="openNew()"></button>
-            <button pButton pRipple label="Delete" icon="pi pi-trash" class="p-button-danger mr-2" (click)="deleteSelectedSbnls()" [disabled]="!selectedSbnls || !selectedSbnls.length"></button>
+            <button *ngIf="getToken()=='ADMIN'" pButton pRipple label="Add" icon="pi pi-plus" class="p-button-success mr-2" (click)="openNew()"></button>
+            <button *ngIf="getToken()=='ADMIN'" pButton pRipple label="Delete" icon="pi pi-trash" class="p-button-danger mr-2" (click)="deleteSelectedSbnls()" [disabled]="!selectedSbnls || !selectedSbnls.length"></button>
             <button pButton pRipple label="Refresh" icon="pi pi-refresh" class="p-button-primary mr-2" (click)="getsbnl()"  ></button>
 
           </div>
@@ -368,6 +368,6 @@
 
   </div>
   <ng-template pTemplate="footer">
-    <p-button icon="pi pi-file-pdf" (click)="SavePDF()" class="text-green-50" label="PDF" pAutoFocus [autofocus]="true"  ></p-button>
+    <p-button icon="pi pi-file-pdf" (click)="SavePDF()" class="text-green-50" label="PDF" pAutoFocus    ></p-button>
   </ng-template>
 </p-dialog>

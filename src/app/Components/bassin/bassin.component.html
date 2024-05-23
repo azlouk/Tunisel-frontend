@@ -5,8 +5,8 @@
       <p-toolbar styleClass="mb-4">
         <ng-template pTemplate="left">
           <div class="my-2">
-            <button pButton pRipple label="Add" icon="pi pi-plus" class="p-button-success mr-2" (click)="openNew()"></button>
-            <button pButton pRipple label="Delete" icon="pi pi-trash" class="p-button-danger mr-2" (click)="deleteSelectedBassins()" [disabled]="!selectedBassins || !selectedBassins.length"></button>
+            <button *ngIf="getToken()=='ADMIN'" pButton pRipple label="Add" icon="pi pi-plus" class="p-button-success mr-2" (click)="openNew()"></button>
+            <button *ngIf="getToken()=='ADMIN'"  pButton pRipple label="Delete" icon="pi pi-trash" class="p-button-danger mr-2" (click)="deleteSelectedBassins()" [disabled]="!selectedBassins || !selectedBassins.length"></button>
             <button pButton pRipple label="Refresh" icon="pi pi-refresh" class="p-button-primary mr-2" (click)="getAllBassin()"  ></button>
 
           </div>
@@ -86,8 +86,8 @@
             </td>
             <td>
               <div class="flex">
-                <button pButton pRipple icon="pi pi-pencil" class="p-button-rounded p-button-success mr-2" (click)="editBassin(bassin)"></button>
-                <button pButton pRipple icon="pi pi-trash" class="p-button-rounded p-button-warning mr-2" (click)="deleteBassin(bassin)"></button>
+                <button *ngIf="getToken()=='ADMIN'" pButton pRipple icon="pi pi-pencil" class="p-button-rounded p-button-success mr-2" (click)="editBassin(bassin)"></button>
+                <button *ngIf="getToken()=='ADMIN'" pButton pRipple icon="pi pi-trash" class="p-button-rounded p-button-warning mr-2" (click)="deleteBassin(bassin)"></button>
                 <button pButton pRipple icon="pi pi-file-pdf" class="p-button-rounded p-button-primary mr-2"  (click)="exportrapport(bassin)"></button>
 
               </div>

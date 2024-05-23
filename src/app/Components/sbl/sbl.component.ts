@@ -10,8 +10,7 @@ import {Table, TableModule} from "primeng/table";
 import {ToastModule} from "primeng/toast";
 import {ToolbarModule} from "primeng/toolbar";
 import {Product} from "../../Models/product";
-import {ProductService} from "../../Services/product.service";
-import {Sbl} from "../../Models/sbl";
+ import {Sbl} from "../../Models/sbl";
 import {SblService} from "../../Services/sbl.service";
 import {Sbnl} from "../../Models/sbnl";
 import {SbnlService} from "../../Services/sbnl.service";
@@ -25,6 +24,7 @@ import {CheckboxModule} from "primeng/checkbox";
 import {ListboxModule} from "primeng/listbox";
 import {Bande} from "../../Models/bande";
 import {BandeService} from "../../Services/bande.service";
+import {getToken} from "../../../main";
 
 @Component({
   selector: 'app-sbl',
@@ -90,7 +90,7 @@ export class SblComponent implements OnInit{
   @Input() get selectedColumns(): any[] {
     return this._selectedColumns;
   }
-  constructor(private productService: ProductService, private messageService: MessageService,private sblService :SblService,private bandeService:BandeService) {}
+  constructor( private messageService: MessageService,private sblService :SblService,private bandeService:BandeService) {}
 
   ngOnInit() {
     this.colsfiltre = [
@@ -356,4 +356,5 @@ export class SblComponent implements OnInit{
     return date1.getDay()<=date2.getDay() && date1.getMonth()<=date2.getMonth() && date1.getFullYear()<=date2.getFullYear()
   }
 
+    protected readonly getToken = getToken;
 }

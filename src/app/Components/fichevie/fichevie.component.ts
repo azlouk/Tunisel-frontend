@@ -12,8 +12,7 @@ import {ToastModule} from "primeng/toast";
 import {ToolbarModule} from "primeng/toolbar";
 import {Product} from "../../Models/product";
 import {Router} from "@angular/router";
-import {ProductService} from "../../Services/product.service";
-import {FicheVie} from "../../Models/fichevie";
+ import {FicheVie} from "../../Models/fichevie";
 import {FicheVieService} from "../../Services/fichevie.service";
 import html2canvas from "html2canvas";
 import jsPDF from "jspdf";
@@ -23,6 +22,7 @@ import {FloatLabelModule} from "primeng/floatlabel";
 import {RadioButtonModule} from "primeng/radiobutton";
 import {utils, writeFile} from "xlsx";
 import * as XLSX from 'xlsx';
+import {getToken} from "../../../main";
 
 @Component({
   selector: 'app-fichevie',
@@ -81,7 +81,7 @@ export class FichevieComponent implements OnInit {
   private isUpdateFicheVie = false;
 
 
-  constructor(private router: Router, private productService: ProductService, private messageService: MessageService, private ficheVieService: FicheVieService) {
+  constructor(private router: Router,   private messageService: MessageService, private ficheVieService: FicheVieService) {
   }
   getAllVie() {
     this.ficheVieService.getFichesVies().subscribe((v: FicheVie[]) => {
@@ -303,4 +303,5 @@ csvExport() {
 //       XLSX.writeFile(wb, 'Export_' + new Date().getTime() + '.xlsx');
 //     }
 //   }
+  protected readonly getToken = getToken;
 }

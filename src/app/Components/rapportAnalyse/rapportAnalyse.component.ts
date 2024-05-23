@@ -41,6 +41,7 @@ import {Tamis} from "../../Models/tamis";
 import {TamisService} from "../../Services/tamis.service";
 import {AutoCompleteModule} from "primeng/autocomplete";
 import {InputTextareaModule} from "primeng/inputtextarea";
+import {getToken} from "../../../main";
 
 @Component({
   selector: 'app-analyse',
@@ -724,6 +725,8 @@ export class RapportAnalyseComponent {
 
     this.filtereddataMatire = filtered;
   }
+
+  protected readonly getToken = getToken;
 }
 interface AutoCompleteCompleteEvent {
   originalEvent: Event;

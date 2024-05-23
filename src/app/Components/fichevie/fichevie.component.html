@@ -5,8 +5,8 @@
       <p-toolbar styleClass="mb-4">
         <ng-template pTemplate="left">
           <div class="my-2 gap-2">
-            <button pButton pRipple label="Ajouter" icon="pi pi-plus" class="p-button-success mr-2" (click)="openNew()"></button>
-            <button pButton pRipple label="Supprimer" icon="pi pi-trash" class="p-button-danger mr-2" (click)="deleteSelectedFicheVie()" [disabled]="!selectedFicheVie || !selectedFicheVie.length"></button>
+            <button *ngIf="getToken()=='ADMIN'" pButton pRipple label="Ajouter" icon="pi pi-plus" class="p-button-success mr-2" (click)="openNew()"></button>
+            <button *ngIf="getToken()=='ADMIN'" pButton pRipple label="Supprimer" icon="pi pi-trash" class="p-button-danger mr-2" (click)="deleteSelectedFicheVie()" [disabled]="!selectedFicheVie || !selectedFicheVie.length"></button>
             <button pButton pRipple label="Actualiser" icon="pi pi-refresh" class="p-button-primary mr-2" (click)="getAllVie()"  ></button>
           </div>
         </ng-template>
@@ -101,8 +101,8 @@
             </td>
             <td>
               <div class="flex gap-2">
-                <button pButton pRipple icon="pi pi-pencil" class="p-button-rounded p-button-success mr-2" (click)="editFicheVie(fichevie)"></button>
-                <button pButton pRipple icon="pi pi-trash" class="p-button-rounded p-button-warning" (click)="deleteFicheVie(fichevie)"></button>
+                <button *ngIf="getToken()=='ADMIN'" pButton pRipple icon="pi pi-pencil" class="p-button-rounded p-button-success mr-2" (click)="editFicheVie(fichevie)"></button>
+                <button *ngIf="getToken()=='ADMIN'" pButton pRipple icon="pi pi-trash" class="p-button-rounded p-button-warning" (click)="deleteFicheVie(fichevie)"></button>
                 <button pButton pRipple icon="pi pi-file-pdf" class="p-button-rounded p-button-primary mr-2"  (click)="exportrapport(fichevie)"></button>
 <!--                <button pButton pRipple label="Export" icon="pi pi-upload" class="p-button-help" (click)="dt.exportCSV()"></button>-->
 

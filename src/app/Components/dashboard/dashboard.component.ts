@@ -1,8 +1,7 @@
 import {Component, OnDestroy, OnInit} from '@angular/core';
 import {MenuItem, TreeNode} from "primeng/api";
 import {debounceTime, Subscription} from "rxjs";
-import {ProductService} from "../../Services/product.service";
-import {LayoutService} from "../../Services/app.layout.service";
+ import {LayoutService} from "../../Services/app.layout.service";
 import {Product} from "../../Models/product";
 import {CurrencyPipe, NgStyle} from "@angular/common";
 import {TableModule} from "primeng/table";
@@ -14,6 +13,7 @@ import {OrganizationChartModule} from "primeng/organizationchart";
 import {DropdownModule} from "primeng/dropdown";
 import {FormsModule} from "@angular/forms";
 import {LoginService} from "../../Services/login.service";
+import {getToken} from "../../../main";
 
 
 @Component({
@@ -41,6 +41,7 @@ export class DashboardComponent implements OnInit, OnDestroy {
   chartDataAnalyse: any;
 
 
+  basin:any[]=[];
   chartOptions: any;
 
   subscription!: Subscription;
@@ -48,7 +49,7 @@ export class DashboardComponent implements OnInit, OnDestroy {
   public nbrPuits = 0;
   public dashboardData: Dashboard = new Dashboard(0, 0,0,0);
 
-  constructor(public loginservice: LoginService, private productService: ProductService, public layoutService: LayoutService, private dashboardService: DashboardService) {
+  constructor(public loginservice: LoginService,  public layoutService: LayoutService, private dashboardService: DashboardService) {
     this.subscription = this.layoutService.configUpdate$
       .pipe(debounceTime(25))
       .subscribe((config) => {
@@ -58,9 +59,10 @@ export class DashboardComponent implements OnInit, OnDestroy {
 
   ngOnInit() {
 
+    this.dashboardService.getCountAnalyseChemique().subscribe((value:any[]) =>this.data=value );
+    this.dashboardService.getCountAnalyseChemiqueBassin().subscribe((value:any[])=>this.basin=value );
     this.initChart();
-    this.productService.getProductsSmall().then(data => this.products = data);
-    this.fetchDashboardData()
+     this.fetchDashboardData()
 
     this.items = [
       {label: 'Add New', icon: 'pi pi-fw pi-plus'},
@@ -86,19 +88,19 @@ export class DashboardComponent implements OnInit, OnDestroy {
     const surfaceBorder = documentStyle.getPropertyValue('--surface-border');
 
     this.chartDataAnalyse = {
-      labels: ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'],
+      labels: ['Janvier', 'Février', 'Mars', 'Avril', 'Mai', 'Juin', 'Juillet','Août','septembre','octobre','novembre','décembre'],
       datasets: [
         {
-          label: 'Chemical',
-          data: [65, 59, 80, 81, 56, 55, 40, 45, 70, 56, 89, 69],
+          label: 'AnalyseChimique',
+          data: this.data.map((a:any)=>a[1]),
           fill: false,
           backgroundColor: documentStyle.getPropertyValue('--bluegray-700'),
           borderColor: documentStyle.getPropertyValue('--bluegray-700'),
           tension: .4
         },
         {
-          label: 'Granulometric',
-          data: [28, 48, 40, 19, 86, 27, 90, 58, 85, 45, 53, 46],
+          label: 'AnalyseChemiqueBassin',
+          data: this.basin.map(b=>b[1]),
           fill: false,
           backgroundColor: documentStyle.getPropertyValue('--green-600'),
           borderColor: documentStyle.getPropertyValue('--green-600'),
@@ -106,7 +108,6 @@ export class DashboardComponent implements OnInit, OnDestroy {
         }
       ]
     };
-
     this.chartOptions = {
       plugins: {
         legend: {
@@ -136,7 +137,8 @@ export class DashboardComponent implements OnInit, OnDestroy {
         }
       }
     };
-  }
+
+}
 
 
   selectedNodes!: TreeNode[];

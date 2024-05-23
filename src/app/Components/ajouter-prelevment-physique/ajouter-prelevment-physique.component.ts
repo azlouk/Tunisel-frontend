@@ -32,6 +32,7 @@ import {Bande} from "../../Models/bande";
 import {BandeService} from "../../Services/bande.service";
 import {InputTextareaModule} from "primeng/inputtextarea";
 import {AutoCompleteCompleteEvent, AutoCompleteModule} from "primeng/autocomplete";
+import {getToken} from "../../../main";
 
 @Component({
   selector: 'app-ajouter-prelevment-physique',
@@ -409,4 +410,5 @@ this.calculateRefusCumulated();
     this.filtereddatasel = filtered;
   }
 
+  protected readonly getToken = getToken;
 }

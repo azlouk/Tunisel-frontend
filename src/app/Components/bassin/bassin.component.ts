@@ -1,7 +1,6 @@
 import {Component, ElementRef, Input, OnInit, ViewChild} from '@angular/core';
 import {Product} from "../../Models/product";
-import {ProductService} from "../../Services/product.service";
-import {MessageService, SharedModule} from "primeng/api";
+ import {MessageService, SharedModule} from "primeng/api";
 import {CommonModule, DatePipe, JsonPipe, NgClass, NgIf} from "@angular/common";
 import {Table, TableModule} from "primeng/table";
 import {Puit} from "../../Models/puit";
@@ -28,6 +27,7 @@ import {CheckboxModule} from "primeng/checkbox";
 import {ListboxModule} from "primeng/listbox";
 import {AutoFocusModule} from "primeng/autofocus";
 import {utils, writeFile} from "xlsx";
+import {getToken} from "../../../main";
 
 @Component({
   selector: 'app-bassin',
@@ -99,7 +99,7 @@ loading:boolean=false ;
   @Input() get selectedColumns(): any[] {
     return this._selectedColumns;
   }
-  constructor(private productService: ProductService, private messageService: MessageService,private bassinService :BassinService,private puitService:PuitService) { }
+  constructor(  private messageService: MessageService,private bassinService :BassinService,private puitService:PuitService) { }
 
   ngOnInit() {
 
@@ -430,4 +430,6 @@ this.SelectetBassin={analysesPhysiques:[]}
     utils.book_append_sheet(wb, ws, 'Bassins');
     writeFile(wb, 'Bassins Report.xlsx');
   }
+
+  protected readonly getToken = getToken;
 }

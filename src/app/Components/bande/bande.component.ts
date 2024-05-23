@@ -16,8 +16,7 @@ import {ToastModule} from "primeng/toast";
 import {ToolbarModule} from "primeng/toolbar";
 import {Product} from "../../Models/product";
 import {Sbnl} from "../../Models/sbnl";
-import {ProductService} from "../../Services/product.service";
-import {SbnlService} from "../../Services/sbnl.service";
+ import {SbnlService} from "../../Services/sbnl.service";
 import {AnalysesChimique} from "../../Models/analyses-chimique";
 import {AnalysesPhysique} from "../../Models/analyses-physique";
 import {Tamis} from "../../Models/tamis";
@@ -30,6 +29,7 @@ import {PasswordModule} from "primeng/password";
 import {RadioButtonModule} from "primeng/radiobutton";
 import {error} from "@angular/compiler-cli/src/transformers/util";
 import Swal from "sweetalert2";
+import {getToken} from "../../../main";
 
 @Component({
   selector: 'app-bande',
@@ -99,7 +99,7 @@ export class BandeComponent {
   @Input() get selectedColumns(): any[] {
     return this._selectedColumns;
   }
-  constructor(private productService: ProductService, private messageService: MessageService,private sbnlService :SbnlService,private bandeService:BandeService) {}
+  constructor(  private messageService: MessageService,private sbnlService :SbnlService,private bandeService:BandeService) {}
 
   ngOnInit() {
     this.colsfiltre = [
@@ -351,4 +351,6 @@ console.log('=====>>>>> export: ',new JsonPipe().transform(bande))
     console.log(date1+"<"+date2)
     return date1.getDay()<=date2.getDay() && date1.getMonth()<=date2.getMonth() && date1.getFullYear()<=date2.getFullYear()
   }
+
+    protected readonly getToken = getToken;
 }

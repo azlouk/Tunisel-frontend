@@ -28,6 +28,7 @@ import {LineCommandeService} from "../../Services/line-commande.service";
 import {KeyFilterModule} from "primeng/keyfilter";
 import {AutoCompleteCompleteEvent, AutoCompleteModule} from "primeng/autocomplete";
 import {Analyse} from "../../Models/analyse";
+import {getToken} from "../../../main";
 
 interface Column {
   id:number;
@@ -421,4 +422,5 @@ this.getLine()
    this.listeLignesCommandes=[...data];
   }
 
+  protected readonly getToken = getToken;
 }

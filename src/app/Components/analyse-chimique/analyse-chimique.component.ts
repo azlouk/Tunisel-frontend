@@ -1,7 +1,6 @@
 import {Component, Injectable, OnInit} from '@angular/core';
 import {Product} from "../../Models/product";
- import {ProductService} from "../../Services/product.service";
-import {MessageService, SharedModule} from "primeng/api";
+ import {MessageService, SharedModule} from "primeng/api";
  import {AsyncPipe, DatePipe, JsonPipe, NgClass, NgIf} from "@angular/common";
 import {Table, TableModule} from "primeng/table";
 import {ButtonModule} from "primeng/button";
@@ -14,6 +13,7 @@ import {ToolbarModule} from "primeng/toolbar";
 import {Router} from "@angular/router";
 import {AnalysesChimique} from "../../Models/analyses-chimique";
 import {AnalyseChimiqueService} from "../../Services/analyse-chimique.service";
+import {getToken} from "../../../main";
 
 @Component({
   selector: 'app-analyse-chimique',
@@ -68,8 +68,9 @@ export class AnalyseChimiqueComponent implements OnInit{
   public updateAnalyseChimique:AnalysesChimique={};
   selectedAnalysesChimiques: AnalysesChimique[] = [];
   private isUpdateAnalyseChimique=false;
+  loadchimique: boolean=false;
 
-  constructor(private router: Router,private productService: ProductService, private messageService: MessageService,private analyseChimiqueService :AnalyseChimiqueService) {}
+  constructor(private router: Router,  private messageService: MessageService,private analyseChimiqueService :AnalyseChimiqueService) {}
 
   ngOnInit() {
     this.getALLChimique();
@@ -154,6 +155,8 @@ export class AnalyseChimiqueComponent implements OnInit{
 
 
   getALLChimique() {
+    this.loadchimique=true
+
     this.analyseChimiqueService.getAllAnalysesChimiques().subscribe((analysesChimiques:  AnalysesChimique[]) => {
       this.analysesChimiques=analysesChimiques;
       this.analysesChimiques.forEach(analysechimique => {
@@ -186,12 +189,12 @@ export class AnalyseChimiqueComponent implements OnInit{
           });
         }
       })
-
-      console.log(new JsonPipe().transform("====================>>>>>>"+this.analysesChimiques))
+     this.loadchimique=false;
 
     },error => {
       console.log(error)})
 
   }
 
+  protected readonly getToken = getToken;
 }

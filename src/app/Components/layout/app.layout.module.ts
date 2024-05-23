@@ -18,6 +18,7 @@ import { AppConfigModule } from './config/config.module';
 import { AppSidebarComponent } from "./app.sidebar.component";
 import { AppLayoutComponent } from "./app.layout.component";
 import {NgClass, NgForOf, NgIf} from "@angular/common";
+import {AvatarModule} from "primeng/avatar";
 
 @NgModule({
     declarations: [
@@ -28,23 +29,24 @@ import {NgClass, NgForOf, NgIf} from "@angular/common";
         AppSidebarComponent,
         AppLayoutComponent,
     ],
-  imports: [
-    // BrowserModule,
-    FormsModule,
-    // HttpClientModule,
-    // BrowserAnimationsModule,
-    InputTextModule,
-    SidebarModule,
-    BadgeModule,
-    RadioButtonModule,
-    InputSwitchModule,
-    RippleModule,
-    RouterModule,
-    AppConfigModule,
-    NgClass,
-    NgForOf,
-    NgIf
-  ],
+    imports: [
+        // BrowserModule,
+        FormsModule,
+        // HttpClientModule,
+        // BrowserAnimationsModule,
+        InputTextModule,
+        SidebarModule,
+        BadgeModule,
+        RadioButtonModule,
+        InputSwitchModule,
+        RippleModule,
+        RouterModule,
+        AppConfigModule,
+        NgClass,
+        NgForOf,
+        NgIf,
+        AvatarModule
+    ],
     exports: [AppLayoutComponent]
 })
 export class AppLayoutModule { }

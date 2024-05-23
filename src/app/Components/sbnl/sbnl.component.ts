@@ -10,8 +10,7 @@ import {Table, TableModule} from "primeng/table";
 import {ToastModule} from "primeng/toast";
 import {ToolbarModule} from "primeng/toolbar";
 import {Product} from "../../Models/product";
-import {ProductService} from "../../Services/product.service";
-import {CalendarModule} from "primeng/calendar";
+ import {CalendarModule} from "primeng/calendar";
 import {InputTextModule} from "primeng/inputtext";
 import {Sbnl} from "../../Models/sbnl";
 import {Bassin} from "../../Models/bassin";
@@ -26,6 +25,7 @@ import {CheckboxModule} from "primeng/checkbox";
 import {AnalysesPhysique} from "../../Models/analyses-physique";
 import {Tamis} from "../../Models/tamis";
 import {ListboxModule} from "primeng/listbox";
+import {getToken} from "../../../main";
 
 @Component({
   selector: 'app-sbnl',
@@ -94,7 +94,7 @@ export class SbnlComponent implements OnInit{
   @Input() get selectedColumns(): any[] {
     return this._selectedColumns;
   }
-  constructor(private productService: ProductService, private messageService: MessageService,private sbnlService :SbnlService,private serviceBassin:BassinService) {}
+  constructor(  private messageService: MessageService,private sbnlService :SbnlService,private serviceBassin:BassinService) {}
 
   ngOnInit() {
     this.colsfiltre = [
@@ -390,4 +390,5 @@ this.Viderfiltredate()
     return date1.getTime() <= date2.getTime();
   }
 
+    protected readonly getToken = getToken;
 }

@@ -5,9 +5,9 @@
       <p-toolbar styleClass="mb-4">
         <ng-template pTemplate="left">
           <div class="my-2">
-            <button pButton pRipple label="Add" icon="pi pi-plus" class="p-button-success mr-2" (click)="openNew()"></button>
-            <button pButton pRipple label="Delete" icon="pi pi-trash" class="p-button-danger mr-2" (click)="deleteSelectedAnalysesPhysiques()" [disabled]="!selectedAnalysesPhysiques || !selectedAnalysesPhysiques.length"></button>
-            <button pButton pRipple label="Refresh" icon="pi pi-refresh" class="p-button-primary mr-2" (click)="getALLphysique()"  ></button>
+            <button *ngIf=" getToken()=='ADMIN'" pButton pRipple label="Add" icon="pi pi-plus" class="p-button-success mr-2" (click)="openNew()"></button>
+            <button *ngIf=" getToken()=='ADMIN'"pButton pRipple label="Delete" icon="pi pi-trash" class="p-button-danger mr-2" (click)="deleteSelectedAnalysesPhysiques()" [disabled]="!selectedAnalysesPhysiques || !selectedAnalysesPhysiques.length"></button>
+            <button  pButton pRipple label="Refresh" icon="pi pi-refresh" class="p-button-primary mr-2" (click)="getALLphysique()"  ></button>
 
           </div>
         </ng-template>
@@ -87,8 +87,9 @@
 
             <td>
               <div class="flex ">
-                <button pButton pRipple icon="pi pi-pencil" class="p-button-rounded p-button-success mr-2" (click)="editAnalysePhysique(analysePhysique)"></button>
-                <button pButton pRipple icon="pi pi-trash" class="p-button-rounded p-button-warning" (click)="deleteAnalysePhysique(analysePhysique)"></button>
+                <button  *ngIf=" getToken()=='ADMIN'" pButton pRipple icon="pi pi-pencil" class="p-button-rounded p-button-success mr-2" (click)="editAnalysePhysique(analysePhysique)"></button>
+                <button *ngIf="getToken()!=='ADMIN'"pButton pRipple icon="pi pi-eye" class="p-button-rounded p-button-primary mr-2" (click)="editAnalysePhysique(analysePhysique)"></button>
+                <button *ngIf=" getToken()=='ADMIN'" pButton pRipple icon="pi pi-trash" class="p-button-rounded p-button-warning" (click)="deleteAnalysePhysique(analysePhysique)"></button>
               </div>
             </td>
           </tr>

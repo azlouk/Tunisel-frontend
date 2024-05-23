@@ -9,9 +9,9 @@ import {ToastModule} from "primeng/toast";
 import {ToolbarModule} from "primeng/toolbar";
 import {Product} from "../../Models/product";
 import {Router} from "@angular/router";
-import {ProductService} from "../../Services/product.service";
-import {AnalysePhysiqueService} from "../../Services/analysePhysique.service";
+ import {AnalysePhysiqueService} from "../../Services/analysePhysique.service";
 import {AnalysesPhysique} from "../../Models/analyses-physique";
+import {getToken} from "../../../main";
 
 @Component({
   selector: 'app-analyse-physique',
@@ -56,7 +56,7 @@ export class AnalysePhysiqueComponent implements OnInit{
   selectedAnalysesPhysiques: AnalysesPhysique[] = [];
   private isUpdateAnalysePhysique=false;
 
-  constructor(private router: Router,private productService: ProductService, private messageService: MessageService,private analysePhysiqueService :AnalysePhysiqueService) {}
+  constructor(private router: Router,  private messageService: MessageService,private analysePhysiqueService :AnalysePhysiqueService) {}
 
   ngOnInit() {
 this.getALLphysique() ;
@@ -174,4 +174,6 @@ this.getALLphysique() ;
     },error => {
       console.log(error)})
   }
+
+  protected readonly getToken = getToken;
 }

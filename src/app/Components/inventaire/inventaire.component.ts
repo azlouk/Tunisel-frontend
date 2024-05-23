@@ -9,8 +9,7 @@ import {MessageService, SharedModule} from "primeng/api";
 import {Table, TableModule} from "primeng/table";
 import {ToastModule} from "primeng/toast";
 import {ToolbarModule} from "primeng/toolbar";
-import {ProductService} from "../../Services/product.service";
-import {Product} from "../../Models/product";
+ import {Product} from "../../Models/product";
 import {Router} from "@angular/router";
 import {Inventaire} from "../../Models/inventaire";
 import {InventaireService} from "../../Services/inventaire.service";
@@ -22,6 +21,7 @@ import jsPDF from "jspdf";
 import {Article} from "../../Models/article";
 import {ArticleService} from "../../Services/article.service";
 import {utils, writeFile} from "xlsx";
+import {getToken} from "../../../main";
 
 @Component({
   selector: 'app-inventaire',
@@ -79,7 +79,7 @@ export class InventaireComponent implements OnInit {
   public selectedInventairePrint: Inventaire={};
 
 
-  constructor(private router: Router, private productService: ProductService,private articleService: ArticleService, private messageService: MessageService, private inventaireService: InventaireService) {
+  constructor(private router: Router,  private articleService: ArticleService, private messageService: MessageService, private inventaireService: InventaireService) {
   }
 
   ngOnInit() {
@@ -319,4 +319,5 @@ existeArticle(a:Article):boolean|undefined{
 }
 
 
+  protected readonly getToken = getToken;
 }

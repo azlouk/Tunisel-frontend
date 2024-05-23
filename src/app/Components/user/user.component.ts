@@ -1,8 +1,7 @@
 import {Component, OnInit} from '@angular/core';
 import {Table, TableModule} from "primeng/table";
 import {Product} from "../../Models/product";
-import {ProductService} from "../../Services/product.service";
-import {MessageService} from "primeng/api";
+ import {MessageService} from "primeng/api";
 import {DialogModule} from "primeng/dialog";
 import {PaginatorModule} from "primeng/paginator";
 import {RadioButtonModule} from "primeng/radiobutton";
@@ -17,6 +16,7 @@ import {PasswordModule} from "primeng/password";
 import {UserType} from "../../Enum/user-type";
 import {InputTextModule} from "primeng/inputtext";
 import {Employer} from "../../Models/employer";
+import {getToken} from "../../../main";
 
 
 @Component({
@@ -69,7 +69,7 @@ export class UserComponent implements OnInit {
 
   private isUpdateUser = false;
 
-  constructor(private productService: ProductService, private messageService: MessageService, private userService: UserService) {
+  constructor(  private messageService: MessageService, private userService: UserService) {
   }
 
   ngOnInit() {
@@ -186,4 +186,5 @@ export class UserComponent implements OnInit {
   }
 
 
+  protected readonly getToken = getToken;
 }

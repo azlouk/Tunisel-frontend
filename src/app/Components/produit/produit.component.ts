@@ -18,6 +18,7 @@ import {Article} from "../../Models/article";
 import {ArticleService} from "../../Services/article.service";
 import {Bassin} from "../../Models/bassin";
 import {ListboxModule} from "primeng/listbox";
+import {getToken} from "../../../main";
 
 @Component({
   selector: 'app-produit',
@@ -192,4 +193,5 @@ export class ProduitComponent implements OnInit{
     table.filterGlobal((event.target as HTMLInputElement).value, 'contains');
   }
 
+    protected readonly getToken = getToken;
 }

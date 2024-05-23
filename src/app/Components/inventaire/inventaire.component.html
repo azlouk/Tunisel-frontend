@@ -4,7 +4,7 @@
       <p-toast></p-toast>
       <p-toolbar styleClass="mb-4">
         <ng-template pTemplate="left">
-          <div class="my-2">
+          <div *ngIf=" getToken()=='ADMIN'"  class="my-2">
             <button pButton pRipple label="Add" icon="pi pi-plus" class="p-button-success mr-2"
                     (click)="openNew()"></button>
             <button pButton pRipple label="Delete" icon="pi pi-trash" class="p-button-danger"
@@ -70,9 +70,9 @@
 
             <td>
               <div class="flex gap-2">
-                <button pButton pRipple icon="pi pi-pencil" class="p-button-rounded p-button-success mr-2"
+                <button *ngIf=" getToken()=='ADMIN'"  pButton pRipple icon="pi pi-pencil" class="p-button-rounded p-button-success mr-2"
                         (click)="editInventaire(inventaire)"></button>
-                <button pButton pRipple icon="pi pi-trash" class="p-button-rounded p-button-warning"
+                <button *ngIf=" getToken()=='ADMIN'"  pButton pRipple icon="pi pi-trash" class="p-button-rounded p-button-warning"
                         (click)="deleteInventaire(inventaire)"></button>
                 <button pButton pRipple icon="pi pi-file-pdf" class="p-button-rounded p-button-primary mr-2"
                         (click)="exportrapport(inventaire)"></button>

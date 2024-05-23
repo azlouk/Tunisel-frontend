@@ -1,8 +1,7 @@
 import {Component, ElementRef, Input, ViewChild} from '@angular/core';
 import {Product} from "../../Models/product";
 import {Sbl} from "../../Models/sbl";
-import {ProductService} from "../../Services/product.service";
-import {MessageService} from "primeng/api";
+ import {MessageService} from "primeng/api";
 import {SblService} from "../../Services/sbl.service";
 import {CommonModule, DatePipe, JsonPipe, NgClass, NgIf} from "@angular/common";
 import {Table, TableModule} from "primeng/table";
@@ -26,6 +25,7 @@ import jsPDF from "jspdf";
 import {ListboxModule} from "primeng/listbox";
 import {CheckboxModule} from "primeng/checkbox";
 import {AutoFocusModule} from "primeng/autofocus";
+import {getToken} from "../../../main";
 
 @Component({
   selector: 'app-sblf',
@@ -90,7 +90,7 @@ export class SblfComponent {
   @Input() get selectedColumns(): any[] {
     return this._selectedColumns;
   }
-  constructor(private productService: ProductService, private messageService: MessageService,private sblfService :SblfService,private sblService:SblService) {}
+  constructor(  private messageService: MessageService,private sblfService :SblfService,private sblService:SblService) {}
 
   ngOnInit() {
 
@@ -363,5 +363,5 @@ export class SblfComponent {
   }
 
 
-
+    protected readonly getToken = getToken;
 }

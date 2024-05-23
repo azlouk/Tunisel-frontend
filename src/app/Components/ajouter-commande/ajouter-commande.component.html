@@ -7,7 +7,7 @@
           <button pButton pRipple label="Back" icon="pi pi-arrow-left" class="p-button-success mr-2 " (click)="retour()"></button>
         </div>
       </ng-template>
-      <h4>Add Command</h4>
+      <h4>{{isUpdateCommande?'Update':'Add'}} command</h4>
     </p-toolbar>
     <div class=" flex justify-content-between  mt-8 border-1 border-round border-gray-300 p-6  h-22rem">
       <div class="  flex flex-column gap-5  justify-content-between ">
@@ -240,7 +240,7 @@
 </p-dialog>
 <!---->
 <div class=" flex col-12 justify-content-end">
-  <button pButton label="Save" icon="pi pi-check" class=" " (click)="saveCommande()"></button>
+  <button *ngIf="getToken()=='ADMIN'" pButton label="Save" icon="pi pi-check" class=" " (click)="saveCommande()"></button>
 </div>
 
 

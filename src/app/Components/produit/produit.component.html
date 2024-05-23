@@ -4,7 +4,7 @@
       <p-toast></p-toast>
       <p-toolbar styleClass="mb-4">
         <ng-template pTemplate="left">
-          <div class="my-2">
+          <div *ngIf=" getToken()=='ADMIN'"  class="my-2">
             <button pButton pRipple label="Add" icon="pi pi-plus" class="p-button-success mr-2" (click)="openNew()"></button>
             <button pButton pRipple label="Delete" icon="pi pi-trash" class="p-button-danger" (click)="deleteSelectedProduit()" [disabled]="!selectedProduit || !selectedProduit.length"></button>
           </div>
@@ -82,7 +82,7 @@
             </td>
 
             <td>
-              <div class="flex ">
+              <div *ngIf=" getToken()=='ADMIN'"  class="flex ">
                 <button pButton pRipple icon="pi pi-pencil" class="p-button-rounded p-button-success mr-2" (click)="editProduit(produit)"></button>
                 <button pButton pRipple icon="pi pi-trash" class="p-button-rounded p-button-warning" (click)="deleteProduit(produit)"></button>
               </div>

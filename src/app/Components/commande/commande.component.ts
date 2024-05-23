@@ -10,9 +10,9 @@ import {ToolbarModule} from "primeng/toolbar";
 import {Product} from "../../Models/product";
 import {AnalysesPhysique} from "../../Models/analyses-physique";
 import {Router} from "@angular/router";
-import {ProductService} from "../../Services/product.service";
-import {Commande} from "../../Models/commande";
+ import {Commande} from "../../Models/commande";
 import {CommandeService} from "../../Services/commande.service";
+import {getToken} from "../../../main";
 
 @Component({
   selector: 'app-commande',
@@ -57,7 +57,7 @@ export class CommandeComponent implements OnInit{
   selectedCommandes:Commande[] = [];
 isUpdateCommande:boolean=false;
 
-  constructor(private router: Router,private productService: ProductService, private messageService: MessageService,private commandeService :CommandeService) {}
+  constructor(private router: Router,  private messageService: MessageService,private commandeService :CommandeService) {}
 
   ngOnInit() {
     this. getAllCommandes() ;
@@ -145,10 +145,5 @@ isUpdateCommande:boolean=false;
         }
 
 
-
-
-
-
-
-
+    protected readonly getToken = getToken;
 }
