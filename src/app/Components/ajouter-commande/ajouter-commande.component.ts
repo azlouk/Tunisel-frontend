@@ -1,4 +1,4 @@
-import {Component, OnInit} from '@angular/core';
+import {Component, ElementRef, OnInit, ViewChild} from '@angular/core';
 import {ButtonModule} from "primeng/button";
 import {CalendarModule} from "primeng/calendar";
 import {DialogModule} from "primeng/dialog";
@@ -25,7 +25,15 @@ import {CommandeService} from "../../Services/commande.service";
 import {LineCommande} from "../../Models/lineCommande";
 import {DropdownModule} from "primeng/dropdown";
 import {LineCommandeService} from "../../Services/line-commande.service";
-import {KeyFilterModule} from "primeng/keyfilter";
+import * as XLSX from 'xlsx';
+import {utils, WorkBook, WorkSheet, writeFile} from "xlsx";
+import {FieldsetModule} from "primeng/fieldset";
+import {AutoFocusModule} from "primeng/autofocus";
+import html2canvas from "html2canvas";
+import jsPDF from "jspdf";
+
+
+
 
 interface Column {
   id:number;
@@ -55,6 +63,8 @@ interface Column {
     MultiSelectModule,
     RippleModule,
     DropdownModule,
+    FieldsetModule,
+    AutoFocusModule,
 
   ],
   templateUrl: './ajouter-commande.component.html',
@@ -304,9 +314,7 @@ getCommandeById(){
 
   }
 
-  getAllLinesCommandes() {
 
-  }
 
   CalculeTotal() {
     this.TotalHarv=0;
@@ -322,4 +330,103 @@ getCommandeById(){
 
     })
   }
+
+
+
+  ExportExcel() {
+    // ====================================================================
+    const headings = [['Command Date', 'Name', 'State']];
+    const headingsBassin = [['Reference', '', 'Description', '', 'Name', '', 'Location', '', 'State', '', 'Creation Date']];
+
+    const wb: WorkBook = utils.book_new();
+    const ws: WorkSheet = utils.json_to_sheet([]);
+
+    // Ajouter les en-têtes de colonne pour les commandes
+    utils.sheet_add_aoa(ws, headings, { origin: 'A2' });
+
+    // Préparer les données des commandes
+    const commandData = [
+      [this.commande.dateCommande, this.commande.nom, this.commande.etat]
+    ];
+
+    // Ajouter les données de commandes à la feuille
+    utils.sheet_add_json(ws, commandData, { origin: 'A3', skipHeader: true });
+
+    // Ajouter les en-têtes de colonne pour les bassins
+    utils.sheet_add_aoa(ws, headingsBassin, { origin: 'A5' });
+
+    // Préparer les données des bassins
+    if (this.commande.bassin) {
+      const bassinData = [
+        [this.commande.bassin.reference, '', this.commande.bassin.description, '', this.commande.bassin.nom, '', this.commande.bassin.emplacement, '', this.commande.bassin.etat, '', this.commande.bassin.dateCreation]
+      ];
+
+      // Ajouter les données de bassins à la feuille
+      utils.sheet_add_json(ws, bassinData, { origin: 'A6', skipHeader: true });
+    }
+
+    // ====================================================================
+    // Ajouter les données du tableau HTML
+    const element = document.getElementById('EXCEL');
+    if (element) {
+      const wst: WorkSheet = utils.table_to_sheet(element);
+      const tableData: any[][] = utils.sheet_to_json(wst, { header: 1 }) as any[][];
+
+      // Déterminer l'index de la colonne contenant 'Prelevelment date'
+      let dateColumnIndex = -1;
+      tableData[0].forEach((header: any, index: number) => {
+        if (header === 'Prelevelment date') {
+          dateColumnIndex = index;
+        }
+      });
+
+      // Formater les dates dans les données du tableau HTML uniquement pour la colonne date identifiée
+      const formattedTableData = tableData.map((row: any[], rowIndex: number) => row.map((cell: any, colIndex: number) => {
+        if (colIndex === dateColumnIndex && typeof cell === 'number' && cell > 20000) {
+          return new Date((cell - 25569) * 86400 * 1000).toLocaleDateString();
+        }
+        return cell;
+      }));
+
+      // Ajouter les données formatées du tableau HTML à la feuille principale
+      utils.sheet_add_json(ws, formattedTableData, { origin: 'A8', skipHeader: true });
+    }
+
+    // Enregistrer la feuille de calcul
+    utils.book_append_sheet(wb, ws, 'Fiche de Vie');
+    writeFile(wb, 'FicheVie_Report.xlsx');
+  }
+
+  @ViewChild("pdfcommande") htmlContent: ElementRef | undefined;
+  visiblePrint: boolean = false;
+  dateToday: Date = new Date();
+
+  DatefiltrageStart: Date = new Date();
+  DatefiltrageEnd: Date = new Date();
+  SearchDate: any;
+
+
+
+
+
+  public SavePDF(): void {
+
+    if (this.htmlContent) {
+      html2canvas(this.htmlContent.nativeElement, {scale: 1}).then((canvas) => {
+        const imgData = canvas.toDataURL('image/png');
+        const pdf = new jsPDF('p', 'mm', 'a4');
+        const imgWidth = 210; // PDF width
+        const imgHeight = (canvas.height * imgWidth) / canvas.width; // Maintain aspect ratio
+        pdf.addImage(imgData, 'png', 2, 2, imgWidth, imgHeight);
+        pdf.save('Print_' + Math.random() + '.pdf');
+      });
+
+
+    }
+
+
+  }
+
+
+
 }

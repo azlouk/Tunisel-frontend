@@ -4,15 +4,25 @@
       <ng-template pTemplate="end"  >
         <div class=" my-2 " >
 
+
           <button pButton pRipple label="Back" icon="pi pi-arrow-left" class="p-button-success mr-2 " (click)="retour()"></button>
         </div>
       </ng-template>
       <h4>Add Command</h4>
     </p-toolbar>
-    <div class=" flex justify-content-between  mt-8 border-1 border-round border-gray-300 p-6  h-22rem">
+<!--    <p-fieldset legend="Export">-->
+      <div class="flex gap-4 justify-content-end align-items-center">
+        <label class="font-bold text-3xl">Export :</label>
+        <button type="button" pButton pRipple icon="pi pi-file-excel" (click)="ExportExcel()" class="p-button-success mr-2" pTooltip="XLS" tooltipPosition="bottom"></button>
+        <button type="button" pButton pRipple icon="pi pi-file" (click)="EXCEL.exportCSV()" class="mr-2" pTooltip="CSV" tooltipPosition="bottom"></button>
+<!--        <button type="button" pButton pRipple icon="pi pi-file-pdf" (click)="SavePDF()" class="p-button-success mr-2" pTooltip="PDF" tooltipPosition="bottom"></button>-->
+      </div>
+<!--    </p-fieldset>-->
+
+    <div class=" flex justify-content-between  mt-4 border-1 border-round border-gray-300 p-6  h-22rem">
       <div class="  flex flex-column   justify-content-between ">
         <p-floatLabel >
-          <p-calendar   id="dateCommande" [(ngModel)]="commande.dateCommande" dateFormat="yy-MM-dd"  [showIcon]="true"></p-calendar>
+          <p-calendar  dateFormat="yy-mm-dd" id="dateCommande" [(ngModel)]="commande.dateCommande"   [showIcon]="true"></p-calendar>
           <label for="dateCommande">Command Date</label>
         </p-floatLabel>
         <p-floatLabel>
@@ -99,6 +109,8 @@
         [value]="listeLignesCommandes"
         [tableStyle]="{'min-width': '50rem'}"
         editMode="row"
+        id="EXCEL"
+        #EXCEL
       >
 
         <ng-template pTemplate="caption">
@@ -205,7 +217,10 @@
 <!---->
 <div class=" flex col-12 justify-content-end">
   <button pButton label="Save" icon="pi pi-check" class=" " (click)="saveCommande()"></button>
+
+
 </div>
+
 
 
 
