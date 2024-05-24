@@ -26,6 +26,8 @@ import {CheckboxModule} from "primeng/checkbox";
 import {AnalysesPhysique} from "../../Models/analyses-physique";
 import {Tamis} from "../../Models/tamis";
 import {ListboxModule} from "primeng/listbox";
+import {AutoFocusModule} from "primeng/autofocus";
+import {utils, writeFile} from "xlsx";
 
 @Component({
   selector: 'app-sbnl',
@@ -48,7 +50,8 @@ import {ListboxModule} from "primeng/listbox";
     DatePipe,
     CheckboxModule,
     CommonModule,
-    ListboxModule
+    ListboxModule,
+    AutoFocusModule
   ],
   templateUrl: './sbnl.component.html',
   styleUrl: './sbnl.component.css'
@@ -82,6 +85,11 @@ export class SbnlComponent implements OnInit{
    selectedSbnl:Sbnl={}
   private isUpdatesbnl=false;
   bassins: Bassin[] = [];
+
+  // ======********============
+  SelectAll: boolean = false;
+
+
 
 
   @ViewChild("pdfpuit") htmlContent: ElementRef | undefined;
@@ -263,9 +271,9 @@ this.getsbnl()
       });
   }
 
-  exportrapport(sbnl: Sbnl) {
+  exportrapport(selectedSbnl: Sbnl) {
 
-    this.selectedSbnl = sbnl;
+    this.selectedSbnl = {...selectedSbnl};
     this.visiblePrint = true
     console.log("---->"+new JsonPipe().transform(this.selectedSbnl));
   }
@@ -378,6 +386,11 @@ this.Viderfiltredate()
   }
 
 
+  SelectAllCheck() {
+    this.colsfiltre.forEach(value => {
+      value.hide = this.SelectAll;
+    })
+  }
   getTamisFiltred() {
     return this.SelectedsbnlPrintAnalyse.tamisList==undefined?[]:this.SelectedsbnlPrintAnalyse.tamisList
   }
@@ -386,8 +399,42 @@ this.Viderfiltredate()
   //   console.log(date1+"<"+date2)
   //   return date1.getDay()<=date2.getDay() && date1.getMonth()<=date2.getMonth() && date1.getFullYear()<=date2.getFullYear()
   // }
+  SelectetSbnl: any;
+
   AfterTodate(date1: Date, date2: Date): boolean {
     return date1.getTime() <= date2.getTime();
+  }
+
+  csvExport() {
+    const headings = [['reference', '',  'description', '', 'dateStock', '', 'emplacement', '', 'etat', '', 'quantite', '', 'sbnlBassin', '', 'stockType', '',]];
+
+    const wb = utils.book_new();
+    const ws = utils.json_to_sheet([]);
+    utils.sheet_add_aoa(ws, headings);
+
+    const formattedData = this.sbnls.map(record => {
+      return [
+        record.id, '',
+        record.reference, '',
+        record.description, '',
+        record.dateStock, '',
+        record.emplacement, '',
+        record.etat, '',
+        record.quantite, '',
+        record.sbnlBassin, '',
+        record.stockType, '',
+
+
+      ];
+    });
+
+    utils.sheet_add_json(ws, formattedData, {
+      origin: 'A2',
+      skipHeader: true,
+    });
+
+    utils.book_append_sheet(wb, ws, 'Bassins');
+    writeFile(wb, 'Bassins Report.xlsx');
   }
 
 }

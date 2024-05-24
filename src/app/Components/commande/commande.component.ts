@@ -51,7 +51,9 @@ import {ListboxModule} from "primeng/listbox";
 export class CommandeComponent implements OnInit{
 
 
-
+  public  TotalHarv=0;
+  public TotalTrQu=0;
+  public TotalProd=0;
   productDialog: boolean = false;
 
   deleteProductDialog: boolean = false;
@@ -217,7 +219,6 @@ isUpdateCommande:boolean=false;
   showDialogDetails(command :Commande) {
     this.visible=true;
     this.selectedCommandPrint=command;
-    this.CalculeTotal();
   }
 
   // ---------------export details provider to PDF file ---------------
@@ -265,9 +266,6 @@ isUpdateCommande:boolean=false;
   }
 
   CalculeTotal() {
-  let  TotalHarv=0;
-  public TotalTrQu=0;
-  public TotalProd=0;
 
     if(this.selectedCommandPrint.ligneCommandes){
     // @ts-ignore

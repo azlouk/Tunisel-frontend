@@ -163,18 +163,7 @@
         #EXCEL
       >
 
-        <!--        <ng-template pTemplate="caption">-->
-        <!--          <p-multiSelect-->
-        <!--            display="chip"-->
-        <!--            [options]="cols"-->
-        <!--            [(ngModel)]="selectedColumns"-->
-        <!--            optionLabel="header"-->
-        <!--            selectedItemsLabel="{0} columns selected"-->
-        <!--            [style]="{'min-width': '200px'}"-->
-        <!--            placeholder="Choose Columns" />-->
 
-
-        <!--        </ng-template>-->
         <ng-template pTemplate="header" let-columns>
           <tr>
 
@@ -183,7 +172,7 @@
             </th>
             <th></th>
           </tr>
-        </ng-template>
+         </ng-template>
 
         <ng-template pTemplate="body" let-lineCommande let-columns="columns" let-editing="editing" let-ri="rowIndex">
           <tr [pEditableRow]="lineCommande">
@@ -212,12 +201,8 @@
 
             <td>
               <div class="flex align-items-center gap-2">
-                <!--                <div class="flex align-items-center justify-content-center gap-2">-->
-                <!--                  <button *ngIf="!editing" pButton pRipple type="button" pInitEditableRow icon="pi pi-pencil" (click)="onRowEditInit(lineCommande)" class="p-button-rounded p-button-success mr-2"></button>-->
-                <!--                  <button *ngIf="editing" pButton pRipple type="button" pSaveEditableRow icon="pi pi-check" (click)="onRowEditSave(lineCommande)" class="p-button-rounded p-button-text p-button-success mr-2"></button>-->
-                <!--                </div>-->
+
                 <div>
-                  <!--                  <button pButton pRipple icon="pi pi-trash" class="p-button-rounded p-button-warning mr-2" (click)="deleteLineCommande(lineCommande)"></button>-->
                 </div>
               </div>
             </td>
