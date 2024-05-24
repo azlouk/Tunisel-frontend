@@ -29,6 +29,12 @@ export class CommandeService {
 
 
   addCommande(commande: Commande) : Observable<Commande>{
+    // commande.ligneCommandes?.forEach(value => {
+    //   if(value.analyseChimique?.id==undefined && value.analysePhysique?.id==undefined){
+    //     value.analysePhysique=null;
+    //   }
+    // })
+    console.error(commande)
     return this.http.post<Commande>(`${this.apiUrl}/commandes/add`,commande);
 
   }

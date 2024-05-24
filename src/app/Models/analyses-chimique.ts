@@ -3,8 +3,8 @@ export interface AnalysesChimique  {
   id?: number;
   reference?: string;
   dateAnalyse?: Date  ;
-  temperature?: number;
-  vent?: number;
+  temperature?: number|undefined;
+  vent?: number|undefined;
   description?: string;
   densite?: number|undefined;
   matiereEnSuspension?: number|undefined;

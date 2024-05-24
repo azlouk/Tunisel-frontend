@@ -207,7 +207,10 @@ export class AjouterCommandeComponent implements OnInit{
 getCommandeById(){
   this.commandeService.getCommandeById(this.commandeId).subscribe(value => {
     this.commande = value;
-    this.listeLignesCommandes = value.ligneCommandes ?? [];
+
+      this.listeLignesCommandes = value.ligneCommandes??[];
+      this.CalculeTotalInput();
+
     // console.log(new JsonPipe().transform(this.commande))
   });
 }
@@ -260,7 +263,8 @@ getCommandeById(){
 
         if(id!==-1){
           this.commandeService.getLignesCommandes(id).subscribe(value => {
-            this.listeLignesCommandes = value;
+            const data=value.filter(value1 => this.listeLignesCommandes.find(value2 => value2==value1)==undefined)
+            this.listeLignesCommandes = data;
             console.log('size  : ' + this.listeLignesCommandes.length);
               this.getCalibre();
           },error =>{
@@ -271,16 +275,21 @@ getCommandeById(){
 
 
   getValueOfligneCommande(col: any, ligneCommande: any): any {
-    if (col.id < 20) {
-      if(col.id==0)
-        return ligneCommande.analyseChimique!==null ? this.pipedate(ligneCommande.analyseChimique[col.field]) : '-'
-      return ligneCommande.analyseChimique!==null ? ligneCommande.analyseChimique[col.field] : '-';
-    } else if (col.id > 19 && col.id < 22) {
-      return ligneCommande.analysePhysique!==null  ? ligneCommande.analysePhysique[col.field] : '-';
-    }
 
-    //************************************
-    else if (col.id > 21 && col.id < 27 && this.selectedColumnsCalibre && this.selectedColumnsCalibre.header) {
+    if (col.id < 20) {
+            if(col.id==0) {
+
+              return ligneCommande.analyseChimique !== null ? this.pipedate(ligneCommande.analyseChimique[col.field]) : '-'
+            }
+
+             return ligneCommande.analyseChimique!==null ? ligneCommande.analyseChimique[col.field] : '-';
+    }
+    else
+      if (col.id > 19 && col.id < 22)
+    {
+          return ligneCommande.analysePhysique!==null  ? ligneCommande.analysePhysique[col.field] : '-';
+    } else
+      if (col.id > 21 && col.id < 27 && this.selectedColumnsCalibre && this.selectedColumnsCalibre.header) {
       if (ligneCommande.analysePhysique !== null && ligneCommande.analysePhysique.tamisList) {
         // Use filter to find matching items in tamisList and add checks for undefined items
         const filteredTamis:any = ligneCommande.analysePhysique.tamisList.find((tamis: any) =>
@@ -292,22 +301,17 @@ getCommandeById(){
         return '-';
       }
     }
-    //************************************
+
 
     else {
+
       return ligneCommande!==null  ? ligneCommande[col.field] : '-';
     }
 
 
   }
 
-  changeCalibre() {
-    if (this.selectedColumnsCalibre) {
-      alert(`Selected Calibre: ${this.selectedColumnsCalibre.header}`);
-    } else {
-      alert('No Calibre selected');
-    }
-  }
+
 
   deleteLineCommande(lineCommande: LineCommande) {
     this.deleteLineCommandeDialog = true;
@@ -329,7 +333,7 @@ getCommandeById(){
 
 
     }
-    this.CalculeTotal()
+    this.CalculeTotalInput()
   }
 
   onRowEditInit(lineCommande: any) {
@@ -344,19 +348,29 @@ getCommandeById(){
 
   }
 
-  CalculeTotal() {
-    this.TotalHarv=0;
-    this.TotalTrQu=0;
-    this.TotalProd=0;
-    this.listeLignesCommandes.forEach(value => {
-      if(value.quantityRecolte)
-      this.TotalHarv+=parseFloat(value.quantityRecolte+'');
-      if(value.quantityProduction)
-        this.TotalProd+=parseFloat(value.quantityProduction+'')
-      if(value.quantiteTransfert)
-        this.TotalTrQu+=parseFloat(value.quantiteTransfert+'');
+  CalculeTotal(l:LineCommande) {
 
-    })
+
+      if(l.quantityRecolte)
+      this.TotalHarv+=parseFloat(l.quantityRecolte+'');
+      if(l.quantityProduction)
+        this.TotalProd+=parseFloat(l.quantityProduction+'')
+      if(l.quantiteTransfert)
+        this.TotalTrQu+=parseFloat(l.quantiteTransfert+'');
+
+
+  }
+  CalculeTotalDelet(l:LineCommande) {
+
+
+      if(l.quantityRecolte)
+      this.TotalHarv-=parseFloat(l.quantityRecolte+'');
+      if(l.quantityProduction)
+        this.TotalProd-=parseFloat(l.quantityProduction+'')
+      if(l.quantiteTransfert)
+        this.TotalTrQu-=parseFloat(l.quantiteTransfert+'');
+
+
   }
   searchAnalyse(l: LineCommande):boolean {
 
@@ -369,9 +383,8 @@ getCommandeById(){
   }
   filtredate() {
 
-
-    //this.Viderfiltredate()
-    const data=this.listeLignesCommandes.filter(l => this.searchAnalyse(l)==true );
+     //this.Viderfiltredate()
+    const data=this.listeLignesCommandes.filter(l => this.searchAnalyse(l)==true || this.chechMatter(l)==true );
 
     this.listeLignesCommandes=[...data]
 
@@ -411,7 +424,7 @@ this.getLine()
   }
     chechMatter(l: LineCommande):boolean {
    if(l.analysePhysique)
-    return  l.analysePhysique.qualite?.indexOf(this.matter)!==-1;
+    return  l.analysePhysique.qualite==this.matter;
 
   return  false ;
   }
@@ -419,8 +432,32 @@ this.getLine()
 
 
     const data = this.listeLignesCommandes.filter(l => this.chechMatter(l)==true);
-   this.listeLignesCommandes=[...data];
+   this.listeLignesCommandes=data;
   }
 
   protected readonly getToken = getToken;
+
+  AddLineCommand() {
+  const lineCommande:LineCommande={analysePhysique:null,analyseChimique:null}
+    // lineCommande.analyseChimique?.dateAnalyse!==undefined? lineCommande.analyseChimique.dateAnalyse.toString():new Date();
+
+    this.listeLignesCommandes.push(lineCommande);
+    console.log('===========>>>>>>: '+new JsonPipe().transform(this.listeLignesCommandes))
+  }
+
+  CalculeTotalInput() {
+    this.TotalHarv=0;
+    this.TotalTrQu=0;
+    this.TotalProd=0 ;
+    this.listeLignesCommandes.forEach(l =>{
+
+      if(l.quantityRecolte)
+        this.TotalHarv+=parseFloat(l.quantityRecolte+'');
+      if(l.quantityProduction)
+        this.TotalProd+=parseFloat(l.quantityProduction+'')
+      if(l.quantiteTransfert)
+        this.TotalTrQu+=parseFloat(l.quantiteTransfert+'');
+
+    } )
+  }
 }

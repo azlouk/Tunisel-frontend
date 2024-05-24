@@ -23,18 +23,7 @@
           <input type="text" pInputText [(ngModel)]="commande.etat"    id="etat" class="w-full" />
           <label for="etat">State</label>
         </p-floatLabel>
-        <p-floatLabel>
 
-            <p-autoComplete
-              [(ngModel)]="matter"
-              (ngModelChange)="filterMatter()"
-              [dropdown]="true"
-              [suggestions]="filtereddatasel"
-              (completeMethod)="filterCountry($event)"
-              field="" />
-
-          <label for="etat">Quality</label>
-        </p-floatLabel>
       </div>
 
       <div class="  ">
@@ -99,9 +88,9 @@
     </div>
 
 <div class="flex  mt-4 mb-4 justify-content-between ">
-  <button pButton pRipple label="Analyse" icon="pi pi-search" class="p-button-secondary mr-2" (click)="getLine()"  ></button>
+  <button pButton pRipple label="Analyse " icon="pi pi-search" class="p-button-secondary mr-2" (click)="getLine()"  ></button>
 
-  <button pButton pRipple label="Reset Default" icon="pi pi-refresh" class="p-button-primary mr-2" *ngIf="isUpdateCommande" (click)="getCommandeById()"  ></button>
+  <button pButton pRipple label="Reset Default Command" icon="pi pi-refresh" class="p-button-primary mr-2" *ngIf="isUpdateCommande" (click)="getCommandeById()"  ></button>
 
 </div>
 
@@ -149,10 +138,31 @@
               <input  class="p-2 shadow-1" type="date"  pInputText   [(ngModel)]="DatefiltrageEnd" [value]="DatefiltrageEnd" />
 
             </div>
-            <p-button (click)="filtredate()" class=" " icon="pi pi-search" label="Search"></p-button>
-            <p-button (click)="Viderfiltredate()"   severity="secondary" icon="pi pi-refresh" label="Clear"></p-button>
+<div class="gap-1  flex align-items-center">
+  <p-floatLabel>
 
-          </div>
+    <p-autoComplete
+      [(ngModel)]="matter"
+
+      [dropdown]="true"
+      [suggestions]="filtereddatasel"
+      (completeMethod)="filterCountry($event)"
+      field="" />
+
+    <label for="etat">Quality</label>
+  </p-floatLabel>
+</div>
+            <div class="flex gap-2">
+              <p-button (click)="filtredate()" class=" " icon="pi pi-search" label="Search"></p-button>
+              <p-button (click)="Viderfiltredate()"   severity="secondary" icon="pi pi-refresh" label="Clear"></p-button>
+            </div>
+           <div class="flex justify-content-end">
+             <p-button (click)="AddLineCommand()"   severity="success"  label="Add"></p-button>
+
+           </div>
+            </div>
+
+
           </div>
 
         </ng-template>
@@ -172,11 +182,10 @@
               <td *ngIf="col.id>26 && col.id<39">
                 <p-cellEditor>
                   <ng-template pTemplate="input">
-                    <input type="text"   pInputText [placeholder]="col.header" [(ngModel)]="lineCommande[col.field]  "(ngModelChange)="CalculeTotal()"/>
+                    <input type="text"   pInputText [placeholder]="col.header" [(ngModel)]="lineCommande[col.field]  "(ngModelChange)="CalculeTotalInput()"/>
                   </ng-template>
                   <ng-template pTemplate="output">
                     {{getValueOfligneCommande(col,lineCommande)}}
-                    {{CalculeTotal()}}
                   </ng-template>
                 </p-cellEditor>
 
@@ -202,6 +211,8 @@
               </div>
             </td>
           </tr>
+
+
         </ng-template>
       </p-table>
     </div>

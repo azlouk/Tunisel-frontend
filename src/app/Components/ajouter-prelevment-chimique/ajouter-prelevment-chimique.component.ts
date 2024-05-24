@@ -34,6 +34,7 @@ import {Bande} from "../../Models/bande";
 import {BandeService} from "../../Services/bande.service";
 import {InputTextareaModule} from "primeng/inputtextarea";
 import {getToken} from "../../../main";
+import {AutoCompleteCompleteEvent, AutoCompleteModule} from "primeng/autocomplete";
 
 @Component({
   selector: 'app-ajouter-prelevment-chimique',
@@ -58,7 +59,8 @@ import {getToken} from "../../../main";
     DialogModule,
     DropdownModule,
     NgClass,
-    InputTextareaModule
+    InputTextareaModule,
+    AutoCompleteModule
 
   ],
   templateUrl: './ajouter-prelevment-chimique.component.html',
@@ -81,15 +83,14 @@ export class AjouterPrelevmentChimiqueComponent implements OnInit {
   analysesChimique: AnalysesChimique = {};
   attributs: any[] = [];
 
-
+  filtereddatasel: any[] = [];
   private analyseChimiqueId: any;
   public isUpdateAnalyseChimique = false;
   visibleDetails: boolean = false;
   SelectAll: boolean = false;
 
   cols: any[] = [];
-
-
+  datasel:string[]=[]
   constructor(private router: Router,
               private puitService: PuitService,
               private bassinService: BassinService,
@@ -103,6 +104,25 @@ export class AjouterPrelevmentChimiqueComponent implements OnInit {
 
 
   ngOnInit(): void {
+    this.datasel = [
+      "Unwashed salt",
+      "Washed salt",
+      "Washed salt sieved 0-4 "
+      , "Washed salt sieved "
+      , "Big salt (Refus)"
+      , "salt 0-8"
+      , "salt 0-4 Stock"
+      , "salt 0-6 Stock"
+      , "salt 0-8 Stock"
+      , "Big salt Stock"
+      , "crushed salt"
+      , "salt 0-6 Cribble "
+      , "salt 0-8 Cribble "
+      , "salt 0-4 Stock Zarzis"
+      , "salt 0-6 Stock Zarzis"
+      , "salt 0-8 Stock Zarzis"
+      , " Sel Navire"];
+
 
     this.attributs= [
       {name:'d',checked:false,label:'density', value:this.analysesChimique.densite},
@@ -368,6 +388,19 @@ export class AjouterPrelevmentChimiqueComponent implements OnInit {
     this.selectedSbl = {};
     this.selectedPuit = {};
 
+  }
+  filterCountry(event: AutoCompleteCompleteEvent) {
+    let filtered: any[] = [];
+    let query = event.query;
+
+    for (let i = 0; i < (this.datasel as any[]).length; i++) {
+      let country = (this.datasel as any[])[i];
+      if (country.toLowerCase().indexOf(query.toLowerCase()) == 0) {
+        filtered.push(country);
+      }
+    }
+
+    this.filtereddatasel = filtered;
   }
 
   protected readonly getToken = getToken;

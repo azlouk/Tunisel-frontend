@@ -16,7 +16,7 @@ export interface LineCommande {
   lieuxPrelevement?: string ;
   matCamiont?: string ;
   conformite?: string ;
-  analyseChimique?:AnalysesChimique;
-  analysePhysique?:AnalysesPhysique;
+  analyseChimique:AnalysesChimique| null;
+  analysePhysique:AnalysesPhysique | null;
 
 }
