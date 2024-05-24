@@ -26,6 +26,7 @@ import {EtatFiche} from "../../Enum/etat-fiche";
 import {Emplacement} from "../../Enum/emplacement";
 import * as Papa from 'papaparse';
 import {getToken} from "../../../main";
+import {DockModule} from "primeng/dock";
 
 @Component({
   selector: 'app-fichevie',
@@ -49,7 +50,8 @@ import {getToken} from "../../../main";
     FormsModule,
     FloatLabelModule,
     RadioButtonModule,
-    NgClass
+    NgClass,
+    DockModule
   ],
   templateUrl: './fichevie.component.html',
   styleUrl: './fichevie.component.css'

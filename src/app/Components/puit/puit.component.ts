@@ -24,6 +24,9 @@ import {AutoFocusModule} from "primeng/autofocus";
 import {LoginService} from "../../Services/login.service";
 import * as XLSX from 'xlsx';
 import {getToken} from "../../../main";
+import {utils, WorkBook, WorkSheet, writeFile} from "xlsx";
+import * as Papa from 'papaparse';
+import {TooltipModule} from "primeng/tooltip";
 
 @Component({
   selector: 'app-puit',
@@ -46,7 +49,8 @@ import {getToken} from "../../../main";
     MultiSelectModule,
     NgForOf,
     CheckboxModule,
-    AutoFocusModule
+    AutoFocusModule,
+    TooltipModule
   ],
   templateUrl: './puit.component.html',
   styleUrl: './puit.component.css'
@@ -381,47 +385,109 @@ this.ReportedBy=this.Loginservice.getToken()
   // =====================================
 
 
-  SaveExcel(): void {
-    const element = document.getElementById('EXCEL');
-    if (element) {
-      const ws: XLSX.WorkSheet = XLSX.utils.table_to_sheet(element);
-      const wb: XLSX.WorkBook = XLSX.utils.book_new();
-      XLSX.utils.book_append_sheet(wb, ws, 'Sheet1');
-      XLSX.writeFile(wb, 'Export_' + new Date().getTime() + '.xlsx');
-    }
+
+  SaveExcel() {
+    const headings = [
+      ['Name Borehole', 'Reference Pool',  'Date Creation'],
+
+    ];
+
+    const wb: WorkBook = utils.book_new();
+    const ws: WorkSheet = utils.json_to_sheet([]);
+
+    // Ajouter les en-têtes de colonne  de fiche de vieà partir de A2
+    utils.sheet_add_aoa(ws, headings, { origin: 'A2' });
+
+
+    const PuitData = [
+      [this.selectedPuitPrint.nom, this.selectedPuitPrint.reference, this.selectedPuitPrint.dateCreation]
+    ];
+
+    utils.sheet_add_json(ws, PuitData, {
+      origin: 'A3',
+      skipHeader: true,
+    });
+
+    // Ajouter les données du tableau HTML
+    let element = document.getElementById('EXCEL');
+    const wst: WorkSheet = utils.table_to_sheet(element);
+
+    // Convertir les données du tableau HTML en format JSON
+    let tableData: any[][] = utils.sheet_to_json(wst, { header: 1 }) as any[][];
+
+    // Formater les dates dans les données du tableau HTML
+    tableData = tableData.map((row: any[]) => row.map((cell: any) => {
+
+      // Supposons que les dates soient dans la deuxième colonne (index 1)
+      if (typeof cell === 'number' && cell > 40000) { // Vérifier si c'est un nombre de date Excel
+        return new Date((cell - 25569) * 86400 * 1000).toLocaleDateString();
+      }
+      return cell;
+    }));
+
+    // Ajouter les données formatées du tableau HTML à la feuille principale
+    utils.sheet_add_json(ws, tableData, {
+      origin: 'A6',
+      skipHeader: true,
+    });
+
+    // Enregistrer la feuille de calcul
+    utils.book_append_sheet(wb, ws, 'Fiche de Vie');
+
+    writeFile(wb, 'Puit Report.xlsx');
   }
 
+  exportcsv() {
+    const headings = [
+      ['Name Borehole', 'Reference Pool', 'Date Creation'],
+    ];
 
-  // SaveExcel(): void {
-  //   const element = document.getElementById('EXCEL');
-  //   if (element) {
-  //     const ws: XLSX.WorkSheet = XLSX.utils.table_to_sheet(element, { raw: true });
-  //
-  //     // Appliquer le style de fond et de bordure à toutes les cellules
-  //     const range = XLSX.utils.decode_range(ws['!ref']);
-  //     for (let R = range.s.r; R <= range.e.r; ++R) {
-  //       for (let C = range.s.c; C <= range.e.c; ++C) {
-  //         const cellAddress = { c: C, r: R };
-  //         const cellRef = XLSX.utils.encode_cell(cellAddress);
-  //         if (cellRef) { // Vérifier si cellRef est défini
-  //           if (!ws[cellRef]) continue;
-  //           ws[cellRef].s = {
-  //             fill: { fgColor: { rgb: "FFFF00" } }, // Couleur de fond jaune
-  //             border: { // Bordure
-  //               top: { style: 'thin', color: { rgb: "000000" } },
-  //               bottom: { style: 'thin', color: { rgb: "000000" } },
-  //               left: { style: 'thin', color: { rgb: "000000" } },
-  //               right: { style: 'thin', color: { rgb: "000000" } }
-  //             }
-  //           };
-  //         }
-  //       }
-  //     }
-  //
-  //     const wb: XLSX.WorkBook = XLSX.utils.book_new();
-  //     XLSX.utils.book_append_sheet(wb, ws, 'Sheet1');
-  //     XLSX.writeFile(wb, 'Export_' + new Date().getTime() + '.xlsx');
-  //   }
-  // }
+    // Prepare borehole data
+    const puitData = [
+      [this.selectedPuitPrint.nom, this.selectedPuitPrint.reference, this.selectedPuitPrint.dateCreation],
+    ];
+
+    // Extract data from the HTML table
+    let element = document.getElementById('EXCEL');
+    if (!element) {
+      console.error('Element with id "EXCEL" not found.');
+      return;
+    }
+
+    const wst: XLSX.WorkSheet = XLSX.utils.table_to_sheet(element);
+
+    // Convert table data to JSON format
+    let tableData: any[][] = XLSX.utils.sheet_to_json(wst, { header: 1 }) as any[][];
+
+    // Format dates in table data
+    tableData = tableData.map((row: any[]) =>
+      row.map((cell: any) => {
+        // Assume dates are in the second column (index 1)
+        if (typeof cell === 'number' && cell > 40000) {
+          return new Date((cell - 25569) * 86400 * 1000).toLocaleDateString();
+        }
+        return cell;
+      })
+    );
+
+    // Combine headings, puitData, and formatted tableData
+    const csvData: (string | number)[][] = [...headings, ...puitData, ...tableData];
+
+    // Convert data to CSV format using PapaParse
+    const csv = Papa.unparse(csvData);
+
+    // Create a Blob from CSV data
+    const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
+    const url = URL.createObjectURL(blob);
+
+    // Create a link and trigger the download
+    const link = document.createElement('a');
+    link.setAttribute('href', url);
+    link.setAttribute('download', 'Puit_Report.csv');
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+  }
+
   protected readonly getToken = getToken;
 }
