@@ -7,10 +7,19 @@
           <button pButton pRipple label="Back" icon="pi pi-arrow-left" class="p-button-success mr-2 " (click)="retour()"></button>
         </div>
       </ng-template>
-      <h4>{{isUpdateCommande?'Update':'Add'}} command</h4>
+      <h4>Add Command</h4>
     </p-toolbar>
+
+    <!--    <p-fieldset legend="Export">-->
+    <div class="flex gap-4 justify-content-end align-items-center">
+      <label class="font-bold text-3xl">Export :</label>
+      <button type="button" pButton pRipple icon="pi pi-file-excel" (click)="ExportExcel()" class="p-button-success mr-2" pTooltip="XLS" tooltipPosition="bottom"></button>
+      <button type="button" pButton pRipple icon="pi pi-file" (click)="EXCEL.exportCSV()" class="mr-2" pTooltip="CSV" tooltipPosition="bottom"></button>
+      <!--        <button type="button" pButton pRipple icon="pi pi-file-pdf" (click)="SavePDF()" class="p-button-success mr-2" pTooltip="PDF" tooltipPosition="bottom"></button>-->
+    </div>
+    <!--    </p-fieldset>-->
     <div class=" flex justify-content-between  mt-8 border-1 border-round border-gray-300 p-6  h-22rem">
-      <div class="  flex flex-column gap-5  justify-content-between ">
+      <div class="  flex flex-column   justify-content-between ">
         <p-floatLabel >
           <p-calendar   id="dateCommande" [(ngModel)]="commande.dateCommande" dateFormat="yy-MM-dd"  [showIcon]="true"></p-calendar>
           <label for="dateCommande">Command Date</label>
@@ -23,7 +32,6 @@
           <input type="text" pInputText [(ngModel)]="commande.etat"    id="etat" class="w-full" />
           <label for="etat">State</label>
         </p-floatLabel>
-
       </div>
 
       <div class="  ">
@@ -66,8 +74,7 @@
   </div>
   <div class="field">
     <p><span class="font-bold"> Description: </span>{{commande.bassin.description}}</p>
-  </div>
-  <div class="field">
+  </div><div class="field">
   <p><span class="font-bold"> Name: </span>{{commande.bassin.nom}}</p>
 </div>
   <div class="field">
@@ -82,29 +89,27 @@
 
 
 
-
       </div>
 
     </div>
 
-<div class="flex  mt-4 mb-4 justify-content-between ">
-  <button pButton pRipple label="Analyse " icon="pi pi-search" class="p-button-secondary mr-2" (click)="getLine()"  ></button>
+<div class="flex  mt-4 mb-4 justify-content-between">
+  <button pButton pRipple label="Analyse" icon="pi pi-search" class="p-button-secondary mr-2" (click)="getLine()"  *ngIf="!isUpdateCommande"></button>
 
-  <button pButton pRipple label="Reset Default Command" icon="pi pi-refresh" class="p-button-primary mr-2" *ngIf="isUpdateCommande" (click)="getCommandeById()"  ></button>
+  <button pButton pRipple label="Reset Default" icon="pi pi-refresh" class="p-button-primary mr-2" (click)="getCommandeById()"  ></button>
 
 </div>
 
 
 
     <div class="card">
-
-
       <p-table
         [columns]="selectedColumns"
         [value]="listeLignesCommandes"
         [tableStyle]="{'min-width': '50rem'}"
-
         editMode="row"
+        id="EXCEL"
+        #EXCEL
       >
 
         <ng-template pTemplate="caption">

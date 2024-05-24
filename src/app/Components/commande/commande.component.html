@@ -65,6 +65,7 @@
               <div *ngIf="getToken()!=='ADMIN'"   class="flex justify-content-end mr-8">
                 <button pButton pRipple icon="pi pi-eye" class="p-button-rounded p-button-primary mr-2" (click)="editCommande(commande)"></button>
 
+                 <button pButton pRipple icon="pi pi-eye" class="p-button-rounded p-button-success mr-2" (click)="showDialogDetails(commande)"></button>
               </div>
 
             </td>
@@ -99,7 +100,133 @@
   </div>
 </div>
 
+<!-- Details//////////////////////////////////////////////// -->
 
+
+<div class="card flex justify-content-center">
+  <p-dialog header="Details Commande" [(visible)]="visible" [style]="{ width: '80vw', maxWidth: '300vw' }">
+
+
+    <div class="card" id="commandepdf">
+
+
+
+<!--      infoPropreTableCommande-->
+      <div class="shadow-1 p-2 gap-1 text-3xl flex  inline-flex justify-content-evenly" >Command Details  :<br>
+        <br><br>
+          <label class="text-2xl font-bold">Reference  :</label><span class="ml-2 text-2xl">{{selectedCommandPrint.dateCommande}}</span><br><br>
+          <label class="text-2xl font-bold">Relative :</label><span class=" ml-2 text-2xl">{{selectedCommandPrint.nom}}</span><br><br>
+          <label class="text-2xl font-bold">Temperature :</label><span class=" ml-2 text-2xl">{{selectedCommandPrint.etat}} °C</span><br><br>
+
+          <label class="text-2xl font-bold">Date </label><span class=" ml-2 text-2xl">{{selectedCommandPrint.bassin?.dateCreation}}</span><br>
+        </div>
+      <br><br>
+      <br><br>
+      <br><br>
+      <div class="shadow-1 p-2 gap-1 text-3xl flex inline-flex justify-content-evenly" >Pond Details  :<br>
+        <label class="text-2xl font-bold">Date </label><span class=" ml-2 text-2xl">{{selectedCommandPrint.bassin?.dateCreation}}</span><br>
+
+        <label class="text-2xl font-bold">Reference  :</label><span class="ml-2 text-2xl">{{selectedCommandPrint.bassin?.reference}}</span><br>
+        <label class="text-2xl font-bold">Relative :</label><span class=" ml-2 text-2xl">{{selectedCommandPrint.bassin?.description}}</span><br>
+        <label class="text-2xl font-bold">Temperature :</label><span class=" ml-2 text-2xl">{{selectedCommandPrint.bassin?.nom}} °C</span><br>
+        <label class="text-2xl font-bold">Temperature :</label><span class=" ml-2 text-2xl">{{selectedCommandPrint.bassin?.emplacement}} °C</span><br>
+        <label class="text-2xl font-bold">Temperature :</label><span class=" ml-2 text-2xl">{{selectedCommandPrint.bassin?.etat}} °C</span><br>
+
+      </div>
+
+<!--      infoTable-->
+      <p-table
+        [columns]="selectedColumns"
+        [value]="selectedCommandPrint.ligneCommandes!==undefined?selectedCommandPrint.ligneCommandes:[]"
+        [tableStyle]="{'min-width': '50rem'}"
+        editMode="row"
+        id="EXCEL"
+        #EXCEL
+      >
+
+<!--        <ng-template pTemplate="caption">-->
+<!--          <p-multiSelect-->
+<!--            display="chip"-->
+<!--            [options]="cols"-->
+<!--            [(ngModel)]="selectedColumns"-->
+<!--            optionLabel="header"-->
+<!--            selectedItemsLabel="{0} columns selected"-->
+<!--            [style]="{'min-width': '200px'}"-->
+<!--            placeholder="Choose Columns" />-->
+
+
+
+<!--        </ng-template>-->
+        <ng-template pTemplate="header" let-columns>
+          <tr>
+
+            <th *ngFor="let col of columns">
+              {{col.header}}
+            </th>
+            <th></th>
+          </tr>
+        </ng-template>
+
+        <ng-template pTemplate="body" let-lineCommande let-columns="columns" let-editing="editing" let-ri="rowIndex">
+          <tr [pEditableRow]="lineCommande">
+            <ng-container *ngFor="let col of columns">
+              <td *ngIf="col.id>26 && col.id<39">
+                <p-cellEditor>
+                  <ng-template pTemplate="input">
+                    <input type="text"   pInputText [placeholder]="col.header" [(ngModel)]="lineCommande[col.field]  "(ngModelChange)="CalculeTotal()"/>
+                  </ng-template>
+                  <ng-template pTemplate="output">
+                    {{getValueOfligneCommande(col,lineCommande)}}
+                    {{CalculeTotal()}}
+                  </ng-template>
+                </p-cellEditor>
+
+              </td>
+
+              <td  *ngIf="col.id>=0 && col.id<27">
+
+                {{getValueOfligneCommande(col,lineCommande)}}
+              </td>
+
+            </ng-container>
+
+
+            <td>
+              <div class="flex align-items-center gap-2" >
+<!--                <div class="flex align-items-center justify-content-center gap-2">-->
+<!--                  <button *ngIf="!editing" pButton pRipple type="button" pInitEditableRow icon="pi pi-pencil" (click)="onRowEditInit(lineCommande)" class="p-button-rounded p-button-success mr-2"></button>-->
+<!--                  <button *ngIf="editing" pButton pRipple type="button" pSaveEditableRow icon="pi pi-check" (click)="onRowEditSave(lineCommande)" class="p-button-rounded p-button-text p-button-success mr-2"></button>-->
+<!--                </div>-->
+                <div >
+<!--                  <button pButton pRipple icon="pi pi-trash" class="p-button-rounded p-button-warning mr-2" (click)="deleteLineCommande(lineCommande)"></button>-->
+                </div>
+              </div>
+            </td>
+          </tr>
+        </ng-template>
+      </p-table>
+      <h1>Tatal: {{TotalHarv}}</h1>
+
+    </div>
+
+
+
+
+
+
+
+
+    <ng-template pTemplate="footer">
+
+    <div class="modal-footer-btn">
+      <p-button icon="pi pi-file-pdf" (click)="savePdfDetails()" class="text-green-50" label="PDF" pAutoFocus [autofocus]="true"  ></p-button>
+      <p-button icon="pi pi-cancel" (click)="cancel()" class="text-green-50" label="Cancel"  ></p-button>
+
+    </div>
+    </ng-template>
+
+  </p-dialog>
+</div>
 
 
 
