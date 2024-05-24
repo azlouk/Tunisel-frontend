@@ -12,8 +12,7 @@ import {ToastModule} from "primeng/toast";
 import {ToolbarModule} from "primeng/toolbar";
 import {Product} from "../../Models/product";
 import {Router} from "@angular/router";
-import {ProductService} from "../../Services/product.service";
-import {FicheVie} from "../../Models/fichevie";
+ import {FicheVie} from "../../Models/fichevie";
 import {FicheVieService} from "../../Services/fichevie.service";
 import html2canvas from "html2canvas";
 import jsPDF from "jspdf";
@@ -26,6 +25,7 @@ import * as XLSX from 'xlsx';
 import {EtatFiche} from "../../Enum/etat-fiche";
 import {Emplacement} from "../../Enum/emplacement";
 import * as Papa from 'papaparse';
+import {getToken} from "../../../main";
 
 @Component({
   selector: 'app-fichevie',
@@ -470,4 +470,5 @@ excelExport() {
   }
 
 ////////////////////////// exportCsv///////////////
-}
+  protected readonly getToken = getToken;
+ }
