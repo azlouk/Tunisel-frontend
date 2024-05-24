@@ -7,7 +7,7 @@ import {InputNumberModule} from "primeng/inputnumber";
 import {InputTextModule} from "primeng/inputtext";
 import {InputTextareaModule} from "primeng/inputtextarea";
 import {ListboxModule} from "primeng/listbox";
-import {JsonPipe, NgForOf, NgIf} from "@angular/common";
+import {DatePipe, JsonPipe, NgForOf, NgIf} from "@angular/common";
 import {PaginatorModule} from "primeng/paginator";
 import {MessageService, SharedModule} from "primeng/api";
 import {TabViewModule} from "primeng/tabview";
@@ -33,6 +33,7 @@ import {FieldsetModule} from "primeng/fieldset";
 import {AutoFocusModule} from "primeng/autofocus";
 import html2canvas from "html2canvas";
 import jsPDF from "jspdf";
+import autoTable from "jspdf-autotable";
 
 
 
@@ -116,7 +117,8 @@ export class AjouterCommandeComponent implements OnInit{
               private route: ActivatedRoute,
                private commandeService:CommandeService,
               private messageService: MessageService,
-              private lineCommandeService: LineCommandeService
+              private lineCommandeService: LineCommandeService,
+              private datePipe: DatePipe
   )
   {}
 
@@ -222,7 +224,19 @@ getCommandeById(){
     // console.log(new JsonPipe().transform(this.commande))
   });
 }
+  formatDate(date: Date): string {
+    const year = date.getFullYear();
+    const month = (date.getMonth() + 1).toString().padStart(2, '0');
+    const day = date.getDate().toString().padStart(2, '0');
+    return `${year}-${month}-${day}`;
+  }
   saveCommande() {
+        const datestr=this.commande.dateCommande?.toString()
+       const dates: string | null =this.datePipe.transform(datestr,'yyyy-MM-dd')
+    if (dates)
+     this.commande.dateCommande =new Date(dates);
+
+
     this.commande.ligneCommandes=[];
     this.commande.ligneCommandes=this.listeLignesCommandes;
     if(this.isUpdateCommande){
@@ -535,7 +549,7 @@ this.getLine()
     writeFile(wb, 'FicheVie_Report.xlsx');
   }
 
-  @ViewChild("pdfcommande") htmlContent: ElementRef | undefined;
+  @ViewChild("pdfcommande",{ static: false }) htmlContent: ElementRef | undefined;
   visiblePrint: boolean = false;
   dateToday: Date = new Date();
 
@@ -547,23 +561,110 @@ this.getLine()
 
 
 
+
   public SavePDF(): void {
 
-    if (this.htmlContent) {
-      html2canvas(this.htmlContent.nativeElement, {scale: 1}).then((canvas) => {
+
+    let header:string[]=[] ;
+    let data:any[]=[] ;
+
+ let sizeimageA4=1;
+this.selectedColumns.forEach(value => {
+  header.push(value.header)
+})
+    this.listeLignesCommandes.forEach(l => {
+      let ligne:any[]=[];
+      this.selectedColumns.forEach(col => {
+        ligne.push(this.getValueOfligneCommande(col,l))
+      })
+     data.push(ligne)
+    })
+    let oriantation:string="p" ;
+     let format="a4"
+    if(this.selectedColumns.length>11){
+      oriantation="l";
+      if(this.selectedColumns.length<10) {
+        format = "a4"
+        sizeimageA4=1;
+      }      else if(this.selectedColumns.length>10 && this.selectedColumns.length<16) {
+        format="a2"
+        sizeimageA4=3
+      }  else if(this.selectedColumns.length>16 ) {
+        format="a1";
+        sizeimageA4=4
+      }
+    }
+     const doc = new jsPDF("l","mm",format)
+     let headerPage=document.getElementById("headerpages");
+    if(headerPage)
+           headerPage.innerHTML='    <div class="flex border-1 w-full justify-content-between">' +
+             '      <div class="flex-initial flex align-items-center justify-content-center   font-bold m-2 px-5 py-3 border-round">' +
+             '        <img src="/assets/layout/images/logo.png"/>' +
+             +
+             '      </div>' +
+             '      <div class="flex-initial flex align-items-center justify-content-center  text-6xl font-bold m-2 px-5 py-3 border-round">' +
+             '        Daily monitoring of analyses for the order\n' +
+
+             '      </div>' +
+             '      <div class="flex-initial border-1 flex     w-25  font-bold m-2 px-5 py-3  ">' +
+             '        <div class="col   ">' +
+             '          <div class="row  mb-2    w-full  ">BEN GUERDANE, TUNISIA  </div>' +
+             '          <div class="row mb-2   w-full text-center    text-1xl font-bold  pi pi-calendar ">'+new Date() +'</div>' +
+             +
+             '        </div>' +
+             '      </div>' +
+             '    </div>' +
+             '<!--      infoPropreTableCommande-->\n' +
+             '      <div class="  p-2 gap-1 text-3xl flex   justify-content-evenly">\n' +
+             '        <br><br>\n' +
+             '        <label class="text-2xl font-bold">Command Date :</label><span\n' +
+             '        class="ml-2 text-2xl">'+this.commande.dateCommande+'</span><br><br>\n' +
+             '        <label class="text-2xl font-bold">Name :</label><span class=" ml-2 text-2xl">'+this.commande.nom+'</span><br><br>\n' +
+             '        <label class="text-2xl font-bold">Status :</label><span\n' +
+             '        class=" ml-2 text-2xl">'+this.commande.etat+' </span><br><br>\n' +
+             '\n' +
+             '      </div>\n' +
+
+             '      <div class="  p-2 gap-1 text-3xl flex   justify-content-evenly">\n' +
+             '        <label class="text-2xl font-bold">Creation Date Pond : </label><span\n' +
+             '        class=" ml-2 text-2xl">'+this.commande.bassin?.dateCreation+'</span>\n' +
+             '\n' +
+             '        <label class="text-2xl font-bold">Reference :</label><span\n' +
+             '        class="ml-2 text-2xl">'+this.commande.bassin?.reference+'</span>\n' +
+             '        <label class="text-2xl font-bold">Description :</label><span\n' +
+             '        class=" ml-2 text-2xl">'+this.commande.bassin?.description+'</span>\n' +
+             '        <label class="text-2xl font-bold">Name :</label><span\n' +
+             '        class=" ml-2 text-2xl">'+this.commande.bassin?.nom+'</span>\n' +
+             '        <label class="text-2xl font-bold">Location :</label><span\n' +
+             '        class=" ml-2 text-2xl">'+this.commande.bassin?.emplacement+' </span>\n' +
+             '        <label class="text-2xl font-bold">Status :</label><span\n' +
+             '        class=" ml-2 text-2xl">'+this.commande.bassin?.etat+' </span>\n' +
+             '\n' +
+             '      </div>\n' +
+             '<!--      infoTable-->\n'
+    if(headerPage)
+      html2canvas(headerPage, {scale: 1}).then((canvas) => {
         const imgData = canvas.toDataURL('image/png');
-        const pdf = new jsPDF('p', 'mm', 'a4');
-        const imgWidth = 210; // PDF width
+         const imgWidth = 210; // PDF width
         const imgHeight = (canvas.height * imgWidth) / canvas.width; // Maintain aspect ratio
-        pdf.addImage(imgData, 'png', 2, 2, imgWidth, imgHeight);
-        pdf.save('Print_' + Math.random() + '.pdf');
+        doc.addImage(imgData, 'png', 2, 2, imgWidth*sizeimageA4, imgHeight*sizeimageA4);
+        autoTable(doc,{startY:150})
+// Or use javascript directly:
+        autoTable(doc, {
+          head: [header],
+          body: data,
+        });
+        doc.save('Print_'+Math.random()+'.pdf')
       });
+
+
 
 
     }
 
 
-  }
+
+
 
 
 
