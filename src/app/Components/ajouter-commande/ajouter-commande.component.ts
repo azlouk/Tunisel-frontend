@@ -556,6 +556,7 @@ this.getLine()
   DatefiltrageStart: Date = new Date();
   DatefiltrageEnd: Date = new Date();
   SearchDate: any;
+  visibleCommande: boolean=false;
 
 
 
@@ -563,7 +564,7 @@ this.getLine()
 
 
   public SavePDF(): void {
-
+   this.visibleCommande=true
 
     let header:string[]=[] ;
     let data:any[]=[] ;
@@ -659,7 +660,7 @@ this.selectedColumns.forEach(value => {
 
 
 
-
+    this.visibleCommande=false
     }
 
 
