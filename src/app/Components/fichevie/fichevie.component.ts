@@ -12,7 +12,8 @@ import {ToastModule} from "primeng/toast";
 import {ToolbarModule} from "primeng/toolbar";
 import {Product} from "../../Models/product";
 import {Router} from "@angular/router";
- import {FicheVie} from "../../Models/fichevie";
+import {ProductService} from "../../Services/product.service";
+import {FicheVie} from "../../Models/fichevie";
 import {FicheVieService} from "../../Services/fichevie.service";
 import html2canvas from "html2canvas";
 import jsPDF from "jspdf";
@@ -20,9 +21,11 @@ import {AutoFocusModule} from "primeng/autofocus";
 import {CheckboxModule} from "primeng/checkbox";
 import {FloatLabelModule} from "primeng/floatlabel";
 import {RadioButtonModule} from "primeng/radiobutton";
-import {utils, writeFile} from "xlsx";
+import {utils, WorkBook, WorkSheet, writeFile} from "xlsx";
 import * as XLSX from 'xlsx';
-import {getToken} from "../../../main";
+import {EtatFiche} from "../../Enum/etat-fiche";
+import {Emplacement} from "../../Enum/emplacement";
+import * as Papa from 'papaparse';
 
 @Component({
   selector: 'app-fichevie',
@@ -251,57 +254,220 @@ export class FichevieComponent implements OnInit {
 
   }
 
-csvExport() {
-  const tableName = this.ficheVie.designation; // Nom du tableau
+// csvExport() {
+//
+//   const headings = [
+//     ['id', '', 'societe', '', 'designation', '', 'code', '', 'serie', '', 'marque', '', 'etalonnage', '', 'verification', '', 'dateReception', '', 'etatFiche', '', 'emplacement', ''],
+//     [],
+//     [],
+//     [],
+//
+//   ];
+//   // const interventionHeadings = [
+//   //   ['id','', 'dateIntervention','', 'who','', 'natureAction','', 'resultat','', 'certificat','', 'nomVisa','', 'observation']
+//   // ];
+//   const wb = utils.book_new();
+//   const ws = utils.json_to_sheet([]);
+//
+//   // Ajouter les en-têtes de colonne à partir de A2
+//
+//   utils.sheet_add_aoa(ws, headings, { origin: 'A2' });
+//
+//   // Préparer les données formatées pour les fiches de vie et leurs interventions
+//
+//   const ficheData = this.ficheVies.map(fiche => [
+//     fiche.id, '', fiche.societe, '', fiche.designation, '', fiche.code, '', fiche.serie, '', fiche.marque, '', fiche.etalonnage, '', fiche.verification, '',
+//     fiche.dateReception, '', fiche.etatFiche, '', fiche.emplacement, ''
+//   ]);
+//   utils.sheet_add_json(ws, ficheData, {
+//     origin: 'A3',
+//     skipHeader: true,
+//   });
+//
+//
+//
+//   let element = document.getElementById('EXCEL');
+//  const wst= XLSX.utils.table_to_sheet(element)
+//   utils.sheet_add_json(ws, utils.sheet_to_json(wst) , {
+//     origin: 'A8',
+//
+//   });
+//
+//
+//
+//
+//
+//   //saveData sheet
+//   utils.book_append_sheet(wb, ws, 'Fiche de Vie');
+//
+//
+//
+//   writeFile(wb, 'FicheVie Report.xlsx');
+//
+//   // const interventionsData2:any[]=[]
+//   //   // @ts-ignore
+//   // this.selectedFicheViePrint.interventions.forEach(value => {
+//   //     interventionsData2.push(value.id)
+//   //     interventionsData2.push(value.dateintervention)
+//   //     interventionsData2.push(value.qui)
+//   //     interventionsData2.push(value.nomVisa)
+//   //     interventionsData2.push(value.id)
+//   //     interventionsData2.push(value.id)
+//   //     interventionsData2.push(value.id)
+//   //   })
+//   // console.log(interventionsData2)
+//
+//   // utils.sheet_add_aoa(ws, interventionHeadings, { origin: 'A6' });
+//   // // Préparer les données formatées pour les interventions
+//   // const interventionsData = this.ficheVies.flatMap(fiche =>
+//   //   fiche.interventions!.map(intervention => [
+//   //     intervention.id,'', intervention.dateintervention,'', intervention.qui,'', intervention.natureAction,'', intervention.resultat,'', intervention.certificat,'', intervention.nomVisa,'', intervention.observation,'',
+//   //   ])
+//   // );
+//
+//   // const tableName = ficheData.; // Nom du tableau
+//   // const soustableName = this.ficheVie.designation; // Nom du tableau
+//
+//
+//   // Ajouter le nom du tableau en A1
+//   // utils.sheet_add_aoa(ws, [[tableName]], { origin: 'A1' });
+//   // Ajouter les données à partir de A3
+//
+//   // utils.sheet_add_aoa(ws, interventionHeadings, { origin: 'A6' });
+//   // utils.sheet_add_json(ws, ['hh','khjik','knk','khjik','knk','khjik','knk','khjik','knk','khjik','knk','khjik','knk','khjik','knk','khjik','knk','khjik','knk','khjik','knk','khjik','knk','khjik','knk','khjik','knk','khjik','knk','khjik','knk'], {
+//   //   origin: 'A7',
+//   //   skipHeader: true,
+//   // });
+//
+// }
+//
+// // SaveExcel(): void {
+// //     const element = document.getElementById('EXCEL');
+// //     if (element) {
+// //       const ws: XLSX.WorkSheet = XLSX.utils.table_to_sheet(element, { raw: true });
+// //
+// //       const wb: XLSX.WorkBook = XLSX.utils.book_new();
+// //       XLSX.utils.book_append_sheet(wb, ws, 'Sheet1');
+// //       XLSX.writeFile(wb, 'Export_' + new Date().getTime() + '.xlsx');
+// //     }
+// //   }
+
+
+
+
+excelExport() {
   const headings = [
     ['id', '', 'societe', '', 'designation', '', 'code', '', 'serie', '', 'marque', '', 'etalonnage', '', 'verification', '', 'dateReception', '', 'etatFiche', '', 'emplacement', ''],
-    ['Interventions', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '']
+    [],
+    [],
+    [],
   ];
-  const interventionHeadings = [
-    ['id', 'dateIntervention', 'who', 'natureAction', 'resultat', 'certificat', 'nomVisa', 'observation']
-  ];
-  const wb = utils.book_new();
-  const ws = utils.json_to_sheet([]);
-  // Ajouter le nom du tableau en A1
-  utils.sheet_add_aoa(ws, [[tableName]], { origin: 'A1' });
-  // Ajouter les en-têtes de colonne à partir de A2
 
+  const wb: WorkBook = utils.book_new();
+  const ws: WorkSheet = utils.json_to_sheet([]);
+
+  // Ajouter les en-têtes de colonne  de fiche de vieà partir de A2
   utils.sheet_add_aoa(ws, headings, { origin: 'A2' });
 
   // Préparer les données formatées pour les fiches de vie et leurs interventions
+  const ficheData = this.ficheVies.map(fiche => [
+    fiche.id, '', fiche.societe, '', fiche.designation, '', fiche.code, '', fiche.serie, '', fiche.marque, '', fiche.etalonnage, '', fiche.verification, '',
+    fiche.dateReception ? new Date(fiche.dateReception).toLocaleDateString() : '', // Formater la date
+    '', fiche.etatFiche, '', fiche.emplacement, ''
+  ]);
 
-  const formattedData = this.ficheVies.map(fiche => {
-    const ficheData = [
-      fiche.id, '', fiche.societe, '', fiche.designation, '', fiche.code, '', fiche.serie, '', fiche.marque, '', fiche.etalonnage, '', fiche.verification, '',
-      fiche.dateReception, '', fiche.etatFiche, '', fiche.emplacement, ''
-    ];
-
-    const interventionsData = fiche.interventions!.map(intervention => [
-      intervention.id, intervention.dateintervention, intervention.qui, intervention.natureAction, intervention.resultat, intervention.certificat, intervention.nomVisa, intervention.observation
-    ]);
-    return [ficheData, ...interventionsData];
-  }).flat();
-
-  // Ajouter les données à partir de A3
-  utils.sheet_add_json(ws, formattedData, {
-    origin: 'A4',
+  utils.sheet_add_json(ws, ficheData, {
+    origin: 'A3',
     skipHeader: true,
   });
 
+  // Ajouter les données du tableau HTML
+  let element = document.getElementById('EXCEL');
+  const wst: WorkSheet = utils.table_to_sheet(element);
 
+  // Convertir les données du tableau HTML en format JSON
+  let tableData: any[][] = utils.sheet_to_json(wst, { header: 1 }) as any[][];
+
+  // Formater les dates dans les données du tableau HTML
+  tableData = tableData.map((row: any[]) => row.map((cell: any) => {
+
+    // Supposons que les dates soient dans la deuxième colonne (index 1)
+    if (typeof cell === 'number' && cell > 40000) { // Vérifier si c'est un nombre de date Excel
+      return new Date((cell - 25569) * 86400 * 1000).toLocaleDateString();
+    }
+    return cell;
+  }));
+
+  // Ajouter les données formatées du tableau HTML à la feuille principale
+  utils.sheet_add_json(ws, tableData, {
+    origin: 'A8',
+    skipHeader: true,
+  });
+
+  // Enregistrer la feuille de calcul
   utils.book_append_sheet(wb, ws, 'Fiche de Vie');
+
   writeFile(wb, 'FicheVie Report.xlsx');
 }
 
-// SaveExcel(): void {
-//     const element = document.getElementById('EXCEL');
-//     if (element) {
-//       const ws: XLSX.WorkSheet = XLSX.utils.table_to_sheet(element, { raw: true });
-//
-//       const wb: XLSX.WorkBook = XLSX.utils.book_new();
-//       XLSX.utils.book_append_sheet(wb, ws, 'Sheet1');
-//       XLSX.writeFile(wb, 'Export_' + new Date().getTime() + '.xlsx');
-//     }
-//   }
-  protected readonly getToken = getToken;
+
+////////////////////////// exportCsv///////////////
+
+
+  csvExport() {
+    const headings = [
+      ['id', '', 'societe', '', 'designation', '', 'code', '', 'serie', '', 'marque', '', 'etalonnage', '', 'verification', '', 'dateReception', '', 'etatFiche', '', 'emplacement', ''],
+    ];
+
+    // Préparer les données formatées pour les fiches de vie et leurs interventions
+    const ficheData = this.ficheVies.map(fiche => [
+      fiche.id, '', fiche.societe, '', fiche.designation, '', fiche.code, '', fiche.serie, '', fiche.marque, '', fiche.etalonnage, '', fiche.verification, '',
+      fiche.dateReception ? new Date(fiche.dateReception).toLocaleDateString() : '', // Formater la date
+      '', fiche.etatFiche, '', fiche.emplacement, ''
+    ]);
+
+    // Ajouter les en-têtes et les données des fiches de vie
+    let csvData: (string[] | (number | undefined | string | EtatFiche | Emplacement)[])[] = [...headings, ...ficheData];
+
+    // Extraire les données du tableau HTML
+    let element = document.getElementById('EXCEL');
+    if (!element) {
+      console.error('Element with id "EXCEL" not found.');
+      return;
+    }
+
+    const wst: XLSX.WorkSheet = XLSX.utils.table_to_sheet(element);
+
+    // Convertir les données du tableau HTML en format JSON
+    let tableData: (string | number)[][] = XLSX.utils.sheet_to_json(wst, { header: 1 }) as (string | number)[][];
+
+    // Formater les dates dans les données du tableau HTML
+    tableData = tableData.map((row: (string | number)[]) => row.map((cell: string | number) => {
+      // Supposons que les dates soient dans la deuxième colonne (index 1)
+      if (typeof cell === 'number' && cell > 40000) { // Vérifier si c'est un nombre de date Excel
+        return new Date((cell - 25569) * 86400 * 1000).toLocaleDateString();
+      }
+      return cell;
+    }));
+
+    // Ajouter les données du tableau HTML au CSV
+    csvData = [...csvData, ...tableData];
+
+    // Convertir les données en CSV avec PapaParse
+    const csv = Papa.unparse(csvData);
+
+    // Créer un Blob à partir des données CSV
+    const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
+    const url = URL.createObjectURL(blob);
+
+    // Créer un lien et déclencher le téléchargement
+    const link = document.createElement('a');
+    link.setAttribute('href', url);
+    link.setAttribute('download', 'FicheVie Report.csv');
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+  }
+
+////////////////////////// exportCsv///////////////
 }

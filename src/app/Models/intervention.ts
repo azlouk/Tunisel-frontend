@@ -1,6 +1,6 @@
 export interface Intervention {
   id?: number;
-  dateintervention?: Date;
+  dateintervention?: string;
   qui?: string;
   natureAction?: string;
   resultat?: string;
