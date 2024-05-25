@@ -207,12 +207,12 @@
     </div>
     <br>
     <div class="shadow-1 p-2 gap-1 text-3xl flex inline-flex justify-content-evenly" >filtrate Grain size  :<br>
-      <p-listbox [options]="SelectetBassin.analysesPhysiques!==undefined?SelectetBassin.analysesPhysiques:[]" [(ngModel)]="SelectedsbnlPrintAnalyse" optionLabel="reference" [filter]="true" [style]="{ width: '15rem' }" [listStyle]="{'max-height': '220px'}"></p-listbox>
-      <div *ngIf="SelectedsbnlPrintAnalyse.hasOwnProperty('id')" class="p-2">
-        <label class="text-2xl font-bold">Reference  :</label><span class="ml-2 text-2xl">{{SelectedsbnlPrintAnalyse.reference}}</span><br>
-        <label class="text-2xl font-bold">Relative :</label><span class=" ml-2 text-2xl">{{SelectedsbnlPrintAnalyse.matiere}}</span><br>
-        <label class="text-2xl font-bold">Temperature :</label><span class=" ml-2 text-2xl">{{SelectedsbnlPrintAnalyse.temperature}} °C</span><br>
-        <label class="text-2xl font-bold">Date </label><span class=" ml-2 text-2xl">{{SelectedsbnlPrintAnalyse.dateAnalyse}}</span><br>
+      <p-listbox [options]=" SelectetBassin.analysesPhysiques!==undefined?SelectetBassin.analysesPhysiques:[]" [(ngModel)]="SelectedPrintAnalysePhysique" optionLabel="reference" [filter]="true" [style]="{ width: '15rem' }" [listStyle]="{'max-height': '220px'}"></p-listbox>
+      <div *ngIf="SelectedPrintAnalysePhysique.hasOwnProperty('id')" class="p-2">
+        <label class="text-2xl font-bold">Reference  :</label><span class="ml-2 text-2xl">{{SelectedPrintAnalysePhysique.reference}}</span><br>
+        <label class="text-2xl font-bold">Relative :</label><span class=" ml-2 text-2xl">{{SelectedPrintAnalysePhysique.matiere}}</span><br>
+        <label class="text-2xl font-bold">Temperature :</label><span class=" ml-2 text-2xl">{{SelectedPrintAnalysePhysique.temperature}} °C</span><br>
+        <label class="text-2xl font-bold">Date </label><span class=" ml-2 text-2xl">{{SelectedPrintAnalysePhysique.dateAnalyse}}</span><br>
       </div>
     </div>
   </div>
@@ -235,7 +235,7 @@
     </div>
 
     <p-table #dt1 [value]="this.SelectetBassin.analysesChimiques !== undefined ? this.SelectetBassin.analysesChimiques : []" [tableStyle]="{ 'min-width': '50rem' }"
-             dataKey="id"
+             dataKey="id" id="EXCEL"
              [showCurrentPageReport]="true"
              [globalFilterFields]="['dateAnalyse']"
 
@@ -309,14 +309,14 @@
     <label class="font-bold top-5 text-5xl">Grain Size</label>
     <br><br><br><br>
     <div class=" top-5 bottom-5">
-      <label class="text-2xl font-bold">Date   :</label><span class="ml-2 text-2xl">{{SelectedsbnlPrintAnalyse.dateAnalyse}}</span><br>
-      <label class="text-2xl font-bold">Reference  :</label><span class="ml-2 text-2xl">{{SelectedsbnlPrintAnalyse.reference}}</span><br>
-      <label class="text-2xl font-bold">Relative :</label><span class=" ml-2 text-2xl">{{SelectedsbnlPrintAnalyse.matiere}}</span><br>
-      <label class="text-2xl font-bold">Temperature :</label><span class=" ml-2 text-2xl">{{SelectedsbnlPrintAnalyse.temperature}} °C</span><br>
-      <label class="text-2xl font-bold">Description :</label><span class=" ml-2 text-2xl">{{SelectedsbnlPrintAnalyse.description}} </span><br>
+      <label class="text-2xl font-bold">Date   :</label><span class="ml-2 text-2xl">{{SelectedPrintAnalysePhysique.dateAnalyse}}</span><br>
+      <label class="text-2xl font-bold">Reference  :</label><span class="ml-2 text-2xl">{{SelectedPrintAnalysePhysique.reference}}</span><br>
+      <label class="text-2xl font-bold">Relative :</label><span class=" ml-2 text-2xl">{{SelectedPrintAnalysePhysique.matiere}}</span><br>
+      <label class="text-2xl font-bold">Temperature :</label><span class=" ml-2 text-2xl">{{SelectedPrintAnalysePhysique.temperature}} °C</span><br>
+      <label class="text-2xl font-bold">Description :</label><span class=" ml-2 text-2xl">{{SelectedPrintAnalysePhysique.description}} </span><br>
     </div>
     <br><br><br>
-    <p-table class=" " #dt [value]="getTamisFiltred()" [columns]="cols"  responsiveLayout="scroll"       dataKey="id">
+    <p-table class=" " #dt [value]="getTamisFiltred()" [columns]="cols"  responsiveLayout="scroll" id="TAMIS"      dataKey="id">
 
       <ng-template pTemplate="header">
         <tr>
@@ -332,15 +332,13 @@
       <ng-template pTemplate="body" let-tamis >
         <tr >
 
-          <td ><span class="p-column-title" >Calibre</span>
+          <td >
             {{tamis.calibre}}
           </td>
           <td>
-            <span class="p-column-title">Weight</span>
             {{tamis.masse}}
           </td>
           <td >
-            <span class="p-column-title">Refus</span>
             {{tamis.refus}}
 
 
@@ -348,11 +346,9 @@
 
 
           <td >
-            <span class="p-column-title">Refus Cumulated</span>
             {{tamis.refusCumulated}}
           </td>
           <td>
-            <span class="p-column-title">pass Cumulated</span>
             {{tamis.passCumulated}}
           </td>
 
@@ -369,6 +365,8 @@
   </div>
   <ng-template pTemplate="footer">
     <p-button icon="pi pi-file-pdf" (click)="SavePDF()" class="text-green-50" label="PDF" pAutoFocus [autofocus]="true"  ></p-button>
-    <p-button icon="pi pi-file-pdf" (click)="csvExport()" class="text-green-50" label="EXCEL" pAutoFocus [autofocus]="true"  ></p-button>
+    <button type="button" pButton pRipple  icon="pi pi-file-excel" (click)="ExportExcel()" class="p-button-success" label="EXCEL" pAutoFocus [autofocus]="true"  ></button>
+    <button type="button" pButton pRipple icon="pi pi-file" (click)="exportcsv()" class="p-button-warning " label="CSV" pTooltip="CSV" ></button>
+
   </ng-template>
 </p-dialog>

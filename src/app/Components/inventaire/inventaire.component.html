@@ -221,9 +221,12 @@
 
   </div>
   <ng-template pTemplate="footer">
-    <p-button icon="pi pi-file-pdf" (click)="SavePDF()" class="text-green-50" label="PDF" pAutoFocus
-              [autofocus]="true"></p-button>
-    <p-button icon="pi pi-file-pdf" (click)="csvExport()" class="text-green-50" label="EXCEL" pAutoFocus [autofocus]="true"  ></p-button>
+    <div class="flex  gap-2 justify-content-end ">
+      <p-button icon="pi pi-file-pdf" (click)="SavePDF()" class="text-green-50" label="PDF" pAutoFocus [autofocus]="true"></p-button>
+      <button type="button" pButton pRipple  icon="pi pi-file-excel" (click)="ExcelExport()" class="p-button-success" label="EXCEL" pAutoFocus [autofocus]="true"  ></button>
+      <button type="button" pButton pRipple icon="pi pi-file" (click)="csvExport()" class="p-button-warning " label="CSV" pTooltip="CSV" ></button>
+
+    </div>
 
   </ng-template>
 </p-dialog>

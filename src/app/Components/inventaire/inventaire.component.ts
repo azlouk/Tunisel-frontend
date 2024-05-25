@@ -22,6 +22,8 @@ import {Article} from "../../Models/article";
 import {ArticleService} from "../../Services/article.service";
 import {utils, writeFile} from "xlsx";
 import {getToken} from "../../../main";
+import * as Papa from 'papaparse';
+import {DockModule} from "primeng/dock";
 
 @Component({
   selector: 'app-inventaire',
@@ -41,7 +43,8 @@ import {getToken} from "../../../main";
     AutoFocusModule,
     CheckboxModule,
     DatePipe,
-    NgForOf
+    NgForOf,
+    DockModule
   ],
   templateUrl: './inventaire.component.html',
   styleUrl: './inventaire.component.css'
@@ -276,9 +279,9 @@ export class InventaireComponent implements OnInit {
   //   writeFile(wb, 'Bassins Report.xlsx');
   // }
 
-  csvExport() {
+  ExcelExport() {
     const tableName = this.selectedInventairePrint.reference; // Ajoutez le nom de votre tableau ici
-    const headings = [['id', '','Name', '', 'designation', '', 'quantity', '',]];
+    const headings = [['Name', '', 'designation', '', 'quantity', '',]];
 
     const wb = utils.book_new();
     const ws = utils.json_to_sheet([]);
@@ -292,7 +295,7 @@ export class InventaireComponent implements OnInit {
     // Préparer les données avec des colonnes vides intercalées
     const formattedData = this.selectedInventairePrint.inventaireProduitAssociations!.map(record => {
       return [
-        record.id, '',
+
                     record.produit?.nom, '',
                   record.produit?.designation, '',
                      record.quantitePI, '',
@@ -309,6 +312,34 @@ export class InventaireComponent implements OnInit {
 
     utils.book_append_sheet(wb, ws, 'Inventaire');
     writeFile(wb, 'Inventaire Report.xlsx');
+  }
+  csvExport() {
+    const headings = [
+      [ 'Name', '', 'designation', '', 'quantity', '',],
+    ];
+
+    // Prepare formatted data for inventory products
+    const formattedData = this.selectedInventairePrint.inventaireProduitAssociations!.map(record => [
+    record.produit?.nom, '', record.produit?.designation, '', record.quantitePI, '',
+    ]);
+
+    // Combine headings and formatted data
+    let csvData: (string | number | undefined)[][] = [...headings, ...formattedData];
+
+    // Convert data to CSV format using PapaParse
+    const csv = Papa.unparse(csvData);
+
+    // Create a Blob from CSV data
+    const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
+    const url = URL.createObjectURL(blob);
+
+    // Create a link and trigger the download
+    const link = document.createElement('a');
+    link.setAttribute('href', url);
+    link.setAttribute('download', 'Inventaire_Report.csv');
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
   }
 
 existeArticle(a:Article):boolean|undefined{

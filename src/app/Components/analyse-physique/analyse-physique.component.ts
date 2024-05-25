@@ -12,24 +12,29 @@ import {Router} from "@angular/router";
  import {AnalysePhysiqueService} from "../../Services/analysePhysique.service";
 import {AnalysesPhysique} from "../../Models/analyses-physique";
 import {getToken} from "../../../main";
+import {FormsModule} from "@angular/forms";
+import {CalendarModule} from "primeng/calendar";
 
 @Component({
   selector: 'app-analyse-physique',
   standalone: true,
-    imports: [
-        ButtonModule,
-        DialogModule,
-        InputTextModule,
-        NgIf,
-        SharedModule,
-        TableModule,
-        ToastModule,
-        ToolbarModule
-    ],
+  imports: [
+    ButtonModule,
+    DialogModule,
+    InputTextModule,
+    NgIf,
+    SharedModule,
+    TableModule,
+    ToastModule,
+    ToolbarModule,
+    FormsModule,
+    CalendarModule
+  ],
   templateUrl: './analyse-physique.component.html',
   styleUrl: './analyse-physique.component.css'
 })
 export class AnalysePhysiqueComponent implements OnInit{
+  date!: Date;
   productDialog: boolean = false;
 
   deleteProductDialog: boolean = false;
@@ -174,6 +179,20 @@ this.getALLphysique() ;
     },error => {
       console.log(error)})
   }
+  filterPerMonth(date: Date) {
+    if (!date) {
+      this.getALLphysique();
+      return;
+    }
+    this.analysesPhysiques = this.analysesPhysiques.filter(value => {
+      if (value.dateAnalyse) {
+        const analyseDate = new Date(value.dateAnalyse);
+        return analyseDate.getFullYear() === date.getFullYear() && analyseDate.getMonth() === date.getMonth();
+      }
+      return false;
+    });
+  }
 
   protected readonly getToken = getToken;
+
 }
