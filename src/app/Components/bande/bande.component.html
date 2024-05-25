@@ -202,8 +202,8 @@
     </div>
     <br>
     <div class="shadow-1 p-2 gap-1 text-3xl flex inline-flex justify-content-evenly" >filtrate Grain size  :<br>
-      <p-listbox [options]="getAnalyseGranoli()" [(ngModel)]="SelectedBandePrintAnalyse" optionLabel="reference" [filter]="true" [style]="{ width: '15rem' }" [listStyle]="{'max-height': '220px'}"></p-listbox>
-      <div *ngIf="SelectedBandePrintAnalyse.hasOwnProperty('id')" class="p-2">
+      <p-listbox [options]="selectedBande.analysesPhysiques!==undefined?selectedBande.analysesPhysiques:[]" [(ngModel)]="SelectedBandePrintAnalyse" optionLabel="reference" [filter]="true" [style]="{ width: '15rem' }" [listStyle]="{'max-height': '220px'}"></p-listbox>
+      <div  class="p-2">
         <label class="text-2xl font-bold">Reference  :</label><span class="ml-2 text-2xl">{{SelectedBandePrintAnalyse.dateAnalyse}}</span><br>
         <label class="text-2xl font-bold">Relative :</label><span class=" ml-2 text-2xl">{{SelectedBandePrintAnalyse.matiere}}</span><br>
         <label class="text-2xl font-bold">Temperature :</label><span class=" ml-2 text-2xl">{{SelectedBandePrintAnalyse.temperature}} °C</span><br>
@@ -228,7 +228,7 @@
     </div>
 
     <p-table #dt1 [value]="getAnalyse()" [tableStyle]="{ 'min-width': '50rem' }"
-             dataKey="id"
+             dataKey="id" id="EXCEL"
              [showCurrentPageReport]="true"
              [globalFilterFields]="['dateAnalyse']"
 
@@ -284,7 +284,7 @@
       <label class="text-2xl font-bold">Temperature :</label><span class=" ml-2 text-2xl">{{SelectedBandePrintAnalyse.temperature}} °C</span><br>
     </div>
     <br><br><br>
-    <p-table class=" " #dt [value]="getTamisFiltred()" [columns]="cols"  responsiveLayout="scroll"       dataKey="id">
+    <p-table class=" " #dt [value]="getTamisFiltred()" [columns]="cols"  responsiveLayout="scroll"    id ="TAMIS"     dataKey="id">
 
       <ng-template pTemplate="header">
         <tr>
@@ -300,15 +300,15 @@
       <ng-template pTemplate="body" let-tamis >
         <tr >
 
-          <td ><span class="p-column-title" >Calibre</span>
+          <td >
             {{tamis.calibre}}
           </td>
           <td>
-            <span class="p-column-title">Weight</span>
+
             {{tamis.masse}}
           </td>
           <td >
-            <span class="p-column-title">Refus</span>
+
             {{tamis.refus}}
 
 
@@ -316,11 +316,11 @@
 
 
           <td >
-            <span class="p-column-title">Refus Cumulated</span>
+
             {{tamis.refusCumulated}}
           </td>
           <td>
-            <span class="p-column-title">pass Cumulated</span>
+
             {{tamis.passCumulated}}
           </td>
 
@@ -337,6 +337,9 @@
   </div>
   <ng-template pTemplate="footer">
     <p-button icon="pi pi-file-pdf" (click)="SavePDF()" class="text-green-50" label="PDF" pAutoFocus [autofocus]="true"  ></p-button>
+    <button type="button" pButton pRipple  icon="pi pi-file-excel" (click)="ExportExcel()" class="p-button-success" label="EXCEL" pAutoFocus [autofocus]="true"  ></button>
+    <button type="button" pButton pRipple icon="pi pi-file" (click)="exportcsv()" class="p-button-warning " label="CSV" pTooltip="CSV" ></button>
+
   </ng-template>
 </p-dialog>
 
