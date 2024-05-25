@@ -598,7 +598,8 @@ this.selectedColumns.forEach(value => {
      const doc = new jsPDF("l","mm",format)
      let headerPage=document.getElementById("headerpages");
     if(headerPage)
-           headerPage.innerHTML='    <div class="flex border-1 w-full justify-content-between">' +
+           headerPage.innerHTML=' <div class=" flex flex-column">   ' +
+             '<div class="flex   border-1 w-full justify-content-between">' +
              '      <div class="flex-initial flex align-items-center justify-content-center   font-bold m-2 px-5 py-3 border-round">' +
              '        <img src="/assets/layout/images/logo.png"/>' +
              +
@@ -614,21 +615,16 @@ this.selectedColumns.forEach(value => {
              +
              '        </div>' +
              '      </div>' +
-             '    </div>' +
-             '<!--      infoPropreTableCommande-->\n' +
-             '      <div class="  p-2 gap-1 text-3xl flex   justify-content-evenly">\n' +
-             '        <br><br>\n' +
-             '        <label class="text-2xl font-bold">Command Date :</label><span\n' +
-             '        class="ml-2 text-2xl">'+this.commande.dateCommande+'</span><br><br>\n' +
-             '        <label class="text-2xl font-bold">Name :</label><span class=" ml-2 text-2xl">'+this.commande.nom+'</span><br><br>\n' +
-             '        <label class="text-2xl font-bold">Status :</label><span\n' +
-             '        class=" ml-2 text-2xl">'+this.commande.etat+' </span><br><br>\n' +
-             '\n' +
-             '      </div>\n' +
-
-             '      <div class="  p-2 gap-1 text-3xl flex   justify-content-evenly">\n' +
-             '        <label class="text-2xl font-bold">Creation Date Pond : </label><span\n' +
-             '        class=" ml-2 text-2xl">'+this.commande.bassin?.dateCreation+'</span>\n' +
+             '    </div>  ' +
+             '<!--      infoPropreTableCommande--> ' +
+             '      <div class=" flex    p-2 gap-1 text-3xl flex    justify-content-evenly">' +
+             '        <br><br>' +
+             '        <label class="text-2xl font-bold">Command Date :</label><span class="ml-2 text-2xl">'+this.commande.dateCommande+'</span>' +
+             '        <label class="text-2xl font-bold">Name :</label><span class=" ml-2 text-2xl">'+this.commande.nom+'</span>' +
+             '        <label class="text-2xl font-bold">Status :</label><span class=" ml-2 text-2xl">'+this.commande.etat+' </span>' +
+             '      </div>' +
+             '      <div class="flex     p-2 gap-1 text-3xl flex   justify-content-evenly">' +
+             '        <label class="text-2xl font-bold">Creation Date Pond : </label><span class=" ml-2 text-2xl">'+this.commande.bassin?.dateCreation+'</span>' +
              '\n' +
              '        <label class="text-2xl font-bold">Reference :</label><span\n' +
              '        class="ml-2 text-2xl">'+this.commande.bassin?.reference+'</span>\n' +
@@ -641,7 +637,7 @@ this.selectedColumns.forEach(value => {
              '        <label class="text-2xl font-bold">Status :</label><span\n' +
              '        class=" ml-2 text-2xl">'+this.commande.bassin?.etat+' </span>\n' +
              '\n' +
-             '      </div>\n' +
+             '      </div>  ' +
              '<!--      infoTable-->\n'
     if(headerPage)
       html2canvas(headerPage, {scale: 1}).then((canvas) => {
@@ -649,7 +645,7 @@ this.selectedColumns.forEach(value => {
          const imgWidth = 210; // PDF width
         const imgHeight = (canvas.height * imgWidth) / canvas.width; // Maintain aspect ratio
         doc.addImage(imgData, 'png', 2, 2, imgWidth*sizeimageA4, imgHeight*sizeimageA4);
-        autoTable(doc,{startY:150})
+        autoTable(doc,{startY:250})
 // Or use javascript directly:
         autoTable(doc, {
           head: [header],
