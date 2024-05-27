@@ -105,6 +105,12 @@
 
     <div class="card">
       <p-table
+        [paginator]="true"
+        [rows]="10"
+        [rowsPerPageOptions]="[10,20,30,200,500]"
+        [showCurrentPageReport]="true"
+        [rowHover]="true"
+        currentPageReportTemplate="Display from {first} to {last} of {totalRecords} items"
         [columns]="selectedColumns"
         [value]="listeLignesCommandes"
         [tableStyle]="{'min-width': '50rem'}"
@@ -137,12 +143,12 @@
 
           <div class="gap-5 flex align-items-center    ">
             <div class="gap-1 flex align-items-center">Analysis start date  :
-              <input  class="p-2 shadow-1" type="date" pInputText    [(ngModel)]="DatefiltrageStart" [value]="DatefiltrageStart" />
+              <input  class="p-2 shadow-1" type="date" pInputText    [(ngModel)]="DatefiltrageStart"   />
 
             </div>
             <div class="gap-1  flex align-items-center  ">
               Date End Analysis  :
-              <input  class="p-2 shadow-1" type="date"  pInputText   [(ngModel)]="DatefiltrageEnd" [value]="DatefiltrageEnd" />
+              <input  class="p-2 shadow-1" type="date"  pInputText   [(ngModel)]="DatefiltrageEnd"   />
 
             </div>
 <div class="gap-1  flex align-items-center">

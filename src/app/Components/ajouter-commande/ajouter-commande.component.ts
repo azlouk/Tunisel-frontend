@@ -109,7 +109,7 @@ export class AjouterCommandeComponent implements OnInit{
 
   private datasel: string[]=[];
   filtereddatasel: any[]=[];
-  matter: any;
+  matter: any="Unwashed salt";
   constructor(private router: Router,
               private bassinService :BassinService,
               private tamisService:TamisService ,
@@ -225,7 +225,13 @@ getCommandeById(){
 }
   saveCommande() {
     this.commande.ligneCommandes=[];
+
     this.commande.ligneCommandes=this.listeLignesCommandes;
+    this.commande.ligneCommandes.forEach(value => {
+      if(value.id && value.id<=0){
+        value.id=undefined ;
+      }
+    })
     if(this.isUpdateCommande){
 
       this.commandeService.updateCommande(this.commande).subscribe(value => this.router.navigate(['/commande']))
@@ -347,19 +353,9 @@ this.commande.bassins.forEach(basin => {
   confirmDelete() {
     this.deleteLineCommandeDialog = false;
 
-
-      if(this.lineCommande.analysePhysique!==null){
-        this.listeLignesCommandes = this.listeLignesCommandes.filter(val => val.analysePhysique?.reference !== this.lineCommande.analysePhysique?.reference);
+   this.listeLignesCommandes = this.listeLignesCommandes.filter(val => val.id !== this.lineCommande.id);
         this.messageService.add({severity: 'success', summary: 'Successful', detail: 'Line Commande Deleted', life: 3000});
 
-      }
-      else if(this.lineCommande.analyseChimique!==null){
-        this.listeLignesCommandes = this.listeLignesCommandes.filter(val => val.analyseChimique?.reference !== this.lineCommande.analyseChimique?.reference);
-        this.messageService.add({severity: 'success', summary: 'Successful', detail: 'Line Commande Deleted', life: 3000});
-
-
-
-    }
     this.CalculeTotalInput()
   }
 
@@ -411,7 +407,7 @@ this.commande.bassins.forEach(basin => {
   filtredate() {
 
      //this.Viderfiltredate()
-    const data=this.listeLignesCommandes.filter(l => this.searchAnalyse(l)==true || this.chechMatter(l)==true );
+    const data=this.listeLignesCommandes.filter(l => this.searchAnalyse(l)==true && this.chechMatter(l)==true );
 
     this.listeLignesCommandes=[...data]
 
@@ -451,7 +447,7 @@ this.getLine()
   }
     chechMatter(l: LineCommande):boolean {
    if(l.analysePhysique)
-    return  l.analysePhysique.qualite==this.matter;
+    return  l.analysePhysique.qualite!.includes(this.matter).valueOf();
 
   return  false ;
   }
@@ -466,6 +462,7 @@ this.getLine()
 
   AddLineCommand() {
   const lineCommande:LineCommande={analysePhysique:null,analyseChimique:null}
+    lineCommande.id=-1*(new  Date().getTime());
     // lineCommande.analyseChimique?.dateAnalyse!==undefined? lineCommande.analyseChimique.dateAnalyse.toString():new Date();
 
     this.listeLignesCommandes.push(lineCommande);
@@ -558,8 +555,8 @@ this.getLine()
   visiblePrint: boolean = false;
   dateToday: Date = new Date();
 
-  DatefiltrageStart: Date = new Date();
-  DatefiltrageEnd: Date = new Date();
+  DatefiltrageStart: string = new Date().toISOString().split('T')[0];
+  DatefiltrageEnd: string = new Date().toISOString().split('T')[0];
   SearchDate: any;
 
 
