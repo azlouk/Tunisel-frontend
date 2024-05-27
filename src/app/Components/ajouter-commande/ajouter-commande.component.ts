@@ -34,6 +34,8 @@ import {AutoFocusModule} from "primeng/autofocus";
 import html2canvas from "html2canvas";
 import jsPDF from "jspdf";
 import autoTable from "jspdf-autotable";
+import {OverlayPanelModule} from "primeng/overlaypanel";
+import {ProgressBarModule} from "primeng/progressbar";
 
 
 
@@ -72,6 +74,8 @@ interface Column {
     FieldsetModule,
     AutoFocusModule,
     AutoCompleteModule,
+    OverlayPanelModule,
+    ProgressBarModule,
 
   ],
   templateUrl: './ajouter-commande.component.html',
@@ -564,8 +568,8 @@ this.getLine()
 
 
   public SavePDF(): void {
-   this.visibleCommande=true
-
+this.visibleCommande=true
+    setTimeout(()=>{
     let header:string[]=[] ;
     let data:any[]=[] ;
 
@@ -595,14 +599,14 @@ this.selectedColumns.forEach(value => {
         sizeimageA4=4
       }
     }
+
      const doc = new jsPDF("l","mm",format)
      let headerPage=document.getElementById("headerpages");
     if(headerPage)
            headerPage.innerHTML=' <div class=" flex flex-column">   ' +
              '<div class="flex   border-1 w-full justify-content-between">' +
              '      <div class="flex-initial flex align-items-center justify-content-center   font-bold m-2 px-5 py-3 border-round">' +
-             '        <img src="/assets/layout/images/logo.png"/>' +
-             +
+
              '      </div>' +
              '      <div class="flex-initial flex align-items-center justify-content-center  text-6xl font-bold m-2 px-5 py-3 border-round">' +
              '        Daily monitoring of analyses for the order\n' +
@@ -611,13 +615,16 @@ this.selectedColumns.forEach(value => {
              '      <div class="flex-initial border-1 flex     w-25  font-bold m-2 px-5 py-3  ">' +
              '        <div class="col   ">' +
              '          <div class="row  mb-2    w-full  ">BEN GUERDANE, TUNISIA  </div>' +
-             '          <div class="row mb-2   w-full text-center    text-1xl font-bold  pi pi-calendar ">'+new Date() +'</div>' +
-             +
+             '          <div class="row mb-2   w-full text-center    text-1xl font-bold  pi pi-calendar ">'+this.pipedate(new Date())+'</div>' +
              '        </div>' +
-             '      </div>' +
+             '      </div>   ' +
+             '</div> ' +
+             '</div>' +
+             '</div>' +
+
              '    </div>  ' +
              '<!--      infoPropreTableCommande--> ' +
-             '      <div class=" flex    p-2 gap-1 text-3xl flex    justify-content-evenly">' +
+             '      <div class=" flex  me-3 mt-5  p-2 gap-1 text-3xl flex    justify-content-evenly">' +
              '        <br><br>' +
              '        <label class="text-2xl font-bold">Command Date :</label><span class="ml-2 text-2xl">'+this.commande.dateCommande+'</span>' +
              '        <label class="text-2xl font-bold">Name :</label><span class=" ml-2 text-2xl">'+this.commande.nom+'</span>' +
@@ -625,27 +632,39 @@ this.selectedColumns.forEach(value => {
              '      </div>' +
              '      <div class="flex     p-2 gap-1 text-3xl flex   justify-content-evenly">' +
              '        <label class="text-2xl font-bold">Creation Date Pond : </label><span class=" ml-2 text-2xl">'+this.commande.bassin?.dateCreation+'</span>' +
-             '\n' +
-             '        <label class="text-2xl font-bold">Reference :</label><span\n' +
-             '        class="ml-2 text-2xl">'+this.commande.bassin?.reference+'</span>\n' +
-             '        <label class="text-2xl font-bold">Description :</label><span\n' +
-             '        class=" ml-2 text-2xl">'+this.commande.bassin?.description+'</span>\n' +
-             '        <label class="text-2xl font-bold">Name :</label><span\n' +
-             '        class=" ml-2 text-2xl">'+this.commande.bassin?.nom+'</span>\n' +
-             '        <label class="text-2xl font-bold">Location :</label><span\n' +
-             '        class=" ml-2 text-2xl">'+this.commande.bassin?.emplacement+' </span>\n' +
-             '        <label class="text-2xl font-bold">Status :</label><span\n' +
-             '        class=" ml-2 text-2xl">'+this.commande.bassin?.etat+' </span>\n' +
-             '\n' +
+             '        <label class="text-2xl font-bold">Reference :</label><span class="ml-2 text-2xl">'+this.commande.bassin?.reference+'</span>' +
+             '        <label class="text-2xl font-bold">Description :</label><span class=" ml-2 text-2xl">'+this.commande.bassin?.description+'</span>' +
+             '        <label class="text-2xl font-bold">Name :</label><span class=" ml-2 text-2xl">'+this.commande.bassin?.nom+'</span>' +
+             '        <label class="text-2xl font-bold">Location :</label><span class=" ml-2 text-2xl">'+this.commande.bassin?.emplacement+' </span>' +
+             '        <label class="text-2xl font-bold">Status :</label><span class=" ml-2 text-2xl">'+this.commande.bassin?.etat+' </span>' +
              '      </div>  ' +
-             '<!--      infoTable-->\n'
+             '<div class=" flex justify-content-start  ">' +
+             '  <div class="flex flex-column gap-3 border-1 border-round border-gray-400 p-3">' +
+             '    <div class="flex align-items-start gap-3 justify-content-between">' +
+             '      <label   class="font-bold">Total Harvset in(T) :    </label>' +
+             '      <label   class="font-bold text-center    ">'+this.TotalHarv+'</label>' +
+             '     </div>' +
+
+             '    <div class="flex align-items-center gap-3 justify-content-between ">' +
+             '      <label   class="font-bold">Total Production in(T) :</label>' +
+             '      <label   class="font-bold text-center    ">'+this.TotalProd+'</label>' +
+
+             '     </div>' +
+             '    <div class="flex align-items-center gap-3 justify-content-between ">' +
+             '      <label   class="font-bold">Total Transfer Quantity :</label>' +
+             '      <label   class="font-bold text-center    ">'+this.TotalHarv+'</label>' +
+
+             '     </div>' +
+             '  </div>' +
+             '</div>' ;
+
     if(headerPage)
       html2canvas(headerPage, {scale: 1}).then((canvas) => {
         const imgData = canvas.toDataURL('image/png');
          const imgWidth = 210; // PDF width
         const imgHeight = (canvas.height * imgWidth) / canvas.width; // Maintain aspect ratio
         doc.addImage(imgData, 'png', 2, 2, imgWidth*sizeimageA4, imgHeight*sizeimageA4);
-        autoTable(doc,{startY:250})
+        autoTable(doc,{startY:imgHeight+180})
 // Or use javascript directly:
         autoTable(doc, {
           head: [header],
@@ -653,11 +672,11 @@ this.selectedColumns.forEach(value => {
         });
         doc.save('Print_'+Math.random()+'.pdf')
       });
+  this.visibleCommande=false
 
+    },this.commande.ligneCommandes!.length*100)
 
-
-    this.visibleCommande=false
-    }
+     }
 
 
 
