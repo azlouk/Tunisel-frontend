@@ -8,5 +8,5 @@ export interface Commande {
   etat?: string;
   dateCommande?: Date;
   ligneCommandes?:LineCommande[];
-  bassin?:Bassin;
+  bassins?:Bassin[];
 }

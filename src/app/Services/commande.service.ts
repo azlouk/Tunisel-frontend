@@ -34,7 +34,7 @@ export class CommandeService {
     //     value.analysePhysique=null;
     //   }
     // })
-    console.error(commande)
+    // console.error(commande)
     return this.http.post<Commande>(`${this.apiUrl}/commandes/add`,commande);
 
   }

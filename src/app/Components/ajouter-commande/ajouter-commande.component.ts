@@ -146,7 +146,7 @@ export class AjouterCommandeComponent implements OnInit{
     ]
     this.cols = [
 
-      {id:0, field: 'dateAnalyse', header: 'Prelevelment date' },
+      {id:0, field: 'dateAnalyse', header: 'Prelevelment date Analyse' },
       {id:1, field: 'reference', header: 'Reference' },
       {id:2,field: 'matiere', header: 'Matter' },
       {id:3, field: 'description', header: 'Description' },
@@ -173,18 +173,19 @@ export class AjouterCommandeComponent implements OnInit{
       {id:24, field: 'refus', header: 'Refusal '},
       {id:25, field: 'refusCumulated', header: 'Refusal Cumulateds '},
       {id:26, field: 'passCumulated', header: 'Cumulated Pass'},
-      {id:27, field: 'quantityRecolte', header: 'Harvest'},
-      {id:28, field: 'quantityProduction', header: 'Production'},
-      {id:29, field: 'quantityPluieBengarden', header: 'Ben Gardane Rain'},
-      {id:30, field: 'quantityPluieZarzis', header: 'Zarzis Rain'},
-      {id:31, field: 'quantiteTransfert', header: 'Transfer Quantity'},
-      {id:32, field: 'decisionTransfert', header: 'Transfer Decision'},
-      {id:33, field: 'numeroLot', header: 'Number Lot'},
-      {id:34, field: 'poidsLot', header: 'Lot Weight'},
-      {id:35, field: 'emplassementLot', header: 'Lot Location'},
-      {id:36, field: 'lieuxPrelevement', header: 'Places Prelevement'},
-      {id:37, field: 'matCamion', header: 'Truck Mat'},
-      {id:38, field: 'conformite', header: 'Conformite'},
+      {id:27, field: 'dateCreation', header: 'Date Creation'},
+      {id:28, field: 'quantityRecolte', header: 'Harvest'},
+      {id:29, field: 'quantityProduction', header: 'Production'},
+      {id:30, field: 'quantityPluieBengarden', header: 'Ben Gardane Rain'},
+      {id:31, field: 'quantityPluieZarzis', header: 'Zarzis Rain'},
+      {id:32, field: 'quantiteTransfert', header: 'Transfer Quantity'},
+      {id:33, field: 'decisionTransfert', header: 'Transfer Decision'},
+      {id:34, field: 'numeroLot', header: 'Number Lot'},
+      {id:35, field: 'poidsLot', header: 'Lot Weight'},
+      {id:36, field: 'emplassementLot', header: 'Lot Location'},
+      {id:37, field: 'lieuxPrelevement', header: 'Places Prelevement'},
+      {id:38, field: 'matCamion', header: 'Truck Mat'},
+      {id:39, field: 'conformite', header: 'Conformite'},
 
     ];
 
@@ -263,23 +264,40 @@ getCommandeById(){
   }
 
   getLine() {
-
-    if(this.commande.bassin!==null){
+this.listeLignesCommandes=[];
+    if(this.commande.bassins){
 
       // const id :number =this.selectedBassin.id!==undefined?this.selectedBassin.id:-1;
-      const id :number =this.commande.bassin&&this.commande.bassin.id!==undefined?this.commande.bassin.id:-1;
+      // const id :number =this.commande.bassin&&this.commande.bassin.id!==undefined?this.commande.bassin.id:-1;
+this.commande.bassins.forEach(basin => {
+  if(basin.id){
+    this.commandeService.getLignesCommandes(basin.id).subscribe(value => {
+      const data=value.filter(value1 => this.listeLignesCommandes.find(value2 => value2==value1)==undefined)
 
-        if(id!==-1){
-          this.commandeService.getLignesCommandes(id).subscribe(value => {
-            const data=value.filter(value1 => this.listeLignesCommandes.find(value2 => value2==value1)==undefined)
-            this.listeLignesCommandes = data;
-            console.log('size  : ' + this.listeLignesCommandes.length);
-              this.getCalibre();
-          },error =>{
-            console.log(error);
-            console.log('error size  : ' + this.listeLignesCommandes.length);});
-        }
-  }}
+      this.listeLignesCommandes.push(...data);
+
+      console.log('size  : ' + this.listeLignesCommandes.length);
+      this.getCalibre();
+    },error =>{
+      console.log(error);
+      console.log('error size  : ' + this.listeLignesCommandes.length);});
+  }
+
+  })
+
+
+        // if(id!==-1){
+        //   this.commandeService.getLignesCommandes(id).subscribe(value => {
+        //     const data=value.filter(value1 => this.listeLignesCommandes.find(value2 => value2==value1)==undefined)
+        //     this.listeLignesCommandes = data;
+        //     console.log('size  : ' + this.listeLignesCommandes.length);
+        //       this.getCalibre();
+        //   },error =>{
+        //     console.log(error);
+        //     console.log('error size  : ' + this.listeLignesCommandes.length);});
+        // }
+    }
+ }
 
 
   getValueOfligneCommande(col: any, ligneCommande: any): any {
@@ -312,6 +330,7 @@ getCommandeById(){
 
 
     else {
+      // ligneCommande.dateCreation=new Date();
 
       return ligneCommande!==null  ? ligneCommande[col.field] : '-';
     }
@@ -494,14 +513,14 @@ this.getLine()
     utils.sheet_add_aoa(ws, headingsBassin, { origin: 'A5' });
 
     // Préparer les données des bassins
-    if (this.commande.bassin) {
-      const bassinData = [
-        [this.commande.bassin.reference, '', this.commande.bassin.description, '', this.commande.bassin.nom, '', this.commande.bassin.emplacement, '', this.commande.bassin.etat, '', this.commande.bassin.dateCreation]
-      ];
-
-      // Ajouter les données de bassins à la feuille
-      utils.sheet_add_json(ws, bassinData, { origin: 'A6', skipHeader: true });
-    }
+    // if (this.commande.bassin) {
+    //   const bassinData = [
+    //     [this.commande.bassin.reference, '', this.commande.bassin.description, '', this.commande.bassin.nom, '', this.commande.bassin.emplacement, '', this.commande.bassin.etat, '', this.commande.bassin.dateCreation]
+    //   ];
+    //
+    //   // Ajouter les données de bassins à la feuille
+    //   utils.sheet_add_json(ws, bassinData, { origin: 'A6', skipHeader: true });
+    // }
 
     // ====================================================================
     // Ajouter les données du tableau HTML
