@@ -100,7 +100,7 @@
             <td>
               <div class="flex ">
                 <button *ngIf="getToken()=='ADMIN'" pButton pRipple icon="pi pi-pencil" class="p-button-rounded p-button-success mr-2" (click)="editSbl(sbl)"></button>
-                <button *ngIf="getToken()=='ADMIN'" pButton pRipple icon="pi pi-trash" class="p-button-rounded p-button-warning" (click)="deleteSbl(sbl)"></button>
+                <button *ngIf="getToken()=='ADMIN'" pButton pRipple icon="pi pi-trash" class="p-button-rounded p-button-warning mr-2" (click)="deleteSbl(sbl)"></button>
                 <button pButton pRipple icon="pi pi-file-pdf" class="p-button-rounded p-button-primary mr-2"  (click)="exportrapport(sbl)"></button>
 
               </div>
@@ -216,7 +216,7 @@
     </div>
     <br>
     <div class="shadow-1 p-2 gap-1 text-3xl flex inline-flex justify-content-evenly" >filtrate Grain size  :<br>
-      <p-listbox [options]="getAnalyseGranoli()" [(ngModel)]="SelectedsbnlPrintAnalyse" optionLabel="reference" [filter]="true" [style]="{ width: '15rem' }" [listStyle]="{'max-height': '220px'}"></p-listbox>
+      <p-listbox [options]="Selectetsbl.analysesPhysiques!==undefined?Selectetsbl.analysesPhysiques:[]" [(ngModel)]="SelectedsbnlPrintAnalyse" optionLabel="reference" [filter]="true" [style]="{ width: '15rem' }" [listStyle]="{'max-height': '220px'}"></p-listbox>
       <div *ngIf="SelectedsbnlPrintAnalyse.hasOwnProperty('id')" class="p-2">
         <label class="text-2xl font-bold">Reference  :</label><span class="ml-2 text-2xl">{{SelectedsbnlPrintAnalyse.dateAnalyse}}</span><br>
         <label class="text-2xl font-bold">Relative :</label><span class=" ml-2 text-2xl">{{SelectedsbnlPrintAnalyse.matiere}}</span><br>
@@ -242,7 +242,7 @@
     </div>
 
     <p-table #dt1 [value]="getAnalyse()" [tableStyle]="{ 'min-width': '50rem' }"
-             dataKey="id"
+             dataKey="id" id="EXCEL"
              [showCurrentPageReport]="true"
              [globalFilterFields]="['dateAnalyse']"
 
@@ -321,7 +321,7 @@
       <label class="text-2xl font-bold">Temperature :</label><span class=" ml-2 text-2xl">{{SelectedsbnlPrintAnalyse.temperature}} °C</span><br>
     </div>
     <br><br><br>
-    <p-table class=" " #dt [value]="getTamisFiltred()" [columns]="cols"  responsiveLayout="scroll"       dataKey="id">
+    <p-table class=" " id="TAMIS" #dt [value]="getTamisFiltred()" [columns]="cols"  responsiveLayout="scroll"       dataKey="id">
 
       <ng-template pTemplate="header">
         <tr>
@@ -337,15 +337,15 @@
       <ng-template pTemplate="body" let-tamis >
         <tr >
 
-          <td ><span class="p-column-title" >Calibre</span>
+          <td >
             {{tamis.calibre}}
           </td>
           <td>
-            <span class="p-column-title">Weight</span>
+
             {{tamis.masse}}
           </td>
           <td >
-            <span class="p-column-title">Refus</span>
+
             {{tamis.refus}}
 
 
@@ -353,11 +353,11 @@
 
 
           <td >
-            <span class="p-column-title">Refus Cumulated</span>
+
             {{tamis.refusCumulated}}
           </td>
           <td>
-            <span class="p-column-title">pass Cumulated</span>
+
             {{tamis.passCumulated}}
           </td>
 
@@ -373,6 +373,9 @@
 
   </div>
   <ng-template pTemplate="footer">
-    <p-button icon="pi pi-file-pdf" (click)="SavePDF()" class="text-green-50" label="PDF" pAutoFocus [autofocus]="true"  ></p-button>
+    <p-button icon="pi pi-file-pdf" (click)="SavePDF()" class="text-green-50" label="PDF"  ></p-button>
+    <button type="button" pButton pRipple  icon="pi pi-file-excel" (click)="ExportExcel()" class="p-button-success " label="EXCEL" pAutoFocus [autofocus]="true"  ></button>
+    <button type="button" pButton pRipple icon="pi pi-file" (click)="exportcsv()" class="p-button-warning " label="CSV" pTooltip="CSV" ></button>
+
   </ng-template>
 </p-dialog>

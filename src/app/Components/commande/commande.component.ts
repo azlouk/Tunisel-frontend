@@ -8,14 +8,12 @@ import {Table, TableModule} from "primeng/table";
 import {ToastModule} from "primeng/toast";
 import {ToolbarModule} from "primeng/toolbar";
 import {Product} from "../../Models/product";
-import {AnalysesPhysique} from "../../Models/analyses-physique";
-import {Router} from "@angular/router";
+ import {Router} from "@angular/router";
  import {Commande} from "../../Models/commande";
 import {CommandeService} from "../../Services/commande.service";
 import {getToken} from "../../../main";
 import {FormsModule} from "@angular/forms";
-import {error} from "@angular/compiler-cli/src/transformers/util";
-import html2canvas from "html2canvas";
+ import html2canvas from "html2canvas";
 import jsPDF from "jspdf";
 import {Puit} from "../../Models/puit";
 import {DropdownModule} from "primeng/dropdown";
@@ -24,6 +22,7 @@ import {RippleModule} from "primeng/ripple";
 import {Column} from "jspdf-autotable";
 import {AutoFocusModule} from "primeng/autofocus";
 import {ListboxModule} from "primeng/listbox";
+import {InputNumberModule} from "primeng/inputnumber";
 
 @Component({
   selector: 'app-commande',
@@ -43,7 +42,8 @@ import {ListboxModule} from "primeng/listbox";
     NgForOf,
     RippleModule,
     AutoFocusModule,
-    ListboxModule
+    ListboxModule,
+    InputNumberModule
   ],
   templateUrl: './commande.component.html',
   styleUrl: './commande.component.css'
@@ -219,16 +219,17 @@ isUpdateCommande:boolean=false;
   showDialogDetails(command :Commande) {
     this.visible=true;
     this.selectedCommandPrint=command;
+    this.CalculeTotal()
   }
 
   // ---------------export details provider to PDF file ---------------
   savePdfDetails() {
-    const data = document.getElementById('commandepdf');
 
+    const data = document.getElementById('commandepdf');
     if (data){
       html2canvas(data).then(canvas => {
         const imgData = canvas.toDataURL('image/png');
-        const pdf = new jsPDF();
+        const pdf = new jsPDF('l', 'mm', 'a4');
         const imgProps= pdf.getImageProperties(imgData);
         const pdfWidth = pdf.internal.pageSize.getWidth();
         const pdfHeight = (imgProps.height * pdfWidth) / imgProps.width;
@@ -269,7 +270,7 @@ isUpdateCommande:boolean=false;
 
     if(this.selectedCommandPrint.ligneCommandes){
     // @ts-ignore
-      this.selectedCommandPrint.ligneCommandes(value => {
+      this.selectedCommandPrint.ligneCommandes.forEach(value => {
       if(value.quantityRecolte)
         this.TotalHarv+=parseFloat(value.quantityRecolte+'');
       if(value.quantityProduction)

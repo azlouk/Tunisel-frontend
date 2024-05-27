@@ -26,6 +26,10 @@ import {AnalysesPhysique} from "../../Models/analyses-physique";
 import {Tamis} from "../../Models/tamis";
 import {ListboxModule} from "primeng/listbox";
 import {getToken} from "../../../main";
+import {AutoFocusModule} from "primeng/autofocus";
+import {TooltipModule} from "primeng/tooltip";
+import * as XLSX from "xlsx";
+import {writeFile} from "xlsx";
 
 @Component({
   selector: 'app-sbnl',
@@ -48,7 +52,9 @@ import {getToken} from "../../../main";
     DatePipe,
     CheckboxModule,
     CommonModule,
-    ListboxModule
+    ListboxModule,
+    AutoFocusModule,
+    TooltipModule
   ],
   templateUrl: './sbnl.component.html',
   styleUrl: './sbnl.component.css'
@@ -391,4 +397,180 @@ this.Viderfiltredate()
   }
 
     protected readonly getToken = getToken;
+
+  ExportExcel() {
+    try {
+      // Define headers
+      const headers = {
+        titre: [['Analysis Report']],
+        titre1: [['Chemical analysis']],
+        titreBassin: [['Reference', 'Date Creation']],
+        titre2: [['Grain Size']],
+        titreAnalysePhysique: [['Date', 'Reference', 'Relative', 'Temperature', 'Description']]
+      };
+
+      // Create a new workbook and worksheet
+      const wb: XLSX.WorkBook = XLSX.utils.book_new();
+      const ws: XLSX.WorkSheet = XLSX.utils.json_to_sheet([]);
+
+      // Add headers to the worksheet
+      XLSX.utils.sheet_add_aoa(ws, headers.titre, { origin: 'D1' });
+      XLSX.utils.sheet_add_aoa(ws, headers.titre1, { origin: 'A3' });
+      XLSX.utils.sheet_add_aoa(ws, headers.titreBassin, { origin: 'A5' });
+      XLSX.utils.sheet_add_aoa(ws, headers.titre2, { origin: 'A14' });
+      XLSX.utils.sheet_add_aoa(ws, headers.titreAnalysePhysique, { origin: 'A16' });
+
+      // Add Bassin data
+      const bassinData = [
+        [this.selectedSbnl.reference, this.selectedSbnl.dateStock]
+      ];
+      XLSX.utils.sheet_add_json(ws, bassinData, { origin: 'A6', skipHeader: true });
+
+      // Add Analyse Physique data
+      const analysePhyData = [
+        [
+          this.SelectedsbnlPrintAnalyse.dateAnalyse,
+          this.SelectedsbnlPrintAnalyse.reference,
+          this.SelectedsbnlPrintAnalyse.matiere,
+          this.SelectedsbnlPrintAnalyse.temperature,
+          this.SelectedsbnlPrintAnalyse.description
+        ]
+      ];
+      XLSX.utils.sheet_add_json(ws, analysePhyData, { origin: 'A17', skipHeader: true });
+
+      // Helper function to format dates
+      const formatDate = (cell: any): any => {
+        if (typeof cell === 'number' && cell > 40000) {
+          return new Date((cell - 25569) * 86400 * 1000).toLocaleDateString();
+        }
+        return cell;
+      };
+
+      // Function to process and add table data to worksheet
+      const addTableDataToSheet = (elementId: string, startRow: number) => {
+        const element = document.getElementById(elementId);
+        if (element) {
+          const wsTable: XLSX.WorkSheet = XLSX.utils.table_to_sheet(element);
+
+          let tableData: any[][] = XLSX.utils.sheet_to_json(wsTable, { header: 1 }) as any[][];
+
+          // Determine the index of the column containing 'Date Analyse'
+          let dateColumnIndex = -1;
+          tableData[0].forEach((header: any, index: number) => {
+            if (header === 'Date Analyse') {
+              dateColumnIndex = index;
+            }
+          });
+
+          // Format dates in the table data
+          const formattedTableData = tableData.map((row: any[], rowIndex: number) => row.map((cell: any, colIndex: number) => {
+            if (colIndex === dateColumnIndex && typeof cell === 'number' && cell > 20000) {
+              return new Date((cell - 25569) * 86400 * 1000).toLocaleDateString();
+            }
+            return cell;
+          }));
+
+          // tableData = tableData.map(row => row.map(cell => formatDate(cell)));
+          XLSX.utils.sheet_add_aoa(ws, formattedTableData, { origin: `A${startRow}`});
+        }
+      };
+      // Add HTML table data to worksheet
+      addTableDataToSheet('EXCEL', 8);
+      addTableDataToSheet('TAMIS', 20);
+
+      // Append worksheet to workbook and save the file
+      XLSX.utils.book_append_sheet(wb, ws, 'Fiche de Vie');
+      writeFile(wb, 'Unwashed Report.xlsx');
+    } catch (error) {
+      console.error('Error exporting Excel file:', error);
+    }
+  }
+
+
+  exportcsv(): void {
+    try {
+      // Define headers
+      const headers: Record<string, string[]> = {
+        titre: ['Analysis Report'],
+        titre1: ['Chemical analysis'],
+        titreBassin: ['Reference', 'Date Creation'],
+        titre2: ['Grain Size'],
+        titreAnalysePhysique: ['Date', 'Reference', 'Relative', 'Temperature', 'Description']
+      };
+
+      // Initialize CSV data array with headers
+      let csvData: string[] = Object.values(headers).map(header => header.join(','));
+
+      // Add Bassin data to the CSV data array
+      const bassinData: string = [this.selectedSbnl.reference, this.selectedSbnl.dateStock].join(',');
+      csvData.push(bassinData);
+
+      // Add Analyse Physique data to the CSV data array
+      const analysePhyData: string = [
+        this.SelectedsbnlPrintAnalyse.dateAnalyse,
+        this.SelectedsbnlPrintAnalyse.reference,
+        this.SelectedsbnlPrintAnalyse.matiere,
+        this.SelectedsbnlPrintAnalyse.temperature,
+        this.SelectedsbnlPrintAnalyse.description
+      ].join(',');
+      csvData.push(analysePhyData);
+
+      // Function to format dates
+      const formatDate = (cell: any): any => {
+        if (typeof cell === 'number' && cell > 40000) {
+          return new Date((cell - 25569) * 86400 * 1000).toLocaleDateString();
+        }
+        return cell;
+      };
+
+      // Function to process and add table data to CSV data array
+      const addTableDataToCSV = (elementId: string): void => {
+        const element: HTMLElement | null = document.getElementById(elementId);
+        if (element) {
+          const wsTable: XLSX.WorkSheet = XLSX.utils.table_to_sheet(element);
+
+          let tableData: any[][] = XLSX.utils.sheet_to_json(wsTable, { header: 1 }) as any[][];
+
+          // Determine the index of the column containing 'Date Analyse'
+          let dateColumnIndex: number = -1;
+          tableData[0].forEach((header: any, index: number) => {
+            if (header === 'Date Analyse') {
+              dateColumnIndex = index;
+            }
+          });
+
+          // Format dates in the table data
+          tableData = tableData.map(row => row.map((cell, colIndex) => {
+            if (colIndex === dateColumnIndex && typeof cell === 'number' && cell > 20000) {
+              return new Date((cell - 25569) * 86400 * 1000).toLocaleDateString();
+            }
+            return cell;
+          }));
+
+          csvData = csvData.concat(tableData.map(row => row.map(cell => formatDate(cell).toString()).join(',')));
+        }
+      };
+
+      // Add HTML table data to CSV data array
+      addTableDataToCSV('EXCEL');
+      addTableDataToCSV('TAMIS');
+
+      // Convert CSV data array to CSV format
+      const csv: string = csvData.join('\n');
+
+      // Create a Blob from CSV data
+      const blob: Blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
+      const url: string = URL.createObjectURL(blob);
+
+      // Create a link and trigger the download
+      const link: HTMLAnchorElement = document.createElement('a');
+      link.setAttribute('href', url);
+      link.setAttribute('download', 'Unwashed_Report.csv');
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+    } catch (error) {
+      console.error('Error exporting CSV file:', error);
+    }
+  }
 }

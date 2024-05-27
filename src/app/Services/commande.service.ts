@@ -24,6 +24,7 @@ export class CommandeService {
     return this.http.delete(`${this.apiUrl}/commandes/delete/${CommandeId}`);
   }
   updateCommande(commande: Commande): Observable<Commande> {
+    console.error(commande)
     return this.http.put<Commande>(`${this.apiUrl}/commandes/update`, commande);
   }
 
