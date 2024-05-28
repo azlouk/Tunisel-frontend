@@ -42,19 +42,19 @@
           </p-tabPanel>
 
           <p-tabPanel header="Unwashed" >
-            <p-multiSelect [options]="sbnls"    [(ngModel)]="commande.bassins" (ngModelChange)="getLine()" placeholder="Select a Unwashed" optionLabel="reference" display="chip" ></p-multiSelect>
+            <p-multiSelect [options]="sbnls"    [(ngModel)]="commande.sbnls" (ngModelChange)="getLine()" placeholder="Select a Unwashed" optionLabel="reference" display="chip" ></p-multiSelect>
           </p-tabPanel>
 
           <p-tabPanel header="Band" >
-          <p-multiSelect [options]="bandes"    [(ngModel)]="commande.bassins" (ngModelChange)="getLine()" placeholder="Select a Band" optionLabel="reference" display="chip" ></p-multiSelect>
+          <p-multiSelect [options]="bandes"    [(ngModel)]="commande.bandes" (ngModelChange)="getLine()" placeholder="Select a Band" optionLabel="reference" display="chip" ></p-multiSelect>
         </p-tabPanel>
 
           <p-tabPanel header="Washed" >
-            <p-multiSelect [options]="sbls"    [(ngModel)]="commande.bassins" (ngModelChange)="getLine()" placeholder="Select a Washed" optionLabel="reference" display="chip" ></p-multiSelect>
+            <p-multiSelect [options]="sbls"    [(ngModel)]="commande.sbls" (ngModelChange)="getLine()" placeholder="Select a Washed" optionLabel="reference" display="chip" ></p-multiSelect>
           </p-tabPanel>
 
           <p-tabPanel header="Washed Ship" >
-            <p-multiSelect [options]="sblfs"    [(ngModel)]="commande.bassins" (ngModelChange)="getLine()" placeholder="Select a Washed Ship" optionLabel="reference" display="chip" ></p-multiSelect>
+            <p-multiSelect [options]="sblfs"    [(ngModel)]="commande.sblfs" (ngModelChange)="getLine()" placeholder="Select a Washed Ship" optionLabel="reference" display="chip" ></p-multiSelect>
           </p-tabPanel>
 
         </p-tabView>
