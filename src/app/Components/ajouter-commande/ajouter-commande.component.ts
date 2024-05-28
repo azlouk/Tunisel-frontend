@@ -33,6 +33,14 @@ import {FieldsetModule} from "primeng/fieldset";
 import {AutoFocusModule} from "primeng/autofocus";
 import html2canvas from "html2canvas";
 import jsPDF from "jspdf";
+import {Sbnl} from "../../Models/sbnl";
+import {Bande} from "../../Models/bande";
+import {Sbl} from "../../Models/sbl";
+import {Sblf} from "../../Models/sblf";
+import {SbnlService} from "../../Services/sbnl.service";
+import {SblService} from "../../Services/sbl.service";
+import {SblfService} from "../../Services/sblf.service";
+import {BandeService} from "../../Services/bande.service";
 
 
 
@@ -78,7 +86,11 @@ interface Column {
 })
 export class AjouterCommandeComponent implements OnInit{
   bassins: Bassin[] = [];
-  selectedBassin: Bassin = {};
+  sbnls: Sbnl[] = [];
+  bandes: Bande[] = [];
+  sbls: Sbl[] = [];
+  sblfs: Sblf[] = [];
+
 
   commande: Commande={} ;
 
@@ -116,6 +128,10 @@ export class AjouterCommandeComponent implements OnInit{
               private route: ActivatedRoute,
                private commandeService:CommandeService,
               private messageService: MessageService,
+              private sbnlService :SbnlService,
+              private sblService :SblService,
+              private sblfService :SblfService,
+              private bandeService:BandeService,
               private lineCommandeService: LineCommandeService
   )
   {}
@@ -208,6 +224,28 @@ export class AjouterCommandeComponent implements OnInit{
       }, error => {
         console.log('Error fetching Bassins:', error);
       });
+    this.sbnlService.getAllSbnls().subscribe((v:  Sbnl[]) => {
+      this.sbnls=v;
+
+    },error => {
+      console.log(error)});
+
+    this.bandeService.getAllBandes().subscribe((v:  Bande[]) => {
+      this.bandes=v;
+
+    },error => {
+      console.log(error)})
+
+    this.sblService.getAllSbl().subscribe((v:  Sbl[]) => {
+      this.sbls=v;
+    },error => {
+      console.log(error)})
+
+    this.sblfService.getAllSblfs().subscribe((v:  Sblf[]) => {
+      this.sblfs=v;
+
+    },error => {
+      console.log(error)})
   }
 
   retour() {
@@ -367,9 +405,7 @@ this.commande.bassins.forEach(basin => {
 
   }
 
-  getAllLinesCommandes() {
 
-  }
 
   CalculeTotal(l:LineCommande) {
 

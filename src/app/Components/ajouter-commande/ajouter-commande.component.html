@@ -35,32 +35,29 @@
       </div>
 
       <div class=" flex justify-content-center w-full ">
-        <p-multiSelect *ngIf="!isUpdateCommande" [options]="bassins"    [(ngModel)]="commande.bassins" (ngModelChange)="getLine()" defaultLabel="Select a Bassin" optionLabel="nom" display="chip" ></p-multiSelect>
 
-<!--        <p-tabView *ngIf="!isUpdateCommande"[scrollable]="true" >-->
-<!--          <p-tabPanel header="Pond" >-->
-<!--            <p-listbox [options]="bassins" [(ngModel)]="commande.bassin" (click)="getLine()" optionLabel="nom" [filter]="true" [listStyle]="{'height': '87px'}"  ></p-listbox>-->
+        <p-tabView [scrollable]="true" >
+          <p-tabPanel header="Pond" >
+            <p-multiSelect [options]="bassins"    [(ngModel)]="commande.bassins" (ngModelChange)="getLine()" placeholder="Select a Pond" optionLabel="nom" display="chip" ></p-multiSelect>
+          </p-tabPanel>
 
-<!--          </p-tabPanel>-->
-<!--&lt;!&ndash;          <p-tabPanel header="Sotck non lavé" pTooltip="Sotck non lavé">&ndash;&gt;-->
-<!--&lt;!&ndash;            <p-listbox [options]="sbnls" [(ngModel)]="selectedSbnl" optionLabel="reference" [filter]="true" [listStyle]="{'height': '87px'}"  ></p-listbox>&ndash;&gt;-->
+          <p-tabPanel header="Unwashed" >
+            <p-multiSelect [options]="sbnls"    [(ngModel)]="commande.bassins" (ngModelChange)="getLine()" placeholder="Select a Unwashed" optionLabel="reference" display="chip" ></p-multiSelect>
+          </p-tabPanel>
 
-<!--&lt;!&ndash;          </p-tabPanel>&ndash;&gt;-->
-<!--&lt;!&ndash;          <p-tabPanel header="Bande" pTooltip="Sotck non lavé">&ndash;&gt;-->
-<!--&lt;!&ndash;            <p-listbox [options]="bandes" [(ngModel)]="selectedBande" optionLabel="reference" [filter]="true" [listStyle]="{'height': '87px'}"  ></p-listbox>&ndash;&gt;-->
+          <p-tabPanel header="Band" >
+          <p-multiSelect [options]="bandes"    [(ngModel)]="commande.bassins" (ngModelChange)="getLine()" placeholder="Select a Band" optionLabel="reference" display="chip" ></p-multiSelect>
+        </p-tabPanel>
 
-<!--&lt;!&ndash;          </p-tabPanel>&ndash;&gt;-->
+          <p-tabPanel header="Washed" >
+            <p-multiSelect [options]="sbls"    [(ngModel)]="commande.bassins" (ngModelChange)="getLine()" placeholder="Select a Washed" optionLabel="reference" display="chip" ></p-multiSelect>
+          </p-tabPanel>
 
-<!--&lt;!&ndash;          <p-tabPanel header="Sotck lavé" >&ndash;&gt;-->
-<!--&lt;!&ndash;            <p-listbox [options]="sbls" [(ngModel)]="selectedSbl" optionLabel="reference" [filter]="true" [listStyle]="{'height': '87px'}" ></p-listbox>&ndash;&gt;-->
+          <p-tabPanel header="Washed Ship" >
+            <p-multiSelect [options]="sblfs"    [(ngModel)]="commande.bassins" (ngModelChange)="getLine()" placeholder="Select a Washed Ship" optionLabel="reference" display="chip" ></p-multiSelect>
+          </p-tabPanel>
 
-<!--&lt;!&ndash;          </p-tabPanel>&ndash;&gt;-->
-
-<!--&lt;!&ndash;          <p-tabPanel header="Sotck finale" >&ndash;&gt;-->
-<!--&lt;!&ndash;            <p-listbox [options]="sblfs" [(ngModel)]="selectedSblf" optionLabel="reference" [filter]="true"  [listStyle]="{'height': '87px'}" ></p-listbox>&ndash;&gt;-->
-<!--&lt;!&ndash;          </p-tabPanel>&ndash;&gt;-->
-
-<!--        </p-tabView>-->
+        </p-tabView>
         <div >
 
 
@@ -141,7 +138,7 @@
 
           </div>
 
-          <div class="gap-5 flex align-items-center    ">
+          <div class="gap-5 flex align-items-center   mt-4 ">
             <div class="gap-1 flex align-items-center">Analysis start date  :
               <input  class="p-2 shadow-1" type="date" pInputText    [(ngModel)]="DatefiltrageStart"   />
 

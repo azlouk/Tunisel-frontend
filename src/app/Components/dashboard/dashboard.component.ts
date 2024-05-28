@@ -59,9 +59,15 @@ export class DashboardComponent implements OnInit, OnDestroy {
 
   ngOnInit() {
 
-    this.dashboardService.getCountAnalyseChemique().subscribe((value:any[]) =>this.data=value );
-    this.dashboardService.getCountAnalyseChemiqueBassin().subscribe((value:any[])=>this.basin=value );
-    this.initChart();
+    this.dashboardService.getCountAnalyseChemique().subscribe((value:any[]) => {
+      this.data = value;
+      this.initChart();
+    } );
+    this.dashboardService.getCountAnalyseChemiqueBassin().subscribe((value:any[])=> {
+      this.basin = value;
+      this.initChart();
+    } );
+
      this.fetchDashboardData()
 
     this.items = [
