@@ -1,10 +1,11 @@
 <div class="grid">
   <div class="col-12 card px-6 py-6 ">
-    <p-toolbar styleClass="mb-4" >
-      <ng-template pTemplate="end"  >
-        <div class=" my-2 " >
+    <p-toolbar styleClass="mb-4">
+      <ng-template pTemplate="end">
+        <div class=" my-2 ">
 
-          <button pButton pRipple label="Back" icon="pi pi-arrow-left" class="p-button-success mr-2 " (click)="retour()"></button>
+          <button pButton pRipple label="Back" icon="pi pi-arrow-left" class="p-button-success mr-2 "
+                  (click)="retour()"></button>
         </div>
       </ng-template>
       <h4>Add Command</h4>
@@ -13,266 +14,314 @@
     <!--    <p-fieldset legend="Export">-->
     <div *ngIf="isUpdateCommande" class="flex gap-4 justify-content-end align-items-center">
       <label class="font-bold text-3xl">Export :</label>
-      <button type="button" pButton pRipple icon="pi pi-file-excel" (click)="ExportExcel()" class="p-button-success mr-2" pTooltip="XLS" tooltipPosition="bottom"></button>
+      <button type="button" pButton pRipple icon="pi pi-file-excel" (click)="ExportExcel()"
+              class="p-button-success mr-2" pTooltip="XLS" tooltipPosition="bottom"></button>
       <button type="button" pButton pRipple icon="pi pi-file" (click)="commande.ligneCommandes!==undefined?EXCEL.exportCSV(): Swal.fire({title:'Error' ,text:'No data found to printed' ,icon:'error'})
       " class="mr-2" pTooltip="CSV" tooltipPosition="bottom"></button>
-      <button type="button" pButton pRipple icon="pi pi-file-pdf" (click)="SavePDF();" class="mr-2 p-button-secondary" pTooltip="PDF" tooltipPosition="bottom"></button>
+      <button type="button" pButton pRipple icon="pi pi-file-pdf" (click)="SavePDF();" class="mr-2 p-button-secondary"
+              pTooltip="PDF" tooltipPosition="bottom"></button>
       <!--        <button type="button" pButton pRipple icon="pi pi-file-pdf" (click)="SavePDF()" class="p-button-success mr-2" pTooltip="PDF" tooltipPosition="bottom"></button>-->
     </div>
     <!--    </p-fieldset>-->
     <div>
-    <div class=" flex justify-content-between  mt-8 border-1 border-round border-gray-300 p-6  h-22rem">
-      <div class="  flex flex-column   justify-content-between ">
-        <p-floatLabel >
-          <p-calendar   id="dateCommande" [(ngModel)]="commande.dateCommande" dateFormat="yy-mm-dd"
-                        [showIcon]="true" />
-          <label for="dateCommande">Command Date </label>
-        </p-floatLabel>
-        {{commande.dateCommande}}
-        <p-floatLabel>
-          <input type="text" pInputText [(ngModel)]="commande.nom" id="nom" class="w-full"  />
-          <label for="nom">Name</label>
-        </p-floatLabel>
-        <p-floatLabel>
-          <input type="text" pInputText [(ngModel)]="commande.etat"    id="etat" class="w-full" />
-          <label for="etat">State</label>
-        </p-floatLabel>
+      <div class=" flex justify-content-between  mt-8 border-1 border-round border-gray-300 p-6  h-22rem">
+        <div class="  flex flex-column   justify-content-between ">
+          <p-floatLabel>
+            <p-calendar id="dateCommande" [(ngModel)]="commande.dateCommande" dateFormat="yy-mm-dd"
+                        [showIcon]="true"/>
+            <label for="dateCommande">Command Date </label>
+          </p-floatLabel>
+          {{commande.dateCommande}}
+          <p-floatLabel>
+            <input type="text" pInputText [(ngModel)]="commande.nom" id="nom" class="w-full"/>
+            <label for="nom">Name</label>
+          </p-floatLabel>
+          <p-floatLabel>
+            <input type="text" pInputText [(ngModel)]="commande.etat" id="etat" class="w-full"/>
+            <label for="etat">State</label>
+          </p-floatLabel>
+        </div>
+
+        <div class="  ">
+
+          <p-tabView *ngIf="!isUpdateCommande" [scrollable]="true">
+            <p-tabPanel header="Pond">
+              <p-listbox [options]="bassins" [(ngModel)]="commande.bassin" (click)="getLine()" optionLabel="nom"
+                         [filter]="true" [listStyle]="{'height': '87px'}"></p-listbox>
+
+            </p-tabPanel>
+            <!--          <p-tabPanel header="Sotck non lavé" pTooltip="Sotck non lavé">-->
+            <!--            <p-listbox [options]="sbnls" [(ngModel)]="selectedSbnl" optionLabel="reference" [filter]="true" [listStyle]="{'height': '87px'}"  ></p-listbox>-->
+
+            <!--          </p-tabPanel>-->
+            <!--          <p-tabPanel header="Bande" pTooltip="Sotck non lavé">-->
+            <!--            <p-listbox [options]="bandes" [(ngModel)]="selectedBande" optionLabel="reference" [filter]="true" [listStyle]="{'height': '87px'}"  ></p-listbox>-->
+
+            <!--          </p-tabPanel>-->
+
+            <!--          <p-tabPanel header="Sotck lavé" >-->
+            <!--            <p-listbox [options]="sbls" [(ngModel)]="selectedSbl" optionLabel="reference" [filter]="true" [listStyle]="{'height': '87px'}" ></p-listbox>-->
+
+            <!--          </p-tabPanel>-->
+
+            <!--          <p-tabPanel header="Sotck finale" >-->
+            <!--            <p-listbox [options]="sblfs" [(ngModel)]="selectedSblf" optionLabel="reference" [filter]="true"  [listStyle]="{'height': '87px'}" ></p-listbox>-->
+            <!--          </p-tabPanel>-->
+
+          </p-tabView>
+          <div>
+
+
+          </div>
+        </div>
+
+        <div class="flex flex-column border-1 border-round border-gray-300 p-4" *ngIf="commande.bassin">
+
+          <div class="field ">
+            <p><span class="font-bold"> Reference: </span>{{commande.bassin.reference}}</p>
+          </div>
+          <div class="field">
+            <p><span class="font-bold"> Description: </span>{{commande.bassin.description}}</p>
+          </div>
+          <div class="field">
+            <p><span class="font-bold"> Name: </span>{{commande.bassin.nom}}</p>
+          </div>
+          <div class="field">
+            <p><span class="font-bold"> Location: </span>{{commande.bassin.emplacement}}</p>
+          </div>
+          <div class="field">
+            <p><span class="font-bold"> State: </span>{{commande.bassin.etat}}</p>
+          </div>
+          <div class="field">
+            <p><span class="font-bold"> Creation Date: </span>{{commande.bassin.dateCreation}}</p>
+          </div>
+
+
+        </div>
+
       </div>
 
-      <div class="  ">
+      <div *ngIf="getToken()=='ADMIN'" class="flex  mt-4 mb-4 justify-content-between">
+        <button pButton pRipple label="Analyse" icon="pi pi-search" class="p-button-secondary mr-2" (click)="getLine()"
+                *ngIf="!isUpdateCommande"></button>
 
-        <p-tabView *ngIf="!isUpdateCommande"[scrollable]="true" >
-          <p-tabPanel header="Pond" >
-            <p-listbox [options]="bassins" [(ngModel)]="commande.bassin" (click)="getLine()" optionLabel="nom" [filter]="true" [listStyle]="{'height': '87px'}"  ></p-listbox>
+        <button pButton pRipple label="Reset Default" icon="pi pi-refresh" class="p-button-primary mr-2"
+                (click)="getCommandeById()"></button>
 
-          </p-tabPanel>
-<!--          <p-tabPanel header="Sotck non lavé" pTooltip="Sotck non lavé">-->
-<!--            <p-listbox [options]="sbnls" [(ngModel)]="selectedSbnl" optionLabel="reference" [filter]="true" [listStyle]="{'height': '87px'}"  ></p-listbox>-->
-
-<!--          </p-tabPanel>-->
-<!--          <p-tabPanel header="Bande" pTooltip="Sotck non lavé">-->
-<!--            <p-listbox [options]="bandes" [(ngModel)]="selectedBande" optionLabel="reference" [filter]="true" [listStyle]="{'height': '87px'}"  ></p-listbox>-->
-
-<!--          </p-tabPanel>-->
-
-<!--          <p-tabPanel header="Sotck lavé" >-->
-<!--            <p-listbox [options]="sbls" [(ngModel)]="selectedSbl" optionLabel="reference" [filter]="true" [listStyle]="{'height': '87px'}" ></p-listbox>-->
-
-<!--          </p-tabPanel>-->
-
-<!--          <p-tabPanel header="Sotck finale" >-->
-<!--            <p-listbox [options]="sblfs" [(ngModel)]="selectedSblf" optionLabel="reference" [filter]="true"  [listStyle]="{'height': '87px'}" ></p-listbox>-->
-<!--          </p-tabPanel>-->
-
-        </p-tabView>
-        <div >
+      </div>
 
 
+      <div class="card  ">
+        <p-table
+          [columns]="selectedColumns"
+          [value]="listeLignesCommandes"
+
+          editMode="row"
+          id="EXCEL"
+          #EXCEL
+        >
+
+          <ng-template pTemplate="caption">
+            <div class="flex flex-column  align-items-center gap-2    ">
+              <div class="flex align-items-center gap-2  ">
+                <p-multiSelect
+                  display="chip"
+                  [options]="cols"
+                  [(ngModel)]="selectedColumns"
+                  optionLabel="header"
+                  selectedItemsLabel="{0} columns selected"
+                  [style]="{'min-width': '600px'}"
+                  placeholder="Choose Columns"/>
+                <p>{{selectedColumns.length}} items selected</p>
+
+
+                <p-dropdown
+                  [options]="listcalibre"
+                  [(ngModel)]="selectedColumnsCalibre"
+                  optionLabel="header"
+                  [showClear]="true"
+
+                  placeholder="Choose Calibre"/>
+
+              </div>
+
+              <div class="gap-5 flex align-items-center    ">
+                <div class="gap-1 flex align-items-center">Analysis start date :
+                  <input class="p-2 shadow-1" type="date" pInputText [(ngModel)]="DatefiltrageStart"
+                         [value]="DatefiltrageStart"/>
+
+                </div>
+                <div class="gap-1  flex align-items-center  ">
+                  Date End Analysis :
+                  <input class="p-2 shadow-1" type="date" pInputText [(ngModel)]="DatefiltrageEnd"
+                         [value]="DatefiltrageEnd"/>
+
+                </div>
+                <div class="gap-1  flex align-items-center">
+                  <p-floatLabel>
+
+                    <p-autoComplete
+                      [(ngModel)]="matter"
+
+                      [dropdown]="true"
+                      [suggestions]="filtereddatasel"
+                      (completeMethod)="filterCountry($event)"
+                      field=""/>
+
+                    <label for="etat">Quality</label>
+                  </p-floatLabel>
+                </div>
+                <div class="flex gap-2">
+                  <p-button (click)="filtredate()" class=" " icon="pi pi-search" label="Search"></p-button>
+                  <p-button (click)="Viderfiltredate()" severity="secondary" icon="pi pi-refresh"
+                            label="Clear"></p-button>
+                </div>
+                <div *ngIf="getToken()=='ADMIN'" class="flex justify-content-end">
+                  <p-button (click)="AddLineCommand()" severity="success" label="Add"></p-button>
+
+                </div>
+              </div>
+
+
+            </div>
+
+          </ng-template>
+          <ng-template pTemplate="header" let-columns>
+            <tr>
+
+              <th *ngFor="let col of columns">
+                {{col.header}}
+              </th>
+              <th></th>
+            </tr>
+          </ng-template>
+
+          <ng-template pTemplate="body" let-lineCommande let-columns="columns" let-editing="editing" let-ri="rowIndex">
+            <tr [pEditableRow]="lineCommande">
+              <ng-container *ngFor="let col of columns">
+                <td *ngIf="col.id>26 && col.id<39">
+                  <p-cellEditor>
+                    <ng-template pTemplate="input">
+                      <input type="text" pInputText [placeholder]="col.header" [(ngModel)]="lineCommande[col.field]  "
+                             (ngModelChange)="CalculeTotalInput()"/>
+                    </ng-template>
+                    <ng-template pTemplate="output">
+                      {{getValueOfligneCommande(col, lineCommande)}}
+                    </ng-template>
+                  </p-cellEditor>
+
+                </td>
+
+                <td *ngIf="col.id>=0 && col.id<27">
+
+                  {{getValueOfligneCommande(col, lineCommande)}}
+                </td>
+
+              </ng-container>
+
+
+              <td>
+                <div class="flex align-items-center gap-2">
+                  <div class="flex align-items-center justify-content-center gap-2">
+                    <button *ngIf="!editing" pButton pRipple type="button" pInitEditableRow icon="pi pi-pencil"
+                            (click)="onRowEditInit(lineCommande)"
+                            class="p-button-rounded p-button-success mr-2"></button>
+                    <button *ngIf="editing" pButton pRipple type="button" pSaveEditableRow icon="pi pi-check"
+                            (click)="onRowEditSave(lineCommande)"
+                            class="p-button-rounded p-button-text p-button-success mr-2"></button>
+                  </div>
+                  <div>
+                    <button pButton pRipple icon="pi pi-trash" class="p-button-rounded p-button-warning mr-2"
+                            (click)="deleteLineCommande(lineCommande)"></button>
+                  </div>
+                </div>
+              </td>
+            </tr>
+
+
+          </ng-template>
+        </p-table>
+      </div>
+
+
+      <div class="flex justify-content-between">
+        <div class=" flex justify-content-end  ">
+          <div class="flex flex gap-5 border-1 border-round border-gray-400 p-3">
+            <div class="flex align-items-start gap-3 justify-content-between">
+              <label class="font-bold ">% Cum Pass: </label>
+              <label class="font-bold text-center    ">{{calculerMoyennes().passCumulated}}</label>
+            </div>
+            <div class="flex align-items-start gap-3 justify-content-between">
+              <label class="font-bold">%H₂O: </label>
+              <label class="font-bold text-center">{{calculerMoyennes().humidite}}</label>
+            </div>
+            <div class="flex align-items-start gap-3 justify-content-between">
+              <label class="font-bold">%Mg: </label>
+              <label class="font-bold text-center">{{calculerMoyennes().magnesium}}</label>
+            </div>
+            <div class="flex align-items-start gap-3 justify-content-between">
+              <label class="font-bold">%SO₄: </label>
+              <label class="font-bold text-center">{{calculerMoyennes().sulfate}}</label>
+            </div>
+            <div class="flex align-items-start gap-3 justify-content-between">
+              <label class="font-bold">%NaCL: </label>
+              <label class="font-bold text-center">{{calculerMoyennes().chlorureDeSodium}}</label>
+            </div>
+            <div class="flex align-items-start gap-3 justify-content-between">
+              <label class="font-bold">%MI: </label>
+              <label class="font-bold text-center">{{calculerMoyennes().matiereInsoluble}}</label>
+            </div>
+            <div class="flex align-items-start gap-3 justify-content-between">
+              <label class="font-bold">%Fe(CN)₆: </label>
+              <label class="font-bold text-center">{{calculerMoyennes().ferrocyanure}}</label>
+            </div>
+          </div>
+
+        </div>
+        <div class="  justify-content-end  ">
+          <div class="flex flex-column gap-3 border-1 border-round border-gray-400 p-3">
+            <div class="flex align-items-start gap-3 justify-content-between">
+              <label class="font-bold">Total Harvset in(T) : </label>
+              <label class="font-bold text-center    ">{{TotalHarv}}</label>
+
+            </div>
+
+            <div class="flex align-items-center gap-3 justify-content-between ">
+              <label class="font-bold">Total Production in(T) :</label>
+              <label class="font-bold text-center    ">{{TotalProd}}</label>
+
+            </div>
+            <div class="flex align-items-center gap-3 justify-content-between ">
+              <label class="font-bold">Total Transfer Quantity :</label>
+              <label class="font-bold text-center    ">{{TotalTrQu}}</label>
+
+            </div>
+
+
+          </div>
 
         </div>
       </div>
 
-      <div class="flex flex-column border-1 border-round border-gray-300 p-4" *ngIf="commande.bassin">
-
-  <div class="field " >
-    <p><span class="font-bold"> Reference: </span>{{commande.bassin.reference}}</p>
-  </div>
-  <div class="field">
-    <p><span class="font-bold"> Description: </span>{{commande.bassin.description}}</p>
-  </div><div class="field">
-  <p><span class="font-bold"> Name: </span>{{commande.bassin.nom}}</p>
-</div>
-  <div class="field">
-    <p><span class="font-bold"> Location: </span>{{commande.bassin.emplacement}}</p>
-  </div>
-  <div class="field">
-    <p><span class="font-bold"> State: </span>{{commande.bassin.etat}}</p>
-  </div>
-  <div class="field">
-    <p><span class="font-bold"> Creation Date: </span>{{commande.bassin.dateCreation}}</p>
-  </div>
-
-
-
-      </div>
-
     </div>
-
-<div *ngIf="getToken()=='ADMIN'" class="flex  mt-4 mb-4 justify-content-between">
-  <button pButton pRipple label="Analyse" icon="pi pi-search" class="p-button-secondary mr-2" (click)="getLine()"  *ngIf="!isUpdateCommande"></button>
-
-  <button pButton pRipple label="Reset Default" icon="pi pi-refresh" class="p-button-primary mr-2" (click)="getCommandeById()"  ></button>
-
-</div>
-
-
-
-    <div class="card  ">
-      <p-table
-        [columns]="selectedColumns"
-        [value]="listeLignesCommandes"
-
-        editMode="row"
-        id="EXCEL"
-        #EXCEL
-      >
-
-        <ng-template pTemplate="caption">
-          <div class="flex flex-column  align-items-center gap-2    ">
-          <div class="flex align-items-center gap-2  ">
-            <p-multiSelect
-            display="chip"
-            [options]="cols"
-            [(ngModel)]="selectedColumns"
-            optionLabel="header"
-            selectedItemsLabel="{0} columns selected"
-            [style]="{'min-width': '600px'}"
-            placeholder="Choose Columns" />
-            <p>{{selectedColumns.length}} items selected</p>
-
-
-            <p-dropdown
-              [options]="listcalibre"
-              [(ngModel)]="selectedColumnsCalibre"
-              optionLabel="header"
-              [showClear]="true"
-
-              placeholder="Choose Calibre" />
-
-          </div>
-
-          <div class="gap-5 flex align-items-center    ">
-            <div class="gap-1 flex align-items-center">Analysis start date  :
-              <input  class="p-2 shadow-1" type="date" pInputText    [(ngModel)]="DatefiltrageStart" [value]="DatefiltrageStart" />
-
-            </div>
-            <div class="gap-1  flex align-items-center  ">
-              Date End Analysis  :
-              <input  class="p-2 shadow-1" type="date"  pInputText   [(ngModel)]="DatefiltrageEnd" [value]="DatefiltrageEnd" />
-
-            </div>
-<div class="gap-1  flex align-items-center">
-  <p-floatLabel>
-
-    <p-autoComplete
-      [(ngModel)]="matter"
-
-      [dropdown]="true"
-      [suggestions]="filtereddatasel"
-      (completeMethod)="filterCountry($event)"
-      field="" />
-
-    <label for="etat">Quality</label>
-  </p-floatLabel>
-</div>
-            <div class="flex gap-2">
-              <p-button (click)="filtredate()" class=" " icon="pi pi-search" label="Search"></p-button>
-              <p-button (click)="Viderfiltredate()"   severity="secondary" icon="pi pi-refresh" label="Clear"></p-button>
-            </div>
-           <div *ngIf="getToken()=='ADMIN'" class="flex justify-content-end">
-             <p-button (click)="AddLineCommand()"   severity="success"  label="Add"></p-button>
-
-           </div>
-            </div>
-
-
-          </div>
-
-        </ng-template>
-        <ng-template pTemplate="header" let-columns>
-          <tr>
-
-            <th *ngFor="let col of columns">
-              {{col.header}}
-            </th>
-          <th></th>
-          </tr>
-        </ng-template>
-
-        <ng-template pTemplate="body" let-lineCommande let-columns="columns" let-editing="editing" let-ri="rowIndex">
-          <tr [pEditableRow]="lineCommande">
-            <ng-container *ngFor="let col of columns">
-              <td *ngIf="col.id>26 && col.id<39">
-                <p-cellEditor>
-                  <ng-template pTemplate="input">
-                    <input type="text"   pInputText [placeholder]="col.header" [(ngModel)]="lineCommande[col.field]  "(ngModelChange)="CalculeTotalInput()"/>
-                  </ng-template>
-                  <ng-template pTemplate="output">
-                    {{getValueOfligneCommande(col,lineCommande)}}
-                  </ng-template>
-                </p-cellEditor>
-
-              </td>
-
-              <td  *ngIf="col.id>=0 && col.id<27">
-
-                {{getValueOfligneCommande(col,lineCommande)}}
-              </td>
-
-            </ng-container>
-
-
-            <td>
-              <div class="flex align-items-center gap-2" >
-                <div class="flex align-items-center justify-content-center gap-2">
-                  <button *ngIf="!editing" pButton pRipple type="button" pInitEditableRow icon="pi pi-pencil" (click)="onRowEditInit(lineCommande)" class="p-button-rounded p-button-success mr-2"></button>
-                  <button *ngIf="editing" pButton pRipple type="button" pSaveEditableRow icon="pi pi-check" (click)="onRowEditSave(lineCommande)" class="p-button-rounded p-button-text p-button-success mr-2"></button>
-                </div>
-              <div >
-              <button pButton pRipple icon="pi pi-trash" class="p-button-rounded p-button-warning mr-2" (click)="deleteLineCommande(lineCommande)"></button>
-            </div>
-              </div>
-            </td>
-          </tr>
-
-
-        </ng-template>
-      </p-table>
-    </div>
-<div class=" flex justify-content-end  ">
-  <div class="flex flex-column gap-3 border-1 border-round border-gray-400 p-3">
-    <div class="flex align-items-start gap-3 justify-content-between">
-      <label   class="font-bold">Total Harvset in(T) :    </label>
-      <label   class="font-bold text-center    ">{{TotalHarv}}</label>
-
-     </div>
-
-    <div class="flex align-items-center gap-3 justify-content-between ">
-      <label   class="font-bold">Total Production in(T) :</label>
-      <label   class="font-bold text-center    ">{{TotalProd}}</label>
-
-     </div>
-    <div class="flex align-items-center gap-3 justify-content-between ">
-      <label   class="font-bold">Total Transfer Quantity :</label>
-      <label   class="font-bold text-center    ">{{TotalTrQu}}</label>
-
-     </div>
-
-
-
-  </div>
-
-</div>
-</div>
   </div>
 </div>
 <p-dialog [(visible)]="deleteLineCommandeDialog" header="Confirmer" [modal]="true" [style]="{width:'450px'}">
   <div class="flex align-items-center justify-content-center">
     <i class="pi pi-exclamation-triangle mr-3" style="font-size: 2rem"></i>
-    <span >Are you sure you want to delete ?</span>
+    <span>Are you sure you want to delete ?</span>
   </div>
   <ng-template pTemplate="footer">
-    <button pButton pRipple icon="pi pi-times" class="p-button-text" label="No" (click)="deleteLineCommandeDialog = false"></button>
+    <button pButton pRipple icon="pi pi-times" class="p-button-text" label="No"
+            (click)="deleteLineCommandeDialog = false"></button>
     <button pButton pRipple icon="pi pi-check" class="p-button-text" label="Yes" (click)="confirmDelete()"></button>
   </ng-template>
 </p-dialog>
 <!---->
 <div class=" flex col-12 justify-content-end">
-  <button *ngIf="getToken()=='ADMIN'" pButton label="Save" icon="pi pi-check" class=" " (click)="saveCommande()"></button>
+  <button *ngIf="getToken()=='ADMIN'" pButton label="Save" icon="pi pi-check" class=" "
+          (click)="saveCommande()"></button>
 </div>
-
-
-
 
 
 <p-dialog header="Loading PDF Command" [(visible)]="visibleCommande" [style]="{ width: '80vw', maxWidth: '300vw' }">

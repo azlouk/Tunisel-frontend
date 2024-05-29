@@ -113,6 +113,11 @@ export class AjouterCommandeComponent implements OnInit{
   TotalProd: number=0;
   TotalTrQu: number=0;
 
+  moyennes: { humidite: number, magnesium: number, sulfate: number, chlorureDeSodium: number, matiereInsoluble: number, ferrocyanure: number } | undefined;
+
+
+
+
   private datasel: string[]=[];
   filtereddatasel: any[]=[];
   matter: any;
@@ -130,6 +135,7 @@ export class AjouterCommandeComponent implements OnInit{
 
 
   ngOnInit(): void {
+
     // =============================================
     this.datasel = [
       "Unwashed salt",
@@ -294,6 +300,7 @@ getCommandeById(){
             this.listeLignesCommandes = data;
             console.log('size  : ' + this.listeLignesCommandes.length);
               this.getCalibre();
+            this.calculerMoyennes();
           },error =>{
             console.log(error);
             console.log('error size  : ' + this.listeLignesCommandes.length);});
@@ -690,4 +697,231 @@ this.getLine()
 
 
   protected readonly Swal = Swal;
+
+
+  calculerMoyennes():
+    { passCumulated: number,humidite: number,magnesium: number,sulfate: number,chlorureDeSodium: number, matiereInsoluble: number, ferrocyanure: number } {
+
+    let totalHumidite = 0;
+
+    let totalMagnesium = 0;
+    let totalSulfate = 0;
+    let totalMatiereInsoluble = 0;
+
+    let totalchlorureDeSodium = 0;
+
+    let totalferrocyanure = 0;
+    let totalPassCum = 0;
+
+
+
+
+    let countPassCum = 0;
+    let countHumidite = 0;
+    let countMagnesium = 0;
+    let countSulfate = 0;
+    let countMatiereInsoluble = 0;
+    let countchlorureDeSodium = 0;
+    let countferrocyanure = 0;
+
+
+    this.listeLignesCommandes.forEach((lineCommande) => {
+
+      // if (lineCommande.analysePhysique) {
+      //
+      //   if (lineCommande.analysePhysique.tamisList !== undefined) {
+      //     lineCommande.analysePhysique.tamisList.forEach(value => {
+      //       if(value.passCumulated)
+      //       { totalPassCum += Number(value.passCumulated);
+      //         countPassCum++;}
+      //
+      //     })
+      //   }
+      //
+      //   }
+
+      if (lineCommande.analysePhysique) {
+        if (lineCommande.analysePhysique.tamisList !== undefined) {
+          lineCommande.analysePhysique.tamisList.forEach(value => {
+            if (value.passCumulated !== undefined && value.passCumulated !== null) {
+              // Convertir la valeur en chaîne pour s'assurer que 'match' peut être utilisé
+              let passCumulatedString = String(value.passCumulated);
+
+              // Utiliser une expression régulière pour extraire la partie numérique de la chaîne
+              let passCumulatedValue = passCumulatedString.match(/\d+/);
+
+              // Si une partie numérique est trouvée, elle est convertie en nombre
+              if (passCumulatedValue) {
+                let passCumulatedNumber = Number(passCumulatedValue[0]);
+
+                // Vérifier si le nombre est supérieur à 0
+                if (passCumulatedNumber > 0) {
+                  totalPassCum += passCumulatedNumber;
+                  countPassCum++;
+                }
+              }
+            }
+          });
+        }
+      }
+
+      console.log('liste de ligne commande'+new JsonPipe().transform(lineCommande))
+
+      if (lineCommande.analyseChimique) {
+        console.log('magnesium=>>><'+lineCommande.analyseChimique.magnesium)
+
+
+
+
+
+
+        if (lineCommande.analyseChimique.humidite !== undefined &&
+          lineCommande.analyseChimique.humidite !== null) {
+
+          let varhum = String(lineCommande.analyseChimique.humidite);
+
+          let humiditeValue = varhum.match(/\d+/);
+
+          if (humiditeValue) {
+            let humiditeNumber = Number(humiditeValue[0]);
+
+            if (humiditeNumber > 0) {
+              totalHumidite += humiditeNumber;
+              countHumidite++;
+            }
+          }
+        }
+
+
+
+
+
+        if (lineCommande.analyseChimique.magnesium !== undefined &&
+          lineCommande.analyseChimique.magnesium !== null) {
+
+          // Convertir la valeur en chaîne pour s'assurer que 'match' peut être utilisé
+          let varmag = String(lineCommande.analyseChimique.magnesium);
+
+          // Utiliser une expression régulière pour extraire la partie numérique de la chaîne
+          let magnesiumValue = varmag.match(/\d+/);
+
+          // Si une partie numérique est trouvée, elle est convertie en nombre
+          if (magnesiumValue) {
+            let magnesiumNumber = Number(magnesiumValue[0]);
+
+            // Vérifier si le nombre est supérieur à 0
+            if (magnesiumNumber > 0) {
+              totalMagnesium += magnesiumNumber;
+              countMagnesium++;
+            }
+          }
+        }
+
+
+
+
+
+        if (lineCommande.analyseChimique.sulfate !== undefined &&
+          lineCommande.analyseChimique.sulfate !== null) {
+
+          let varsulf = String(lineCommande.analyseChimique.sulfate);
+
+          let sulfateValue = varsulf.match(/\d+/);
+
+          if (sulfateValue) {
+            let sulfateNumber = Number(sulfateValue[0]);
+
+            if (sulfateNumber > 0) {
+              totalSulfate += sulfateNumber;
+              countSulfate++;
+            }
+          }
+        }
+
+
+
+
+
+
+        if (lineCommande.analyseChimique.chlorureDeSodium !== undefined &&
+          lineCommande.analyseChimique.chlorureDeSodium !== null) {
+
+          let varclor = String(lineCommande.analyseChimique.chlorureDeSodium);
+
+          let clorValue = varclor.match(/\d+/);
+
+          if (clorValue) {
+            let clorNumber = Number(clorValue[0]);
+
+            if (clorNumber > 0) {
+              totalchlorureDeSodium += clorNumber;
+              countchlorureDeSodium++;
+            }
+          }
+        }
+
+
+
+
+
+
+        if (lineCommande.analyseChimique.matiereInsoluble !== undefined &&
+          lineCommande.analyseChimique.matiereInsoluble !== null) {
+
+          let varMi = String(lineCommande.analyseChimique.matiereInsoluble);
+
+          let MiValue = varMi.match(/\d+/);
+
+          if (MiValue) {
+            let MiNumber = Number(MiValue[0]);
+
+            if (MiNumber > 0) {
+              totalMatiereInsoluble += MiNumber;
+              countMatiereInsoluble++;
+            }
+          }
+        }
+
+
+
+
+
+
+        if (lineCommande.analyseChimique.ferrocyanure !== undefined &&
+          lineCommande.analyseChimique.ferrocyanure !== null) {
+
+          let varferro = String(lineCommande.analyseChimique.ferrocyanure);
+
+          let ferroValue = varferro.match(/\d+/);
+
+          if (ferroValue) {
+            let ferroNumber = Number(ferroValue[0]);
+
+            if (ferroNumber > 0) {
+              totalferrocyanure += ferroNumber;
+              countferrocyanure++;
+            }
+          }
+        }
+
+      }
+    });
+
+    return {
+
+
+      passCumulated: countPassCum > 0 ? totalPassCum / countPassCum : 0,
+      humidite: countHumidite > 0 ? totalHumidite / countHumidite : 0,
+      magnesium: countMagnesium > 0 ? totalMagnesium / countMagnesium : 0,
+
+      sulfate: countSulfate > 0 ? totalSulfate / countSulfate : 0,
+      chlorureDeSodium: countchlorureDeSodium > 0 ? totalchlorureDeSodium / countchlorureDeSodium : 0,
+      ferrocyanure: countferrocyanure > 0 ? totalferrocyanure / countferrocyanure : 0,
+      matiereInsoluble: countMatiereInsoluble > 0 ? totalMatiereInsoluble / countMatiereInsoluble : 0,
+
+    };
+  }
+
+
+
 }
