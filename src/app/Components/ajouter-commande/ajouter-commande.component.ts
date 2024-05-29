@@ -36,6 +36,7 @@ import jsPDF from "jspdf";
 import autoTable from "jspdf-autotable";
 import {OverlayPanelModule} from "primeng/overlaypanel";
 import {ProgressBarModule} from "primeng/progressbar";
+import Swal from "sweetalert2";
 
 
 
@@ -490,67 +491,71 @@ this.getLine()
 
 
   ExportExcel() {
-    // ====================================================================
-    const headings = [['Command Date', 'Name', 'State']];
-    const headingsBassin = [['Reference', '', 'Description', '', 'Name', '', 'Location', '', 'State', '', 'Creation Date']];
+    if(this.commande.ligneCommandes) { // ====================================================================
+      const headings = [['Command Date', 'Name', 'State']];
+      const headingsBassin = [['Reference', '', 'Description', '', 'Name', '', 'Location', '', 'State', '', 'Creation Date']];
 
-    const wb: WorkBook = utils.book_new();
-    const ws: WorkSheet = utils.json_to_sheet([]);
+      const wb: WorkBook = utils.book_new();
+      const ws: WorkSheet = utils.json_to_sheet([]);
 
-    // Ajouter les en-têtes de colonne pour les commandes
-    utils.sheet_add_aoa(ws, headings, { origin: 'A2' });
+      // Ajouter les en-têtes de colonne pour les commandes
+      utils.sheet_add_aoa(ws, headings, {origin: 'A2'});
 
-    // Préparer les données des commandes
-    const commandData = [
-      [this.commande.dateCommande, this.commande.nom, this.commande.etat]
-    ];
-
-    // Ajouter les données de commandes à la feuille
-    utils.sheet_add_json(ws, commandData, { origin: 'A3', skipHeader: true });
-
-    // Ajouter les en-têtes de colonne pour les bassins
-    utils.sheet_add_aoa(ws, headingsBassin, { origin: 'A5' });
-
-    // Préparer les données des bassins
-    if (this.commande.bassin) {
-      const bassinData = [
-        [this.commande.bassin.reference, '', this.commande.bassin.description, '', this.commande.bassin.nom, '', this.commande.bassin.emplacement, '', this.commande.bassin.etat, '', this.commande.bassin.dateCreation]
+      // Préparer les données des commandes
+      const commandData = [
+        [this.commande.dateCommande, this.commande.nom, this.commande.etat]
       ];
 
-      // Ajouter les données de bassins à la feuille
-      utils.sheet_add_json(ws, bassinData, { origin: 'A6', skipHeader: true });
+      // Ajouter les données de commandes à la feuille
+      utils.sheet_add_json(ws, commandData, {origin: 'A3', skipHeader: true});
+
+      // Ajouter les en-têtes de colonne pour les bassins
+      utils.sheet_add_aoa(ws, headingsBassin, {origin: 'A5'});
+
+      // Préparer les données des bassins
+      if (this.commande.bassin) {
+        const bassinData = [
+          [this.commande.bassin.reference, '', this.commande.bassin.description, '', this.commande.bassin.nom, '', this.commande.bassin.emplacement, '', this.commande.bassin.etat, '', this.commande.bassin.dateCreation]
+        ];
+
+        // Ajouter les données de bassins à la feuille
+        utils.sheet_add_json(ws, bassinData, {origin: 'A6', skipHeader: true});
+      }
+
+      // ====================================================================
+      // Ajouter les données du tableau HTML
+      const element = document.getElementById('EXCEL');
+      if (element) {
+        const wst: WorkSheet = utils.table_to_sheet(element);
+        const tableData: any[][] = utils.sheet_to_json(wst, {header: 1}) as any[][];
+
+        // Déterminer l'index de la colonne contenant 'Prelevelment date'
+        let dateColumnIndex = -1;
+        tableData[0].forEach((header: any, index: number) => {
+          if (header === 'Prelevelment date') {
+            dateColumnIndex = index;
+          }
+        });
+
+        // Formater les dates dans les données du tableau HTML uniquement pour la colonne date identifiée
+        const formattedTableData = tableData.map((row: any[], rowIndex: number) => row.map((cell: any, colIndex: number) => {
+          if (colIndex === dateColumnIndex && typeof cell === 'number' && cell > 20000) {
+            return new Date((cell - 25569) * 86400 * 1000).toLocaleDateString();
+          }
+          return cell;
+        }));
+
+        // Ajouter les données formatées du tableau HTML à la feuille principale
+        utils.sheet_add_json(ws, formattedTableData, {origin: 'A8', skipHeader: true});
+      }
+
+      // Enregistrer la feuille de calcul
+      utils.book_append_sheet(wb, ws, 'Fiche de Vie');
+      writeFile(wb, 'FicheVie_Report.xlsx');
+    }else {
+      Swal.fire({title:"Error" ,text:"No data found to printed" ,icon:"error"})
+
     }
-
-    // ====================================================================
-    // Ajouter les données du tableau HTML
-    const element = document.getElementById('EXCEL');
-    if (element) {
-      const wst: WorkSheet = utils.table_to_sheet(element);
-      const tableData: any[][] = utils.sheet_to_json(wst, { header: 1 }) as any[][];
-
-      // Déterminer l'index de la colonne contenant 'Prelevelment date'
-      let dateColumnIndex = -1;
-      tableData[0].forEach((header: any, index: number) => {
-        if (header === 'Prelevelment date') {
-          dateColumnIndex = index;
-        }
-      });
-
-      // Formater les dates dans les données du tableau HTML uniquement pour la colonne date identifiée
-      const formattedTableData = tableData.map((row: any[], rowIndex: number) => row.map((cell: any, colIndex: number) => {
-        if (colIndex === dateColumnIndex && typeof cell === 'number' && cell > 20000) {
-          return new Date((cell - 25569) * 86400 * 1000).toLocaleDateString();
-        }
-        return cell;
-      }));
-
-      // Ajouter les données formatées du tableau HTML à la feuille principale
-      utils.sheet_add_json(ws, formattedTableData, { origin: 'A8', skipHeader: true });
-    }
-
-    // Enregistrer la feuille de calcul
-    utils.book_append_sheet(wb, ws, 'Fiche de Vie');
-    writeFile(wb, 'FicheVie_Report.xlsx');
   }
 
   @ViewChild("pdfcommande",{ static: false }) htmlContent: ElementRef | undefined;
@@ -568,120 +573,121 @@ this.getLine()
 
 
   public SavePDF(): void {
-this.visibleCommande=true
-    setTimeout(()=>{
-    let header:string[]=[] ;
-    let data:any[]=[] ;
 
- let sizeimageA4=1;
-this.selectedColumns.forEach(value => {
-  header.push(value.header)
-})
-    this.listeLignesCommandes.forEach(l => {
-      let ligne:any[]=[];
-      this.selectedColumns.forEach(col => {
-        ligne.push(this.getValueOfligneCommande(col,l))
-      })
-     data.push(ligne)
-    })
-    let oriantation:string="p" ;
-     let format="a4"
-    if(this.selectedColumns.length>11){
-      oriantation="l";
-      if(this.selectedColumns.length<10) {
-        format = "a4"
-        sizeimageA4=1;
-      }      else if(this.selectedColumns.length>10 && this.selectedColumns.length<16) {
-        format="a2"
-        sizeimageA4=3
-      }  else if(this.selectedColumns.length>16 ) {
-        format="a1";
-        sizeimageA4=4
-      }
-    }
+    if (this.commande.ligneCommandes) {
+      this.visibleCommande=true
+      setTimeout(() => {
+        let header: string[] = [];
+        let data: any[] = [];
 
-     const doc = new jsPDF("l","mm",format)
-     let headerPage=document.getElementById("headerpages");
-    if(headerPage)
-           headerPage.innerHTML=' <div class=" flex flex-column">   ' +
-             '<div class="flex   border-1 w-full justify-content-between">' +
-             '      <div class="flex-initial flex align-items-center justify-content-center   font-bold m-2 px-5 py-3 border-round">' +
+        let sizeimageA4 = 1;
+        this.selectedColumns.forEach(value => {
+          header.push(value.header)
+        })
+        this.listeLignesCommandes.forEach(l => {
+          let ligne: any[] = [];
+          this.selectedColumns.forEach(col => {
+            ligne.push(this.getValueOfligneCommande(col, l))
+          })
+          data.push(ligne)
+        })
+        let oriantation: string = "p";
+        let format = "a4"
+        if (this.selectedColumns.length > 11) {
+          oriantation = "l";
+          if (this.selectedColumns.length < 10) {
+            format = "a4"
+            sizeimageA4 = 1;
+          } else if (this.selectedColumns.length > 10 && this.selectedColumns.length < 16) {
+            format = "a2"
+            sizeimageA4 = 3
+          } else if (this.selectedColumns.length > 16) {
+            format = "a1";
+            sizeimageA4 = 4
+          }
+        }
 
-             '      </div>' +
-             '      <div class="flex-initial flex align-items-center justify-content-center  text-6xl font-bold m-2 px-5 py-3 border-round">' +
-             '        Daily monitoring of analyses for the order\n' +
+        const doc = new jsPDF("l", "mm", format)
+        let headerPage = document.getElementById("headerpages");
+        if (headerPage)
+          headerPage.innerHTML = ' <div class=" flex flex-column">   ' +
+            '<div class="flex   border-1 w-full justify-content-between">' +
+            '      <div class="flex-initial flex align-items-center justify-content-center   font-bold m-2 px-5 py-3 border-round">' +
 
-             '      </div>' +
-             '      <div class="flex-initial border-1 flex     w-25  font-bold m-2 px-5 py-3  ">' +
-             '        <div class="col   ">' +
-             '          <div class="row  mb-2    w-full  ">BEN GUERDANE, TUNISIA  </div>' +
-             '          <div class="row mb-2   w-full text-center    text-1xl font-bold  pi pi-calendar ">'+this.pipedate(new Date())+'</div>' +
-             '        </div>' +
-             '      </div>   ' +
-             '</div> ' +
-             '</div>' +
-             '</div>' +
+            '      </div>' +
+            '      <div class="flex-initial flex align-items-center justify-content-center  text-6xl font-bold m-2 px-5 py-3 border-round">' +
+            '        Daily monitoring of analyses for the order\n' +
 
-             '    </div>  ' +
-             '<!--      infoPropreTableCommande--> ' +
-             '      <div class=" flex  me-3 mt-5  p-2 gap-1 text-3xl flex    justify-content-evenly">' +
-             '        <br><br>' +
-             '        <label class="text-2xl font-bold">Command Date :</label><span class="ml-2 text-2xl">'+this.commande.dateCommande+'</span>' +
-             '        <label class="text-2xl font-bold">Name :</label><span class=" ml-2 text-2xl">'+this.commande.nom+'</span>' +
-             '        <label class="text-2xl font-bold">Status :</label><span class=" ml-2 text-2xl">'+this.commande.etat+' </span>' +
-             '      </div>' +
-             '      <div class="flex     p-2 gap-1 text-3xl flex   justify-content-evenly">' +
-             '        <label class="text-2xl font-bold">Creation Date Pond : </label><span class=" ml-2 text-2xl">'+this.commande.bassin?.dateCreation+'</span>' +
-             '        <label class="text-2xl font-bold">Reference :</label><span class="ml-2 text-2xl">'+this.commande.bassin?.reference+'</span>' +
-             '        <label class="text-2xl font-bold">Description :</label><span class=" ml-2 text-2xl">'+this.commande.bassin?.description+'</span>' +
-             '        <label class="text-2xl font-bold">Name :</label><span class=" ml-2 text-2xl">'+this.commande.bassin?.nom+'</span>' +
-             '        <label class="text-2xl font-bold">Location :</label><span class=" ml-2 text-2xl">'+this.commande.bassin?.emplacement+' </span>' +
-             '        <label class="text-2xl font-bold">Status :</label><span class=" ml-2 text-2xl">'+this.commande.bassin?.etat+' </span>' +
-             '      </div>  ' +
-             '<div class=" flex justify-content-start  ">' +
-             '  <div class="flex flex-column gap-3 border-1 border-round border-gray-400 p-3">' +
-             '    <div class="flex align-items-start gap-3 justify-content-between">' +
-             '      <label   class="font-bold">Total Harvset in(T) :    </label>' +
-             '      <label   class="font-bold text-center    ">'+this.TotalHarv+'</label>' +
-             '     </div>' +
+            '      </div>' +
+            '      <div class="flex-initial border-1 flex     w-25  font-bold m-2 px-5 py-3  ">' +
+            '        <div class="col   ">' +
+            '          <div class="row  mb-2    w-full  ">BEN GUERDANE, TUNISIA  </div>' +
+            '          <div class="row mb-2   w-full text-center    text-1xl font-bold  pi pi-calendar ">' + this.pipedate(new Date()) + '</div>' +
+            '        </div>' +
+            '      </div>   ' +
+            '</div> ' +
+            '</div>' +
+            '</div>' +
 
-             '    <div class="flex align-items-center gap-3 justify-content-between ">' +
-             '      <label   class="font-bold">Total Production in(T) :</label>' +
-             '      <label   class="font-bold text-center    ">'+this.TotalProd+'</label>' +
+            '    </div>  ' +
+            '<!--      infoPropreTableCommande--> ' +
+            '      <div class=" flex  me-3 mt-5  p-2 gap-1 text-3xl flex    justify-content-evenly">' +
+            '        <br><br>' +
+            '        <label class="text-2xl font-bold">Command Date :</label><span class="ml-2 text-2xl">' + this.commande.dateCommande + '</span>' +
+            '        <label class="text-2xl font-bold">Name :</label><span class=" ml-2 text-2xl">' + this.commande.nom + '</span>' +
+            '        <label class="text-2xl font-bold">Status :</label><span class=" ml-2 text-2xl">' + this.commande.etat + ' </span>' +
+            '      </div>' +
+            '      <div class="flex     p-2 gap-1 text-3xl flex   justify-content-evenly">' +
+            '        <label class="text-2xl font-bold">Creation Date Pond : </label><span class=" ml-2 text-2xl">' + this.commande.bassin?.dateCreation + '</span>' +
+            '        <label class="text-2xl font-bold">Reference :</label><span class="ml-2 text-2xl">' + this.commande.bassin?.reference + '</span>' +
+            '        <label class="text-2xl font-bold">Description :</label><span class=" ml-2 text-2xl">' + this.commande.bassin?.description + '</span>' +
+            '        <label class="text-2xl font-bold">Name :</label><span class=" ml-2 text-2xl">' + this.commande.bassin?.nom + '</span>' +
+            '        <label class="text-2xl font-bold">Location :</label><span class=" ml-2 text-2xl">' + this.commande.bassin?.emplacement + ' </span>' +
+            '        <label class="text-2xl font-bold">Status :</label><span class=" ml-2 text-2xl">' + this.commande.bassin?.etat + ' </span>' +
+            '      </div>  ' +
+            '<div class=" flex justify-content-start  ">' +
+            '  <div class="flex flex-column gap-3 border-1 border-round border-gray-400 p-3">' +
+            '    <div class="flex align-items-start gap-3 justify-content-between">' +
+            '      <label   class="font-bold">Total Harvset in(T) :    </label>' +
+            '      <label   class="font-bold text-center    ">' + this.TotalHarv + '</label>' +
+            '     </div>' +
 
-             '     </div>' +
-             '    <div class="flex align-items-center gap-3 justify-content-between ">' +
-             '      <label   class="font-bold">Total Transfer Quantity :</label>' +
-             '      <label   class="font-bold text-center    ">'+this.TotalHarv+'</label>' +
+            '    <div class="flex align-items-center gap-3 justify-content-between ">' +
+            '      <label   class="font-bold">Total Production in(T) :</label>' +
+            '      <label   class="font-bold text-center    ">' + this.TotalProd + '</label>' +
 
-             '     </div>' +
-             '  </div>' +
-             '</div>' ;
+            '     </div>' +
+            '    <div class="flex align-items-center gap-3 justify-content-between ">' +
+            '      <label   class="font-bold">Total Transfer Quantity :</label>' +
+            '      <label   class="font-bold text-center    ">' + this.TotalHarv + '</label>' +
 
-    if(headerPage)
-      html2canvas(headerPage, {scale: 1}).then((canvas) => {
-        const imgData = canvas.toDataURL('image/png');
-         const imgWidth = 210; // PDF width
-        const imgHeight = (canvas.height * imgWidth) / canvas.width; // Maintain aspect ratio
-        doc.addImage(imgData, 'png', 2, 2, imgWidth*sizeimageA4, imgHeight*sizeimageA4);
-        autoTable(doc,{startY:imgHeight+180})
+            '     </div>' +
+            '  </div>' +
+            '</div>';
+
+        if (headerPage)
+          html2canvas(headerPage, {scale: 1}).then((canvas) => {
+            const imgData = canvas.toDataURL('image/png');
+            const imgWidth = 210; // PDF width
+            const imgHeight = (canvas.height * imgWidth) / canvas.width; // Maintain aspect ratio
+            doc.addImage(imgData, 'png', 2, 2, imgWidth * sizeimageA4, imgHeight * sizeimageA4);
+            autoTable(doc, {startY: imgHeight + 180})
 // Or use javascript directly:
-        autoTable(doc, {
-          head: [header],
-          body: data,
-        });
-        doc.save('Print_'+Math.random()+'.pdf')
-      });
-  this.visibleCommande=false
+            autoTable(doc, {
+              head: [header],
+              body: data,
+            });
+            doc.save('Print_' + Math.random() + '.pdf')
+          });
+        this.visibleCommande = false
 
-    },this.commande.ligneCommandes!.length*100)
-
+      }, this.commande.ligneCommandes!.length * 100)
+    }else {
+      console.log("aucun ligne commande")
+      Swal.fire({title:"Error" ,text:"No data found to printed" ,icon:"error"})
+    }
      }
 
 
-
-
-
-
-
+  protected readonly Swal = Swal;
 }
