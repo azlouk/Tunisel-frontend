@@ -24,11 +24,9 @@
     <div class=" flex justify-content-between  mt-8 border-1 border-round border-gray-300 p-6  h-22rem">
       <div class="  flex flex-column   justify-content-between ">
         <p-floatLabel >
-          <p-calendar   id="dateCommande" [(ngModel)]="commande.dateCommande" dateFormat="yy-mm-dd"
-                        [showIcon]="true" />
-          <label for="dateCommande">Command Date </label>
+          <p-calendar   id="dateCommande" [(ngModel)]="commande.dateCommande" dateFormat="yy-mm-dd"  [showIcon]="true"></p-calendar>
+          <label for="dateCommande">Command Date</label>
         </p-floatLabel>
-        {{commande.dateCommande}}
         <p-floatLabel>
           <input type="text" pInputText [(ngModel)]="commande.nom" id="nom" class="w-full"  />
           <label for="nom">Name</label>
@@ -39,30 +37,28 @@
         </p-floatLabel>
       </div>
 
-      <div class="  ">
+      <div class=" flex justify-content-center w-full ">
 
-        <p-tabView *ngIf="!isUpdateCommande"[scrollable]="true" >
+        <p-tabView [scrollable]="true" >
           <p-tabPanel header="Pond" >
-            <p-listbox [options]="bassins" [(ngModel)]="commande.bassin" (click)="getLine()" optionLabel="nom" [filter]="true" [listStyle]="{'height': '87px'}"  ></p-listbox>
-
+            <p-multiSelect [options]="bassins"    [(ngModel)]="commande.bassins" (ngModelChange)="getLine()" placeholder="Select a Pond" optionLabel="nom" display="chip" ></p-multiSelect>
           </p-tabPanel>
-<!--          <p-tabPanel header="Sotck non lavé" pTooltip="Sotck non lavé">-->
-<!--            <p-listbox [options]="sbnls" [(ngModel)]="selectedSbnl" optionLabel="reference" [filter]="true" [listStyle]="{'height': '87px'}"  ></p-listbox>-->
 
-<!--          </p-tabPanel>-->
-<!--          <p-tabPanel header="Bande" pTooltip="Sotck non lavé">-->
-<!--            <p-listbox [options]="bandes" [(ngModel)]="selectedBande" optionLabel="reference" [filter]="true" [listStyle]="{'height': '87px'}"  ></p-listbox>-->
+          <p-tabPanel header="Unwashed" >
+            <p-multiSelect [options]="sbnls"    [(ngModel)]="commande.sbnls" (ngModelChange)="getLine()" placeholder="Select a Unwashed" optionLabel="reference" display="chip" ></p-multiSelect>
+          </p-tabPanel>
 
-<!--          </p-tabPanel>-->
+          <p-tabPanel header="Band" >
+          <p-multiSelect [options]="bandes"    [(ngModel)]="commande.bandes" (ngModelChange)="getLine()" placeholder="Select a Band" optionLabel="reference" display="chip" ></p-multiSelect>
+        </p-tabPanel>
 
-<!--          <p-tabPanel header="Sotck lavé" >-->
-<!--            <p-listbox [options]="sbls" [(ngModel)]="selectedSbl" optionLabel="reference" [filter]="true" [listStyle]="{'height': '87px'}" ></p-listbox>-->
+          <p-tabPanel header="Washed" >
+            <p-multiSelect [options]="sbls"    [(ngModel)]="commande.sbls" (ngModelChange)="getLine()" placeholder="Select a Washed" optionLabel="reference" display="chip" ></p-multiSelect>
+          </p-tabPanel>
 
-<!--          </p-tabPanel>-->
-
-<!--          <p-tabPanel header="Sotck finale" >-->
-<!--            <p-listbox [options]="sblfs" [(ngModel)]="selectedSblf" optionLabel="reference" [filter]="true"  [listStyle]="{'height': '87px'}" ></p-listbox>-->
-<!--          </p-tabPanel>-->
+          <p-tabPanel header="Washed Ship" >
+            <p-multiSelect [options]="sblfs"    [(ngModel)]="commande.sblfs" (ngModelChange)="getLine()" placeholder="Select a Washed Ship" optionLabel="reference" display="chip" ></p-multiSelect>
+          </p-tabPanel>
 
         </p-tabView>
         <div >
@@ -72,33 +68,33 @@
         </div>
       </div>
 
-      <div class="flex flex-column border-1 border-round border-gray-300 p-4" *ngIf="commande.bassin">
+<!--      <div class="flex flex-column border-1 border-round border-gray-300 p-4" *ngIf="commande.bassin">-->
 
-  <div class="field " >
-    <p><span class="font-bold"> Reference: </span>{{commande.bassin.reference}}</p>
-  </div>
-  <div class="field">
-    <p><span class="font-bold"> Description: </span>{{commande.bassin.description}}</p>
-  </div><div class="field">
-  <p><span class="font-bold"> Name: </span>{{commande.bassin.nom}}</p>
-</div>
-  <div class="field">
-    <p><span class="font-bold"> Location: </span>{{commande.bassin.emplacement}}</p>
-  </div>
-  <div class="field">
-    <p><span class="font-bold"> State: </span>{{commande.bassin.etat}}</p>
-  </div>
-  <div class="field">
-    <p><span class="font-bold"> Creation Date: </span>{{commande.bassin.dateCreation}}</p>
-  </div>
+<!--  <div class="field " >-->
+<!--    <p><span class="font-bold"> Reference: </span>{{commande.bassin.reference}}</p>-->
+<!--  </div>-->
+<!--  <div class="field">-->
+<!--    <p><span class="font-bold"> Description: </span>{{commande.bassin.description}}</p>-->
+<!--  </div><div class="field">-->
+<!--  <p><span class="font-bold"> Name: </span>{{commande.bassin.nom}}</p>-->
+<!--</div>-->
+<!--  <div class="field">-->
+<!--    <p><span class="font-bold"> Location: </span>{{commande.bassin.emplacement}}</p>-->
+<!--  </div>-->
+<!--  <div class="field">-->
+<!--    <p><span class="font-bold"> State: </span>{{commande.bassin.etat}}</p>-->
+<!--  </div>-->
+<!--  <div class="field">-->
+<!--    <p><span class="font-bold"> Creation Date: </span>{{commande.bassin.dateCreation}}</p>-->
+<!--  </div>-->
 
 
 
-      </div>
+<!--      </div>-->
 
     </div>
 
-<div *ngIf="getToken()=='ADMIN'" class="flex  mt-4 mb-4 justify-content-between">
+<div class="flex  mt-4 mb-4 justify-content-between">
   <button pButton pRipple label="Analyse" icon="pi pi-search" class="p-button-secondary mr-2" (click)="getLine()"  *ngIf="!isUpdateCommande"></button>
 
   <button pButton pRipple label="Reset Default" icon="pi pi-refresh" class="p-button-primary mr-2" (click)="getCommandeById()"  ></button>
@@ -109,8 +105,15 @@
 
     <div class="card  ">
       <p-table
+        [paginator]="true"
+        [rows]="10"
+        [rowsPerPageOptions]="[10,20,30,200,500]"
+        [showCurrentPageReport]="true"
+        [rowHover]="true"
+        currentPageReportTemplate="Display from {first} to {last} of {totalRecords} items"
         [columns]="selectedColumns"
         [value]="listeLignesCommandes"
+        [tableStyle]="{'min-width': '50rem'}"
 
         editMode="row"
         id="EXCEL"
@@ -141,14 +144,14 @@
 
           </div>
 
-          <div class="gap-5 flex align-items-center    ">
+          <div class="gap-5 flex align-items-center   mt-4 ">
             <div class="gap-1 flex align-items-center">Analysis start date  :
-              <input  class="p-2 shadow-1" type="date" pInputText    [(ngModel)]="DatefiltrageStart" [value]="DatefiltrageStart" />
+              <input  class="p-2 shadow-1" type="date" pInputText    [(ngModel)]="DatefiltrageStart"   />
 
             </div>
             <div class="gap-1  flex align-items-center  ">
               Date End Analysis  :
-              <input  class="p-2 shadow-1" type="date"  pInputText   [(ngModel)]="DatefiltrageEnd" [value]="DatefiltrageEnd" />
+              <input  class="p-2 shadow-1" type="date"  pInputText   [(ngModel)]="DatefiltrageEnd"   />
 
             </div>
 <div class="gap-1  flex align-items-center">
@@ -192,10 +195,14 @@
         <ng-template pTemplate="body" let-lineCommande let-columns="columns" let-editing="editing" let-ri="rowIndex">
           <tr [pEditableRow]="lineCommande">
             <ng-container *ngFor="let col of columns">
+
               <td *ngIf="col.id>26 && col.id<39">
+
                 <p-cellEditor>
                   <ng-template pTemplate="input">
-                    <input type="text"   pInputText [placeholder]="col.header" [(ngModel)]="lineCommande[col.field]  "(ngModelChange)="CalculeTotalInput()"/>
+                    <input type="text" *ngIf="col.id!==27"    pInputText [placeholder]="col.header" [(ngModel)]="lineCommande[col.field]  "(ngModelChange)="CalculeTotalInput()"/>
+                    <input type="date"  pInputText *ngIf="col.id==27" [placeholder]="col.header" [(ngModel)]="lineCommande[col.field]  "(ngModelChange)="CalculeTotalInput()"/>
+
                   </ng-template>
                   <ng-template pTemplate="output">
                     {{getValueOfligneCommande(col,lineCommande)}}

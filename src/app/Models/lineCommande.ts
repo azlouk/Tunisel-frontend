@@ -18,5 +18,5 @@ export interface LineCommande {
   conformite?: string ;
   analyseChimique:AnalysesChimique| null;
   analysePhysique:AnalysesPhysique | null;
-
+  dateCreation?:Date;
 }

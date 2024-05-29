@@ -17,6 +17,9 @@ export class CommandeService {
   getAllCommande(): Observable<Commande[]> {
     return this.http.get<Commande[]>(`${this.apiUrl}/commandes/read`) ;
   }
+  getAllCommandeDTO(): Observable<Commande[]> {
+    return this.http.get<Commande[]>(`${this.apiUrl}/commandes/readDTO`) ;
+  }
   getCommandeById(commandeId:number): Observable<Commande> {
     return this.http.get<Commande>(`${this.apiUrl}/commandes/`+commandeId);
   }
@@ -30,18 +33,28 @@ export class CommandeService {
 
 
   addCommande(commande: Commande) : Observable<Commande>{
-    // commande.ligneCommandes?.forEach(value => {
-    //   if(value.analyseChimique?.id==undefined && value.analysePhysique?.id==undefined){
-    //     value.analysePhysique=null;
-    //   }
-    // })
-    console.error(commande)
+
     return this.http.post<Commande>(`${this.apiUrl}/commandes/add`,commande);
 
   }
 
 
-  getLignesCommandes(bassinId:number): Observable<LineCommande[]> {
-    return this.http.get<LineCommande[]>(`${this.apiUrl}/commandes/linesCommandes/${bassinId}`) ;
+  getLignesCommandesBassin(bassinId:number): Observable<LineCommande[]> {
+    return this.http.get<LineCommande[]>(`${this.apiUrl}/commandes/linesCommandesBassin/${bassinId}`) ;
+  }
+
+  getLignesCommandesSbnl(sbnlId:number): Observable<LineCommande[]> {
+    return this.http.get<LineCommande[]>(`${this.apiUrl}/commandes/linesCommandesSbnl/${sbnlId}`) ;
+  }
+
+  getLignesCommandesSbl(sblId:number): Observable<LineCommande[]> {
+    return this.http.get<LineCommande[]>(`${this.apiUrl}/commandes/linesCommandesSbl/${sblId}`) ;
+  }
+  getLignesCommandesSblf(sblfId:number): Observable<LineCommande[]> {
+    return this.http.get<LineCommande[]>(`${this.apiUrl}/commandes/linesCommandesSblf/${sblfId}`) ;
+  }
+
+  getLignesCommandesBande(bandeId:number): Observable<LineCommande[]> {
+    return this.http.get<LineCommande[]>(`${this.apiUrl}/commandes/linesCommandesBande/${bandeId}`) ;
   }
 }

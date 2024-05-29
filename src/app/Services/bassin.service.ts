@@ -16,6 +16,9 @@ apiUrl=environment.apiUrl
   getAllBassins(): Observable<Bassin[]> {
     return this.http.get<Bassin[]>(`${this.apiUrl}/bassins/read`);
   }
+ // getAllBassinsDTO(): Observable<Bassin[]> {
+ //    return this.http.get<Bassin[]>(`${this.apiUrl}/bassins/readDTO`);
+ //  }
 
 
 

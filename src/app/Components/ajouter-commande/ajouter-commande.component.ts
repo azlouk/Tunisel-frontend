@@ -33,9 +33,6 @@ import {FieldsetModule} from "primeng/fieldset";
 import {AutoFocusModule} from "primeng/autofocus";
 import html2canvas from "html2canvas";
 import jsPDF from "jspdf";
-import autoTable from "jspdf-autotable";
-import {OverlayPanelModule} from "primeng/overlaypanel";
-import {ProgressBarModule} from "primeng/progressbar";
 import Swal from "sweetalert2";
 
 
@@ -75,8 +72,6 @@ interface Column {
     FieldsetModule,
     AutoFocusModule,
     AutoCompleteModule,
-    OverlayPanelModule,
-    ProgressBarModule,
 
   ],
   templateUrl: './ajouter-commande.component.html',
@@ -122,8 +117,7 @@ export class AjouterCommandeComponent implements OnInit{
               private route: ActivatedRoute,
                private commandeService:CommandeService,
               private messageService: MessageService,
-              private lineCommandeService: LineCommandeService,
-              private datePipe: DatePipe
+              private lineCommandeService: LineCommandeService
   )
   {}
 
@@ -229,19 +223,7 @@ getCommandeById(){
     // console.log(new JsonPipe().transform(this.commande))
   });
 }
-  formatDate(date: Date): string {
-    const year = date.getFullYear();
-    const month = (date.getMonth() + 1).toString().padStart(2, '0');
-    const day = date.getDate().toString().padStart(2, '0');
-    return `${year}-${month}-${day}`;
-  }
   saveCommande() {
-        const datestr=this.commande.dateCommande?.toString()
-       const dates: string | null =this.datePipe.transform(datestr,'yyyy-MM-dd')
-    if (dates)
-     this.commande.dateCommande =new Date(dates);
-
-
     this.commande.ligneCommandes=[];
     this.commande.ligneCommandes=this.listeLignesCommandes;
     if(this.isUpdateCommande){
@@ -282,23 +264,101 @@ getCommandeById(){
   }
 
   getLine() {
+this.listeLignesCommandes=[];
+    if(this.commande.bassins){
+this.commande.bassins.forEach(basin => {
+  if(basin.id){
+    this.commandeService.getLignesCommandesBassin(basin.id).subscribe(value => {
+      const data=value.filter(value1 => this.listeLignesCommandes.find(value2 => value2==value1)==undefined)
 
-    if(this.commande.bassin!==null){
+      this.listeLignesCommandes.push(...data);
 
-      // const id :number =this.selectedBassin.id!==undefined?this.selectedBassin.id:-1;
-      const id :number =this.commande.bassin&&this.commande.bassin.id!==undefined?this.commande.bassin.id:-1;
+      console.log('size  : ' + this.listeLignesCommandes.length);
+      this.getCalibre();
+    },error =>{
+      console.log(error);
+      console.log('error size  : ' + this.listeLignesCommandes.length);});
+  }
 
-        if(id!==-1){
-          this.commandeService.getLignesCommandes(id).subscribe(value => {
+  })
+
+    }
+
+
+    if(this.commande.sbnls){
+      this.commande.sbnls.forEach(sbnl => {
+        if(sbnl.id){
+          this.commandeService.getLignesCommandesSbnl(sbnl.id).subscribe(value => {
             const data=value.filter(value1 => this.listeLignesCommandes.find(value2 => value2==value1)==undefined)
-            this.listeLignesCommandes = data;
+
+            this.listeLignesCommandes.push(...data);
+
             console.log('size  : ' + this.listeLignesCommandes.length);
-              this.getCalibre();
+            this.getCalibre();
           },error =>{
             console.log(error);
             console.log('error size  : ' + this.listeLignesCommandes.length);});
         }
-  }}
+
+      })
+
+    }
+
+    if(this.commande.sbls){
+      this.commande.sbls.forEach(sbl => {
+        if(sbl.id){
+          this.commandeService.getLignesCommandesSbl(sbl.id).subscribe(value => {
+            const data=value.filter(value1 => this.listeLignesCommandes.find(value2 => value2==value1)==undefined)
+
+            this.listeLignesCommandes.push(...data);
+
+            console.log('size  : ' + this.listeLignesCommandes.length);
+            this.getCalibre();
+          },error =>{
+            console.log(error);
+            console.log('error size  : ' + this.listeLignesCommandes.length);});
+        }
+
+      })
+
+    }
+    if(this.commande.sblfs){
+      this.commande.sblfs.forEach(sblf => {
+        if(sblf.id){
+          this.commandeService.getLignesCommandesSblf(sblf.id).subscribe(value => {
+            const data=value.filter(value1 => this.listeLignesCommandes.find(value2 => value2==value1)==undefined)
+
+            this.listeLignesCommandes.push(...data);
+
+            console.log('size  : ' + this.listeLignesCommandes.length);
+            this.getCalibre();
+          },error =>{
+            console.log(error);
+            console.log('error size  : ' + this.listeLignesCommandes.length);});
+        }
+
+      })
+
+    }
+    if(this.commande.bandes){
+      this.commande.bandes.forEach(bande => {
+        if(bande.id){
+          this.commandeService.getLignesCommandesBande(bande.id).subscribe(value => {
+            const data=value.filter(value1 => this.listeLignesCommandes.find(value2 => value2==value1)==undefined)
+
+            this.listeLignesCommandes.push(...data);
+
+            console.log('size  : ' + this.listeLignesCommandes.length);
+            this.getCalibre();
+          },error =>{
+            console.log(error);
+            console.log('error size  : ' + this.listeLignesCommandes.length);});
+        }
+
+      })
+
+    }
+ }
 
 
   getValueOfligneCommande(col: any, ligneCommande: any): any {
@@ -347,19 +407,9 @@ getCommandeById(){
   confirmDelete() {
     this.deleteLineCommandeDialog = false;
 
-
-      if(this.lineCommande.analysePhysique!==null){
-        this.listeLignesCommandes = this.listeLignesCommandes.filter(val => val.analysePhysique?.reference !== this.lineCommande.analysePhysique?.reference);
+   this.listeLignesCommandes = this.listeLignesCommandes.filter(val => val.id !== this.lineCommande.id);
         this.messageService.add({severity: 'success', summary: 'Successful', detail: 'Line Commande Deleted', life: 3000});
 
-      }
-      else if(this.lineCommande.analyseChimique!==null){
-        this.listeLignesCommandes = this.listeLignesCommandes.filter(val => val.analyseChimique?.reference !== this.lineCommande.analyseChimique?.reference);
-        this.messageService.add({severity: 'success', summary: 'Successful', detail: 'Line Commande Deleted', life: 3000});
-
-
-
-    }
     this.CalculeTotalInput()
   }
 
@@ -371,9 +421,7 @@ getCommandeById(){
 
   }
 
-  getAllLinesCommandes() {
 
-  }
 
   CalculeTotal(l:LineCommande) {
 
@@ -399,6 +447,8 @@ getCommandeById(){
 
 
   }
+
+
   searchAnalyse(l: LineCommande):boolean {
 
     if(l.analyseChimique){
@@ -411,7 +461,7 @@ getCommandeById(){
   filtredate() {
 
      //this.Viderfiltredate()
-    const data=this.listeLignesCommandes.filter(l => this.searchAnalyse(l)==true || this.chechMatter(l)==true );
+    const data=this.listeLignesCommandes.filter(l => this.searchAnalyse(l)==true && this.chechMatter(l)==true );
 
     this.listeLignesCommandes=[...data]
 
@@ -451,7 +501,7 @@ this.getLine()
   }
     chechMatter(l: LineCommande):boolean {
    if(l.analysePhysique)
-    return  l.analysePhysique.qualite==this.matter;
+    return  l.analysePhysique.qualite!.includes(this.matter).valueOf();
 
   return  false ;
   }
@@ -466,6 +516,7 @@ this.getLine()
 
   AddLineCommand() {
   const lineCommande:LineCommande={analysePhysique:null,analyseChimique:null}
+    lineCommande.id=-1*(new  Date().getTime());
     // lineCommande.analyseChimique?.dateAnalyse!==undefined? lineCommande.analyseChimique.dateAnalyse.toString():new Date();
 
     this.listeLignesCommandes.push(lineCommande);
@@ -512,15 +563,15 @@ this.getLine()
       // Ajouter les en-têtes de colonne pour les bassins
       utils.sheet_add_aoa(ws, headingsBassin, {origin: 'A5'});
 
-      // Préparer les données des bassins
-      if (this.commande.bassin) {
-        const bassinData = [
-          [this.commande.bassin.reference, '', this.commande.bassin.description, '', this.commande.bassin.nom, '', this.commande.bassin.emplacement, '', this.commande.bassin.etat, '', this.commande.bassin.dateCreation]
-        ];
-
-        // Ajouter les données de bassins à la feuille
-        utils.sheet_add_json(ws, bassinData, {origin: 'A6', skipHeader: true});
-      }
+    // Préparer les données des bassins
+    // if (this.commande.bassin) {
+    //   const bassinData = [
+    //     [this.commande.bassin.reference, '', this.commande.bassin.description, '', this.commande.bassin.nom, '', this.commande.bassin.emplacement, '', this.commande.bassin.etat, '', this.commande.bassin.dateCreation]
+    //   ];
+    //
+    //   // Ajouter les données de bassins à la feuille
+    //   utils.sheet_add_json(ws, bassinData, { origin: 'A6', skipHeader: true });
+    // }
 
       // ====================================================================
       // Ajouter les données du tableau HTML
@@ -562,8 +613,8 @@ this.getLine()
   visiblePrint: boolean = false;
   dateToday: Date = new Date();
 
-  DatefiltrageStart: Date = new Date();
-  DatefiltrageEnd: Date = new Date();
+  DatefiltrageStart: string = new Date().toISOString().split('T')[0];
+  DatefiltrageEnd: string = new Date().toISOString().split('T')[0];
   SearchDate: any;
   visibleCommande: boolean=false;
 

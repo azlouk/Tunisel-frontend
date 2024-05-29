@@ -210,7 +210,7 @@ isUpdateCommande:boolean=false;
   }
 
   getAllCommandes() {
-    this.commandeService.getAllCommande().subscribe((ListCommande:  Commande[]) => {
+    this.commandeService.getAllCommandeDTO().subscribe((ListCommande:  Commande[]) => {
       this.comanndes=ListCommande;}, error => {
       console.log(error)});
         }
