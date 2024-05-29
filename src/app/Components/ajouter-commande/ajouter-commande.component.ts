@@ -7,7 +7,7 @@ import {InputNumberModule} from "primeng/inputnumber";
 import {InputTextModule} from "primeng/inputtext";
 import {InputTextareaModule} from "primeng/inputtextarea";
 import {ListboxModule} from "primeng/listbox";
-import {JsonPipe, NgForOf, NgIf} from "@angular/common";
+import {DatePipe, JsonPipe, NgForOf, NgIf} from "@angular/common";
 import {PaginatorModule} from "primeng/paginator";
 import {MessageService, SharedModule} from "primeng/api";
 import {TabViewModule} from "primeng/tabview";
@@ -41,6 +41,10 @@ import {SbnlService} from "../../Services/sbnl.service";
 import {SblService} from "../../Services/sbl.service";
 import {SblfService} from "../../Services/sblf.service";
 import {BandeService} from "../../Services/bande.service";
+import autoTable from "jspdf-autotable";
+import {OverlayPanelModule} from "primeng/overlaypanel";
+import {ProgressBarModule} from "primeng/progressbar";
+import Swal from "sweetalert2";
 
 
 
@@ -79,6 +83,8 @@ interface Column {
     FieldsetModule,
     AutoFocusModule,
     AutoCompleteModule,
+    OverlayPanelModule,
+    ProgressBarModule,
 
   ],
   templateUrl: './ajouter-commande.component.html',
@@ -119,6 +125,11 @@ export class AjouterCommandeComponent implements OnInit{
   TotalProd: number=0;
   TotalTrQu: number=0;
 
+  moyennes: { humidite: number, magnesium: number, sulfate: number, chlorureDeSodium: number, matiereInsoluble: number, ferrocyanure: number } | undefined;
+
+
+
+
   private datasel: string[]=[];
   filtereddatasel: any[]=[];
   matter: any="Unwashed salt";
@@ -128,11 +139,12 @@ export class AjouterCommandeComponent implements OnInit{
               private route: ActivatedRoute,
                private commandeService:CommandeService,
               private messageService: MessageService,
+              private lineCommandeService: LineCommandeService,
+              private datePipe: DatePipe,
               private sbnlService :SbnlService,
               private sblService :SblService,
               private sblfService :SblfService,
               private bandeService:BandeService,
-              private lineCommandeService: LineCommandeService
   )
   {}
 
@@ -261,7 +273,19 @@ getCommandeById(){
     // console.log(new JsonPipe().transform(this.commande))
   });
 }
+  formatDate(date: Date): string {
+    const year = date.getFullYear();
+    const month = (date.getMonth() + 1).toString().padStart(2, '0');
+    const day = date.getDate().toString().padStart(2, '0');
+    return `${year}-${month}-${day}`;
+  }
   saveCommande() {
+        const datestr=this.commande.dateCommande?.toString()
+       const dates: string | null =this.datePipe.transform(datestr,'yyyy-MM-dd')
+    if (dates)
+     this.commande.dateCommande =new Date(dates);
+
+
     this.commande.ligneCommandes=[];
 
     this.commande.ligneCommandes=this.listeLignesCommandes;
@@ -376,6 +400,8 @@ this.commande.bassins.forEach(basin => {
 
             console.log('size  : ' + this.listeLignesCommandes.length);
             this.getCalibre();
+              this.getCalibre();
+            this.calculerMoyennes();
           },error =>{
             console.log(error);
             console.log('error size  : ' + this.listeLignesCommandes.length);});
@@ -466,7 +492,9 @@ this.commande.bassins.forEach(basin => {
 
   }
 
+  getAllLinesCommandes() {
 
+  }
 
   CalculeTotal(l:LineCommande) {
 
@@ -587,26 +615,26 @@ this.getLine()
 
 
   ExportExcel() {
-    // ====================================================================
-    const headings = [['Command Date', 'Name', 'State']];
-    const headingsBassin = [['Reference', '', 'Description', '', 'Name', '', 'Location', '', 'State', '', 'Creation Date']];
+    if(this.commande.ligneCommandes) { // ====================================================================
+      const headings = [['Command Date', 'Name', 'State']];
+      const headingsBassin = [['Reference', '', 'Description', '', 'Name', '', 'Location', '', 'State', '', 'Creation Date']];
 
-    const wb: WorkBook = utils.book_new();
-    const ws: WorkSheet = utils.json_to_sheet([]);
+      const wb: WorkBook = utils.book_new();
+      const ws: WorkSheet = utils.json_to_sheet([]);
 
-    // Ajouter les en-têtes de colonne pour les commandes
-    utils.sheet_add_aoa(ws, headings, { origin: 'A2' });
+      // Ajouter les en-têtes de colonne pour les commandes
+      utils.sheet_add_aoa(ws, headings, {origin: 'A2'});
 
-    // Préparer les données des commandes
-    const commandData = [
-      [this.commande.dateCommande, this.commande.nom, this.commande.etat]
-    ];
+      // Préparer les données des commandes
+      const commandData = [
+        [this.commande.dateCommande, this.commande.nom, this.commande.etat]
+      ];
 
-    // Ajouter les données de commandes à la feuille
-    utils.sheet_add_json(ws, commandData, { origin: 'A3', skipHeader: true });
+      // Ajouter les données de commandes à la feuille
+      utils.sheet_add_json(ws, commandData, {origin: 'A3', skipHeader: true});
 
-    // Ajouter les en-têtes de colonne pour les bassins
-    utils.sheet_add_aoa(ws, headingsBassin, { origin: 'A5' });
+      // Ajouter les en-têtes de colonne pour les bassins
+      utils.sheet_add_aoa(ws, headingsBassin, {origin: 'A5'});
 
     // Préparer les données des bassins
     // if (this.commande.bassin) {
@@ -618,45 +646,51 @@ this.getLine()
     //   utils.sheet_add_json(ws, bassinData, { origin: 'A6', skipHeader: true });
     // }
 
-    // ====================================================================
-    // Ajouter les données du tableau HTML
-    const element = document.getElementById('EXCEL');
-    if (element) {
-      const wst: WorkSheet = utils.table_to_sheet(element);
-      const tableData: any[][] = utils.sheet_to_json(wst, { header: 1 }) as any[][];
+      // ====================================================================
+      // Ajouter les données du tableau HTML
+      const element = document.getElementById('EXCEL');
+      if (element) {
+        const wst: WorkSheet = utils.table_to_sheet(element);
+        const tableData: any[][] = utils.sheet_to_json(wst, {header: 1}) as any[][];
 
-      // Déterminer l'index de la colonne contenant 'Prelevelment date'
-      let dateColumnIndex = -1;
-      tableData[0].forEach((header: any, index: number) => {
-        if (header === 'Prelevelment date') {
-          dateColumnIndex = index;
-        }
-      });
+        // Déterminer l'index de la colonne contenant 'Prelevelment date'
+        let dateColumnIndex = -1;
+        tableData[0].forEach((header: any, index: number) => {
+          if (header === 'Prelevelment date') {
+            dateColumnIndex = index;
+          }
+        });
 
-      // Formater les dates dans les données du tableau HTML uniquement pour la colonne date identifiée
-      const formattedTableData = tableData.map((row: any[], rowIndex: number) => row.map((cell: any, colIndex: number) => {
-        if (colIndex === dateColumnIndex && typeof cell === 'number' && cell > 20000) {
-          return new Date((cell - 25569) * 86400 * 1000).toLocaleDateString();
-        }
-        return cell;
-      }));
+        // Formater les dates dans les données du tableau HTML uniquement pour la colonne date identifiée
+        const formattedTableData = tableData.map((row: any[], rowIndex: number) => row.map((cell: any, colIndex: number) => {
+          if (colIndex === dateColumnIndex && typeof cell === 'number' && cell > 20000) {
+            return new Date((cell - 25569) * 86400 * 1000).toLocaleDateString();
+          }
+          return cell;
+        }));
 
-      // Ajouter les données formatées du tableau HTML à la feuille principale
-      utils.sheet_add_json(ws, formattedTableData, { origin: 'A8', skipHeader: true });
+        // Ajouter les données formatées du tableau HTML à la feuille principale
+        utils.sheet_add_json(ws, formattedTableData, {origin: 'A8', skipHeader: true});
+      }
+
+      // Enregistrer la feuille de calcul
+      utils.book_append_sheet(wb, ws, 'Fiche de Vie');
+      writeFile(wb, 'FicheVie_Report.xlsx');
+    }else {
+      Swal.fire({title:"Error" ,text:"No data found to printed" ,icon:"error"})
+
     }
-
-    // Enregistrer la feuille de calcul
-    utils.book_append_sheet(wb, ws, 'Fiche de Vie');
-    writeFile(wb, 'FicheVie_Report.xlsx');
   }
 
-  @ViewChild("pdfcommande") htmlContent: ElementRef | undefined;
+  @ViewChild("pdfcommande",{ static: false }) htmlContent: ElementRef | undefined;
   visiblePrint: boolean = false;
   dateToday: Date = new Date();
 
   DatefiltrageStart: string = new Date().toISOString().split('T')[0];
   DatefiltrageEnd: string = new Date().toISOString().split('T')[0];
   SearchDate: any;
+  visibleCommande: boolean=false;
+
 
 
 
@@ -664,20 +698,345 @@ this.getLine()
 
   public SavePDF(): void {
 
-    if (this.htmlContent) {
-      html2canvas(this.htmlContent.nativeElement, {scale: 1}).then((canvas) => {
-        const imgData = canvas.toDataURL('image/png');
-        const pdf = new jsPDF('p', 'mm', 'a4');
-        const imgWidth = 210; // PDF width
-        const imgHeight = (canvas.height * imgWidth) / canvas.width; // Maintain aspect ratio
-        pdf.addImage(imgData, 'png', 2, 2, imgWidth, imgHeight);
-        pdf.save('Print_' + Math.random() + '.pdf');
-      });
+    if (this.commande.ligneCommandes) {
+      this.visibleCommande=true
+      setTimeout(() => {
+        let header: string[] = [];
+        let data: any[] = [];
 
+        let sizeimageA4 = 1;
+        this.selectedColumns.forEach(value => {
+          header.push(value.header)
+        })
+        this.listeLignesCommandes.forEach(l => {
+          let ligne: any[] = [];
+          this.selectedColumns.forEach(col => {
+            ligne.push(this.getValueOfligneCommande(col, l))
+          })
+          data.push(ligne)
+        })
+        let oriantation: string = "p";
+        let format = "a4"
+        if (this.selectedColumns.length > 11) {
+          oriantation = "l";
+          if (this.selectedColumns.length < 10) {
+            format = "a4"
+            sizeimageA4 = 1;
+          } else if (this.selectedColumns.length > 10 && this.selectedColumns.length < 16) {
+            format = "a2"
+            sizeimageA4 = 3
+          } else if (this.selectedColumns.length > 16) {
+            format = "a1";
+            sizeimageA4 = 4
+          }
+        }
 
+        const doc = new jsPDF("l", "mm", format)
+        let headerPage = document.getElementById("headerpages");
+        if (headerPage)
+          headerPage.innerHTML = ' <div class=" flex flex-column">   ' +
+            '<div class="flex   border-1 w-full justify-content-between">' +
+            '      <div class="flex-initial flex align-items-center justify-content-center   font-bold m-2 px-5 py-3 border-round">' +
+
+            '      </div>' +
+            '      <div class="flex-initial flex align-items-center justify-content-center  text-6xl font-bold m-2 px-5 py-3 border-round">' +
+            '        Daily monitoring of analyses for the order\n' +
+
+            '      </div>' +
+            '      <div class="flex-initial border-1 flex     w-25  font-bold m-2 px-5 py-3  ">' +
+            '        <div class="col   ">' +
+            '          <div class="row  mb-2    w-full  ">BEN GUERDANE, TUNISIA  </div>' +
+            '          <div class="row mb-2   w-full text-center    text-1xl font-bold  pi pi-calendar ">' + this.pipedate(new Date()) + '</div>' +
+            '        </div>' +
+            '      </div>   ' +
+            '</div> ' +
+            '</div>' +
+            '</div>' +
+
+            '    </div>  ' +
+            '<!--      infoPropreTableCommande--> ' +
+            '      <div class=" flex  me-3 mt-5  p-2 gap-1 text-3xl flex    justify-content-evenly">' +
+            '        <br><br>' +
+            '        <label class="text-2xl font-bold">Command Date :</label><span class="ml-2 text-2xl">' + this.commande.dateCommande + '</span>' +
+            '        <label class="text-2xl font-bold">Name :</label><span class=" ml-2 text-2xl">' + this.commande.nom + '</span>' +
+            '        <label class="text-2xl font-bold">Status :</label><span class=" ml-2 text-2xl">' + this.commande.etat + ' </span>' +
+            '      </div>' +
+            '      <div class="flex     p-2 gap-1 text-3xl flex   justify-content-evenly">' +
+            // '        <label class="text-2xl font-bold">Creation Date Pond : </label><span class=" ml-2 text-2xl">' + this.commande.bassin?.dateCreation + '</span>' +
+            // '        <label class="text-2xl font-bold">Reference :</label><span class="ml-2 text-2xl">' + this.commande.bassin?.reference + '</span>' +
+            // '        <label class="text-2xl font-bold">Description :</label><span class=" ml-2 text-2xl">' + this.commande.bassin?.description + '</span>' +
+            // '        <label class="text-2xl font-bold">Name :</label><span class=" ml-2 text-2xl">' + this.commande.bassin?.nom + '</span>' +
+            // '        <label class="text-2xl font-bold">Location :</label><span class=" ml-2 text-2xl">' + this.commande.bassin?.emplacement + ' </span>' +
+            // '        <label class="text-2xl font-bold">Status :</label><span class=" ml-2 text-2xl">' + this.commande.bassin?.etat + ' </span>' +
+            '      </div>  ' +
+            '<div class=" flex justify-content-start  ">' +
+            '  <div class="flex flex-column gap-3 border-1 border-round border-gray-400 p-3">' +
+            '    <div class="flex align-items-start gap-3 justify-content-between">' +
+            '      <label   class="font-bold">Total Harvset in(T) :    </label>' +
+            '      <label   class="font-bold text-center    ">' + this.TotalHarv + '</label>' +
+            '     </div>' +
+
+            '    <div class="flex align-items-center gap-3 justify-content-between ">' +
+            '      <label   class="font-bold">Total Production in(T) :</label>' +
+            '      <label   class="font-bold text-center    ">' + this.TotalProd + '</label>' +
+
+            '     </div>' +
+            '    <div class="flex align-items-center gap-3 justify-content-between ">' +
+            '      <label   class="font-bold">Total Transfer Quantity :</label>' +
+            '      <label   class="font-bold text-center    ">' + this.TotalHarv + '</label>' +
+
+            '     </div>' +
+            '  </div>' +
+            '</div>';
+
+        if (headerPage)
+          html2canvas(headerPage, {scale: 1}).then((canvas) => {
+            const imgData = canvas.toDataURL('image/png');
+            const imgWidth = 210; // PDF width
+            const imgHeight = (canvas.height * imgWidth) / canvas.width; // Maintain aspect ratio
+            doc.addImage(imgData, 'png', 2, 2, imgWidth * sizeimageA4, imgHeight * sizeimageA4);
+            autoTable(doc, {startY: imgHeight + 180})
+// Or use javascript directly:
+            autoTable(doc, {
+              head: [header],
+              body: data,
+            });
+            doc.save('Print_' + Math.random() + '.pdf')
+          });
+        this.visibleCommande = false
+
+      }, this.commande.ligneCommandes!.length * 100)
+    }else {
+      console.log("aucun ligne commande")
+      Swal.fire({title:"Error" ,text:"No data found to printed" ,icon:"error"})
     }
+     }
 
 
+  protected readonly Swal = Swal;
+
+
+  calculerMoyennes():
+    { passCumulated: number,humidite: number,magnesium: number,sulfate: number,chlorureDeSodium: number, matiereInsoluble: number, ferrocyanure: number } {
+
+    let totalHumidite = 0;
+
+    let totalMagnesium = 0;
+    let totalSulfate = 0;
+    let totalMatiereInsoluble = 0;
+
+    let totalchlorureDeSodium = 0;
+
+    let totalferrocyanure = 0;
+    let totalPassCum = 0;
+
+
+
+
+    let countPassCum = 0;
+    let countHumidite = 0;
+    let countMagnesium = 0;
+    let countSulfate = 0;
+    let countMatiereInsoluble = 0;
+    let countchlorureDeSodium = 0;
+    let countferrocyanure = 0;
+
+
+    this.listeLignesCommandes.forEach((lineCommande) => {
+
+      // if (lineCommande.analysePhysique) {
+      //
+      //   if (lineCommande.analysePhysique.tamisList !== undefined) {
+      //     lineCommande.analysePhysique.tamisList.forEach(value => {
+      //       if(value.passCumulated)
+      //       { totalPassCum += Number(value.passCumulated);
+      //         countPassCum++;}
+      //
+      //     })
+      //   }
+      //
+      //   }
+
+      if (lineCommande.analysePhysique) {
+        if (lineCommande.analysePhysique.tamisList !== undefined) {
+          lineCommande.analysePhysique.tamisList.forEach(value => {
+            if (value.passCumulated !== undefined && value.passCumulated !== null) {
+              // Convertir la valeur en chaîne pour s'assurer que 'match' peut être utilisé
+              let passCumulatedString = String(value.passCumulated);
+
+              // Utiliser une expression régulière pour extraire la partie numérique de la chaîne
+              let passCumulatedValue = passCumulatedString.match(/\d+/);
+
+              // Si une partie numérique est trouvée, elle est convertie en nombre
+              if (passCumulatedValue) {
+                let passCumulatedNumber = Number(passCumulatedValue[0]);
+
+                // Vérifier si le nombre est supérieur à 0
+                if (passCumulatedNumber > 0) {
+                  totalPassCum += passCumulatedNumber;
+                  countPassCum++;
+                }
+              }
+            }
+          });
+        }
+      }
+
+      console.log('liste de ligne commande'+new JsonPipe().transform(lineCommande))
+
+      if (lineCommande.analyseChimique) {
+        console.log('magnesium=>>><'+lineCommande.analyseChimique.magnesium)
+
+
+
+
+
+
+        if (lineCommande.analyseChimique.humidite !== undefined &&
+          lineCommande.analyseChimique.humidite !== null) {
+
+          let varhum = String(lineCommande.analyseChimique.humidite);
+
+          let humiditeValue = varhum.match(/\d+/);
+
+          if (humiditeValue) {
+            let humiditeNumber = Number(humiditeValue[0]);
+
+            if (humiditeNumber > 0) {
+              totalHumidite += humiditeNumber;
+              countHumidite++;
+            }
+          }
+        }
+
+
+
+
+
+        if (lineCommande.analyseChimique.magnesium !== undefined &&
+          lineCommande.analyseChimique.magnesium !== null) {
+
+          // Convertir la valeur en chaîne pour s'assurer que 'match' peut être utilisé
+          let varmag = String(lineCommande.analyseChimique.magnesium);
+
+          // Utiliser une expression régulière pour extraire la partie numérique de la chaîne
+          let magnesiumValue = varmag.match(/\d+/);
+
+          // Si une partie numérique est trouvée, elle est convertie en nombre
+          if (magnesiumValue) {
+            let magnesiumNumber = Number(magnesiumValue[0]);
+
+            // Vérifier si le nombre est supérieur à 0
+            if (magnesiumNumber > 0) {
+              totalMagnesium += magnesiumNumber;
+              countMagnesium++;
+            }
+          }
+        }
+
+
+
+
+
+        if (lineCommande.analyseChimique.sulfate !== undefined &&
+          lineCommande.analyseChimique.sulfate !== null) {
+
+          let varsulf = String(lineCommande.analyseChimique.sulfate);
+
+          let sulfateValue = varsulf.match(/\d+/);
+
+          if (sulfateValue) {
+            let sulfateNumber = Number(sulfateValue[0]);
+
+            if (sulfateNumber > 0) {
+              totalSulfate += sulfateNumber;
+              countSulfate++;
+            }
+          }
+        }
+
+
+
+
+
+
+        if (lineCommande.analyseChimique.chlorureDeSodium !== undefined &&
+          lineCommande.analyseChimique.chlorureDeSodium !== null) {
+
+          let varclor = String(lineCommande.analyseChimique.chlorureDeSodium);
+
+          let clorValue = varclor.match(/\d+/);
+
+          if (clorValue) {
+            let clorNumber = Number(clorValue[0]);
+
+            if (clorNumber > 0) {
+              totalchlorureDeSodium += clorNumber;
+              countchlorureDeSodium++;
+            }
+          }
+        }
+
+
+
+
+
+
+        if (lineCommande.analyseChimique.matiereInsoluble !== undefined &&
+          lineCommande.analyseChimique.matiereInsoluble !== null) {
+
+          let varMi = String(lineCommande.analyseChimique.matiereInsoluble);
+
+          let MiValue = varMi.match(/\d+/);
+
+          if (MiValue) {
+            let MiNumber = Number(MiValue[0]);
+
+            if (MiNumber > 0) {
+              totalMatiereInsoluble += MiNumber;
+              countMatiereInsoluble++;
+            }
+          }
+        }
+
+
+
+
+
+
+        if (lineCommande.analyseChimique.ferrocyanure !== undefined &&
+          lineCommande.analyseChimique.ferrocyanure !== null) {
+
+          let varferro = String(lineCommande.analyseChimique.ferrocyanure);
+
+          let ferroValue = varferro.match(/\d+/);
+
+          if (ferroValue) {
+            let ferroNumber = Number(ferroValue[0]);
+
+            if (ferroNumber > 0) {
+              totalferrocyanure += ferroNumber;
+              countferrocyanure++;
+            }
+          }
+        }
+
+      }
+    });
+
+    return {
+
+
+      passCumulated: countPassCum > 0 ? totalPassCum / countPassCum : 0,
+      humidite: countHumidite > 0 ? totalHumidite / countHumidite : 0,
+      magnesium: countMagnesium > 0 ? totalMagnesium / countMagnesium : 0,
+
+      sulfate: countSulfate > 0 ? totalSulfate / countSulfate : 0,
+      chlorureDeSodium: countchlorureDeSodium > 0 ? totalchlorureDeSodium / countchlorureDeSodium : 0,
+      ferrocyanure: countferrocyanure > 0 ? totalferrocyanure / countferrocyanure : 0,
+      matiereInsoluble: countMatiereInsoluble > 0 ? totalMatiereInsoluble / countMatiereInsoluble : 0,
+
+    };
   }
 
 
