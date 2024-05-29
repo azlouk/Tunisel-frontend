@@ -310,12 +310,9 @@ getCommandeById(){
   getLine() {
 this.listeLignesCommandes=[];
     if(this.commande.bassins){
-
-      // const id :number =this.selectedBassin.id!==undefined?this.selectedBassin.id:-1;
-      // const id :number =this.commande.bassin&&this.commande.bassin.id!==undefined?this.commande.bassin.id:-1;
 this.commande.bassins.forEach(basin => {
   if(basin.id){
-    this.commandeService.getLignesCommandes(basin.id).subscribe(value => {
+    this.commandeService.getLignesCommandesBassin(basin.id).subscribe(value => {
       const data=value.filter(value1 => this.listeLignesCommandes.find(value2 => value2==value1)==undefined)
 
       this.listeLignesCommandes.push(...data);
@@ -329,17 +326,81 @@ this.commande.bassins.forEach(basin => {
 
   })
 
+    }
 
-        // if(id!==-1){
-        //   this.commandeService.getLignesCommandes(id).subscribe(value => {
-        //     const data=value.filter(value1 => this.listeLignesCommandes.find(value2 => value2==value1)==undefined)
-        //     this.listeLignesCommandes = data;
-        //     console.log('size  : ' + this.listeLignesCommandes.length);
-        //       this.getCalibre();
-        //   },error =>{
-        //     console.log(error);
-        //     console.log('error size  : ' + this.listeLignesCommandes.length);});
-        // }
+
+    if(this.commande.sbnls){
+      this.commande.sbnls.forEach(sbnl => {
+        if(sbnl.id){
+          this.commandeService.getLignesCommandesSbnl(sbnl.id).subscribe(value => {
+            const data=value.filter(value1 => this.listeLignesCommandes.find(value2 => value2==value1)==undefined)
+
+            this.listeLignesCommandes.push(...data);
+
+            console.log('size  : ' + this.listeLignesCommandes.length);
+            this.getCalibre();
+          },error =>{
+            console.log(error);
+            console.log('error size  : ' + this.listeLignesCommandes.length);});
+        }
+
+      })
+
+    }
+
+    if(this.commande.sbls){
+      this.commande.sbls.forEach(sbl => {
+        if(sbl.id){
+          this.commandeService.getLignesCommandesSbl(sbl.id).subscribe(value => {
+            const data=value.filter(value1 => this.listeLignesCommandes.find(value2 => value2==value1)==undefined)
+
+            this.listeLignesCommandes.push(...data);
+
+            console.log('size  : ' + this.listeLignesCommandes.length);
+            this.getCalibre();
+          },error =>{
+            console.log(error);
+            console.log('error size  : ' + this.listeLignesCommandes.length);});
+        }
+
+      })
+
+    }
+    if(this.commande.sblfs){
+      this.commande.sblfs.forEach(sblf => {
+        if(sblf.id){
+          this.commandeService.getLignesCommandesSblf(sblf.id).subscribe(value => {
+            const data=value.filter(value1 => this.listeLignesCommandes.find(value2 => value2==value1)==undefined)
+
+            this.listeLignesCommandes.push(...data);
+
+            console.log('size  : ' + this.listeLignesCommandes.length);
+            this.getCalibre();
+          },error =>{
+            console.log(error);
+            console.log('error size  : ' + this.listeLignesCommandes.length);});
+        }
+
+      })
+
+    }
+    if(this.commande.bandes){
+      this.commande.bandes.forEach(bande => {
+        if(bande.id){
+          this.commandeService.getLignesCommandesBande(bande.id).subscribe(value => {
+            const data=value.filter(value1 => this.listeLignesCommandes.find(value2 => value2==value1)==undefined)
+
+            this.listeLignesCommandes.push(...data);
+
+            console.log('size  : ' + this.listeLignesCommandes.length);
+            this.getCalibre();
+          },error =>{
+            console.log(error);
+            console.log('error size  : ' + this.listeLignesCommandes.length);});
+        }
+
+      })
+
     }
  }
 
@@ -431,6 +492,8 @@ this.commande.bassins.forEach(basin => {
 
 
   }
+
+
   searchAnalyse(l: LineCommande):boolean {
 
     if(l.analyseChimique){
