@@ -524,6 +524,7 @@ export class RapportAnalyseComponent {
       this.analysesPhysique.reference = this.analysesChimique.reference;
       this.analysesPhysique.matiere=this.analysesChimique.matiere
       this.analysesPhysique.dateAnalyse=this.analysesChimique.dateAnalyse
+      this.analysesPhysique.qualite=this.analysesChimique.qualite
 
       this.selectedBassin.analysesChimiques = [];
       if (this.checkedChimique == true) {

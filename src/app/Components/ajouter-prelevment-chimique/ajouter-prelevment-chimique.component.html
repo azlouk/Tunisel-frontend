@@ -39,6 +39,17 @@
 
       </p-floatLabel>
       <p-floatLabel>
+        <p-autoComplete
+          [(ngModel)]="analysesChimique.qualite"
+          [dropdown]="true"
+          [suggestions]="filtereddatasel"
+          (completeMethod)="filterCountry($event)"
+          field="" />
+
+        <label >Quality</label>
+
+      </p-floatLabel>
+      <p-floatLabel>
         <textarea rows="3" cols="20" pInputTextarea [(ngModel)]="analysesChimique.description"  class="w-full" ></textarea>
         <label >Description</label>
       </p-floatLabel>
