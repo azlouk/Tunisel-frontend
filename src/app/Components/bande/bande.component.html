@@ -109,7 +109,7 @@
             <td>
               <div class="flex ">
                 <button pButton pRipple icon="pi pi-pencil" class="p-button-rounded p-button-success mr-2" (click)="editBande(b)"></button>
-                <button pButton pRipple icon="pi pi-trash" class="p-button-rounded p-button-warning" (click)="deleteBande()"></button>
+                <button pButton pRipple icon="pi pi-trash" class="p-button-rounded p-button-warning mr-2" (click)="deleteBande()"></button>
                 <button pButton pRipple icon="pi pi-file-pdf" class="p-button-rounded p-button-primary mr-2"  (click)="exportrapport(b)"></button>
 
               </div>
@@ -194,6 +194,8 @@
 
     </div>
     <div class="shadow-1 p-2">
+      <p-checkbox [(ngModel)]="SelectAll" (ngModelChange)="SelectAllCheck()" [binary]="true" inputId="binary" class="text-primary" label="All"></p-checkbox>
+
       <th *ngFor="let c of colsfiltre">
 
         <p-checkbox [(ngModel)]="c.hide" label=" {{ c.header}}" [binary]="true" inputId="binary"></p-checkbox>

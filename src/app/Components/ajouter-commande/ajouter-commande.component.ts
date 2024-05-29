@@ -574,7 +574,8 @@ this.getLine()
   }
     chechMatter(l: LineCommande):boolean {
    if(l.analysePhysique)
-    return  l.analysePhysique.qualite!.includes(this.matter).valueOf();
+    // return  l.analysePhysique.qualite!.includes(this.matter).valueOf();
+    return  l.analysePhysique.qualite?.trim().toLowerCase()==this.matter.trim().toLowerCase();
 
   return  false ;
   }

@@ -50,11 +50,26 @@
 
       <div class="card">
         <p-tabView *ngIf="!isUpdateAnalyseChimique"[scrollable]="true">
-          <p-tabPanel header="Basin" >
+          <p-tabPanel header="Pond" >
             <p-listbox [options]="bassins" [(ngModel)]="selectedBassin" optionLabel="nom" (ngModelChange)="selectBassin()"[filter]="true" [listStyle]="{'height': '87px'}"  ></p-listbox>
+          </p-tabPanel>
+          <p-tabPanel header="Unwashed stock" pTooltip="Enter your username" >
+            <p-listbox [options]="sbnls" [(ngModel)]="selectedSbnl" optionLabel="reference" (ngModelChange)="selectSBNL()" [filter]="true" [listStyle]="{'height': '87px'}"  ></p-listbox>
+
+          </p-tabPanel>
+          <p-tabPanel header="Band" pTooltip="Enter your username" >
+            <p-listbox [options]="bandes" [(ngModel)]="selectedBande" optionLabel="reference" (ngModelChange)="selectBande()"[filter]="true" [listStyle]="{'height': '87px'}"  ></p-listbox>
+
+          </p-tabPanel>
+          <p-tabPanel header="Washed stock" >
+            <p-listbox [options]="sbls" [(ngModel)]="selectedSbl" optionLabel="reference" [filter]="true" (ngModelChange)="selectSBL()"[listStyle]="{'height': '87px'}" ></p-listbox>
 
           </p-tabPanel>
 
+          <p-tabPanel header="Final stock" >
+            <p-listbox [options]="sblfs" [(ngModel)]="selectedSblf" optionLabel="reference" [filter]="true" (ngModelChange)="selectSBLF()" [listStyle]="{'height': '87px'}" ></p-listbox>
+
+          </p-tabPanel>
         </p-tabView>
       </div>
 

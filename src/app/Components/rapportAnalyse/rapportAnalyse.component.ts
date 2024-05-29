@@ -175,7 +175,7 @@ export class RapportAnalyseComponent {
       {name:'Na',checked:false,label:'Sodium', value:this.analysesChimique.sodium},
       {name:'Cl',checked:false,label:'Chlorure', value:this.analysesChimique.chlorure},
       {name:'pH',checked:false,label:'pH', value:this.analysesChimique.ph},
-      {name:'NaCL',checked:false,label:'Chlorure de sodium', value:this.analysesChimique.chlorureDeSodium},
+      {name:'NaCl',checked:false,label:'Chlorure de sodium', value:this.analysesChimique.chlorureDeSodium},
       {name:'Fe(CN)₆',checked:false,label:'Ferrocyanure', value:this.analysesChimique.ferrocyanure},
 
     ]
@@ -524,7 +524,7 @@ export class RapportAnalyseComponent {
       this.analysesPhysique.reference = this.analysesChimique.reference;
       this.analysesPhysique.matiere=this.analysesChimique.matiere
       this.analysesPhysique.dateAnalyse=this.analysesChimique.dateAnalyse
-      this.analysesPhysique.qualite=this.analysesChimique.qualite
+      this.analysesChimique.qualite=this.analysesPhysique.qualite
 
       this.selectedBassin.analysesChimiques = [];
       if (this.checkedChimique == true) {

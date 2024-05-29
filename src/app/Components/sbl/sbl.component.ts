@@ -83,7 +83,7 @@ export class SblComponent implements OnInit{
   bandes: Bande[] = [];
   Selectetsbl:Sbl={}
   private isUpdateSbl=false;
-
+  SelectAll: boolean = false;
   @ViewChild("pdfpuit") htmlContent: ElementRef | undefined;
   visiblePrint: boolean = false;
   dateToday: Date = new Date();
@@ -536,4 +536,10 @@ export class SblComponent implements OnInit{
       console.error('Error exporting CSV file:', error);
     }
   }
+  SelectAllCheck() {
+    this.colsfiltre.forEach(value => {
+      value.hide = this.SelectAll;
+    })
+  }
+
 }

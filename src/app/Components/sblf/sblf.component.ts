@@ -82,6 +82,7 @@ export class SblfComponent {
   selectedSblfs: Sblf[] = [];
   sbls: Sbl[] = [];
   private isUpdateSblf=false;
+  SelectAll: boolean = false;
   @ViewChild("pdfpuit") htmlContent: ElementRef | undefined;
   visiblePrint: boolean = false;
   dateToday: Date = new Date();
@@ -538,5 +539,11 @@ export class SblfComponent {
       console.error('Error exporting CSV file:', error);
     }
   }
-    protected readonly getToken = getToken;
+  SelectAllCheck() {
+    this.colsfiltre.forEach(value => {
+      value.hide = this.SelectAll;
+    })
+  }
+
+  protected readonly getToken = getToken;
 }
