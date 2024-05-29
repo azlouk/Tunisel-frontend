@@ -347,7 +347,7 @@ export class AjouterPrelevmentChimiqueComponent implements OnInit {
   }
 
   selectSBNL() {
-    alert(new JsonPipe().transform(this.selectedSbnl))
+   // alert(new JsonPipe().transform(this.selectedSbnl))
 
     this.selectedBassin = {};
     this.selectedPuit = {};

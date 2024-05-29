@@ -209,11 +209,11 @@ isUpdateCommande:boolean=false;
     table.filterGlobal((event.target as HTMLInputElement).value, 'contains');
   }
 
-  getAllCommandes() {
+   getAllCommandes() {
     this.commandeService.getAllCommandeDTO().subscribe((ListCommande:  Commande[]) => {
       this.comanndes=ListCommande;}, error => {
       console.log(error)});
-        }
+  }
 
 
   showDialogDetails(command :Commande) {

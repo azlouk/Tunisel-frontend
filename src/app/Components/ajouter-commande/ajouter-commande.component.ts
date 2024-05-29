@@ -34,6 +34,15 @@ import {AutoFocusModule} from "primeng/autofocus";
 import html2canvas from "html2canvas";
 import jsPDF from "jspdf";
 import Swal from "sweetalert2";
+import autoTable from "jspdf-autotable";
+import {Sbnl} from "../../Models/sbnl";
+import {Bande} from "../../Models/bande";
+import {Sblf} from "../../Models/sblf";
+import {SbnlService} from "../../Services/sbnl.service";
+import {SblfService} from "../../Services/sblf.service";
+import {SblService} from "../../Services/sbl.service";
+import {BandeService} from "../../Services/bande.service";
+import {Sbl} from "../../Models/sbl";
 
 
 
@@ -79,8 +88,10 @@ interface Column {
 })
 export class AjouterCommandeComponent implements OnInit{
   bassins: Bassin[] = [];
-  selectedBassin: Bassin = {};
-
+  sbnls: Sbnl[] = [];
+  bandes: Bande[] = [];
+  sbls: Sbl[] = [];
+  sblfs: Sblf[] = [];
   commande: Commande={} ;
 
   private commandeId: any;
@@ -117,7 +128,11 @@ export class AjouterCommandeComponent implements OnInit{
               private route: ActivatedRoute,
                private commandeService:CommandeService,
               private messageService: MessageService,
-              private lineCommandeService: LineCommandeService
+              private lineCommandeService: LineCommandeService,
+              private sbnlService :SbnlService,
+              private sblService :SblService,
+              private sblfService :SblfService,
+              private bandeService:BandeService,
   )
   {}
 
@@ -208,6 +223,33 @@ export class AjouterCommandeComponent implements OnInit{
       }, error => {
         console.log('Error fetching Bassins:', error);
       });
+
+
+    this.sbnlService.getAllSbnls().subscribe((v:  Sbnl[]) => {
+      this.sbnls=v;
+
+    },error => {
+      console.log(error)});
+
+    this.bandeService.getAllBandes().subscribe((v:  Bande[]) => {
+      this.bandes=v;
+
+    },error => {
+      console.log(error)})
+
+    this.sblService.getAllSbl().subscribe((v:  Sbl[]) => {
+      this.sbls=v;
+    },error => {
+      console.log(error)})
+
+    this.sblfService.getAllSblfs().subscribe((v:  Sblf[]) => {
+      this.sblfs=v;
+
+    },error => {
+      console.log(error)})
+
+
+
   }
 
   retour() {
@@ -226,6 +268,7 @@ getCommandeById(){
   saveCommande() {
     this.commande.ligneCommandes=[];
     this.commande.ligneCommandes=this.listeLignesCommandes;
+    console.log(new JsonPipe().transform(this.commande))
     if(this.isUpdateCommande){
 
       this.commandeService.updateCommande(this.commande).subscribe(value => this.router.navigate(['/commande']))
@@ -264,23 +307,23 @@ getCommandeById(){
   }
 
   getLine() {
-this.listeLignesCommandes=[];
+    this.listeLignesCommandes=[];
     if(this.commande.bassins){
-this.commande.bassins.forEach(basin => {
-  if(basin.id){
-    this.commandeService.getLignesCommandesBassin(basin.id).subscribe(value => {
-      const data=value.filter(value1 => this.listeLignesCommandes.find(value2 => value2==value1)==undefined)
+      this.commande.bassins.forEach(basin => {
+        if(basin.id){
+          this.commandeService.getLignesCommandesBassin(basin.id).subscribe(value => {
+            const data=value.filter(value1 => this.listeLignesCommandes.find(value2 => value2==value1)==undefined)
 
-      this.listeLignesCommandes.push(...data);
+            this.listeLignesCommandes.push(...data);
 
-      console.log('size  : ' + this.listeLignesCommandes.length);
-      this.getCalibre();
-    },error =>{
-      console.log(error);
-      console.log('error size  : ' + this.listeLignesCommandes.length);});
-  }
+            console.log('size  : ' + this.listeLignesCommandes.length);
+            this.getCalibre();
+          },error =>{
+            console.log(error);
+            console.log('error size  : ' + this.listeLignesCommandes.length);});
+        }
 
-  })
+      })
 
     }
 
@@ -358,9 +401,7 @@ this.commande.bassins.forEach(basin => {
       })
 
     }
- }
-
-
+  }
   getValueOfligneCommande(col: any, ligneCommande: any): any {
 
     if (col.id < 20) {
@@ -679,7 +720,6 @@ this.getLine()
             '</div> ' +
             '</div>' +
             '</div>' +
-
             '    </div>  ' +
             '<!--      infoPropreTableCommande--> ' +
             '      <div class=" flex  me-3 mt-5  p-2 gap-1 text-3xl flex    justify-content-evenly">' +
@@ -688,14 +728,7 @@ this.getLine()
             '        <label class="text-2xl font-bold">Name :</label><span class=" ml-2 text-2xl">' + this.commande.nom + '</span>' +
             '        <label class="text-2xl font-bold">Status :</label><span class=" ml-2 text-2xl">' + this.commande.etat + ' </span>' +
             '      </div>' +
-            '      <div class="flex     p-2 gap-1 text-3xl flex   justify-content-evenly">' +
-            '        <label class="text-2xl font-bold">Creation Date Pond : </label><span class=" ml-2 text-2xl">' + this.commande.bassin?.dateCreation + '</span>' +
-            '        <label class="text-2xl font-bold">Reference :</label><span class="ml-2 text-2xl">' + this.commande.bassin?.reference + '</span>' +
-            '        <label class="text-2xl font-bold">Description :</label><span class=" ml-2 text-2xl">' + this.commande.bassin?.description + '</span>' +
-            '        <label class="text-2xl font-bold">Name :</label><span class=" ml-2 text-2xl">' + this.commande.bassin?.nom + '</span>' +
-            '        <label class="text-2xl font-bold">Location :</label><span class=" ml-2 text-2xl">' + this.commande.bassin?.emplacement + ' </span>' +
-            '        <label class="text-2xl font-bold">Status :</label><span class=" ml-2 text-2xl">' + this.commande.bassin?.etat + ' </span>' +
-            '      </div>  ' +
+
             '<div class=" flex justify-content-start  ">' +
             '  <div class="flex flex-column gap-3 border-1 border-round border-gray-400 p-3">' +
             '    <div class="flex align-items-start gap-3 justify-content-between">' +

@@ -158,7 +158,7 @@ this.ReportedBy=this.Loginservice.getToken()
 
   openNew() {
     this.puit = {};
-    this.puit.reference = "puit-" + this.createId()
+    this.puit.reference = "well-" + this.createId()
     this.submitted = false;
     this.productDialog = true;
   }
