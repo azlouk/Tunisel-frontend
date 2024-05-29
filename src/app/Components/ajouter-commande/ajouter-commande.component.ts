@@ -564,7 +564,7 @@ this.getLine()
     lineCommande.id=-1*(new  Date().getTime());
     // lineCommande.analyseChimique?.dateAnalyse!==undefined? lineCommande.analyseChimique.dateAnalyse.toString():new Date();
 
-    this.listeLignesCommandes.push(lineCommande);
+    this.listeLignesCommandes.unshift(lineCommande);
     console.log('===========>>>>>>: '+new JsonPipe().transform(this.listeLignesCommandes))
   }
 
