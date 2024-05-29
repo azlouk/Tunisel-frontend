@@ -711,7 +711,7 @@ this.getLine()
     let totalchlorureDeSodium = 0;
 
     let totalferrocyanure = 0;
-    let totalPassCum = 0;
+    let totalPassCum:number = 0;
 
 
 
@@ -741,24 +741,29 @@ this.getLine()
       //   }
 
       if (lineCommande.analysePhysique) {
-        if (lineCommande.analysePhysique.tamisList !== undefined) {
+        if (lineCommande.analysePhysique.tamisList !== undefined ) {
           lineCommande.analysePhysique.tamisList.forEach(value => {
-            if (value.passCumulated !== undefined && value.passCumulated !== null) {
+
+            if (this.selectedColumnsCalibre!==undefined && value.passCumulated !== undefined && value.passCumulated !== null && value.calibre==parseFloat(this.selectedColumnsCalibre.header)) {
               // Convertir la valeur en chaîne pour s'assurer que 'match' peut être utilisé
-              let passCumulatedString = String(value.passCumulated);
+              let passCumulatedString = value.passCumulated;
 
               // Utiliser une expression régulière pour extraire la partie numérique de la chaîne
-              let passCumulatedValue = passCumulatedString.match(/\d+/);
+              let passCumulatedValue = passCumulatedString
 
               // Si une partie numérique est trouvée, elle est convertie en nombre
               if (passCumulatedValue) {
-                let passCumulatedNumber = Number(passCumulatedValue[0]);
+                console.log('passCumulatedNumber: '+ passCumulatedValue)
+
+                // let passCumulatedNumber = Number(passCumulatedValue[0]);
 
                 // Vérifier si le nombre est supérieur à 0
-                if (passCumulatedNumber > 0) {
-                  totalPassCum += passCumulatedNumber;
+
+                  totalPassCum += passCumulatedValue;
                   countPassCum++;
-                }
+                  console.log('countPassCum: '+countPassCum)
+                  console.log('totalPassCum: '+totalPassCum)
+
               }
             }
           });
@@ -923,5 +928,7 @@ this.getLine()
   }
 
 
-
+  caliber(selectedColumnsCalibre: Column) {
+    this.calculerMoyennes()
+  }
 }

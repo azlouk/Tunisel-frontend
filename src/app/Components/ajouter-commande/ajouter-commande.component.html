@@ -140,7 +140,7 @@
                   [(ngModel)]="selectedColumnsCalibre"
                   optionLabel="header"
                   [showClear]="true"
-
+                  (ngModelChange)="caliber(selectedColumnsCalibre)"
                   placeholder="Choose Calibre"/>
 
               </div>
