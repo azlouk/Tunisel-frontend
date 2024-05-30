@@ -202,7 +202,7 @@ export class SblfComponent {
       this.productDialog = false
       if (this.isUpdateSblf == true) {
         this.sblfService.updateSblf(this.sblf).subscribe(() => {
-          this.sblfService.getAllSblfs().subscribe((sblfs: Sblf[]) => {
+          this.sblfService.getAllSblfsDTO().subscribe((sblfs: Sblf[]) => {
             this.sblfs = sblfs;
           });
         });

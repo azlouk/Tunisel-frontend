@@ -18,6 +18,9 @@ export class SbnlService {
   getAllSbnls(): Observable<Sbnl[]> {
     return this.http.get<Sbnl[]>(`${this.apiUrl}/sbnls/read`) ;
   }
+  getAllSbnlsDTO(): Observable<Sbnl[]> {
+    return this.http.get<Sbnl[]>(`${this.apiUrl}/sbnls/readDTO`) ;
+  }
 
   deleteSbnl(sbnlId: number | undefined): Observable<any> {
     return this.http.delete(`${this.apiUrl}/sbnls/delete/${sbnlId}`);

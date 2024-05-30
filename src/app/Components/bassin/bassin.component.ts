@@ -255,7 +255,7 @@ this.SelectetBassin={analysesPhysiques:[]}
 
   getAllBassin() {
     this.loading=true ;
-    this.bassinService.getAllBassins()
+    this.bassinService.getAllBassinsDTO()
       .subscribe((bassins: Bassin[]) => {
         this.bassins = bassins;
         this.loading=false ;

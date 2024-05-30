@@ -15,6 +15,9 @@ export class BandeService {
   getAllBandes(): Observable<Bande[]> {
     return this.http.get<Bande[]>(`${this.apiUrl}/bandes/read`) ;
   }
+  getAllBandesDTO(): Observable<Bande[]> {
+    return this.http.get<Bande[]>(`${this.apiUrl}/bandes/readDTO`) ;
+  }
 
   deleteBande(bandeId: number | undefined): Observable<any> {
     return this.http.delete(`${this.apiUrl}/bandes/delete/${bandeId}`);
