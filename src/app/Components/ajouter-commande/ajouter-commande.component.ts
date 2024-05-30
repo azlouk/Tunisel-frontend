@@ -117,7 +117,7 @@ export class AjouterCommandeComponent implements OnInit{
   listeLignesCommandes:LineCommande[]=[];
 
   listcalibre:Column[]=[];
-  selectedColumnsCalibre!: Column;
+  selectedColumnsCalibre!: any;
   lineCommande!:LineCommande;
   deleteLineCommandeDialog:boolean=false ;
 
@@ -267,11 +267,15 @@ export class AjouterCommandeComponent implements OnInit{
 getCommandeById(){
   this.commandeService.getCommandeById(this.commandeId).subscribe(value => {
     this.commande = value;
+
     this.selectedColumns=this.commande.dataHeaders || []
       this.listeLignesCommandes = value.ligneCommandes??[];
-      this.CalculeTotalInput();
 
-    // console.log(new JsonPipe().transform(this.commande))
+      this.CalculeTotalInput();
+      this.getCalibre() ;
+      this.calculerMoyennes();
+
+     console.log(new JsonPipe().transform(this.commande))
   });
 }
   formatDate(date: Date): string {
@@ -287,7 +291,7 @@ getCommandeById(){
     if (dates) {
       this.commande.dateCommande = new Date(dates);
     }
-
+  this.commande.calibre=this.selectedColumnsCalibre!==undefined?this.selectedColumnsCalibre.header:'no calibre selected'
     this.commande.ligneCommandes=[];
     this.commande.ligneCommandes=this.listeLignesCommandes;
     this.commande.dataHeaders= this.selectedColumns
@@ -332,9 +336,15 @@ getCommandeById(){
       value.forEach((value1: number) => {
         if(this.listcalibre.length<value.length){
         this.listcalibre.push({ id: value1, field: '', header: value1.toString() });}
+           if(this.isUpdateCommande){
+             if(value1.toString()==this.commande.calibre){
+               this.selectedColumnsCalibre={ id: value1, field: '', header: value1.toString() }
 
+             }
+           }
       });
-    });
+
+     });
   }
 
   getLine() {
@@ -1075,6 +1085,9 @@ this.getLine()
 
 
   caliber(selectedColumnsCalibre: Column) {
+    this.selectedColumnsCalibre=selectedColumnsCalibre
     this.calculerMoyennes()
   }
+
+
 }

@@ -125,7 +125,8 @@
 
           <ng-template pTemplate="caption">
             <div class="flex flex-column  align-items-center gap-2    ">
-              <div class="flex align-items-center gap-2  ">
+              <div class="flex align-items-center gap-3  ">
+                <label>{{selectedColumns.length}} items selected</label>
                 <p-multiSelect
                   display="chip"
                   [options]="cols"
@@ -134,18 +135,19 @@
                   selectedItemsLabel="{0} columns selected"
                   [style]="{'min-width': '600px'}"
                   placeholder="Choose Columns"/>
-                <p>{{selectedColumns.length}} items selected</p>
 
 
+                 <label class="font-bold"> Choose Calibre : </label>
                 <p-dropdown
                   [options]="listcalibre"
                   [(ngModel)]="selectedColumnsCalibre"
                   optionLabel="header"
-                  [showClear]="true"
-                  (ngModelChange)="caliber(selectedColumnsCalibre)"
-                  placeholder="Choose Calibre"/>
+                  placeholder="{{selectedColumnsCalibre!==undefined?selectedColumnsCalibre.header:'0'}}"
 
-              </div>
+                  (ngModelChange)="caliber(selectedColumnsCalibre)"
+                   />
+                <div *ngIf="isUpdateCommande" >Calibre of Command: {{commande.calibre!==undefined?commande.calibre:'no calibre selected '}}</div>
+               </div>
 
           <div class="gap-5 flex align-items-center   mt-4 ">
             <div class="gap-1 flex align-items-center">Analysis start date  :

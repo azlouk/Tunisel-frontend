@@ -20,5 +20,6 @@ export interface Commande {
   sblfs?:Sblf[];
   bandes?:Bande[];
   dataHeaders?:Column[];
+  calibre?:string
 }
 
