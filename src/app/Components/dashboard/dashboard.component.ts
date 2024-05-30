@@ -97,7 +97,7 @@ export class DashboardComponent implements OnInit, OnDestroy {
       labels: ['Janvier', 'Février', 'Mars', 'Avril', 'Mai', 'Juin', 'Juillet','Août','septembre','octobre','novembre','décembre'],
       datasets: [
         {
-          label: 'AnalyseChimique',
+          label: 'Chimical Analyse',
           data: this.data.map((a:any)=>a[1]),
           fill: false,
           backgroundColor: documentStyle.getPropertyValue('--bluegray-700'),
@@ -105,7 +105,7 @@ export class DashboardComponent implements OnInit, OnDestroy {
           tension: .4
         },
         {
-          label: 'AnalyseChemiqueBassin',
+          label: 'Granulometric Analyse',
           data: this.basin.map(b=>b[1]),
           fill: false,
           backgroundColor: documentStyle.getPropertyValue('--green-600'),

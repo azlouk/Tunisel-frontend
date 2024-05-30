@@ -50,7 +50,7 @@ export class AppMenuComponent implements OnInit {
         items: [
           {label: 'Analysis Report', icon: 'pi pi-fw pi-check-circle', routerLink: ['/rapport']},
           {label: 'Chemical Analysis', icon: 'pi pi-fw pi-check-circle', routerLink: ['/analyseChimique']},
-          {label: 'Physical Analysis', icon: 'pi pi-fw pi-check-circle', routerLink: ['/analysePhysique']},
+          {label: 'Granulometric Analysis', icon: 'pi pi-fw pi-check-circle', routerLink: ['/analysePhysique']},
         ]
       },
       {

@@ -4,6 +4,8 @@ import {Bande} from "./bande";
 import {Sblf} from "./sblf";
 import {Sbl} from "./sbl";
 import {Sbnl} from "./sbnl";
+import {Column} from "../Components/ajouter-commande/ajouter-commande.component";
+
 
 
 export interface Commande {
@@ -17,4 +19,6 @@ export interface Commande {
   sbls?:Sbl[];
   sblfs?:Sblf[];
   bandes?:Bande[];
+  dataHeaders?:Column[];
 }
+

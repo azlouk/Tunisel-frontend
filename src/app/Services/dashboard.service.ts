@@ -24,6 +24,6 @@ export class DashboardService {
   }
 
   getCountAnalyseChemiqueBassin(): Observable<any[]> {
-    return this.http.get<any[]>(`${this.apiUrl}/bassins/count-by-month-bassin`);
+    return this.http.get<any[]>(`${this.apiUrl}/analysesPhysiques/count-by-month`);
   }
 }

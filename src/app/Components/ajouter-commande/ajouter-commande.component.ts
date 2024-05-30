@@ -49,7 +49,7 @@ import Swal from "sweetalert2";
 
 
 
-interface Column {
+export interface Column {
   id:number;
   field: string;
   header: string;
@@ -113,7 +113,7 @@ export class AjouterCommandeComponent implements OnInit{
 
   cols!: Column[];
 
-  selectedColumns!: Column[];
+  selectedColumns: Column[]=[];
   listeLignesCommandes:LineCommande[]=[];
 
   listcalibre:Column[]=[];
@@ -217,7 +217,8 @@ export class AjouterCommandeComponent implements OnInit{
 
     ];
 
-    this.selectedColumns = this.cols;
+
+
     // =============================================
 
     this.isUpdateTamis=false ;
@@ -266,7 +267,7 @@ export class AjouterCommandeComponent implements OnInit{
 getCommandeById(){
   this.commandeService.getCommandeById(this.commandeId).subscribe(value => {
     this.commande = value;
-
+    this.selectedColumns=this.commande.dataHeaders || []
       this.listeLignesCommandes = value.ligneCommandes??[];
       this.CalculeTotalInput();
 
@@ -280,20 +281,25 @@ getCommandeById(){
     return `${year}-${month}-${day}`;
   }
   saveCommande() {
+    //Fix date Save -1 day primeng
         const datestr=this.commande.dateCommande?.toString()
        const dates: string | null =this.datePipe.transform(datestr,'yyyy-MM-dd')
-    if (dates)
-     this.commande.dateCommande =new Date(dates);
-
+    if (dates) {
+      this.commande.dateCommande = new Date(dates);
+    }
 
     this.commande.ligneCommandes=[];
-
     this.commande.ligneCommandes=this.listeLignesCommandes;
+    this.commande.dataHeaders= this.selectedColumns
+
     this.commande.ligneCommandes.forEach(value => {
       if(value.id && value.id<=0){
         value.id=undefined ;
       }
     })
+
+    console.log(new JsonPipe().transform( this.commande))
+
     if(this.isUpdateCommande){
 
       this.commandeService.updateCommande(this.commande).subscribe(value => this.router.navigate(['/commande']))
@@ -380,11 +386,9 @@ this.commande.bassins.forEach(basin => {
 
             this.listeLignesCommandes.push(...data);
 
-            console.log('size  : ' + this.listeLignesCommandes.length);
-            this.getCalibre();
+             this.getCalibre();
           },error =>{
-            console.log(error);
-            console.log('error size  : ' + this.listeLignesCommandes.length);});
+            console.log(error);});
         }
 
       })
@@ -787,7 +791,39 @@ this.getLine()
 
             '     </div>' +
             '  </div>' +
-            '</div>';
+            '</div> <br> <br>' +
+            '      <div class="flex justify-content-between">\n' +
+            '        <div class=" flex justify-content-end  ">\n' +
+            '          <div class="flex flex gap-5 border-1 border-round border-gray-400 p-3">\n' +
+            '            <div class="flex align-items-start gap-3 justify-content-between">\n' +
+            '              <label class="font-bold ">% Cum Pass: </label>\n' +
+            '              <label class="font-bold text-center    ">'+this.calculerMoyennes().passCumulated+'</label>\n' +
+            '            </div>\n' +
+            '            <div class="flex align-items-start gap-3 justify-content-between">\n' +
+            '              <label class="font-bold">%H₂O: </label>\n' +
+            '              <label class="font-bold text-center">'+this.calculerMoyennes().humidite+'</label>\n' +
+            '            </div>\n' +
+            '            <div class="flex align-items-start gap-3 justify-content-between">\n' +
+            '              <label class="font-bold">%Mg: </label>\n' +
+            '              <label class="font-bold text-center">'+this.calculerMoyennes().magnesium+'</label>\n' +
+            '            </div>\n' +
+            '            <div class="flex align-items-start gap-3 justify-content-between">\n' +
+            '              <label class="font-bold">%SO₄: </label>\n' +
+            '              <label class="font-bold text-center">'+this.calculerMoyennes().sulfate+'</label>\n' +
+            '            </div>\n' +
+            '            <div class="flex align-items-start gap-3 justify-content-between">\n' +
+            '              <label class="font-bold">%NaCL: </label>\n' +
+            '              <label class="font-bold text-center">'+this.calculerMoyennes().chlorureDeSodium+'</label>\n' +
+            '            </div>\n' +
+            '            <div class="flex align-items-start gap-3 justify-content-between">\n' +
+            '              <label class="font-bold">%MI: </label>\n' +
+            '              <label class="font-bold text-center">'+this.calculerMoyennes().matiereInsoluble+'</label>\n' +
+            '            </div>\n' +
+            '            <div class="flex align-items-start gap-3 justify-content-between">\n' +
+            '              <label class="font-bold">%Fe(CN)₆: </label>\n' +
+            '              <label class="font-bold text-center">'+this.calculerMoyennes().ferrocyanure+'</label>\n' +
+            '            </div>\n' +
+            '          </div>\n' ;
 
         if (headerPage)
           html2canvas(headerPage, {scale: 1}).then((canvas) => {
@@ -795,7 +831,7 @@ this.getLine()
             const imgWidth = 210; // PDF width
             const imgHeight = (canvas.height * imgWidth) / canvas.width; // Maintain aspect ratio
             doc.addImage(imgData, 'png', 2, 2, imgWidth * sizeimageA4, imgHeight * sizeimageA4);
-            autoTable(doc, {startY: imgHeight + 180})
+            autoTable(doc, {startY: imgHeight + (50*sizeimageA4)})
 // Or use javascript directly:
             autoTable(doc, {
               head: [header],
@@ -882,15 +918,8 @@ this.getLine()
         }
       }
 
-      console.log('liste de ligne commande'+new JsonPipe().transform(lineCommande))
 
       if (lineCommande.analyseChimique) {
-        console.log('magnesium=>>><'+lineCommande.analyseChimique.magnesium)
-
-
-
-
-
 
         if (lineCommande.analyseChimique.humidite !== undefined &&
           lineCommande.analyseChimique.humidite !== null) {
