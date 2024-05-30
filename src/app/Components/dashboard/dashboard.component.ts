@@ -94,7 +94,7 @@ export class DashboardComponent implements OnInit, OnDestroy {
     const surfaceBorder = documentStyle.getPropertyValue('--surface-border');
 
     this.chartDataAnalyse = {
-      labels: ['Janvier', 'Février', 'Mars', 'Avril', 'Mai', 'Juin', 'Juillet','Août','septembre','octobre','novembre','décembre'],
+      labels: ['January', 'February', 'March', 'April', 'May', 'June', 'July','August','September','October','November','December'],
       datasets: [
         {
           label: 'Chimical Analyse',
