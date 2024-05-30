@@ -25,7 +25,7 @@
         </p-floatLabel>
         <p-floatLabel>
           <input type="text" pInputText [(ngModel)]="analysesChimique.pluie" id="pluie" class="w-full"  />
-          <label for="pluie">Pluie</label>
+          <label for="pluie">Rain</label>
         </p-floatLabel>
         <p-floatLabel>
           <p-autoComplete
@@ -94,8 +94,8 @@
     </div>
     <div  *ngIf="checkedChimique" class="border-1 border-round border-gray-300 p-6 mt-8 bg-gray-200">
       <label class="font-bold text-3xl">Chemical analysis </label>
-    <div class="   flex  gap-3  mt-8      ">
-      <div   class="card gap-3  flex flex-column       justify-content-between  ">
+     <div class="   flex  gap-3  mt-8      ">
+      <div   class="card gap-5  flex flex-column       justify-content-between  ">
         <label class="font-bold">climatical</label>
          <p-floatLabel>
           <input type="text" pInputText [(ngModel)]="analysesChimique.temperature"  id="temperature" class="w-full" />
@@ -112,8 +112,8 @@
         </p-floatLabel>
       </div>
 
-      <div   class=" card  flex w-full  flex-column    ">
-        <label class="font-bold">Chemical components </label>
+      <div   class=" card  flex w-full  gap-5 flex-column    ">
+        <label class="font-bold ">Chemical components </label>
 
         <div class="flex   gap-5   flex-wrap  overflow-auto  ">
           <p-checkbox [(ngModel)]="SelectAll" (ngModelChange)="SelectAllCheck()" [binary]="true" inputId="binary" class="text-primary" label="All"></p-checkbox>
