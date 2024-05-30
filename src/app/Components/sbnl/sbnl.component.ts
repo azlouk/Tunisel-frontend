@@ -211,7 +211,7 @@ this.getsbnl()
 
       if (this.isUpdatesbnl == true) {
         this.sbnlService.updateSbnl(this.sbnl).subscribe(() => {
-          this.sbnlService.getAllSbnls().subscribe((sbnls: Sbnl[]) => {
+          this.sbnlService.getAllSbnlsDTO().subscribe((sbnls: Sbnl[]) => {
             this.sbnls = sbnls;
           });
         });

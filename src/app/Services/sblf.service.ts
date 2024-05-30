@@ -16,6 +16,9 @@ export class SblfService {
   getAllSblfs(): Observable<Sblf[]> {
     return this.http.get<Sblf[]>(`${this.apiUrl}/sblfs/read`) ;
   }
+  getAllSblfsDTO(): Observable<Sblf[]> {
+    return this.http.get<Sblf[]>(`${this.apiUrl}/sblfs/readDTO`) ;
+  }
 
   deleteSblf(sblfId: number | undefined): Observable<any> {
 

@@ -234,7 +234,7 @@ export class BandeComponent {
   }
 
   getBande() {
-    this.bandeService.getAllBandes().subscribe((v:  Bande[]) => {
+    this.bandeService.getAllBandesDTO().subscribe((v:  Bande[]) => {
       this.bandes=v;
 
     },error => {

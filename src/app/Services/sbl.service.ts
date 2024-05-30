@@ -17,6 +17,9 @@ export class SblService {
   getAllSbl(): Observable<Sbl[]> {
     return this.http.get<Sbl[]>(`${this.apiUrl}/sbls/read`) ;
   }
+  getAllSblDTO(): Observable<Sbl[]> {
+    return this.http.get<Sbl[]>(`${this.apiUrl}/sbls/readDTO`) ;
+  }
 
   deleteSbl(sblId: number | undefined): Observable<any> {
     return this.http.delete(`${this.apiUrl}/sbls/delete/${sblId}`);

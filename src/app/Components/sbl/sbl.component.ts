@@ -196,7 +196,7 @@ export class SblComponent implements OnInit{
     this.productDialog=false
     if(this.isUpdateSbl==true) {
       this.sblService.updateSbl(this.sbl).subscribe(() =>{
-        this.sblService.getAllSbl().subscribe((sbls: Sbl[]) => {
+        this.sblService.getAllSblDTO().subscribe((sbls: Sbl[]) => {
           this.sbls = sbls;
 
         });
