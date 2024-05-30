@@ -20,6 +20,10 @@
           <label >Reference</label>
         </p-floatLabel>
         <p-floatLabel>
+          <input type="text" pInputText [(ngModel)]="analysesPhysique.pluie" id="pluie" class="w-full"  />
+          <label for="pluie">Pluie</label>
+        </p-floatLabel>
+        <p-floatLabel>
           <p-autoComplete
             [(ngModel)]="analysesPhysique.qualite"
             [dropdown]="true"

@@ -23,7 +23,10 @@
           <input type="text" pInputText [(ngModel)]="analysesChimique.reference" id="Referenceph" class="w-full"  />
           <label for="Referenceph">Reference</label>
         </p-floatLabel>
-
+        <p-floatLabel>
+          <input type="text" pInputText [(ngModel)]="analysesChimique.pluie" id="pluie" class="w-full"  />
+          <label for="pluie">Pluie</label>
+        </p-floatLabel>
         <p-floatLabel>
           <p-autoComplete
             [(ngModel)]="analysesChimique.matiere"
@@ -113,7 +116,7 @@
         <label class="font-bold">Chemical components </label>
 
         <div class="flex   gap-5   flex-wrap  overflow-auto  ">
-          <p-checkbox [(ngModel)]="SelectAll" (ngModelChange)="SelectAllCheck()" [binary]="true" inputId="binary" class="text-primary" label="Tout"></p-checkbox>
+          <p-checkbox [(ngModel)]="SelectAll" (ngModelChange)="SelectAllCheck()" [binary]="true" inputId="binary" class="text-primary" label="All"></p-checkbox>
 
           <div class="flex align-items-center  gap-1 " *ngFor="let attribut of attributs">
             <p-checkbox [(ngModel)]="attribut.checked" [binary]="true" Id="ny"></p-checkbox>
