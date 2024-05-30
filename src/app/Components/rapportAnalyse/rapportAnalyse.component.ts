@@ -42,6 +42,7 @@ import {TamisService} from "../../Services/tamis.service";
 import {AutoCompleteModule} from "primeng/autocomplete";
 import {InputTextareaModule} from "primeng/inputtextarea";
 import {getToken} from "../../../main";
+import {RapportAnalyseService} from "../../Services/rapport-analyse.service";
 
 @Component({
   selector: 'app-analyse',
@@ -134,6 +135,7 @@ export class RapportAnalyseComponent {
               private bandeService: BandeService,
               private analysePhysiqueService: AnalysePhysiqueService,
               private tamisService: TamisService,
+              private rapportAnalyseService: RapportAnalyseService,
   ) {
   }
 
@@ -175,7 +177,7 @@ export class RapportAnalyseComponent {
       {name:'Na',checked:false,label:'Sodium', value:this.analysesChimique.sodium},
       {name:'Cl',checked:false,label:'Chlorure', value:this.analysesChimique.chlorure},
       {name:'pH',checked:false,label:'pH', value:this.analysesChimique.ph},
-      {name:'NaCL',checked:false,label:'Chlorure de sodium', value:this.analysesChimique.chlorureDeSodium},
+      {name:'NaCl',checked:false,label:'Chlorure de sodium', value:this.analysesChimique.chlorureDeSodium},
       {name:'Fe(CN)₆',checked:false,label:'Ferrocyanure', value:this.analysesChimique.ferrocyanure},
 
     ]
@@ -518,33 +520,95 @@ export class RapportAnalyseComponent {
     this.analysesChimique.ph=this.attributs[11].value;
     this.analysesChimique.chlorureDeSodium=this.attributs[12].value;
     this.analysesChimique.ferrocyanure=this.attributs[13].value;
-    console.log(JSON.stringify(this.selectedBassin))
+    // console.log(JSON.stringify(this.selectedBassin))
+    this.analysesPhysique.reference = this.analysesChimique.reference;
+    this.analysesPhysique.matiere=this.analysesChimique.matiere;
+    this.analysesPhysique.dateAnalyse=this.analysesChimique.dateAnalyse;
+    this.analysesChimique.qualite=this.analysesPhysique.qualite;
+    this.analysesPhysique.pluie=this.analysesChimique.pluie;
 
-    if (this.selectedBassin!=null && this.selectedBassin.hasOwnProperty('id')) {
-      this.analysesPhysique.reference = this.analysesChimique.reference;
-      this.analysesPhysique.matiere=this.analysesChimique.matiere
-      this.analysesPhysique.dateAnalyse=this.analysesChimique.dateAnalyse
-      this.analysesPhysique.qualite=this.analysesChimique.qualite
-
+    if (this.selectedBassin!==null && this.selectedBassin.hasOwnProperty('id')) {
       this.selectedBassin.analysesChimiques = [];
       if (this.checkedChimique == true) {
         this.selectedBassin.analysesChimiques.push(this.analysesChimique);
-        console.error(this.analysesChimique)
       }
       this.selectedBassin.analysesPhysiques = [];
       if (this.checkedPhysique == true) {
         this.analysesPhysique.tamisList = this.listeTamis;
         this.selectedBassin.analysesPhysiques.push(this.analysesPhysique);
       }
-      console.log('======**********>>>>>>   ' + new JsonPipe().transform(this.selectedBassin));
-      this.analysePhysiqueService.addAnalysesPhysiquesToBassin(this.selectedBassin).subscribe(value => {
+      console.log(this.selectedBassin);
+      this.rapportAnalyseService.addRapportToBassin(this.selectedBassin).subscribe(value => {
+        this.router.navigate(['/analysePhysique']);
+      }, error => console.log(error));
+    }
+    else if (this.selectedSbnl!==null && this.selectedSbnl.hasOwnProperty('id')) {
+      this.selectedSbnl.analysesChimiques = [];
+      if (this.checkedChimique == true) {
+        this.selectedSbnl.analysesChimiques.push(this.analysesChimique);
+      }
+      this.selectedSbnl.analysesPhysiques = [];
+      if (this.checkedPhysique == true) {
+        this.analysesPhysique.tamisList = this.listeTamis;
+        this.selectedSbnl.analysesPhysiques.push(this.analysesPhysique);
+      }
+
+      this.rapportAnalyseService.addRapportToSbnl(this.selectedSbnl).subscribe(value => {
+        this.router.navigate(['/analysePhysique']);
+      }, error => console.log(error));
+    }
+
+
+    else if (this.selectedSbl!==null && this.selectedSbl.hasOwnProperty('id')) {
+      this.selectedSbl.analysesChimiques = [];
+      if (this.checkedChimique == true) {
+        this.selectedSbl.analysesChimiques.push(this.analysesChimique);
+      }
+      this.selectedSbl.analysesPhysiques = [];
+      if (this.checkedPhysique == true) {
+        this.analysesPhysique.tamisList = this.listeTamis;
+        this.selectedSbl.analysesPhysiques.push(this.analysesPhysique);
+      }
+
+      this.rapportAnalyseService.addRapportToSbl(this.selectedSbl).subscribe(value => {
+        this.router.navigate(['/analysePhysique']);
+      }, error => console.log(error));
+    }
+
+    else if (this.selectedSblf!==null && this.selectedSblf.hasOwnProperty('id')) {
+      this.selectedSblf.analysesChimiques = [];
+      if (this.checkedChimique == true) {
+        this.selectedSblf.analysesChimiques.push(this.analysesChimique);
+      }
+      this.selectedSblf.analysesPhysiques = [];
+      if (this.checkedPhysique == true) {
+        this.analysesPhysique.tamisList = this.listeTamis;
+        this.selectedSblf.analysesPhysiques.push(this.analysesPhysique);
+      }
+
+      this.rapportAnalyseService.addRapportToSblf(this.selectedSblf).subscribe(value => {
+        this.router.navigate(['/analysePhysique']);
+      }, error => console.log(error));
+    }
+    else if (this.selectedBande!==null && this.selectedBande.hasOwnProperty('id')) {
+      this.selectedBande.analysesChimiques = [];
+      if (this.checkedChimique == true) {
+        this.selectedBande.analysesChimiques.push(this.analysesChimique);
+      }
+      this.selectedBande.analysesPhysiques = [];
+      if (this.checkedPhysique == true) {
+        this.analysesPhysique.tamisList = this.listeTamis;
+        this.selectedBande.analysesPhysiques.push(this.analysesPhysique);
+      }
+
+      this.rapportAnalyseService.addRapportToBande(this.selectedBande).subscribe(value => {
         this.router.navigate(['/analysePhysique']);
       }, error => console.log(error));
     }
     else {
       Swal.fire({
         title: "error?",
-        text: "Séléctionner Bassin SVP!",
+        text: "Please select Pond or Unwashed or Band or Washed or Washed Ship!",
         icon: "warning"
       });
     }

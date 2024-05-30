@@ -22,5 +22,6 @@ export interface AnalysesChimique  {
   ferrocyanure?: number|undefined;
   ref?:string;
   qualite?:string ;
+  pluie?:string ;
 
 }

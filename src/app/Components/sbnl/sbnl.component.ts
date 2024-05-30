@@ -89,7 +89,7 @@ export class SbnlComponent implements OnInit{
   private isUpdatesbnl=false;
   bassins: Bassin[] = [];
 
-
+  SelectAll: boolean = false;
   @ViewChild("pdfpuit") htmlContent: ElementRef | undefined;
   visiblePrint: boolean = false;
   dateToday: Date = new Date();
@@ -573,4 +573,10 @@ this.Viderfiltredate()
       console.error('Error exporting CSV file:', error);
     }
   }
+  SelectAllCheck() {
+    this.colsfiltre.forEach(value => {
+      value.hide = this.SelectAll;
+    })
+  }
+
 }

@@ -23,7 +23,10 @@
           <input type="text" pInputText [(ngModel)]="analysesChimique.reference" id="Referenceph" class="w-full"  />
           <label for="Referenceph">Reference</label>
         </p-floatLabel>
-
+        <p-floatLabel>
+          <input type="text" pInputText [(ngModel)]="analysesChimique.pluie" id="pluie" class="w-full"  />
+          <label for="pluie">Pluie</label>
+        </p-floatLabel>
         <p-floatLabel>
           <p-autoComplete
             [(ngModel)]="analysesChimique.matiere"
@@ -50,11 +53,26 @@
 
       <div class="card">
         <p-tabView *ngIf="!isUpdateAnalyseChimique"[scrollable]="true">
-          <p-tabPanel header="Basin" >
+          <p-tabPanel header="Pond" >
             <p-listbox [options]="bassins" [(ngModel)]="selectedBassin" optionLabel="nom" (ngModelChange)="selectBassin()"[filter]="true" [listStyle]="{'height': '87px'}"  ></p-listbox>
+          </p-tabPanel>
+          <p-tabPanel header="Unwashed stock" pTooltip="Enter your username" >
+            <p-listbox [options]="sbnls" [(ngModel)]="selectedSbnl" optionLabel="reference" (ngModelChange)="selectSBNL()" [filter]="true" [listStyle]="{'height': '87px'}"  ></p-listbox>
+
+          </p-tabPanel>
+          <p-tabPanel header="Band" pTooltip="Enter your username" >
+            <p-listbox [options]="bandes" [(ngModel)]="selectedBande" optionLabel="reference" (ngModelChange)="selectBande()"[filter]="true" [listStyle]="{'height': '87px'}"  ></p-listbox>
+
+          </p-tabPanel>
+          <p-tabPanel header="Washed stock" >
+            <p-listbox [options]="sbls" [(ngModel)]="selectedSbl" optionLabel="reference" [filter]="true" (ngModelChange)="selectSBL()"[listStyle]="{'height': '87px'}" ></p-listbox>
 
           </p-tabPanel>
 
+          <p-tabPanel header="Final stock" >
+            <p-listbox [options]="sblfs" [(ngModel)]="selectedSblf" optionLabel="reference" [filter]="true" (ngModelChange)="selectSBLF()" [listStyle]="{'height': '87px'}" ></p-listbox>
+
+          </p-tabPanel>
         </p-tabView>
       </div>
 
@@ -98,7 +116,7 @@
         <label class="font-bold">Chemical components </label>
 
         <div class="flex   gap-5   flex-wrap  overflow-auto  ">
-          <p-checkbox [(ngModel)]="SelectAll" (ngModelChange)="SelectAllCheck()" [binary]="true" inputId="binary" class="text-primary" label="Tout"></p-checkbox>
+          <p-checkbox [(ngModel)]="SelectAll" (ngModelChange)="SelectAllCheck()" [binary]="true" inputId="binary" class="text-primary" label="All"></p-checkbox>
 
           <div class="flex align-items-center  gap-1 " *ngFor="let attribut of attributs">
             <p-checkbox [(ngModel)]="attribut.checked" [binary]="true" Id="ny"></p-checkbox>

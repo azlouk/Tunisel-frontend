@@ -194,26 +194,28 @@ export class AjouterCommandeComponent implements OnInit{
       {id:17, field: 'ph', header: 'Ph'},
       {id:18, field: 'chlorureDeSodium', header: 'Chlorure de Sodium'},
       {id:19, field: 'ferrocyanure', header: 'Ferrocyanure'},
-      {id:20, field: 'conformite', header: 'Conformite'},
-      {id:21, field: 'qualite', header: 'Quality'},
-      {id:22, field: 'calibre', header: 'Calibre'},
-      {id:23, field: 'masse', header: 'Weight'},
-      {id:24, field: 'refus', header: 'Refusal '},
-      {id:25, field: 'refusCumulated', header: 'Refusal Cumulateds '},
-      {id:26, field: 'passCumulated', header: 'Cumulated Pass'},
-      {id:27, field: 'dateCreation', header: 'Date Creation'},
-      {id:28, field: 'quantityRecolte', header: 'Harvest'},
-      {id:29, field: 'quantityProduction', header: 'Production'},
-      {id:30, field: 'quantityPluieBengarden', header: 'Ben Gardane Rain'},
-      {id:31, field: 'quantityPluieZarzis', header: 'Zarzis Rain'},
-      {id:32, field: 'quantiteTransfert', header: 'Transfer Quantity'},
-      {id:33, field: 'decisionTransfert', header: 'Transfer Decision'},
-      {id:34, field: 'numeroLot', header: 'Number Lot'},
-      {id:35, field: 'poidsLot', header: 'Lot Weight'},
-      {id:36, field: 'emplassementLot', header: 'Lot Location'},
-      {id:37, field: 'lieuxPrelevement', header: 'Places Prelevement'},
-      {id:38, field: 'matCamion', header: 'Truck Mat'},
-      {id:39, field: 'conformite', header: 'Conformite'},
+      {id:20, field: 'pluie', header: 'Chemical Rain '},
+      {id:21, field: 'conformite', header: 'Conformite'},
+      {id:22, field: 'qualite', header: 'Quality'},
+      {id:23, field: 'pluie', header: 'Physical Rain '},
+      {id:24, field: 'calibre', header: 'Calibre'},
+      {id:25, field: 'masse', header: 'Weight'},
+      {id:26, field: 'refus', header: 'Refusal '},
+      {id:27, field: 'refusCumulated', header: 'Refusal Cumulateds '},
+      {id:28, field: 'passCumulated', header: 'Cumulated Pass'},
+      {id:29, field: 'dateCreation', header: 'Date Creation'},
+      {id:30, field: 'quantityRecolte', header: 'Harvest'},
+      {id:31, field: 'quantityProduction', header: 'Production'},
+      {id:32, field: 'quantityPluieBengarden', header: 'Ben Gardane Rain'},
+      {id:33, field: 'quantityPluieZarzis', header: 'Zarzis Rain'},
+      {id:34, field: 'quantiteTransfert', header: 'Transfer Quantity'},
+      {id:35, field: 'decisionTransfert', header: 'Transfer Decision'},
+      {id:36, field: 'numeroLot', header: 'Number Lot'},
+      {id:37, field: 'poidsLot', header: 'Lot Weight'},
+      {id:38, field: 'emplassementLot', header: 'Lot Location'},
+      {id:39, field: 'lieuxPrelevement', header: 'Places Prelevement'},
+      {id:40, field: 'matCamion', header: 'Truck Mat'},
+      {id:41, field: 'conformite', header: 'Conformite'},
 
     ];
 
@@ -447,7 +449,7 @@ this.commande.bassins.forEach(basin => {
 
   getValueOfligneCommande(col: any, ligneCommande: any): any {
 
-    if (col.id < 20) {
+    if (col.id < 21) {
             if(col.id==0) {
 
               return ligneCommande.analyseChimique !== null ? this.pipedate(ligneCommande.analyseChimique[col.field]) : '-'
@@ -456,11 +458,11 @@ this.commande.bassins.forEach(basin => {
              return ligneCommande.analyseChimique!==null ? ligneCommande.analyseChimique[col.field] : '-';
     }
     else
-      if (col.id > 19 && col.id < 22)
+      if (col.id > 20 && col.id < 24)
     {
           return ligneCommande.analysePhysique!==null  ? ligneCommande.analysePhysique[col.field] : '-';
     } else
-      if (col.id > 21 && col.id < 27 && this.selectedColumnsCalibre && this.selectedColumnsCalibre.header) {
+      if (col.id > 23 && col.id < 29 && this.selectedColumnsCalibre && this.selectedColumnsCalibre.header) {
       if (ligneCommande.analysePhysique !== null && ligneCommande.analysePhysique.tamisList) {
         // Use filter to find matching items in tamisList and add checks for undefined items
         const filteredTamis:any = ligneCommande.analysePhysique.tamisList.find((tamis: any) =>
@@ -588,7 +590,8 @@ this.getLine()
   }
     chechMatter(l: LineCommande):boolean {
    if(l.analysePhysique)
-    return  l.analysePhysique.qualite!.includes(this.matter).valueOf();
+    // return  l.analysePhysique.qualite!.includes(this.matter).valueOf();
+    return  l.analysePhysique.qualite?.trim().toLowerCase()==this.matter.trim().toLowerCase();
 
   return  false ;
   }

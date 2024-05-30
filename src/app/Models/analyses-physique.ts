@@ -12,4 +12,5 @@ export interface AnalysesPhysique  {
   qualite?:string ;
   tamisList?:Tamis[];
   ref?:string ;
+  pluie?:string ;
 }

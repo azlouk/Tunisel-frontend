@@ -39,6 +39,10 @@
 
       </p-floatLabel>
       <p-floatLabel>
+        <input type="text" pInputText [(ngModel)]="analysesChimique.pluie" id="pluie" class="w-full"  />
+        <label for="pluie">Pluie</label>
+      </p-floatLabel>
+      <p-floatLabel>
         <p-autoComplete
           [(ngModel)]="analysesChimique.qualite"
           [dropdown]="true"
@@ -59,28 +63,28 @@
 
         <p-tabView *ngIf="!isUpdateAnalyseChimique"[scrollable]="true">
           <p-tabPanel header="Well" >
-            <p-listbox [options]="puits" [(ngModel)]="selectedPuit" (ngModelChange)="selectPuit()" optionLabel="nom" [filter]="true"  [listStyle]="{'height': '87px'}" ></p-listbox>
+            <p-listbox [options]="puits" [(ngModel)]="selectedPuit" (ngModelChange)="selectPuit()" optionLabel="nom" [filter]="true"  [listStyle]="{'height': '200px'}" ></p-listbox>
 
           </p-tabPanel>
           <p-tabPanel header="Pond" >
-            <p-listbox [options]="bassins" [(ngModel)]="selectedBassin" optionLabel="nom" (ngModelChange)="selectBassin()"[filter]="true" [listStyle]="{'height': '87px'}"  ></p-listbox>
+            <p-listbox [options]="bassins" [(ngModel)]="selectedBassin" optionLabel="nom" (ngModelChange)="selectBassin()"[filter]="true"  [listStyle]="{'height': '200px'}"  ></p-listbox>
 
           </p-tabPanel>
           <p-tabPanel header="Unwashed stock" pTooltip="Enter your username" >
-            <p-listbox [options]="sbnls" [(ngModel)]="selectedSbnl" optionLabel="reference" (ngModelChange)="selectSBNL()" [filter]="true" [listStyle]="{'height': '87px'}"  ></p-listbox>
+            <p-listbox [options]="sbnls" [(ngModel)]="selectedSbnl" optionLabel="reference" (ngModelChange)="selectSBNL()" [filter]="true"  [listStyle]="{'height': '200px'}"    ></p-listbox>
 
           </p-tabPanel>
           <p-tabPanel header="Band" pTooltip="Enter your username" >
-            <p-listbox [options]="bandes" [(ngModel)]="selectedBande" optionLabel="reference" (ngModelChange)="selectBande()"[filter]="true" [listStyle]="{'height': '87px'}"  ></p-listbox>
+            <p-listbox [options]="bandes" [(ngModel)]="selectedBande" optionLabel="reference" (ngModelChange)="selectBande()"[filter]="true"  [listStyle]="{'height': '200px'}"    ></p-listbox>
 
           </p-tabPanel>
           <p-tabPanel header="Washed stock" >
-            <p-listbox [options]="sbls" [(ngModel)]="selectedSbl" optionLabel="reference" [filter]="true" (ngModelChange)="selectSBL()"[listStyle]="{'height': '87px'}" ></p-listbox>
+            <p-listbox [options]="sbls" [(ngModel)]="selectedSbl" optionLabel="reference" [filter]="true" (ngModelChange)="selectSBL()" [listStyle]="{'height': '200px'}"   ></p-listbox>
 
           </p-tabPanel>
 
           <p-tabPanel header="Final stock" >
-            <p-listbox [options]="sblfs" [(ngModel)]="selectedSblf" optionLabel="reference" [filter]="true" (ngModelChange)="selectSBLF()" [listStyle]="{'height': '87px'}" ></p-listbox>
+            <p-listbox [options]="sblfs" [(ngModel)]="selectedSblf" optionLabel="reference" [filter]="true" (ngModelChange)="selectSBLF()"  [listStyle]="{'height': '200px'}"   ></p-listbox>
 
           </p-tabPanel>
         </p-tabView>
@@ -115,8 +119,7 @@
                   <p><span class="font-bold"> State: </span>{{selectedPuit.etat}}</p>
                 </div>
                 <div class="field">
-                  <p><span class="font-bold"> Creation date
-: </span>{{selectedPuit.dateCreation}}</p>
+                  <p><span class="font-bold"> Creation date: </span>{{selectedPuit.dateCreation}}</p>
                 </div>
                 <div class="field">
                   <p><span class="font-bold"> Closing date: </span>{{selectedPuit.dateFermeture}}</p>
@@ -336,7 +339,7 @@
 <div class="grid">
 
 
-          <div class="col-2 " *ngFor="let attribut of attributs">
+          <div class="col-2 flex gap-1" *ngFor="let attribut of attributs">
 
             <p-checkbox [(ngModel)]="attribut.checked" [binary]="true" Id="ny"></p-checkbox>
             <label for="ny" class="font-bold  ">{{attribut.name}}</label>

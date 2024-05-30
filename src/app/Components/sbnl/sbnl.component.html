@@ -203,7 +203,9 @@
 
     </div>
     <div class="shadow-1 p-2">
-    <th *ngFor="let c of colsfiltre">
+      <p-checkbox [(ngModel)]="SelectAll" (ngModelChange)="SelectAllCheck()" [binary]="true" inputId="binary" class="text-primary" label="All"></p-checkbox>
+
+      <th *ngFor="let c of colsfiltre">
 
       <p-checkbox [(ngModel)]="c.hide" label=" {{ c.header}}" [binary]="true" inputId="binary"></p-checkbox>
 
