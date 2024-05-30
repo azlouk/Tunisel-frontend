@@ -234,14 +234,21 @@ export class BandeComponent {
   }
 
   getBande() {
-    this.bandeService.getAllBandesDTO().subscribe((v:  Bande[]) => {
+    this.loading=true ;
+
+    this.bandeService.getAllBandes().subscribe((v:  Bande[]) => {
       this.bandes=v;
+      this.loading=false ;
 
     },error => {
       console.log(error)})
+    this.loading=true ;
+
     this.sbnlService.getAllSbnls()
       .subscribe((sbnls: Sbnl[]) => {
         this.sbnls = sbnls;
+        this.loading=false ;
+
       }, error => {
         console.log('Error fetching users:', error);
       });
@@ -281,6 +288,7 @@ console.log('=====>>>>> export: ',new JsonPipe().transform(bande))
   }
 
   Viderfiltredate() {
+    this.loading=true ;
 
     this.bandeService.getAllBandes().subscribe((bande: Bande[]) => {
       this.bandes = bande;
@@ -288,6 +296,7 @@ console.log('=====>>>>> export: ',new JsonPipe().transform(bande))
       const bandeBande: Bande | undefined = this.bandes.find(value => this.selectedBande.id == value.id)
       if (bandeBande)
         this.selectedBande = bandeBande;
+      this.loading=false ;
 
     });
   }
@@ -538,6 +547,7 @@ console.log('=====>>>>> export: ',new JsonPipe().transform(bande))
   }
 
   protected readonly getToken = getToken;
+  loading: boolean=false;
 
 
 }

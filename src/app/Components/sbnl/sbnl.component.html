@@ -15,10 +15,10 @@
 
       </p-toolbar>
 
-      <p-table #dt [value]="sbnls" [columns]="cols"  responsiveLayout="scroll" [rows]="10" [globalFilterFields]="['id','reference','description','dateCreation','nom','emplacement','etat','dateFermeture']" [paginator]="true" [rowsPerPageOptions]="[10,20,30]" [showCurrentPageReport]="true" currentPageReportTemplate="Display  {first} to  {last} of  {totalRecords} entries" [(selection)]="selectedSbnls" selectionMode="multiple" [rowHover]="true" dataKey="id">
+      <p-table #dt [loading]="loading" [value]="sbnls" [columns]="cols"  responsiveLayout="scroll" [rows]="10" [globalFilterFields]="['id','reference','description','dateCreation','nom','emplacement','etat','dateFermeture']" [paginator]="true" [rowsPerPageOptions]="[10,20,30]" [showCurrentPageReport]="true" currentPageReportTemplate="Display  {first} to  {last} of  {totalRecords} entries" [(selection)]="selectedSbnls" selectionMode="multiple" [rowHover]="true" dataKey="id">
         <ng-template pTemplate="caption">
           <div class="flex flex-column md:flex-row md:justify-content-between md:align-items-center">
-            <h5 class="m-0">Management of unwashed basin stocks</h5>
+            <h5 class="m-0">Management of unwashed Pond stocks</h5>
             <span class="block mt-2 md:mt-0 p-input-icon-left">
                             <i class="pi pi-search"></i>
                             <input  type="text" pInputText (input)="onGlobalFilter(dt, $event)" placeholder="Search..."  class="w-full sm:w-auto"/>
@@ -111,7 +111,7 @@
       </p-table>
     </div>
 
-    <p-dialog [(visible)]="productDialog" [style]="{width: '450px'}" header="New stock basin Not Washed" [modal]="true" class="p-fluid">
+    <p-dialog [(visible)]="productDialog" [style]="{width: '450px'}" header="New stock Pond Not Washed" [modal]="true" class="p-fluid">
       <ng-template pTemplate="content">
         <div class="field">
           <label for="name">Basin</label>

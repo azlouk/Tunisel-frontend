@@ -88,7 +88,7 @@
       </p-table>
     </div>
 
-    <p-dialog [(visible)]="productDialog" [style]="{width: '450px'}" header="User "   [modal]="true" class="p-fluid">
+    <p-dialog (onHide)="alertOnhide()" [(visible)]="productDialog" [style]="{width: '450px'}" header="User "   [modal]="true" class="p-fluid">
       <ng-template pTemplate="content">
         <div class="flex justify-content-evenly">
         <div class="field" *ngIf="!isUpdateUser">

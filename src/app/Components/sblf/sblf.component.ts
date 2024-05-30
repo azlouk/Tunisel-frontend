@@ -202,7 +202,7 @@ export class SblfComponent {
       this.productDialog = false
       if (this.isUpdateSblf == true) {
         this.sblfService.updateSblf(this.sblf).subscribe(() => {
-          this.sblfService.getAllSblfsDTO().subscribe((sblfs: Sblf[]) => {
+          this.sblfService.getAllSblfs().subscribe((sblfs: Sblf[]) => {
             this.sblfs = sblfs;
           });
         });
@@ -226,14 +226,20 @@ export class SblfComponent {
   }
 
   getAllSBLF() {
+    this.loading=true ;
     this.sblfService.getAllSblfs().subscribe((v:  Sblf[]) => {
       this.sblfs=v;
       console.log(new JsonPipe().transform("====================>>>>>>"+this.sblfs))
+      this.loading=false ;
 
     },error => {
       console.log(error)})
+    this.loading=true ;
+
     this.sblService.getAllSbl().subscribe((v:  Sbl[]) => {
       this.sbls=v;
+      this.loading=false ;
+
       console.log(new JsonPipe().transform("====================>>>>>>"+this.sbls))
 
     },error => {
@@ -546,4 +552,5 @@ export class SblfComponent {
   }
 
   protected readonly getToken = getToken;
+  loading: boolean=false;
 }

@@ -211,8 +211,13 @@ isUpdateCommande:boolean=false;
   }
 
   getAllCommandes() {
+    this.loading=true ;
+
     this.commandeService.getAllCommandeDTO().subscribe((ListCommande:  Commande[]) => {
-      this.comanndes=ListCommande;}, error => {
+      this.comanndes=ListCommande;
+      this.loading=false ;
+
+    }, error => {
       console.log(error)});
         }
 
@@ -287,4 +292,5 @@ isUpdateCommande:boolean=false;
     this.visible=false;
   }
     protected readonly getToken = getToken;
+  loading: boolean=false;
 }

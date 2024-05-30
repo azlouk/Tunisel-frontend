@@ -145,6 +145,8 @@ this.getALLphysique() ;
   }
 
   getALLphysique() {
+    this.loading=true ;
+
     this.analysePhysiqueService.getAllAnalysesPhysiques().subscribe((analysesPhysiques:  AnalysesPhysique[]) => {
       this.analysesPhysiques=analysesPhysiques;
        this.analysesPhysiques.forEach(analysephysique => {
@@ -175,6 +177,7 @@ this.getALLphysique() ;
         }
       })
 
+      this.loading=false ;
 
     },error => {
       console.log(error)})
@@ -194,5 +197,6 @@ this.getALLphysique() ;
   }
 
   protected readonly getToken = getToken;
+  loading: boolean=false;
 
 }

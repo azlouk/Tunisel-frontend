@@ -188,4 +188,9 @@ export class UserComponent implements OnInit {
 
 
   protected readonly getToken = getToken;
+
+  alertOnhide() {
+    this.isUpdateUser=false
+
+  }
 }

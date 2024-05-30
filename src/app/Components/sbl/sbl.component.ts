@@ -196,7 +196,7 @@ export class SblComponent implements OnInit{
     this.productDialog=false
     if(this.isUpdateSbl==true) {
       this.sblService.updateSbl(this.sbl).subscribe(() =>{
-        this.sblService.getAllSblDTO().subscribe((sbls: Sbl[]) => {
+        this.sblService.getAllSbl().subscribe((sbls: Sbl[]) => {
           this.sbls = sbls;
 
         });
@@ -226,14 +226,20 @@ export class SblComponent implements OnInit{
 
 
   getAllSbl() {
+    this.loading=true ;
+
     this.sblService.getAllSbl().subscribe((v:  Sbl[]) => {
       this.sbls=v;
       // console.log(new JsonPipe().transform("====================>>>>>>"+this.sbls))
+      this.loading=false ;
 
     },error => {
       console.log(error)})
+    this.loading=true ;
+
     this.bandeService.getAllBandes().subscribe((v:  Sbnl[]) => {
       this.bandes=v;
+      this.loading=false ;
 
     },error => {
       console.log(error)})
@@ -361,6 +367,7 @@ export class SblComponent implements OnInit{
   }
 
     protected readonly getToken = getToken;
+  loading: boolean=false;
 
   ExportExcel() {
     try {

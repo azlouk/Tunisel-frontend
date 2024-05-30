@@ -8,7 +8,7 @@
                   (click)="retour()"></button>
         </div>
       </ng-template>
-      <h4>Add Command</h4>
+      <h4>{{isUpdateCommande?"Update":"Add"}} Order</h4>
     </p-toolbar>
 
     <!--    <p-fieldset legend="Export">-->
@@ -110,7 +110,7 @@
       </div>
 
 
-    <div class="flex m-2 p-2 border-gray-200 border-1 overflow-auto flex-column  align-items-center gap-2    ">
+    <div class="flex m-2 p-2 border-gray-200 border-1   flex-column  align-items-center gap-2    ">
       <div class=" md:flex  md:align-items-center  md:gap-3 ">
         <label>{{selectedColumns.length}} items selected</label>
         <p-multiSelect

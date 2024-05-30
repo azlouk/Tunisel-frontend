@@ -211,7 +211,7 @@ this.getsbnl()
 
       if (this.isUpdatesbnl == true) {
         this.sbnlService.updateSbnl(this.sbnl).subscribe(() => {
-          this.sbnlService.getAllSbnlsDTO().subscribe((sbnls: Sbnl[]) => {
+          this.sbnlService.getAllSbnls().subscribe((sbnls: Sbnl[]) => {
             this.sbnls = sbnls;
           });
         });
@@ -256,9 +256,10 @@ this.getsbnl()
   }
 
   getsbnl() {
+    this.loading=true
     this.sbnlService.getAllSbnls().subscribe((v:  Sbnl[]) => {
       this.sbnls=v;
-
+      this.loading=false
     },error => {
       console.log(error)})
     this.serviceBassin.getAllBassins()
@@ -397,6 +398,7 @@ this.Viderfiltredate()
   }
 
     protected readonly getToken = getToken;
+  loading: boolean=false;
 
   ExportExcel() {
     try {

@@ -15,10 +15,10 @@
 
       </p-toolbar>
 
-      <p-table #dt [value]="comanndes" [columns]="cols"  responsiveLayout="scroll" [rows]="10" [globalFilterFields]="['id','nom','etat','dateCommande']" [paginator]="true" [rowsPerPageOptions]="[10,20,30,200,500]" [showCurrentPageReport]="true" currentPageReportTemplate="Display from {first} to {last} of {totalRecords} items" [(selection)]="selectedCommandes" selectionMode="multiple" [rowHover]="true" dataKey="id">
+      <p-table #dt [loading]="loading" [value]="comanndes" [columns]="cols"  responsiveLayout="scroll" [rows]="10" [globalFilterFields]="['id','nom','etat','dateCommande']" [paginator]="true" [rowsPerPageOptions]="[10,20,30,200,500]" [showCurrentPageReport]="true" currentPageReportTemplate="Display from {first} to {last} of {totalRecords} items" [(selection)]="selectedCommandes" selectionMode="multiple" [rowHover]="true" dataKey="id">
         <ng-template pTemplate="caption">
           <div class="flex flex-column md:flex-row md:justify-content-between md:align-items-center">
-            <h5 class="m-0">Commands List </h5>
+            <h5 class="m-0">Order List </h5>
             <span class="block mt-2 md:mt-0 p-input-icon-left">
                             <i class="pi pi-search"></i>
                             <input  type="text" pInputText (input)="onGlobalFilter(dt, $event)" placeholder="Search..."  class="w-full sm:w-auto"/>

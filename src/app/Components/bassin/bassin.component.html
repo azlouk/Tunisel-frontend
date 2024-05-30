@@ -15,7 +15,7 @@
 
       </p-toolbar>
 
-      <p-table #dt [value]="bassins" [columns]="cols"  responsiveLayout="scroll" [rows]="10" [globalFilterFields]="['surface','etat','id','emplacement','nom','dateCreation','reference','description']" [paginator]="true" [rowsPerPageOptions]="[10,20,30]" [showCurrentPageReport]="true" currentPageReportTemplate="Display  {first} to  {last} of  {totalRecords} entries" [(selection)]="selectedBassins" selectionMode="multiple" [rowHover]="true" dataKey="id">
+      <p-table #dt [loading]="loading" [value]="bassins" [columns]="cols"  responsiveLayout="scroll" [rows]="10" [globalFilterFields]="['surface','etat','id','emplacement','nom','dateCreation','reference','description']" [paginator]="true" [rowsPerPageOptions]="[10,20,30]" [showCurrentPageReport]="true" currentPageReportTemplate="Display  {first} to  {last} of  {totalRecords} entries" [(selection)]="selectedBassins" selectionMode="multiple" [rowHover]="true" dataKey="id">
         <ng-template pTemplate="caption">
           <div class="flex flex-column md:flex-row md:justify-content-between md:align-items-center">
             <h5 class="m-0">Basin management</h5>
@@ -97,7 +97,7 @@
       </p-table>
     </div>
 
-    <p-dialog [(visible)]="productDialog" [style]="{width: '450px'}" header="basin details" [modal]="true" class="p-fluid">
+    <p-dialog [(visible)]="productDialog" [style]="{width: '450px'}" header="Pond details" [modal]="true" class="p-fluid">
       <ng-template pTemplate="content">
         <div class="field">
         <label for="name">Well</label>
@@ -153,8 +153,8 @@
       </ng-template>
     </p-dialog>
 
-    <p-dialog [(visible)]="deleteProductDialog" header="Confirm" [modal]="true" [style]="{width:'450px'}">
-      <div class="flex align-items-center justify-content-center">
+    <p-dialog  class="p-fluid" [(visible)]="deleteProductDialog" header="Confirm" [modal]="true" [style]="{width:'80%'}">
+      <div class="flex align-items-center   justify-content-center">
         <i class="pi pi-exclamation-triangle mr-3" style="font-size: 2rem"></i>
         <span *ngIf="product">Are you sure you want to delete? <b>{{product.name}}</b>?</span>
       </div>
@@ -165,7 +165,7 @@
     </p-dialog>
 
     <p-dialog [(visible)]="deleteProductsDialog" header="Confirm" [modal]="true" [style]="{width:'450px'}">
-      <div class="flex align-items-center justify-content-center">
+      <div class="flex align-items-center justify-content-center overflow-auto" style="width: 80%">
         <i class="pi pi-exclamation-triangle mr-3" style="font-size: 2rem"></i>
         <span>Are you sure you want to delete? les produits sélectionnés ?</span>
       </div>
@@ -179,7 +179,9 @@
 
 
 
-<p-dialog header="Chemical and particle size analysis" [(visible)]="visiblePrint" [modal]="true"   [breakpoints]="{ '800px': '75vw', '575px': '90vw' }">
+<p-dialog header="Chemical and particle size analysis" [(visible)]="visiblePrint" [modal]="true" [style]="{width: '100%'}"     >
+  <ng-template pTemplate="content">
+
   <div class="shadow-1 p-2  " >chemical filtration  :
 
     <div class="card flex justify-content-evenly ">
@@ -196,10 +198,10 @@
       <p-button (click)="Viderfiltredate()" class=" " icon="pi pi-refresh" label="Refresh"></p-button>
 
     </div>
-    <div class="shadow-1 p-2">
+    <div class="shadow-1 p-2 overflow-auto">
       <p-checkbox [(ngModel)]="SelectAll" (ngModelChange)="SelectAllCheck()" [binary]="true" inputId="binary" class="text-primary" label="All"></p-checkbox>
 
-      <th *ngFor="let c of colsfiltre">
+      <th *ngFor="let c of colsfiltre"  >
 
         <p-checkbox [(ngModel)]="c.hide" label=" {{ c.header}}" [binary]="true" inputId="binary"></p-checkbox>
 
@@ -361,7 +363,9 @@
 
 
   </div>
-  <ng-template pTemplate="footer">
+  </ng-template>
+
+    <ng-template pTemplate="footer">
     <p-button icon="pi pi-file-pdf" (click)="SavePDF()" class="text-green-50" label="PDF" pAutoFocus [autofocus]="true"  ></p-button>
     <button type="button" pButton pRipple  icon="pi pi-file-excel" (click)="ExportExcel()" class="p-button-success" label="EXCEL" pAutoFocus [autofocus]="true"  ></button>
     <button type="button" pButton pRipple icon="pi pi-file" (click)="exportcsv()" class="p-button-warning " label="CSV" pTooltip="CSV" ></button>

@@ -15,7 +15,7 @@
 
       </p-toolbar>
 
-      <p-table #dt [value]="bandes" [columns]="cols"  responsiveLayout="scroll" [rows]="10" [globalFilterFields]="['id','reference','description','dateCreation','nom','emplacement','etat','dateFermeture']" [paginator]="true" [rowsPerPageOptions]="[10,20,30]" [showCurrentPageReport]="true" currentPageReportTemplate="Display  {first} to  {last} of  {totalRecords} entries" [(selection)]="selectedBandes" selectionMode="multiple" [rowHover]="true" dataKey="id">
+      <p-table [loading]="loading" #dt [value]="bandes" [columns]="cols"  responsiveLayout="scroll" [rows]="10" [globalFilterFields]="['id','reference','description','dateCreation','nom','emplacement','etat','dateFermeture']" [paginator]="true" [rowsPerPageOptions]="[10,20,30]" [showCurrentPageReport]="true" currentPageReportTemplate="Display  {first} to  {last} of  {totalRecords} entries" [(selection)]="selectedBandes" selectionMode="multiple" [rowHover]="true" dataKey="id">
         <ng-template pTemplate="caption">
           <div class="flex flex-column md:flex-row md:justify-content-between md:align-items-center">
             <h5 class="m-0">Band Inventory Management</h5>

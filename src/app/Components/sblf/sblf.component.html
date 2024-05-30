@@ -16,10 +16,10 @@
 
       </p-toolbar>
 
-      <p-table #dt [value]="sblfs" [columns]="cols"  responsiveLayout="scroll" [rows]="10" [globalFilterFields]="['id','reference','description','dateCreation','nom','emplacement','etat','dateFermeture']" [paginator]="true" [rowsPerPageOptions]="[10,20,30]" [showCurrentPageReport]="true" currentPageReportTemplate="Display  {first} to  {last} of  {totalRecords} entries" [(selection)]="selectedSblfs" selectionMode="multiple" [rowHover]="true" dataKey="id">
+      <p-table #dt [loading]="loading" [value]="sblfs" [columns]="cols"  responsiveLayout="scroll" [rows]="10" [globalFilterFields]="['id','reference','description','dateCreation','nom','emplacement','etat','dateFermeture']" [paginator]="true" [rowsPerPageOptions]="[10,20,30]" [showCurrentPageReport]="true" currentPageReportTemplate="Display  {first} to  {last} of  {totalRecords} entries" [(selection)]="selectedSblfs" selectionMode="multiple" [rowHover]="true" dataKey="id">
         <ng-template pTemplate="caption">
           <div class="flex flex-column md:flex-row md:justify-content-between md:align-items-center">
-            <h5 class="m-0">Management of final lava basin stocks</h5>
+            <h5 class="m-0">Management of unwashed Pond stocks</h5>
             <span class="block mt-2 md:mt-0 p-input-icon-left">
                             <i class="pi pi-search"></i>
                             <input  type="text" pInputText (input)="onGlobalFilter(dt, $event)" placeholder="Search..."  class="w-full sm:w-auto"/>
