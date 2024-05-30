@@ -88,14 +88,14 @@
       </p-table>
     </div>
 
-    <p-dialog [(visible)]="productDialog" [style]="{width: '450px'}" header="Add User " [modal]="true" class="p-fluid">
+    <p-dialog [(visible)]="productDialog" [style]="{width: '450px'}" header="User "   [modal]="true" class="p-fluid">
       <ng-template pTemplate="content">
         <div class="flex justify-content-evenly">
-        <div class="field">
+        <div class="field" *ngIf="!isUpdateUser">
           <p-radioButton id="admin" name="user"   value="ADMIN" [(ngModel)]="user.userType" inputId="admin"></p-radioButton>
           <label for="admin" class="ml-2">Admin</label>
         </div>
-        <div class="field">
+        <div class="field" *ngIf="!isUpdateUser">
           <p-radioButton  id="employer" name="user"   value="EMPLOYER" [(ngModel)]="user.userType" inputId="employer"></p-radioButton>
           <label for="employer" class="ml-2">Employer</label>
         </div>

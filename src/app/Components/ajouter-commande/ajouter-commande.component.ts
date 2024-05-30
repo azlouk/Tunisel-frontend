@@ -270,10 +270,12 @@ getCommandeById(){
   this.commandeService.getCommandeById(this.commandeId).subscribe(value => {
     this.commande = value;
 
-    this.selectedColumns=this.commande.dataHeaders || []
-      this.listeLignesCommandes = value.ligneCommandes??[];
-
-      this.CalculeTotalInput();
+        this.selectedColumns=this.commande.dataHeaders || []
+        this.listeLignesCommandes = value.ligneCommandes??[];
+        this.DatefiltrageStart=this.commande.datestart!==undefined?this.commande.datestart+'' :new Date().toDateString() ;
+        this.DatefiltrageEnd=this.commande.dateend!==undefined?this.commande.dateend+'' :new Date().toDateString() ;
+    this.matter=this.commande.quality!==undefined?this.commande.quality :"no quality selected" ;
+        this.CalculeTotalInput();
       this.getCalibre() ;
       this.calculerMoyennes();
 
@@ -290,9 +292,25 @@ getCommandeById(){
     //Fix date Save -1 day primeng
         const datestr=this.commande.dateCommande?.toString()
        const dates: string | null =this.datePipe.transform(datestr,'yyyy-MM-dd')
+   //Date creation  of command
     if (dates) {
       this.commande.dateCommande = new Date(dates);
     }
+    //date Start of command
+    const dateStart=this.DatefiltrageStart?.toString()
+    const dateStarts: string | null =this.datePipe.transform(dateStart,'yyyy-MM-dd')
+    if(dateStarts){
+      this.commande.datestart = new Date(dateStarts);
+    }
+
+    //date end of command
+    const dateEnd=this.DatefiltrageEnd?.toString()
+    const dateEnds: string | null =this.datePipe.transform(dateEnd,'yyyy-MM-dd')
+    if(dateEnds){
+      this.commande.dateend = new Date(dateEnds);
+    }
+
+    this.commande.quality=this.matter;
   this.commande.calibre=this.selectedColumnsCalibre!==undefined?this.selectedColumnsCalibre.header:'no calibre selected'
     this.commande.ligneCommandes=[];
     this.commande.ligneCommandes=this.listeLignesCommandes;
@@ -327,8 +345,8 @@ getCommandeById(){
     this.visibale=false;
   }
 
-  onGlobalFilter(dt: Table, $event: Event) {
-
+  onGlobalFilter(dt: Table, event: Event) {
+    dt.filterGlobal((event.target as HTMLInputElement).value, 'contains');
   }
 
 
@@ -454,8 +472,10 @@ this.commande.bassins.forEach(basin => {
 
               return ligneCommande.analyseChimique !== null ? this.pipedate(ligneCommande.analyseChimique[col.field]) : '-'
             }
-
-             return ligneCommande.analyseChimique!==null ? ligneCommande.analyseChimique[col.field] : '-';
+              if(ligneCommande.analyseChimique==null && col.field=="reference"){
+                return  ligneCommande.analysePhysique[col.field]
+              }
+             return ligneCommande.analyseChimique!==null ? ligneCommande.analyseChimique[col.field] :"-" ;
     }
     else
       if (col.id > 20 && col.id < 24)
@@ -790,17 +810,17 @@ this.getLine()
             '  <div class="flex flex-column gap-3 border-1 border-round border-gray-400 p-3">' +
             '    <div class="flex align-items-start gap-3 justify-content-between">' +
             '      <label   class="font-bold">Total Harvset in(T) :    </label>' +
-            '      <label   class="font-bold text-center    ">' + this.TotalHarv + '</label>' +
+            '      <label   class="font-bold text-center    ">' + this.TotalHarv.toFixed(3) + '</label>' +
             '     </div>' +
 
             '    <div class="flex align-items-center gap-3 justify-content-between ">' +
             '      <label   class="font-bold">Total Production in(T) :</label>' +
-            '      <label   class="font-bold text-center    ">' + this.TotalProd + '</label>' +
+            '      <label   class="font-bold text-center    ">' + this.TotalProd.toFixed(3) + '</label>' +
 
             '     </div>' +
             '    <div class="flex align-items-center gap-3 justify-content-between ">' +
             '      <label   class="font-bold">Total Transfer Quantity :</label>' +
-            '      <label   class="font-bold text-center    ">' + this.TotalHarv + '</label>' +
+            '      <label   class="font-bold text-center    ">' + this.TotalHarv.toFixed(3) + '</label>' +
 
             '     </div>' +
             '  </div>' +
@@ -810,31 +830,31 @@ this.getLine()
             '          <div class="flex flex gap-5 border-1 border-round border-gray-400 p-3">\n' +
             '            <div class="flex align-items-start gap-3 justify-content-between">\n' +
             '              <label class="font-bold ">% Cum Pass: </label>\n' +
-            '              <label class="font-bold text-center    ">'+this.calculerMoyennes().passCumulated+'</label>\n' +
+            '              <label class="font-bold text-center    ">'+this.calculerMoyennes().passCumulated.toFixed(3)+'</label>\n' +
             '            </div>\n' +
             '            <div class="flex align-items-start gap-3 justify-content-between">\n' +
             '              <label class="font-bold">%H₂O: </label>\n' +
-            '              <label class="font-bold text-center">'+this.calculerMoyennes().humidite+'</label>\n' +
+            '              <label class="font-bold text-center">'+this.calculerMoyennes().humidite.toFixed(3)+'</label>\n' +
             '            </div>\n' +
             '            <div class="flex align-items-start gap-3 justify-content-between">\n' +
             '              <label class="font-bold">%Mg: </label>\n' +
-            '              <label class="font-bold text-center">'+this.calculerMoyennes().magnesium+'</label>\n' +
+            '              <label class="font-bold text-center">'+this.calculerMoyennes().magnesium.toFixed(3)+'</label>\n' +
             '            </div>\n' +
             '            <div class="flex align-items-start gap-3 justify-content-between">\n' +
             '              <label class="font-bold">%SO₄: </label>\n' +
-            '              <label class="font-bold text-center">'+this.calculerMoyennes().sulfate+'</label>\n' +
+            '              <label class="font-bold text-center">'+this.calculerMoyennes().sulfate.toFixed(3)+'</label>\n' +
             '            </div>\n' +
             '            <div class="flex align-items-start gap-3 justify-content-between">\n' +
             '              <label class="font-bold">%NaCL: </label>\n' +
-            '              <label class="font-bold text-center">'+this.calculerMoyennes().chlorureDeSodium+'</label>\n' +
+            '              <label class="font-bold text-center">'+this.calculerMoyennes().chlorureDeSodium.toFixed(3)+'</label>\n' +
             '            </div>\n' +
             '            <div class="flex align-items-start gap-3 justify-content-between">\n' +
             '              <label class="font-bold">%MI: </label>\n' +
-            '              <label class="font-bold text-center">'+this.calculerMoyennes().matiereInsoluble+'</label>\n' +
+            '              <label class="font-bold text-center">'+this.calculerMoyennes().matiereInsoluble.toFixed(3)+'</label>\n' +
             '            </div>\n' +
             '            <div class="flex align-items-start gap-3 justify-content-between">\n' +
             '              <label class="font-bold">%Fe(CN)₆: </label>\n' +
-            '              <label class="font-bold text-center">'+this.calculerMoyennes().ferrocyanure+'</label>\n' +
+            '              <label class="font-bold text-center">'+this.calculerMoyennes().ferrocyanure.toFixed(3)+'</label>\n' +
             '            </div>\n' +
             '          </div>\n' ;
 
@@ -919,7 +939,7 @@ this.getLine()
 
               // Si une partie numérique est trouvée, elle est convertie en nombre
               if (passCumulatedValue) {
-                console.log('passCumulatedNumber: '+ passCumulatedValue)
+                // console.log('passCumulatedNumber: '+ passCumulatedValue)
 
                 // let passCumulatedNumber = Number(passCumulatedValue[0]);
 
@@ -927,8 +947,8 @@ this.getLine()
 
                   totalPassCum += passCumulatedValue;
                   countPassCum++;
-                  console.log('countPassCum: '+countPassCum)
-                  console.log('totalPassCum: '+totalPassCum)
+                  // console.log('countPassCum: '+countPassCum)
+                  // console.log('totalPassCum: '+totalPassCum)
 
               }
             }
@@ -1093,4 +1113,11 @@ this.getLine()
   }
 
 
+  getheader():any[] {
+    let headers:any[]=[]
+    this.selectedColumns.forEach(value => {
+      headers.push(value.header)
+    })
+    return headers;
+  }
 }

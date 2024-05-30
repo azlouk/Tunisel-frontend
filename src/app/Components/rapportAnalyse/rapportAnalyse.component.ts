@@ -190,7 +190,7 @@ export class RapportAnalyseComponent {
 
     this.analyseChimiqueId = this.route.snapshot.paramMap.get('id');
     this.isUpdateAnalyseChimique = this.analyseChimiqueId !== null
-    this.analysesChimique.reference = "00" + new Date().getFullYear()
+    this.analysesChimique.reference = "R-" + new Date().getMonth() + new Date().getFullYear()
 
     if (!this.isUpdateAnalyseChimique) {
       // @ts-ignore
@@ -205,7 +205,7 @@ export class RapportAnalyseComponent {
         this.selectedSbnl = value.sbnl;
         this.selectedSblf = value.sblf;
         this.selectedBande = value.bande;
-        console.log('ooooooooooooooooo  ', new JsonPipe().transform(value))
+        //console.log('ooooooooooooooooo  ', new JsonPipe().transform(value))
       }, error => {
 
       });

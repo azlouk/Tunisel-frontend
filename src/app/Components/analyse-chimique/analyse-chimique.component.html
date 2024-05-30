@@ -50,6 +50,7 @@
             <th pSortableColumn="reference">Reference <p-sortIcon field="reference"></p-sortIcon></th>
              <th pSortableColumn="dateAnalyse">Analysis Date<p-sortIcon field="dateAnalyse"></p-sortIcon></th>
              <th pSortableColumn="matiere">Matter<p-sortIcon field="matiere"></p-sortIcon></th>
+             <th pSortableColumn="qualite">Quality<p-sortIcon field="qualite"></p-sortIcon></th>
             <th pSortableColumn="temperature">temperature <p-sortIcon field="temperature"></p-sortIcon></th>
             <th pSortableColumn="vent">wind <p-sortIcon field="vent"></p-sortIcon></th>
             <th pSortableColumn="ref">Relatif  <p-sortIcon field="ref"></p-sortIcon></th>
@@ -77,6 +78,10 @@
             <td style="width:14%; min-width:10rem;">
               <span class="p-column-title">Matter</span>
               {{analyseChimique.matiere}}
+            </td>
+            <td style="width:14%; min-width:10rem;">
+              <span class="p-column-title">quality</span>
+              {{analyseChimique.qualite}}
             </td>
             <td style="width:14%; min-width:10rem;">
               <span class="p-column-title">temperature</span>

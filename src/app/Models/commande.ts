@@ -21,5 +21,10 @@ export interface Commande {
   bandes?:Bande[];
   dataHeaders?:Column[];
   calibre?:string
+
+  datestart?:Date;
+  dateend?:Date;
+  quality?:string;
+
 }
 

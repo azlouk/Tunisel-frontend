@@ -67,7 +67,7 @@ export class UserComponent implements OnInit {
 
   selectedUsers: User[] = [];
 
-  private isUpdateUser = false;
+   isUpdateUser = false;
 
   constructor(  private messageService: MessageService, private userService: UserService) {
   }
@@ -152,6 +152,7 @@ export class UserComponent implements OnInit {
   hideDialog() {
     this.productDialog = false;
     this.submitted = false;
+    this.isUpdateUser=false ;
   }
 
 
