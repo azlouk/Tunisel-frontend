@@ -45,6 +45,7 @@ import autoTable from "jspdf-autotable";
 import {OverlayPanelModule} from "primeng/overlaypanel";
 import {ProgressBarModule} from "primeng/progressbar";
 import Swal from "sweetalert2";
+import {ProgressSpinnerModule} from "primeng/progressspinner";
 
 
 
@@ -85,6 +86,7 @@ export interface Column {
     AutoCompleteModule,
     OverlayPanelModule,
     ProgressBarModule,
+    ProgressSpinnerModule,
 
   ],
   templateUrl: './ajouter-commande.component.html',
@@ -268,6 +270,7 @@ export class AjouterCommandeComponent implements OnInit{
     this.router.navigate(['/commande']);
   }
 getCommandeById(){
+  this.loadingcommande=true;
   this.commandeService.getCommandeById(this.commandeId).subscribe(value => {
     this.commande = value;
 
@@ -279,7 +282,7 @@ getCommandeById(){
         this.CalculeTotalInput();
       this.getCalibre() ;
       this.calculerMoyennes();
-
+    this.loadingcommande=false ;
     // console.log(new JsonPipe().transform(this.commande))
   });
 }
@@ -290,6 +293,7 @@ getCommandeById(){
     return `${year}-${month}-${day}`;
   }
   saveCommande() {
+    this.loadinSave=true;
     //Fix date Save -1 day primeng
         const datestr=this.commande.dateCommande?.toString()
        const dates: string | null =this.datePipe.transform(datestr,'yyyy-MM-dd')
@@ -323,15 +327,20 @@ getCommandeById(){
       }
     })
 
-    console.log(new JsonPipe().transform( this.commande))
+   // console.log(new JsonPipe().transform( this.commande))
 
     if(this.isUpdateCommande){
 
-      this.commandeService.updateCommande(this.commande).subscribe(value => this.router.navigate(['/commande']))
+      this.commandeService.updateCommande(this.commande).subscribe(value => {
+       this.loadinSave=false;
+        this.router.navigate(['/commande'])
+      })
     }
     else{
 
         this.commandeService.addCommande(this.commande).subscribe(value => {
+          this.loadinSave=false;
+
           this.router.navigate(['/commande']);
         },error => console.log(error));
       }
@@ -369,55 +378,63 @@ getCommandeById(){
   }
 
   getLine() {
+    this.loadingcommande=true;
 this.listeLignesCommandes=[];
-    if(this.commande.bassins){
+if(this.commande.bassins){
 this.commande.bassins.forEach(basin => {
   if(basin.id){
+    this.loadingcommande=true;
     this.commandeService.getLignesCommandesBassin(basin.id).subscribe(value => {
       const data=value.filter(value1 => this.listeLignesCommandes.find(value2 => value2==value1)==undefined)
 
       this.listeLignesCommandes.push(...data);
-
+      this.loadingcommande=false;
       console.log('size  : ' + this.listeLignesCommandes.length);
       this.getCalibre();
+      this.calculerMoyennes();
     },error =>{
       console.log(error);
-      console.log('error size  : ' + this.listeLignesCommandes.length);});
+     // console.log('error size  : ' + this.listeLignesCommandes.length)
+      ;});
   }
-
   })
 
     }
-
-
-    if(this.commande.sbnls){
+if(this.commande.sbnls){
       this.commande.sbnls.forEach(sbnl => {
         if(sbnl.id){
+          this.loadingcommande=true;
           this.commandeService.getLignesCommandesSbnl(sbnl.id).subscribe(value => {
             const data=value.filter(value1 => this.listeLignesCommandes.find(value2 => value2==value1)==undefined)
 
             this.listeLignesCommandes.push(...data);
 
-            console.log('size  : ' + this.listeLignesCommandes.length);
+           // console.log('size  : ' + this.listeLignesCommandes.length);
             this.getCalibre();
+            this.calculerMoyennes();
+            this.loadingcommande=false;
           },error =>{
             console.log(error);
-            console.log('error size  : ' + this.listeLignesCommandes.length);});
+         //   console.log('error size  : ' + this.listeLignesCommandes.length);
+          });
         }
 
       })
 
     }
-
-    if(this.commande.sbls){
+if(this.commande.sbls){
       this.commande.sbls.forEach(sbl => {
         if(sbl.id){
+          this.loadingcommande=true;
           this.commandeService.getLignesCommandesSbl(sbl.id).subscribe(value => {
             const data=value.filter(value1 => this.listeLignesCommandes.find(value2 => value2==value1)==undefined)
 
             this.listeLignesCommandes.push(...data);
 
-             this.getCalibre();
+            this.getCalibre();
+            this.calculerMoyennes();
+             this.loadingcommande=false;
+
           },error =>{
             console.log(error);});
         }
@@ -425,29 +442,32 @@ this.commande.bassins.forEach(basin => {
       })
 
     }
-    if(this.commande.sblfs){
+if(this.commande.sblfs){
       this.commande.sblfs.forEach(sblf => {
         if(sblf.id){
+          this.loadingcommande=true;
           this.commandeService.getLignesCommandesSblf(sblf.id).subscribe(value => {
             const data=value.filter(value1 => this.listeLignesCommandes.find(value2 => value2==value1)==undefined)
 
             this.listeLignesCommandes.push(...data);
 
-            console.log('size  : ' + this.listeLignesCommandes.length);
+          //  console.log('size  : ' + this.listeLignesCommandes.length);
             this.getCalibre();
-              this.getCalibre();
             this.calculerMoyennes();
+            this.loadingcommande=false;
           },error =>{
             console.log(error);
-            console.log('error size  : ' + this.listeLignesCommandes.length);});
+           // console.log('error size  : ' + this.listeLignesCommandes.length);
+          });
         }
 
       })
 
     }
-    if(this.commande.bandes){
+if(this.commande.bandes){
       this.commande.bandes.forEach(bande => {
         if(bande.id){
+          this.loadingcommande=true;
           this.commandeService.getLignesCommandesBande(bande.id).subscribe(value => {
             const data=value.filter(value1 => this.listeLignesCommandes.find(value2 => value2==value1)==undefined)
 
@@ -455,14 +475,18 @@ this.commande.bassins.forEach(basin => {
 
             console.log('size  : ' + this.listeLignesCommandes.length);
             this.getCalibre();
+            this.calculerMoyennes();
+            this.loadingcommande=false;
           },error =>{
             console.log(error);
-            console.log('error size  : ' + this.listeLignesCommandes.length);});
+           // console.log('error size  : ' + this.listeLignesCommandes.length);
+          });
         }
 
       })
 
     }
+
  }
 
 
@@ -473,7 +497,7 @@ this.commande.bassins.forEach(basin => {
 
               return ligneCommande.analyseChimique !== null ? this.pipedate(ligneCommande.analyseChimique[col.field]) : '-'
             }
-              if(ligneCommande.analyseChimique==null && col.field=="reference"){
+              if(ligneCommande.analyseChimique==null && ligneCommande.analysePhysique!==null && col.field=="reference"){
                 return  ligneCommande.analysePhysique[col.field]
               }
              return ligneCommande.analyseChimique!==null ? ligneCommande.analyseChimique[col.field] :"-" ;
@@ -516,10 +540,10 @@ this.commande.bassins.forEach(basin => {
     this.deleteLineCommandeDialog = true;
     this.lineCommande = {...lineCommande};
   }
-  confirmDelete() {
+  confirmDelete(lineCommande: LineCommande) {
     this.deleteLineCommandeDialog = false;
 
-   this.listeLignesCommandes = this.listeLignesCommandes.filter(val => val.id !== this.lineCommande.id);
+   this.listeLignesCommandes = this.listeLignesCommandes.filter(val => val.id !==lineCommande.id);
         this.messageService.add({severity: 'success', summary: 'Successful', detail: 'Line Commande Deleted', life: 3000});
 
     this.CalculeTotalInput()
@@ -881,13 +905,15 @@ this.getLine()
 
       }, this.commande.ligneCommandes!.length * 100)
     }else {
-      console.log("aucun ligne commande")
+     // console.log("aucun ligne commande")
       Swal.fire({title:"Error" ,text:"No data found to printed" ,icon:"error"})
     }
      }
 
 
   protected readonly Swal = Swal;
+  loadingcommande: boolean=false;
+  loadinSave: boolean=false ;
 
 
   calculerMoyennes():
@@ -961,7 +987,7 @@ this.getLine()
         }
       }
 
-      console.log('liste de ligne commande'+new JsonPipe().transform(lineCommande))
+      //console.log('liste de ligne commande'+new JsonPipe().transform(lineCommande))
 
       if (lineCommande.analyseChimique) {
 
@@ -1158,5 +1184,9 @@ this.getLine()
       headers.push(value.header)
     })
     return headers;
+  }
+
+  caliber(selectedColumnsCalibre: any) {
+    this.selectedColumnsCalibre=selectedColumnsCalibre ;
   }
 }
