@@ -15,7 +15,7 @@
 
       </p-toolbar>
 
-      <p-table #dt [value]="comanndes" [columns]="cols"  responsiveLayout="scroll" [rows]="10" [globalFilterFields]="['id','nom','etat']" [paginator]="true" [rowsPerPageOptions]="[10,20,30,200,500]" [showCurrentPageReport]="true" currentPageReportTemplate="Display from {first} to {last} of {totalRecords} items" [(selection)]="selectedCommandes" selectionMode="multiple" [rowHover]="true" dataKey="id">
+      <p-table #dt [value]="comanndes" [columns]="cols"  responsiveLayout="scroll" [rows]="10" [globalFilterFields]="['id','nom','etat','dateCommande']" [paginator]="true" [rowsPerPageOptions]="[10,20,30,200,500]" [showCurrentPageReport]="true" currentPageReportTemplate="Display from {first} to {last} of {totalRecords} items" [(selection)]="selectedCommandes" selectionMode="multiple" [rowHover]="true" dataKey="id">
         <ng-template pTemplate="caption">
           <div class="flex flex-column md:flex-row md:justify-content-between md:align-items-center">
             <h5 class="m-0">Commands List </h5>
@@ -34,6 +34,7 @@
               <p-tableHeaderCheckbox></p-tableHeaderCheckbox>
             </th>
             <th pSortableColumn="id">ID<p-sortIcon field="id"></p-sortIcon></th>
+            <th pSortableColumn="dateCommande">Date creation<p-sortIcon field="dateCommande"></p-sortIcon></th>
             <th pSortableColumn="nom">Name <p-sortIcon field="nom"></p-sortIcon></th>
             <th pSortableColumn="etat">Status<p-sortIcon field="etat"></p-sortIcon></th>
             <th></th>
@@ -44,15 +45,19 @@
             <td>
               <p-tableCheckbox [value]="commande"></p-tableCheckbox>
             </td>
-            <td style="width:20%; min-width:10rem;">
+            <td style="width:10%; min-width:10rem;">
               <span class="p-column-title">ID</span>
               {{commande.id}}
+            </td>
+            <td style="width:15%; min-width:10rem;">
+              <span class="p-column-title">ID</span>
+              {{commande.dateCommande | date :'dd-MM-yyyy'}}
             </td>
             <td style="width:50%; min-width:10rem;">
               <span class="p-column-title">Nom</span>
               {{commande.nom}}
             </td>
-            <td style="width:20%; min-width:10rem;">
+            <td style="width:15%; min-width:10rem;">
               <span class="p-column-title">Etat</span>
               {{commande.etat}}
             </td>

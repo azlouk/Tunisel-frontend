@@ -2,7 +2,7 @@ import {Component, OnInit} from '@angular/core';
 import {ButtonModule} from "primeng/button";
 import {DialogModule} from "primeng/dialog";
 import {InputTextModule} from "primeng/inputtext";
-import {NgForOf, NgIf} from "@angular/common";
+import {DatePipe, NgForOf, NgIf} from "@angular/common";
 import {MessageService, SharedModule} from "primeng/api";
 import {Table, TableModule} from "primeng/table";
 import {ToastModule} from "primeng/toast";
@@ -43,7 +43,8 @@ import {InputNumberModule} from "primeng/inputnumber";
     RippleModule,
     AutoFocusModule,
     ListboxModule,
-    InputNumberModule
+    InputNumberModule,
+    DatePipe
   ],
   templateUrl: './commande.component.html',
   styleUrl: './commande.component.css'
