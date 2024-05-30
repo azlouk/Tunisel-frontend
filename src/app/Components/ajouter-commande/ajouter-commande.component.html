@@ -224,12 +224,13 @@
                   </ng-template>
                   <ng-template pTemplate="output">
                     {{getValueOfligneCommande(col,lineCommande)}}
+
                   </ng-template>
                 </p-cellEditor>
 
                 </td>
 
-                <td *ngIf="col.id>=0 && col.id<27">
+                <td *ngIf="col.id>=0 && col.id<29 || col.id== 42">
 
                   {{getValueOfligneCommande(col, lineCommande)}}
                 </td>

@@ -19,4 +19,5 @@ export interface LineCommande {
   analyseChimique:AnalysesChimique| null;
   analysePhysique:AnalysesPhysique | null;
   dateCreation?:Date;
+  related?:string;
 }

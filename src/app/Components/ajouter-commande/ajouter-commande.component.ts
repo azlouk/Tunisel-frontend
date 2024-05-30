@@ -216,6 +216,7 @@ export class AjouterCommandeComponent implements OnInit{
       {id:39, field: 'lieuxPrelevement', header: 'Places Prelevement'},
       {id:40, field: 'matCamion', header: 'Truck Mat'},
       {id:41, field: 'conformite', header: 'Conformite'},
+      {id:42, field: 'related', header: 'Related'},
 
     ];
 
@@ -279,7 +280,7 @@ getCommandeById(){
       this.getCalibre() ;
       this.calculerMoyennes();
 
-     console.log(new JsonPipe().transform(this.commande))
+    // console.log(new JsonPipe().transform(this.commande))
   });
 }
   formatDate(date: Date): string {
@@ -495,7 +496,11 @@ this.commande.bassins.forEach(basin => {
       }
     }
 
+        else if(col.id==42){
+        // return ligneCommande.analysePhysique!==null  ? ligneCommande.analysePhysique[col.field] : '-';
+        return ligneCommande.related!==null  ? this.getRelatedAnalyse(ligneCommande) : '-';
 
+      }
     else {
       // ligneCommande.dateCreation=new Date();
 
@@ -596,7 +601,7 @@ this.getLine()
   }
 
   AfterTodate(date1:Date , date2:Date):boolean{
-    console.log(date1+"<"+date2)
+    // console.log(date1+"<"+date2)
     return date1.getTime()<=date2.getTime()
   }
     pipedate(analyseChimiqueElement: any) {
@@ -630,7 +635,7 @@ this.getLine()
     // lineCommande.analyseChimique?.dateAnalyse!==undefined? lineCommande.analyseChimique.dateAnalyse.toString():new Date();
 
     this.listeLignesCommandes.unshift(lineCommande);
-    console.log('===========>>>>>>: '+new JsonPipe().transform(this.listeLignesCommandes))
+    // console.log('===========>>>>>>: '+new JsonPipe().transform(this.listeLignesCommandes))
   }
 
   CalculeTotalInput() {
@@ -956,8 +961,14 @@ this.getLine()
         }
       }
 
+      console.log('liste de ligne commande'+new JsonPipe().transform(lineCommande))
 
       if (lineCommande.analyseChimique) {
+
+
+
+
+
 
         if (lineCommande.analyseChimique.humidite !== undefined &&
           lineCommande.analyseChimique.humidite !== null) {
@@ -1105,12 +1116,40 @@ this.getLine()
 
     };
   }
+    getRelatedAnalyse(lineCommande:LineCommande): string {
+      let related: string = '';
 
 
-  caliber(selectedColumnsCalibre: Column) {
-    this.selectedColumnsCalibre=selectedColumnsCalibre
-    this.calculerMoyennes()
-  }
+      const sbnl = this.commande.sbnls?.find(sbnl => sbnl.analysesChimiques!.find(analyse => analyse.id == lineCommande.analyseChimique?.id) !== undefined || sbnl.analysesPhysiques!.find(analyseph => analyseph.id == lineCommande.analysePhysique?.id) !== undefined)
+      if (sbnl !== undefined && sbnl.reference !== undefined) {
+        related = sbnl.reference;
+      }
+
+
+      const bassin = this.commande.bassins?.find(bassin => bassin.analysesChimiques!.find(analyse => analyse.id == lineCommande.analyseChimique?.id) !== undefined || bassin.analysesPhysiques!.find(analyseph => analyseph.id == lineCommande.analysePhysique?.id) !== undefined)
+      if (bassin !== undefined && bassin.nom !== undefined) {
+        related = bassin.nom;
+      }
+
+
+      const sbl = this.commande.sbls?.find(sbl => sbl.analysesChimiques!.find(analyse => analyse.id == lineCommande.analyseChimique?.id) !== undefined || sbl.analysesPhysiques!.find(analyseph => analyseph.id == lineCommande.analysePhysique?.id) !== undefined)
+      if (sbl !== undefined && sbl.reference !== undefined) {
+        related = sbl.reference;
+      }
+
+      const sblf = this.commande.sblfs?.find(sblf => sblf.analysesChimiques!.find(analyse => analyse.id == lineCommande.analyseChimique?.id) !== undefined || sblf.analysesPhysiques!.find(analyseph => analyseph.id == lineCommande.analysePhysique?.id) !== undefined)
+      if (sblf !== undefined && sblf.reference !== undefined) {
+        related = sblf.reference;
+      }
+
+      const bande = this.commande.bandes?.find(bande => bande.analysesChimiques!.find(analyse => analyse.id == lineCommande.analyseChimique?.id) !== undefined || bande.analysesPhysiques!.find(analyseph => analyseph.id == lineCommande.analysePhysique?.id) !== undefined)
+      if (bande !== undefined && bande.reference !== undefined) {
+        related = bande.reference;
+      }
+
+      return related;
+
+    }
 
 
   getheader():any[] {
