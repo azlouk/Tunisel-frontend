@@ -130,9 +130,8 @@
         </div>
 
         <div class="field">
-          <label for="dateStock">Date Stock</label>
-          <p-calendar dateFormat="yy-mm-dd" id="dateStock" [(ngModel)]="sblf.dateStock"   [showIcon]="true"></p-calendar>
-<!--          <small class="ng-dirty ng-invalid" *ngIf="submitted && !sblf.dateStock">poste is required.</small>-->
+          <label for="dateCreation">Date Stock</label>
+          <input  class="p-2 shadow-1" type="date" pInputText id="dateCreation"  [(ngModel)]="sblf.dateStock"  />
         </div>
 
         <div class="field">

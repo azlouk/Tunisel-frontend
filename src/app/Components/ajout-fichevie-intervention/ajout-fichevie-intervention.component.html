@@ -37,7 +37,8 @@
       <div class="flex justify-content-between  align-items-center">
         <div class="flex flex-column gap-4">
           <p-floatLabel>
-            <p-calendar id="dateReception" dateFormat="yy-mm-dd" [showIcon]="true" [(ngModel)]="ficheVie.dateReception"></p-calendar>
+            <input  class="p-2 shadow-1 w-full" type="date" pInputText id="dateReception" dateFormat="yy-mm-dd" [(ngModel)]="ficheVie.dateReception"  />
+
             <label for="dateReception">Reception date</label>
           </p-floatLabel>
           <p-floatLabel>

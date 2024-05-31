@@ -6,7 +6,6 @@
       <ng-template pTemplate="end"  >
         <div class=" my-2 " >
 
-          <button pButton pRipple label="Back" icon="pi pi-arrow-left" class="p-button-success mr-2 " (click)="retour()"></button>
         </div>
       </ng-template>
       <h4>Add analysis report</h4>
@@ -14,7 +13,7 @@
     <div  class=" flex gap-5  mt-8 border-1 border-round border-gray-300 p-6   ">
       <div class=" gap-5  flex flex-column   card  justify-content-between  ">
         <p-floatLabel >
-          <input  class="p-2 shadow-1" type="date" pInputText id="dateCreationph"  [(ngModel)]="analysesChimique.dateAnalyse" [value]="analysesChimique.dateAnalyse" />
+          <input  class="p-2 shadow-1 w-full" type="date" pInputText id="dateCreationph"  [(ngModel)]="analysesChimique.dateAnalyse" [value]="analysesChimique.dateAnalyse" />
           <label for="dateCreationph">date created</label>
           <!--        <p-calendar id="dateCreation" dateFormat="yy-mm-dd" [(ngModel)]="bassin.dateCreation"  [ngClass]="{'ng-invalid ng-dirty' : submitted && !bassin.dateCreation}" [showIcon]="true"></p-calendar>-->
           <!--        <small class="ng-dirty ng-invalid" *ngIf="submitted && !bassin.dateCreation">poste is required.</small>-->

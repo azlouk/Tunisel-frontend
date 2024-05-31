@@ -109,8 +109,8 @@
 
         <div class="field">
           <label for="dateCreation">Creation Date</label>
-          <p-calendar dateFormat="yy-mm-dd" id="dateCreation" [(ngModel)]="puit.dateCreation"    [showIcon]="true"></p-calendar>
-<!--          <input type="text" pInputText id="dateCreation"  [(ngModel)]="puit.dateCreation" required autofocus [ngClass]="{'ng-invalid ng-dirty' : submitted && !puit.dateCreation}"/>-->
+          <input  class="p-2 shadow-1" dateFormat="yy-mm-dd" type="date" pInputText id="dateCreation"  [(ngModel)]="puit.dateCreation"  />
+
          </div>
         <div class="field">
           <label for="nom">Name</label>
@@ -145,7 +145,7 @@
     <p-dialog [(visible)]="deleteProductDialog" header="Confirm" [modal]="true" [style]="{width:'450px'}">
       <div class="flex align-items-center justify-content-center">
         <i class="pi pi-exclamation-triangle mr-3" style="font-size: 2rem"></i>
-        <span *ngIf="product">Are you sure you want to delete? <b>{{product.name}}</b>?</span>
+        <span *ngIf="product">Are you sure you want to delete? </span>
       </div>
       <ng-template pTemplate="footer">
         <button pButton pRipple icon="pi pi-times" class="p-button-text" label="Non" (click)="deleteProductDialog = false"></button>

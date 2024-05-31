@@ -29,6 +29,7 @@ import {getToken} from "../../../main";
 import {TooltipModule} from "primeng/tooltip";
 import * as XLSX from "xlsx";
 import {writeFile} from "xlsx";
+import Swal from "sweetalert2";
 
 @Component({
   selector: 'app-sblf',
@@ -163,31 +164,44 @@ export class SblfComponent {
 
   confirmDeleteSelected() {
     this.deleteProductsDialog = false;
-    console.log(this.selectedSblfs.length)
     this.selectedSblfs.forEach(selectedSblf => {
       this.sblfService.deleteSblf(selectedSblf.id).subscribe(
         () => {
           this.sblfs = this.sblfs.filter(sblf =>sblf.id !== selectedSblf.id);
+          this.messageService.add({ severity: 'success', summary: 'Successful', detail: 'Sblf Deleted', life: 3000 });
+
         },
         (error) => {
-          console.error('Error deleting Sbl:', error);
+          Swal.fire({
+            icon: "error",
+            title: "Can not deleted",
+            text: "Washed ship related with  Chemical and Granulometric Analysis !",
+          })
+          console.error( error);
         }
       );
     });
 
-    this.messageService.add({ severity: 'success', summary: 'Successful', detail: 'Sbl Deleted', life: 3000 });
-    this.selectedSblfs = [];
+
   }
 
   confirmDelete() {
     this.deleteProductDialog = false;
-    console.log("this.sblf.id", this.sblf.id);
-    this.sblfs = this.sblfs.filter(val => val.id !== this.sblf.id);
     if (this.sblf.id!= null) {
-      this.sblfService.deleteSblf(this.sblf.id).subscribe(() => console.log("Sblf deleted"));
+      this.sblfService.deleteSblf(this.sblf.id).subscribe(() => {
+        this.sblfs = this.sblfs.filter(val => val.id !== this.sblf.id);
+
+        this.messageService.add({ severity: 'success', summary: 'Successful', detail: 'Sblf Deleted', life: 3000 });
+
+      },error => {
+        Swal.fire({
+          icon: "error",
+          title: "Can not deleted",
+          text: "Washed ship related with  Chemical and Granulometric Analysis !",
+        })
+        console.log(error)
+      });
     }
-    this.messageService.add({ severity: 'success', summary: 'Successful', detail: 'Sblf Deleted', life: 3000 });
-    this.sblf ;
   }
 
   hideDialog() {

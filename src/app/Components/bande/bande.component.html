@@ -136,7 +136,8 @@
 
         <div class="field">
           <label for="dateCreation">Date Stock</label>
-          <p-calendar dateFormat="yy-mm-dd" id="dateCreation" [(ngModel)]="bande.dateStock"  [ngClass]="{'ng-invalid ng-dirty' : submitted && !bande.dateStock}" [showIcon]="true"></p-calendar>
+          <input  class="p-2 shadow-1" type="date" pInputText id="dateCreation"  [(ngModel)]="bande.dateStock"  />
+
         </div>
 
 

@@ -137,6 +137,9 @@ export class AjouterCommandeComponent implements OnInit{
   private datasel: string[]=[];
   filtereddatasel: any[]=[];
   matter: any="Unwashed salt";
+  first = 0;
+
+  rows = 10;
   constructor(private router: Router,
               private bassinService :BassinService,
               private tamisService:TamisService ,
@@ -1196,4 +1199,13 @@ this.getLine()
   caliber(selectedColumnsCalibre: any) {
     this.selectedColumnsCalibre=selectedColumnsCalibre ;
   }
+
+
+
+
+
+
+
+
+
 }

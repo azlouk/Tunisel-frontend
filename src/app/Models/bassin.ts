@@ -12,7 +12,7 @@ export interface Bassin {
   emplacement?: string;
   etat?: string;
   surface?: number;
-  sbnls?: Sbnl[];
+  // sbnls?: Sbnl[];
   analysesChimiques?: AnalysesChimique[];
   analysesPhysiques?: AnalysesPhysique[];
   bassinPuit?:Puit;

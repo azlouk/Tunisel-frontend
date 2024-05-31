@@ -176,14 +176,20 @@ export class BandeComponent {
       this.bandeService.deleteBande(selectedBande.id).subscribe(
         () => {
           this.bandes = this.bandes.filter(bande =>bande.id !== selectedBande.id);
+          this.messageService.add({ severity: 'success', summary: 'successful', detail: 'Bande Delete', life: 3000 });
+
         },
         (error) => {
-          console.error('Error deleting bande:', error);
+          console.error( error);
+          Swal.fire({
+            icon: "error",
+            title: "Can not deleted",
+            text: "Band related with Washed !",
+          })
         }
       );
     });
 
-    this.messageService.add({ severity: 'success', summary: 'réussi', detail: 'Bande Delete', life: 3000 });
     this.selectedBandes = [];
   }
 
@@ -192,11 +198,15 @@ export class BandeComponent {
 
     if (bande.id!= null) {
       this.bandeService.deleteBande(bande.id).subscribe(() => { this.bandes = this.bandes.filter(val => val.id !== bande.id);
-        console.log("bande deleted")
-        this.messageService.add({ severity: 'success', summary: 'réussi', detail: 'Bande Supprimer', life: 3000 });
+        this.messageService.add({ severity: 'success', summary: 'successful', detail: 'Bande Deleted', life: 3000 });
 
-      },error1 => {
-        Swal.fire({title:"Erreur",icon:"error", text:"SVP   supprimer stock laver puis tout  les analyses (Chimique et granulométrique) "})
+      },error => {
+        console.log(error)
+        Swal.fire({
+          icon: "error",
+          title: "Can not deleted",
+          text: "Band related with Washed !",
+        })
       });
     }
 
