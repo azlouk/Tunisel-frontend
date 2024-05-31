@@ -226,7 +226,7 @@ export class AjouterPrelevmentPhysiqueComponent implements OnInit{
     this.selectedSbnl = {};
      this.selectedSbl = {};
     this.selectedSblf = {};
-    this.id=this.selectedBande!==undefined && this.selectedBande.id!=undefined?this.selectedBande.id:0;
+    this.id=this.selectedBande!==undefined && this.selectedBande.id!==undefined?this.selectedBande.id:0;
     this.ref="bande"
   }
 
@@ -253,7 +253,6 @@ export class AjouterPrelevmentPhysiqueComponent implements OnInit{
   }
 
   saveAnalysePhysique() {
-  alert(this.id+" "+this.ref)
     if(this.isUpdateAnalysePhysique) {
       if (
         this.selectedBassin !== null && this.selectedBassin.hasOwnProperty('id') ||
@@ -262,6 +261,8 @@ export class AjouterPrelevmentPhysiqueComponent implements OnInit{
         this.selectedBande !== null && this.selectedBande.hasOwnProperty('id') ||
         this.selectedSblf !== null && this.selectedSblf.hasOwnProperty('id')
       ) {
+        alert(this.id+" "+this.ref+" "+this.analysesPhysique.id)
+
         this.analysePhysiqueService.updateAnalysesPhysiques(this.analysesPhysique, this.id, this.ref).subscribe(value => this.router.navigate(['/analysePhysique']), error => {
           Swal.fire({
             title: "Error of Modification",
