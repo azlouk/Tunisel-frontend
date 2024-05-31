@@ -366,7 +366,7 @@ export class RapportAnalyseComponent {
     try {
       if (this.selectedPuit.hasOwnProperty('id') || this.selectedSbnl.hasOwnProperty("id") || this.selectedBassin.hasOwnProperty("id") || this.selectedSbl.hasOwnProperty("id") || this.selectedSblf.hasOwnProperty("id") || this.selectedBande.hasOwnProperty("id")) {
         if (this.isUpdateAnalyseChimique) {
-          this.analyseChimiqueService.updateAnalyseChimique(this.analysesChimique).subscribe(value => this.router.navigate(['/analyseChimique']))
+          this.analyseChimiqueService.updateAnalyseChimique(this.analysesChimique,2,"bassin").subscribe(value => this.router.navigate(['/analyseChimique']))
         } else {
 
           this.analysesChimique.id = 0;

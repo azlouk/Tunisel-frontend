@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import {environment} from "../environment/environment";
-import {HttpClient} from "@angular/common/http";
+import {HttpClient, HttpParams} from "@angular/common/http";
 import {Observable} from "rxjs";
 import {JsonPipe} from "@angular/common";
 import {Puit} from "../Models/puit";
@@ -25,8 +25,10 @@ export class AnalysePhysiqueService {
   deleteAnalysesPhysiques(analysesPhysiqueId: number | undefined): Observable<any> {
     return this.http.delete(`${this.apiUrl}/analysesPhysiques/${analysesPhysiqueId}`);
   }
-  updateAnalysesPhysiques(analyse: AnalysesPhysique): Observable<AnalysesPhysique> {
-    return this.http.put<AnalysesPhysique>(`${this.apiUrl}/analysesPhysiques/update`, analyse);
+  updateAnalysesPhysiques(analyse: AnalysesPhysique, id:number, ref:string): Observable<AnalysesPhysique> {
+    const params = new HttpParams().set('id', id.toString()).set('ref', ref);
+
+    return this.http.put<AnalysesPhysique>(`${this.apiUrl}/analysesPhysiques/update`, analyse,{params});
   }
 
 

@@ -92,6 +92,8 @@ export class AjouterPrelevmentPhysiqueComponent implements OnInit{
   // =====================
   cols: any;
   selectedIntervention: any;
+  id:number=0 ;
+  ref:string="" ;
   constructor(private router: Router,
               private bassinService :BassinService,
               private sbnlService :SbnlService,
@@ -193,12 +195,89 @@ export class AjouterPrelevmentPhysiqueComponent implements OnInit{
     this.router.navigate(['/analysePhysique']);
   }
 
+  selectBassin() {
+    // alert(new JsonPipe().transform(this.selectedBassin))
 
+     this.selectedSbnl = {};
+    this.selectedBande = {};
+    this.selectedSbl = {};
+    this.selectedSblf = {};
+
+    this.id=this.selectedBassin!==undefined && this.selectedBassin.id!=undefined?this.selectedBassin.id:0;
+    this.ref="bassin"
+  }
+
+  selectSBNL() {
+    //   alert(new JsonPipe().transform(this.selectedSbnl))
+
+    this.selectedBassin = {};
+     this.selectedBande = {};
+    this.selectedSbl = {};
+    this.selectedSblf = {};
+    this.id=this.selectedSbnl!==undefined && this.selectedSbnl.id!=undefined?this.selectedSbnl.id:0;
+    this.ref="sbnl"
+  }
+
+  selectBande() {
+    // alert(new JsonPipe().transform(this.selectedBande))
+
+    this.selectedBassin = {};
+    this.selectedSbnl = {};
+     this.selectedSbl = {};
+    this.selectedSblf = {};
+    this.id=this.selectedBande!==undefined && this.selectedBande.id!=undefined?this.selectedBande.id:0;
+    this.ref="bande"
+  }
+
+  selectSBL() {
+    // alert(new JsonPipe().transform(this.selectedSbl))
+
+    this.selectedBassin = {};
+    this.selectedSbnl = {};
+    this.selectedBande = {};
+     this.selectedSblf = {};
+    this.id=this.selectedSbl!==undefined && this.selectedSbl.id!=undefined?this.selectedSbl.id:0;
+    this.ref="sbl"
+  }
+
+  selectSBLF() {
+    // alert(new JsonPipe().transform(this.selectedSblf))
+
+    this.selectedBassin = {};
+    this.selectedSbnl = {};
+    this.selectedBande = {};
+    this.selectedSbl = {};
+     this.id=this.selectedSblf!==undefined && this.selectedSblf.id!=undefined?this.selectedSblf.id:0;
+    this.ref="sblf"
+  }
 
   saveAnalysePhysique() {
+  alert(this.id+" "+this.ref)
+    if(this.isUpdateAnalysePhysique) {
+      if (
+        this.selectedBassin !== null && this.selectedBassin.hasOwnProperty('id') ||
+        this.selectedSbnl !== null && this.selectedSbnl.hasOwnProperty('id') ||
+        this.selectedSbl !== null && this.selectedSbl.hasOwnProperty('id') ||
+        this.selectedBande !== null && this.selectedBande.hasOwnProperty('id') ||
+        this.selectedSblf !== null && this.selectedSblf.hasOwnProperty('id')
+      ) {
+        this.analysePhysiqueService.updateAnalysesPhysiques(this.analysesPhysique, this.id, this.ref).subscribe(value => this.router.navigate(['/analysePhysique']), error => {
+          Swal.fire({
+            title: "Error of Modification",
+            text: "Please remove this analyse from order first to change assignment ",
+            icon: "error"
+          })
 
-    if(this.isUpdateAnalysePhysique){
-      this.analysePhysiqueService.updateAnalysesPhysiques(this.analysesPhysique).subscribe(value => this.router.navigate(['/analysePhysique']))
+
+        })
+      } else {
+        Swal.fire({
+          title: "Error of selection",
+          text: "Please select one of Well ,Pond ,Unwashed ,band ,washed or washed ship  ..etc",
+          icon: "error"
+        })
+
+      }
     }
     else{
       if(this.selectedBassin.hasOwnProperty('id')){
@@ -235,7 +314,7 @@ export class AjouterPrelevmentPhysiqueComponent implements OnInit{
         this.analysePhysiqueService.addAnalysesPhysiquesToSblf(this.selectedSblf).subscribe(value => this.router.navigate(['/analysePhysique']))
       }
       else {
-
+        Swal.fire({title:"Error of selection", text:"Please select one of Well ,Pond ,Unwashed ,band ,washed or washed ship  ..etc",icon:"error"})
       }
     }
 

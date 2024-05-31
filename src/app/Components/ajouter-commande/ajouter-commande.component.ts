@@ -184,20 +184,20 @@ export class AjouterCommandeComponent implements OnInit{
       {id:3, field: 'description', header: 'Description' },
       {id:4, field: 'temperature', header: 'Temperature' },
       {id:5, field: 'vent', header: 'wind' },
-      {id:6, field: 'densite', header: 'Densite' },
+      {id:6, field: 'densite', header: 'density' },
       {id:7, field: 'matiereEnSuspension', header: 'Suspended matter'},
-      {id:8, field: 'salinite', header: 'Salinite'},
+      {id:8, field: 'salinite', header: 'salinity'},
       {id:9, field: 'calcium', header: 'Calcium'},
       {id:10, field: 'magnesium', header: 'Magnesium'},
-      {id:11, field: 'sulfate', header: 'sulfate'},
-      {id:12, field: 'humidite', header: 'Humidite'},
+      {id:11, field: 'sulfate', header: 'sulphate'},
+      {id:12, field: 'humidite', header: 'humidity'},
       {id:13, field: 'matiereInsoluble', header: 'Insoluble matter'},
       {id:14, field: 'potassium', header: 'Potassium'},
       {id:15, field: 'sodium', header: 'Sodium'},
-      {id:16, field: 'chlorure', header: 'Chorure'},
+      {id:16, field: 'chlorure', header: 'Chloride '},
       {id:17, field: 'ph', header: 'Ph'},
-      {id:18, field: 'chlorureDeSodium', header: 'Chlorure de Sodium'},
-      {id:19, field: 'ferrocyanure', header: 'Ferrocyanure'},
+      {id:18, field: 'chlorureDeSodium', header: 'sodium chloride'},
+      {id:19, field: 'ferrocyanure', header: 'ferrocyanide'},
       {id:20, field: 'pluie', header: 'Chemical Rain '},
       {id:21, field: 'conformite', header: 'Conformite'},
       {id:22, field: 'qualite', header: 'Quality'},
@@ -219,7 +219,7 @@ export class AjouterCommandeComponent implements OnInit{
       {id:38, field: 'emplassementLot', header: 'Lot Location'},
       {id:39, field: 'lieuxPrelevement', header: 'Places Prelevement'},
       {id:40, field: 'matCamion', header: 'Truck Mat'},
-      {id:41, field: 'conformite', header: 'Conformite'},
+      {id:41, field: 'conformite', header: 'Compliance'},
       {id:42, field: 'related', header: 'Related'},
 
     ];
@@ -605,7 +605,7 @@ if(this.commande.bandes){
   filtredate() {
 
      //this.Viderfiltredate()
-    const data=this.listeLignesCommandes.filter(l => this.searchAnalyse(l)==true && this.chechMatter(l)==true );
+    const data=this.listeLignesCommandes.filter(l => this.searchAnalyse(l)==true && (this.chechMatterChemical(l)==true || this.chechMatterPhysical(l)==true) );
 
     this.listeLignesCommandes=[...data]
 
@@ -643,17 +643,24 @@ this.getLine()
       return `${day}-${month}-${year}`;
 
   }
-    chechMatter(l: LineCommande):boolean {
+  chechMatterPhysical(l: LineCommande):boolean {
    if(l.analysePhysique)
     // return  l.analysePhysique.qualite!.includes(this.matter).valueOf();
     return  l.analysePhysique.qualite?.trim().toLowerCase()==this.matter.trim().toLowerCase();
 
   return  false ;
   }
+  chechMatterChemical(l: LineCommande):boolean {
+   if(l.analyseChimique)
+    // return  l.analysePhysique.qualite!.includes(this.matter).valueOf();
+    return  l.analyseChimique.qualite?.trim().toLowerCase()==this.matter.trim().toLowerCase();
+
+  return  false ;
+  }
   filterMatter() {
 
 
-    const data = this.listeLignesCommandes.filter(l => this.chechMatter(l)==true);
+    const data = this.listeLignesCommandes.filter(l => (this.chechMatterPhysical(l)==true || this.chechMatterChemical(l)==true) );
    this.listeLignesCommandes=data;
   }
 
@@ -888,7 +895,7 @@ this.getLine()
             '              <label class="font-bold text-center">'+this.calculerMoyennes().matiereInsoluble.toFixed(3)+'</label>\n' +
             '            </div>\n' +
             '            <div class="flex align-items-start gap-3 justify-content-between">\n' +
-            '              <label class="font-bold">%Fe(CN)₆: </label>\n' +
+            '              <label class="font-bold">Fe(CN)₆: </label>\n' +
             '              <label class="font-bold text-center">'+this.calculerMoyennes().ferrocyanure.toFixed(3)+'</label>\n' +
             '            </div>\n' +
             '          </div>\n' ;
@@ -921,6 +928,17 @@ this.getLine()
   loadingcommande: boolean=false;
   loadinSave: boolean=false ;
   selectedProduct: any;
+
+
+    extractDoublesFromString(input: string): number[] {
+    const regex = /-?\d+(\.\d+)?/g;
+    const matches = input.match(regex);
+    if (matches) {
+      return matches.map(match => parseFloat(match));
+    } else {
+      return [];
+    }
+  }
 
 
   calculerMoyennes():
@@ -998,137 +1016,82 @@ this.getLine()
 
       if (lineCommande.analyseChimique) {
 
+        if (lineCommande.analyseChimique.humidite !== undefined &&  lineCommande.analyseChimique.humidite !== null) {
 
-
-
-
-
-        if (lineCommande.analyseChimique.humidite !== undefined &&
-          lineCommande.analyseChimique.humidite !== null) {
-
-          let varhum = String(lineCommande.analyseChimique.humidite);
-
-          let humiditeValue = varhum.match(/\d+/);
-
-          if (humiditeValue) {
-            let humiditeNumber = Number(humiditeValue[0]);
-
-            if (humiditeNumber > 0) {
-              totalHumidite += humiditeNumber;
+          if (lineCommande.analyseChimique.humidite !== undefined &&  lineCommande.analyseChimique.humidite !== null) {
+            const humidite:number[]=this.extractDoublesFromString(lineCommande.analyseChimique.humidite);
+            // Si une partie numérique est trouvée, elle est convertie en nombre
+            if (humidite.length!=0) {
+              totalHumidite += humidite[0];
               countHumidite++;
+
             }
           }
+
         }
 
-
-
-
-
-        if (lineCommande.analyseChimique.magnesium !== undefined &&
-          lineCommande.analyseChimique.magnesium !== null) {
-
-          // Convertir la valeur en chaîne pour s'assurer que 'match' peut être utilisé
-          let varmag = String(lineCommande.analyseChimique.magnesium);
-
-          // Utiliser une expression régulière pour extraire la partie numérique de la chaîne
-          let magnesiumValue = varmag.match(/\d+/);
-
+        if (lineCommande.analyseChimique.magnesium !== undefined &&  lineCommande.analyseChimique.magnesium !== null) {
+              const magnes:number[]=this.extractDoublesFromString(lineCommande.analyseChimique.magnesium);
           // Si une partie numérique est trouvée, elle est convertie en nombre
-          if (magnesiumValue) {
-            let magnesiumNumber = Number(magnesiumValue[0]);
-
-            // Vérifier si le nombre est supérieur à 0
-            if (magnesiumNumber > 0) {
-              totalMagnesium += magnesiumNumber;
+          if (magnes.length!=0) {
+              totalMagnesium += magnes[0];
               countMagnesium++;
-            }
+
           }
         }
 
+        if (lineCommande.analyseChimique.sulfate !== undefined &&    lineCommande.analyseChimique.sulfate !== null) {
 
-
-
-
-        if (lineCommande.analyseChimique.sulfate !== undefined &&
-          lineCommande.analyseChimique.sulfate !== null) {
-
-          let varsulf = String(lineCommande.analyseChimique.sulfate);
-
-          let sulfateValue = varsulf.match(/\d+/);
-
-          if (sulfateValue) {
-            let sulfateNumber = Number(sulfateValue[0]);
-
-            if (sulfateNumber > 0) {
-              totalSulfate += sulfateNumber;
+          if (lineCommande.analyseChimique.sulfate !== undefined &&  lineCommande.analyseChimique.sulfate !== null) {
+            const sulfate:number[]=this.extractDoublesFromString(lineCommande.analyseChimique.sulfate);
+            // Si une partie numérique est trouvée, elle est convertie en nombre
+            if (sulfate.length!=0) {
+              totalSulfate += sulfate[0];
               countSulfate++;
+
             }
           }
+
         }
 
+        if (lineCommande.analyseChimique.chlorureDeSodium !== undefined &&   lineCommande.analyseChimique.chlorureDeSodium !== null) {
 
-
-
-
-
-        if (lineCommande.analyseChimique.chlorureDeSodium !== undefined &&
-          lineCommande.analyseChimique.chlorureDeSodium !== null) {
-
-          let varclor = String(lineCommande.analyseChimique.chlorureDeSodium);
-
-          let clorValue = varclor.match(/\d+/);
-
-          if (clorValue) {
-            let clorNumber = Number(clorValue[0]);
-
-            if (clorNumber > 0) {
-              totalchlorureDeSodium += clorNumber;
+          if (lineCommande.analyseChimique.chlorureDeSodium !== undefined &&  lineCommande.analyseChimique.chlorureDeSodium !== null) {
+            const chlorureDeSodium:number[]=this.extractDoublesFromString(lineCommande.analyseChimique.chlorureDeSodium);
+            // Si une partie numérique est trouvée, elle est convertie en nombre
+            if (chlorureDeSodium.length!=0) {
+              totalchlorureDeSodium += chlorureDeSodium[0];
               countchlorureDeSodium++;
+
             }
           }
+
         }
 
+        if (lineCommande.analyseChimique.matiereInsoluble !== undefined &&  lineCommande.analyseChimique.matiereInsoluble !== null) {
 
-
-
-
-
-        if (lineCommande.analyseChimique.matiereInsoluble !== undefined &&
-          lineCommande.analyseChimique.matiereInsoluble !== null) {
-
-          let varMi = String(lineCommande.analyseChimique.matiereInsoluble);
-
-          let MiValue = varMi.match(/\d+/);
-
-          if (MiValue) {
-            let MiNumber = Number(MiValue[0]);
-
-            if (MiNumber > 0) {
-              totalMatiereInsoluble += MiNumber;
+          if (lineCommande.analyseChimique.matiereInsoluble !== undefined && lineCommande.analyseChimique.matiereInsoluble !== null) {
+            const matiereInsoluble: number[] = this.extractDoublesFromString(lineCommande.analyseChimique.matiereInsoluble);
+            // Si une partie numérique est trouvée, elle est convertie en nombre
+            if (matiereInsoluble.length != 0) {
+              totalMatiereInsoluble += matiereInsoluble[0];
               countMatiereInsoluble++;
+
             }
           }
+
         }
 
-
-
-
-
-
-        if (lineCommande.analyseChimique.ferrocyanure !== undefined &&
-          lineCommande.analyseChimique.ferrocyanure !== null) {
-
-          let varferro = String(lineCommande.analyseChimique.ferrocyanure);
-
-          let ferroValue = varferro.match(/\d+/);
-
-          if (ferroValue) {
-            let ferroNumber = Number(ferroValue[0]);
-
-            if (ferroNumber > 0) {
-              totalferrocyanure += ferroNumber;
+        if (lineCommande.analyseChimique.ferrocyanure !== undefined &&   lineCommande.analyseChimique.ferrocyanure !== null) {
+          if (lineCommande.analyseChimique.ferrocyanure !== undefined &&  lineCommande.analyseChimique.ferrocyanure !== null) {
+            const ferrocyanure:number[]=this.extractDoublesFromString(lineCommande.analyseChimique.ferrocyanure);
+            // Si une partie numérique est trouvée, elle est convertie en nombre
+            if (ferrocyanure.length!=0) {
+              totalferrocyanure += ferrocyanure[0];
               countferrocyanure++;
+
             }
+
           }
         }
 

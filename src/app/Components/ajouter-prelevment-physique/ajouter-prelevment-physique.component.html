@@ -9,8 +9,8 @@
       </ng-template>
       <h4>{{isUpdateAnalysePhysique?'Update':'Add'}} Physical Analysis</h4>
     </p-toolbar>
-    <div class=" flex justify-content-between  mt-8 border-1 border-round border-gray-300 p-6  h-22rem">
-      <div class="  flex flex-column gap-4   justify-content-between ">
+    <div class=" flex justify-content-between  mt-8 border-1 border-round border-gray-300 p-6   ">
+      <div class="  flex flex-column  gap-5    ">
         <p-floatLabel >
           <p-calendar   id="dateCreation" [(ngModel)]="analysesPhysique.dateAnalyse" dateFormat="yy-mm-dd"  [showIcon]="true"></p-calendar>
           <label for="dateCreation">Creation Date</label>
@@ -35,7 +35,7 @@
 
         </p-floatLabel>
       </div>
-      <div class=" flex flex-column  justify-content-between">
+      <div class=" flex flex-column  gap-5   ">
 
 
         <p-floatLabel>
@@ -51,42 +51,40 @@
           <label >Description</label>
         </p-floatLabel>
       </div>
-      <div class=" flex flex-column ">
 
-        <p-tabView *ngIf="!isUpdateAnalysePhysique"[scrollable]="true" >
-          <p-tabPanel header="Basin" >
-            <p-listbox [options]="bassins" [(ngModel)]="selectedBassin" optionLabel="nom" [filter]="true" [listStyle]="{'height': '87px'}"  ></p-listbox>
+      <div class="flex flex-column justify-content-between col-4 border-1 border-gray-200">
+        <label class="font-bold text-3xl m-2">Assignment</label>
+        <p-tabView  [scrollable]="true">
 
-          </p-tabPanel>
-          <p-tabPanel header="Unwashed stock" pTooltip="Sotck non lavé">
-            <p-listbox [options]="sbnls" [(ngModel)]="selectedSbnl" optionLabel="reference" [filter]="true" [listStyle]="{'height': '87px'}"  ></p-listbox>
+          <p-tabPanel header="Pond" >
+            <p-listbox [options]="bassins" [(ngModel)]="selectedBassin" optionLabel="nom" (ngModelChange)="selectBassin()"[filter]="true"  [listStyle]="{'height': '200px'}"  ></p-listbox>
 
           </p-tabPanel>
-          <p-tabPanel header="Band" pTooltip="Sotck non lavé">
-            <p-listbox [options]="bandes" [(ngModel)]="selectedBande" optionLabel="reference" [filter]="true" [listStyle]="{'height': '87px'}"  ></p-listbox>
+          <p-tabPanel header="Unwashed stock" pTooltip="Enter your username" >
+            <p-listbox [options]="sbnls" [(ngModel)]="selectedSbnl" optionLabel="reference" (ngModelChange)="selectSBNL()" [filter]="true"  [listStyle]="{'height': '200px'}"    ></p-listbox>
 
           </p-tabPanel>
+          <p-tabPanel header="Band" pTooltip="Enter your username" >
+            <p-listbox [options]="bandes" [(ngModel)]="selectedBande" optionLabel="reference" (ngModelChange)="selectBande()" [filter]="true"  [listStyle]="{'height': '200px'}"    ></p-listbox>
 
+          </p-tabPanel>
           <p-tabPanel header="Washed stock" >
-            <p-listbox [options]="sbls" [(ngModel)]="selectedSbl" optionLabel="reference" [filter]="true" [listStyle]="{'height': '87px'}" ></p-listbox>
+            <p-listbox [options]="sbls" [(ngModel)]="selectedSbl" optionLabel="reference" [filter]="true" (ngModelChange)="selectSBL()" [listStyle]="{'height': '200px'}"   ></p-listbox>
 
           </p-tabPanel>
 
           <p-tabPanel header="Final stock" >
-            <p-listbox [options]="sblfs" [(ngModel)]="selectedSblf" optionLabel="reference" [filter]="true"  [listStyle]="{'height': '87px'}" ></p-listbox>
+            <p-listbox [options]="sblfs" [(ngModel)]="selectedSblf" optionLabel="reference" [filter]="true" (ngModelChange)="selectSBLF()"  [listStyle]="{'height': '200px'}"   ></p-listbox>
 
           </p-tabPanel>
         </p-tabView>
         <div >
-          <!--          =========-->
-          <div class="border-1 border-round border-gray-300 p-2 " *ngIf="isUpdateAnalysePhysique&&selectedBassin">
-            <p class="font-bold">
-              Basin
-            </p>
-            <div class="flex flex-column ">
 
-              <p><span class="font-bold"> Reference: </span>{{selectedBassin.reference}}</p>
+          <!--          =========-->
+          <div class="border-1 border-round border-gray-300 p-2 " *ngIf="(selectedBassin!=undefined && selectedBassin.hasOwnProperty('id'))">
+            <div class="flex flex-column ">
               <p><span class="font-bold"> Name: </span>{{selectedBassin.nom}}</p>
+              <p><span class="font-bold"> Reference: </span>{{selectedBassin.reference}}</p>
               <div class=" flex justify-content-end">
                 <button pButton pRipple label="Details" icon="pi pi-eye" class="p-button-primary mr-2 " (click)="openNew()"></button>
               </div>
@@ -112,17 +110,19 @@
                   <p><span class="font-bold"> Creation date: </span>{{selectedBassin.dateCreation}}</p>
                 </div>
 
+
               </ng-template>
+
+
+
 
             </p-dialog>
           </div>
 
           <!--          =========-->
           <!--          =========-->
-          <div class="border-1 border-round border-gray-300 p-2 " *ngIf="isUpdateAnalysePhysique&&selectedSbnl">
-            <p class="font-bold">
-              Sbnl
-            </p>
+          <div class="border-1 border-round border-gray-300 p-2 " *ngIf="(selectedSbnl!=undefined && selectedSbnl.hasOwnProperty('id'))">
+
             <div class="flex flex-column ">
 
               <p><span class="font-bold"> Reference: </span>{{selectedSbnl.reference}}</p>
@@ -135,7 +135,7 @@
             <p-dialog [(visible)]="visibleDetails" [style]="{width: '450px'}" header="Details of Sbnl" [modal]="true" class="p-fluid">
               <ng-template pTemplate="content">
                 <div class="field">
-                  <p><span class="font-bold"> Reference: </span>{{selectedBassin.reference}}</p>
+                  <p><span class="font-bold"> Reference: </span>{{selectedSbnl.reference}}</p>
                 </div>
                 <div class="field">
                   <p><span class="font-bold">  Location: </span>{{selectedSbnl.emplacement}}</p>
@@ -151,19 +151,21 @@
                   <p><span class="font-bold"> State: </span>{{selectedSbnl.etat}}</p>
                 </div>
 
+
+
               </ng-template>
+
+
+
+
             </p-dialog>
           </div>
 
           <!--          =========-->
 
           <!--          =========-->
-          <div class="border-1 border-round border-gray-300 p-2 " *ngIf="isUpdateAnalysePhysique&&selectedBande">
-            <p class="font-bold">
-              Band
-            </p>
+          <div class="border-1 border-round border-gray-300 p-2 " *ngIf=" selectedBande!=undefined && selectedBande.hasOwnProperty('id')">
             <div class="flex flex-column ">
-
               <p><span class="font-bold"> Reference: </span>{{selectedBande.reference}}</p>
               <p><span class="font-bold">  State: </span>{{selectedBande.etat}}</p>
               <div class=" flex justify-content-end">
@@ -171,7 +173,7 @@
               </div>
 
             </div>
-            <p-dialog [(visible)]="visibleDetails" [style]="{width: '450px'}" header="Details of Sbnl" [modal]="true" class="p-fluid">
+            <p-dialog [(visible)]="visibleDetails" [style]="{width: '450px'}" header="Band Details" [modal]="true" class="p-fluid">
               <ng-template pTemplate="content">
                 <div class="field">
                   <p><span class="font-bold"> Reference: </span>{{selectedBande.reference}}</p>
@@ -181,26 +183,29 @@
                   <p><span class="font-bold"> Description: </span>{{selectedBande.description}}</p>
                 </div>
                 <div class="field">
-                  <p><span class="font-bold"> State: </span>{{selectedBande.etat}}</p>
+                  <div class="field">
+                    <p><span class="font-bold"> State: </span>{{selectedBande.etat}}</p>
+                  </div>
+                  <p><span class="font-bold"> Quantity: </span>{{selectedBande.quantite}}</p>
                 </div>
-                <div class="field">
-                  <p><span class="font-bold"> Total Quantity: </span>{{selectedBande.quantite}}</p>
-                </div>
+
                 <div class="field">
                   <p><span class="font-bold"> Quantity Refusal: </span>{{selectedBande.quantiteRefus}}</p>
                 </div>
 
 
               </ng-template>
+
+
+
+
             </p-dialog>
           </div>
 
           <!--          =========-->
           <!--          =========-->
-          <div class="border-1 border-round border-gray-300 p-2 " *ngIf="isUpdateAnalysePhysique&&selectedSbl">
-            <p class="font-bold">
-              Sbl
-            </p>
+          <div class="border-1 border-round border-gray-300 p-2 " *ngIf="selectedSbl!=undefined && selectedSbl.hasOwnProperty('id')">
+
             <div class="flex flex-column ">
               <p><span class="font-bold"> Reference: </span>{{selectedSbl.reference}}</p>
               <p><span class="font-bold">  Location: </span>{{selectedSbl.emplacement}}</p>
@@ -208,7 +213,7 @@
                 <button pButton pRipple label="Details" icon="pi pi-eye" class="p-button-primary mr-2 " (click)="openNew()"></button>
               </div>
             </div>
-            <p-dialog [(visible)]="visibleDetails" [style]="{width: '450px'}" header="Details de Sbl" [modal]="true" class="p-fluid">
+            <p-dialog [(visible)]="visibleDetails" [style]="{width: '450px'}" header="Details of Sbl" [modal]="true" class="p-fluid">
               <ng-template pTemplate="content">
                 <div class="field">
                   <p><span class="font-bold"> Reference: </span>{{selectedSbl.reference}}</p>
@@ -230,10 +235,7 @@
           </div>
           <!--          =========-->
           <!--          =========-->
-          <div class="border-1 border-round border-gray-300 p-2 " *ngIf="isUpdateAnalysePhysique&&selectedSblf">
-            <p class="font-bold">
-              Sblf
-            </p>
+          <div class="border-1 border-round border-gray-300 p-2 " *ngIf="selectedSblf !=undefined && selectedSblf.hasOwnProperty('id') ">
             <div class="flex flex-column ">
               <p><span class="font-bold"> Reference: </span>{{selectedSblf.reference}}</p>
               <p><span class="font-bold">  Location: </span>{{selectedSblf.emplacement}}</p>
@@ -241,8 +243,7 @@
                 <button pButton pRipple label="Details" icon="pi pi-eye" class="p-button-primary mr-2 " (click)="openNew()"></button>
               </div>
             </div>
-
-            <p-dialog [(visible)]="visibleDetails" [style]="{width: '450px'}" header="Details de Sblf" [modal]="true" class="p-fluid">
+            <p-dialog [(visible)]="visibleDetails" [style]="{width: '450px'}" header="Details of Sbl" [modal]="true" class="p-fluid">
               <ng-template pTemplate="content">
                 <div class="field">
                   <p><span class="font-bold"> Reference: </span>{{selectedSblf.reference}}</p>
