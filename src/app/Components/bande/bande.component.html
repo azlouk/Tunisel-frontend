@@ -15,7 +15,7 @@
 
       </p-toolbar>
 
-      <p-table #dt [value]="bandes" [columns]="cols"  responsiveLayout="scroll" [rows]="10" [globalFilterFields]="['id','reference','description','dateCreation','nom','emplacement','etat','dateFermeture']" [paginator]="true" [rowsPerPageOptions]="[10,20,30]" [showCurrentPageReport]="true" currentPageReportTemplate="Display  {first} to  {last} of  {totalRecords} entries" [(selection)]="selectedBandes" selectionMode="multiple" [rowHover]="true" dataKey="id">
+      <p-table #dt [value]="bandes" [columns]="cols"  responsiveLayout="scroll" [rows]="10" [globalFilterFields]="['id','reference','description','dateCreation','state','totalquantite','refusalquantite','Sbnl']" [paginator]="true" [rowsPerPageOptions]="[10,20,30]" [showCurrentPageReport]="true" currentPageReportTemplate="Display  {first} to  {last} of  {totalRecords} entries" [(selection)]="selectedBandes" selectionMode="multiple" [rowHover]="true" dataKey="id">
         <ng-template pTemplate="caption">
           <div class="flex flex-column md:flex-row md:justify-content-between md:align-items-center">
             <h5 class="m-0">Band Inventory Management</h5>
@@ -37,10 +37,10 @@
             <th pSortableColumn="reference">Reference <p-sortIcon field="reference"></p-sortIcon></th>
             <th pSortableColumn="description">Description <p-sortIcon field="description"></p-sortIcon></th>
             <th pSortableColumn="dateCreation">Date Stock<p-sortIcon field="dateCreation"></p-sortIcon></th>
-            <th pSortableColumn="etat">State <p-sortIcon field="etat"></p-sortIcon></th>
-            <th pSortableColumn="etat">Total Quantity<p-sortIcon field="etat"></p-sortIcon></th>
-            <th pSortableColumn="emplacement">Quantity Refusal<p-sortIcon field="emplacement"></p-sortIcon></th>
-            <th pSortableColumn="bandeSbnl">Sbnl <p-sortIcon field="bandeSbnl"></p-sortIcon></th>
+            <th pSortableColumn="state">State <p-sortIcon field="state"></p-sortIcon></th>
+            <th pSortableColumn="totalquantite">Total Quantity<p-sortIcon field="totalquantite"></p-sortIcon></th>
+            <th pSortableColumn="refusalquantite">Quantity Refusal<p-sortIcon field="refusalquantite"></p-sortIcon></th>
+            <th pSortableColumn="Sbnl">Unwashed Stock <p-sortIcon field="Sbnl"></p-sortIcon></th>
 
 
             <th></th>
@@ -97,7 +97,7 @@
               <p-dialog [(visible)]="deleteProductDialog" header="Confirm" [modal]="true" [style]="{width:'450px'}">
                 <div class="flex align-items-center justify-content-center">
                   <i class="pi pi-exclamation-triangle mr-3" style="font-size: 2rem"></i>
-                  <span *ngIf="bande">Are you sure you want to delete?<b>{{bande.reference}}</b>?</span>
+                  <span *ngIf="bande">Are you sure you want to delete<b>{{bande.reference}}</b>?</span>
                 </div>
                 <ng-template pTemplate="footer">
                   <button pButton pRipple icon="pi pi-times" class="p-button-text" label="No" (click)="deleteProductDialog = false"></button>
@@ -119,7 +119,7 @@
       </p-table>
     </div>
 
-    <p-dialog [(visible)]="productDialog" [style]="{width: '450px'}" header="New stock basin Not Washed" [modal]="true" class="p-fluid">
+    <p-dialog [(visible)]="productDialog" [style]="{width: '450px'}" header="Bande" [modal]="true" class="p-fluid">
       <ng-template pTemplate="content">
         <div class="field">
           <label for="name">Sbnl</label>
@@ -160,7 +160,7 @@
 
       <ng-template pTemplate="footer">
         <button pButton pRipple label="Cancel" icon="pi pi-times" class="p-button-text" (click)="hideDialog()"></button>
-        <button pButton pRipple label="Add" icon="pi pi-check" class="p-button-text" (click)="saveBande()"></button>
+        <button pButton pRipple label="Yes" icon="pi pi-check" class="p-button-text" (click)="saveBande()"></button>
       </ng-template>
     </p-dialog>
 

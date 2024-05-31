@@ -67,7 +67,7 @@ export class UserComponent implements OnInit {
 
   selectedUsers: User[] = [];
 
-  private isUpdateUser = false;
+  public isUpdateUser = false;
 
   constructor(  private messageService: MessageService, private userService: UserService) {
   }
@@ -75,11 +75,12 @@ export class UserComponent implements OnInit {
   ngOnInit() {
     this.getAllUsers();
     this.cols = [
-      {field: 'product', header: 'Product'},
-      {field: 'price', header: 'Price'},
-      {field: 'category', header: 'Category'},
-      {field: 'rating', header: 'Reviews'},
-      {field: 'inventoryStatus', header: 'Status'}
+      {field: 'id', header: 'id'},
+      {field: 'nom', header: 'nom'},
+      {field: 'pseudo', header: 'pseudo'},
+      {field: 'poste', header: 'poste'},
+      {field: 'telephone', header: 'telephone'},
+      {field: 'telephone', header: 'role'}
     ];
 
     this.statuses = [

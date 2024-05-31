@@ -16,10 +16,10 @@
 
       </p-toolbar>
 
-      <p-table #dt [value]="sblfs" [columns]="cols"  responsiveLayout="scroll" [rows]="10" [globalFilterFields]="['id','reference','description','dateCreation','nom','emplacement','etat','dateFermeture']" [paginator]="true" [rowsPerPageOptions]="[10,20,30]" [showCurrentPageReport]="true" currentPageReportTemplate="Display  {first} to  {last} of  {totalRecords} entries" [(selection)]="selectedSblfs" selectionMode="multiple" [rowHover]="true" dataKey="id">
+      <p-table #dt [value]="sblfs" [columns]="cols"  responsiveLayout="scroll" [rows]="10" [globalFilterFields]="['id','reference','description','dateStock','emplacement','etat','quantite','type']" [paginator]="true" [rowsPerPageOptions]="[10,20,30]" [showCurrentPageReport]="true" currentPageReportTemplate="Display  {first} to  {last} of  {totalRecords} entries" [(selection)]="selectedSblfs" selectionMode="multiple" [rowHover]="true" dataKey="id">
         <ng-template pTemplate="caption">
           <div class="flex flex-column md:flex-row md:justify-content-between md:align-items-center">
-            <h5 class="m-0">Management of final lava basin stocks</h5>
+            <h5 class="m-0">Management of washed ship</h5>
             <span class="block mt-2 md:mt-0 p-input-icon-left">
                             <i class="pi pi-search"></i>
                             <input  type="text" pInputText (input)="onGlobalFilter(dt, $event)" placeholder="Search..."  class="w-full sm:w-auto"/>
@@ -37,11 +37,11 @@
             <th pSortableColumn="id">Id <p-sortIcon field="id"></p-sortIcon></th>
             <th pSortableColumn="reference">Reference <p-sortIcon field="reference"></p-sortIcon></th>
             <th pSortableColumn="description">Description <p-sortIcon field="description"></p-sortIcon></th>
-            <th pSortableColumn="dateStock">Date Stock<p-sortIcon field="dateStock"></p-sortIcon></th>
+            <th pSortableColumn="dateStock">date of stock<p-sortIcon field="dateStock"></p-sortIcon></th>
             <th pSortableColumn="emplacement">Location <p-sortIcon field="emplacement"></p-sortIcon></th>
             <th pSortableColumn="etat">State <p-sortIcon field="etat"></p-sortIcon></th>
-            <th pSortableColumn="quantité">Quantity <p-sortIcon field="quantité"></p-sortIcon></th>
-            <th pSortableColumn="type">Stock bassin laver <p-sortIcon field="type"></p-sortIcon></th>
+            <th pSortableColumn="quantite">Quantity <p-sortIcon field="quantite"></p-sortIcon></th>
+            <th pSortableColumn="type">Washed stock <p-sortIcon field="type"></p-sortIcon></th>
 
             <th></th>
           </tr>
@@ -84,7 +84,7 @@
               {{sblf.quantite}}
             </td>
             <td style="width:14%; min-width:8rem;">
-              <span class="p-column-title">Basin</span>
+              <span class="p-column-title">Washed stock</span>
               {{sblf.sblfSbl.reference }}
               <span class="pi pi-eye text-primary cursor-pointer m-2" (click)="opSBLf.toggle($event)"  ></span>
               <p-overlayPanel #opSBLf>
@@ -110,10 +110,10 @@
       </p-table>
     </div>
 
-    <p-dialog [(visible)]="productDialog" [style]="{width: '450px'}" header="Stock bassin laver final" [modal]="true" class="p-fluid">
+    <p-dialog [(visible)]="productDialog" [style]="{width: '450px'}" header="Stock washed ship" [modal]="true" class="p-fluid">
       <ng-template pTemplate="content">
         <div class="field">
-          <label>Sbl</label>
+          <label>Washed stock</label>
           <p-dropdown [options]="sbls" [(ngModel)]="sblf.sblfSbl" [editable]="true" optionLabel="reference" class="w-full" [ngClass]="{'ng-invalid ng-dirty' : submitted && !sblf.sblfSbl}"></p-dropdown>
           <small class="ng-dirty ng-invalid" *ngIf="submitted && !sblf.sblfSbl">Washed stock is required.</small>
 
@@ -174,18 +174,18 @@
     <p-dialog [(visible)]="deleteProductDialog" header="Confirm" [modal]="true" [style]="{width:'450px'}">
       <div class="flex align-items-center justify-content-center">
         <i class="pi pi-exclamation-triangle mr-3" style="font-size: 2rem"></i>
-        <span *ngIf="product">Are you sure you want to delete?<b>{{product.name}}</b>?</span>
+        <span *ngIf="product">Are you sure you want to delete<b>{{product.name}}</b>?</span>
       </div>
       <ng-template pTemplate="footer">
-        <button pButton pRipple icon="pi pi-times" class="p-button-text" label="Non" (click)="deleteProductDialog = false"></button>
-        <button pButton pRipple icon="pi pi-check" class="p-button-text" label="Oui" (click)="confirmDelete()"></button>
+        <button pButton pRipple icon="pi pi-times" class="p-button-text" label="Cancel" (click)="deleteProductDialog = false"></button>
+        <button pButton pRipple icon="pi pi-check" class="p-button-text" label="yes" (click)="confirmDelete()"></button>
       </ng-template>
     </p-dialog>
 
     <p-dialog [(visible)]="deleteProductsDialog" header="Confirm" [modal]="true" [style]="{width:'450px'}">
       <div class="flex align-items-center justify-content-center">
         <i class="pi pi-exclamation-triangle mr-3" style="font-size: 2rem"></i>
-        <span>Do you want to delete   ?</span>
+        <span>Do you want to delete?</span>
       </div>
       <ng-template pTemplate="footer">
         <button pButton pRipple icon="pi pi-times" class="p-button-text" label="No" (click)="deleteProductsDialog = false"></button>

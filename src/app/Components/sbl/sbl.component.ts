@@ -135,7 +135,7 @@ export class SblComponent implements OnInit{
   }
 
   openNew() {
-    this.sbl ;
+    this.sbl={} ;
     this.submitted = false;
     this.productDialog = true;
   }

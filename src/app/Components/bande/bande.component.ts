@@ -134,17 +134,17 @@ export class BandeComponent {
       { field: 'reference', header: 'reference' },
       { field: 'description', header: 'description' },
       { field: 'dateCreation', header: 'dateCreation' },
-      { field: 'nom', header: 'nom' },
-      { field: 'emplacement', header: 'emplacement' },
-      { field: 'etat', header: 'etat' },
-      { field: 'dateFermeture', header: 'dateFermeture' },
+      { field: 'state', header: 'state' },
+      { field: 'totalquantite', header: 'totalquantite' },
+      { field: 'refusalquantite', header: 'refusalquantite' },
+      { field: 'Sbnl', header: 'Sbnl' },
     ];
 
 
   }
 
   openNew() {
-    this.bande;
+    this.bande={};
     this.submitted = false;
     this.productDialog = true;
   }
@@ -188,18 +188,18 @@ export class BandeComponent {
   }
 
   confirmDelete(bande :Bande) {
-    this.deleteProductDialog = false;
+
 
     if (bande.id!= null) {
       this.bandeService.deleteBande(bande.id).subscribe(() => { this.bandes = this.bandes.filter(val => val.id !== bande.id);
-        console.log("bande deleted")
-        this.messageService.add({ severity: 'success', summary: 'réussi', detail: 'Bande Supprimer', life: 3000 });
+        console.log("bande  deleted")
+        this.messageService.add({ severity: 'success', summary: 'success', detail: 'Bande has been deleted', life: 3000 });
 
       },error1 => {
-        Swal.fire({title:"Erreur",icon:"error", text:"SVP   supprimer stock laver puis tout  les analyses (Chimique et granulométrique) "})
+        Swal.fire({title:"Erreur",icon:"error", text:"Please remove stock wash then all analyses (Chemical and grain size) "})
       });
     }
-
+    this.deleteProductDialog = false;
   }
 
   hideDialog() {
