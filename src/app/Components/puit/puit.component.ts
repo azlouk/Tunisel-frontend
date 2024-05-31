@@ -189,25 +189,45 @@ this.ReportedBy=this.Loginservice.getToken()
       this.puitService.deletePuit(selectedPuit.id).subscribe(
         () => {
           this.puits = this.puits.filter(puit => puit.id !== selectedPuit.id);
+          this.messageService.add({severity: 'success', summary: 'successful', detail: 'The wells are removed', life: 3000});
+
         },
         (error) => {
-          console.error('Error deleting user:', error);
+          Swal.fire({
+            icon: "error",
+            title: "Can not deleted",
+            text: "Well related with Pond !",
+
+          });
+          console.error( error);
         }
       );
     });
 
-    this.messageService.add({severity: 'success', summary: 'Réussi', detail: 'Puit est bien ajouté', life: 3000});
-    this.selectedPuits = [];
+
   }
 
   confirmDelete() {
     this.deleteProductDialog = false;
-    this.puits = this.puits.filter(val => val.id !== this.puit.id);
-    if (this.puit.id != null) {
-      this.puitService.deletePuit(this.puit.id).subscribe(() => console.log("puit deleted"));
-    }
-    this.messageService.add({severity: 'success', summary: 'Réussi', detail: 'Puit a été suprrimé', life: 3000});
-    this.puit;
+
+      this.puitService.deletePuit(this.puit.id).subscribe(() => {
+
+        this.puits = this.puits.filter(val => val.id !== this.puit.id);
+        this.messageService.add({severity: 'success', summary: 'successful', detail: 'Well deleted', life: 3000});
+
+      },error =>{
+
+          Swal.fire({
+            icon: "error",
+            title: "Can not deleted",
+            text: "Well related with Pond !",
+          })
+
+        console.error( error);
+      }
+      );
+
+
   }
 
   hideDialog() {

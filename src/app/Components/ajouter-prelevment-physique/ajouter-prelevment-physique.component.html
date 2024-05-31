@@ -12,7 +12,8 @@
     <div class=" flex justify-content-between  mt-8 border-1 border-round border-gray-300 p-6   ">
       <div class="  flex flex-column  gap-5    ">
         <p-floatLabel >
-          <p-calendar   id="dateCreation" [(ngModel)]="analysesPhysique.dateAnalyse" dateFormat="yy-mm-dd"  [showIcon]="true"></p-calendar>
+          <input  class="p-2 shadow-1 w-full" type="date" pInputText id="dateCreation" dateFormat="yy-mm-dd"   [(ngModel)]="analysesPhysique.dateAnalyse"  />
+
           <label for="dateCreation">Creation Date</label>
         </p-floatLabel>
         <p-floatLabel>

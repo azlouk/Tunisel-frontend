@@ -30,6 +30,7 @@ import {AutoFocusModule} from "primeng/autofocus";
 import {TooltipModule} from "primeng/tooltip";
 import * as XLSX from "xlsx";
 import {writeFile} from "xlsx";
+import Swal from "sweetalert2";
 
 @Component({
   selector: 'app-sbnl',
@@ -131,10 +132,9 @@ this.getsbnl()
       { field: 'reference', header: 'reference' },
       { field: 'description', header: 'description' },
       { field: 'dateCreation', header: 'dateCreation' },
-      { field: 'nom', header: 'nom' },
+      { field: 'quantite', header: 'nom' },
       { field: 'emplacement', header: 'emplacement' },
-      { field: 'etat', header: 'etat' },
-      { field: 'dateFermeture', header: 'dateFermeture' },
+      { field: 'pond', header: 'pond' },
     ];
 
 
@@ -177,12 +177,17 @@ this.getsbnl()
           this.sbnls = this.sbnls.filter(sbnl =>sbnl.id !== selectedSbnl.id);
         },
         (error) => {
-          console.error('Error deleting user:', error);
+          Swal.fire({
+            icon: "error",
+            title: "Can not deleted",
+            text: "Unwashed related with band !",
+          })
+          console.error( error);
         }
       );
     });
 
-    this.messageService.add({ severity: 'success', summary: 'Successful', detail: 'User Deleted', life: 3000 });
+    this.messageService.add({ severity: 'success', summary: 'Successful', detail: 'Unwashed Deleted', life: 3000 });
     this.selectedSbnls = [];
   }
 
@@ -191,10 +196,18 @@ this.getsbnl()
     console.log("this.sbnl.id", this.sbnl.id);
     this.sbnls = this.sbnls.filter(val => val.id !== this.sbnl.id);
     if (this.sbnl.id!= null) {
-      this.sbnlService.deleteSbnl(this.sbnl.id).subscribe(() => console.log("sbnl deleted"));
+      this.sbnlService.deleteSbnl(this.sbnl.id).subscribe(() => {
+        this.messageService.add({ severity: 'success', summary: 'Successful', detail: 'Unwashed Deleted', life: 3000 });
+      },error => {
+        console.log(error)
+        Swal.fire({
+          icon: "error",
+          title: "Can not deleted",
+          text: "Unwashed related with band !",
+        })
+      });
     }
-    this.messageService.add({ severity: 'success', summary: 'Successful', detail: 'Puit Deleted', life: 3000 });
-    this.sbnl ;
+
   }
 
   hideDialog() {

@@ -22,10 +22,10 @@ export class UserService {
   deleteUser(userId: number | undefined): Observable<any> {
     return this.http.delete(`${this.apiUrl}/users/delete/${userId}`);
   }
-  saveUser(user: User): Observable<User> {
-   console.log("update");
-    return this.http.put<User>(`${this.apiUrl}/admins/${user.id}`, user);
-  }
+  // saveUser(user: User): Observable<User> {
+  //  console.log("update");
+  //   return this.http.put<User>(`${this.apiUrl}/admins/${user.id}`, user);
+  // }
 
 
   addAdmin(user: User) : Observable<User>{
@@ -33,11 +33,21 @@ export class UserService {
     return this.http.post<User>(`${this.apiUrl}/admins/add`, user);
 
   }
+  UpdateAdmin(user: User) : Observable<User>{
 
+    return this.http.put<User>(`${this.apiUrl}/admins/update`, user);
+
+  }
 
   AddEmployer(user: User) {
     console.log("create Employer");
     return this.http.post<User>(`${this.apiUrl}/employers/add`, user);
+
+  }
+
+  UpdateEmployer(user: User) {
+
+    return this.http.put<User>(`${this.apiUrl}/employers/update`, user);
 
   }
 }

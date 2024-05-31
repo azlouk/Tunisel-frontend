@@ -205,7 +205,7 @@ export class RapportAnalyseComponent {
         this.selectedSbnl = value.sbnl;
         this.selectedSblf = value.sblf;
         this.selectedBande = value.bande;
-        //console.log('ooooooooooooooooo  ', new JsonPipe().transform(value))
+
       }, error => {
 
       });
@@ -234,7 +234,7 @@ export class RapportAnalyseComponent {
 
     this.puitService.getAllPuits().subscribe((v: Puit[]) => {
       this.puits = v;
-      //  console.log(new JsonPipe().transform("====================>>>>>>"+this.puits))
+
 
     }, error => {
       console.log(error)
@@ -262,14 +262,14 @@ export class RapportAnalyseComponent {
 
     this.sblService.getAllSbl().subscribe((v: Sbl[]) => {
       this.sbls = v;
-      console.log(new JsonPipe().transform("====================>>>>>>" + this.sbls))
+
     }, error => {
       console.log(error)
     })
 
     this.sblfService.getAllSblfs().subscribe((v: Sblf[]) => {
       this.sblfs = v;
-      console.log(new JsonPipe().transform("====================>>>>>>" + this.sblfs))
+
 
     }, error => {
       console.log(error)
@@ -370,7 +370,7 @@ export class RapportAnalyseComponent {
         } else {
 
           this.analysesChimique.id = 0;
-          //console.error("Data analyse Chimique:" + new JsonPipe().transform(this.analysesChimique))
+
 
 
           if (this.selectedPuit.hasOwnProperty('id')) {
@@ -520,7 +520,7 @@ export class RapportAnalyseComponent {
     this.analysesChimique.ph=this.attributs[11].value;
     this.analysesChimique.chlorureDeSodium=this.attributs[12].value;
     this.analysesChimique.ferrocyanure=this.attributs[13].value;
-    // console.log(JSON.stringify(this.selectedBassin))
+
     this.analysesPhysique.reference = this.analysesChimique.reference;
     this.analysesPhysique.matiere=this.analysesChimique.matiere;
     this.analysesPhysique.dateAnalyse=this.analysesChimique.dateAnalyse;
@@ -537,7 +537,6 @@ export class RapportAnalyseComponent {
         this.analysesPhysique.tamisList = this.listeTamis;
         this.selectedBassin.analysesPhysiques.push(this.analysesPhysique);
       }
-      console.log(this.selectedBassin);
       this.rapportAnalyseService.addRapportToBassin(this.selectedBassin).subscribe(value => {
         this.router.navigate(['/analysePhysique']);
       }, error => console.log(error));
@@ -730,7 +729,7 @@ export class RapportAnalyseComponent {
         totalMasse += tamis.masse;
 
       }}
-    console.log('=========>>>>>>>>>>totle Weight: ',totalMasse);
+
     return totalMasse;
   }
   calculateRefus(total:number) {

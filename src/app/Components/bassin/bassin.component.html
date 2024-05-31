@@ -118,8 +118,7 @@
 
         <div class="field">
           <label for="dateCreation">Creation Date</label>
-          <p-calendar id="dateCreation" dateFormat="yy-mm-dd" [(ngModel)]="bassin.dateCreation"  [showIcon]="true"></p-calendar>
-<!--          <small class="ng-dirty ng-invalid" *ngIf="submitted && !bassin.dateCreation">Creation date est requis.</small>-->
+          <input  class="p-2 shadow-1" type="date" pInputText id="dateCreation"  [(ngModel)]="bassin.dateCreation"  />
         </div>
         <div class="field">
           <label for="nom">Name</label>
@@ -153,10 +152,10 @@
       </ng-template>
     </p-dialog>
 
-    <p-dialog  class="p-fluid" [(visible)]="deleteProductDialog" header="Confirm" [modal]="true" [style]="{width:'80%'}">
+    <p-dialog  class="p-fluid" [(visible)]="deleteProductDialog" header="Confirm" [modal]="true" [style]="{width:'450px'}">
       <div class="flex align-items-center   justify-content-center">
         <i class="pi pi-exclamation-triangle mr-3" style="font-size: 2rem"></i>
-        <span *ngIf="product">Are you sure you want to delete? <b>{{product.name}}</b>?</span>
+        <span *ngIf="product">Are you sure you want to delete?</span>
       </div>
       <ng-template pTemplate="footer">
         <button pButton pRipple icon="pi pi-times" class="p-button-text" label="No" (click)="deleteProductDialog = false"></button>
@@ -165,9 +164,9 @@
     </p-dialog>
 
     <p-dialog [(visible)]="deleteProductsDialog" header="Confirm" [modal]="true" [style]="{width:'450px'}">
-      <div class="flex align-items-center justify-content-center overflow-auto" style="width: 80%">
-        <i class="pi pi-exclamation-triangle mr-3" style="font-size: 2rem"></i>
-        <span>Are you sure you want to delete? les produits sélectionnés ?</span>
+      <div class="flex align-items-center justify-content-center overflow-auto" >
+        <i class="pi pi-exclamation-triangle mr-3" ></i>
+        <span>Are you sure you want to delete?</span>
       </div>
       <ng-template pTemplate="footer">
         <button pButton pRipple icon="pi pi-times" class="p-button-text" label="No" (click)="deleteProductsDialog = false"></button>

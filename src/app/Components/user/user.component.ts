@@ -13,9 +13,7 @@ import {ToastModule} from "primeng/toast";
 import {UserService} from "../../Services/user.service";
 import {User} from "../../Models/user";
 import {PasswordModule} from "primeng/password";
-import {UserType} from "../../Enum/user-type";
 import {InputTextModule} from "primeng/inputtext";
-import {Employer} from "../../Models/employer";
 import {getToken} from "../../../main";
 
 
@@ -75,11 +73,12 @@ export class UserComponent implements OnInit {
   ngOnInit() {
     this.getAllUsers();
     this.cols = [
-      {field: 'product', header: 'Product'},
-      {field: 'price', header: 'Price'},
-      {field: 'category', header: 'Category'},
-      {field: 'rating', header: 'Reviews'},
-      {field: 'inventoryStatus', header: 'Status'}
+      {field: 'id', header: 'id'},
+      {field: 'nom', header: 'nom'},
+      {field: 'pseudo', header: 'pseudo'},
+      {field: 'poste', header: 'poste'},
+      {field: 'telephone', header: 'telephone'},
+      {field: 'telephone', header: 'role'}
     ];
 
     this.statuses = [
@@ -162,10 +161,21 @@ export class UserComponent implements OnInit {
 
     if (this.user.pseudo?.trim() && this.user.mp?.trim()) {
       if (this.isUpdateUser == true) {
-        this.userService.saveUser(this.user).subscribe(() => {
-        });
-        this.isUpdateUser = false;
+        if (this.user.userType === "ADMIN") {
+          this.userService.UpdateAdmin(this.user).subscribe(() => {
+            this.getAllUsers();
+
+          })
+        }
+        if (this.user.userType == "EMPLOYER") {
+          this.userService.UpdateEmployer(this.user).subscribe(() => {
+            this.getAllUsers();
+            this.isUpdateUser = false;
+          });
+        }
+        this.productDialog = false
       } else {
+        this.isUpdateUser = false;
         if (this.user.userType === "ADMIN") {
           this.userService.addAdmin(this.user).subscribe(() => {
             this.getAllUsers();

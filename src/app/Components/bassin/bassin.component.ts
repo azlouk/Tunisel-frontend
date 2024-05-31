@@ -31,6 +31,7 @@ import {getToken} from "../../../main";
 import * as XLSX from 'xlsx';
 import {TooltipModule} from "primeng/tooltip";
 import * as Papa from 'papaparse';
+import Swal from "sweetalert2";
 
 @Component({
   selector: 'app-bassin',
@@ -165,31 +166,48 @@ this.SelectetBassin={analysesPhysiques:[]}
 
   confirmDeleteSelected() {
     this.deleteProductsDialog = false;
-    console.log(this.selectedBassins.length)
-    this.selectedBassins.forEach(selectedUser => {
-      this.bassinService.deleteBassin(selectedUser.id).subscribe(
+    // console.log(this.selectedBassins.length)
+    this.selectedBassins.forEach(bassin => {
+
+      this.bassinService.deleteBassin(bassin.id).subscribe(
         () => {
-          this.bassins = this.bassins.filter(bassin => bassin.id !== selectedUser.id);
+          this.bassins = this.bassins.filter(bassin => bassin.id !== bassin.id);
+          this.messageService.add({ severity: 'success', summary: 'Successful', detail: 'Bassins Deleted', life: 3000 });
+
         },
         (error) => {
+          Swal.fire({
+          icon: "error",
+          title: "Can not deleted",
+          text: "Pond related with Unwashed !",
+        })
           console.error('Error deleting user:', error);
         }
       );
     });
 
-    this.messageService.add({ severity: 'success', summary: 'Successful', detail: 'User Deleted', life: 3000 });
-    this.selectedBassins = [];
   }
 
   confirmDelete() {
     this.deleteProductDialog = false;
-    console.log("this.bassin.id", this.bassin.id);
-    this.bassins = this.bassins.filter(val => val.id !== this.bassin.id);
-    if (this.bassin.id!= null) {
-      this.bassinService.deleteBassin(this.bassin.id).subscribe(() => console.log("bassin deleted"));
-    }
-    this.messageService.add({ severity: 'success', summary: 'Successful', detail: 'Bassin Deleted', life: 3000 });
-    this.bassin = {};
+
+      this.bassinService.deleteBassin(this.bassin.id).subscribe(() => {
+        this.bassins = this.bassins.filter(val => val.id !== this.bassin.id);
+        this.messageService.add({ severity: 'success', summary: 'Successful', detail: 'Bassin Deleted', life: 3000 });
+
+      },error => {
+        console.log(error)
+        Swal.fire({
+          icon: "error",
+          title: "Can not deleted",
+          text: "Pond related with Unwashed !",
+        })
+      });
+
+
+
+
+
   }
 
   hideDialog() {

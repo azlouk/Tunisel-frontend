@@ -18,7 +18,7 @@
       <p-table  [loading]="loading" #dt [value]="sbls" [columns]="cols"  responsiveLayout="scroll" [rows]="10" [globalFilterFields]="['id','reference','description','dateStock','emplacement','etat','quantite','type']" [paginator]="true" [rowsPerPageOptions]="[10,20,30]" [showCurrentPageReport]="true" currentPageReportTemplate="Display  {first} to  {last} of  {totalRecords} entries" [(selection)]="selectedSbls" selectionMode="multiple" [rowHover]="true" dataKey="id">
         <ng-template pTemplate="caption">
           <div class="flex flex-column md:flex-row md:justify-content-between md:align-items-center">
-            <h5 class="m-0">Management of stocks of washed Pond</h5>
+            <h5 class="m-0">Management of washed stock</h5>
             <span class="block mt-2 md:mt-0 p-input-icon-left">
                             <i class="pi pi-search"></i>
                             <input  type="text" pInputText (input)="onGlobalFilter(dt, $event)" placeholder="Search..."  class="w-full sm:w-auto"/>
@@ -39,8 +39,8 @@
             <th pSortableColumn="dateStock">Date Stock<p-sortIcon field="dateStock"></p-sortIcon></th>
             <th pSortableColumn="emplacement">Location <p-sortIcon field="emplacement"></p-sortIcon></th>
             <th pSortableColumn="etat">State <p-sortIcon field="etat"></p-sortIcon></th>
-            <th pSortableColumn="quantité">Quantity <p-sortIcon field="quantité"></p-sortIcon></th>
-            <th pSortableColumn="type">Management of stocks of washed basins <p-sortIcon field="type"></p-sortIcon></th>
+            <th pSortableColumn="quantite">Quantity <p-sortIcon field="quantite"></p-sortIcon></th>
+            <th pSortableColumn="type">Band <p-sortIcon field="type"></p-sortIcon></th>
             <th>Action</th>
 
           </tr>
@@ -110,7 +110,7 @@
       </p-table>
     </div>
 
-    <p-dialog [(visible)]="productDialog" [style]="{width: '450px'}" header="Nouveau stock lavé" [modal]="true" class="p-fluid">
+    <p-dialog [(visible)]="productDialog" [style]="{width: '450px'}" header="Washed" [modal]="true" class="p-fluid">
       <ng-template pTemplate="content">
         <div class="field">
           <label>Band</label>
@@ -128,9 +128,8 @@
         </div>
 
         <div class="field">
-          <label for="dateStock">Date Stock</label>
-          <p-calendar dateFormat="yy-mm-dd" id="dateStock" [(ngModel)]="sbl.dateStock"   [showIcon]="true"></p-calendar>
-<!--          <small class="ng-dirty ng-invalid" *ngIf="submitted && !sbl.dateStock">poste is required.</small>-->
+          <label for="dateCreation">Date Stock</label>
+          <input  class="p-2 shadow-1" type="date" pInputText id="dateCreation"  [(ngModel)]="sbl.dateStock"  />
         </div>
 
         <div class="field">
@@ -145,13 +144,11 @@
         <div class="field">
           <label for="etat">State</label>
           <input type="text" pInputText id="etat"  [(ngModel)]="sbl.etat" required autofocus />
-<!--          <small class="ng-dirty ng-invalid" *ngIf="submitted && !sbl.etat">Telephone is required.</small>-->
         </div>
         <div class="field">
           <label for="quantite">Quantity</label>
           <p-inputNumber Id="quantite" mode="decimal" [minFractionDigits]="3" [(ngModel)]="sbl.quantite"   ></p-inputNumber>
 
-<!--           <small class="ng-dirty ng-invalid" *ngIf="submitted && !sbl.etat">Telephone is required.</small>-->
         </div>
 
 
@@ -165,18 +162,18 @@
 
       <ng-template pTemplate="footer">
         <button pButton pRipple label="Cancel" icon="pi pi-times" class="p-button-text" (click)="hideDialog()"></button>
-        <button pButton pRipple label="Add" icon="pi pi-check" class="p-button-text" (click)="saveSbl()"></button>
+        <button pButton pRipple label="Confirm" icon="pi pi-check" class="p-button-text" (click)="saveSbl()"></button>
       </ng-template>
     </p-dialog>
 
     <p-dialog [(visible)]="deleteProductDialog" header="Confirm" [modal]="true" [style]="{width:'450px'}">
       <div class="flex align-items-center justify-content-center">
         <i class="pi pi-exclamation-triangle mr-3" style="font-size: 2rem"></i>
-        <span *ngIf="product">Are you sure you want to delete?<b>{{product.name}}</b>?</span>
+        <span *ngIf="product">Are you sure you want to delete<b>{{product.name}}</b>?</span>
       </div>
       <ng-template pTemplate="footer">
-        <button pButton pRipple icon="pi pi-times" class="p-button-text" label="Non" (click)="deleteProductDialog = false"></button>
-        <button pButton pRipple icon="pi pi-check" class="p-button-text" label="Oui" (click)="confirmDelete()"></button>
+        <button pButton pRipple icon="pi pi-times" class="p-button-text" label="Cancel" (click)="deleteProductDialog = false"></button>
+        <button pButton pRipple icon="pi pi-check" class="p-button-text" label="Yes" (click)="confirmDelete()"></button>
       </ng-template>
     </p-dialog>
 

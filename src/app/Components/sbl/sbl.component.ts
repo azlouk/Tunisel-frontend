@@ -29,6 +29,7 @@ import {AutoFocusModule} from "primeng/autofocus";
 import {TooltipModule} from "primeng/tooltip";
 import * as XLSX from "xlsx";
 import {writeFile} from "xlsx";
+import Swal from "sweetalert2";
 
 @Component({
   selector: 'app-sbl',
@@ -135,7 +136,7 @@ export class SblComponent implements OnInit{
   }
 
   openNew() {
-    this.sbl ;
+    this.sbl={} ;
     this.submitted = false;
     this.productDialog = true;
   }
@@ -159,31 +160,44 @@ export class SblComponent implements OnInit{
 
   confirmDeleteSelected() {
     this.deleteProductsDialog = false;
-    console.log(this.selectedSbls.length)
     this.selectedSbls.forEach(selectedSbl => {
       this.sblService.deleteSbl(selectedSbl.id).subscribe(
         () => {
           this.sbls = this.sbls.filter(sbl =>sbl.id !== selectedSbl.id);
+          this.messageService.add({ severity: 'success', summary: 'Successful', detail: 'Sbl Deleted', life: 3000 });
+
         },
         (error) => {
-          console.error('Error deleting Sbl:', error);
+          Swal.fire({
+            icon: "error",
+            title: "Can not deleted",
+            text: "Washed related with Washed ship !",
+          })
+          console.error( error);
         }
       );
     });
 
-    this.messageService.add({ severity: 'success', summary: 'Successful', detail: 'Sbl Deleted', life: 3000 });
-    this.selectedSbls = [];
   }
 
   confirmDelete() {
     this.deleteProductDialog = false;
     console.log("this.sbl.id", this.sbl.id);
-    this.sbls = this.sbls.filter(val => val.id !== this.sbl.id);
     if (this.sbl.id!= null) {
-      this.sblService.deleteSbl(this.sbl.id).subscribe(() => console.log("Sbl deleted"));
+      this.sblService.deleteSbl(this.sbl.id).subscribe(() => {
+        this.sbls = this.sbls.filter(val => val.id !== this.sbl.id);
+
+        this.messageService.add({ severity: 'success', summary: 'Successful', detail: 'Sbl Deleted', life: 3000 });
+
+      },error => {
+        Swal.fire({
+          icon: "error",
+          title: "Can not deleted",
+          text: "Washed related with Washed ship !",
+        })
+        console.log(error)
+      });
     }
-    this.messageService.add({ severity: 'success', summary: 'Successful', detail: 'Sbl Deleted', life: 3000 });
-    this.sbl ;
   }
 
   hideDialog() {
@@ -222,6 +236,7 @@ export class SblComponent implements OnInit{
   onGlobalFilter(table: Table, event: Event) {
     table.filterGlobal((event.target as HTMLInputElement).value, 'contains');
   }
+
 
 
 

@@ -159,7 +159,6 @@ export class AnalyseChimiqueComponent implements OnInit {
             if (value.bande) {
               analysechimique.ref = value.bande.reference;
             }
-            console.log(new JsonPipe().transform(value));
           }, error => {
             console.error(error);
           });

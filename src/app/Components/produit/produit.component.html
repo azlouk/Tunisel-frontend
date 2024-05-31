@@ -33,12 +33,12 @@
             </th>
             <th pSortableColumn="id">Id <p-sortIcon field="id"></p-sortIcon></th>
             <th pSortableColumn="nom">Name <p-sortIcon field="nom"></p-sortIcon></th>
-            <th pSortableColumn="quantité">Quantity <p-sortIcon field="quantite"></p-sortIcon></th>
+            <th pSortableColumn="quantite">Quantity <p-sortIcon field="quantite"></p-sortIcon></th>
             <th pSortableColumn="designation">Designetion<p-sortIcon field="designation"></p-sortIcon></th>
 
             <th pSortableColumn="reference">Reference<p-sortIcon field="reference"></p-sortIcon></th>
 
-            <th pSortableColumn="articleId">Aticle Id<p-sortIcon field="articleId"></p-sortIcon></th>
+            <th pSortableColumn="article">Aticle<p-sortIcon field="article"></p-sortIcon></th>
 
             <th></th>
           </tr>
@@ -92,7 +92,7 @@
       </p-table>
     </div>
 
-    <p-dialog [(visible)]="productDialog" [style]="{width: '450px' , height:'700px'}" header="Nouveau produit" [modal]="true" class="p-fluid">
+    <p-dialog [(visible)]="productDialog" [style]="{width: '450px' , height:'700px'}" header="Product" [modal]="true" class="p-fluid">
       <ng-template pTemplate="content">
         <div class="field">
           <label for="nom">Name</label>
@@ -118,7 +118,7 @@
         </div>
 
         <div class="field  ">
-          <label for="reference">Article </label>
+          <label for="reference">Item </label>
            <small class="ng-dirty ng-invalid" *ngIf="submitted && !produit.article"></small>
           <p-listbox [options]="articles" [(ngModel)]="produit.article" optionLabel="nom" [filter]="true" [ngClass]="{'ng-invalid ng-dirty' : submitted && !produit.article}" [style]="{ width: 'auto' }" [listStyle]="{'max-height': '120px'}"></p-listbox>
 
@@ -136,13 +136,13 @@
 
       <ng-template pTemplate="footer">
         <button pButton pRipple label="Cancel" icon="pi pi-times" class="p-button-text" (click)="hideDialog()"></button>
-        <button pButton pRipple label="Quantity" icon="pi pi-check" class="p-button-text" (click)="saveProduit()"></button>
+        <button pButton pRipple label="Confirm" icon="pi pi-check" class="p-button-text" (click)="saveProduit()"></button>
       </ng-template>
     </p-dialog>
     <p-dialog [(visible)]="deleteProductDialog" header="Confirm" [modal]="true" [style]="{width:'450px'}">
       <div class="flex align-items-center justify-content-center">
         <i class="pi pi-exclamation-triangle mr-3" style="font-size: 2rem"></i>
-        <span *ngIf="produit">Are you sure you want to delete? <b>{{produit.nom}}</b>?</span>
+        <span *ngIf="produit">Are you sure you want to delete <b>{{produit.nom}}</b>?</span>
       </div>
       <ng-template pTemplate="footer">
         <button pButton pRipple icon="pi pi-times" class="p-button-text" label="No" (click)="deleteProductDialog = false"></button>

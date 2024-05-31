@@ -15,7 +15,8 @@
           <label>Reference</label>
         </p-floatLabel>
         <p-floatLabel>
-          <p-calendar id="dateReception" dateFormat="yy-mm-dd" [showIcon]="true" [(ngModel)]="inventaire.dateInventaire"></p-calendar>
+          <input  class="p-2 shadow-1 w-full" type="date" pInputText id="dateReception" dateFormat="yy-mm-dd" [(ngModel)]="inventaire.dateInventaire"  />
+
           <label for="dateReception">Inventory Date</label>
         </p-floatLabel>
       </div>

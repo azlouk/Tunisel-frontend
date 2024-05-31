@@ -109,6 +109,7 @@ export class AjouterPrelevmentPhysiqueComponent implements OnInit{
 
 
   ngOnInit(): void {
+    this.analysesPhysique.dateAnalyse = new Date();
     this.datasel = [
       "Unwashed salt",
       "Washed salt",
