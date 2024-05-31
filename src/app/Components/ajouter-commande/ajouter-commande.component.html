@@ -173,19 +173,26 @@
 
     </div>
     <div class="card">
+      <div class="m-2">
+        <label class="font-bold">
+        Total Number Of Analyse
+        </label>
+      <p-badge   [value]="listeLignesCommandes.length.toString()" severity="info" />
+      </div>
+
       <p-table
-        [paginator]="true"
-        [rows]="10"
-        [loading]="loadingcommande"
-        [rowsPerPageOptions]="[10,20,30,200,500]"
-        [showCurrentPageReport]="true"
-        [rowHover]="true"
-        currentPageReportTemplate="Display from {first} to {last} of {totalRecords} items"
-        [columns]="selectedColumns"
+          [loading]="loadingcommande"
+         [rowHover]="true"
+        [lazy]="true"
+         [columns]="selectedColumns"
         [value]="listeLignesCommandes"
-        [tableStyle]="{'min-width': '50rem'}"
-        [globalFilterFields]="getheader()"
-        editMode="row"
+          [scrollable]="true"
+          scrollHeight="600px"
+          [tableStyle]="{'min-width': '50rem'}"
+          styleClass="p-datatable-gridlines"
+          selectionMode="single"
+          [(selection)]="selectedProduct"
+          editMode="row"
         id="EXCEL"
         #EXCEL
       >
@@ -212,7 +219,7 @@
 
           </ng-template>
         <ng-template pTemplate="body" let-lineCommande let-columns="columns" let-editing="editing" let-ri="rowIndex">
-          <tr [pEditableRow]="lineCommande">
+          <tr [pEditableRow]="lineCommande" [pSelectableRow]="lineCommande">
             <ng-container *ngFor="let col of columns">
 
               <td *ngIf="col.id>28 && col.id<42">

@@ -46,6 +46,7 @@ import {OverlayPanelModule} from "primeng/overlaypanel";
 import {ProgressBarModule} from "primeng/progressbar";
 import Swal from "sweetalert2";
 import {ProgressSpinnerModule} from "primeng/progressspinner";
+import {BadgeModule} from "primeng/badge";
 
 
 
@@ -87,6 +88,7 @@ export interface Column {
     OverlayPanelModule,
     ProgressBarModule,
     ProgressSpinnerModule,
+    BadgeModule,
 
   ],
   templateUrl: './ajouter-commande.component.html',
@@ -495,7 +497,7 @@ if(this.commande.bandes){
     if (col.id < 21) {
             if(col.id==0) {
 
-              return ligneCommande.analyseChimique !== null ? this.pipedate(ligneCommande.analyseChimique[col.field]) : '-'
+              return ligneCommande.analyseChimique !== null ? this.pipedate(ligneCommande.analyseChimique[col.field]) : this.pipedate(ligneCommande.analysePhysique[col.field])
             }
               if(ligneCommande.analyseChimique==null && ligneCommande.analysePhysique!==null && col.field=="reference"){
                 return  ligneCommande.analysePhysique[col.field]
@@ -505,6 +507,10 @@ if(this.commande.bandes){
     else
       if (col.id > 20 && col.id < 24)
     {
+         if(col.id==22){
+           return ligneCommande.analysePhysique!==null  ? ligneCommande.analysePhysique[col.field] : ligneCommande.analyseChimique[col.field];
+
+         }
           return ligneCommande.analysePhysique!==null  ? ligneCommande.analysePhysique[col.field] : '-';
     } else
       if (col.id > 23 && col.id < 29 && this.selectedColumnsCalibre && this.selectedColumnsCalibre.header) {
@@ -914,6 +920,7 @@ this.getLine()
   protected readonly Swal = Swal;
   loadingcommande: boolean=false;
   loadinSave: boolean=false ;
+  selectedProduct: any;
 
 
   calculerMoyennes():
