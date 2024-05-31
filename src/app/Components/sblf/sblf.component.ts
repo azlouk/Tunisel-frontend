@@ -129,11 +129,11 @@ export class SblfComponent {
       { field: 'id', header: 'id' },
       { field: 'reference', header: 'reference' },
       { field: 'description', header: 'description' },
-      { field: 'dateCreation', header: 'dateCreation' },
-      { field: 'nom', header: 'nom' },
+      { field: 'dateStock', header: 'dateStock' },
       { field: 'emplacement', header: 'emplacement' },
       { field: 'etat', header: 'etat' },
-      { field: 'dateStock', header: 'dateStock' },
+      { field: 'quantite', header: 'quantite' },
+      { field: 'type', header: 'type' },
     ];
 
 

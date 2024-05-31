@@ -134,17 +134,17 @@ export class BandeComponent {
       { field: 'reference', header: 'reference' },
       { field: 'description', header: 'description' },
       { field: 'dateCreation', header: 'dateCreation' },
-      { field: 'nom', header: 'nom' },
-      { field: 'emplacement', header: 'emplacement' },
-      { field: 'etat', header: 'etat' },
-      { field: 'dateFermeture', header: 'dateFermeture' },
+      { field: 'state', header: 'state' },
+      { field: 'totalquantite', header: 'totalquantite' },
+      { field: 'refusalquantite', header: 'refusalquantite' },
+      { field: 'Sbnl', header: 'Sbnl' },
     ];
 
 
   }
 
   openNew() {
-    this.bande;
+    this.bande={};
     this.submitted = false;
     this.productDialog = true;
   }

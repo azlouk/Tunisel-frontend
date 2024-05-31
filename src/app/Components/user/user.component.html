@@ -13,7 +13,7 @@
 
       </p-toolbar>
 
-      <p-table #dt [value]="users" [columns]="cols"  responsiveLayout="scroll" [rows]="10" [globalFilterFields]="['id','pseudo','.poste','telephone','nom']" [paginator]="true" [rowsPerPageOptions]="[10,20,30]" [showCurrentPageReport]="true" currentPageReportTemplate="Display  {first} to  {last} of  {totalRecords} entries" [(selection)]="selectedUsers" selectionMode="multiple" [rowHover]="true" dataKey="id">
+      <p-table #dt [value]="users" [columns]="cols"  responsiveLayout="scroll" [rows]="10" [globalFilterFields]="['id','nom','pseudo','poste','telephone','role']" [paginator]="true" [rowsPerPageOptions]="[10,20,30]" [showCurrentPageReport]="true" currentPageReportTemplate="Display  {first} to  {last} of  {totalRecords} entries" [(selection)]="selectedUsers" selectionMode="multiple" [rowHover]="true" dataKey="id">
         <ng-template pTemplate="caption">
           <div class="flex flex-column md:flex-row md:justify-content-between md:align-items-center">
             <h5 class="m-0">Users management</h5>
@@ -36,7 +36,7 @@
             <th pSortableColumn="pseudo">Pseudo <p-sortIcon field="pseudo"></p-sortIcon></th>
             <th pSortableColumn="poste">Post <p-sortIcon field="poste"></p-sortIcon></th>
             <th pSortableColumn="telephone">Telephone <p-sortIcon field="telephone"></p-sortIcon></th>
-            <th pSortableColumn="telephone">Role <p-sortIcon field="telephone"></p-sortIcon></th>
+            <th pSortableColumn="role">Role <p-sortIcon field="role"></p-sortIcon></th>
 
             <th></th>
           </tr>
@@ -115,8 +115,8 @@
           <input type="text" pInputText id="poste"  [(ngModel)]="user.poste" />
         </div>
         <div class="field">
-          <label for="telephone">Telephone</label>
-          <input type="text" pInputText id="telephone"  [(ngModel)]="user.telephone" />
+          <label for="telephone" >Telephone</label>
+          <p-inputNumber   id="telephone" mode="decimal" [(ngModel)]="user.telephone" ></p-inputNumber>
         </div>
 
 
@@ -141,22 +141,22 @@
     <p-dialog [(visible)]="deleteProductDialog" header="Confirm" [modal]="true" [style]="{width:'450px'}">
       <div class="flex align-items-center justify-content-center">
         <i class="pi pi-exclamation-triangle mr-3" style="font-size: 2rem"></i>
-        <span *ngIf="user">Are you sure you want to delete? <b>{{user.pseudo}}</b>?</span>
+        <span *ngIf="user">Are you sure you want to delete <b>{{user.pseudo}}</b>?</span>
       </div>
       <ng-template pTemplate="footer">
-        <button pButton pRipple icon="pi pi-times" class="p-button-text" label="Non" (click)="deleteProductDialog = false"></button>
-        <button pButton pRipple icon="pi pi-check" class="p-button-text" label="Oui" (click)="confirmDelete()"></button>
+        <button pButton pRipple icon="pi pi-times" class="p-button-text" label="No" (click)="deleteProductDialog = false"></button>
+        <button pButton pRipple icon="pi pi-check" class="p-button-text" label="Yes" (click)="confirmDelete()"></button>
       </ng-template>
     </p-dialog>
 
     <p-dialog [(visible)]="deleteProductsDialog" header="Confirm" [modal]="true" [style]="{width:'450px'}">
       <div class="flex align-items-center justify-content-center">
         <i class="pi pi-exclamation-triangle mr-3" style="font-size: 2rem"></i>
-        <span>Do you want to delete users ?</span>
+        <span>Do you want to delete users </span>
       </div>
       <ng-template pTemplate="footer">
-        <button pButton pRipple icon="pi pi-times" class="p-button-text" label="Non" (click)="deleteProductsDialog = false"></button>
-        <button pButton pRipple icon="pi pi-check" class="p-button-text" label="Oui" (click)="confirmDeleteSelected()"></button>
+        <button pButton pRipple icon="pi pi-times" class="p-button-text" label="No" (click)="deleteProductsDialog = false"></button>
+        <button pButton pRipple icon="pi pi-check" class="p-button-text" label="Yes" (click)="confirmDeleteSelected()"></button>
       </ng-template>
     </p-dialog>
   </div>

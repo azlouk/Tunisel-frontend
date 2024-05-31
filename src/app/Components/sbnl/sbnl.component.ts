@@ -132,10 +132,9 @@ this.getsbnl()
       { field: 'reference', header: 'reference' },
       { field: 'description', header: 'description' },
       { field: 'dateCreation', header: 'dateCreation' },
-      { field: 'nom', header: 'nom' },
+      { field: 'quantite', header: 'nom' },
       { field: 'emplacement', header: 'emplacement' },
-      { field: 'etat', header: 'etat' },
-      { field: 'dateFermeture', header: 'dateFermeture' },
+      { field: 'pond', header: 'pond' },
     ];
 
 
