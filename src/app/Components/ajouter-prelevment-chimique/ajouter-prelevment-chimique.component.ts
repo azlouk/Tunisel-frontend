@@ -167,6 +167,26 @@ export class AjouterPrelevmentChimiqueComponent implements OnInit {
         this.selectedSbnl = value.sbnl;
         this.selectedSblf = value.sblf;
         this.selectedBande = value.bande;
+        if(this.selectedPuit){
+          this.id=this.selectedPuit.id!
+          this.ref="puit"}
+        else
+          if(this.selectedBassin){
+          this.id=this.selectedBassin.id!
+          this.ref="bassin"
+        }else if (this.selectedSbnl){
+          this.id=this.selectedSbnl.id!
+          this.ref="sbnl"
+        }else if (this.selectedBande){
+          this.id=this.selectedBande.id!
+          this.ref="bande"
+        }else if (this.selectedSbl){
+          this.id=this.selectedSbl.id!
+          this.ref="sbl"
+        }else if (this.selectedSblf){
+          this.id=this.selectedSblf.id!
+          this.ref="sblf"
+        }
         console.log('ooooooooooooooooo  ', new JsonPipe().transform(value))
       }, error => {
 
@@ -268,12 +288,12 @@ export class AjouterPrelevmentChimiqueComponent implements OnInit {
 
       if (this.isUpdateAnalyseChimique) {
         if(
-          this.selectedPuit!==null &&  this.selectedPuit.hasOwnProperty('id')||
-          this.selectedBassin!==null &&  this.selectedBassin.hasOwnProperty('id') ||
-          this.selectedSbnl!==null && this.selectedSbnl.hasOwnProperty('id') ||
-          this.selectedSbl!==null && this.selectedSbl.hasOwnProperty('id') ||
-          this.selectedBande!==null && this.selectedBande.hasOwnProperty('id') ||
-          this.selectedSblf!==null && this.selectedSblf.hasOwnProperty('id')
+          this.selectedPuit!==undefined && this.selectedPuit!==null &&  this.selectedPuit.hasOwnProperty('id')||
+          this.selectedBassin!==undefined &&   this.selectedBassin!==null &&  this.selectedBassin.hasOwnProperty('id') ||
+          this.selectedSbnl!==undefined &&  this.selectedSbnl!==null && this.selectedSbnl.hasOwnProperty('id') ||
+          this.selectedSbl!==undefined &&this.selectedSbl!==null && this.selectedSbl.hasOwnProperty('id') ||
+          this.selectedBande!==undefined && this.selectedBande!==null && this.selectedBande.hasOwnProperty('id') ||
+          this.selectedSblf!==undefined &&  this.selectedSblf!==null && this.selectedSblf.hasOwnProperty('id')
         ) {
           this.analyseChimiqueService.updateAnalyseChimique(this.analysesChimique, this.id, this.ref).subscribe(value => this.router.navigate(['/analyseChimique']),error => {
             Swal.fire({title:"Error of Modification", text:"Please remove this analyse from order first to change assignment ",icon:"error"})
@@ -357,8 +377,7 @@ export class AjouterPrelevmentChimiqueComponent implements OnInit {
     this.selectedSbl = {};
     this.selectedSblf = {};
 
-
-    this.id=this.selectedPuit!==undefined && this.selectedPuit.id!=undefined?this.selectedPuit.id:0;
+    this.id=this.selectedPuit && this.selectedPuit.id?this.selectedPuit.id:0;
     this.ref="puit"
 
   }
@@ -372,7 +391,7 @@ export class AjouterPrelevmentChimiqueComponent implements OnInit {
     this.selectedSbl = {};
     this.selectedSblf = {};
 
-    this.id=this.selectedBassin!==undefined && this.selectedBassin.id!=undefined?this.selectedBassin.id:0;
+    this.id=this.selectedBassin && this.selectedBassin.id?this.selectedBassin.id:0;
     this.ref="bassin"
   }
 
@@ -384,7 +403,7 @@ export class AjouterPrelevmentChimiqueComponent implements OnInit {
     this.selectedBande = {};
     this.selectedSbl = {};
     this.selectedSblf = {};
-    this.id=this.selectedSbnl!==undefined && this.selectedSbnl.id!=undefined?this.selectedSbnl.id:0;
+    this.id=this.selectedSbnl && this.selectedSbnl.id?this.selectedSbnl.id:0;
     this.ref="sbnl"
   }
 
@@ -396,7 +415,7 @@ export class AjouterPrelevmentChimiqueComponent implements OnInit {
     this.selectedPuit = {};
     this.selectedSbl = {};
     this.selectedSblf = {};
-    this.id=this.selectedBande!==undefined && this.selectedBande.id!=undefined?this.selectedBande.id:0;
+    this.id=this.selectedBande && this.selectedBande.id?this.selectedBande.id:0;
     this.ref="bande"
   }
 
@@ -408,7 +427,7 @@ export class AjouterPrelevmentChimiqueComponent implements OnInit {
     this.selectedBande = {};
     this.selectedPuit = {};
     this.selectedSblf = {};
-    this.id=this.selectedSbl!==undefined && this.selectedSbl.id!=undefined?this.selectedSbl.id:0;
+    this.id=this.selectedSbl && this.selectedSbl.id?this.selectedSbl.id:0;
     this.ref="sbl"
   }
 
@@ -420,7 +439,7 @@ export class AjouterPrelevmentChimiqueComponent implements OnInit {
     this.selectedBande = {};
     this.selectedSbl = {};
     this.selectedPuit = {};
-    this.id=this.selectedSblf!==undefined && this.selectedSblf.id!=undefined?this.selectedSblf.id:0;
+    this.id=this.selectedSblf && this.selectedSblf.id?this.selectedSblf.id:0;
     this.ref="sblf"
   }
   filterCountry(event: AutoCompleteCompleteEvent) {

@@ -51,6 +51,7 @@ export class AnalysePhysiqueService {
     return this.http.put<void>(`${this.apiUrl}/analysesPhysiques/AddanalysePhysique/sbnl`, sbnl);
   }
   addAnalysesPhysiquesToBande(bande:Bande) : Observable<void>{
+    console.error(new JsonPipe().transform(bande))
     return this.http.put<void>(`${this.apiUrl}/analysesPhysiques/AddanalysePhysique/bande`, bande);
   }
   addAnalysesPhysiquesToSbl(sbl:Sbl) : Observable<void>{

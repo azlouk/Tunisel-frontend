@@ -141,11 +141,28 @@ export class AjouterPrelevmentPhysiqueComponent implements OnInit{
       this.analysePhysiqueService.getElementByAnalysesPhysiquesId(this.analysePhysiqueId).subscribe((value: any) => {
 
         this.selectedBassin = value.bassin;
-
         this.selectedSbl = value.sbl;
         this.selectedSbnl = value.sbnl;
         this.selectedSblf = value.sblf;
         this.selectedBande = value.bande;
+
+          if(this.selectedBassin){
+            this.id=this.selectedBassin.id!
+            this.ref="bassin"
+          }else if (this.selectedSbnl){
+            this.id=this.selectedSbnl.id!
+            this.ref="sbnl"
+          }else if (this.selectedBande){
+            this.id=this.selectedBande.id!
+            this.ref="bande"
+          }else if (this.selectedSbl){
+            this.id=this.selectedSbl.id!
+            this.ref="sbl"
+          }else if (this.selectedSblf){
+            this.id=this.selectedSblf.id!
+            this.ref="sblf"
+          }
+         console.error((value))
 
       }, error => {
 
@@ -204,7 +221,7 @@ export class AjouterPrelevmentPhysiqueComponent implements OnInit{
     this.selectedSbl = {};
     this.selectedSblf = {};
 
-    this.id=this.selectedBassin!==undefined && this.selectedBassin.id!=undefined?this.selectedBassin.id:0;
+    this.id=this.selectedBassin && this.selectedBassin.id?this.selectedBassin.id:0;
     this.ref="bassin"
   }
 
@@ -215,7 +232,7 @@ export class AjouterPrelevmentPhysiqueComponent implements OnInit{
      this.selectedBande = {};
     this.selectedSbl = {};
     this.selectedSblf = {};
-    this.id=this.selectedSbnl!==undefined && this.selectedSbnl.id!=undefined?this.selectedSbnl.id:0;
+    this.id=this.selectedSbnl && this.selectedSbnl.id?this.selectedSbnl.id:0;
     this.ref="sbnl"
   }
 
@@ -226,7 +243,7 @@ export class AjouterPrelevmentPhysiqueComponent implements OnInit{
     this.selectedSbnl = {};
      this.selectedSbl = {};
     this.selectedSblf = {};
-    this.id=this.selectedBande!==undefined && this.selectedBande.id!==undefined?this.selectedBande.id:0;
+    this.id=this.selectedBande && this.selectedBande.id?this.selectedBande.id:0;
     this.ref="bande"
   }
 
@@ -237,7 +254,7 @@ export class AjouterPrelevmentPhysiqueComponent implements OnInit{
     this.selectedSbnl = {};
     this.selectedBande = {};
      this.selectedSblf = {};
-    this.id=this.selectedSbl!==undefined && this.selectedSbl.id!=undefined?this.selectedSbl.id:0;
+    this.id=this.selectedSbl && this.selectedSbl.id?this.selectedSbl.id:0;
     this.ref="sbl"
   }
 
@@ -248,20 +265,20 @@ export class AjouterPrelevmentPhysiqueComponent implements OnInit{
     this.selectedSbnl = {};
     this.selectedBande = {};
     this.selectedSbl = {};
-     this.id=this.selectedSblf!==undefined && this.selectedSblf.id!=undefined?this.selectedSblf.id:0;
+     this.id=this.selectedSblf && this.selectedSblf.id?this.selectedSblf.id:0;
     this.ref="sblf"
   }
 
   saveAnalysePhysique() {
     if(this.isUpdateAnalysePhysique) {
       if (
-        this.selectedBassin !== null && this.selectedBassin.hasOwnProperty('id') ||
-        this.selectedSbnl !== null && this.selectedSbnl.hasOwnProperty('id') ||
-        this.selectedSbl !== null && this.selectedSbl.hasOwnProperty('id') ||
-        this.selectedBande !== null && this.selectedBande.hasOwnProperty('id') ||
-        this.selectedSblf !== null && this.selectedSblf.hasOwnProperty('id')
+        this.selectedBassin !== undefined && this.selectedBassin !== null && this.selectedBassin.hasOwnProperty('id') ||
+        this.selectedSbnl !== undefined && this.selectedSbnl !== null && this.selectedSbnl.hasOwnProperty('id') ||
+        this.selectedSbl !== undefined && this.selectedSbl !== null && this.selectedSbl.hasOwnProperty('id') ||
+        this.selectedBande !== undefined && this.selectedBande !== null && this.selectedBande.hasOwnProperty('id') ||
+        this.selectedSblf !== undefined && this.selectedSblf.hasOwnProperty('id')
       ) {
-        alert(this.id+" "+this.ref+" "+this.analysesPhysique.id)
+       // alert(this.id+" ref"+this.ref+"  id an"+this.analysesPhysique.id)
 
         this.analysePhysiqueService.updateAnalysesPhysiques(this.analysesPhysique, this.id, this.ref).subscribe(value => this.router.navigate(['/analysePhysique']), error => {
           Swal.fire({
