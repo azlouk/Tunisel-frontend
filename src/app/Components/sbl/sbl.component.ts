@@ -210,18 +210,19 @@ export class SblComponent implements OnInit{
     this.productDialog=false
     if(this.isUpdateSbl==true) {
       this.sblService.updateSbl(this.sbl).subscribe(() =>{
-        this.sblService.getAllSbl().subscribe((sbls: Sbl[]) => {
+        this.sblService.getAllSblDTO().subscribe((sbls: Sbl[]) => {
           this.sbls = sbls;
 
         });
       });
       console.log('Sbl updated');
+
       this.isUpdateSbl=false;
     }
     else
     {
       this.sblService.addSbl(this.sbl).subscribe(() => {
-        this.sblService.getAllSbl().subscribe((sbls: Sbl[]) => {
+        this.sblService.getAllSblDTO().subscribe((sbls: Sbl[]) => {
           this.sbls = sbls;
         });
       });
@@ -243,7 +244,7 @@ export class SblComponent implements OnInit{
   getAllSbl() {
     this.loading=true ;
 
-    this.sblService.getAllSbl().subscribe((v:  Sbl[]) => {
+    this.sblService.getAllSblDTO().subscribe((v:  Sbl[]) => {
       this.sbls=v;
       // console.log(new JsonPipe().transform("====================>>>>>>"+this.sbls))
       this.loading=false ;
@@ -252,7 +253,7 @@ export class SblComponent implements OnInit{
       console.log(error)})
     this.loading=true ;
 
-    this.bandeService.getAllBandes().subscribe((v:  Sbnl[]) => {
+    this.bandeService.getAllBandesDTO().subscribe((v:  Sbnl[]) => {
       this.bandes=v;
       this.loading=false ;
 
@@ -305,7 +306,7 @@ export class SblComponent implements OnInit{
 
   Viderfiltredate() {
 
-    this.sblService.getAllSbl().subscribe((sbl: Sbl[]) => {
+    this.sblService.getAllSblDTO().subscribe((sbl: Sbl[]) => {
       this.sbls = sbl;
 
       const sblsbl: Sbl | undefined = this.sbls.find(value => this.Selectetsbl.id == value.id)

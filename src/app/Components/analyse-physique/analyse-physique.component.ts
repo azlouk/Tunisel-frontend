@@ -149,33 +149,33 @@ this.getALLphysique() ;
 
     this.analysePhysiqueService.getAllAnalysesPhysiques().subscribe((analysesPhysiques:  AnalysesPhysique[]) => {
       this.analysesPhysiques=analysesPhysiques;
-       this.analysesPhysiques.forEach(analysephysique => {
-        if (analysephysique.id != null) {
-          this.analysePhysiqueService.getElementByAnalysesPhysiquesId(analysephysique.id).subscribe((value: any) => {
-            // if(value.puit){
-            //   analysephysique.ref=value.puit.reference+ " "+value.puit.nom
-            // }
-            if(value.bassin){
-              analysephysique.ref=value.bassin.reference+ " "+value.bassin.nom
-            }
-             if(value.sbl) {
-              analysephysique.ref=value.sbl.reference
-            }
-            if(value.sbnl) {
-              analysephysique.ref=value.sbnl.reference
-            }
-            if(value.sblf) {
-              analysephysique.ref=value.sblf.reference
-            }
-
-
-
-
-          }, error => {
-
-          });
-        }
-      })
+      //  this.analysesPhysiques.forEach(analysephysique => {
+      //   if (analysephysique.id != null) {
+      //     this.analysePhysiqueService.getElementByAnalysesPhysiquesId(analysephysique.id).subscribe((value: any) => {
+      //       // if(value.puit){
+      //       //   analysephysique.ref=value.puit.reference+ " "+value.puit.nom
+      //       // }
+      //       if(value.bassin){
+      //         analysephysique.ref=value.bassin.reference+ " "+value.bassin.nom
+      //       }
+      //        if(value.sbl) {
+      //         analysephysique.ref=value.sbl.reference
+      //       }
+      //       if(value.sbnl) {
+      //         analysephysique.ref=value.sbnl.reference
+      //       }
+      //       if(value.sblf) {
+      //         analysephysique.ref=value.sblf.reference
+      //       }
+      //
+      //
+      //
+      //
+      //     }, error => {
+      //
+      //     });
+      //   }
+      // })
 
       this.loading=false ;
 

@@ -246,7 +246,7 @@ export class BandeComponent {
   getBande() {
     this.loading=true ;
 
-    this.bandeService.getAllBandes().subscribe((v:  Bande[]) => {
+    this.bandeService.getAllBandesDTO().subscribe((v:  Bande[]) => {
       this.bandes=v;
       this.loading=false ;
 
@@ -254,7 +254,7 @@ export class BandeComponent {
       console.log(error)})
     this.loading=true ;
 
-    this.sbnlService.getAllSbnls()
+    this.sbnlService.getAllSbnlsDTO()
       .subscribe((sbnls: Sbnl[]) => {
         this.sbnls = sbnls;
         this.loading=false ;
@@ -300,7 +300,7 @@ console.log('=====>>>>> export: ',new JsonPipe().transform(bande))
   Viderfiltredate() {
     this.loading=true ;
 
-    this.bandeService.getAllBandes().subscribe((bande: Bande[]) => {
+    this.bandeService.getAllBandesDTO().subscribe((bande: Bande[]) => {
       this.bandes = bande;
 
       const bandeBande: Bande | undefined = this.bandes.find(value => this.selectedBande.id == value.id)
