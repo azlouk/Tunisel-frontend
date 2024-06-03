@@ -139,8 +139,8 @@ export class AjouterPrelevmentChimiqueComponent implements OnInit {
       {name:'Na',checked:false,label:'Sodium', value:this.analysesChimique.sodium},
       {name:'Cl',checked:false,label:'chloride', value:this.analysesChimique.chlorure},
       {name:'pH',checked:false,label:'pH', value:this.analysesChimique.ph},
-      {name:'NaCl',checked:false,label:'chlorure de sodium', value:this.analysesChimique.chlorureDeSodium},
-      {name:'Fe(CN)₆',checked:false,label:'ferrocyanure ', value:this.analysesChimique.ferrocyanure},
+      {name:'NaCl',checked:false,label:'sodium chloride', value:this.analysesChimique.chlorureDeSodium},
+      {name:'Fe(CN)₆',checked:false,label:'ferrocyanide ', value:this.analysesChimique.ferrocyanure},
 
     ]
     this.selectedPuit = {};

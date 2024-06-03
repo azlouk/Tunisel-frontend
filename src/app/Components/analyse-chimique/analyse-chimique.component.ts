@@ -140,32 +140,32 @@ export class AnalyseChimiqueComponent implements OnInit {
     this.loadchimique = true;
     this.analyseChimiqueService.getAllAnalysesChimiques().subscribe((analysesChimiques: AnalysesChimique[]) => {
       this.analysesChimiques = analysesChimiques;
-      // this.analysesChimiques.forEach(analysechimique => {
-      //   if (analysechimique.id != null) {
-      //     this.analyseChimiqueService.getElementByAnalyseChimiqueId(analysechimique.id).subscribe((value: any) => {
-      //       if (value.puit) {
-      //         analysechimique.ref = value.puit.reference + " " + value.puit.nom;
-      //       }
-      //       if (value.bassin) {
-      //         analysechimique.ref = value.bassin.reference + " " + value.bassin.nom;
-      //       }
-      //       if (value.sbl) {
-      //         analysechimique.ref = value.sbl.reference;
-      //       }
-      //       if (value.sbnl) {
-      //         analysechimique.ref = value.sbnl.reference;
-      //       }
-      //       if (value.sblf) {
-      //         analysechimique.ref = value.sblf.reference;
-      //       }
-      //       if (value.bande) {
-      //         analysechimique.ref = value.bande.reference;
-      //       }
-      //     }, error => {
-      //       console.error(error);
-      //     });
-      //   }
-      // });
+      this.analysesChimiques.forEach(analysechimique => {
+        if (analysechimique.id != null) {
+          this.analyseChimiqueService.getElementByAnalyseChimiqueId(analysechimique.id).subscribe((value: any) => {
+            if (value.puit) {
+              analysechimique.ref = value.puit.reference + " " + value.puit.nom;
+            }
+            if (value.bassin) {
+              analysechimique.ref = value.bassin.reference + " " + value.bassin.nom;
+            }
+            if (value.sbl) {
+              analysechimique.ref = value.sbl.reference;
+            }
+            if (value.sbnl) {
+              analysechimique.ref = value.sbnl.reference;
+            }
+            if (value.sblf) {
+              analysechimique.ref = value.sblf.reference;
+            }
+            if (value.bande) {
+              analysechimique.ref = value.bande.reference;
+            }
+          }, error => {
+            console.error(error);
+          });
+        }
+      });
       this.loadchimique = false;
 
     }, error => {
