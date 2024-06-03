@@ -224,7 +224,7 @@ this.SelectetBassin={analysesPhysiques:[]}
 
       if (this.bassin) {
 
-        this.bassinService.updateBassin(this.bassin).subscribe(() =>{ this.bassinService.getAllBassins()
+        this.bassinService.updateBassin(this.bassin).subscribe(() =>{ this.bassinService.getAllBassinsDTO()
           .subscribe((bassins: Bassin[]) => {
             this.bassins = bassins;
           } );});
@@ -236,8 +236,7 @@ this.SelectetBassin={analysesPhysiques:[]}
     {
 
 
-        this.bassinService.addBassin(this.bassin).subscribe(() =>{ this.bassinService.getAllBassins()
-          .subscribe((bassins: Bassin[]) => {
+        this.bassinService.addBassin(this.bassin).subscribe(() =>{ this.bassinService.getAllBassinsDTO().subscribe((bassins: Bassin[]) => {
             this.bassins = bassins;
           } );});
       console.log(new JsonPipe().transform(this.bassin));
@@ -273,7 +272,7 @@ this.SelectetBassin={analysesPhysiques:[]}
 
   getAllBassin() {
     this.loading=true ;
-    this.bassinService.getAllBassins()
+    this.bassinService.getAllBassinsDTO()
       .subscribe((bassins: Bassin[]) => {
         this.bassins = bassins;
         this.loading=false ;
@@ -323,7 +322,7 @@ this.SelectetBassin={analysesPhysiques:[]}
 
   Viderfiltredate() {
 
-    this.bassinService.getAllBassins().subscribe((bassins: Bassin[]) => {
+    this.bassinService.getAllBassinsDTO().subscribe((bassins: Bassin[]) => {
       this.selectedBassins = bassins;
 
       const bassinbassin: Bassin | undefined = this.selectedBassins.find(value => this.SelectetBassin.id == value.id)

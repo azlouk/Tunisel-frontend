@@ -241,30 +241,30 @@ export class AjouterCommandeComponent implements OnInit{
     }
 
 
-    this.bassinService.getAllBassins()
+    this.bassinService.getAllBassinsDTO()
       .subscribe((bassins: Bassin[]) => {
         this.bassins = bassins;
       }, error => {
         console.log('Error fetching Bassins:', error);
       });
-    this.sbnlService.getAllSbnls().subscribe((v:  Sbnl[]) => {
+    this.sbnlService.getAllSbnlsDTO().subscribe((v:  Sbnl[]) => {
       this.sbnls=v;
 
     },error => {
       console.log(error)});
 
-    this.bandeService.getAllBandes().subscribe((v:  Bande[]) => {
+    this.bandeService.getAllBandesDTO().subscribe((v:  Bande[]) => {
       this.bandes=v;
 
     },error => {
       console.log(error)})
 
-    this.sblService.getAllSbl().subscribe((v:  Sbl[]) => {
+    this.sblService.getAllSblDTO().subscribe((v:  Sbl[]) => {
       this.sbls=v;
     },error => {
       console.log(error)})
 
-    this.sblfService.getAllSblfs().subscribe((v:  Sblf[]) => {
+    this.sblfService.getAllSblfsDTO().subscribe((v:  Sblf[]) => {
       this.sblfs=v;
 
     },error => {

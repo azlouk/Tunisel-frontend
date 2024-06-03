@@ -224,7 +224,7 @@ this.getsbnl()
 
       if (this.isUpdatesbnl == true) {
         this.sbnlService.updateSbnl(this.sbnl).subscribe(() => {
-          this.sbnlService.getAllSbnls().subscribe((sbnls: Sbnl[]) => {
+          this.sbnlService.getAllSbnlsDTO().subscribe((sbnls: Sbnl[]) => {
             this.sbnls = sbnls;
           });
         });
@@ -232,7 +232,7 @@ this.getsbnl()
         this.isUpdatesbnl = false;
       } else {
         this.sbnlService.addSbnl(this.sbnl).subscribe(() => {
-          this.sbnlService.getAllSbnls()
+          this.sbnlService.getAllSbnlsDTO()
             .subscribe((sbnls: Sbnl[]) => {
               this.sbnls = sbnls;
             });
@@ -270,12 +270,12 @@ this.getsbnl()
 
   getsbnl() {
     this.loading=true
-    this.sbnlService.getAllSbnls().subscribe((v:  Sbnl[]) => {
+    this.sbnlService.getAllSbnlsDTO().subscribe((v:  Sbnl[]) => {
       this.sbnls=v;
       this.loading=false
     },error => {
       console.log(error)})
-    this.serviceBassin.getAllBassins()
+    this.serviceBassin.getAllBassinsDTO()
       .subscribe((bassins: Bassin[]) => {
         this.bassins = bassins;
       }, error => {
@@ -329,7 +329,7 @@ this.Viderfiltredate()
 
   Viderfiltredate() {
 
-    this.sbnlService.getAllSbnls().subscribe((sbnl: Sbnl[]) => {
+    this.sbnlService.getAllSbnlsDTO().subscribe((sbnl: Sbnl[]) => {
       this.sbnls = sbnl;
 
       const sbnlSbnl: Sbnl | undefined = this.sbnls.find(value => this.selectedSbnl.id == value.id)

@@ -216,7 +216,7 @@ export class SblfComponent {
       this.productDialog = false
       if (this.isUpdateSblf == true) {
         this.sblfService.updateSblf(this.sblf).subscribe(() => {
-          this.sblfService.getAllSblfs().subscribe((sblfs: Sblf[]) => {
+          this.sblfService.getAllSblfsDTO().subscribe((sblfs: Sblf[]) => {
             this.sblfs = sblfs;
           });
         });
@@ -224,7 +224,7 @@ export class SblfComponent {
         this.isUpdateSblf = false;
       } else {
         this.sblfService.addSblf(this.sblf).subscribe(() => {
-          this.sblfService.getAllSblfs().subscribe((sblfs: Sblf[]) => {
+          this.sblfService.getAllSblfsDTO().subscribe((sblfs: Sblf[]) => {
             this.sblfs = sblfs;
           });
         });
@@ -241,7 +241,7 @@ export class SblfComponent {
 
   getAllSBLF() {
     this.loading=true ;
-    this.sblfService.getAllSblfs().subscribe((v:  Sblf[]) => {
+    this.sblfService.getAllSblfsDTO().subscribe((v:  Sblf[]) => {
       this.sblfs=v;
       console.log(new JsonPipe().transform("====================>>>>>>"+this.sblfs))
       this.loading=false ;
@@ -250,7 +250,7 @@ export class SblfComponent {
       console.log(error)})
     this.loading=true ;
 
-    this.sblService.getAllSbl().subscribe((v:  Sbl[]) => {
+    this.sblService.getAllSblDTO().subscribe((v:  Sbl[]) => {
       this.sbls=v;
       this.loading=false ;
 
@@ -305,7 +305,7 @@ export class SblfComponent {
 
   Viderfiltredate() {
 
-    this.sblfService.getAllSblfs().subscribe((Sblf: Sblf[]) => {
+    this.sblfService.getAllSblfsDTO().subscribe((Sblf: Sblf[]) => {
       this.sblfs = Sblf;
 
       const sbnlfsbnlf: Sblf | undefined = this.sblfs.find(value => this.selectedSblf.id == value.id)
