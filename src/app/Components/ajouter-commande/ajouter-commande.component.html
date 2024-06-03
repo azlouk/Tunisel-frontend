@@ -194,25 +194,24 @@
           [(selection)]="selectedProduct"
           editMode="row"
         id="EXCEL"
+          [globalFilterFields]="['id','dateAnalyse','reference','matiere','description','temperature','vent','ref','description']"
         #EXCEL
       >
 
           <ng-template pTemplate="caption">
+  <div class="flex flex-column  gap-2">
 
-
-<!--            <span class="block mt-2 md:mt-0 p-input-icon-left ">-->
-
-<!--                            <i class="pi pi-search"></i>-->
-<!--                            <input  type="text" pInputText (input)="onGlobalFilter(EXCEL, $event)" placeholder="Search..."  class="w-full sm:w-auto"/>-->
-<!--                        </span>-->
+          <span class="pi pi-arrow-circle-up  cursor-pointer "  (click)="SortableTable()">Date Creation</span>
+    </div>
           </ng-template>
           <ng-template pTemplate="header" let-columns>
             <tr>
 
-              <th *ngFor="let col of columns">
-                {{col.header}}
-              </th>
-              <th></th>
+              <th *ngFor="let col of columns"  >  {{col.header}}  </th>
+
+
+
+
             </tr>
 
 
@@ -226,8 +225,8 @@
 
                 <p-cellEditor>
                   <ng-template pTemplate="input">
-                    <input type="text" *ngIf="col.id!==27"    pInputText [placeholder]="col.header" [(ngModel)]="lineCommande[col.field]  "(ngModelChange)="CalculeTotalInput()"/>
-                    <input type="date"  pInputText *ngIf="col.id==27" [placeholder]="col.header" [(ngModel)]="lineCommande[col.field]  "(ngModelChange)="CalculeTotalInput()"/>
+                    <input type="text" *ngIf="col.id!==29"    pInputText [placeholder]="col.header" [(ngModel)]="lineCommande[col.field]  "(ngModelChange)="CalculeTotalInput()"/>
+                    <input type="date"  pInputText *ngIf="col.id==29" [placeholder]="col.header" [(ngModel)]="lineCommande[col.field]"(ngModelChange)="CalculeTotalInput()"/>
 
                   </ng-template>
                   <ng-template pTemplate="output">
@@ -238,7 +237,7 @@
 
                 </td>
 
-                <td *ngIf="col.id>=0 && col.id<29 || col.id== 42">
+                <td *ngIf="col.id>=0 && col.id<29 || col.id== 42" >
 
                   {{getValueOfligneCommande(col, lineCommande)}}
                 </td>

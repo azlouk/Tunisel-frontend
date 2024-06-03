@@ -11,7 +11,7 @@ import {DatePipe, JsonPipe, NgForOf, NgIf} from "@angular/common";
 import {PaginatorModule} from "primeng/paginator";
 import {MessageService, SharedModule} from "primeng/api";
 import {TabViewModule} from "primeng/tabview";
-import {Table, TableModule} from "primeng/table";
+import {SortableColumn, Table, TableModule} from "primeng/table";
 import {ToolbarModule} from "primeng/toolbar";
 import {TooltipModule} from "primeng/tooltip";
 import {Bassin} from "../../Models/bassin";
@@ -210,7 +210,7 @@ export class AjouterCommandeComponent implements OnInit{
       {id:26, field: 'refus', header: 'Refusal '},
       {id:27, field: 'refusCumulated', header: 'Refusal Cumulateds '},
       {id:28, field: 'passCumulated', header: 'Cumulated Pass'},
-      {id:29, field: 'dateCreation', header: 'Date Creation'},
+      {id:29, field: 'dateCreation', header: 'dateCreation'},
       {id:30, field: 'quantityRecolte', header: 'Harvest'},
       {id:31, field: 'quantityProduction', header: 'Production'},
       {id:32, field: 'quantityPluieBengarden', header: 'Ben Gardane Rain'},
@@ -360,8 +360,8 @@ getCommandeById(){
     this.visibale=false;
   }
 
-  onGlobalFilter(dt: Table, event: Event) {
-    dt.filterGlobal((event.target as HTMLInputElement).value, 'contains');
+  onGlobalFilter(table: Table, event: Event) {
+    table.filterGlobal((event.target as HTMLInputElement).value, 'contains');
   }
 
 
@@ -1164,11 +1164,20 @@ this.getLine()
   }
 
 
+  protected readonly SortableColumn = SortableColumn;
 
-
-
-
-
+  SortableTable() {
+     this.listeLignesCommandes=this.listeLignesCommandes.sort((a, b) => {
+      if(a.analyseChimique && b.analyseChimique)
+       return this.AfterTodate(new Date(a.analyseChimique?.dateAnalyse+""),new Date(b.analyseChimique?.dateAnalyse+""))==true?0:-1;
+  else if(a.analysePhysique)
+    return -1
+        else if(b.analyseChimique)
+          return  0;
+        // return this.AfterTodate(new Date(a.analysePhysique?.dateAnalyse+""),new Date(b.analysePhysique?.dateAnalyse+""))==true?0:-1;
+ return  0;
+     });
+   }
 
 
 }
