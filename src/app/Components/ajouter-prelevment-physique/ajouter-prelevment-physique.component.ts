@@ -385,7 +385,7 @@ this.visibale=false;
   saveTamis() {
      if(this.isUpdateTamis){
 
-      const tamis=this.listeTamis.findIndex((tt:Tamis)=>tt.id==this.tamis.id)
+      const tamis=this.listeTamis.findIndex((tt:Tamis)=>tt.calibre===this.tamis.calibre)
          if(tamis!==-1){
          this.listeTamis[tamis]= {...this.tamis} ;
            this.visibale=false
@@ -435,9 +435,10 @@ this.visibale=false;
   }
 
   editTamis(tamis: Tamis) {
+    this.isUpdateTamis=true ;
     this.visibale=true;
      this.tamis={...tamis}
-    this.isUpdateTamis=true ;
+
   }
 
   calculateTotalMass(): number {

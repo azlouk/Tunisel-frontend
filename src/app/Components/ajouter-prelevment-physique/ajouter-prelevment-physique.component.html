@@ -280,7 +280,7 @@
       <div class="  flex flex-column gap-4 ">
 
         <p-floatLabel>
-          <p-inputNumber id="certificat" class="w-1/2 " [(ngModel)]="tamis.calibre"  mode="decimal" locale="en-US" [minFractionDigits]="3"></p-inputNumber>
+          <p-inputNumber [disabled]="isUpdateTamis" id="certificat" class="w-1/2 " [(ngModel)]="tamis.calibre"  mode="decimal" locale="en-US" [minFractionDigits]="3"></p-inputNumber>
           <label>Calibre</label>
         </p-floatLabel>
 

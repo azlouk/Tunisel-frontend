@@ -182,10 +182,10 @@
 
       <p-table
           [loading]="loadingcommande"
-         [rowHover]="true"
-        [lazy]="true"
-         [columns]="selectedColumns"
-        [value]="listeLignesCommandes"
+          [rowHover]="true"
+          [lazy]="true"
+          [columns]="selectedColumns"
+          [value]="listeLignesCommandes"
           [scrollable]="true"
           scrollHeight="600px"
           [tableStyle]="{'min-width': '50rem'}"
@@ -193,28 +193,26 @@
           selectionMode="single"
           [(selection)]="selectedProduct"
           editMode="row"
-        id="EXCEL"
-          [globalFilterFields]="['id','dateAnalyse','reference','matiere','description','temperature','vent','ref','description']"
-        #EXCEL
+          id="EXCEL"
+          #EXCEL
+
       >
 
           <ng-template pTemplate="caption">
   <div class="flex flex-column  gap-2">
 
-          <span class="pi pi-arrow-circle-up  cursor-pointer "  (click)="SortableTable()">Date Creation</span>
     </div>
           </ng-template>
           <ng-template pTemplate="header" let-columns>
+
+
             <tr>
+            <ng-container *ngFor="let col of columns" >
+              <th *ngIf="col.id!==0"  >  {{col.header}}  </th>
+              <th *ngIf="col.id===0" pSortableColumn="dateCreation" (click)="SortableTable()" >  {{col.header}}   <p-sortIcon field="dateCreation" /></th>
 
-              <th *ngFor="let col of columns"  >  {{col.header}}  </th>
-
-
-
-
+            </ng-container>
             </tr>
-
-
 
           </ng-template>
         <ng-template pTemplate="body" let-lineCommande let-columns="columns" let-editing="editing" let-ri="rowIndex">
@@ -266,7 +264,8 @@
 
           </ng-template>
         </p-table>
-      </div>
+
+    </div>
 
 
       <div class="flex justify-content-between overflow-auto">

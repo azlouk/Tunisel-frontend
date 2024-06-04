@@ -9,7 +9,7 @@ import {InputTextareaModule} from "primeng/inputtextarea";
 import {ListboxModule} from "primeng/listbox";
 import {DatePipe, JsonPipe, NgForOf, NgIf} from "@angular/common";
 import {PaginatorModule} from "primeng/paginator";
-import {MessageService, SharedModule} from "primeng/api";
+import {MessageService, SharedModule, SortEvent} from "primeng/api";
 import {TabViewModule} from "primeng/tabview";
 import {SortableColumn, Table, TableModule} from "primeng/table";
 import {ToolbarModule} from "primeng/toolbar";
@@ -210,7 +210,7 @@ export class AjouterCommandeComponent implements OnInit{
       {id:26, field: 'refus', header: 'Refusal '},
       {id:27, field: 'refusCumulated', header: 'Refusal Cumulateds '},
       {id:28, field: 'passCumulated', header: 'Cumulated Pass'},
-      {id:29, field: 'dateCreation', header: 'dateCreation'},
+      {id:29, field: 'dateCreation', header: 'Date Creation'},
       {id:30, field: 'quantityRecolte', header: 'Harvest'},
       {id:31, field: 'quantityProduction', header: 'Production'},
       {id:32, field: 'quantityPluieBengarden', header: 'Ben Gardane Rain'},
@@ -393,6 +393,7 @@ this.commande.bassins.forEach(basin => {
       const data=value.filter(value1 => this.listeLignesCommandes.find(value2 => value2==value1)==undefined)
 
       this.listeLignesCommandes.push(...data);
+
       this.loadingcommande=false;
       console.log('size  : ' + this.listeLignesCommandes.length);
       this.getCalibre();
@@ -499,8 +500,9 @@ if(this.commande.bandes){
 
     if (col.id < 21) {
             if(col.id==0) {
+              return ligneCommande?.analyseChimique !== null ? this.pipedate(ligneCommande?.analyseChimique[col.field]) :
+                ligneCommande?.analysePhysique !== null && ligneCommande?.analysePhysique !== undefined ? this.pipedate(ligneCommande?.analysePhysique[col.field]) : '-';
 
-              return ligneCommande.analyseChimique !== null ? this.pipedate(ligneCommande.analyseChimique[col.field]) : this.pipedate(ligneCommande.analysePhysique[col.field])
             }
               if(ligneCommande.analyseChimique==null && ligneCommande.analysePhysique!==null && col.field=="reference"){
                 return  ligneCommande.analysePhysique[col.field]
@@ -511,7 +513,9 @@ if(this.commande.bandes){
       if (col.id > 20 && col.id < 24)
     {
          if(col.id==22){
-           return ligneCommande.analysePhysique!==null  ? ligneCommande.analysePhysique[col.field] : ligneCommande.analyseChimique[col.field];
+           return ligneCommande?.analysePhysique?.qualite !== null ? ligneCommande?.analysePhysique?.qualite :
+             ligneCommande?.analyseChimique?.qualite !== null ? ligneCommande?.analyseChimique?.qualite : '-';
+
 
          }
           return ligneCommande.analysePhysique!==null  ? ligneCommande.analysePhysique[col.field] : '-';
@@ -1164,20 +1168,62 @@ this.getLine()
   }
 
 
-  protected readonly SortableColumn = SortableColumn;
 
+ //  SortableTable() {
+ //     this.listeLignesCommandes=this.listeLignesCommandes.sort((a, b) => {
+ //      if(a.analyseChimique && b.analyseChimique)
+ //       return this.AfterTodate(new Date(a.analyseChimique?.dateAnalyse+""),new Date(b.analyseChimique?.dateAnalyse+""))==true?0:-1;
+ //  else if(a.analysePhysique)
+ //    return -1
+ //        else if(b.analyseChimique)
+ //          return  0;
+ // return  0;
+ //     });
+ //   }
+isSorted:number=1;
   SortableTable() {
-     this.listeLignesCommandes=this.listeLignesCommandes.sort((a, b) => {
-      if(a.analyseChimique && b.analyseChimique)
-       return this.AfterTodate(new Date(a.analyseChimique?.dateAnalyse+""),new Date(b.analyseChimique?.dateAnalyse+""))==true?0:-1;
-  else if(a.analysePhysique)
-    return -1
-        else if(b.analyseChimique)
-          return  0;
-        // return this.AfterTodate(new Date(a.analysePhysique?.dateAnalyse+""),new Date(b.analysePhysique?.dateAnalyse+""))==true?0:-1;
- return  0;
-     });
-   }
+
+
+    this.listeLignesCommandes.sort((a:LineCommande, b:LineCommande) => {
+
+  const dateA=this.dateAUtilise(a);
+  const dateB=this.dateBUtilise(b);
+
+
+      if(dateA && dateB)
+      return this.AfterTodate(new Date(dateA+""),new Date(dateB+""))?this.isSorted:this.isSorted*-1;
+      else if(dateA==undefined && dateB)
+        return this.isSorted;
+    else return this.isSorted
+
+
+    });
+    this.isSorted=this.isSorted>0?-1:1;
+  }
+
+
+
+dateAUtilise(a:LineCommande){
+      if(a.analyseChimique!==null && a.analysePhysique!==null)
+        return a.analyseChimique.dateAnalyse;
+      else if (a.analyseChimique==null && a.analysePhysique!==null)
+        return a.analysePhysique.dateAnalyse;
+      else if (a.analyseChimique!==null && a.analysePhysique==null)
+        return a.analyseChimique.dateAnalyse;
+      else return 0
+
+}
+
+  dateBUtilise(b:LineCommande){
+    if(b.analyseChimique!==null && b.analysePhysique!==null)
+      return b.analyseChimique.dateAnalyse;
+    else if (b.analyseChimique==null && b.analysePhysique!==null)
+      return b.analysePhysique.dateAnalyse;
+    else if (b.analyseChimique!==null && b.analysePhysique==null)
+      return b.analyseChimique.dateAnalyse;
+  else return 0
+
+  }
 
 
 }
