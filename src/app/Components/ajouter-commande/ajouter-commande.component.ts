@@ -395,12 +395,10 @@ this.commande.bassins.forEach(basin => {
       this.listeLignesCommandes.push(...data);
 
       this.loadingcommande=false;
-      console.log('size  : ' + this.listeLignesCommandes.length);
       this.getCalibre();
       this.calculerMoyennes();
     },error =>{
       console.log(error);
-     // console.log('error size  : ' + this.listeLignesCommandes.length)
       ;});
   }
   })

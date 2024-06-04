@@ -657,7 +657,7 @@ export class RapportAnalyseComponent {
 
     if (this.isUpdateTamis) {
 
-      const tamis = this.listeTamis.findIndex((tt: Tamis) => tt.id == this.tamis.id)
+      const tamis = this.listeTamis.findIndex((tt: Tamis) => tt.calibre === this.tamis.calibre)
       if (tamis !== -1) {
         this.listeTamis[tamis] = {...this.tamis};
         this.visibale = false

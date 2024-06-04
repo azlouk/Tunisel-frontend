@@ -243,7 +243,6 @@ export class SblfComponent {
     this.loading=true ;
     this.sblfService.getAllSblfsDTO().subscribe((v:  Sblf[]) => {
       this.sblfs=v;
-      console.log(new JsonPipe().transform("====================>>>>>>"+this.sblfs))
       this.loading=false ;
 
     },error => {
@@ -254,7 +253,6 @@ export class SblfComponent {
       this.sbls=v;
       this.loading=false ;
 
-      console.log(new JsonPipe().transform("====================>>>>>>"+this.sbls))
 
     },error => {
       console.log(error)})
@@ -264,7 +262,6 @@ export class SblfComponent {
 
     this.selectedSblf = sbnl;
     this.visiblePrint = true
-    console.log("---->"+new JsonPipe().transform(this.selectedSblf));
   }
 
   Detailsbnl(sbnl: Sbnl) {

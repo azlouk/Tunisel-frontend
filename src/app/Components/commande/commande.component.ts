@@ -178,16 +178,15 @@ isUpdateCommande:boolean=false;
     this.selectedCommandes.forEach(selectedCommandes => {
       this.commandeService.deleteCommande(selectedCommandes.id).subscribe(
         () => {
+          this.messageService.add({ severity: 'success', summary: 'Successful', detail: 'User Deleted', life: 3000 });
+
           this.comanndes = this.comanndes.filter(commande =>commande.id !== selectedCommandes.id);
         },
         (error) => {
-          console.error('Error deleting user:', error);
         }
       );
     });
 
-    this.messageService.add({ severity: 'success', summary: 'Successful', detail: 'User Deleted', life: 3000 });
-    this.selectedCommandes = [];
   }
 
   confirmDelete() {
