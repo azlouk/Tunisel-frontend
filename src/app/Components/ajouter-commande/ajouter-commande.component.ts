@@ -162,23 +162,8 @@ export class AjouterCommandeComponent implements OnInit{
   ngOnInit(): void {
     // =============================================
     this.datasel = [
-      "Unwashed salt",
-      "Washed salt",
-      "Washed salt sieved 0-4 "
-      , "Washed salt sieved "
-      , "Big salt (Refus)"
-      , "salt 0-8"
-      , "salt 0-4 Stock"
-      , "salt 0-6 Stock"
-      , "salt 0-8 Stock"
-      , "Big salt Stock"
-      , "crushed salt"
-      , "salt 0-6 Cribble "
-      , "salt 0-8 Cribble "
-      , "salt 0-4 Stock Zarzis"
-      , "salt 0-6 Stock Zarzis"
-      , "salt 0-8 Stock Zarzis"
-      , " Sel Navire"
+      "GC RS DK",
+      "GC RS NO",
 
     ]
     this.cols = [

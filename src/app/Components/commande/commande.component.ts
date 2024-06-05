@@ -52,9 +52,7 @@ import {InputNumberModule} from "primeng/inputnumber";
 export class CommandeComponent implements OnInit{
 
 
-  public  TotalHarv=0;
-  public TotalTrQu=0;
-  public TotalProd=0;
+
   productDialog: boolean = false;
 
   deleteProductDialog: boolean = false;
@@ -81,7 +79,6 @@ export class CommandeComponent implements OnInit{
   selectedCommandes:Commande[] = [];
 isUpdateCommande:boolean=false;
   visible: boolean=false;
-   commandeDetails!: Commande;
   selectedColumns!: Column[];
 
   constructor(private router: Router,  private messageService: MessageService,private commandeService :CommandeService) {}
@@ -196,7 +193,7 @@ isUpdateCommande:boolean=false;
       this.commandeService.deleteCommande(this.commande.id).subscribe(() => console.log("Command Deleted"));
     }
     this.messageService.add({ severity: 'success', summary: 'Successful', detail: 'Command Deleted', life: 3000 });
-    this.commande ;
+
   }
 
   hideDialog() {
@@ -221,75 +218,28 @@ isUpdateCommande:boolean=false;
         }
 
 
-  showDialogDetails(command :Commande) {
-    this.visible=true;
-    this.selectedCommandPrint=command;
-    this.CalculeTotal()
-  }
-
-  // ---------------export details provider to PDF file ---------------
-  savePdfDetails() {
-
-    const data = document.getElementById('commandepdf');
-    if (data){
-      html2canvas(data).then(canvas => {
-        const imgData = canvas.toDataURL('image/png');
-        const pdf = new jsPDF('l', 'mm', 'a4');
-        const imgProps= pdf.getImageProperties(imgData);
-        const pdfWidth = pdf.internal.pageSize.getWidth();
-        const pdfHeight = (imgProps.height * pdfWidth) / imgProps.width;
-        pdf.addImage(imgData, 'PNG', 0, 0, pdfWidth, pdfHeight);
-        pdf.save('supplier-details.pdf');
-      });
-    }
-  }
-  selectedCommandPrint: Commande = {}
-  getValueOfligneCommande(col: any, ligneCommande: any): any {
-    if (col.id < 20) {
-      return ligneCommande.analyseChimique!==null ? ligneCommande.analyseChimique[col.field] : '-';
-    } else if (col.id > 19 && col.id < 22) {
-      return ligneCommande.analysePhysique!==null  ? ligneCommande.analysePhysique[col.field] : '-';
-    }
-
-    //************************************
-    else if (col.id > 21 && col.id < 27 ) {
-      if (ligneCommande.analysePhysique !== null && ligneCommande.analysePhysique.tamisList) {
-        // Use filter to find matching items in tamisList and add checks for undefined items
-        const filteredTamis:any = ligneCommande.analysePhysique.tamisList[0];
 
 
-        // Check if filteredTamisList is not empty and return it, otherwise return '-'
-        return filteredTamis!==undefined? filteredTamis[col.field]  : '-';
-      } else {
-        return '-';
-      }
-    }
-    //************************************
 
-    else {
-      return ligneCommande!==null  ? ligneCommande[col.field] : '-';
-    }
-  }
 
-  CalculeTotal() {
 
-    if(this.selectedCommandPrint.ligneCommandes){
-    // @ts-ignore
-      this.selectedCommandPrint.ligneCommandes.forEach(value => {
-      if(value.quantityRecolte)
-        this.TotalHarv+=parseFloat(value.quantityRecolte+'');
-      if(value.quantityProduction)
-        this.TotalProd+=parseFloat(value.quantityProduction+'')
-      if(value.quantiteTransfert)
-        this.TotalTrQu+=parseFloat(value.quantiteTransfert+'');
 
-    })
-  }
-  }
+
 
   cancel() {
     this.visible=false;
   }
     protected readonly getToken = getToken;
   loading: boolean=false;
+
+  calculAvailableVolume(commande:Commande){
+    let total:number=0;
+    commande.ligneCommandes?.forEach(l => {
+      if(l.quantiteTransfert)
+      total+=parseFloat(l.quantiteTransfert+'');
+    })
+    if(commande.volume)
+    return commande.volume-total
+    else return total
+  }
 }

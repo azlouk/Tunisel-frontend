@@ -23,8 +23,8 @@
       <!--        <button type="button" pButton pRipple icon="pi pi-file-pdf" (click)="SavePDF()" class="p-button-success mr-2" pTooltip="PDF" tooltipPosition="bottom"></button>-->
     </div>
     <!--    </p-fieldset>-->
-    <div class=" flex justify-content-between  mt-8 border-1 border-round border-gray-300 p-6  h-22rem">
-      <div class="  flex flex-column   justify-content-between ">
+    <div class=" flex justify-content-between  mt-8 border-1 border-round border-gray-300 p-6  ">
+      <div class="  flex flex-column gap-5  justify-content-between ">
         <p-floatLabel >
           <p-calendar   id="dateCommande" [(ngModel)]="commande.dateCommande" dateFormat="yy-mm-dd"  [showIcon]="true"></p-calendar>
           <label for="dateCommande">Command Date</label>
@@ -36,6 +36,31 @@
         <p-floatLabel>
           <input type="text" pInputText [(ngModel)]="commande.etat"    id="etat" class="w-full" />
           <label for="etat">State</label>
+        </p-floatLabel>
+        <p-floatLabel>
+          <input type="text" pInputText [(ngModel)]="commande.laycan"    id="laycan" class="w-full" />
+          <label for="laycan">Laycan</label>
+        </p-floatLabel>
+        <p-floatLabel>
+          <input type="text" pInputText [(ngModel)]="commande.purchaseOrder"    id="purchaseOrder" class="w-full" />
+          <label for="purchaseOrder">Purchase Order</label>
+        </p-floatLabel>
+        <p-floatLabel>
+          <p-inputNumber [(ngModel)]="commande.volume"    id="volume" class="w-full" [minFractionDigits]="3"></p-inputNumber>
+
+<!--          <input type="text" pInputText [(ngModel)]="commande.volume"    id="volume" class="w-full" />-->
+          <label for="volume">Volume</label>
+        </p-floatLabel>
+        <p-floatLabel>
+          <p-autoComplete
+            [(ngModel)]="commande.customer"
+            [dropdown]="true"
+            [suggestions]="filtereddatasel"
+            (completeMethod)="filterCountry($event)"
+            field="" />
+
+          <label >Customer</label>
+
         </p-floatLabel>
       </div>
 {{ this.listeLignesCommandesCopy.length}}
@@ -306,18 +331,18 @@
           <div class="flex flex-column gap-3 border-1 border-round border-gray-400 p-3">
             <div class="flex align-items-start gap-3 justify-content-between">
               <label class="font-bold">Total Harvset in(T) : </label>
-              <label class="font-bold text-center    ">{{TotalHarv.toFixed(3)}}</label>
+              <label class="font-bold text-center    ">{{TotalHarv.toFixed(0)}}</label>
 
             </div>
 
             <div class="flex align-items-center gap-3 justify-content-between ">
               <label class="font-bold">Total Production in(T) :</label>
-              <label class="font-bold text-center    ">{{TotalProd.toFixed(3)}}</label>
+              <label class="font-bold text-center    ">{{TotalProd.toFixed(0)}}</label>
 
             </div>
             <div class="flex align-items-center gap-3 justify-content-between ">
               <label class="font-bold">Total Transfer Quantity :</label>
-              <label class="font-bold text-center    ">{{TotalTrQu.toFixed(3)}}</label>
+              <label class="font-bold text-center    ">{{TotalTrQu.toFixed(0)}}</label>
 
             </div>
 

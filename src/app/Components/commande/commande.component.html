@@ -30,12 +30,18 @@
         </ng-template>
         <ng-template pTemplate="header">
           <tr>
-            <th style="width: 3rem">
+            <th>
               <p-tableHeaderCheckbox></p-tableHeaderCheckbox>
             </th>
             <th pSortableColumn="id">ID<p-sortIcon field="id"></p-sortIcon></th>
             <th pSortableColumn="dateCommande">Date creation<p-sortIcon field="dateCommande"></p-sortIcon></th>
             <th pSortableColumn="nom">Name <p-sortIcon field="nom"></p-sortIcon></th>
+            <th pSortableColumn="Customer">Customer <p-sortIcon field="Customer"></p-sortIcon></th>
+            <th pSortableColumn="Laycan">Laycan <p-sortIcon field="Laycan"></p-sortIcon></th>
+            <th pSortableColumn="Purchase">Purchase Order <p-sortIcon field="Purchase"></p-sortIcon></th>
+            <th pSortableColumn="Volume">Total Volume<p-sortIcon field="Volume"></p-sortIcon></th>
+            <th pSortableColumn="Availble">Volume Availble <p-sortIcon field="Availble"></p-sortIcon></th>
+            <th pSortableColumn="Calibre">Calibre <p-sortIcon field="Calibre"></p-sortIcon></th>
             <th pSortableColumn="etat">Status<p-sortIcon field="etat"></p-sortIcon></th>
             <th></th>
           </tr>
@@ -44,24 +50,44 @@
           <tr >
             <td>
               <p-tableCheckbox [value]="commande"></p-tableCheckbox>
+
             </td>
-            <td style="width:10%; min-width:10rem;">
+            <td >
               <span class="p-column-title">ID</span>
               {{commande.id}}
             </td>
-            <td style="width:15%; min-width:10rem;">
+            <td >
               <span class="p-column-title">ID</span>
               {{commande.dateCommande | date :'dd-MM-yyyy'}}
             </td>
-            <td style="width:50%; min-width:10rem;">
+            <td >
               <span class="p-column-title">Nom</span>
               {{commande.nom}}
+            </td> <td >
+              <span class="p-column-title">Customer</span>
+              {{commande.customer}}
+            </td> <td >
+              <span class="p-column-title">Laycan</span>
+              {{commande.laycan}}
+            </td> <td >
+              <span class="p-column-title">Purchase Order</span>
+              {{commande.purchaseOrder}}
+            </td> <td >
+              <span class="p-column-title">Total Volume</span>
+              {{commande.volume}}
+            </td> <td >
+              <span class="p-column-title">Volume Availble</span>
+              {{calculAvailableVolume(commande)}}
             </td>
-            <td style="width:15%; min-width:10rem;">
+            <td >
+              <span class="p-column-title">Volume Availble</span>
+              {{commande.calibre}}
+            </td>
+            <td >
               <span class="p-column-title">Etat</span>
               {{commande.etat}}
             </td>
-            <td style="width:10%; min-width:10rem;">
+            <td >
               <div *ngIf="getToken()=='ADMIN'"   class="flex justify-content-end mr-8">
                 <button pButton pRipple icon="pi pi-pencil" class="p-button-rounded p-button-success mr-2" (click)="editCommande(commande)"></button>
                 <button pButton pRipple icon="pi pi-trash" class="p-button-rounded p-button-warning mr-2" (click)="deleteCommande(commande)"></button>
