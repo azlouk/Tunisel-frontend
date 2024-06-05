@@ -38,12 +38,12 @@
           <label for="etat">State</label>
         </p-floatLabel>
       </div>
-
+{{ this.listeLignesCommandesCopy.length}}
       <div class=" flex justify-content-center w-full ">
 
         <p-tabView [scrollable]="true" >
           <p-tabPanel header="Pond" >
-            <p-multiSelect [options]="bassins"    [(ngModel)]="commande.bassins" (ngModelChange)="getLine()" placeholder="Select a Pond" optionLabel="nom" display="chip" ></p-multiSelect>
+            <p-multiSelect [options]="bassins"    [(ngModel)]="commande.bassins"   (ngModelChange)="getLine()" placeholder="Select a Pond" optionLabel="nom" display="chip" ></p-multiSelect>
           </p-tabPanel>
 
           <p-tabPanel header="Unwashed" >
@@ -59,7 +59,7 @@
           </p-tabPanel>
 
           <p-tabPanel header="Washed Ship" >
-            <p-multiSelect [options]="sblfs"    [(ngModel)]="commande.sblfs" (ngModelChange)="getLine()" placeholder="Select a Washed Ship" optionLabel="reference" display="chip" ></p-multiSelect>
+            <p-multiSelect [options]="sblfs"    [(ngModel)]="commande.sblfs"    (ngModelChange)="getLine()" placeholder="Select a Washed Ship" optionLabel="reference" display="chip" ></p-multiSelect>
           </p-tabPanel>
 
           </p-tabView>

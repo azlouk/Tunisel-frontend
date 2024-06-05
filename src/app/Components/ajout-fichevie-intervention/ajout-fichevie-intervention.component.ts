@@ -16,7 +16,6 @@ import {Bassin} from "../../Models/bassin";
 import {Sbnl} from "../../Models/sbnl";
 import {Sbl} from "../../Models/sbl";
 import {Sblf} from "../../Models/sblf";
-import {AnalysesChimique} from "../../Models/analyses-chimique";
 import {ActivatedRoute, Router} from "@angular/router";
 
 import {FormsModule} from "@angular/forms";
@@ -27,7 +26,6 @@ import {Intervention} from "../../Models/intervention";
 import {FicheVieService} from "../../Services/fichevie.service";
 import {FicheVie} from "../../Models/fichevie";
 import {Table, TableModule} from "primeng/table";
-import {log} from "@angular-devkit/build-angular/src/builders/ssr-dev-server";
 
 @Component({
   selector: 'app-ajout-fichevie-intervention',
@@ -119,7 +117,6 @@ export class AjoutFichevieInterventionComponent implements OnInit {
       this.listeInterventions = [];
 
       if (this.isUpdateFichVie) {
-        console.log(new JsonPipe().transform(this.ficheVie))
         this.ficheVieService.updateFicheVie(this.ficheVie).subscribe(value => this.router.navigate(['/etalonage']))
       } else {
 
