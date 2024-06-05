@@ -239,7 +239,6 @@ this.SelectetBassin={analysesPhysiques:[]}
         this.bassinService.addBassin(this.bassin).subscribe(() =>{ this.bassinService.getAllBassinsDTO().subscribe((bassins: Bassin[]) => {
             this.bassins = bassins;
           } );});
-      console.log(new JsonPipe().transform(this.bassin));
 
     }
   }

@@ -19,7 +19,7 @@ import {ActivatedRoute, Router} from "@angular/router";
 import {BassinService} from "../../Services/bassin.service";
 import {TamisService} from "../../Services/tamis.service";
 import {Commande} from "../../Models/commande";
-import {MultiSelectModule} from "primeng/multiselect";
+import {MultiSelectModule, MultiSelectRemoveEvent} from "primeng/multiselect";
 import {RippleModule} from "primeng/ripple";
 import {CommandeService} from "../../Services/commande.service";
 import {LineCommande} from "../../Models/lineCommande";
@@ -56,6 +56,7 @@ export interface Column {
   field: string;
   header: string;
 }
+
 
 
 
@@ -119,6 +120,7 @@ export class AjouterCommandeComponent implements OnInit{
 
   selectedColumns: Column[]=[];
   listeLignesCommandes:LineCommande[]=[];
+  listeLignesCommandesCopy:LineCommande[]=[];
 
   listcalibre:Column[]=[];
   selectedColumnsCalibre!: any;
@@ -283,7 +285,7 @@ getCommandeById(){
         this.listeLignesCommandes = value.ligneCommandes??[];
         this.DatefiltrageStart=this.commande.datestart!==undefined?this.commande.datestart+'' :new Date().toDateString() ;
         this.DatefiltrageEnd=this.commande.dateend!==undefined?this.commande.dateend+'' :new Date().toDateString() ;
-    this.matter=this.commande.quality!==undefined?this.commande.quality :"no quality selected" ;
+         this.matter=this.commande.quality!==undefined?this.commande.quality :"no quality selected" ;
         this.CalculeTotalInput();
       this.getCalibre() ;
       this.calculerMoyennes();
@@ -381,118 +383,186 @@ getCommandeById(){
 
      });
   }
-
-  getLine() {
-    this.loadingcommande=true;
-this.listeLignesCommandes=[];
-if(this.commande.bassins){
-this.commande.bassins.forEach(basin => {
-  if(basin.id){
-    this.loadingcommande=true;
-    this.commandeService.getLignesCommandesBassin(basin.id).subscribe(value => {
-      const data=value.filter(value1 => this.listeLignesCommandes.find(value2 => value2==value1)==undefined)
-
-      this.listeLignesCommandes.push(...data);
-
-      this.loadingcommande=false;
-      this.getCalibre();
-      this.calculerMoyennes();
-    },error =>{
-      console.log(error);
-      ;});
+    getRef(value: LineCommande) {
+    return value.analysePhysique!==null?value.analysePhysique.reference:value.analyseChimique!==null?value.analyseChimique.reference:value.id+"";
   }
-  })
+  getLine() {
 
-    }
-if(this.commande.sbnls){
-      this.commande.sbnls.forEach(sbnl => {
-        if(sbnl.id){
-          this.loadingcommande=true;
-          this.commandeService.getLignesCommandesSbnl(sbnl.id).subscribe(value => {
-            const data=value.filter(value1 => this.listeLignesCommandes.find(value2 => value2==value1)==undefined)
 
-            this.listeLignesCommandes.push(...data);
+      this.listeLignesCommandes=[...this.commande.ligneCommandes!==undefined?this.commande.ligneCommandes:[]]
 
-           // console.log('size  : ' + this.listeLignesCommandes.length);
-            this.getCalibre();
-            this.calculerMoyennes();
-            this.loadingcommande=false;
-          },error =>{
-            console.log(error);
-         //   console.log('error size  : ' + this.listeLignesCommandes.length);
-          });
-        }
+    this.listeLignesCommandesCopy=[...this.listeLignesCommandes]
+    this.listeLignesCommandes=[]
+this.getLineBassin();
+this.getLinesbln();
+this.getLineBande();
+this.getLinesbl() ;
+this.getLinesblf() ;
 
-      })
-
-    }
-if(this.commande.sbls){
-      this.commande.sbls.forEach(sbl => {
-        if(sbl.id){
-          this.loadingcommande=true;
-          this.commandeService.getLignesCommandesSbl(sbl.id).subscribe(value => {
-            const data=value.filter(value1 => this.listeLignesCommandes.find(value2 => value2==value1)==undefined)
-
-            this.listeLignesCommandes.push(...data);
-
-            this.getCalibre();
-            this.calculerMoyennes();
-             this.loadingcommande=false;
-
-          },error =>{
-            console.log(error);});
-        }
-
-      })
-
-    }
-if(this.commande.sblfs){
-      this.commande.sblfs.forEach(sblf => {
-        if(sblf.id){
-          this.loadingcommande=true;
-          this.commandeService.getLignesCommandesSblf(sblf.id).subscribe(value => {
-            const data=value.filter(value1 => this.listeLignesCommandes.find(value2 => value2==value1)==undefined)
-
-            this.listeLignesCommandes.push(...data);
-
-          //  console.log('size  : ' + this.listeLignesCommandes.length);
-            this.getCalibre();
-            this.calculerMoyennes();
-            this.loadingcommande=false;
-          },error =>{
-            console.log(error);
-           // console.log('error size  : ' + this.listeLignesCommandes.length);
-          });
-        }
-
-      })
-
-    }
-if(this.commande.bandes){
-      this.commande.bandes.forEach(bande => {
-        if(bande.id){
-          this.loadingcommande=true;
-          this.commandeService.getLignesCommandesBande(bande.id).subscribe(value => {
-            const data=value.filter(value1 => this.listeLignesCommandes.find(value2 => value2==value1)==undefined)
-
-            this.listeLignesCommandes.push(...data);
-
-            console.log('size  : ' + this.listeLignesCommandes.length);
-            this.getCalibre();
-            this.calculerMoyennes();
-            this.loadingcommande=false;
-          },error =>{
-            console.log(error);
-           // console.log('error size  : ' + this.listeLignesCommandes.length);
-          });
-        }
-
-      })
-
-    }
 
  }
 
+
+
+ getLineBassin(){
+   if(this.commande.bassins) {
+     this.commande.bassins.forEach(basin => {
+       console.log("Nom bassin = " + basin.nom)
+       if (basin.id) {
+         this.loadingcommande = true;
+         console.log('data Lignes  ==> ' + new JsonPipe().transform(this.listeLignesCommandes))
+
+         this.commandeService.getLignesCommandesBassin(basin.id).subscribe(LinesCommandes => {
+
+           LinesCommandes.forEach(value => {
+             const data= this.listeLignesCommandesCopy.find(value1 => this.getRef(value)==this.getRef(value1))
+             console.error(data)
+             if(data){
+               this.listeLignesCommandes.push({...data})
+             }else {
+               this.listeLignesCommandes.push({...value})
+
+             }
+           })
+
+
+           this.loadingcommande = false;
+           this.getCalibre();
+           this.calculerMoyennes();
+         }, error => {
+           console.log(error);
+           ;
+         });
+       }
+     })
+
+   }
+ }
+ getLinesbln(){
+
+    if(this.commande.sbnls){
+     this.commande.sbnls.forEach(sbnl => {
+       if(sbnl.id){
+         this.loadingcommande=true;
+         this.commandeService.getLignesCommandesSbnl(sbnl.id).subscribe(LinesCommandes => {
+           LinesCommandes.forEach(value => {
+             const data= this.listeLignesCommandesCopy.find(value1 => this.getRef(value)==this.getRef(value1))
+             console.error(data)
+             if(data){
+               this.listeLignesCommandes.push({...data})
+             }else {
+               this.listeLignesCommandes.push({...value})
+
+             }
+           })
+           // console.log('size  : ' + this.listeLignesCommandes.length);
+           this.getCalibre();
+           this.calculerMoyennes();
+           this.loadingcommande=false;
+         },error =>{
+           console.log(error);
+           //   console.log('error size  : ' + this.listeLignesCommandes.length);
+         });
+       }
+
+     })
+
+   }
+ }
+
+ getLineBande(){
+
+    if(this.commande.bandes){
+     this.commande.bandes.forEach(bande => {
+       if(bande.id){
+         this.loadingcommande=true;
+         this.commandeService.getLignesCommandesBande(bande.id).subscribe(LinesCommandes => {
+           LinesCommandes.forEach(value => {
+             const data= this.listeLignesCommandesCopy.find(value1 => this.getRef(value)==this.getRef(value1))
+             console.error(data)
+             if(data){
+               this.listeLignesCommandes.push({...data})
+             }else {
+               this.listeLignesCommandes.push({...value})
+
+             }
+           })
+           this.getCalibre();
+           this.calculerMoyennes();
+           this.loadingcommande=false;
+         },error =>{
+           console.log(error);
+           // console.log('error size  : ' + this.listeLignesCommandes.length);
+         });
+       }
+
+     })
+
+
+   }
+ }
+
+ getLinesbl(){
+
+    if(this.commande.sbls){
+     this.commande.sbls.forEach(sbl => {
+       if(sbl.id){
+         this.loadingcommande=true;
+         this.commandeService.getLignesCommandesSbl(sbl.id).subscribe(LinesCommandes => {
+           LinesCommandes.forEach(value => {
+             const data= this.listeLignesCommandesCopy.find(value1 => this.getRef(value)==this.getRef(value1))
+             console.error(data)
+             if(data){
+               this.listeLignesCommandes.push({...data})
+             }else {
+               this.listeLignesCommandes.push({...value})
+
+             }
+           })
+
+           this.getCalibre();
+           this.calculerMoyennes();
+           this.loadingcommande=false;
+
+         },error =>{
+           console.log(error);});
+       }
+
+     })
+
+   }
+ }
+ getLinesblf(){
+
+    if(this.commande.sblfs){
+     this.commande.sblfs.forEach(sblf => {
+       if(sblf.id){
+         this.loadingcommande=true;
+         this.commandeService.getLignesCommandesSblf(sblf.id).subscribe(LinesCommandes => {
+           LinesCommandes.forEach(value => {
+             const data= this.listeLignesCommandesCopy.find(value1 => this.getRef(value)==this.getRef(value1))
+              if(data){
+               this.listeLignesCommandes.push({...data})
+             }else {
+               this.listeLignesCommandes.push({...value})
+
+             }
+           })
+
+           //  console.log('size  : ' + this.listeLignesCommandes.length);
+           this.getCalibre();
+           this.calculerMoyennes();
+           this.loadingcommande=false;
+         },error =>{
+           console.log(error);
+           // console.log('error size  : ' + this.listeLignesCommandes.length);
+         });
+       }
+
+     })
+
+   }
+ }
 
   getValueOfligneCommande(col: any, ligneCommande: any): any {
 
@@ -821,7 +891,7 @@ this.getLine()
           headerPage.innerHTML = ' <div class=" flex flex-column">   ' +
             '<div class="flex   border-1 w-full justify-content-between">' +
             '      <div class="flex-initial flex align-items-center justify-content-center   font-bold m-2 px-5 py-3 border-round">' +
-
+                        '<img src="/logo.png" >'+
             '      </div>' +
             '      <div class="flex-initial flex align-items-center justify-content-center  text-6xl font-bold m-2 px-5 py-3 border-round">' +
             '        Daily monitoring of analyses for the order\n' +
@@ -1222,6 +1292,7 @@ dateAUtilise(a:LineCommande){
   else return 0
 
   }
+
 
 
 }
