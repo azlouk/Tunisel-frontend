@@ -25,6 +25,18 @@ export interface Commande {
   datestart?:Date;
   dateend?:Date;
   quality?:string;
+  laycan?:string;
+  purchaseOrder?:string;
+  volume?:number;
+  customer?:string;
+  dateCustomer?:Date;
+   cumPass?:string;
+   h2o?:string;
+   mg?:string;
+   so4?:string;
+   nacl?:string;
+   mi?:string;
+   fecn6?:string;
 
 }
 

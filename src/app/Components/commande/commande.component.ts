@@ -3,7 +3,7 @@ import {ButtonModule} from "primeng/button";
 import {DialogModule} from "primeng/dialog";
 import {InputTextModule} from "primeng/inputtext";
 import {DatePipe, NgForOf, NgIf} from "@angular/common";
-import {MessageService, SharedModule} from "primeng/api";
+import {MenuItem, MenuItemCommandEvent, MessageService, SharedModule} from "primeng/api";
 import {Table, TableModule} from "primeng/table";
 import {ToastModule} from "primeng/toast";
 import {ToolbarModule} from "primeng/toolbar";
@@ -23,6 +23,11 @@ import {Column} from "jspdf-autotable";
 import {AutoFocusModule} from "primeng/autofocus";
 import {ListboxModule} from "primeng/listbox";
 import {InputNumberModule} from "primeng/inputnumber";
+import {TimelineModule} from "primeng/timeline";
+import * as events from "events";
+import {StepsModule} from "primeng/steps";
+
+
 
 @Component({
   selector: 'app-commande',
@@ -44,17 +49,20 @@ import {InputNumberModule} from "primeng/inputnumber";
     AutoFocusModule,
     ListboxModule,
     InputNumberModule,
-    DatePipe
+    DatePipe,
+    TimelineModule,
+    StepsModule
   ],
   templateUrl: './commande.component.html',
   styleUrl: './commande.component.css'
 })
 export class CommandeComponent implements OnInit{
 
+  itemsData: MenuItem[] | undefined;
 
-  public  TotalHarv=0;
-  public TotalTrQu=0;
-  public TotalProd=0;
+
+  activeIndex: number =0;
+
   productDialog: boolean = false;
 
   deleteProductDialog: boolean = false;
@@ -81,12 +89,14 @@ export class CommandeComponent implements OnInit{
   selectedCommandes:Commande[] = [];
 isUpdateCommande:boolean=false;
   visible: boolean=false;
-   commandeDetails!: Commande;
   selectedColumns!: Column[];
+commandesCopy: Commande[]=[];
+
 
   constructor(private router: Router,  private messageService: MessageService,private commandeService :CommandeService) {}
 
   ngOnInit() {
+
     this.cols = [
 
       {id:0, field: 'dateAnalyse', header: 'Prelevelment date' },
@@ -196,7 +206,7 @@ isUpdateCommande:boolean=false;
       this.commandeService.deleteCommande(this.commande.id).subscribe(() => console.log("Command Deleted"));
     }
     this.messageService.add({ severity: 'success', summary: 'Successful', detail: 'Command Deleted', life: 3000 });
-    this.commande ;
+
   }
 
   hideDialog() {
@@ -214,82 +224,80 @@ isUpdateCommande:boolean=false;
 
     this.commandeService.getAllCommandeDTO().subscribe((ListCommande:  Commande[]) => {
       this.comanndes=ListCommande;
+     this.commandesCopy=[... this.comanndes]
       this.loading=false ;
-
+      this.initiaTimeLine();
     }, error => {
       console.log(error)});
         }
 
 
-  showDialogDetails(command :Commande) {
-    this.visible=true;
-    this.selectedCommandPrint=command;
-    this.CalculeTotal()
-  }
-
-  // ---------------export details provider to PDF file ---------------
-  savePdfDetails() {
-
-    const data = document.getElementById('commandepdf');
-    if (data){
-      html2canvas(data).then(canvas => {
-        const imgData = canvas.toDataURL('image/png');
-        const pdf = new jsPDF('l', 'mm', 'a4');
-        const imgProps= pdf.getImageProperties(imgData);
-        const pdfWidth = pdf.internal.pageSize.getWidth();
-        const pdfHeight = (imgProps.height * pdfWidth) / imgProps.width;
-        pdf.addImage(imgData, 'PNG', 0, 0, pdfWidth, pdfHeight);
-        pdf.save('supplier-details.pdf');
-      });
-    }
-  }
-  selectedCommandPrint: Commande = {}
-  getValueOfligneCommande(col: any, ligneCommande: any): any {
-    if (col.id < 20) {
-      return ligneCommande.analyseChimique!==null ? ligneCommande.analyseChimique[col.field] : '-';
-    } else if (col.id > 19 && col.id < 22) {
-      return ligneCommande.analysePhysique!==null  ? ligneCommande.analysePhysique[col.field] : '-';
-    }
-
-    //************************************
-    else if (col.id > 21 && col.id < 27 ) {
-      if (ligneCommande.analysePhysique !== null && ligneCommande.analysePhysique.tamisList) {
-        // Use filter to find matching items in tamisList and add checks for undefined items
-        const filteredTamis:any = ligneCommande.analysePhysique.tamisList[0];
 
 
-        // Check if filteredTamisList is not empty and return it, otherwise return '-'
-        return filteredTamis!==undefined? filteredTamis[col.field]  : '-';
-      } else {
-        return '-';
-      }
-    }
-    //************************************
 
-    else {
-      return ligneCommande!==null  ? ligneCommande[col.field] : '-';
-    }
-  }
 
-  CalculeTotal() {
 
-    if(this.selectedCommandPrint.ligneCommandes){
-    // @ts-ignore
-      this.selectedCommandPrint.ligneCommandes.forEach(value => {
-      if(value.quantityRecolte)
-        this.TotalHarv+=parseFloat(value.quantityRecolte+'');
-      if(value.quantityProduction)
-        this.TotalProd+=parseFloat(value.quantityProduction+'')
-      if(value.quantiteTransfert)
-        this.TotalTrQu+=parseFloat(value.quantiteTransfert+'');
 
-    })
-  }
-  }
+
 
   cancel() {
     this.visible=false;
   }
     protected readonly getToken = getToken;
   loading: boolean=false;
+
+  calculAvailableVolume(commande:Commande){
+    let total:number=0;
+    commande.ligneCommandes?.forEach(l => {
+      if(l.quantiteTransfert)
+      total+=parseFloat(l.quantiteTransfert+'');
+    })
+    if(commande.volume)
+    return commande.volume-total
+    else return total
+  }
+
+  protected readonly events = events;
+
+  onActiveIndexChange(event: number) {
+    this.activeIndex = event;
+  }
+
+
+
+  initiaTimeLine() {
+    let data: number[] = [];
+
+    this.comanndes.forEach(c => {
+      if (c.dateCommande) {
+        data.push(new Date(c.dateCommande + "").getFullYear());
+      }
+    });
+
+    data.sort();
+
+    const uniqueArr = data.filter((item, index) => data.indexOf(item) === index);
+    // console.log(uniqueArr);
+
+    this.itemsData = [];
+
+    uniqueArr.forEach(value => {
+      this.itemsData!.push({
+        label: value.toString(),
+
+        command: (event: MenuItemCommandEvent) => {
+          this.filterCommandes(value);
+        }
+      });
+    });
+
+    // console.log(this.itemsData);
+  }
+
+  filterCommandes(value: number) {
+
+    this.comanndes = this.commandesCopy.filter(commande => new Date(commande.dateCommande + "").getFullYear() === value);
+  }
+
+
 }
