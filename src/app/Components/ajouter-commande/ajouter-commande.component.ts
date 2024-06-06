@@ -931,6 +931,7 @@ this.getLine()
             '      <div class="flex justify-content-between">\n' +
             '        <div class=" flex justify-content-end  ">\n' +
             '          <div class="flex flex gap-5 border-1 border-round border-gray-400 p-3">\n' +
+            '              <label class="font-bold mr-4">TUNISEL average analysis: </label>\n '+
             '            <div class="flex align-items-start gap-3 justify-content-between">\n' +
             '              <label class="font-bold ">% Cum Pass: </label>\n' +
             '              <label class="font-bold text-center    ">'+this.calculerMoyennes().passCumulated.toFixed(3)+'</label>\n' +
@@ -959,7 +960,46 @@ this.getLine()
             '              <label class="font-bold">Fe(CN)₆: </label>\n' +
             '              <label class="font-bold text-center">'+this.calculerMoyennes().ferrocyanure.toFixed(3)+'</label>\n' +
             '            </div>\n' +
-            '          </div>\n' ;
+            '          </div>\n  ' +
+            '<div class="gap-3 border-1 border-round border-gray-400 p-3 ml-3"> ' +
+            '<div class="flex align-items-center   ">\n' +
+            '              <label class="font-bold mr-4">Customer analysis: </label>\n <br>' +
+            '              <label class="font-bold ">Date :'+this.commande.dateCustomer+'</label>\n' +
+             '            </div>\n' +
+            '              <div class="flex align-items-start gap-3 justify-content-between">\n' +
+            '            <div class="flex align-items-start gap-3 justify-content-between">\n' +
+            '              <p-floatLabel>\n' +
+             '                <label class="font-bold">H₂O : '+this.commande.h2o+'</label>\n' +
+            '              </p-floatLabel>\n' +
+            '            </div>\n' +
+            '            <div class="flex align-items-start gap-3 justify-content-between">\n' +
+            '              <p-floatLabel>\n' +
+             '                <label class="font-bold">Mg : '+this.commande.mg+'</label>\n' +
+            '              </p-floatLabel>\n' +
+            '            </div>\n' +
+            '            <div class="flex align-items-start gap-3 justify-content-between">\n' +
+            '              <p-floatLabel>\n' +
+             '                <label class="font-bold">SO₄ : ' +this.commande.so4+'</label>\n' +
+            '              </p-floatLabel>\n' +
+            '            </div>\n' +
+            '            <div class="flex align-items-start gap-3 justify-content-between">\n' +
+            '              <p-floatLabel>\n' +
+             '                <label class="font-bold">NaCL : '+this.commande.nacl+'</label>\n' +
+            '              </p-floatLabel>\n' +
+            '            </div>\n' +
+            '            <div class="flex align-items-start gap-3 justify-content-between">\n' +
+            '              <p-floatLabel>\n' +
+             '                <label class="font-bold">MI :'+this.commande.mi+'</label>\n' +
+            '              </p-floatLabel>\n' +
+            '            </div>\n' +
+            '            <div class="flex align-items-start gap-3 justify-content-between">\n' +
+            '              <p-floatLabel>\n' +
+             '                <label class="font-bold">Fe(CN)₆ :'+this.commande.fecn6+'</label>\n' +
+            '              </p-floatLabel>\n' +
+            '            </div>\n' +
+            '              </div>\n' +
+            '            </div>' +
+            '</div>' ;
 
         if (headerPage)
           html2canvas(headerPage, {scale: 1}).then((canvas) => {
@@ -967,7 +1007,7 @@ this.getLine()
             const imgWidth = 210; // PDF width
             const imgHeight = (canvas.height * imgWidth) / canvas.width; // Maintain aspect ratio
             doc.addImage(imgData, 'png', 2, 2, imgWidth * sizeimageA4, imgHeight * sizeimageA4);
-            autoTable(doc, {startY: imgHeight + (50*sizeimageA4)})
+            autoTable(doc, {startY: imgHeight + (60*sizeimageA4)})
 // Or use javascript directly:
             autoTable(doc, {
               head: [header],
