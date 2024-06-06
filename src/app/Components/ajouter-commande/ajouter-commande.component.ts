@@ -142,6 +142,8 @@ export class AjouterCommandeComponent implements OnInit{
   first = 0;
 
   rows = 10;
+  datenow!:any ;
+  headerCopy!:string;
   constructor(private router: Router,
               private bassinService :BassinService,
               private tamisService:TamisService ,
@@ -160,6 +162,9 @@ export class AjouterCommandeComponent implements OnInit{
 
 
   ngOnInit(): void {
+
+  this.CountClick=0 ;
+    this.datenow=new Date() ;
     // =============================================
     this.datasel = [
       "GC RS DK",
@@ -834,195 +839,369 @@ this.getLine()
 
 
 
+// headerCopy= document.getElementById("headerpages");
+//  headerCopy = document.getElementById("headerpages") as string;
 
 
+//   public SavePDF(): void {
+//
+//     if (this.commande.ligneCommandes) {
+//       this.visibleCommande=true
+//       setTimeout(() => {
+//         let header: string[] = [];
+//         let data: any[] = [];
+//
+//         let sizeimageA4 = 1;
+//         this.selectedColumns.forEach(value => {
+//           header.push(value.header)
+//         })
+//         this.listeLignesCommandes.forEach(l => {
+//           let ligne: any[] = [];
+//           this.selectedColumns.forEach(col => {
+//             ligne.push(this.getValueOfligneCommande(col, l))
+//           })
+//           data.push(ligne)
+//         })
+//         let oriantation: string = "p";
+//         let format = "a4"
+//         if (this.selectedColumns.length > 11) {
+//           oriantation = "l";
+//           if (this.selectedColumns.length < 10) {
+//             format = "a4"
+//             sizeimageA4 = 1;
+//           } else if (this.selectedColumns.length > 10 && this.selectedColumns.length < 16) {
+//             format = "a2"
+//             sizeimageA4 = 3
+//           } else if (this.selectedColumns.length > 16) {
+//             format = "a1";
+//             sizeimageA4 = 4
+//           }
+//         }
+//
+//         const doc = new jsPDF("l", "mm", format)
+//         let headerPage = document.getElementById("headerpages");
+//
+//         if (headerPage)
+//           headerPage.innerHTML = ''; // Clear previous content
+//           headerPage.innerHTML +=
+//             '<!--      infoPropreTableCommande--> ' +
+//             '      <div class=" flex  me-3 mt-5  p-2 gap-1 text-3xl flex    justify-content-evenly">' +
+//             '        <br><br>' +
+//             '        <label class="text-2xl font-bold">Command Date :</label><span class="ml-2 text-2xl">' + this.commande.dateCommande + '</span>' +
+//             '        <label class="text-2xl font-bold">Name :</label><span class=" ml-2 text-2xl">' + this.commande.nom + '</span>' +
+//             '        <label class="text-2xl font-bold">Status :</label><span class=" ml-2 text-2xl">' + this.commande.etat + ' </span>' +
+//             '      </div>' +
+//             '      <div class="flex     p-2 gap-1 text-3xl flex   justify-content-evenly">' +
+//             // '        <label class="text-2xl font-bold">Creation Date Pond : </label><span class=" ml-2 text-2xl">' + this.commande.bassin?.dateCreation + '</span>' +
+//             // '        <label class="text-2xl font-bold">Reference :</label><span class="ml-2 text-2xl">' + this.commande.bassin?.reference + '</span>' +
+//             // '        <label class="text-2xl font-bold">Description :</label><span class=" ml-2 text-2xl">' + this.commande.bassin?.description + '</span>' +
+//             // '        <label class="text-2xl font-bold">Name :</label><span class=" ml-2 text-2xl">' + this.commande.bassin?.nom + '</span>' +
+//             // '        <label class="text-2xl font-bold">Location :</label><span class=" ml-2 text-2xl">' + this.commande.bassin?.emplacement + ' </span>' +
+//             // '        <label class="text-2xl font-bold">Status :</label><span class=" ml-2 text-2xl">' + this.commande.bassin?.etat + ' </span>' +
+//             '      </div>  ' +
+//             '<div class=" flex justify-content-start  ">' +
+//             '  <div class="flex flex-column gap-3 border-1 border-round border-gray-400 p-3">' +
+//             '    <div class="flex align-items-start gap-3 justify-content-between">' +
+//             '      <label   class="font-bold">Total Harvset in(T) :    </label>' +
+//             '      <label   class="font-bold text-center    ">' + this.TotalHarv.toFixed(3) + '</label>' +
+//             '     </div>' +
+//
+//             '    <div class="flex align-items-center gap-3 justify-content-between ">' +
+//             '      <label   class="font-bold">Total Production in(T) :</label>' +
+//             '      <label   class="font-bold text-center    ">' + this.TotalProd.toFixed(3) + '</label>' +
+//
+//             '     </div>' +
+//             '    <div class="flex align-items-center gap-3 justify-content-between ">' +
+//             '      <label   class="font-bold">Total Transfer Quantity :</label>' +
+//             '      <label   class="font-bold text-center    ">' + this.TotalHarv.toFixed(3) + '</label>' +
+//
+//             '     </div>' +
+//             '  </div>' +
+//             '</div> <br> <br>' +
+//             '      <div class="flex justify-content-between">\n' +
+//             '        <div class=" flex justify-content-end  ">\n' +
+//             '          <div class="flex flex gap-5 border-1 border-round border-gray-400 p-3">\n' +
+//             '              <label class="font-bold mr-4">TUNISEL average analysis: </label>\n '+
+//             '            <div class="flex align-items-start gap-3 justify-content-between">\n' +
+//             '              <label class="font-bold ">% Cum Pass: </label>\n' +
+//             '              <label class="font-bold text-center    ">'+this.calculerMoyennes().passCumulated.toFixed(3)+'</label>\n' +
+//             '            </div>\n' +
+//             '            <div class="flex align-items-start gap-3 justify-content-between">\n' +
+//             '              <label class="font-bold">%H₂O: </label>\n' +
+//             '              <label class="font-bold text-center">'+this.calculerMoyennes().humidite.toFixed(3)+'</label>\n' +
+//             '            </div>\n' +
+//             '            <div class="flex align-items-start gap-3 justify-content-between">\n' +
+//             '              <label class="font-bold">%Mg: </label>\n' +
+//             '              <label class="font-bold text-center">'+this.calculerMoyennes().magnesium.toFixed(3)+'</label>\n' +
+//             '            </div>\n' +
+//             '            <div class="flex align-items-start gap-3 justify-content-between">\n' +
+//             '              <label class="font-bold">%SO₄: </label>\n' +
+//             '              <label class="font-bold text-center">'+this.calculerMoyennes().sulfate.toFixed(3)+'</label>\n' +
+//             '            </div>\n' +
+//             '            <div class="flex align-items-start gap-3 justify-content-between">\n' +
+//             '              <label class="font-bold">%NaCL: </label>\n' +
+//             '              <label class="font-bold text-center">'+this.calculerMoyennes().chlorureDeSodium.toFixed(3)+'</label>\n' +
+//             '            </div>\n' +
+//             '            <div class="flex align-items-start gap-3 justify-content-between">\n' +
+//             '              <label class="font-bold">%MI: </label>\n' +
+//             '              <label class="font-bold text-center">'+this.calculerMoyennes().matiereInsoluble.toFixed(3)+'</label>\n' +
+//             '            </div>\n' +
+//             '            <div class="flex align-items-start gap-3 justify-content-between">\n' +
+//             '              <label class="font-bold">Fe(CN)₆: </label>\n' +
+//             '              <label class="font-bold text-center">'+this.calculerMoyennes().ferrocyanure.toFixed(3)+'</label>\n' +
+//             '            </div>\n' +
+//             '          </div>\n  ' +
+//             '<div class="gap-3 border-1 border-round border-gray-400 p-3 ml-3"> ' +
+//             '<div class="flex align-items-center   ">\n' +
+//             '              <label class="font-bold mr-4">Customer analysis: </label>\n <br>' +
+//             '              <label class="font-bold ">Date :'+this.commande.dateCustomer+'</label>\n' +
+//              '            </div>\n' +
+//             '              <div class="flex align-items-start gap-3 justify-content-between">\n' +
+//             '            <div class="flex align-items-start gap-3 justify-content-between">\n' +
+//             '              <p-floatLabel>\n' +
+//              '                <label class="font-bold">H₂O : '+this.commande.h2o+'</label>\n' +
+//             '              </p-floatLabel>\n' +
+//             '            </div>\n' +
+//             '            <div class="flex align-items-start gap-3 justify-content-between">\n' +
+//             '              <p-floatLabel>\n' +
+//              '                <label class="font-bold">Mg : '+this.commande.mg+'</label>\n' +
+//             '              </p-floatLabel>\n' +
+//             '            </div>\n' +
+//             '            <div class="flex align-items-start gap-3 justify-content-between">\n' +
+//             '              <p-floatLabel>\n' +
+//              '                <label class="font-bold">SO₄ : ' +this.commande.so4+'</label>\n' +
+//             '              </p-floatLabel>\n' +
+//             '            </div>\n' +
+//             '            <div class="flex align-items-start gap-3 justify-content-between">\n' +
+//             '              <p-floatLabel>\n' +
+//              '                <label class="font-bold">NaCL : '+this.commande.nacl+'</label>\n' +
+//             '              </p-floatLabel>\n' +
+//             '            </div>\n' +
+//             '            <div class="flex align-items-start gap-3 justify-content-between">\n' +
+//             '              <p-floatLabel>\n' +
+//              '                <label class="font-bold">MI :'+this.commande.mi+'</label>\n' +
+//             '              </p-floatLabel>\n' +
+//             '            </div>\n' +
+//             '            <div class="flex align-items-start gap-3 justify-content-between">\n' +
+//             '              <p-floatLabel>\n' +
+//              '                <label class="font-bold">Fe(CN)₆ :'+this.commande.fecn6+'</label>\n' +
+//             '              </p-floatLabel>\n' +
+//             '            </div>\n' +
+//             '              </div>\n' +
+//             '            </div>' +
+//             '</div>' ;
+//
+//         if (headerPage)
+//           html2canvas(headerPage, {scale: 1}).then((canvas) => {
+//             const imgData = canvas.toDataURL('image/png');
+//             const imgWidth = 210; // PDF width
+//             const imgHeight = (canvas.height * imgWidth) / canvas.width; // Maintain aspect ratio
+//             doc.addImage(imgData, 'png', 2, 2, imgWidth * sizeimageA4, imgHeight * sizeimageA4);
+//             autoTable(doc, {startY: imgHeight + (60*sizeimageA4)})
+// // Or use javascript directly:
+//             autoTable(doc, {
+//               head: [header],
+//               body: data,
+//             });
+//             doc.save('Print_' + Math.random() + '.pdf')
+//           });
+//         this.visibleCommande = false
+//
+//       }, this.commande.ligneCommandes!.length * 100)
+//     }else {
+//      // console.log("aucun ligne commande")
+//       Swal.fire({title:"Error" ,text:"No data found to printed" ,icon:"error"})
+//     }
+//      }
+
+
+  CountClick:number=0;
   public SavePDF(): void {
+    let headerPage = document.getElementById("headerpages");
+
 
     if (this.commande.ligneCommandes) {
-      this.visibleCommande=true
+      this.visibleCommande = true;
+
       setTimeout(() => {
+
+        if(this.CountClick==0)
+        {
+
+    // @ts-ignore
+          this.headerCopy=document.getElementById("headerpages").innerHTML.toString()+"";
+
+
+        }
+
         let header: string[] = [];
         let data: any[] = [];
 
         let sizeimageA4 = 1;
         this.selectedColumns.forEach(value => {
-          header.push(value.header)
-        })
+          header.push(value.header);
+        });
         this.listeLignesCommandes.forEach(l => {
           let ligne: any[] = [];
           this.selectedColumns.forEach(col => {
-            ligne.push(this.getValueOfligneCommande(col, l))
-          })
-          data.push(ligne)
-        })
-        let oriantation: string = "p";
-        let format = "a4"
+            ligne.push(this.getValueOfligneCommande(col, l));
+          });
+          data.push(ligne);
+        });
+
+        let orientation: string = "p";
+        let format = "a4";
         if (this.selectedColumns.length > 11) {
-          oriantation = "l";
+          orientation = "l";
           if (this.selectedColumns.length < 10) {
-            format = "a4"
+            format = "a4";
             sizeimageA4 = 1;
           } else if (this.selectedColumns.length > 10 && this.selectedColumns.length < 16) {
-            format = "a2"
-            sizeimageA4 = 3
+            format = "a2";
+            sizeimageA4 = 3;
           } else if (this.selectedColumns.length > 16) {
             format = "a1";
-            sizeimageA4 = 4
+            sizeimageA4 = 4;
           }
         }
 
-        const doc = new jsPDF("l", "mm", format)
+
+        const doc = new jsPDF("l", "mm", format);
         let headerPage = document.getElementById("headerpages");
-        if (headerPage)
-          headerPage.innerHTML = ' <div class=" flex flex-column">   ' +
-            '<div class="flex   border-1 w-full justify-content-between">' +
-            '      <div class="flex-initial flex align-items-center justify-content-center   font-bold m-2 px-5 py-3 border-round">' +
-                        '<img src="/logo.png" >'+
-            '      </div>' +
-            '      <div class="flex-initial flex align-items-center justify-content-center  text-6xl font-bold m-2 px-5 py-3 border-round">' +
-            '        Daily monitoring of analyses for the order\n' +
 
-            '      </div>' +
-            '      <div class="flex-initial border-1 flex     w-25  font-bold m-2 px-5 py-3  ">' +
-            '        <div class="col   ">' +
-            '          <div class="row  mb-2    w-full  ">BEN GUERDANE, TUNISIA  </div>' +
-            '          <div class="row mb-2   w-full text-center    text-1xl font-bold  pi pi-calendar ">' + this.pipedate(new Date()) + '</div>' +
-            '        </div>' +
-            '      </div>   ' +
-            '</div> ' +
-            '</div>' +
-            '</div>' +
-
-            '    </div>  ' +
+        if (headerPage) {
+          if(this.CountClick!=0)
+            headerPage.innerHTML=this.headerCopy ;
+          headerPage.innerHTML +=
             '<!--      infoPropreTableCommande--> ' +
-            '      <div class=" flex  me-3 mt-5  p-2 gap-1 text-3xl flex    justify-content-evenly">' +
+            '      <div class="flex me-3 mt-5 p-2 gap-1 text-3xl flex justify-content-evenly">' +
             '        <br><br>' +
             '        <label class="text-2xl font-bold">Command Date :</label><span class="ml-2 text-2xl">' + this.commande.dateCommande + '</span>' +
-            '        <label class="text-2xl font-bold">Name :</label><span class=" ml-2 text-2xl">' + this.commande.nom + '</span>' +
-            '        <label class="text-2xl font-bold">Status :</label><span class=" ml-2 text-2xl">' + this.commande.etat + ' </span>' +
+            '        <label class="text-2xl font-bold">Name :</label><span class="ml-2 text-2xl">' + this.commande.nom + '</span>' +
+            '        <label class="text-2xl font-bold">Status :</label><span class="ml-2 text-2xl">' + this.commande.etat + ' </span>' +
             '      </div>' +
-            '      <div class="flex     p-2 gap-1 text-3xl flex   justify-content-evenly">' +
-            // '        <label class="text-2xl font-bold">Creation Date Pond : </label><span class=" ml-2 text-2xl">' + this.commande.bassin?.dateCreation + '</span>' +
+            '      <div class="flex p-2 gap-1 text-3xl flex justify-content-evenly">' +
+            // Commented out section
+            // '        <label class="text-2xl font-bold">Creation Date Pond : </label><span class="ml-2 text-2xl">' + this.commande.bassin?.dateCreation + '</span>' +
             // '        <label class="text-2xl font-bold">Reference :</label><span class="ml-2 text-2xl">' + this.commande.bassin?.reference + '</span>' +
-            // '        <label class="text-2xl font-bold">Description :</label><span class=" ml-2 text-2xl">' + this.commande.bassin?.description + '</span>' +
-            // '        <label class="text-2xl font-bold">Name :</label><span class=" ml-2 text-2xl">' + this.commande.bassin?.nom + '</span>' +
-            // '        <label class="text-2xl font-bold">Location :</label><span class=" ml-2 text-2xl">' + this.commande.bassin?.emplacement + ' </span>' +
-            // '        <label class="text-2xl font-bold">Status :</label><span class=" ml-2 text-2xl">' + this.commande.bassin?.etat + ' </span>' +
-            '      </div>  ' +
-            '<div class=" flex justify-content-start  ">' +
+            // '        <label class="text-2xl font-bold">Description :</label><span class="ml-2 text-2xl">' + this.commande.bassin?.description + '</span>' +
+            // '        <label class="text-2xl font-bold">Name :</label><span class="ml-2 text-2xl">' + this.commande.bassin?.nom + '</span>' +
+            // '        <label class="text-2xl font-bold">Location :</label><span class="ml-2 text-2xl">' + this.commande.bassin?.emplacement + ' </span>' +
+            // '        <label class="text-2xl font-bold">Status :</label><span class="ml-2 text-2xl">' + this.commande.bassin?.etat + ' </span>' +
+            '      </div>' +
+            '<div class="flex justify-content-start">' +
             '  <div class="flex flex-column gap-3 border-1 border-round border-gray-400 p-3">' +
             '    <div class="flex align-items-start gap-3 justify-content-between">' +
-            '      <label   class="font-bold">Total Harvset in(T) :    </label>' +
-            '      <label   class="font-bold text-center    ">' + this.TotalHarv.toFixed(3) + '</label>' +
-            '     </div>' +
-
+            '      <label class="font-bold">Total Harvest in(T) : </label>' +
+            '      <label class="font-bold text-center">' + this.TotalHarv + '</label>' +
+            '    </div>' +
             '    <div class="flex align-items-center gap-3 justify-content-between ">' +
-            '      <label   class="font-bold">Total Production in(T) :</label>' +
-            '      <label   class="font-bold text-center    ">' + this.TotalProd.toFixed(3) + '</label>' +
-
-            '     </div>' +
+            '      <label class="font-bold">Total Production in(T) :</label>' +
+            '      <label class="font-bold text-center">' + this.TotalProd + '</label>' +
+            '    </div>' +
             '    <div class="flex align-items-center gap-3 justify-content-between ">' +
-            '      <label   class="font-bold">Total Transfer Quantity :</label>' +
-            '      <label   class="font-bold text-center    ">' + this.TotalHarv.toFixed(3) + '</label>' +
-
-            '     </div>' +
+            '      <label class="font-bold">Total Transfer Quantity :</label>' +
+            '      <label class="font-bold text-center">' + this.TotalTrQu + '</label>' +
+            '    </div>' +
             '  </div>' +
             '</div> <br> <br>' +
             '      <div class="flex justify-content-between">\n' +
-            '        <div class=" flex justify-content-end  ">\n' +
+            '        <div class="flex justify-content-end">\n' +
             '          <div class="flex flex gap-5 border-1 border-round border-gray-400 p-3">\n' +
-            '              <label class="font-bold mr-4">TUNISEL average analysis: </label>\n '+
+            '              <label class="font-bold mr-4">TUNISEL average analysis: </label>\n ' +
             '            <div class="flex align-items-start gap-3 justify-content-between">\n' +
             '              <label class="font-bold ">% Cum Pass: </label>\n' +
-            '              <label class="font-bold text-center    ">'+this.calculerMoyennes().passCumulated.toFixed(3)+'</label>\n' +
+            '              <label class="font-bold text-center">' + this.calculerMoyennes().passCumulated.toFixed(3) + '</label>\n' +
             '            </div>\n' +
             '            <div class="flex align-items-start gap-3 justify-content-between">\n' +
             '              <label class="font-bold">%H₂O: </label>\n' +
-            '              <label class="font-bold text-center">'+this.calculerMoyennes().humidite.toFixed(3)+'</label>\n' +
+            '              <label class="font-bold text-center">' + this.calculerMoyennes().humidite.toFixed(3) + '</label>\n' +
             '            </div>\n' +
             '            <div class="flex align-items-start gap-3 justify-content-between">\n' +
             '              <label class="font-bold">%Mg: </label>\n' +
-            '              <label class="font-bold text-center">'+this.calculerMoyennes().magnesium.toFixed(3)+'</label>\n' +
+            '              <label class="font-bold text-center">' + this.calculerMoyennes().magnesium.toFixed(3) + '</label>\n' +
             '            </div>\n' +
             '            <div class="flex align-items-start gap-3 justify-content-between">\n' +
             '              <label class="font-bold">%SO₄: </label>\n' +
-            '              <label class="font-bold text-center">'+this.calculerMoyennes().sulfate.toFixed(3)+'</label>\n' +
+            '              <label class="font-bold text-center">' + this.calculerMoyennes().sulfate.toFixed(3) + '</label>\n' +
             '            </div>\n' +
             '            <div class="flex align-items-start gap-3 justify-content-between">\n' +
             '              <label class="font-bold">%NaCL: </label>\n' +
-            '              <label class="font-bold text-center">'+this.calculerMoyennes().chlorureDeSodium.toFixed(3)+'</label>\n' +
+            '              <label class="font-bold text-center">' + this.calculerMoyennes().chlorureDeSodium.toFixed(3) + '</label>\n' +
             '            </div>\n' +
             '            <div class="flex align-items-start gap-3 justify-content-between">\n' +
             '              <label class="font-bold">%MI: </label>\n' +
-            '              <label class="font-bold text-center">'+this.calculerMoyennes().matiereInsoluble.toFixed(3)+'</label>\n' +
+            '              <label class="font-bold text-center">' + this.calculerMoyennes().matiereInsoluble.toFixed(3) + '</label>\n' +
             '            </div>\n' +
             '            <div class="flex align-items-start gap-3 justify-content-between">\n' +
             '              <label class="font-bold">Fe(CN)₆: </label>\n' +
-            '              <label class="font-bold text-center">'+this.calculerMoyennes().ferrocyanure.toFixed(3)+'</label>\n' +
+            '              <label class="font-bold text-center">' + this.calculerMoyennes().ferrocyanure.toFixed(3) + '</label>\n' +
             '            </div>\n' +
-            '          </div>\n  ' +
+            '          </div>\n' +
             '<div class="gap-3 border-1 border-round border-gray-400 p-3 ml-3"> ' +
-            '<div class="flex align-items-center   ">\n' +
+            '<div class="flex align-items-center ">\n' +
             '              <label class="font-bold mr-4">Customer analysis: </label>\n <br>' +
-            '              <label class="font-bold ">Date :'+this.commande.dateCustomer+'</label>\n' +
-             '            </div>\n' +
-            '              <div class="flex align-items-start gap-3 justify-content-between">\n' +
+            '              <label class="font-bold">Date :' + this.commande.dateCustomer + '</label>\n' +
+            '            </div>\n' +
+            '            <div class="flex align-items-start gap-3 justify-content-between">\n' +
             '            <div class="flex align-items-start gap-3 justify-content-between">\n' +
             '              <p-floatLabel>\n' +
-             '                <label class="font-bold">H₂O : '+this.commande.h2o+'</label>\n' +
+            '                <label class="font-bold">H₂O : ' + this.commande.h2o + '</label>\n' +
             '              </p-floatLabel>\n' +
             '            </div>\n' +
             '            <div class="flex align-items-start gap-3 justify-content-between">\n' +
             '              <p-floatLabel>\n' +
-             '                <label class="font-bold">Mg : '+this.commande.mg+'</label>\n' +
+            '                <label class="font-bold">Mg : ' + this.commande.mg + '</label>\n' +
             '              </p-floatLabel>\n' +
             '            </div>\n' +
             '            <div class="flex align-items-start gap-3 justify-content-between">\n' +
             '              <p-floatLabel>\n' +
-             '                <label class="font-bold">SO₄ : ' +this.commande.so4+'</label>\n' +
+            '                <label class="font-bold">SO₄ : ' + this.commande.so4 + '</label>\n' +
             '              </p-floatLabel>\n' +
             '            </div>\n' +
             '            <div class="flex align-items-start gap-3 justify-content-between">\n' +
             '              <p-floatLabel>\n' +
-             '                <label class="font-bold">NaCL : '+this.commande.nacl+'</label>\n' +
+            '                <label class="font-bold">NaCL : ' + this.commande.nacl + '</label>\n' +
             '              </p-floatLabel>\n' +
             '            </div>\n' +
             '            <div class="flex align-items-start gap-3 justify-content-between">\n' +
             '              <p-floatLabel>\n' +
-             '                <label class="font-bold">MI :'+this.commande.mi+'</label>\n' +
+            '                <label class="font-bold">MI :' + this.commande.mi + '</label>\n' +
             '              </p-floatLabel>\n' +
             '            </div>\n' +
             '            <div class="flex align-items-start gap-3 justify-content-between">\n' +
             '              <p-floatLabel>\n' +
-             '                <label class="font-bold">Fe(CN)₆ :'+this.commande.fecn6+'</label>\n' +
+            '                <label class="font-bold">Fe(CN)₆ :' + this.commande.fecn6 + '</label>\n' +
             '              </p-floatLabel>\n' +
             '            </div>\n' +
-            '              </div>\n' +
+            '            </div>\n' +
             '            </div>' +
-            '</div>' ;
+            '</div>';
+        }
 
         if (headerPage)
-          html2canvas(headerPage, {scale: 1}).then((canvas) => {
+          html2canvas(headerPage, { scale: 1 }).then((canvas) => {
             const imgData = canvas.toDataURL('image/png');
             const imgWidth = 210; // PDF width
             const imgHeight = (canvas.height * imgWidth) / canvas.width; // Maintain aspect ratio
             doc.addImage(imgData, 'png', 2, 2, imgWidth * sizeimageA4, imgHeight * sizeimageA4);
-            autoTable(doc, {startY: imgHeight + (60*sizeimageA4)})
-// Or use javascript directly:
+            autoTable(doc, { startY: imgHeight + (60 * sizeimageA4) });
+
             autoTable(doc, {
               head: [header],
               body: data,
             });
-            doc.save('Print_' + Math.random() + '.pdf')
+            doc.save('Print_' + Math.random().toFixed(4) + '.pdf');
           });
-        this.visibleCommande = false
 
-      }, this.commande.ligneCommandes!.length * 100)
-    }else {
-     // console.log("aucun ligne commande")
-      Swal.fire({title:"Error" ,text:"No data found to printed" ,icon:"error"})
+        this.visibleCommande = false;
+        this.CountClick++;
+      }, this.commande.ligneCommandes!.length * 100);
+    } else {
+      Swal.fire({ title: "Error", text: "No data found to print", icon: "error" });
     }
-     }
+
+  }
 
 
   protected readonly Swal = Swal;
@@ -1319,6 +1498,8 @@ dateAUtilise(a:LineCommande){
 
   }
 
+
+  protected readonly Date = Date;
 
 
 }

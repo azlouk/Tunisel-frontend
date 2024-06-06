@@ -63,7 +63,6 @@
 
         </p-floatLabel>
       </div>
-{{ this.listeLignesCommandesCopy.length}}
       <div class=" flex justify-content-center w-full ">
 
         <p-tabView [scrollable]="true" >
@@ -435,9 +434,27 @@
 
 
 <p-dialog header="Loading PDF Command" [(visible)]="visibleCommande" [style]="{ width: '80vw', maxWidth: '300vw' }">
-  <div
-    id="headerpages">
-  </div>
+  <div id="headerpages">
+    <div class=" flex flex-column">
+    <div class="flex   border-1 w-full justify-content-between">
+           <div class="flex-initial flex align-items-center justify-content-center   font-bold m-2 px-5 py-3 border-round">
+        <img src="./assets/logo.png" >
+              </div>
+           <div class="flex-initial flex align-items-center justify-content-center  text-6xl font-bold m-2 px-5 py-3 border-round">
+               Daily monitoring of analyses for the order
+
+            </div>
+      <div class="flex-initial border-1 flex     w-25  font-bold m-2 px-5 py-3  ">
+               <div class="col   ">
+                    <div class="row  mb-2    w-full  ">BEN GUERDANE, TUNISIA  </div>
+                    <div class="row mb-2   w-full text-center    text-1xl font-bold  pi pi-calendar ">
+                      {{pipedate(datenow)}} </div>
+                  </div>
+              </div>
+      </div>
+    </div>
+    </div>
+
 
 </p-dialog>
 

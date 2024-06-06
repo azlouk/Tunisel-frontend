@@ -284,6 +284,7 @@ commandesCopy: Commande[]=[];
     uniqueArr.forEach(value => {
       this.itemsData!.push({
         label: value.toString(),
+
         command: (event: MenuItemCommandEvent) => {
           this.filterCommandes(value);
         }
