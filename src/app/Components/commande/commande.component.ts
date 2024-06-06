@@ -3,7 +3,7 @@ import {ButtonModule} from "primeng/button";
 import {DialogModule} from "primeng/dialog";
 import {InputTextModule} from "primeng/inputtext";
 import {DatePipe, NgForOf, NgIf} from "@angular/common";
-import {MessageService, SharedModule} from "primeng/api";
+import {MenuItem, MenuItemCommandEvent, MessageService, SharedModule} from "primeng/api";
 import {Table, TableModule} from "primeng/table";
 import {ToastModule} from "primeng/toast";
 import {ToolbarModule} from "primeng/toolbar";
@@ -23,6 +23,11 @@ import {Column} from "jspdf-autotable";
 import {AutoFocusModule} from "primeng/autofocus";
 import {ListboxModule} from "primeng/listbox";
 import {InputNumberModule} from "primeng/inputnumber";
+import {TimelineModule} from "primeng/timeline";
+import * as events from "events";
+import {StepsModule} from "primeng/steps";
+
+
 
 @Component({
   selector: 'app-commande',
@@ -44,14 +49,19 @@ import {InputNumberModule} from "primeng/inputnumber";
     AutoFocusModule,
     ListboxModule,
     InputNumberModule,
-    DatePipe
+    DatePipe,
+    TimelineModule,
+    StepsModule
   ],
   templateUrl: './commande.component.html',
   styleUrl: './commande.component.css'
 })
 export class CommandeComponent implements OnInit{
 
+  itemsData: MenuItem[] | undefined;
 
+
+  activeIndex: number =0;
 
   productDialog: boolean = false;
 
@@ -80,10 +90,13 @@ export class CommandeComponent implements OnInit{
 isUpdateCommande:boolean=false;
   visible: boolean=false;
   selectedColumns!: Column[];
+commandesCopy: Commande[]=[];
+
 
   constructor(private router: Router,  private messageService: MessageService,private commandeService :CommandeService) {}
 
   ngOnInit() {
+
     this.cols = [
 
       {id:0, field: 'dateAnalyse', header: 'Prelevelment date' },
@@ -211,8 +224,9 @@ isUpdateCommande:boolean=false;
 
     this.commandeService.getAllCommandeDTO().subscribe((ListCommande:  Commande[]) => {
       this.comanndes=ListCommande;
+     this.commandesCopy=[... this.comanndes]
       this.loading=false ;
-
+      this.initiaTimeLine();
     }, error => {
       console.log(error)});
         }
@@ -242,4 +256,47 @@ isUpdateCommande:boolean=false;
     return commande.volume-total
     else return total
   }
+
+  protected readonly events = events;
+
+  onActiveIndexChange(event: number) {
+    this.activeIndex = event;
+  }
+
+
+
+  initiaTimeLine() {
+    let data: number[] = [];
+
+    this.comanndes.forEach(c => {
+      if (c.dateCommande) {
+        data.push(new Date(c.dateCommande + "").getFullYear());
+      }
+    });
+
+    data.sort();
+
+    const uniqueArr = data.filter((item, index) => data.indexOf(item) === index);
+    // console.log(uniqueArr);
+
+    this.itemsData = [];
+
+    uniqueArr.forEach(value => {
+      this.itemsData!.push({
+        label: value.toString(),
+        command: (event: MenuItemCommandEvent) => {
+          this.filterCommandes(value);
+        }
+      });
+    });
+
+    // console.log(this.itemsData);
+  }
+
+  filterCommandes(value: number) {
+
+    this.comanndes = this.commandesCopy.filter(commande => new Date(commande.dateCommande + "").getFullYear() === value);
+  }
+
+
 }

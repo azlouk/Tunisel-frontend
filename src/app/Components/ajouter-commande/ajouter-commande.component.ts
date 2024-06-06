@@ -166,6 +166,7 @@ export class AjouterCommandeComponent implements OnInit{
       "GC RS NO",
 
     ]
+    this.commande.dateCustomer=new Date();
     this.cols = [
 
       {id:0, field: 'dateAnalyse', header: 'Prelevelment date Analyse' },

@@ -29,7 +29,14 @@ export interface Commande {
   purchaseOrder?:string;
   volume?:number;
   customer?:string;
-
+  dateCustomer?:Date;
+   cumPass?:string;
+   h2o?:string;
+   mg?:string;
+   so4?:string;
+   nacl?:string;
+   mi?:string;
+   fecn6?:string;
 
 }
 
