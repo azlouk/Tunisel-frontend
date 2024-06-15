@@ -5,6 +5,7 @@ import {Sblf} from "./sblf";
 import {Sbl} from "./sbl";
 import {Sbnl} from "./sbnl";
 import {Column} from "../Components/ajouter-commande/ajouter-commande.component";
+import {StockOrder} from "./stock-order";
 
 
 
@@ -37,6 +38,6 @@ export interface Commande {
    nacl?:string;
    mi?:string;
    fecn6?:string;
-
+  stockOrder?:StockOrder;
 }
 

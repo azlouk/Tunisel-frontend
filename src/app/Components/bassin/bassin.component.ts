@@ -32,7 +32,16 @@ import * as XLSX from 'xlsx';
 import {TooltipModule} from "primeng/tooltip";
 import * as Papa from 'papaparse';
 import Swal from "sweetalert2";
+import {Recolte} from "../../Models/recolte";
+import {RecolteService} from "../../Services/recolte.service";
+import {RippleModule} from "primeng/ripple";
+import {log} from "@angular-devkit/build-angular/src/builders/ssr-dev-server";
 
+interface RecolteSummary {
+  total: number;
+  month: number;
+  bassinId: number;
+}
 @Component({
   selector: 'app-bassin',
   standalone: true,
@@ -56,7 +65,7 @@ import Swal from "sweetalert2";
     MultiSelectModule,
     DatePipe,
     CheckboxModule,
-    ListboxModule, CommonModule, AutoFocusModule, TooltipModule
+    ListboxModule, CommonModule, AutoFocusModule, TooltipModule, RippleModule
   ],
   templateUrl: './bassin.component.html',
   styleUrl: './bassin.component.css'
@@ -67,6 +76,7 @@ export class BassinComponent implements OnInit {
   deleteProductDialog: boolean = false;
 
   deleteProductsDialog: boolean = false;
+  RecolteDialog: boolean = false;
 
   products: Product[] = [];
 
@@ -83,6 +93,7 @@ export class BassinComponent implements OnInit {
   rowsPerPageOptions = [5, 10, 20];
   // ======********============
   bassins: Bassin[] = [];
+  bassinsId: number[] = [];
 
   bassin: Bassin = {};
 
@@ -93,17 +104,26 @@ export class BassinComponent implements OnInit {
   selectedPuit?: Puit;
   SelectAll: boolean = false;
 loading:boolean=false ;
+recolte=new Recolte();
+recolteUP=new Recolte();
+recoltes:Recolte[]=[];
   @ViewChild("pdfpuit") htmlContent: ElementRef | undefined;
   visiblePrint: boolean = false;
   dateToday: Date = new Date();
-
+  RecoltePDF: boolean = false;
   DatefiltrageStart: Date = new Date();
   DatefiltrageEnd: Date = new Date();
+ dateStart!: Date;
+ dateEnd!: Date ;
+ listSumRecolte:any[]=[]
   public  _selectedColumns: any[]=[];
   @Input() get selectedColumns(): any[] {
     return this._selectedColumns;
   }
-  constructor(  private messageService: MessageService,private bassinService :BassinService,private puitService:PuitService) { }
+  constructor(  private messageService: MessageService,
+                private bassinService :BassinService,
+                private puitService:PuitService,
+                private recolteService:RecolteService) { }
 
   ngOnInit() {
 
@@ -139,6 +159,7 @@ this.SelectetBassin={analysesPhysiques:[]}
 
     },error => {
       console.log(error)})
+    this.getAllRecolte();
   }
 
   openNew() {
@@ -154,7 +175,7 @@ this.SelectetBassin={analysesPhysiques:[]}
   }
 
   editBassin(bassin: Bassin) {
-    // this.isUpdateUser=true;
+    this.isUpdateBassin=true;
     this.bassin = { ...bassin };
     this.productDialog = true;
   }
@@ -274,6 +295,10 @@ this.SelectetBassin={analysesPhysiques:[]}
     this.bassinService.getAllBassinsDTO()
       .subscribe((bassins: Bassin[]) => {
         this.bassins = bassins;
+        this.bassins.forEach(value => {
+          if(value.id)
+          this.bassinsId.push(value.id)
+        })
         this.loading=false ;
       }, error => {
         console.log('Error fetching users:', error);
@@ -585,4 +610,120 @@ this.SelectetBassin={analysesPhysiques:[]}
 
 
   protected readonly getToken = getToken;
+
+
+
+  AddRecolte(bassin: Bassin) {
+
+    this.RecolteDialog=true;
+this.bassin=bassin
+    this.getAllRecolte()
+  }
+
+  hideDialogRecolte() {
+    this.RecolteDialog=false;
+  }
+
+  saveRecolte() {
+    if (    this.bassin.id!==undefined)
+  this.recolteService.addRecolte(this.recolte,this.bassin.id).subscribe(value => {
+    this.getAllRecolte();
+    this.recolte=new Recolte();
+  })
+    }
+    getAllRecolte(){
+    if(this.bassin.id)
+  this.bassinService.getAllBassinsById(this.bassin.id).subscribe(value =>{
+    if(value.recolteList) {
+      this.recoltes = value.recolteList
+    } }
+     )
+    }
+
+
+  deleteRecolte(recolte: Recolte)   {
+  this.recolteService.deleteRecolte(recolte.id).subscribe(value =>     this.recoltes= this.recoltes.filter(rec => rec.id !== recolte.id)
+  )
+
+  }
+
+  saveUpdateRecolte() {
+    this.recolteService.updateRecolte(this.recolteUP).subscribe(value => {
+      this.getAllRecolte();
+
+    })
+  }
+
+  updateRecolte(recolte: Recolte) {
+    this.recolteUP=recolte;
+  }
+
+exportRecolte(bassin: Bassin) {
+    this.RecoltePDF=true;
+  }
+
+  // ======================recolte PDF=======================
+  transform(value: Date): string {
+    // Parse the input date string
+    const date = new Date(value);
+
+    // Extract month and year
+    const month = date.getMonth() + 1; // Months are zero-based, so add 1
+    const year = date.getFullYear();
+
+    // Format the date to MM-YYYY
+    const formattedDate = `${month.toString().padStart(2, '0')}-${year}`;
+
+    return formattedDate;
+  }
+  months: number[] = [];
+  getMonthsBetweenDates(dateDebut1: Date, dateFin1: Date): number[] {
+
+
+let dateDebut=this.transform(dateDebut1);
+let dateFin=this.transform(dateFin1);
+let year=this.getYear(dateFin1);
+
+
+    // Extract start month and year
+    const [startMonthStr, startYearStr] = dateDebut.split('-');
+    const startMonth = parseInt(startMonthStr);
+    const startYear = parseInt(startYearStr);
+
+    // Extract end month and year
+    const [endMonthStr, endYearStr] = dateFin.split('-');
+    const endMonth = parseInt(endMonthStr);
+    const endYear = parseInt(endYearStr);
+
+    // Calculate the number of months between the two dates
+    const monthsDiff = (endYear - startYear) * 12 + (endMonth - startMonth) +1;
+    // Generate the list of months between the two dates
+    for (let i = 0; i < monthsDiff; i++) {
+      const month = (startMonth + i) % 12 ; // Handle month rollover (e.g., December to January)
+     this.months.push(month);
+    }
+    if(this.months.length>0){
+      this.recolteService.getSumRecoltePerMonthByBassinIdsAndYear(year,this.bassinsId).subscribe(value => {
+        this.listSumRecolte=value;
+        // this.listSumRecolte.forEach(value => console.table(new JsonPipe().transform((value as { month: number }).month)));
+        this.listSumRecolte=this.listSumRecolte.filter(lr => this.months.find(m =>m==lr.month )!==undefined)
+        console.log(new JsonPipe().transform(this.listSumRecolte))
+      })
+    }
+    return this.months;
+  }
+
+  getYear(value: Date): number {
+    // Parse the input date string
+    const date = new Date(value);
+
+    // Extract year
+    const year = date.getFullYear();
+
+    // Format the date to YYYY
+    // const formattedDate = `${year}`;
+    return year;
+  }
+
+
 }

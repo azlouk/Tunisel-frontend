@@ -35,6 +35,15 @@ export class AppMenuComponent implements OnInit {
 
       },
       {
+        label: 'Stock Order',
+        items: [
+          {label: 'Stock Order', icon: 'pi pi-fw pi-user', routerLink: ['/stockOrder']},
+
+
+        ]
+
+      },
+      {
         label: 'Stock Basin',
         items: [
           {label: 'Unwashed', icon: 'pi pi-fw pi-box', routerLink: ['sbnls']},

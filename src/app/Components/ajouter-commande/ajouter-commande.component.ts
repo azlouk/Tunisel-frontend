@@ -7,7 +7,7 @@ import {InputNumberModule} from "primeng/inputnumber";
 import {InputTextModule} from "primeng/inputtext";
 import {InputTextareaModule} from "primeng/inputtextarea";
 import {ListboxModule} from "primeng/listbox";
-import {DatePipe, JsonPipe, NgForOf, NgIf} from "@angular/common";
+import {DatePipe, JsonPipe, NgClass, NgForOf, NgIf} from "@angular/common";
 import {PaginatorModule} from "primeng/paginator";
 import {MessageService, SharedModule, SortEvent} from "primeng/api";
 import {TabViewModule} from "primeng/tabview";
@@ -47,6 +47,11 @@ import {ProgressBarModule} from "primeng/progressbar";
 import Swal from "sweetalert2";
 import {ProgressSpinnerModule} from "primeng/progressspinner";
 import {BadgeModule} from "primeng/badge";
+import {StockOrder} from "../../Models/stock-order";
+import {StockOrderService} from "../../Services/stock-order.service";
+import _default from "chart.js/dist/plugins/plugin.tooltip";
+import borderColor = _default.defaults.borderColor;
+import {flush} from "@angular/core/testing";
 
 
 
@@ -90,6 +95,7 @@ export interface Column {
     ProgressBarModule,
     ProgressSpinnerModule,
     BadgeModule,
+    NgClass,
 
   ],
   templateUrl: './ajouter-commande.component.html',
@@ -144,6 +150,7 @@ export class AjouterCommandeComponent implements OnInit{
   rows = 10;
   datenow!:any ;
   headerCopy!:string;
+  stockOrders: StockOrder[] = [];
   constructor(private router: Router,
               private bassinService :BassinService,
               private tamisService:TamisService ,
@@ -156,6 +163,7 @@ export class AjouterCommandeComponent implements OnInit{
               private sblService :SblService,
               private sblfService :SblfService,
               private bandeService:BandeService,
+              private stockOrderService:StockOrderService,
   )
   {}
 
@@ -171,6 +179,7 @@ export class AjouterCommandeComponent implements OnInit{
       "GC RS NO",
 
     ]
+    this.getAllStockOrder();
     this.commande.dateCustomer=new Date();
     this.cols = [
 
@@ -379,16 +388,17 @@ getCommandeById(){
   }
   getLine() {
 
+    this.listeLignesCommandes=[...this.commande.ligneCommandes!==undefined?this.commande.ligneCommandes:[]]
+    this.listeLignesCommandesCopy=[...this.listeLignesCommandes];
+    this.listeLignesCommandes=this.listeLignesCommandes.filter(lc =>lc.analysePhysique==null && lc.analyseChimique==null )
+    // this.listeLignesCommandes=[];
 
-      this.listeLignesCommandes=[...this.commande.ligneCommandes!==undefined?this.commande.ligneCommandes:[]]
 
-    this.listeLignesCommandesCopy=[...this.listeLignesCommandes]
-    this.listeLignesCommandes=[]
-this.getLineBassin();
-this.getLinesbln();
-this.getLineBande();
-this.getLinesbl() ;
-this.getLinesblf() ;
+    this.getLineBassin();
+    this.getLinesbln();
+    this.getLineBande();
+    this.getLinesbl() ;
+    this.getLinesblf() ;
 
 
  }
@@ -407,7 +417,7 @@ this.getLinesblf() ;
 
            LinesCommandes.forEach(value => {
              const data= this.listeLignesCommandesCopy.find(value1 => this.getRef(value)==this.getRef(value1))
-             console.error(data)
+
              if(data){
                this.listeLignesCommandes.push({...data})
              }else {
@@ -1500,6 +1510,33 @@ dateAUtilise(a:LineCommande){
 
 
   protected readonly Date = Date;
+  getAllStockOrder() {
+
+    this.stockOrderService.getAllStockOrder()
+      .subscribe((stockOrders: StockOrder[]) => {
+        this.stockOrders = stockOrders;
+
+      }, error => {
+        console.log( error);
+      });
+  }
+  public verify(lineCommande: any):Boolean |undefined {
+
+    if(lineCommande.analyseChimique==null && lineCommande.analysePhysique==null ){
+    console.log('====> id :'+lineCommande.id)
+
+      return false ;
+    }
+
+    const line:LineCommande|undefined= this.commande.ligneCommandes?.find(lineC=>lineC.id==lineCommande.id )
+    if(line)
+      return undefined;
+    else return true;
+  }
+
+
+
+
 
 
 }

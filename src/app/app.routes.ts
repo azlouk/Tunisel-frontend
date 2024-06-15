@@ -27,6 +27,7 @@ import {AjouterCommandeComponent} from "./Components/ajouter-commande/ajouter-co
 import {
   AjoutFichevieInterventionComponent
 } from "./Components/ajout-fichevie-intervention/ajout-fichevie-intervention.component";
+import {StockOrderComponent} from "./Components/stock-order/stock-order.component";
 
 export const routes: Routes = [
   {path:'', component:LoginComponent},
@@ -61,4 +62,5 @@ export const routes: Routes = [
   {path:'commande', component:CommandeComponent,  canActivate:[AuthGuard]},
   {path:'ajouterCommande', component:AjouterCommandeComponent,  canActivate:[AuthGuard]},
   {path:'updateCommande/:id', component:AjouterCommandeComponent,  canActivate:[AuthGuard]},
+  {path:'stockOrder', component:StockOrderComponent,  canActivate:[AuthGuard]},
 ];

@@ -2,7 +2,7 @@ import {Component, OnInit} from '@angular/core';
 import {ButtonModule} from "primeng/button";
 import {DialogModule} from "primeng/dialog";
 import {InputTextModule} from "primeng/inputtext";
-import {DatePipe, NgForOf, NgIf} from "@angular/common";
+import {DatePipe, JsonPipe, NgForOf, NgIf} from "@angular/common";
 import {MenuItem, MenuItemCommandEvent, MessageService, SharedModule} from "primeng/api";
 import {Table, TableModule} from "primeng/table";
 import {ToastModule} from "primeng/toast";
@@ -26,6 +26,9 @@ import {InputNumberModule} from "primeng/inputnumber";
 import {TimelineModule} from "primeng/timeline";
 import * as events from "events";
 import {StepsModule} from "primeng/steps";
+import {StockOrder} from "../../Models/stock-order";
+import {StockOrderService} from "../../Services/stock-order.service";
+import {LogarithmicScale} from "chart.js";
 
 
 
@@ -82,7 +85,8 @@ export class CommandeComponent implements OnInit{
   rowsPerPageOptions = [5, 10, 20];
   // ======********============
 
-  comanndes:Commande[] = [];
+  commandes:Commande[] = [];
+  ListCommandes: Commande[] = [];
 
   commande:Commande={};
  updateCommande:Commande={};
@@ -91,9 +95,17 @@ isUpdateCommande:boolean=false;
   visible: boolean=false;
   selectedColumns!: Column[];
 commandesCopy: Commande[]=[];
+  stockOrders: StockOrder[] = [];
+  stockSelected!: StockOrder;
 
-
-  constructor(private router: Router,  private messageService: MessageService,private commandeService :CommandeService) {}
+  TotalHarv: number=0;
+  TotalProd: number=0;
+  TotalTrQu: number=0;
+  VolumeAvailble: number=0;
+  constructor(private router: Router,
+              private messageService: MessageService,
+              private commandeService :CommandeService,
+              private stockOrderService:StockOrderService) {}
 
   ngOnInit() {
 
@@ -156,7 +168,7 @@ commandesCopy: Commande[]=[];
       { field: 'dateFermeture', header: 'dateFermeture' },
     ];
 
-
+this.getAllStockOrder();
   }
 
   openNew() {
@@ -190,7 +202,7 @@ commandesCopy: Commande[]=[];
         () => {
           this.messageService.add({ severity: 'success', summary: 'Successful', detail: 'User Deleted', life: 3000 });
 
-          this.comanndes = this.comanndes.filter(commande =>commande.id !== selectedCommandes.id);
+          this.commandes = this.commandes.filter(commande =>commande.id !== selectedCommandes.id);
         },
         (error) => {
         }
@@ -201,7 +213,7 @@ commandesCopy: Commande[]=[];
 
   confirmDelete() {
     this.deleteProductDialog = false;
-    this.comanndes = this.comanndes.filter(val => val.id !== this.commande.id);
+    this.commandes = this.commandes.filter(val => val.id !== this.commande.id);
     if (this.commande.id!= null) {
       this.commandeService.deleteCommande(this.commande.id).subscribe(() => console.log("Command Deleted"));
     }
@@ -223,8 +235,8 @@ commandesCopy: Commande[]=[];
     this.loading=true ;
 
     this.commandeService.getAllCommandeDTO().subscribe((ListCommande:  Commande[]) => {
-      this.comanndes=ListCommande;
-     this.commandesCopy=[... this.comanndes]
+      this.commandes=ListCommande;
+     this.commandesCopy=[... this.commandes]
       this.loading=false ;
       this.initiaTimeLine();
     }, error => {
@@ -246,18 +258,19 @@ commandesCopy: Commande[]=[];
     protected readonly getToken = getToken;
   loading: boolean=false;
 
-  calculAvailableVolume(commande:Commande){
-    let total:number=0;
-    commande.ligneCommandes?.forEach(l => {
-      if(l.quantiteTransfert)
-      total+=parseFloat(l.quantiteTransfert+'');
-    })
-    if(commande.volume)
-    return commande.volume-total
-    else return total
-  }
+  // calculAvailableVolume(commande:Commande){
+  //   let total:number=0;
+  //   commande.ligneCommandes?.forEach(l => {
+  //     if(l.quantiteTransfert)
+  //     total+=parseFloat(l.quantiteTransfert+'');
+  //   })
+  //   if(commande.volume)
+  //   return commande.volume-total
+  //   else return total
+  // }
 
   protected readonly events = events;
+
 
   onActiveIndexChange(event: number) {
     this.activeIndex = event;
@@ -268,7 +281,7 @@ commandesCopy: Commande[]=[];
   initiaTimeLine() {
     let data: number[] = [];
 
-    this.comanndes.forEach(c => {
+    this.commandes.forEach(c => {
       if (c.dateCommande) {
         data.push(new Date(c.dateCommande + "").getFullYear());
       }
@@ -295,9 +308,54 @@ commandesCopy: Commande[]=[];
   }
 
   filterCommandes(value: number) {
-
-    this.comanndes = this.commandesCopy.filter(commande => new Date(commande.dateCommande + "").getFullYear() === value);
+    this.commandes = this.commandesCopy.filter(commande => new Date(commande.dateCommande + "").getFullYear() === value);
   }
 
 
+  getAllStockOrder() {
+
+    this.stockOrderService.getAllStockOrder()
+      .subscribe((stockOrders: StockOrder[]) => {
+        this.stockOrders = stockOrders;
+
+      }, error => {
+        console.log( error);
+      });
+  }
+
+
+  filtreByStock(stockSelected: StockOrder) {
+    this.commandes = this.commandesCopy.filter(commande => {
+
+     this.commandeService.getCommandesByStockOrderAndEtatContains(stockSelected.id,"Loading Completed").subscribe(value => {
+       this.ListCommandes = value;
+
+       this.CalculeTotalInput();
+       this.calculVolumeAvailble(stockSelected);
+     })
+
+      return commande.stockOrder && commande.stockOrder.id === stockSelected.id;
+    });
+  }
+
+
+  calculVolumeAvailble(stockSelected: StockOrder) {
+const total=stockSelected.volumeSaline+stockSelected.volumeTerrain+stockSelected.volumePort+stockSelected.volumeQuai;
+    this.VolumeAvailble= total-this.TotalTrQu;
+  }
+  CalculeTotalInput() {
+    this.TotalHarv=0;
+    this.TotalTrQu=0;
+    this.TotalProd=0 ;
+    this.ListCommandes.forEach(com => com.ligneCommandes &&  com.ligneCommandes.forEach(l =>{
+
+      if(l.quantityRecolte)
+        this.TotalHarv+=parseFloat(l.quantityRecolte+'');
+      if(l.quantityProduction)
+        this.TotalProd+=parseFloat(l.quantityProduction+'')
+      if(l.quantiteTransfert)
+        this.TotalTrQu+=parseFloat(l.quantiteTransfert+'');
+
+    } ))
+  }
 }

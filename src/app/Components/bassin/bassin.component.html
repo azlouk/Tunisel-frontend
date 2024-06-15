@@ -4,10 +4,17 @@
       <p-toast></p-toast>
       <p-toolbar styleClass="mb-4">
         <ng-template pTemplate="left">
-          <div class="my-2">
+          <div class="flex justify-content-between ">
+
+            <div class="">
             <button *ngIf="getToken()=='ADMIN'" pButton pRipple label="Add" icon="pi pi-plus" class="p-button-success mr-2" (click)="openNew()"></button>
             <button *ngIf="getToken()=='ADMIN'"  pButton pRipple label="Delete" icon="pi pi-trash" class="p-button-danger mr-2" (click)="deleteSelectedBassins()" [disabled]="!selectedBassins || !selectedBassins.length"></button>
             <button pButton pRipple label="Refresh" icon="pi pi-refresh" class="p-button-primary mr-2" (click)="getAllBassin()"  ></button>
+            </div>
+
+            <div class="flex justify-content-end">
+              <button pButton pRipple icon="pi pi-file-pdf" class="p-button-rounded p-button-primary mr-2"  (click)="exportRecolte(bassin)"></button>
+            </div>
 
           </div>
         </ng-template>
@@ -18,7 +25,7 @@
       <p-table #dt [loading]="loading" [value]="bassins" [columns]="cols"  responsiveLayout="scroll" [rows]="10" [globalFilterFields]="['surface','etat','id','emplacement','nom','dateCreation','reference','description']" [paginator]="true" [rowsPerPageOptions]="[10,20,30]" [showCurrentPageReport]="true" currentPageReportTemplate="Display  {first} to  {last} of  {totalRecords} entries" [(selection)]="selectedBassins" selectionMode="multiple" [rowHover]="true" dataKey="id">
         <ng-template pTemplate="caption">
           <div class="flex flex-column md:flex-row md:justify-content-between md:align-items-center">
-            <h5 class="m-0">Basin management</h5>
+            <h5 class="m-0">Pond management</h5>
             <span class="block mt-2 md:mt-0 p-input-icon-left">
                             <i class="pi pi-search"></i>
                             <input  type="text" pInputText (input)="onGlobalFilter(dt, $event)" placeholder="Search..."  class="w-full sm:w-auto"/>
@@ -86,6 +93,8 @@
             </td>
             <td>
               <div class="flex">
+                <button *ngIf="getToken()=='ADMIN'" pButton pRipple  class="p-button-rounded p-button-info mr-2" (click)="AddRecolte(bassin)">Recolte</button>
+
                 <button *ngIf="getToken()=='ADMIN'" pButton pRipple icon="pi pi-pencil" class="p-button-rounded p-button-success mr-2" (click)="editBassin(bassin)"></button>
                 <button *ngIf="getToken()=='ADMIN'" pButton pRipple icon="pi pi-trash" class="p-button-rounded p-button-warning mr-2" (click)="deleteBassin(bassin)"></button>
                 <button pButton pRipple icon="pi pi-file-pdf" class="p-button-rounded p-button-primary mr-2"  (click)="exportrapport(bassin)"></button>
@@ -352,9 +361,6 @@
           </td>
 
 
-
-
-
         </tr>
       </ng-template>
     </p-table>
@@ -368,6 +374,301 @@
     <p-button icon="pi pi-file-pdf" (click)="SavePDF()" class="text-green-50" label="PDF" pAutoFocus [autofocus]="true"  ></p-button>
     <button type="button" pButton pRipple  icon="pi pi-file-excel" (click)="ExportExcel()" class="p-button-success" label="EXCEL" pAutoFocus [autofocus]="true"  ></button>
     <button type="button" pButton pRipple icon="pi pi-file" (click)="exportcsv()" class="p-button-warning " label="CSV" pTooltip="CSV" ></button>
+
+  </ng-template>
+</p-dialog>
+<p-dialog [(visible)]="RecolteDialog" [style]="{width: '1000px'}" header="Recolte" [modal]="true" class="p-fluid">
+  <ng-template pTemplate="content">
+    <h3>Add Recolte</h3>
+<div class="flex justify-content-between align-items-center border border-1 border-round border-gray-400 p-3">
+    <div class="">
+      <label for="dateCreationr">Date Creation</label>
+      <input  class="p-2 shadow-1" type="date" dateFormat="yy-mm-dd"  pInputText id="dateCreationr"  [(ngModel)]="recolte.dateCreation"  />
+    </div>
+
+    <div class="">
+      <label for="value">Value</label>
+      <p-inputNumber  id="value"  [(ngModel)]="recolte.value" mode="decimal" [minFractionDigits]="3" ></p-inputNumber>
+    </div>
+  <div>
+    <button pButton pRipple label="Save" icon="pi pi-check" class="p-button-text" (click)="saveRecolte()"></button>
+  </div>
+</div>
+    <div class="cart mt-5">
+      <p-table #dt [loading]="loading"
+               [value]="recoltes"
+               [columns]="cols"
+               responsiveLayout="scroll" [rows]="10"
+               [globalFilterFields]="['surface','etat','id','emplacement','nom','dateCreation','reference','description']"
+               [paginator]="true"
+               editMode="row"
+               [rowsPerPageOptions]="[10,20,30]"
+               [showCurrentPageReport]="true" currentPageReportTemplate="Display  {first} to  {last} of  {totalRecords} entries" [(selection)]="selectedBassins" selectionMode="multiple" [rowHover]="true" dataKey="id">
+        <ng-template pTemplate="caption">
+          <div class="flex flex-column md:flex-row md:justify-content-between md:align-items-center">
+            <div class="flex justify-content-between align-items-center w-full">
+            <h5 class="m-0">Recolte management</h5>
+              <div>
+            <span class=" p-input-icon-left ">
+                            <i class="pi pi-search"></i>
+                            <input  type="text" pInputText (input)="onGlobalFilter(dt, $event)" placeholder="Search..."  class="w-full sm:w-auto"/>
+                        </span>
+              </div>
+            </div>
+
+          </div>
+        </ng-template>
+        <ng-template pTemplate="header">
+          <tr>
+            <th style="width: 3rem">
+              <p-tableHeaderCheckbox></p-tableHeaderCheckbox>
+            </th>
+            <th pSortableColumn="id">Id <p-sortIcon field="id"></p-sortIcon></th>
+            <th pSortableColumn="reference">Date Recolte<p-sortIcon field="reference"></p-sortIcon></th>
+            <th pSortableColumn="description">Value <p-sortIcon field="description"></p-sortIcon></th>
+
+            <th></th>
+          </tr>
+        </ng-template>
+        <ng-template pTemplate="body" let-recolte let-editing="editing" >
+          <tr [pEditableRow]="recolte" >
+            <td>
+              <p-tableCheckbox [value]="recolte"></p-tableCheckbox>
+            </td>
+            <td >
+              <span class="p-column-title">Id</span>
+              {{recolte.id}}
+            </td>
+
+            <td >
+              <p-cellEditor>
+                <ng-template pTemplate="input">
+                  <input  class="p-2 shadow-1" type="date" dateFormat="yy-mm-dd"  pInputText   [(ngModel)]="recolte.dateCreation"  />
+
+                </ng-template>
+                <ng-template pTemplate="output">
+                  {{recolte.dateCreation|date:'dd-MM-yyyy'}}
+                </ng-template>
+              </p-cellEditor>
+            </td>
+
+            <td >
+              <p-cellEditor>
+                <ng-template pTemplate="input">
+                  <input
+                    pInputText
+                    type="text"
+                    [(ngModel)]="recolte.value" />
+                </ng-template>
+                <ng-template pTemplate="output">
+                  {{recolte.value}}
+                </ng-template>
+              </p-cellEditor>
+            </td>
+
+            <td>
+              <div class="flex  align-items-center gap-2">
+                <div class="flex align-items-center justify-content-center gap-2" *ngIf="getToken()=='ADMIN'">
+                  <button *ngIf="!editing" pButton pRipple type="button" pInitEditableRow icon="pi pi-pencil"
+                          (click)="updateRecolte(recolte)"
+                          class="p-button-rounded   mr-2"></button>
+                  <button *ngIf="editing" pButton pRipple type="button"  pSaveEditableRow icon="pi pi-check"
+                          (click)="saveUpdateRecolte()"
+                          class="p-button-rounded p-button-text  mr-2"></button>
+                </div>
+                <button *ngIf="getToken()=='ADMIN'" pButton pRipple icon="pi pi-trash" class="p-button-rounded p-button-warning mr-2" (click)="deleteRecolte(recolte)"></button>
+              </div>
+            </td>
+          </tr>
+        </ng-template>
+      </p-table>
+
+    </div>
+
+  </ng-template>
+
+
+
+
+  <ng-template pTemplate="footer">
+    <button pButton pRipple label="Close" icon="pi pi-times" class="p-button-text" (click)="hideDialogRecolte()"></button>
+  </ng-template>
+</p-dialog>
+<p-dialog header="Chemical and particle size analysis" [(visible)]="RecoltePDF" [modal]="true" [style]="{width: '100%'}"     >
+  <ng-template pTemplate="content">
+
+    <div class="shadow-1 p-2  " >chemical filtration  :
+
+      <div class="card flex justify-content-evenly ">
+        <div class="gap-1 flex align-items-center">Date Start :
+          <p-calendar
+            [(ngModel)]="dateStart"
+            view="month"
+            dateFormat="mm-yy"
+            [readonlyInput]="true" />
+        </div>
+        <div class="gap-1  flex align-items-center">
+          Date End :
+          <p-calendar
+            [(ngModel)]="dateEnd"
+            view="month"
+            dateFormat="mm-yy"
+            [readonlyInput]="true" />
+        </div>
+        <p-button (click)="getMonthsBetweenDates(dateStart,dateEnd)" class=" " icon="pi pi-search" label="Search"></p-button>
+        <p-button (click)="Viderfiltredate()" class=" " icon="pi pi-refresh" label="Refresh"></p-button>
+
+      </div>
+
+    </div>
+
+
+    <div #pdfpuit class="pt-8 pl-4 pr-4">
+      <img src="assets/layout/images/logo.png">
+      <div class="row justify-content-end font-bold flex text-1xl"> Creation date: <span class=" text-1xl font-bold  pi pi-calendar ">{{dateToday | date :"yyyy-MM-dd"}}</span></div>
+      <div class="row    font-bold flex text-1xl   "> Identification :<span class=" text-1xl font-bold   "> {{SelectetBassin.reference}}</span></div>
+
+      <div class="row   text-8xl font-bold text-center m-2 p-3" > Analysis Report </div>
+      <div class="mt-5 mb-5">
+
+        <label class="font-bold text-5xl  ">Chemical analysis</label>
+        <br><br><br><br>
+        <label class="text-2xl font-bold">Reference  :</label><span class="ml-2 text-2xl">{{SelectetBassin.reference}}</span><br>
+        <label class="text-2xl font-bold">Date creation :</label><span class=" ml-2 text-2xl">{{SelectetBassin.dateCreation}}</span><br>
+
+
+      </div>
+
+      <p-table #dt1 [value]="this.SelectetBassin.analysesChimiques !== undefined ? this.SelectetBassin.analysesChimiques : []" [tableStyle]="{ 'min-width': '50rem' }"
+               dataKey="id" id="EXCELRecolte"
+               [showCurrentPageReport]="true"
+               [globalFilterFields]="['dateAnalyse']"
+
+
+
+      >
+
+
+        <ng-template pTemplate="header">
+          <tr>
+
+            <ng-container  *ngFor="let c of getColsfiltr()">
+              <th class="ml-2 mr-2">{{ c.header }}</th>
+            </ng-container>
+
+
+            <!--       <th>-->
+            <!--         <p-columnFilter type="date" field="dateAnalyse" display="menu"></p-columnFilter>-->
+
+            <!--         Analysis Date</th>-->
+
+
+            <!--        <th>Temperature °C</th>-->
+            <!--        <th>wind (km/h)</th>-->
+            <!--        <th>humidity  </th>-->
+            <!--        <th>Densite (g/cm 3)</th>-->
+            <!--        <th>Suspended Matter (g)</th>-->
+            <!--        <th>salinite (psu)</th>-->
+            <!--        <th>Calcium (mmol/L)</th>-->
+            <!--        <th>Magnesium (g)</th>-->
+            <!--        <th>Sulfate (g)</th>-->
+            <!--        <th>Insoluble matter (g)</th>-->
+            <!--        <th>Potassium (mmol/L)</th>-->
+            <!--        <th>Sodium (mmol)</th>-->
+            <!--        <th>Chlorure (meq · L–1)</th>-->
+            <!--        <th>pH</th>-->
+            <!--        <th>sodium chloride (g)</th>-->
+            <!--        <th>Ferrocyanure (g/mol)</th>-->
+
+          </tr>
+        </ng-template>
+        <ng-template pTemplate="body" let-a>
+          <tr>
+
+
+            <td *ngIf="colsfiltre[0].hide" >{{ a.reference==undefined?'-':a.reference }}</td>
+
+            <td *ngIf="colsfiltre[1].hide">{{ a.dateAnalyse | date: 'MM/dd/yyyy'}}</td>
+            <td *ngIf="colsfiltre[2].hide">{{ a.temperature==undefined?'-':a.temperature }}</td>
+            <td *ngIf="colsfiltre[3].hide">{{ a.vent ==undefined?'-':a.vent}}</td>
+            <td *ngIf="colsfiltre[4].hide">{{ a.humidite==undefined?'-':a.humidite }}</td>
+            <td *ngIf="colsfiltre[5].hide">{{ a.densite ==undefined?'-':a.densite}}</td>
+            <td *ngIf="colsfiltre[6].hide">{{ a.matiereEnSuspension==undefined?'-':a.matiereEnSuspension }}</td>
+            <td *ngIf="colsfiltre[7].hide">{{ a.salinite ==undefined?'-':a.salinite}}</td>
+            <td *ngIf="colsfiltre[8].hide">{{ a.calcium==undefined?'-':a.calcium }}</td>
+            <td *ngIf="colsfiltre[9].hide" >{{ a.magnesium ==undefined?'-':a.magnesium}}</td>
+            <td *ngIf="colsfiltre[10].hide">{{ a.sulfate==undefined?'-':a.sulfate }}</td>
+            <td *ngIf="colsfiltre[11].hide">{{ a.matiereInsoluble ==undefined?'-':a.matiereInsoluble}}</td>
+            <td *ngIf="colsfiltre[12].hide">{{ a.potassium==undefined?'-':a.potassium }}</td>
+            <td *ngIf="colsfiltre[13].hide">{{ a.sodium ==undefined?'-':a.sodium}}</td>
+            <td *ngIf="colsfiltre[14].hide">{{ a.chlorure==undefined?'-':a.chlorure }}</td>
+            <td *ngIf="colsfiltre[15].hide">{{ a.ph ==undefined?'-':a.ph}}</td>
+            <td *ngIf="colsfiltre[16].hide">{{ a.chlorureDeSodium ==undefined?'-':a.chlorureDeSodium}}</td>
+            <td *ngIf="colsfiltre[17].hide">{{ a.ferrocyanure ==undefined?'-':a.ferrocyanure}}</td>
+            <td *ngIf="colsfiltre[18].hide" >{{ a.description==undefined?'-':a.description }}</td>
+          </tr>
+        </ng-template>
+      </p-table>
+      <br><br><br><br>
+
+      <label class="font-bold top-5 text-5xl">Grain Size</label>
+      <br><br><br><br>
+      <div class=" top-5 bottom-5">
+        <label class="text-2xl font-bold">Date   :</label><span class="ml-2 text-2xl">{{SelectedPrintAnalysePhysique.dateAnalyse}}</span><br>
+        <label class="text-2xl font-bold">Reference  :</label><span class="ml-2 text-2xl">{{SelectedPrintAnalysePhysique.reference}}</span><br>
+        <label class="text-2xl font-bold">Relative :</label><span class=" ml-2 text-2xl">{{SelectedPrintAnalysePhysique.matiere}}</span><br>
+        <label class="text-2xl font-bold">Temperature :</label><span class=" ml-2 text-2xl">{{SelectedPrintAnalysePhysique.temperature}} °C</span><br>
+        <label class="text-2xl font-bold">Description :</label><span class=" ml-2 text-2xl">{{SelectedPrintAnalysePhysique.description}} </span><br>
+      </div>
+      <br><br><br>
+      <p-table class=" " #dt [value]="getTamisFiltred()" [columns]="cols"  responsiveLayout="scroll" id="TAMIS"      dataKey="id">
+
+        <ng-template pTemplate="header">
+          <tr>
+
+            <th pSortableColumn="dateintervention">Calibre <p-sortIcon field="dateintervention"></p-sortIcon></th>
+            <th pSortableColumn="qui">Weight <p-sortIcon field="qui"></p-sortIcon></th>
+            <th pSortableColumn="natureAction">Refus <p-sortIcon field="natureAction"></p-sortIcon></th>
+            <th pSortableColumn="resultat">Refus Cumulated<p-sortIcon field="resultat"></p-sortIcon></th>
+            <th pSortableColumn="certificat">pass Cumulated <p-sortIcon field="certificat"></p-sortIcon></th>
+            <th></th>
+          </tr>
+        </ng-template>
+        <ng-template pTemplate="body" let-tamis >
+          <tr >
+
+            <td >
+              {{tamis.calibre}}
+            </td>
+            <td>
+              {{tamis.masse}}
+            </td>
+            <td >
+              {{tamis.refus}}
+
+            </td>
+
+            <td >
+              {{tamis.refusCumulated}}
+            </td>
+            <td>
+              {{tamis.passCumulated}}
+            </td>
+
+
+          </tr>
+        </ng-template>
+      </p-table>
+
+
+
+    </div>
+  </ng-template>
+
+  <ng-template pTemplate="footer">
+    <p-button icon="pi pi-file-pdf" (click)="SavePDF()" class="text-green-50" label="PDF" pAutoFocus [autofocus]="true"  ></p-button>
+<!--    <button type="button" pButton pRipple  icon="pi pi-file-excel" (click)="ExportExcel()" class="p-button-success" label="EXCEL" pAutoFocus [autofocus]="true"  ></button>-->
+<!--    <button type="button" pButton pRipple icon="pi pi-file" (click)="exportcsv()" class="p-button-warning " label="CSV" pTooltip="CSV" ></button>-->
 
   </ng-template>
 </p-dialog>
