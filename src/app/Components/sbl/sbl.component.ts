@@ -317,7 +317,7 @@ export class SblComponent implements OnInit{
   }
 
   getAnalyse() {
-    return this.Selectetsbl.analysesPhysiques !== undefined ? this.Selectetsbl.analysesPhysiques : []
+    return this.Selectetsbl.analysesChimiques !== undefined ? this.Selectetsbl.analysesChimiques : []
   }
   getAnalyseGranoli() {
     const data=this.Selectetsbl.analysesPhysiques !== undefined ? this.Selectetsbl.analysesPhysiques : []

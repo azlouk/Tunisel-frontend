@@ -28,7 +28,7 @@ export class RecolteService {
   addRecolte(Recolte: Recolte, id:number) : Observable<Recolte>{
     return this.http.post<Recolte>(`${this.apiUrl}/recoltes/add/${id}`, Recolte);
   }
-  getSumRecoltePerMonthByBassinIdsAndYear( year:number,bassinsId:number[]) : Observable<Object[]>{
-    return this.http.post<Object[]>(`${this.apiUrl}/recoltes/sum-per-month/${year}`, bassinsId);
+  getSumRecoltePerMonthByBassinIdsAndYear( year:number,bassinsId:number[]) : Observable<any>{
+    return this.http.post<any>(`${this.apiUrl}/recoltes/sum-per-month/${year}`, bassinsId);
   }
 }

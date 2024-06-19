@@ -287,7 +287,11 @@ this.getsbnl()
 
     this.selectedSbnl = sbnl;
     this.visiblePrint = true
-    console.log("---->"+new JsonPipe().transform(this.selectedSbnl));
+    if(this.selectedSbnl){
+      if(this.selectedSbnl.analysesChimiques)
+      console.log("---->"+new JsonPipe().transform(this.selectedSbnl.analysesChimiques[0]));
+
+    }
   }
 
   Detailsbnl(sbnl: Sbnl) {
@@ -340,7 +344,7 @@ this.Viderfiltredate()
   }
 
   getAnalyse() {
-    return this.selectedSbnl.analysesPhysiques !== undefined ? this.selectedSbnl.analysesPhysiques : []
+    return this.selectedSbnl.analysesChimiques !== undefined ? this.selectedSbnl.analysesChimiques : []
   }
   getAnalyseGranoli() {
     const data=this.selectedSbnl.analysesPhysiques !== undefined ? this.selectedSbnl.analysesPhysiques : []
@@ -594,4 +598,6 @@ this.Viderfiltredate()
     })
   }
 
+  protected readonly JsonPipe = JsonPipe;
+  protected readonly JSON = JSON;
 }

@@ -113,10 +113,13 @@ recoltes:Recolte[]=[];
   RecoltePDF: boolean = false;
   DatefiltrageStart: Date = new Date();
   DatefiltrageEnd: Date = new Date();
- dateStart!: Date;
- dateEnd!: Date ;
- listSumRecolte:any[]=[]
+ dateStart: Date=new Date();
+ dateEnd: Date= new Date() ;
+ listSumRecolte:any;
+ listSumRecolteCopy:any;
   public  _selectedColumns: any[]=[];
+
+  MonthName:String[]=["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"]
   @Input() get selectedColumns(): any[] {
     return this._selectedColumns;
   }
@@ -126,7 +129,7 @@ recoltes:Recolte[]=[];
                 private recolteService:RecolteService) { }
 
   ngOnInit() {
-
+ this.listSumRecolteCopy=[]
 this.SelectetBassin={analysesPhysiques:[]}
     this.colsfiltre = [
       {id:0, field: 'reference', header: 'reference' ,hide:true},
@@ -296,8 +299,7 @@ this.SelectetBassin={analysesPhysiques:[]}
       .subscribe((bassins: Bassin[]) => {
         this.bassins = bassins;
         this.bassins.forEach(value => {
-          if(value.id)
-          this.bassinsId.push(value.id)
+
         })
         this.loading=false ;
       }, error => {
@@ -312,7 +314,7 @@ this.SelectetBassin={analysesPhysiques:[]}
     this.visiblePrint = true
   }
   filtredate() {
-    //this.Viderfiltredate()
+
     const data=this.SelectetBassin.analysesChimiques !== undefined ? this.SelectetBassin.analysesChimiques : []
     const newAnalyse:AnalysesChimique[] =[]
     data.forEach(v => {
@@ -677,36 +679,32 @@ exportRecolte(bassin: Bassin) {
     return formattedDate;
   }
   months: number[] = [];
+  public TotalPands: number=0;
   getMonthsBetweenDates(dateDebut1: Date, dateFin1: Date): number[] {
+this.selectedBassins.forEach(value => {
+  if(value.id)
+  this.bassinsId.push(value.id)
+})
+    this.listSumRecolte=[]
+    this.listSumRecolteCopy=[]
 
+this.months=[]
+    this.TotalPands=0;
 
-let dateDebut=this.transform(dateDebut1);
-let dateFin=this.transform(dateFin1);
 let year=this.getYear(dateFin1);
 
 
-    // Extract start month and year
-    const [startMonthStr, startYearStr] = dateDebut.split('-');
-    const startMonth = parseInt(startMonthStr);
-    const startYear = parseInt(startYearStr);
-
-    // Extract end month and year
-    const [endMonthStr, endYearStr] = dateFin.split('-');
-    const endMonth = parseInt(endMonthStr);
-    const endYear = parseInt(endYearStr);
-
-    // Calculate the number of months between the two dates
-    const monthsDiff = (endYear - startYear) * 12 + (endMonth - startMonth) +1;
-    // Generate the list of months between the two dates
-    for (let i = 0; i < monthsDiff; i++) {
-      const month = (startMonth + i) % 12 ; // Handle month rollover (e.g., December to January)
-     this.months.push(month);
+    for (let i = this.dateStart.getMonth()+1; i <= this.dateEnd.getMonth()+1; i++) {
+      // Handle month rollover (e.g., December to January)
+     this.months.push(i);
     }
     if(this.months.length>0){
       this.recolteService.getSumRecoltePerMonthByBassinIdsAndYear(year,this.bassinsId).subscribe(value => {
         this.listSumRecolte=value;
+        this.listSumRecolte=this.getDistBassin();
+this.listSumRecolteCopy=[...value]
         // this.listSumRecolte.forEach(value => console.table(new JsonPipe().transform((value as { month: number }).month)));
-        this.listSumRecolte=this.listSumRecolte.filter(lr => this.months.find(m =>m==lr.month )!==undefined)
+        //  this.listSumRecolte=this.listSumRecolte.filter(lr => this.months.find(m =>m==lr.month )!==undefined)
         console.log(new JsonPipe().transform(this.listSumRecolte))
       })
     }
@@ -726,4 +724,57 @@ let year=this.getYear(dateFin1);
   }
 
 
+  public getMonthName(month: number) {
+    return this.MonthName[month-1]
+  }
+
+
+
+  public getDistBassin() {
+    return this.removeDuplicates(this.listSumRecolte,"id")
+  }
+
+
+
+   removeDuplicates(arr: any[], key: string): any[] {
+    return arr.reduce((unique, item) => {
+      if (!unique.find((obj : any) => obj[key] === item[key])) {
+        unique.push(item);
+      }
+      return unique;
+    }, []);
+  }
+  public getMonthByBassinRecolte(recolte: any, m: number) {
+
+    const  data=this.listSumRecolteCopy.find((r:any)=> r.id==recolte.id && r.month==m);
+    return  data!==undefined?data.total:0;
+  }
+
+  public getTotalPerPond(recolte: any) :number{
+let total:number=0;
+    const list=this.listSumRecolteCopy.filter((rec:any)=>rec.id==recolte.id);
+    list.forEach((list:any)=>total=total+(list.total) );
+
+    return total;
+  }
+
+
+
+  getTotalPerMonth(month: number): number {
+    let total = 0;
+   this.listSumRecolteCopy.forEach((rec:any) => {
+      if(rec.month==month)
+     total += rec.total
+   });
+     return total;
+  }
+
+  public getTotlBassins() {
+    let totolBassin:number=0;
+    this.listSumRecolte.forEach((r:any)=>{
+      totolBassin+=this.getTotalPerPond(r) ;
+
+    } )
+    return totolBassin
+  }
 }

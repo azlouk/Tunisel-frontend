@@ -494,12 +494,17 @@
     <button pButton pRipple label="Close" icon="pi pi-times" class="p-button-text" (click)="hideDialogRecolte()"></button>
   </ng-template>
 </p-dialog>
-<p-dialog header="Chemical and particle size analysis" [(visible)]="RecoltePDF" [modal]="true" [style]="{width: '100%'}"     >
+<p-dialog header="" [(visible)]="RecoltePDF" [modal]="true" [style]="{width: '100%'}"     >
   <ng-template pTemplate="content">
 
-    <div class="shadow-1 p-2  " >chemical filtration  :
+    <div class="shadow-1 p-2  " >Pond filtration  :
 
-      <div class="card flex justify-content-evenly ">
+      <div class="card flex justify-content-evenly align-items-center ">
+        <p-multiSelect
+          [options]="bassins"
+          [(ngModel)]="selectedBassins"
+          optionLabel="nom"
+          placeholder="Select Ponds" />
         <div class="gap-1 flex align-items-center">Date Start :
           <p-calendar
             [(ngModel)]="dateStart"
@@ -515,8 +520,8 @@
             dateFormat="mm-yy"
             [readonlyInput]="true" />
         </div>
+
         <p-button (click)="getMonthsBetweenDates(dateStart,dateEnd)" class=" " icon="pi pi-search" label="Search"></p-button>
-        <p-button (click)="Viderfiltredate()" class=" " icon="pi pi-refresh" label="Refresh"></p-button>
 
       </div>
 
@@ -524,138 +529,56 @@
 
 
     <div #pdfpuit class="pt-8 pl-4 pr-4">
-      <img src="assets/layout/images/logo.png">
-      <div class="row justify-content-end font-bold flex text-1xl"> Creation date: <span class=" text-1xl font-bold  pi pi-calendar ">{{dateToday | date :"yyyy-MM-dd"}}</span></div>
-      <div class="row    font-bold flex text-1xl   "> Identification :<span class=" text-1xl font-bold   "> {{SelectetBassin.reference}}</span></div>
+      <div class="flex border-1 w-full justify-content-between mb-6">
+        <div class="flex-initial flex align-items-center justify-content-center   font-bold m-2 px-5 py-3 border-round">
+          <img src="assets/layout/images/logo.png">
 
-      <div class="row   text-8xl font-bold text-center m-2 p-3" > Analysis Report </div>
-      <div class="mt-5 mb-5">
+        </div>
+        <div class="flex-initial flex align-items-center justify-content-center  text-6xl font-bold m-2 px-5 py-3 border-round">
+          Recolte follow-up
+        </div>
+        <div class="flex-initial border-1 flex     w-25  font-bold m-2 px-5 py-3  ">
+          <div class="col   ">
+            <div class="row  mb-2    w-full  ">BEN GUERDANE, TUNISIA  </div>
+            <div class="row mb-2   w-full text-center    text-1xl font-bold  pi pi-calendar ">{{dateToday | date :"yyyy-MM-dd hh:ss a"}}</div>
 
-        <label class="font-bold text-5xl  ">Chemical analysis</label>
-        <br><br><br><br>
-        <label class="text-2xl font-bold">Reference  :</label><span class="ml-2 text-2xl">{{SelectetBassin.reference}}</span><br>
-        <label class="text-2xl font-bold">Date creation :</label><span class=" ml-2 text-2xl">{{SelectetBassin.dateCreation}}</span><br>
-
-
+          </div>
+        </div>
       </div>
 
-      <p-table #dt1 [value]="this.SelectetBassin.analysesChimiques !== undefined ? this.SelectetBassin.analysesChimiques : []" [tableStyle]="{ 'min-width': '50rem' }"
-               dataKey="id" id="EXCELRecolte"
-               [showCurrentPageReport]="true"
-               [globalFilterFields]="['dateAnalyse']"
+      <p-table class=" " #dt [value]="listSumRecolte" [columns]="cols"  responsiveLayout="scroll"  [globalFilterFields]="['pondName']"    dataKey="id">
 
-
-
-      >
-
-
-        <ng-template pTemplate="header">
+        <ng-template pTemplate="header" >
           <tr>
 
-            <ng-container  *ngFor="let c of getColsfiltr()">
-              <th class="ml-2 mr-2">{{ c.header }}</th>
+            <th pSortableColumn="nom"> Pond Name <p-sortIcon field="nom"></p-sortIcon></th>
+            <ng-container *ngFor="let month of months" >
+            <th >{{getMonthName(month)}} </th>
             </ng-container>
-
-
-            <!--       <th>-->
-            <!--         <p-columnFilter type="date" field="dateAnalyse" display="menu"></p-columnFilter>-->
-
-            <!--         Analysis Date</th>-->
-
-
-            <!--        <th>Temperature °C</th>-->
-            <!--        <th>wind (km/h)</th>-->
-            <!--        <th>humidity  </th>-->
-            <!--        <th>Densite (g/cm 3)</th>-->
-            <!--        <th>Suspended Matter (g)</th>-->
-            <!--        <th>salinite (psu)</th>-->
-            <!--        <th>Calcium (mmol/L)</th>-->
-            <!--        <th>Magnesium (g)</th>-->
-            <!--        <th>Sulfate (g)</th>-->
-            <!--        <th>Insoluble matter (g)</th>-->
-            <!--        <th>Potassium (mmol/L)</th>-->
-            <!--        <th>Sodium (mmol)</th>-->
-            <!--        <th>Chlorure (meq · L–1)</th>-->
-            <!--        <th>pH</th>-->
-            <!--        <th>sodium chloride (g)</th>-->
-            <!--        <th>Ferrocyanure (g/mol)</th>-->
-
+            <th>Total/Pond</th>
           </tr>
         </ng-template>
-        <ng-template pTemplate="body" let-a>
-          <tr>
+        <ng-template pTemplate="body" let-recolte let-ri="rowIndex">
 
+          <tr   >
 
-            <td *ngIf="colsfiltre[0].hide" >{{ a.reference==undefined?'-':a.reference }}</td>
+              <td> {{recolte.nom}}</td>
+            <td   *ngFor="let m of months" >
+                {{getMonthByBassinRecolte(recolte,m)}}
 
-            <td *ngIf="colsfiltre[1].hide">{{ a.dateAnalyse | date: 'MM/dd/yyyy'}}</td>
-            <td *ngIf="colsfiltre[2].hide">{{ a.temperature==undefined?'-':a.temperature }}</td>
-            <td *ngIf="colsfiltre[3].hide">{{ a.vent ==undefined?'-':a.vent}}</td>
-            <td *ngIf="colsfiltre[4].hide">{{ a.humidite==undefined?'-':a.humidite }}</td>
-            <td *ngIf="colsfiltre[5].hide">{{ a.densite ==undefined?'-':a.densite}}</td>
-            <td *ngIf="colsfiltre[6].hide">{{ a.matiereEnSuspension==undefined?'-':a.matiereEnSuspension }}</td>
-            <td *ngIf="colsfiltre[7].hide">{{ a.salinite ==undefined?'-':a.salinite}}</td>
-            <td *ngIf="colsfiltre[8].hide">{{ a.calcium==undefined?'-':a.calcium }}</td>
-            <td *ngIf="colsfiltre[9].hide" >{{ a.magnesium ==undefined?'-':a.magnesium}}</td>
-            <td *ngIf="colsfiltre[10].hide">{{ a.sulfate==undefined?'-':a.sulfate }}</td>
-            <td *ngIf="colsfiltre[11].hide">{{ a.matiereInsoluble ==undefined?'-':a.matiereInsoluble}}</td>
-            <td *ngIf="colsfiltre[12].hide">{{ a.potassium==undefined?'-':a.potassium }}</td>
-            <td *ngIf="colsfiltre[13].hide">{{ a.sodium ==undefined?'-':a.sodium}}</td>
-            <td *ngIf="colsfiltre[14].hide">{{ a.chlorure==undefined?'-':a.chlorure }}</td>
-            <td *ngIf="colsfiltre[15].hide">{{ a.ph ==undefined?'-':a.ph}}</td>
-            <td *ngIf="colsfiltre[16].hide">{{ a.chlorureDeSodium ==undefined?'-':a.chlorureDeSodium}}</td>
-            <td *ngIf="colsfiltre[17].hide">{{ a.ferrocyanure ==undefined?'-':a.ferrocyanure}}</td>
-            <td *ngIf="colsfiltre[18].hide" >{{ a.description==undefined?'-':a.description }}</td>
+            </td>
+            <td   >
+              {{getTotalPerPond(recolte)}}
+            </td>
+
           </tr>
-        </ng-template>
-      </p-table>
-      <br><br><br><br>
-
-      <label class="font-bold top-5 text-5xl">Grain Size</label>
-      <br><br><br><br>
-      <div class=" top-5 bottom-5">
-        <label class="text-2xl font-bold">Date   :</label><span class="ml-2 text-2xl">{{SelectedPrintAnalysePhysique.dateAnalyse}}</span><br>
-        <label class="text-2xl font-bold">Reference  :</label><span class="ml-2 text-2xl">{{SelectedPrintAnalysePhysique.reference}}</span><br>
-        <label class="text-2xl font-bold">Relative :</label><span class=" ml-2 text-2xl">{{SelectedPrintAnalysePhysique.matiere}}</span><br>
-        <label class="text-2xl font-bold">Temperature :</label><span class=" ml-2 text-2xl">{{SelectedPrintAnalysePhysique.temperature}} °C</span><br>
-        <label class="text-2xl font-bold">Description :</label><span class=" ml-2 text-2xl">{{SelectedPrintAnalysePhysique.description}} </span><br>
-      </div>
-      <br><br><br>
-      <p-table class=" " #dt [value]="getTamisFiltred()" [columns]="cols"  responsiveLayout="scroll" id="TAMIS"      dataKey="id">
-
-        <ng-template pTemplate="header">
-          <tr>
-
-            <th pSortableColumn="dateintervention">Calibre <p-sortIcon field="dateintervention"></p-sortIcon></th>
-            <th pSortableColumn="qui">Weight <p-sortIcon field="qui"></p-sortIcon></th>
-            <th pSortableColumn="natureAction">Refus <p-sortIcon field="natureAction"></p-sortIcon></th>
-            <th pSortableColumn="resultat">Refus Cumulated<p-sortIcon field="resultat"></p-sortIcon></th>
-            <th pSortableColumn="certificat">pass Cumulated <p-sortIcon field="certificat"></p-sortIcon></th>
-            <th></th>
-          </tr>
-        </ng-template>
-        <ng-template pTemplate="body" let-tamis >
-          <tr >
-
-            <td >
-              {{tamis.calibre}}
-            </td>
-            <td>
-              {{tamis.masse}}
-            </td>
-            <td >
-              {{tamis.refus}}
+          <tr *ngIf="ri+1==listSumRecolte.length" class="bg-green-200">
+            <td>Total/Month</td>
+            <td   *ngFor="let m of months" >
+              {{getTotalPerMonth(m)}}
 
             </td>
-
-            <td >
-              {{tamis.refusCumulated}}
-            </td>
-            <td>
-              {{tamis.passCumulated}}
-            </td>
-
-
+            <td>{{getTotlBassins()}}</td>
           </tr>
         </ng-template>
       </p-table>
@@ -667,8 +590,6 @@
 
   <ng-template pTemplate="footer">
     <p-button icon="pi pi-file-pdf" (click)="SavePDF()" class="text-green-50" label="PDF" pAutoFocus [autofocus]="true"  ></p-button>
-<!--    <button type="button" pButton pRipple  icon="pi pi-file-excel" (click)="ExportExcel()" class="p-button-success" label="EXCEL" pAutoFocus [autofocus]="true"  ></button>-->
-<!--    <button type="button" pButton pRipple icon="pi pi-file" (click)="exportcsv()" class="p-button-warning " label="CSV" pTooltip="CSV" ></button>-->
 
   </ng-template>
 </p-dialog>
