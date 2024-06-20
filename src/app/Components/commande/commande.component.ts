@@ -101,6 +101,7 @@ commandesCopy: Commande[]=[];
   TotalHarv: number=0;
   TotalProd: number=0;
   TotalTrQu: number=0;
+  TotalVolume: number=0;
   VolumeAvailble: number=0;
   constructor(private router: Router,
               private messageService: MessageService,
@@ -168,7 +169,8 @@ commandesCopy: Commande[]=[];
       { field: 'dateFermeture', header: 'dateFermeture' },
     ];
 
-this.getAllStockOrder();
+
+
   }
 
   openNew() {
@@ -237,6 +239,7 @@ this.getAllStockOrder();
     this.commandeService.getAllCommandeDTO().subscribe((ListCommande:  Commande[]) => {
       this.commandes=ListCommande;
      this.commandesCopy=[... this.commandes]
+      this.getAllStockOrder();
       this.loading=false ;
       this.initiaTimeLine();
     }, error => {
@@ -312,16 +315,35 @@ this.getAllStockOrder();
   }
 
 
+  // getAllStockOrder() {
+  //
+  //   this.stockOrderService.getAllStockOrder()
+  //     .subscribe((stockOrders: StockOrder[]) => {
+  //       this.stockOrders = stockOrders;
+  //       if(this.stockOrders.length>0){
+  //         // alert(new JsonPipe().transform(this.stockOrders))
+  //       this.sortStockOrdersByCreationDateDesc()
+  //
+  //
+  //         this.stockSelected=this.stockOrders[0];}
+  //     }, error => {
+  //       console.log( error);
+  //     });
+  // }
   getAllStockOrder() {
-
     this.stockOrderService.getAllStockOrder()
-      .subscribe((stockOrders: StockOrder[]) => {
-        this.stockOrders = stockOrders;
-
+      .subscribe((stockOrders: any[]) => {
+        this.stockOrders = stockOrders.map(stockOrder => ({
+          ...stockOrder,
+          dateCreation: new Date(stockOrder.dateCreation)
+        })).sort((a: StockOrder, b: StockOrder) => b.dateCreation.getTime() - a.dateCreation.getTime());
+        this.stockSelected = this.stockOrders[0];
+       this. filtreByStock( this.stockSelected );
       }, error => {
-        console.log( error);
+        console.log(error);
       });
   }
+
 
 
   filtreByStock(stockSelected: StockOrder) {
@@ -357,5 +379,23 @@ const total=stockSelected.volumeSaline+stockSelected.volumeTerrain+stockSelected
         this.TotalTrQu+=parseFloat(l.quantiteTransfert+'');
 
     } ))
+  }
+
+  CalculeTotalVolume(commande:Commande):number {
+    // this.TotalHarv=0;
+    // this.TotalTrQu=0;
+    // this.TotalProd=0 ;
+    this.TotalVolume=0 ;
+commande.ligneCommandes?.forEach(l => {
+  if(l.quantiteTransfert)
+    this.TotalVolume+=parseFloat(l.quantiteTransfert+'');
+
+})
+    return  this.TotalVolume;
+
+    }
+  sortStockOrdersByCreationDateDesc() {
+    this.stockOrders.sort((a, b) => b.dateCreation.getTime() - a.dateCreation.getTime());
+    alert(new JsonPipe().transform("after: "+this.stockOrders))
   }
 }

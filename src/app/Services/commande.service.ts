@@ -23,6 +23,7 @@ export class CommandeService {
 
     return this.http.get<Commande[]>(`${this.apiUrl}/commandes/stockOrder/${stockOrderId}`, { params });
   }
+
   getAllCommandeDTO(): Observable<Commande[]> {
     return this.http.get<Commande[]>(`${this.apiUrl}/commandes/readDTO`) ;
   }

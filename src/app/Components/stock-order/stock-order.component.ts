@@ -61,6 +61,7 @@ import {MultiSelectModule} from "primeng/multiselect";
 export class StockOrderComponent implements OnInit{
   productDialog: boolean = false;
   TransferDialog: boolean = false;
+  AddToSalineDialog: boolean = false;
 
   deleteProductDialog: boolean = false;
 
@@ -234,6 +235,7 @@ export class StockOrderComponent implements OnInit{
  startingPoint: any;
  arrivingPoint: any;
  TransferQuantity: any;
+ AddQuantityToSaline: any;
 
   calculTotalVolume(stockOrder:StockOrder):number {
 
@@ -246,9 +248,18 @@ export class StockOrderComponent implements OnInit{
       this.stockOrder=stockOrder;
     this.isUpdateStockOrder=true;
   }
+ AddToSalineStockOrder(stockOrder: StockOrder) {
+    this.AddQuantityToSaline=0;
+    this.AddToSalineDialog=true;
+    this.stockOrder=stockOrder;
+    this.isUpdateStockOrder=true;
+  }
 
 hideDialogTransfer() {
     this.TransferDialog=false;
+
+  }hideDialogAddToSaline() {
+    this.AddToSalineDialog=false;
 
   }
 
@@ -302,6 +313,13 @@ hideDialogTransfer() {
     }
 
     this.TransferDialog = false;
+    this.isUpdateStockOrder = false;
+  }
+
+  saveAddToSaline():void{
+    this.stockOrder.volumeSaline+=this.AddQuantityToSaline;
+    this.saveStockOrder();
+    this.AddToSalineDialog = false;
     this.isUpdateStockOrder = false;
   }
 }
