@@ -1,4 +1,4 @@
-<div class="grid">
+<div class="grid" *ngIf="getToken()=='ADMIN'" >
   <div class="col-12">
     <div class="card px-6 py-6">
       <p-toast></p-toast>
@@ -7,7 +7,7 @@
           <div class="my-2">
             <button *ngIf="getToken()=='ADMIN'" pButton pRipple label="Add" icon="pi pi-plus" class="p-button-success mr-2" (click)="openNew()"></button>
             <button *ngIf="getToken()=='ADMIN'"  pButton pRipple label="Delete" icon="pi pi-trash" class="p-button-danger mr-2" (click)="deleteSelectedBassins()" [disabled]="!selectedStockOrders || !selectedStockOrders.length"></button>
-            <button pButton pRipple label="Refresh" icon="pi pi-refresh" class="p-button-primary mr-2" (click)="getAllBassin()"  ></button>
+            <button pButton pRipple label="Refresh" icon="pi pi-refresh" class="p-button-primary mr-2" (click)="getAllStockOrder()"  ></button>
 
           </div>
         </ng-template>

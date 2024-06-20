@@ -214,6 +214,7 @@ export class StockOrderComponent implements OnInit{
       .subscribe((bassins: Bassin[]) => {
         this.bassins = bassins;
         this.loading=false ;
+
       }, error => {
         console.log( error);
       });

@@ -2,6 +2,7 @@
 import {OnInit} from '@angular/core';
 import {Component} from '@angular/core';
 import {LayoutService} from './service/app.layout.service';
+import {getToken} from "../../../main";
 
 @Component({
   selector: 'app-menu',
@@ -85,4 +86,6 @@ export class AppMenuComponent implements OnInit {
     ]
 
   }
+
+  protected readonly getToken = getToken;
 }
