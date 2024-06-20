@@ -4,7 +4,7 @@
       <p-toast></p-toast>
       <p-toolbar styleClass="mb-4">
         <ng-template pTemplate="left">
-          <div class="flex justify-content-between ">
+          <div class="flex justify-content-between w-full">
 
             <div class="">
             <button *ngIf="getToken()=='ADMIN'" pButton pRipple label="Add" icon="pi pi-plus" class="p-button-success mr-2" (click)="openNew()"></button>
@@ -12,14 +12,15 @@
             <button pButton pRipple label="Refresh" icon="pi pi-refresh" class="p-button-primary mr-2" (click)="getAllBassin()"  ></button>
             </div>
 
-            <div class="flex justify-content-end">
-              <button pButton pRipple icon="pi pi-file-pdf" class="p-button-rounded p-button-primary mr-2"  (click)="exportRecolte(bassin)"></button>
-            </div>
+
 
           </div>
         </ng-template>
-
-
+        <ng-template pTemplate="right">
+          <div class="">
+            <button pButton pRipple icon="pi pi-file-pdf" class="p-button-rounded p-button-primary mr-2"  (click)="exportRecolte(bassin)">Generate</button>
+          </div>
+        </ng-template>
       </p-toolbar>
 
       <p-table #dt [loading]="loading" [value]="bassins" [columns]="cols"  responsiveLayout="scroll" [rows]="10" [globalFilterFields]="['surface','etat','id','emplacement','nom','dateCreation','reference','description']" [paginator]="true" [rowsPerPageOptions]="[10,20,30]" [showCurrentPageReport]="true" currentPageReportTemplate="Display  {first} to  {last} of  {totalRecords} entries" [(selection)]="selectedBassins" selectionMode="multiple" [rowHover]="true" dataKey="id">
