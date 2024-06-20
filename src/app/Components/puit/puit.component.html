@@ -172,7 +172,7 @@
 
 <!--PrintPDF Rapport-->
 
-<p-dialog header="Analyse chimique" [(visible)]="visiblePrint" [modal]="true"   [breakpoints]="{ '1199px': '75vw', '575px': '90vw' }">
+<p-dialog header="Analyse chimique" [(visible)]="visiblePrint" [modal]="true"   [style]="{width: '100%'}" >
 <div class="shadow-1 p-2" >filtrate :
 
   <div class="card flex justify-content-evenly ">
@@ -188,7 +188,8 @@
     <p-button (click)="filtredate()" class=" " icon="pi pi-search" label="Search"></p-button>
     <p-button (click)="Viderfiltredate()" class=" " icon="pi pi-eye" label="View all"></p-button>
 
-  </div>
+  </div >
+  <div class="shadow-1 p-2 overflow-auto">
   <p-checkbox [(ngModel)]="SelectAll" (ngModelChange)="SelectAllCheck()" [binary]="true" inputId="binary" class="text-primary" label="All"></p-checkbox>
 
   <th *ngFor="let c of colsfiltre">
@@ -196,6 +197,7 @@
     <p-checkbox [(ngModel)]="c.hide" label=" {{ c.header}}" [binary]="true" inputId="binary"></p-checkbox>
 
   </th>
+  </div>
 </div>
 
   <hr>
@@ -247,7 +249,7 @@
    >
 
 
-    <ng-template pTemplate="header">
+    <ng-template pTemplate="header flex flex-wrap">
       <tr>
 
         <th *ngFor="let c of getColsfiltr()">
