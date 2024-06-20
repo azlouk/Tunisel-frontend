@@ -32,7 +32,16 @@ import * as XLSX from 'xlsx';
 import {TooltipModule} from "primeng/tooltip";
 import * as Papa from 'papaparse';
 import Swal from "sweetalert2";
+import {Recolte} from "../../Models/recolte";
+import {RecolteService} from "../../Services/recolte.service";
+import {RippleModule} from "primeng/ripple";
+import {log} from "@angular-devkit/build-angular/src/builders/ssr-dev-server";
 
+interface RecolteSummary {
+  total: number;
+  month: number;
+  bassinId: number;
+}
 @Component({
   selector: 'app-bassin',
   standalone: true,
@@ -56,7 +65,7 @@ import Swal from "sweetalert2";
     MultiSelectModule,
     DatePipe,
     CheckboxModule,
-    ListboxModule, CommonModule, AutoFocusModule, TooltipModule
+    ListboxModule, CommonModule, AutoFocusModule, TooltipModule, RippleModule
   ],
   templateUrl: './bassin.component.html',
   styleUrl: './bassin.component.css'
@@ -67,6 +76,7 @@ export class BassinComponent implements OnInit {
   deleteProductDialog: boolean = false;
 
   deleteProductsDialog: boolean = false;
+  RecolteDialog: boolean = false;
 
   products: Product[] = [];
 
@@ -83,6 +93,7 @@ export class BassinComponent implements OnInit {
   rowsPerPageOptions = [5, 10, 20];
   // ======********============
   bassins: Bassin[] = [];
+  bassinsId: number[] = [];
 
   bassin: Bassin = {};
 
@@ -93,20 +104,32 @@ export class BassinComponent implements OnInit {
   selectedPuit?: Puit;
   SelectAll: boolean = false;
 loading:boolean=false ;
+recolte=new Recolte();
+recolteUP=new Recolte();
+recoltes:Recolte[]=[];
   @ViewChild("pdfpuit") htmlContent: ElementRef | undefined;
   visiblePrint: boolean = false;
   dateToday: Date = new Date();
-
+  RecoltePDF: boolean = false;
   DatefiltrageStart: Date = new Date();
   DatefiltrageEnd: Date = new Date();
+ dateStart: Date=new Date();
+ dateEnd: Date= new Date() ;
+ listSumRecolte:any;
+ listSumRecolteCopy:any;
   public  _selectedColumns: any[]=[];
+
+  MonthName:String[]=["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"]
   @Input() get selectedColumns(): any[] {
     return this._selectedColumns;
   }
-  constructor(  private messageService: MessageService,private bassinService :BassinService,private puitService:PuitService) { }
+  constructor(  private messageService: MessageService,
+                private bassinService :BassinService,
+                private puitService:PuitService,
+                private recolteService:RecolteService) { }
 
   ngOnInit() {
-
+ this.listSumRecolteCopy=[]
 this.SelectetBassin={analysesPhysiques:[]}
     this.colsfiltre = [
       {id:0, field: 'reference', header: 'reference' ,hide:true},
@@ -139,6 +162,7 @@ this.SelectetBassin={analysesPhysiques:[]}
 
     },error => {
       console.log(error)})
+    this.getAllRecolte();
   }
 
   openNew() {
@@ -154,7 +178,7 @@ this.SelectetBassin={analysesPhysiques:[]}
   }
 
   editBassin(bassin: Bassin) {
-    // this.isUpdateUser=true;
+    this.isUpdateBassin=true;
     this.bassin = { ...bassin };
     this.productDialog = true;
   }
@@ -274,6 +298,9 @@ this.SelectetBassin={analysesPhysiques:[]}
     this.bassinService.getAllBassinsDTO()
       .subscribe((bassins: Bassin[]) => {
         this.bassins = bassins;
+        this.bassins.forEach(value => {
+
+        })
         this.loading=false ;
       }, error => {
         console.log('Error fetching users:', error);
@@ -287,7 +314,7 @@ this.SelectetBassin={analysesPhysiques:[]}
     this.visiblePrint = true
   }
   filtredate() {
-    //this.Viderfiltredate()
+
     const data=this.SelectetBassin.analysesChimiques !== undefined ? this.SelectetBassin.analysesChimiques : []
     const newAnalyse:AnalysesChimique[] =[]
     data.forEach(v => {
@@ -585,4 +612,169 @@ this.SelectetBassin={analysesPhysiques:[]}
 
 
   protected readonly getToken = getToken;
+
+
+
+  AddRecolte(bassin: Bassin) {
+
+    this.RecolteDialog=true;
+this.bassin=bassin
+    this.getAllRecolte()
+  }
+
+  hideDialogRecolte() {
+    this.RecolteDialog=false;
+  }
+
+  saveRecolte() {
+    if (    this.bassin.id!==undefined)
+  this.recolteService.addRecolte(this.recolte,this.bassin.id).subscribe(value => {
+    this.getAllRecolte();
+    this.recolte=new Recolte();
+  })
+    }
+    getAllRecolte(){
+    if(this.bassin.id)
+  this.bassinService.getAllBassinsById(this.bassin.id).subscribe(value =>{
+    if(value.recolteList) {
+      this.recoltes = value.recolteList
+    } }
+     )
+    }
+
+
+  deleteRecolte(recolte: Recolte)   {
+  this.recolteService.deleteRecolte(recolte.id).subscribe(value =>     this.recoltes= this.recoltes.filter(rec => rec.id !== recolte.id)
+  )
+
+  }
+
+  saveUpdateRecolte() {
+    this.recolteService.updateRecolte(this.recolteUP).subscribe(value => {
+      this.getAllRecolte();
+
+    })
+  }
+
+  updateRecolte(recolte: Recolte) {
+    this.recolteUP=recolte;
+  }
+
+exportRecolte(bassin: Bassin) {
+    this.RecoltePDF=true;
+  }
+
+  // ======================recolte PDF=======================
+  transform(value: Date): string {
+    // Parse the input date string
+    const date = new Date(value);
+
+    // Extract month and year
+    const month = date.getMonth() + 1; // Months are zero-based, so add 1
+    const year = date.getFullYear();
+
+    // Format the date to MM-YYYY
+    const formattedDate = `${month.toString().padStart(2, '0')}-${year}`;
+
+    return formattedDate;
+  }
+  months: number[] = [];
+  public TotalPands: number=0;
+  getMonthsBetweenDates(dateDebut1: Date, dateFin1: Date): number[] {
+this.selectedBassins.forEach(value => {
+  if(value.id)
+  this.bassinsId.push(value.id)
+})
+    this.listSumRecolte=[]
+    this.listSumRecolteCopy=[]
+
+this.months=[]
+    this.TotalPands=0;
+
+let year=this.getYear(dateFin1);
+
+
+    for (let i = this.dateStart.getMonth()+1; i <= this.dateEnd.getMonth()+1; i++) {
+      // Handle month rollover (e.g., December to January)
+     this.months.push(i);
+    }
+    if(this.months.length>0){
+      this.recolteService.getSumRecoltePerMonthByBassinIdsAndYear(year,this.bassinsId).subscribe(value => {
+        this.listSumRecolte=value;
+        this.listSumRecolte=this.getDistBassin();
+this.listSumRecolteCopy=[...value]
+        // this.listSumRecolte.forEach(value => console.table(new JsonPipe().transform((value as { month: number }).month)));
+        //  this.listSumRecolte=this.listSumRecolte.filter(lr => this.months.find(m =>m==lr.month )!==undefined)
+        console.log(new JsonPipe().transform(this.listSumRecolte))
+      })
+    }
+    return this.months;
+  }
+
+  getYear(value: Date): number {
+    // Parse the input date string
+    const date = new Date(value);
+
+    // Extract year
+    const year = date.getFullYear();
+
+    // Format the date to YYYY
+    // const formattedDate = `${year}`;
+    return year;
+  }
+
+
+  public getMonthName(month: number) {
+    return this.MonthName[month-1]
+  }
+
+
+
+  public getDistBassin() {
+    return this.removeDuplicates(this.listSumRecolte,"id")
+  }
+
+
+
+   removeDuplicates(arr: any[], key: string): any[] {
+    return arr.reduce((unique, item) => {
+      if (!unique.find((obj : any) => obj[key] === item[key])) {
+        unique.push(item);
+      }
+      return unique;
+    }, []);
+  }
+  public getMonthByBassinRecolte(recolte: any, m: number) {
+
+    const  data=this.listSumRecolteCopy.find((r:any)=> r.id==recolte.id && r.month==m);
+    return  data!==undefined?data.total:0;
+  }
+
+  public getTotalPerPond(recolte: any) :number{
+let total:number=0;
+    const list=this.listSumRecolteCopy.filter((rec:any)=>rec.id==recolte.id);
+    list.forEach((list:any)=>total=total+(list.total) );
+
+    return total;
+  }
+
+
+
+  getTotalPerMonth(month: number): number {
+    let total = 0;
+   this.listSumRecolteCopy.forEach((rec:any) => {
+      if(rec.month==month)
+     total += rec.total
+   });
+     return total;
+  }
+
+  public getTotlBassins() {
+    let totolBassin:number=0;
+    this.listSumRecolte.forEach((r:any)=>{
+      totolBassin+=this.getTotalPerPond(r) ;
+
+    } )
+    return totolBassin
+  }
 }

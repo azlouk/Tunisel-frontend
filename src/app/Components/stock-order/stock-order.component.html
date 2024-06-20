@@ -1,0 +1,219 @@
+<div class="grid">
+  <div class="col-12">
+    <div class="card px-6 py-6">
+      <p-toast></p-toast>
+      <p-toolbar styleClass="mb-4">
+        <ng-template pTemplate="left">
+          <div class="my-2">
+            <button *ngIf="getToken()=='ADMIN'" pButton pRipple label="Add" icon="pi pi-plus" class="p-button-success mr-2" (click)="openNew()"></button>
+            <button *ngIf="getToken()=='ADMIN'"  pButton pRipple label="Delete" icon="pi pi-trash" class="p-button-danger mr-2" (click)="deleteSelectedBassins()" [disabled]="!selectedStockOrders || !selectedStockOrders.length"></button>
+            <button pButton pRipple label="Refresh" icon="pi pi-refresh" class="p-button-primary mr-2" (click)="getAllBassin()"  ></button>
+
+          </div>
+        </ng-template>
+
+
+      </p-toolbar>
+
+      <p-table #dt [loading]="loading" [value]="stockOrders" [columns]="cols"  responsiveLayout="scroll" [rows]="10" [globalFilterFields]="['id','name','calibre','terrain','quai','total','reference','saline','dateCreation','port']" [paginator]="true" [rowsPerPageOptions]="[10,20,30]" [showCurrentPageReport]="true" currentPageReportTemplate="Display  {first} to  {last} of  {totalRecords} entries" [(selection)]="selectedStockOrders" selectionMode="multiple" [rowHover]="true" dataKey="id">
+        <ng-template pTemplate="caption">
+          <div class="flex flex-column md:flex-row md:justify-content-between md:align-items-center">
+            <h5 class="m-0">Stock Order management</h5>
+            <span class="block mt-2 md:mt-0 p-input-icon-left">
+                            <i class="pi pi-search"></i>
+                            <input  type="text" pInputText (input)="onGlobalFilter(dt, $event)" placeholder="Search..."  class="w-full sm:w-auto"/>
+                        </span>
+
+
+
+          </div>
+        </ng-template>
+        <ng-template pTemplate="header">
+          <tr>
+            <th style="width: 3rem">
+              <p-tableHeaderCheckbox></p-tableHeaderCheckbox>
+            </th>
+            <th pSortableColumn="id">Id <p-sortIcon field="id"></p-sortIcon></th>
+            <th pSortableColumn="reference">Reference <p-sortIcon field="reference"></p-sortIcon></th>
+            <th pSortableColumn="name">Name <p-sortIcon field="name"></p-sortIcon></th>
+            <th pSortableColumn="dateCreation">Creation Date<p-sortIcon field="dateCreation"></p-sortIcon></th>
+            <th pSortableColumn="calibre">Calibre <p-sortIcon field="calibre"></p-sortIcon></th>
+            <th pSortableColumn="saline">Saline volume <p-sortIcon field="saline"></p-sortIcon></th>
+            <th pSortableColumn="terrain">Terrain volume<p-sortIcon field="terrain"></p-sortIcon></th>
+            <th pSortableColumn="port">Port volume<p-sortIcon field="port"></p-sortIcon></th>
+            <th pSortableColumn="quai">Quai volume <p-sortIcon field="quai"></p-sortIcon></th>
+            <th pSortableColumn="total">Total volume<p-sortIcon field="total"></p-sortIcon></th>
+            <th></th>
+          </tr>
+        </ng-template>
+        <ng-template pTemplate="body" let-stockOrder >
+          <tr >
+            <td>
+              <p-tableCheckbox [value]="stockOrder"></p-tableCheckbox>
+            </td>
+            <td >
+              <span class="p-column-title">Id</span>
+              {{stockOrder.id}}
+            </td>
+            <td >
+              <span class="p-column-title">Reference</span>
+              {{stockOrder.reference}}
+            </td>
+            <td >
+              <span class="p-column-title">Name</span>
+              {{stockOrder.nom}}
+            </td>
+
+            <td >
+              <span class="p-column-title">Creation Date</span>
+              {{stockOrder.dateCreation| date :'dd-mm-yyyy' }}
+            </td>
+            <td >
+              <span class="p-column-title">Calibre</span>
+              {{stockOrder.calibre}}
+            </td>
+            <td >
+              <span class="p-column-title">Saline volume</span>
+              {{stockOrder.volumeSaline}}
+            </td>
+            <td >
+              <span class="p-column-title">Terrain volume</span>
+              {{stockOrder.volumeTerrain}}
+            </td>
+            <td >
+              <span class="p-column-title">Port volume</span>
+              {{stockOrder.volumePort}}
+            </td>
+            <td >
+              <span class="p-column-title">Quai volume</span>
+              {{stockOrder.volumeQuai}}
+            </td>
+            <td >
+              <span class="p-column-title">Total volume</span>
+                  {{calculTotalVolume(stockOrder)}}
+            </td>
+            <td>
+              <div class="flex">
+                <button *ngIf="getToken()=='ADMIN'" pButton pRipple icon="pi pi-arrow-right-arrow-left" class="p-button-rounded p-button-info mr-2" (click)="transferStockOrder(stockOrder)"></button>
+                <button *ngIf="getToken()=='ADMIN'" pButton pRipple icon="pi pi-pencil" class="p-button-rounded p-button-success mr-2" (click)=" editStockOrder(stockOrder)"></button>
+                <button *ngIf="getToken()=='ADMIN'" pButton pRipple icon="pi pi-trash" class="p-button-rounded p-button-warning mr-2" (click)="deleteStockOrder(stockOrder)"></button>
+
+              </div>
+            </td>
+          </tr>
+        </ng-template>
+
+      </p-table>
+    </div>
+
+    <p-dialog [(visible)]="productDialog" [style]="{width: '600px'}" header="Pond details" [modal]="true" class="p-fluid">
+      <ng-template pTemplate="content">
+        <div class="field">
+          <label for="bassin">Pond</label>
+          <p-multiSelect id="bassin" [options]="bassins"    [(ngModel)]="stockOrder.bassinList"  placeholder="Select a Pond" optionLabel="reference" display="chip" ></p-multiSelect>
+
+        </div>
+
+        <div class="field">
+          <label for="reference">Reference</label>
+          <input type="text" pInputText id="reference"  [(ngModel)]="stockOrder.reference"/>
+        </div>
+        <div class="field">
+          <label for="Nom">Nom</label>
+          <input type="text" pInputText id="nom"  [(ngModel)]="stockOrder.nom" />
+        </div>
+
+        <div class="field">
+          <label for="dateCreation">Creation Date</label>
+          <input  class="p-2 shadow-1" type="date" dateFormat="yy-mm-dd"  pInputText id="dateCreation"  [(ngModel)]="stockOrder.dateCreation"  />
+        </div>
+        <div class="field">
+          <label for="calibre">Calibre</label>
+          <p-inputNumber  id="calibre"  [(ngModel)]="stockOrder.calibre" mode="decimal" [minFractionDigits]="3" ></p-inputNumber>
+        </div>
+
+        <div class="field">
+          <label for="saline">Volume Saline</label>
+          <p-inputNumber  id="saline"  [(ngModel)]="stockOrder.volumeSaline" mode="decimal" [minFractionDigits]="3" ></p-inputNumber>
+        </div>
+        <div class="field">
+          <label for="terrain">Volume Terrain</label>
+          <p-inputNumber  id="terrain"  [(ngModel)]="stockOrder.volumeTerrain" mode="decimal" [minFractionDigits]="3" ></p-inputNumber>
+        </div>
+        <div class="field">
+          <label for="port">Volume Port</label>
+          <p-inputNumber  id="port"  [(ngModel)]="stockOrder.volumePort" mode="decimal" [minFractionDigits]="3" ></p-inputNumber>
+        </div>
+        <div class="field">
+          <label for="quai">Volume Quai</label>
+          <p-inputNumber  id="quai"  [(ngModel)]="stockOrder.volumeQuai" mode="decimal" [minFractionDigits]="3" ></p-inputNumber>
+        </div>
+
+
+      </ng-template>
+
+
+
+
+      <ng-template pTemplate="footer">
+        <button pButton pRipple label="Cancel" icon="pi pi-times" class="p-button-text" (click)="hideDialog()"></button>
+        <button pButton pRipple label="Save" icon="pi pi-check" class="p-button-text" (click)="saveStockOrder()"></button>
+      </ng-template>
+    </p-dialog>
+
+    <p-dialog  class="p-fluid" [(visible)]="deleteProductDialog" header="Confirm" [modal]="true" [style]="{width:'450px'}">
+      <div class="flex align-items-center   justify-content-center">
+        <i class="pi pi-exclamation-triangle mr-3" style="font-size: 2rem"></i>
+        <span *ngIf="product">Are you sure you want to delete?</span>
+      </div>
+      <ng-template pTemplate="footer">
+        <button pButton pRipple icon="pi pi-times" class="p-button-text" label="No" (click)="deleteProductDialog = false"></button>
+        <button pButton pRipple icon="pi pi-check" class="p-button-text" label="Yes" (click)="confirmDelete()"></button>
+      </ng-template>
+    </p-dialog>
+
+    <p-dialog [(visible)]="deleteProductsDialog" header="Confirm" [modal]="true" [style]="{width:'450px'}">
+      <div class="flex align-items-center justify-content-center overflow-auto" >
+        <i class="pi pi-exclamation-triangle mr-3" ></i>
+        <span>Are you sure you want to delete?</span>
+      </div>
+      <ng-template pTemplate="footer">
+        <button pButton pRipple icon="pi pi-times" class="p-button-text" label="No" (click)="deleteProductsDialog = false"></button>
+        <button pButton pRipple icon="pi pi-check" class="p-button-text" label="Yes" (click)="confirmDeleteSelected()"></button>
+      </ng-template>
+    </p-dialog>
+  </div>
+</div>
+
+
+<p-dialog [(visible)]="TransferDialog" [style]="{width: '800px'}" header="Transfer Quantity" [modal]="true" class="p-fluid">
+  <ng-template pTemplate="content">
+    <div class="flex gap-4 justify-content-between h-16rem">
+      <div class="field">
+        <label >Starting point</label>
+        <p-dropdown [options]="TransferAttributs" [(ngModel)]="startingPoint" [editable]="true" optionLabel="label" class="w-full" ></p-dropdown>
+      </div>
+
+      <div class="field">
+        <label >Arriving point</label>
+        <p-dropdown [options]="TransferAttributs" [(ngModel)]="arrivingPoint" [editable]="true" optionLabel="label" class="w-full" ></p-dropdown>
+      </div>
+
+      <div class="field">
+        <label for="transfer">Transfer Quantity</label>
+        <p-inputNumber  id="transfer"  [(ngModel)]="TransferQuantity" mode="decimal" [minFractionDigits]="3" ></p-inputNumber>
+      </div>
+
+    </div>
+  </ng-template>
+
+
+
+
+  <ng-template pTemplate="footer">
+    <button pButton pRipple label="Cancel" icon="pi pi-times" class="p-button-text" (click)="hideDialogTransfer()"></button>
+    <button pButton pRipple label="Save" icon="pi pi-check" class="p-button-text" (click)="saveTransferQuantity()"></button>
+  </ng-template>
+</p-dialog>
+
+

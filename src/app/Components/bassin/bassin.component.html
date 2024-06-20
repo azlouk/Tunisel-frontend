@@ -4,10 +4,17 @@
       <p-toast></p-toast>
       <p-toolbar styleClass="mb-4">
         <ng-template pTemplate="left">
-          <div class="my-2">
+          <div class="flex justify-content-between ">
+
+            <div class="">
             <button *ngIf="getToken()=='ADMIN'" pButton pRipple label="Add" icon="pi pi-plus" class="p-button-success mr-2" (click)="openNew()"></button>
             <button *ngIf="getToken()=='ADMIN'"  pButton pRipple label="Delete" icon="pi pi-trash" class="p-button-danger mr-2" (click)="deleteSelectedBassins()" [disabled]="!selectedBassins || !selectedBassins.length"></button>
             <button pButton pRipple label="Refresh" icon="pi pi-refresh" class="p-button-primary mr-2" (click)="getAllBassin()"  ></button>
+            </div>
+
+            <div class="flex justify-content-end">
+              <button pButton pRipple icon="pi pi-file-pdf" class="p-button-rounded p-button-primary mr-2"  (click)="exportRecolte(bassin)"></button>
+            </div>
 
           </div>
         </ng-template>
@@ -18,7 +25,7 @@
       <p-table #dt [loading]="loading" [value]="bassins" [columns]="cols"  responsiveLayout="scroll" [rows]="10" [globalFilterFields]="['surface','etat','id','emplacement','nom','dateCreation','reference','description']" [paginator]="true" [rowsPerPageOptions]="[10,20,30]" [showCurrentPageReport]="true" currentPageReportTemplate="Display  {first} to  {last} of  {totalRecords} entries" [(selection)]="selectedBassins" selectionMode="multiple" [rowHover]="true" dataKey="id">
         <ng-template pTemplate="caption">
           <div class="flex flex-column md:flex-row md:justify-content-between md:align-items-center">
-            <h5 class="m-0">Basin management</h5>
+            <h5 class="m-0">Pond management</h5>
             <span class="block mt-2 md:mt-0 p-input-icon-left">
                             <i class="pi pi-search"></i>
                             <input  type="text" pInputText (input)="onGlobalFilter(dt, $event)" placeholder="Search..."  class="w-full sm:w-auto"/>
@@ -86,6 +93,8 @@
             </td>
             <td>
               <div class="flex">
+                <button *ngIf="getToken()=='ADMIN'" pButton pRipple  class="p-button-rounded p-button-info mr-2" (click)="AddRecolte(bassin)">Recolte</button>
+
                 <button *ngIf="getToken()=='ADMIN'" pButton pRipple icon="pi pi-pencil" class="p-button-rounded p-button-success mr-2" (click)="editBassin(bassin)"></button>
                 <button *ngIf="getToken()=='ADMIN'" pButton pRipple icon="pi pi-trash" class="p-button-rounded p-button-warning mr-2" (click)="deleteBassin(bassin)"></button>
                 <button pButton pRipple icon="pi pi-file-pdf" class="p-button-rounded p-button-primary mr-2"  (click)="exportrapport(bassin)"></button>
@@ -352,9 +361,6 @@
           </td>
 
 
-
-
-
         </tr>
       </ng-template>
     </p-table>
@@ -368,6 +374,222 @@
     <p-button icon="pi pi-file-pdf" (click)="SavePDF()" class="text-green-50" label="PDF" pAutoFocus [autofocus]="true"  ></p-button>
     <button type="button" pButton pRipple  icon="pi pi-file-excel" (click)="ExportExcel()" class="p-button-success" label="EXCEL" pAutoFocus [autofocus]="true"  ></button>
     <button type="button" pButton pRipple icon="pi pi-file" (click)="exportcsv()" class="p-button-warning " label="CSV" pTooltip="CSV" ></button>
+
+  </ng-template>
+</p-dialog>
+<p-dialog [(visible)]="RecolteDialog" [style]="{width: '1000px'}" header="Recolte" [modal]="true" class="p-fluid">
+  <ng-template pTemplate="content">
+    <h3>Add Recolte</h3>
+<div class="flex justify-content-between align-items-center border border-1 border-round border-gray-400 p-3">
+    <div class="">
+      <label for="dateCreationr">Date Creation</label>
+      <input  class="p-2 shadow-1" type="date" dateFormat="yy-mm-dd"  pInputText id="dateCreationr"  [(ngModel)]="recolte.dateCreation"  />
+    </div>
+
+    <div class="">
+      <label for="value">Value</label>
+      <p-inputNumber  id="value"  [(ngModel)]="recolte.value" mode="decimal" [minFractionDigits]="3" ></p-inputNumber>
+    </div>
+  <div>
+    <button pButton pRipple label="Save" icon="pi pi-check" class="p-button-text" (click)="saveRecolte()"></button>
+  </div>
+</div>
+    <div class="cart mt-5">
+      <p-table #dt [loading]="loading"
+               [value]="recoltes"
+               [columns]="cols"
+               responsiveLayout="scroll" [rows]="10"
+               [globalFilterFields]="['surface','etat','id','emplacement','nom','dateCreation','reference','description']"
+               [paginator]="true"
+               editMode="row"
+               [rowsPerPageOptions]="[10,20,30]"
+               [showCurrentPageReport]="true" currentPageReportTemplate="Display  {first} to  {last} of  {totalRecords} entries" [(selection)]="selectedBassins" selectionMode="multiple" [rowHover]="true" dataKey="id">
+        <ng-template pTemplate="caption">
+          <div class="flex flex-column md:flex-row md:justify-content-between md:align-items-center">
+            <div class="flex justify-content-between align-items-center w-full">
+            <h5 class="m-0">Recolte management</h5>
+              <div>
+            <span class=" p-input-icon-left ">
+                            <i class="pi pi-search"></i>
+                            <input  type="text" pInputText (input)="onGlobalFilter(dt, $event)" placeholder="Search..."  class="w-full sm:w-auto"/>
+                        </span>
+              </div>
+            </div>
+
+          </div>
+        </ng-template>
+        <ng-template pTemplate="header">
+          <tr>
+            <th style="width: 3rem">
+              <p-tableHeaderCheckbox></p-tableHeaderCheckbox>
+            </th>
+            <th pSortableColumn="id">Id <p-sortIcon field="id"></p-sortIcon></th>
+            <th pSortableColumn="reference">Date Recolte<p-sortIcon field="reference"></p-sortIcon></th>
+            <th pSortableColumn="description">Value <p-sortIcon field="description"></p-sortIcon></th>
+
+            <th></th>
+          </tr>
+        </ng-template>
+        <ng-template pTemplate="body" let-recolte let-editing="editing" >
+          <tr [pEditableRow]="recolte" >
+            <td>
+              <p-tableCheckbox [value]="recolte"></p-tableCheckbox>
+            </td>
+            <td >
+              <span class="p-column-title">Id</span>
+              {{recolte.id}}
+            </td>
+
+            <td >
+              <p-cellEditor>
+                <ng-template pTemplate="input">
+                  <input  class="p-2 shadow-1" type="date" dateFormat="yy-mm-dd"  pInputText   [(ngModel)]="recolte.dateCreation"  />
+
+                </ng-template>
+                <ng-template pTemplate="output">
+                  {{recolte.dateCreation|date:'dd-MM-yyyy'}}
+                </ng-template>
+              </p-cellEditor>
+            </td>
+
+            <td >
+              <p-cellEditor>
+                <ng-template pTemplate="input">
+                  <input
+                    pInputText
+                    type="text"
+                    [(ngModel)]="recolte.value" />
+                </ng-template>
+                <ng-template pTemplate="output">
+                  {{recolte.value}}
+                </ng-template>
+              </p-cellEditor>
+            </td>
+
+            <td>
+              <div class="flex  align-items-center gap-2">
+                <div class="flex align-items-center justify-content-center gap-2" *ngIf="getToken()=='ADMIN'">
+                  <button *ngIf="!editing" pButton pRipple type="button" pInitEditableRow icon="pi pi-pencil"
+                          (click)="updateRecolte(recolte)"
+                          class="p-button-rounded   mr-2"></button>
+                  <button *ngIf="editing" pButton pRipple type="button"  pSaveEditableRow icon="pi pi-check"
+                          (click)="saveUpdateRecolte()"
+                          class="p-button-rounded p-button-text  mr-2"></button>
+                </div>
+                <button *ngIf="getToken()=='ADMIN'" pButton pRipple icon="pi pi-trash" class="p-button-rounded p-button-warning mr-2" (click)="deleteRecolte(recolte)"></button>
+              </div>
+            </td>
+          </tr>
+        </ng-template>
+      </p-table>
+
+    </div>
+
+  </ng-template>
+
+
+
+
+  <ng-template pTemplate="footer">
+    <button pButton pRipple label="Close" icon="pi pi-times" class="p-button-text" (click)="hideDialogRecolte()"></button>
+  </ng-template>
+</p-dialog>
+<p-dialog header="" [(visible)]="RecoltePDF" [modal]="true" [style]="{width: '100%'}"     >
+  <ng-template pTemplate="content">
+
+    <div class="shadow-1 p-2  " >Pond filtration  :
+
+      <div class="card flex justify-content-evenly align-items-center ">
+        <p-multiSelect
+          [options]="bassins"
+          [(ngModel)]="selectedBassins"
+          optionLabel="nom"
+          placeholder="Select Ponds" />
+        <div class="gap-1 flex align-items-center">Date Start :
+          <p-calendar
+            [(ngModel)]="dateStart"
+            view="month"
+            dateFormat="mm-yy"
+            [readonlyInput]="true" />
+        </div>
+        <div class="gap-1  flex align-items-center">
+          Date End :
+          <p-calendar
+            [(ngModel)]="dateEnd"
+            view="month"
+            dateFormat="mm-yy"
+            [readonlyInput]="true" />
+        </div>
+
+        <p-button (click)="getMonthsBetweenDates(dateStart,dateEnd)" class=" " icon="pi pi-search" label="Search"></p-button>
+
+      </div>
+
+    </div>
+
+
+    <div #pdfpuit class="pt-8 pl-4 pr-4">
+      <div class="flex border-1 w-full justify-content-between mb-6">
+        <div class="flex-initial flex align-items-center justify-content-center   font-bold m-2 px-5 py-3 border-round">
+          <img src="assets/layout/images/logo.png">
+
+        </div>
+        <div class="flex-initial flex align-items-center justify-content-center  text-6xl font-bold m-2 px-5 py-3 border-round">
+          Recolte follow-up
+        </div>
+        <div class="flex-initial border-1 flex     w-25  font-bold m-2 px-5 py-3  ">
+          <div class="col   ">
+            <div class="row  mb-2    w-full  ">BEN GUERDANE, TUNISIA  </div>
+            <div class="row mb-2   w-full text-center    text-1xl font-bold  pi pi-calendar ">{{dateToday | date :"yyyy-MM-dd hh:ss a"}}</div>
+
+          </div>
+        </div>
+      </div>
+
+      <p-table class=" " #dt [value]="listSumRecolte" [columns]="cols"  responsiveLayout="scroll"  [globalFilterFields]="['pondName']"    dataKey="id">
+
+        <ng-template pTemplate="header" >
+          <tr>
+
+            <th pSortableColumn="nom"> Pond Name <p-sortIcon field="nom"></p-sortIcon></th>
+            <ng-container *ngFor="let month of months" >
+            <th >{{getMonthName(month)}} </th>
+            </ng-container>
+            <th>Total/Pond</th>
+          </tr>
+        </ng-template>
+        <ng-template pTemplate="body" let-recolte let-ri="rowIndex">
+
+          <tr   >
+
+              <td> {{recolte.nom}}</td>
+            <td   *ngFor="let m of months" >
+                {{getMonthByBassinRecolte(recolte,m)}}
+
+            </td>
+            <td   >
+              {{getTotalPerPond(recolte)}}
+            </td>
+
+          </tr>
+          <tr *ngIf="ri+1==listSumRecolte.length" class="bg-green-200">
+            <td>Total/Month</td>
+            <td   *ngFor="let m of months" >
+              {{getTotalPerMonth(m)}}
+
+            </td>
+            <td>{{getTotlBassins()}}</td>
+          </tr>
+        </ng-template>
+      </p-table>
+
+
+
+    </div>
+  </ng-template>
+
+  <ng-template pTemplate="footer">
+    <p-button icon="pi pi-file-pdf" (click)="SavePDF()" class="text-green-50" label="PDF" pAutoFocus [autofocus]="true"  ></p-button>
 
   </ng-template>
 </p-dialog>

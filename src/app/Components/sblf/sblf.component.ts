@@ -313,7 +313,7 @@ export class SblfComponent {
   }
 
   getAnalyse() {
-    return this.selectedSblf.analysesPhysiques !== undefined ? this.selectedSblf.analysesPhysiques : []
+    return this.selectedSblf.analysesChimiques !== undefined ? this.selectedSblf.analysesChimiques : []
   }
   getAnalyseGranoli() {
     const data=this.selectedSblf.analysesPhysiques !== undefined ? this.selectedSblf.analysesPhysiques : []

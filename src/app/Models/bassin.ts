@@ -2,6 +2,7 @@ import {AnalysesChimique} from "./analyses-chimique";
 import {AnalysesPhysique} from "./analyses-physique";
 import {Sbnl} from "./sbnl";
 import {Puit} from "./puit";
+import {Recolte} from "./recolte";
 
 export interface Bassin {
   id?: number;
@@ -16,4 +17,5 @@ export interface Bassin {
   analysesChimiques?: AnalysesChimique[];
   analysesPhysiques?: AnalysesPhysique[];
   bassinPuit?:Puit;
+  recolteList?: Recolte[];
 }
