@@ -66,7 +66,7 @@
 
             <td >
               <span class="p-column-title">Creation Date</span>
-              {{stockOrder.dateCreation| date :'dd-mm-yyyy' }}
+              {{stockOrder.dateCreation| date :'dd-MM-yyyy' }}
             </td>
             <td >
               <span class="p-column-title">Calibre</span>
@@ -95,6 +95,7 @@
             <td>
               <div class="flex">
                 <button *ngIf="getToken()=='ADMIN'" pButton pRipple icon="pi pi-arrow-right-arrow-left" class="p-button-rounded p-button-info mr-2" (click)="transferStockOrder(stockOrder)"></button>
+                <button *ngIf="getToken()=='ADMIN'" pButton pRipple icon="pi pi-plus" class="p-button-rounded p-button-secondary mr-2" (click)="AddToSalineStockOrder(stockOrder)"></button>
                 <button *ngIf="getToken()=='ADMIN'" pButton pRipple icon="pi pi-pencil" class="p-button-rounded p-button-success mr-2" (click)=" editStockOrder(stockOrder)"></button>
                 <button *ngIf="getToken()=='ADMIN'" pButton pRipple icon="pi pi-trash" class="p-button-rounded p-button-warning mr-2" (click)="deleteStockOrder(stockOrder)"></button>
 
@@ -213,6 +214,28 @@
   <ng-template pTemplate="footer">
     <button pButton pRipple label="Cancel" icon="pi pi-times" class="p-button-text" (click)="hideDialogTransfer()"></button>
     <button pButton pRipple label="Save" icon="pi pi-check" class="p-button-text" (click)="saveTransferQuantity()"></button>
+  </ng-template>
+</p-dialog>
+<!--======================================-->
+<p-dialog [(visible)]="AddToSalineDialog" [style]="{width: '800px'}" header="Transfer Quantity" [modal]="true" class="p-fluid">
+  <ng-template pTemplate="content">
+    <div class="flex gap-4 justify-content-between h-16rem">
+
+
+      <div class="field">
+        <label for="add">Add Quantity To Saline</label>
+        <p-inputNumber  id="add"  [(ngModel)]="AddQuantityToSaline" mode="decimal" [minFractionDigits]="3" ></p-inputNumber>
+      </div>
+
+    </div>
+  </ng-template>
+
+
+
+
+  <ng-template pTemplate="footer">
+    <button pButton pRipple label="Cancel" icon="pi pi-times" class="p-button-text" (click)="hideDialogAddToSaline()"></button>
+    <button pButton pRipple label="Save" icon="pi pi-check" class="p-button-text" (click)=" saveAddToSaline()"></button>
   </ng-template>
 </p-dialog>
 
