@@ -12,8 +12,10 @@
         </div>
         <app-footer></app-footer>
     </div>
+  <app-config></app-config>
 
 </div>
 <div *ngIf="!loginservice.isLoggedIn()">
   <router-outlet ></router-outlet>
+<!--  <div class="layout-mask"></div>-->
 </div>
