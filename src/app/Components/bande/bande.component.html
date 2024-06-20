@@ -181,7 +181,7 @@
 </div>
 
 
-<p-dialog header="Chemical and particle size analysis" [(visible)]="visiblePrint" [modal]="true"   [breakpoints]="{ '1199px': '75vw', '575px': '90vw' }">
+<p-dialog header="Chemical and particle size analysis" [(visible)]="visiblePrint" [modal]="true"    [style]="{width: '100%'}">
   <div class="shadow-1 p-2  " >chemical filtration  :
 
     <div class="card flex justify-content-evenly ">
@@ -194,7 +194,7 @@
       <p-button (click)="Viderfiltredate()" class=" " icon="pi pi-refresh" label="Refresh"></p-button>
 
     </div>
-    <div class="shadow-1 p-2">
+    <div class="shadow-1 p-2 overflow-auto">
       <p-checkbox [(ngModel)]="SelectAll" (ngModelChange)="SelectAllCheck()" [binary]="true" inputId="binary" class="text-primary" label="All"></p-checkbox>
 
       <th *ngFor="let c of colsfiltre">
@@ -226,7 +226,7 @@
       <label class="font-bold text-5xl  ">Chemical analysis</label>
       <br><br><br><br>
       <label class="text-2xl font-bold">Reference  :</label><span class="ml-2 text-2xl">{{selectedBande.reference}}</span><br>
-      <label class="text-2xl font-bold">Date creation :</label><span class=" ml-2 text-2xl">{{selectedBande.dateStock}}</span><br>
+      <label class="text-2xl font-bold">Date creation :</label><span class=" ml-2 text-2xl">{{selectedBande.dateStock|date :'dd-MM-yyyy'}}</span><br>
 
     </div>
 

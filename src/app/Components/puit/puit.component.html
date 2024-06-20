@@ -95,7 +95,7 @@
       </p-table>
     </div>
 
-    <p-dialog [(visible)]="productDialog" [style]="{width: '80%'}" header="well" [modal]="true" class="p-fluid">
+    <p-dialog [(visible)]="productDialog" [style]="{width: '450px'}" header=" well" [modal]="true" class="p-fluid">
       <ng-template pTemplate="content">
         <div class="field">
           <label for="name">Référence</label>
@@ -172,7 +172,7 @@
 
 <!--PrintPDF Rapport-->
 
-<p-dialog header="Analyse chimique" [(visible)]="visiblePrint" [modal]="true"   [style]="{width: '100%'}"   >
+<p-dialog header="Analyse chimique" [(visible)]="visiblePrint" [modal]="true"   [style]="{width: '100%'}" >
 <div class="shadow-1 p-2" >filtrate :
 
   <div class="card flex justify-content-evenly ">
@@ -188,8 +188,8 @@
     <p-button (click)="filtredate()" class=" " icon="pi pi-search" label="Search"></p-button>
     <p-button (click)="Viderfiltredate()" class=" " icon="pi pi-eye" label="View all"></p-button>
 
-  </div>
-  <div class="overflow-auto">
+  </div >
+  <div class="shadow-1 p-2 overflow-auto">
   <p-checkbox [(ngModel)]="SelectAll" (ngModelChange)="SelectAllCheck()" [binary]="true" inputId="binary" class="text-primary" label="All"></p-checkbox>
 
   <th *ngFor="let c of colsfiltre">
@@ -249,7 +249,7 @@
    >
 
 
-    <ng-template pTemplate="header">
+    <ng-template pTemplate="header flex flex-wrap">
       <tr>
 
         <th *ngFor="let c of getColsfiltr()">

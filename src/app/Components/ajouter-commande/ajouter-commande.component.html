@@ -45,12 +45,7 @@
           <input type="text" pInputText [(ngModel)]="commande.purchaseOrder"    id="purchaseOrder" class="w-full" />
           <label for="purchaseOrder">Purchase Order</label>
         </p-floatLabel>
-        <p-floatLabel>
-          <p-inputNumber [(ngModel)]="commande.volume"    id="volume" class="w-full" [minFractionDigits]="3"></p-inputNumber>
 
-<!--          <input type="text" pInputText [(ngModel)]="commande.volume"    id="volume" class="w-full" />-->
-          <label for="volume">Volume</label>
-        </p-floatLabel>
         <p-floatLabel>
           <p-autoComplete
             [(ngModel)]="commande.customer"
