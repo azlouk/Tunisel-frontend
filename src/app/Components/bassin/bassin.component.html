@@ -16,7 +16,7 @@
 
           </div>
         </ng-template>
-        <ng-template pTemplate="right">
+        <ng-template pTemplate="right" *ngIf="getToken()=='ADMIN'">
           <div class="">
             <button pButton pRipple icon="pi pi-file-pdf" class="p-button-rounded p-button-primary mr-2"  (click)="exportRecolte(bassin)">Generate</button>
           </div>
