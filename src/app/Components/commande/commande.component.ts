@@ -169,6 +169,7 @@ commandesCopy: Commande[]=[];
     ];
 
 this.getAllStockOrder();
+
   }
 
   openNew() {
@@ -317,7 +318,7 @@ this.getAllStockOrder();
     this.stockOrderService.getAllStockOrder()
       .subscribe((stockOrders: StockOrder[]) => {
         this.stockOrders = stockOrders;
-
+        this.stockSelected=this.stockOrders[0];
       }, error => {
         console.log( error);
       });
