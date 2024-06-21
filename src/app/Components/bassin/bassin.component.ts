@@ -36,6 +36,8 @@ import {Recolte} from "../../Models/recolte";
 import {RecolteService} from "../../Services/recolte.service";
 import {RippleModule} from "primeng/ripple";
 import {log} from "@angular-devkit/build-angular/src/builders/ssr-dev-server";
+import {SondageService} from "../../Services/sondage.service";
+import {Sondage} from "../../Models/sondage";
 
 interface RecolteSummary {
   total: number;
@@ -77,6 +79,7 @@ export class BassinComponent implements OnInit {
 
   deleteProductsDialog: boolean = false;
   RecolteDialog: boolean = false;
+  SondageDialog: boolean = false;
 
   products: Product[] = [];
 
@@ -93,6 +96,8 @@ export class BassinComponent implements OnInit {
   rowsPerPageOptions = [5, 10, 20];
   // ======********============
   bassins: Bassin[] = [];
+  bassinsCopy: Bassin[] = [];
+
   bassinsId: number[] = [];
 
   bassin: Bassin = {};
@@ -107,14 +112,22 @@ loading:boolean=false ;
 recolte=new Recolte();
 recolteUP=new Recolte();
 recoltes:Recolte[]=[];
+  sondage=new Sondage();
+  sondageUP=new Sondage();
+  sondages:Sondage[]=[];
   @ViewChild("pdfpuit") htmlContent: ElementRef | undefined;
   visiblePrint: boolean = false;
   dateToday: Date = new Date();
   RecoltePDF: boolean = false;
+  SondaePDF: boolean = false;
   DatefiltrageStart: Date = new Date();
   DatefiltrageEnd: Date = new Date();
  dateStart: Date=new Date();
  dateEnd: Date= new Date() ;
+  dateStartSondage: Date=new Date();
+  dateEndSondage: Date= new Date() ;
+  dateStartSondageS2: Date=new Date();
+  dateEndSondageS2: Date= new Date() ;
  listSumRecolte:any;
  listSumRecolteCopy:any;
   public  _selectedColumns: any[]=[];
@@ -126,7 +139,8 @@ recoltes:Recolte[]=[];
   constructor(  private messageService: MessageService,
                 private bassinService :BassinService,
                 private puitService:PuitService,
-                private recolteService:RecolteService) { }
+                private recolteService:RecolteService,
+                private sondageService:SondageService) { }
 
   ngOnInit() {
  this.listSumRecolteCopy=[]
@@ -248,7 +262,7 @@ this.SelectetBassin={analysesPhysiques:[]}
 
       if (this.bassin) {
 
-        this.bassinService.updateBassin(this.bassin).subscribe(() =>{ this.bassinService.getAllBassinsDTO()
+        this.bassinService.updateBassindto(this.bassin).subscribe(() =>{ this.bassinService.getAllBassinsDTO()
           .subscribe((bassins: Bassin[]) => {
             this.bassins = bassins;
           } );});
@@ -298,9 +312,8 @@ this.SelectetBassin={analysesPhysiques:[]}
     this.bassinService.getAllBassinsDTO()
       .subscribe((bassins: Bassin[]) => {
         this.bassins = bassins;
-        this.bassins.forEach(value => {
+        this.bassinsCopy=[...bassins]
 
-        })
         this.loading=false ;
       }, error => {
         console.log('Error fetching users:', error);
@@ -616,12 +629,15 @@ this.SelectetBassin={analysesPhysiques:[]}
 
 
   AddRecolte(bassin: Bassin) {
-
     this.RecolteDialog=true;
-this.bassin=bassin
+    this.bassin=bassin
     this.getAllRecolte()
   }
-
+  AddSondage(bassin: Bassin) {
+    this.SondageDialog=true;
+    this.bassin=bassin
+    this.getAllSondage()
+  }
   hideDialogRecolte() {
     this.RecolteDialog=false;
   }
@@ -650,6 +666,7 @@ this.bassin=bassin
   }
 
   saveUpdateRecolte() {
+
     this.recolteService.updateRecolte(this.recolteUP).subscribe(value => {
       this.getAllRecolte();
 
@@ -777,4 +794,102 @@ let total:number=0;
     } )
     return totolBassin
   }
+
+
+//   ================Sondage======================================
+  saveSondage() {
+    if (    this.bassin.id!==undefined)
+      this.sondageService.addSondage(this.sondage,this.bassin.id).subscribe(value => {
+        this.getAllSondage();
+        this.sondage=new Sondage();
+      })
+  }
+  getAllSondage(){
+    if(this.bassin.id)
+      this.bassinService.getAllBassinsById(this.bassin.id).subscribe(value =>{
+        if(value.sondageList) {
+          this.sondages = value.sondageList;
+        } }
+      )
+  }
+
+
+  deleteSondage(sondage: Sondage)   {
+    this.sondageService.deleteSondage(sondage.id).subscribe(value =>     this.sondages= this.sondages.filter(son => son.id !== sondage.id)
+    )
+
+  }
+
+  saveUpdateSondage() {
+
+    this.sondageService.updateSondage(this.sondageUP).subscribe(value => {
+      this.getAllSondage();
+
+    })
+  }
+
+  updateSondage(sondage: Sondage) {
+    this.sondageUP=sondage;
+  }
+  hideDialogSondage() {
+    this.SondageDialog=false;
+  }
+
+   getMassSondage(sondage: Sondage):number {
+    let mass:number=0;
+    if(this.bassin.surface!==undefined)
+    mass=this.bassin.surface*sondage.epaisseur*sondage.densite;
+return mass;
+  }
+
+//   ===============sondagePDF===================================
+  exportSondage(bassin: Bassin) {
+    this.SondaePDF=true;
+  }
+
+
+
+  filtreListSondageWithDate(dateStartSondage: Date, dateEndSondage: Date, dateStartSondageS2: Date, dateEndSondageS2: Date) {
+    this.bassins.forEach(bassin => {
+      const filteredList1 = bassin.sondageList?.filter(sondage => {
+        return (dateStartSondage <= sondage.dateDebut && dateEndSondage >= sondage.dateFin);
+      });
+
+      const filteredList2 = bassin.sondageList?.filter(sondage => {
+        return (dateStartSondageS2 <= sondage.dateDebut && dateEndSondageS2 >= sondage.dateFin);
+      });
+
+      // Combine the filtered lists if needed. Here we use a Set to remove duplicates.
+      if(filteredList1!==undefined && filteredList2!==undefined){
+      const combinedFilteredList = Array.from(new Set([...filteredList1, ...filteredList2]));
+
+      bassin.sondageList = combinedFilteredList;
+
+      }
+    });
+  }
+
+  getMassSondagePdf(bassin:Bassin,sondage: Sondage):number {
+    let mass:number=0;
+    if(bassin.surface!==undefined)
+      mass=bassin.surface*sondage.epaisseur*sondage.densite;
+    return mass;
+  }
+
+  public getPert(bassinSondage: Bassin): number {
+    let pert: number = 0;
+
+    if (bassinSondage.sondageList && bassinSondage.sondageList.length > 1) {
+      // Assuming sondageList contains objects with a 'value' property
+      const sondage1 = bassinSondage.sondageList[0];
+      const sondage2 = bassinSondage.sondageList[1];
+const mass2= this.getMassSondagePdf(bassinSondage,sondage2);
+const mass1= this.getMassSondagePdf(bassinSondage,sondage1);
+
+        pert = mass2 - mass1;
+
+    }
+    return pert;
+  }
+
 }

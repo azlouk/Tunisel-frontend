@@ -32,6 +32,9 @@ apiUrl=environment.apiUrl
   updateBassin(bassin: Bassin): Observable<Bassin> {
     return this.http.put<Bassin>(`${this.apiUrl}/bassins/update`, bassin);
   }
+  updateBassindto(bassin: Bassin): Observable<Bassin> {
+    return this.http.put<Bassin>(`${this.apiUrl}/bassins/updatedto`, bassin);
+  }
 
 
   addBassin(bassin: Bassin) : Observable<Bassin>{
