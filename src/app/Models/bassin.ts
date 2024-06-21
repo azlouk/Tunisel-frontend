@@ -3,6 +3,7 @@ import {AnalysesPhysique} from "./analyses-physique";
 import {Sbnl} from "./sbnl";
 import {Puit} from "./puit";
 import {Recolte} from "./recolte";
+import {Sondage} from "./sondage";
 
 export interface Bassin {
   id?: number;
@@ -18,4 +19,5 @@ export interface Bassin {
   analysesPhysiques?: AnalysesPhysique[];
   bassinPuit?:Puit;
   recolteList?: Recolte[];
+  sondageList?: Sondage[];
 }

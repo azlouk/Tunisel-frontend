@@ -315,21 +315,7 @@ commandesCopy: Commande[]=[];
   }
 
 
-  // getAllStockOrder() {
-  //
-  //   this.stockOrderService.getAllStockOrder()
-  //     .subscribe((stockOrders: StockOrder[]) => {
-  //       this.stockOrders = stockOrders;
-  //       if(this.stockOrders.length>0){
-  //         // alert(new JsonPipe().transform(this.stockOrders))
-  //       this.sortStockOrdersByCreationDateDesc()
-  //
-  //
-  //         this.stockSelected=this.stockOrders[0];}
-  //     }, error => {
-  //       console.log( error);
-  //     });
-  // }
+
   getAllStockOrder() {
     this.stockOrderService.getAllStockOrder()
       .subscribe((stockOrders: any[]) => {
@@ -365,6 +351,7 @@ commandesCopy: Commande[]=[];
 const total=stockSelected.volumeSaline+stockSelected.volumeTerrain+stockSelected.volumePort+stockSelected.volumeQuai;
     this.VolumeAvailble= total-this.TotalTrQu;
   }
+
   CalculeTotalInput() {
     this.TotalHarv=0;
     this.TotalTrQu=0;
