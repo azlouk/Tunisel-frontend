@@ -38,6 +38,7 @@ import {RippleModule} from "primeng/ripple";
 import {log} from "@angular-devkit/build-angular/src/builders/ssr-dev-server";
 import {SondageService} from "../../Services/sondage.service";
 import {Sondage} from "../../Models/sondage";
+import {FieldsetModule} from "primeng/fieldset";
 
 interface RecolteSummary {
   total: number;
@@ -67,7 +68,7 @@ interface RecolteSummary {
     MultiSelectModule,
     DatePipe,
     CheckboxModule,
-    ListboxModule, CommonModule, AutoFocusModule, TooltipModule, RippleModule
+    ListboxModule, CommonModule, AutoFocusModule, TooltipModule, RippleModule, FieldsetModule
   ],
   templateUrl: './bassin.component.html',
   styleUrl: './bassin.component.css'
@@ -124,10 +125,10 @@ recoltes:Recolte[]=[];
   DatefiltrageEnd: Date = new Date();
  dateStart: Date=new Date();
  dateEnd: Date= new Date() ;
-  dateStartSondage: Date=new Date();
-  dateEndSondage: Date= new Date() ;
-  dateStartSondageS2: Date=new Date();
-  dateEndSondageS2: Date= new Date() ;
+  dateStartSondage!: Date
+  dateEndSondage!: Date
+  dateStartSondageS2!:Date;
+  dateEndSondageS2!: Date ;
  listSumRecolte:any;
  listSumRecolteCopy:any;
   public  _selectedColumns: any[]=[];
@@ -175,7 +176,8 @@ this.SelectetBassin={analysesPhysiques:[]}
       this.puits=v;
 
     },error => {
-      console.log(error)})
+
+    })
     this.getAllRecolte();
   }
 
@@ -204,7 +206,8 @@ this.SelectetBassin={analysesPhysiques:[]}
 
   confirmDeleteSelected() {
     this.deleteProductsDialog = false;
-    // console.log(this.selectedBassins.length)
+
+
     this.selectedBassins.forEach(bassin => {
 
       this.bassinService.deleteBassin(bassin.id).subscribe(
@@ -234,7 +237,8 @@ this.SelectetBassin={analysesPhysiques:[]}
         this.messageService.add({ severity: 'success', summary: 'Successful', detail: 'Bassin Deleted', life: 3000 });
 
       },error => {
-        console.log(error)
+
+
         Swal.fire({
           icon: "error",
           title: "Can not deleted",
@@ -312,11 +316,11 @@ this.SelectetBassin={analysesPhysiques:[]}
     this.bassinService.getAllBassinsDTO()
       .subscribe((bassins: Bassin[]) => {
         this.bassins = bassins;
-        this.bassinsCopy=[...bassins]
 
         this.loading=false ;
       }, error => {
-        console.log('Error fetching users:', error);
+
+
       });
   }
 
@@ -333,15 +337,18 @@ this.SelectetBassin={analysesPhysiques:[]}
     data.forEach(v => {
 
       if(v.dateAnalyse!==undefined){
-        console.log(typeof v.dateAnalyse )
+
+
         const d=v.dateAnalyse+"";
         const dateana:Date=new Date(d)
-        console.log("-D-->" + dateana)
+
+
         if (  this.AfterTodate(new Date(this.DatefiltrageStart+""),new Date(dateana+"")) &&  this.AfterTodate(new Date(dateana+""),new Date(this.DatefiltrageEnd+""))) {
 
           newAnalyse.push(v);
         } else {
-          console.log("no compare")
+
+
         }
 
 
@@ -349,7 +356,7 @@ this.SelectetBassin={analysesPhysiques:[]}
 
     })
     this.SelectetBassin.analysesChimiques=newAnalyse;
-  console.log("Chimique"+new JsonPipe().transform(newAnalyse))
+
 
     this.getAnalyseGranoli() ;
 
@@ -380,15 +387,18 @@ this.SelectetBassin={analysesPhysiques:[]}
     data.forEach(v => {
 
       if(v.dateAnalyse!==undefined){
-        console.log(typeof v.dateAnalyse )
+
+
         const d=v.dateAnalyse+"";
         const dateana:Date=new Date(d)
-        console.log("-D-->" + dateana)
+
+
         if (  this.AfterTodate(new Date(this.DatefiltrageStart+""),dateana) &&  this.AfterTodate(dateana,new Date(this.DatefiltrageEnd))) {
 
            newAnalyse.push(v);
         } else {
-          console.log("no compare")
+
+
         }
 
       }
@@ -396,7 +406,8 @@ this.SelectetBassin={analysesPhysiques:[]}
     })
 
 
-    console.log("Physique--->"+new JsonPipe().transform(newAnalyse))
+
+
 
     this.SelectetBassin.analysesPhysiques=[...newAnalyse] ;
 
@@ -438,7 +449,8 @@ this.SelectetBassin={analysesPhysiques:[]}
     return this.SelectedPrintAnalysePhysique.tamisList==undefined?[]:this.SelectedPrintAnalysePhysique.tamisList
   }
   AfterTodate(date1:Date , date2:Date):boolean{
-    console.log(date1+"<"+date2)
+
+
     return date1.getTime()<=date2.getTime()
   }
 
@@ -722,7 +734,7 @@ let year=this.getYear(dateFin1);
 this.listSumRecolteCopy=[...value]
         // this.listSumRecolte.forEach(value => console.table(new JsonPipe().transform((value as { month: number }).month)));
         //  this.listSumRecolte=this.listSumRecolte.filter(lr => this.months.find(m =>m==lr.month )!==undefined)
-        console.log(new JsonPipe().transform(this.listSumRecolte))
+
       })
     }
     return this.months;
@@ -843,40 +855,49 @@ return mass;
   }
 
 //   ===============sondagePDF===================================
-  exportSondage(bassin: Bassin) {
+  totalFabrique: number=0;
+  totalperdue: number=0;
+  exportSondage() {
     this.SondaePDF=true;
+    this.getAllBassin();
+    this.bassinsCopy=[]
+    this.totalperdue=0;
+    this.totalFabrique=0 ;
   }
 
 
 
   filtreListSondageWithDate(dateStartSondage: Date, dateEndSondage: Date, dateStartSondageS2: Date, dateEndSondageS2: Date) {
+
+ this.bassinsCopy=[] ;
+ this.totalFabrique=0;
+ this.totalperdue=0;
     this.bassins.forEach(bassin => {
       const filteredList1 = bassin.sondageList?.filter(sondage => {
-        return (dateStartSondage <= sondage.dateDebut && dateEndSondage >= sondage.dateFin);
-      });
-
-      const filteredList2 = bassin.sondageList?.filter(sondage => {
-        return (dateStartSondageS2 <= sondage.dateDebut && dateEndSondageS2 >= sondage.dateFin);
+        return ((dateStartSondage <= sondage.dateDebut && dateEndSondage >= sondage.dateFin) || (dateStartSondageS2 <= sondage.dateDebut && dateEndSondageS2 >= sondage.dateFin));
       });
 
       // Combine the filtered lists if needed. Here we use a Set to remove duplicates.
-      if(filteredList1!==undefined && filteredList2!==undefined){
-      const combinedFilteredList = Array.from(new Set([...filteredList1, ...filteredList2]));
+      if(filteredList1!==undefined){
 
-      bassin.sondageList = combinedFilteredList;
-
+     let bCopy={...bassin}
+        bCopy.sondageList = filteredList1;
+     this.bassinsCopy.push(bCopy)
+        this.getPert(bCopy,0)
+        console.error(bassin.nom+"--->"+bassin.sondageList)
       }
     });
   }
 
   getMassSondagePdf(bassin:Bassin,sondage: Sondage):number {
     let mass:number=0;
+
     if(bassin.surface!==undefined)
       mass=bassin.surface*sondage.epaisseur*sondage.densite;
     return mass;
   }
 
-  public getPert(bassinSondage: Bassin): number {
+  public getPert(bassinSondage: Bassin,ch:number) {
     let pert: number = 0;
 
     if (bassinSondage.sondageList && bassinSondage.sondageList.length > 1) {
@@ -887,9 +908,24 @@ const mass2= this.getMassSondagePdf(bassinSondage,sondage2);
 const mass1= this.getMassSondagePdf(bassinSondage,sondage1);
 
         pert = mass2 - mass1;
+        if( ch==0) {
+          if (pert < 0) {
+            this.totalperdue += pert
+          } else {
+            this.totalFabrique += pert
+          }
+        }
 
+      return pert;
+    }else if(bassinSondage.sondageList?.length==1){
+     return  0;
     }
-    return pert;
+    else {
+      return 0
+    }
+
+
+
   }
 
 }
