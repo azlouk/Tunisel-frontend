@@ -188,6 +188,7 @@ commandesCopy: Commande[]=[];
     this.router.navigate([`/updateCommande/${commande.id}`]);
     this.isUpdateCommande=true;
     this.commande = { ...commande };
+    console.error(commande.datestart)
     this.updateCommande = { ...commande };
   }
 
@@ -204,7 +205,9 @@ commandesCopy: Commande[]=[];
         () => {
           this.messageService.add({ severity: 'success', summary: 'Successful', detail: 'User Deleted', life: 3000 });
 
-          this.commandes = this.commandes.filter(commande =>commande.id !== selectedCommandes.id);
+          this.getAllCommandes();
+          if(this.commande.stockOrder)
+            this.calculVolumeAvailble(this.commande.stockOrder);
         },
         (error) => {
         }
@@ -217,9 +220,14 @@ commandesCopy: Commande[]=[];
     this.deleteProductDialog = false;
     this.commandes = this.commandes.filter(val => val.id !== this.commande.id);
     if (this.commande.id!= null) {
-      this.commandeService.deleteCommande(this.commande.id).subscribe(() => console.log("Command Deleted"));
+      this.commandeService.deleteCommande(this.commande.id).subscribe(() => {
+        console.log("Command Deleted")
+        this.messageService.add({ severity: 'success', summary: 'Successful', detail: 'Command Deleted', life: 3000 });
+        this.getAllCommandes();
+        if(this.commande.stockOrder)
+        this.calculVolumeAvailble(this.commande.stockOrder);
+      });
     }
-    this.messageService.add({ severity: 'success', summary: 'Successful', detail: 'Command Deleted', life: 3000 });
 
   }
 
@@ -335,21 +343,22 @@ commandesCopy: Commande[]=[];
   filtreByStock(stockSelected: StockOrder) {
     this.commandes = this.commandesCopy.filter(commande => {
 
-     this.commandeService.getCommandesByStockOrderAndEtatContains(stockSelected.id,"Loading Completed").subscribe(value => {
-       this.ListCommandes = value;
-
-       this.CalculeTotalInput();
-       this.calculVolumeAvailble(stockSelected);
-     })
+     // this.commandeService.getCommandesByStockOrderAndEtatContains(stockSelected.id,"Loading Completed").subscribe(value => {
+     //   this.ListCommandes = value;
+     //
+     //   // this.CalculeTotalInput();
+     // })
 
       return commande.stockOrder && commande.stockOrder.id === stockSelected.id;
     });
+    this.calculVolumeAvailble(stockSelected);
+
   }
 
 
   calculVolumeAvailble(stockSelected: StockOrder) {
 const total=stockSelected.volumeSaline+stockSelected.volumeTerrain+stockSelected.volumePort+stockSelected.volumeQuai;
-    this.VolumeAvailble= total-this.TotalTrQu;
+    this.VolumeAvailble= total
   }
 
   CalculeTotalInput() {

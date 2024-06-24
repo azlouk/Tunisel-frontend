@@ -39,5 +39,6 @@ export interface Commande {
    mi?:string;
    fecn6?:string;
   stockOrder?:StockOrder;
+  isLoading?:boolean;
 }
 

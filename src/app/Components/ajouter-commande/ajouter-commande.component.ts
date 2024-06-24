@@ -141,6 +141,8 @@ export class AjouterCommandeComponent implements OnInit{
 
 
 
+  private dataQualite: string[]=[];
+  filtereddataQualite: any[]=[];
 
   private datasel: string[]=[];
   filtereddatasel: any[]=[];
@@ -179,6 +181,25 @@ export class AjouterCommandeComponent implements OnInit{
       "GC RS NO",
 
     ]
+
+    this.dataQualite = [
+      "Unwashed salt",
+      "Washed salt",
+      "Washed salt sieved 0-4 "
+      , "Washed salt sieved "
+      , "Big salt (Refus)"
+      , "salt 0-8"
+      , "salt 0-4 Stock"
+      , "salt 0-6 Stock"
+      , "salt 0-8 Stock"
+      , "Big salt Stock"
+      , "crushed salt"
+      , "salt 0-6 Cribble "
+      , "salt 0-8 Cribble "
+      , "salt 0-4 Stock Zarzis"
+      , "salt 0-6 Stock Zarzis"
+      , "salt 0-8 Stock Zarzis"
+      , " Sel Navire"];
     this.getAllStockOrder();
     this.commande.dateCustomer=new Date();
     this.cols = [
@@ -303,7 +324,7 @@ getCommandeById(){
     this.loadinSave=true;
     //Fix date Save -1 day primeng
         const datestr=this.commande.dateCommande?.toString()
-       const dates: string | null =this.datePipe.transform(datestr,'yyyy-MM-dd')
+       const dates: string|null =this.datePipe.transform(datestr,'yyyy-MM-dd')
    //Date creation  of command
     if (dates) {
       this.commande.dateCommande = new Date(dates);
@@ -344,7 +365,7 @@ getCommandeById(){
       })
     }
     else{
-
+      this.commande.isLoading=false;
         this.commandeService.addCommande(this.commande).subscribe(value => {
           this.loadinSave=false;
 
@@ -352,6 +373,12 @@ getCommandeById(){
         },error => console.log(error));
       }
 
+  }
+
+// Helper function to parse date strings safely
+  private parseDate(dateString: string): Date | null {
+    const formattedDate = this.datePipe.transform(dateString, 'yyyy-MM-dd'); // Assuming ISO 8601 format
+    return formattedDate ? new Date(formattedDate) : null;
   }
 
   openNew() {
@@ -704,6 +731,19 @@ this.getLine()
     }
 
     this.filtereddatasel = filtered;
+  }
+  filterQualite(event: AutoCompleteCompleteEvent) {
+    let filtered: any[] = [];
+    let query = event.query;
+
+    for (let i = 0; i < (this.dataQualite as any[]).length; i++) {
+      let country = (this.dataQualite as any[])[i];
+      if (country.toLowerCase().indexOf(query.toLowerCase()) == 0) {
+        filtered.push(country);
+      }
+    }
+
+    this.filtereddataQualite = filtered;
   }
 
   AfterTodate(date1:Date , date2:Date):boolean{

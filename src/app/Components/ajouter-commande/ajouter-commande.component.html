@@ -59,7 +59,7 @@
         </p-floatLabel>
         <p-floatLabel>
 
-            <p-dropdown [options]="stockOrders" [(ngModel)]="commande.stockOrder" [editable]="true" optionLabel="reference" class="w-full" ></p-dropdown>
+            <p-dropdown [options]="stockOrders" [(ngModel)]="commande.stockOrder" [editable]="true" optionLabel="nom" class="w-full" ></p-dropdown>
             <label >Stock Order</label>
 
         </p-floatLabel>
@@ -162,12 +162,12 @@
 
       <div class="gap-2 flex align-items-center   mt-4 ">
         <div class="gap-1 flex align-items-center font-bold">Analysis start date  :
-          <input  class="p-2 shadow-1" type="date" pInputText    [(ngModel)]="DatefiltrageStart"   />
+          <input  class="p-2 shadow-1" type="date" pInputText  dateformat="yyyy-MM-dd"  [(ngModel)]="DatefiltrageStart"   />
 
         </div>
         <div class="gap-1 font-bold flex align-items-center  ">
           Date End Analysis  :
-          <input  class="p-2 shadow-1" type="date"  pInputText   [(ngModel)]="DatefiltrageEnd"   />
+          <input  class="p-2 shadow-1" type="date"  pInputText dateformat="yyyy-MM-dd"  [(ngModel)]="DatefiltrageEnd"   />
 
         </div>
         <div class="gap-1  flex align-items-center">
@@ -177,8 +177,8 @@
               [(ngModel)]="matter"
 
               [dropdown]="true"
-              [suggestions]="filtereddatasel"
-              (completeMethod)="filterCountry($event)"
+              [suggestions]="filtereddataQualite"
+              (completeMethod)="filterQualite($event)"
               field=""/>
 
             <label for="etat" class="font-bold">Quality</label>
