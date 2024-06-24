@@ -754,7 +754,14 @@ this.listSumRecolteCopy=[...value]
 
 
   public getMonthName(month: number) {
+
     return this.MonthName[month-1]
+  }
+public getMonthNameDate(date: Date) {
+    if(date)
+    return this.MonthName[new Date(date.toString()).getMonth()]
+
+  return ""
   }
 
 
@@ -928,4 +935,11 @@ const mass1= this.getMassSondagePdf(bassinSondage,sondage1);
 
   }
 
+  protected readonly DatePipe = DatePipe;
+
+  getYearDate(dateStartSondage: Date) {
+    if(dateStartSondage)
+    return new Date(dateStartSondage.toString()).getFullYear()
+    return ""
+  }
 }

@@ -816,10 +816,16 @@
           </div>
         </div>
       </div>
-        <div class="flex gap-4 mb-5 ">
+      <div class="flex gap-4 w-full justify-content-end mb-2">
+        <p-fieldset legend="Production"  >
           <span class="pi pi-arrow-up bg-green-200 p-2  text-3xl font-bold   ">{{totalFabrique}}</span>
+
+        </p-fieldset>
+        <p-fieldset legend="Wasting" >
+
           <span class=" pi pi-arrow-down bg-red-200 p-2 text-3xl font-bold">{{totalperdue}}</span>
-        </div>
+        </p-fieldset>
+      </div>
       <p-table class=" " #dt [value]="bassinsCopy" [columns]="cols"  responsiveLayout="scroll"  [globalFilterFields]="['pondName']"    dataKey="id">
 
         <ng-template pTemplate="header" >
@@ -829,9 +835,9 @@
 
             <th>Surface</th>
 
-            <th>Mass Semestre 1</th>
-            <th>Mass Semestre 2</th>
-            <th>Pert</th>
+            <th>Weight {{getMonthNameDate(  dateStartSondage)}}-->{{getMonthNameDate(dateEndSondage)}} ({{getYearDate(dateStartSondage)}})</th>
+            <th>Weight {{getMonthNameDate(  dateStartSondageS2)}}-->{{getMonthNameDate(dateEndSondageS2)}} ({{getYearDate(dateStartSondageS2)}})</th>
+             <th>Result</th>
           </tr>
         </ng-template>
         <ng-template pTemplate="body" let-bassinSondage let-ri="rowIndex">
