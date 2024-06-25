@@ -71,6 +71,7 @@ export class UserComponent implements OnInit {
   }
 
   ngOnInit() {
+
     this.getAllUsers();
     this.cols = [
       {field: 'id', header: 'id'},
@@ -156,7 +157,7 @@ export class UserComponent implements OnInit {
 
 
   saveUser() {
-
+    console.error(this.user)
     this.submitted = true;
 
     if (this.user.pseudo?.trim() && this.user.mp?.trim()) {
@@ -173,6 +174,14 @@ export class UserComponent implements OnInit {
             this.isUpdateUser = false;
           });
         }
+        if (this.user.userType == "COSTUMER") {
+          this.userService.UpdateCostumer(this.user).subscribe(() => {
+            this.getAllUsers();
+            this.isUpdateUser = false;
+          });
+        }
+
+
         this.productDialog = false
       } else {
         this.isUpdateUser = false;
@@ -183,6 +192,11 @@ export class UserComponent implements OnInit {
         }
         if (this.user.userType == "EMPLOYER") {
           this.userService.AddEmployer(this.user).subscribe(() => {
+            this.getAllUsers();
+          });
+        }
+        if (this.user.userType == "COSTUMER") {
+          this.userService.AddCostumer(this.user).subscribe(() => {
             this.getAllUsers();
           });
         }

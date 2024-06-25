@@ -50,4 +50,15 @@ export class UserService {
     return this.http.put<User>(`${this.apiUrl}/employers/update`, user);
 
   }
+  AddCostumer(user: User) {
+    console.log("create Employer");
+    return this.http.post<User>(`${this.apiUrl}/costumers/add`, user);
+
+  }
+
+  UpdateCostumer(user: User) {
+
+    return this.http.put<User>(`${this.apiUrl}/costumers/update`, user);
+
+  }
 }

@@ -1,5 +1,5 @@
 
-import {OnInit} from '@angular/core';
+import {model, OnInit} from '@angular/core';
 import {Component} from '@angular/core';
 import {LayoutService} from './service/app.layout.service';
 import {getToken} from "../../../main";
@@ -16,6 +16,11 @@ export class AppMenuComponent implements OnInit {
   }
 
   ngOnInit() {
+
+
+
+
+
     this.model = [
       {
 
@@ -84,6 +89,12 @@ export class AppMenuComponent implements OnInit {
       },
 
     ]
+    if(getToken()=="COSTUMER") {
+
+
+      this.model = this.model.filter(value => value.items.find((v:any)=> v.label=='Orders/Volumes'))
+
+    }
 
   }
 

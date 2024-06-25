@@ -26,28 +26,28 @@
     <div class=" flex justify-content-between  mt-8 border-1 border-round border-gray-300 p-6  ">
       <div class="  flex flex-column gap-5  justify-content-between ">
         <p-floatLabel >
-          <p-calendar   id="dateCommande" [(ngModel)]="commande.dateCommande" dateFormat="yy-mm-dd"  [showIcon]="true"></p-calendar>
+          <p-calendar   id="dateCommande" [(ngModel)]="commande.dateCommande"  dateFormat="yy-mm-dd"  [showIcon]="true" [disabled]="getToken()!=='ADMIN'"></p-calendar>
           <label for="dateCommande">Command Date</label>
         </p-floatLabel>
         <p-floatLabel>
-          <input type="text" pInputText [(ngModel)]="commande.nom" id="nom" class="w-full"  />
+          <input type="text" pInputText [(ngModel)]="commande.nom" id="nom" class="w-full" [disabled]="getToken()!=='ADMIN'" />
           <label for="nom">Name</label>
         </p-floatLabel>
         <p-floatLabel>
-          <input type="text" pInputText [(ngModel)]="commande.etat"    id="etat" class="w-full" />
+          <input type="text" pInputText [(ngModel)]="commande.etat"    id="etat" class="w-full" [disabled]="getToken()!=='ADMIN'" />
           <label for="etat">State</label>
         </p-floatLabel>
         <p-floatLabel>
-          <input type="text" pInputText [(ngModel)]="commande.laycan"    id="laycan" class="w-full" />
+          <input type="text" pInputText [(ngModel)]="commande.laycan"    id="laycan" class="w-full" [disabled]="getToken()!=='ADMIN'" />
           <label for="laycan">Laycan</label>
         </p-floatLabel>
         <p-floatLabel>
-          <input type="text" pInputText [(ngModel)]="commande.purchaseOrder"    id="purchaseOrder" class="w-full" />
+          <input type="text" pInputText [(ngModel)]="commande.purchaseOrder"    id="purchaseOrder" class="w-full" [disabled]="getToken()!=='ADMIN'" />
           <label for="purchaseOrder">Purchase Order</label>
         </p-floatLabel>
 
         <p-floatLabel>
-          <p-autoComplete
+          <p-autoComplete [disabled]="getToken()!=='ADMIN'"
             [(ngModel)]="commande.customer"
             [dropdown]="true"
             [suggestions]="filtereddatasel"
@@ -59,32 +59,32 @@
         </p-floatLabel>
         <p-floatLabel>
 
-            <p-dropdown [options]="stockOrders" [(ngModel)]="commande.stockOrder" [editable]="true" optionLabel="nom" class="w-full" ></p-dropdown>
+            <p-dropdown  [disabled]="getToken()!=='ADMIN'" [options]="stockOrders" [(ngModel)]="commande.stockOrder" [editable]="true" optionLabel="nom" class="w-full" ></p-dropdown>
             <label >Stock Order</label>
 
         </p-floatLabel>
       </div>
-      <div class=" flex justify-content-center w-full ">
+      <div class=" flex justify-content-center w-full " >
 
-        <p-tabView [scrollable]="true" >
+        <p-tabView [scrollable]="true"  >
           <p-tabPanel header="Pond" >
-            <p-multiSelect [options]="bassins"    [(ngModel)]="commande.bassins"   (ngModelChange)="getLine()" placeholder="Select a Pond" optionLabel="nom" display="chip" ></p-multiSelect>
+            <p-multiSelect [options]="bassins" [disabled]="getToken()!=='ADMIN'"    [(ngModel)]="commande.bassins"   (ngModelChange)="getLine()" placeholder="Select a Pond" optionLabel="nom" display="chip" ></p-multiSelect>
           </p-tabPanel>
 
           <p-tabPanel header="Unwashed" >
-            <p-multiSelect [options]="sbnls"    [(ngModel)]="commande.sbnls" (ngModelChange)="getLine()" placeholder="Select a Unwashed" optionLabel="reference" display="chip" ></p-multiSelect>
+            <p-multiSelect [options]="sbnls"  [disabled]="getToken()!=='ADMIN'"  [(ngModel)]="commande.sbnls" (ngModelChange)="getLine()" placeholder="Select a Unwashed" optionLabel="reference" display="chip" ></p-multiSelect>
           </p-tabPanel>
 
           <p-tabPanel header="Band" >
-          <p-multiSelect [options]="bandes"    [(ngModel)]="commande.bandes" (ngModelChange)="getLine()" placeholder="Select a Band" optionLabel="reference" display="chip" ></p-multiSelect>
+          <p-multiSelect [options]="bandes"  [disabled]="getToken()!=='ADMIN'"  [(ngModel)]="commande.bandes" (ngModelChange)="getLine()" placeholder="Select a Band" optionLabel="reference" display="chip" ></p-multiSelect>
         </p-tabPanel>
 
           <p-tabPanel header="Washed" >
-            <p-multiSelect [options]="sbls"    [(ngModel)]="commande.sbls" (ngModelChange)="getLine()" placeholder="Select a Washed" optionLabel="reference" display="chip" ></p-multiSelect>
+            <p-multiSelect [options]="sbls"   [disabled]="getToken()!=='ADMIN'" [(ngModel)]="commande.sbls" (ngModelChange)="getLine()" placeholder="Select a Washed" optionLabel="reference" display="chip" ></p-multiSelect>
           </p-tabPanel>
 
           <p-tabPanel header="Washed Ship" >
-            <p-multiSelect [options]="sblfs"    [(ngModel)]="commande.sblfs"    (ngModelChange)="getLine()" placeholder="Select a Washed Ship" optionLabel="reference" display="chip" ></p-multiSelect>
+            <p-multiSelect [options]="sblfs" [disabled]="getToken()!=='ADMIN'"   [(ngModel)]="commande.sblfs"    (ngModelChange)="getLine()" placeholder="Select a Washed Ship" optionLabel="reference" display="chip" ></p-multiSelect>
           </p-tabPanel>
 
           </p-tabView>
@@ -99,29 +99,10 @@
 
         </div>
 
-<!--      <div class="flex flex-column border-1 border-round border-gray-300 p-4" *ngIf="commande.bassin">-->
-
-<!--  <div class="field " >-->
-<!--    <p><span class="font-bold"> Reference: </span>{{commande.bassin.reference}}</p>-->
-<!--  </div>-->
-<!--  <div class="field">-->
-<!--    <p><span class="font-bold"> Description: </span>{{commande.bassin.description}}</p>-->
-<!--  </div><div class="field">-->
-<!--  <p><span class="font-bold"> Name: </span>{{commande.bassin.nom}}</p>-->
-<!--</div>-->
-<!--  <div class="field">-->
-<!--    <p><span class="font-bold"> Location: </span>{{commande.bassin.emplacement}}</p>-->
-<!--  </div>-->
-<!--  <div class="field">-->
-<!--    <p><span class="font-bold"> State: </span>{{commande.bassin.etat}}</p>-->
-<!--  </div>-->
-<!--  <div class="field">-->
-<!--    <p><span class="font-bold"> Creation Date: </span>{{commande.bassin.dateCreation}}</p>-->
-<!--  </div>-->
 
 
 
-<!--      </div>-->
+
 
       </div>
 
@@ -138,7 +119,7 @@
     <div class="flex m-2 p-2 border-gray-200 border-1   flex-column  align-items-center gap-2    ">
       <div class=" md:flex  md:align-items-center  md:gap-3 ">
         <label>{{selectedColumns.length}} items selected</label>
-        <p-multiSelect
+        <p-multiSelect [disabled]="getToken()!=='ADMIN'"
           display="chip"
           [options]="cols"
           [(ngModel)]="selectedColumns"
@@ -149,7 +130,7 @@
 
 
         <label class="font-bold"> Choose Calibre : </label>
-        <p-dropdown
+        <p-dropdown [disabled]="getToken()!=='ADMIN'"
           [options]="listcalibre"
           [(ngModel)]="selectedColumnsCalibre"
           optionLabel="header"
@@ -162,18 +143,18 @@
 
       <div class="gap-2 flex align-items-center   mt-4 ">
         <div class="gap-1 flex align-items-center font-bold">Analysis start date  :
-          <input  class="p-2 shadow-1" type="date" pInputText  dateformat="yyyy-MM-dd"  [(ngModel)]="DatefiltrageStart"   />
+          <input  class="p-2 shadow-1" type="date" pInputText  dateformat="yyyy-MM-dd"  [(ngModel)]="DatefiltrageStart" [disabled]="getToken()!=='ADMIN'"  />
 
         </div>
         <div class="gap-1 font-bold flex align-items-center  ">
           Date End Analysis  :
-          <input  class="p-2 shadow-1" type="date"  pInputText dateformat="yyyy-MM-dd"  [(ngModel)]="DatefiltrageEnd"   />
+          <input  class="p-2 shadow-1" type="date"  pInputText dateformat="yyyy-MM-dd"  [(ngModel)]="DatefiltrageEnd" [disabled]="getToken()!=='ADMIN'"   />
 
         </div>
         <div class="gap-1  flex align-items-center">
           <p-floatLabel>
 
-            <p-autoComplete
+            <p-autoComplete [disabled]="getToken()!=='ADMIN'"
               [(ngModel)]="matter"
 
               [dropdown]="true"
@@ -186,12 +167,12 @@
 
         </div>
         <div class="flex gap-2">
-          <p-button (click)="filtredate()" class=" " icon="pi pi-search" label="Search"></p-button>
-          <p-button (click)="Viderfiltredate()" severity="secondary" icon="pi pi-refresh"
+          <p-button [disabled]="getToken()!=='ADMIN'" (click)="filtredate()" class=" " icon="pi pi-search" label="Search"></p-button>
+          <p-button [disabled]="getToken()!=='ADMIN'" (click)="Viderfiltredate()" severity="secondary" icon="pi pi-refresh"
                     label="All Analyse"></p-button>
         </div>
         <div *ngIf="getToken()=='ADMIN'" class="flex justify-content-end">
-          <p-button (click)="AddLineCommand()" severity="success" label="Add"></p-button>
+          <p-button  (click)="AddLineCommand()" severity="success" label="Add"></p-button>
 
         </div>
       </div>
@@ -349,37 +330,37 @@
               <div class="flex align-items-start gap-3 justify-content-between">
             <div class="flex align-items-start gap-3 justify-content-between">
               <p-floatLabel>
-                <input type="text" pInputText [(ngModel)]="commande.h2o"    class="w-full" />
+                <input type="text" pInputText [(ngModel)]="commande.h2o" [disabled]="getToken()!=='ADMIN'"   class="w-full" />
                 <label class="font-bold">H₂O</label>
               </p-floatLabel>
             </div>
             <div class="flex align-items-start gap-3 justify-content-between">
               <p-floatLabel>
-                <input type="text" pInputText [(ngModel)]="commande.mg"    class="w-full" />
+                <input type="text" pInputText [(ngModel)]="commande.mg" [disabled]="getToken()!=='ADMIN'"   class="w-full" />
                 <label class="font-bold">Mg</label>
               </p-floatLabel>
             </div>
             <div class="flex align-items-start gap-3 justify-content-between">
               <p-floatLabel>
-                <input type="text" pInputText [(ngModel)]="commande.so4"    class="w-full" />
+                <input type="text" pInputText [(ngModel)]="commande.so4" [disabled]="getToken()!=='ADMIN'"  class="w-full" />
                 <label class="font-bold">SO₄</label>
               </p-floatLabel>
             </div>
             <div class="flex align-items-start gap-3 justify-content-between">
               <p-floatLabel>
-                <input type="text" pInputText [(ngModel)]="commande.nacl"    class="w-full" />
+                <input type="text" pInputText [(ngModel)]="commande.nacl" [disabled]="getToken()!=='ADMIN'"   class="w-full" />
                 <label class="font-bold">NaCL</label>
               </p-floatLabel>
             </div>
             <div class="flex align-items-start gap-3 justify-content-between">
               <p-floatLabel>
-                <input type="text" pInputText [(ngModel)]="commande.mi"    class="w-full" />
+                <input type="text" pInputText [(ngModel)]="commande.mi" [disabled]="getToken()!=='ADMIN'"    class="w-full" />
                 <label class="font-bold">MI</label>
               </p-floatLabel>
             </div>
             <div class="flex align-items-start gap-3 justify-content-between">
               <p-floatLabel>
-                <input type="text" pInputText [(ngModel)]="commande.fecn6"    class="w-full" />
+                <input type="text" pInputText [(ngModel)]="commande.fecn6"  [disabled]="getToken()!=='ADMIN'"  class="w-full" />
                 <label class="font-bold">Fe(CN)₆</label>
               </p-floatLabel>
             </div>

@@ -100,16 +100,16 @@
                   <span *ngIf="bande">Are you sure you want to delete<b>{{bande.reference}}</b>?</span>
                 </div>
                 <ng-template pTemplate="footer">
-                  <button pButton pRipple icon="pi pi-times" class="p-button-text" label="No" (click)="deleteProductDialog = false"></button>
-                  <button pButton pRipple icon="pi pi-check" class="p-button-text" label="Yes" (click)="confirmDelete(b)"></button>
+                  <button *ngIf="getToken()=='ADMIN'" pButton pRipple icon="pi pi-times" class="p-button-text" label="No" (click)="deleteProductDialog = false"></button>
+                  <button  *ngIf="getToken()=='ADMIN'" pButton pRipple icon="pi pi-check" class="p-button-text" label="Yes" (click)="confirmDelete(b)"></button>
                 </ng-template>
               </p-dialog>
 
             </td>
             <td>
               <div class="flex ">
-                <button pButton pRipple icon="pi pi-pencil" class="p-button-rounded p-button-success mr-2" (click)="editBande(b)"></button>
-                <button pButton pRipple icon="pi pi-trash" class="p-button-rounded p-button-warning mr-2" (click)="deleteBande()"></button>
+                <button *ngIf="getToken()=='ADMIN'" pButton pRipple icon="pi pi-pencil" class="p-button-rounded p-button-success mr-2" (click)="editBande(b)"></button>
+                <button *ngIf="getToken()=='ADMIN'" pButton pRipple icon="pi pi-trash" class="p-button-rounded p-button-warning mr-2" (click)="deleteBande()"></button>
                 <button pButton pRipple icon="pi pi-file-pdf" class="p-button-rounded p-button-primary mr-2"  (click)="exportrapport(b)"></button>
 
               </div>
