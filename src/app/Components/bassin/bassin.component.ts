@@ -27,16 +27,14 @@ import {CheckboxModule} from "primeng/checkbox";
 import {ListboxModule} from "primeng/listbox";
 import {AutoFocusModule} from "primeng/autofocus";
 import {utils, WorkBook, WorkSheet, writeFile} from "xlsx";
-import {getToken} from "../../../main";
+import {getToken, roundToDecimalPlaces} from "../../../main";
 import * as XLSX from 'xlsx';
 import {TooltipModule} from "primeng/tooltip";
-import * as Papa from 'papaparse';
-import Swal from "sweetalert2";
+ import Swal from "sweetalert2";
 import {Recolte} from "../../Models/recolte";
 import {RecolteService} from "../../Services/recolte.service";
 import {RippleModule} from "primeng/ripple";
-import {log} from "@angular-devkit/build-angular/src/builders/ssr-dev-server";
-import {SondageService} from "../../Services/sondage.service";
+ import {SondageService} from "../../Services/sondage.service";
 import {Sondage} from "../../Models/sondage";
 import {FieldsetModule} from "primeng/fieldset";
 
@@ -891,8 +889,7 @@ return mass;
         bCopy.sondageList = filteredList1;
      this.bassinsCopy.push(bCopy)
         this.getPert(bCopy,0)
-        console.error(bassin.nom+"--->"+bassin.sondageList)
-      }
+       }
     });
   }
 
@@ -905,9 +902,8 @@ return mass;
   }
 
   public getPert(bassinSondage: Bassin,ch:number) {
-    let pert: number = 0;
-
-    if (bassinSondage.sondageList && bassinSondage.sondageList.length > 1) {
+     let pert: number = 0;
+     if (bassinSondage.sondageList && bassinSondage.sondageList.length > 1) {
       // Assuming sondageList contains objects with a 'value' property
       const sondage1 = bassinSondage.sondageList[0];
       const sondage2 = bassinSondage.sondageList[1];
@@ -916,21 +912,20 @@ const mass1= this.getMassSondagePdf(bassinSondage,sondage1);
 
         pert = mass2 - mass1;
         if( ch==0) {
-          if (pert < 0) {
+          if (pert < 0 && bassinSondage.recolteList?.length!=0) {
             this.totalperdue += pert
           } else {
-            this.totalFabrique += pert
+            this.totalFabrique += Math.abs(pert)
           }
         }
 
-      return pert;
+      return roundToDecimalPlaces( pert ,3) ;
     }else if(bassinSondage.sondageList?.length==1){
      return  0;
     }
     else {
       return 0
     }
-
 
 
   }
@@ -942,4 +937,13 @@ const mass1= this.getMassSondagePdf(bassinSondage,sondage1);
     return new Date(dateStartSondage.toString()).getFullYear()
     return ""
   }
+
+  protected readonly Math = Math;
+
+  getTotalRecole(bassinSondage: Bassin) {
+  const x=  bassinSondage.recolteList?.reduce((sum, num)=>sum +num.value,0);
+return x==undefined?0:x ;
+  }
+
+  protected readonly roundToDecimalPlaces = roundToDecimalPlaces;
 }
