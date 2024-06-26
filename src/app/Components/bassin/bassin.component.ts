@@ -912,7 +912,7 @@ const mass1= this.getMassSondagePdf(bassinSondage,sondage1);
 
         pert = mass2 - mass1;
         if( ch==0) {
-          if (pert < 0 && bassinSondage.recolteList?.length!=0) {
+          if (pert < 0 && this.getTotalRecole(bassinSondage)==0) {
             this.totalperdue += pert
           } else {
             this.totalFabrique += Math.abs(pert)
@@ -941,7 +941,7 @@ const mass1= this.getMassSondagePdf(bassinSondage,sondage1);
   protected readonly Math = Math;
 
   getTotalRecole(bassinSondage: Bassin) {
-  const x=  bassinSondage.recolteList?.reduce((sum, num)=>sum +num.value,0);
+  const x=  bassinSondage.recolteList?.filter(rec=>rec.dateCreation>=this.dateStartSondageS2 && rec.dateCreation<=this.dateEndSondageS2 )?.reduce((sum, num)=>sum +num.value,0);
 return x==undefined?0:x ;
   }
 
