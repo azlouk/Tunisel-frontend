@@ -818,12 +818,12 @@
       </div>
       <div class="flex gap-4 w-full justify-content-end mb-2">
         <p-fieldset legend="Production"  >
-          <span class="pi pi-arrow-up bg-green-200 p-2  text-3xl font-bold   ">{{totalFabrique}}</span>
+          <span class="pi pi-arrow-up bg-green-200 p-2  text-3xl font-bold   ">{{roundToDecimalPlaces(totalFabrique,3)}}</span>
 
         </p-fieldset>
         <p-fieldset legend="Wasting" >
 
-          <span class=" pi pi-arrow-down bg-red-200 p-2 text-3xl font-bold">{{totalperdue}}</span>
+          <span class=" pi pi-arrow-down bg-red-200 p-2 text-3xl font-bold">{{roundToDecimalPlaces(totalperdue,3)}}</span>
         </p-fieldset>
       </div>
       <p-table class=" " #dt [value]="bassinsCopy" [columns]="cols"  responsiveLayout="scroll"  [globalFilterFields]="['pondName']"    dataKey="id">
