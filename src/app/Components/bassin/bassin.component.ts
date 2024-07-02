@@ -708,7 +708,8 @@ exportRecolte(bassin: Bassin) {
   months: number[] = [];
   public TotalPands: number=0;
   getMonthsBetweenDates(dateDebut1: Date, dateFin1: Date): number[] {
-this.selectedBassins.forEach(value => {
+    this.bassinsId=[];
+  this.selectedBassins.forEach(value => {
   if(value.id)
   this.bassinsId.push(value.id)
 })
@@ -787,7 +788,14 @@ public getMonthNameDate(date: Date) {
   public getTotalPerPond(recolte: any) :number{
 let total:number=0;
     const list=this.listSumRecolteCopy.filter((rec:any)=>rec.id==recolte.id);
-    list.forEach((list:any)=>total=total+(list.total) );
+    // list.forEach((list:any)=>total=total+(list.total) )
+    list.forEach((list:any)=> {
+      this.months.forEach(month => {
+        if(list.month==month){
+          total=total+(list.total)
+        }
+      })
+    } )
 
     return total;
   }
@@ -919,7 +927,7 @@ const mass1= this.getMassSondagePdf(bassinSondage,sondage1);
           }
         }
 
-      return roundToDecimalPlaces( pert ,3) ;
+      return roundToDecimalPlaces( pert+this.getTotalRecole(bassinSondage) ,3) ;
     }else if(bassinSondage.sondageList?.length==1){
      return  0;
     }
@@ -940,10 +948,49 @@ const mass1= this.getMassSondagePdf(bassinSondage,sondage1);
 
   protected readonly Math = Math;
 
-  getTotalRecole(bassinSondage: Bassin) {
-  const x=  bassinSondage.recolteList?.filter(rec=>rec.dateCreation>=this.dateStartSondageS2 && rec.dateCreation<=this.dateEndSondageS2 )?.reduce((sum, num)=>sum +num.value,0);
-return x==undefined?0:x ;
+  // getTotalRecole(bassinSondage: Bassin) {
+  //   let x:number=0;
+  // const listFiltree:Recolte[]|undefined=  bassinSondage.recolteList?.filter(rec=> {
+  //   this.pipeDate( rec.dateCreation) >= this.dateStartSondageS2.toString() && this.pipeDate(rec.dateCreation) <= this.dateEndSondageS2.toString();
+  //   console.log(this.pipeDate(rec.dateCreation)+" <> "+this.dateStartSondageS2)
+  //
+  // } );
+  // if(listFiltree!==undefined)
+  //  // x=listFiltree.reduce((sum, num)=>sum +num.value,0)
+  //   listFiltree.forEach(value => x+=value.value)
+  //   return x==undefined?0:x ;
+  // }
+
+  protected readonly roundToDecimalPlaces  = roundToDecimalPlaces;
+  getTotalRecole(bassinSondage: Bassin): number {
+    let total: number = 0;
+    const listFiltree: Recolte[] | undefined = bassinSondage.recolteList?.filter(rec => {
+      const recDate = this.pipeDate(rec.dateCreation);
+      const startDate = this.pipeDate(this.dateStartSondageS2);
+      const endDate = this.pipeDate(this.dateEndSondageS2);
+
+      return recDate >= startDate && recDate <= endDate;
+    });
+
+    if (listFiltree !== undefined) {
+      total = listFiltree.reduce((sum, rec) => sum + rec.value, 0);
+    }
+
+    return total;
   }
 
-  protected readonly roundToDecimalPlaces = roundToDecimalPlaces;
+  pipeDate(isoDatetimeStr: Date): string {
+
+    // Parse the input datetime string
+    const date = new Date(isoDatetimeStr);
+
+    // Format the date object to just the date
+    const year = date.getUTCFullYear();
+    const month = ('0' + (date.getUTCMonth() + 1)).slice(-2);
+    const day = ('0' + date.getUTCDate()).slice(-2);
+
+    return `${year}-${month}-${day}`;
+  }
+
+
 }
