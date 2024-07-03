@@ -357,10 +357,14 @@ commandesCopy: Commande[]=[];
 
 
   calculVolumeAvailble(stockSelected: StockOrder) {
-const total=stockSelected.volumeSaline+stockSelected.volumeTerrain+stockSelected.volumePort+stockSelected.volumeQuai;
+const total=this.getSumSalines(stockSelected)+stockSelected.volumeTerrain+stockSelected.volumePort+stockSelected.volumeQuai;
     this.VolumeAvailble= total
   }
+  getSumSalines(stockOrder:StockOrder){
 
+    return  stockOrder.salines.reduce((sum, saline) => sum+saline.volumeSaline,0)
+
+  }
   CalculeTotalInput() {
     this.TotalHarv=0;
     this.TotalTrQu=0;

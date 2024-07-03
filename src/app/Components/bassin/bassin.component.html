@@ -100,7 +100,7 @@
             </td>
             <td>
               <div class="flex">
-                <button *ngIf="getToken()=='ADMIN'" pButton pRipple  class="p-button-rounded p-button-info mr-2" (click)="AddRecolte(bassin)">Harvest</button>
+                <button *ngIf="getToken()=='ADMIN'||'EMPLOYER'" pButton pRipple  class="p-button-rounded p-button-info mr-2" (click)="AddRecolte(bassin)">Harvest</button>
                 <button *ngIf="getToken()=='ADMIN'" pButton pRipple  class="p-button-rounded p-button-secondary mr-2" (click)="AddSondage(bassin)">Survey</button>
 
                 <button *ngIf="getToken()=='ADMIN'" pButton pRipple icon="pi pi-pencil" class="p-button-rounded p-button-success mr-2" (click)="editBassin(bassin)"></button>
@@ -388,7 +388,7 @@
 <p-dialog [(visible)]="RecolteDialog" [style]="{width: '1000px'}" header="Harvest" [modal]="true" class="p-fluid">
   <ng-template pTemplate="content">
     <h3>Add Harvest</h3>
-<div class="flex justify-content-between align-items-center border border-1 border-round border-gray-400 p-3">
+<div *ngIf="getToken()=='ADMIN'" class="flex justify-content-between align-items-center border border-1 border-round border-gray-400 p-3">
     <div class="">
       <label for="dateCreationr">Date Creation</label>
       <input  class="p-2 shadow-1" type="date" dateFormat="yy-mm-dd"  pInputText id="dateCreationr"  [(ngModel)]="recolte.dateCreation"  />

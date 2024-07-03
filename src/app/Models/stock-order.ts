@@ -1,27 +1,29 @@
 import {Bassin} from "./bassin";
 import {Commande} from "./commande";
+import {Saline} from "./saline";
 
-export class StockOrder {
 
- id: number;
- reference: string;
- dateCreation: Date;
- nom: string;
- calibre: number;
- volumeSaline: number;
- volumeTerrain: number;
- volumePort: number;
- volumeQuai: number;
- bassinList: Bassin[];
- commandeList:Commande[];
+export class StockOrder implements Object{
 
-  constructor(_id: number, _reference: string, _dateCreation: Date, _nom: string, _calibre: number, _volumeSaline: number, _volumeTerrain: number, _volumePort: number, _volumeQuai: number, _bassinList: Bassin[], _commandeList: Commande[]) {
+id: number;
+reference: string;
+dateCreation: Date;
+nom: string;
+calibre: number;
+salines: Saline[];
+volumeTerrain: number;
+volumePort: number;
+volumeQuai: number;
+bassinList: Bassin[];
+commandeList:Commande[];
+
+  constructor(_id: number=0, _reference: string="", _dateCreation: Date=new Date(), _nom: string="", _calibre: number=0, _salines: Saline[]=[], _volumeTerrain: number=0, _volumePort: number=0, _volumeQuai: number=0, _bassinList: Bassin[]=[], _commandeList: Commande[]=[]) {
     this.id = _id;
     this.reference = _reference;
     this.dateCreation = _dateCreation;
     this.nom = _nom;
     this.calibre = _calibre;
-    this.volumeSaline = _volumeSaline;
+    this.salines = _salines;
     this.volumeTerrain = _volumeTerrain;
     this.volumePort = _volumePort;
     this.volumeQuai = _volumeQuai;
@@ -69,12 +71,12 @@ export class StockOrder {
     this.calibre = value;
   }
 
-  public get _volumeSaline(): number {
-    return this.volumeSaline;
+  public get _salines(): Saline[] {
+    return this.salines;
   }
 
-  public set _volumeSaline(value: number) {
-    this.volumeSaline = value;
+  public set _salines(value: Saline[]) {
+    this.salines = value;
   }
 
   public get _volumeTerrain(): number {
@@ -116,4 +118,8 @@ export class StockOrder {
   public set _commandeList(value: Commande[]) {
     this.commandeList = value;
   }
+
+
+
+
 }
