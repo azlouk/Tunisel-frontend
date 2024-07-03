@@ -911,6 +911,7 @@ return mass;
 
   public getPert(bassinSondage: Bassin,ch:number) {
      let pert: number = 0;
+     let pertFinal: number = 0;
      if (bassinSondage.sondageList && bassinSondage.sondageList.length > 1) {
       // Assuming sondageList contains objects with a 'value' property
       const sondage1 = bassinSondage.sondageList[0];
@@ -919,15 +920,16 @@ const mass2= this.getMassSondagePdf(bassinSondage,sondage2);
 const mass1= this.getMassSondagePdf(bassinSondage,sondage1);
 
         pert = mass2 - mass1;
+       pertFinal=pert+this.getTotalRecole(bassinSondage)
         if( ch==0) {
           if (pert < 0 ) {
-            this.totalperdue += pert;
+            this.totalperdue += pertFinal;
           } else if(pert >= 0 ){
-            this.totalFabrique += Math.abs(pert);
+            this.totalFabrique += Math.abs(pertFinal);
           }
         }
 
-      return roundToDecimalPlaces( pert ,3) ;
+      return roundToDecimalPlaces( pertFinal ,3) ;
     }else if(bassinSondage.sondageList?.length==1){
      return  0;
     }

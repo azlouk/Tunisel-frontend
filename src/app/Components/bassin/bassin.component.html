@@ -867,11 +867,11 @@
              </td>
               <td [ngClass]="{'bg-red-200':true}">
 
-                {{(getPert(bassinSondage,1)<0 && bassinSondage.sondageList!==undefined )?roundToDecimalPlaces(getPert(bassinSondage,1)+getTotalRecole(bassinSondage),3):"0"}}
+                {{(getPert(bassinSondage,1)<0 && bassinSondage.sondageList!==undefined )?roundToDecimalPlaces(getPert(bassinSondage,1),3):"0"}}
               </td>
               <td [ngClass]="{'bg-green-200':true}">
 
-              {{(getPert(bassinSondage,1)>0 &&   bassinSondage.sondageList!==undefined )?roundToDecimalPlaces(Math.abs(getPert(bassinSondage,1)+getTotalRecole(bassinSondage)),3):("0") }}
+              {{(getPert(bassinSondage,1)>0 &&   bassinSondage.sondageList!==undefined )?roundToDecimalPlaces(Math.abs(getPert(bassinSondage,1)),3):("0") }}
             </td>
           </tr>
         </ng-template>
