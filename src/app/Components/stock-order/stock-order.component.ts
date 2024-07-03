@@ -1,4 +1,4 @@
-import {Component, ElementRef, Input, OnInit, ViewChild} from '@angular/core';
+import {Component,  OnInit} from '@angular/core';
 import {AutoFocusModule} from "primeng/autofocus";
 import {ButtonModule} from "primeng/button";
 import {CheckboxModule} from "primeng/checkbox";
@@ -16,20 +16,15 @@ import {ToolbarModule} from "primeng/toolbar";
 import {TooltipModule} from "primeng/tooltip";
 import {Product} from "../../Models/product";
 import {Bassin} from "../../Models/bassin";
-import {Puit} from "../../Models/puit";
 import {BassinService} from "../../Services/bassin.service";
-import {PuitService} from "../../Services/puit.service";
 import Swal from "sweetalert2";
-import {AnalysesChimique} from "../../Models/analyses-chimique";
-import {AnalysesPhysique} from "../../Models/analyses-physique";
-import html2canvas from "html2canvas";
-import jsPDF from "jspdf";
-import * as XLSX from "xlsx";
-import {writeFile} from "xlsx";
 import {getToken} from "../../../main";
 import {StockOrderService} from "../../Services/stock-order.service";
 import {StockOrder} from "../../Models/stock-order";
 import {MultiSelectModule} from "primeng/multiselect";
+import {Saline} from "../../Models/saline";
+import {RippleModule} from "primeng/ripple";
+import {SalineService} from "../../Services/saline.service";
 
 @Component({
   selector: 'app-stock-order',
@@ -53,7 +48,8 @@ import {MultiSelectModule} from "primeng/multiselect";
     ToolbarModule,
     TooltipModule,
     NgClass,
-    MultiSelectModule
+    MultiSelectModule,
+    RippleModule
   ],
   templateUrl: './stock-order.component.html',
   styleUrl: './stock-order.component.css'
@@ -85,8 +81,8 @@ export class StockOrderComponent implements OnInit{
   selectedStockOrders: StockOrder[] = [];
   stockOrders: StockOrder[] = [];
   TransferAttributs:any[]=[]
-  stockOrder: StockOrder = new StockOrder(0,'',new Date(),'',0,0,0,0,0,[],[]);
-
+  stockOrder: StockOrder = new StockOrder();
+ saline: Saline=new Saline();
 
   private isUpdateStockOrder=false;
 
@@ -95,7 +91,8 @@ export class StockOrderComponent implements OnInit{
 
   constructor(  private messageService: MessageService,
                 private bassinService :BassinService,
-                private stockOrderService :StockOrderService) { }
+                private stockOrderService :StockOrderService,
+                private salineService :SalineService) { }
 
   ngOnInit() {
     this.TransferAttributs= [
@@ -110,7 +107,7 @@ export class StockOrderComponent implements OnInit{
   }
 
   openNew() {
-    this.stockOrder = new StockOrder(0,'',new Date(),'',0,0,0,0,0,[],[]);
+    this.stockOrder = new StockOrder();
 
     this.submitted = false;
     this.productDialog = true;
@@ -197,7 +194,9 @@ export class StockOrderComponent implements OnInit{
       this.isUpdateStockOrder=false;
     }
     else
-    {this.stockOrderService.addStockOrder(this.stockOrder).subscribe(() =>{
+    {
+      this.stockOrder.salines.push(this.saline)
+      this.stockOrderService.addStockOrder(this.stockOrder).subscribe(() =>{
         this.getAllStockOrder();
       });
 
@@ -237,12 +236,22 @@ export class StockOrderComponent implements OnInit{
  TransferQuantity: any;
  AddQuantityToSaline: any;
 
+
   calculTotalVolume(stockOrder:StockOrder):number {
 
-  return  stockOrder.volumeSaline+stockOrder.volumeTerrain+stockOrder.volumePort+stockOrder.volumeQuai;
+  return this.getSumSalines(stockOrder)+stockOrder.volumeTerrain+stockOrder.volumePort+stockOrder.volumeQuai;
 
   }
+  // ===================Sum=========================
 
+  getSumSalines(stockOrder:StockOrder){
+
+    return  stockOrder.salines.reduce((sum, saline) => sum+saline.volumeSaline,0)
+
+  }
+  // ===================Sum=========================
+  public salines: any;
+  public selectedSalines: any;
   transferStockOrder(stockOrder: StockOrder) {
       this.TransferDialog=true;
       this.stockOrder=stockOrder;
@@ -253,8 +262,12 @@ export class StockOrderComponent implements OnInit{
     this.AddToSalineDialog=true;
     this.stockOrder=stockOrder;
     this.isUpdateStockOrder=true;
-  }
 
+
+  }
+  getSalinesByStockOrder(){
+    this.stockOrderService.getSalinesByStockOrder(this.stockOrder.id).subscribe(value => this.stockOrder.salines=value)
+}
 hideDialogTransfer() {
     this.TransferDialog=false;
 
@@ -267,22 +280,39 @@ hideDialogTransfer() {
 
   saveTransferQuantity(): void {
     if (this.TransferQuantity && this.startingPoint && this.arrivingPoint) {
-      const startingPointAttr = this.TransferAttributs.find(attr => attr.id === this.startingPoint.id);
-      const arrivingPointAttr = this.TransferAttributs.find(attr => attr.id === this.arrivingPoint.id);
 
-      if (startingPointAttr && arrivingPointAttr && this.startingPoint.id === 0) {
+
+
+      if ( this.startingPoint.id === 0) {
         const departingVolume = 'volumeSaline';
-        const arrivingVolume = arrivingPointAttr.attribut;
+        const arrivingVolume = this.arrivingPoint.attribut;
 
-        if ((<any>this.stockOrder)[departingVolume] !== undefined && (<any>this.stockOrder)[arrivingVolume] !== undefined) {
-          (<any>this.stockOrder)[departingVolume] -= this.TransferQuantity;
-          (<any>this.stockOrder)[arrivingVolume] += this.TransferQuantity;
+         this.stockOrder.salines.map((vsaline: Saline, index:number) => {
+              if(vsaline.id==this.salineV.id){
+                console.log(vsaline)
+                    if (this.salineV.volumeSaline==this.TransferQuantity) {
+
+                      (<any>this.stockOrder)[arrivingVolume] += this.TransferQuantity;
+                      console.log((<any>this.stockOrder)[arrivingVolume] );
+
+                      this.stockOrder.salines = this.stockOrder.salines.filter(v => v.id !== this.salineV.id)
+
+                    }else if(this.salineV.volumeSaline>this.TransferQuantity) {
+                      (<any>this.stockOrder)[arrivingVolume] += this.TransferQuantity;
+                      console.log((<any>this.stockOrder)[arrivingVolume] );
+
+                      vsaline.volumeSaline-=this.TransferQuantity ;
+                    }
+              }
+         }) ;
+
+        console.error(this.stockOrder.salines)
           this.saveStockOrder();
-        }
+
       }
-      else if (startingPointAttr && arrivingPointAttr && this.startingPoint.id === 1) {
+      else if (this.startingPoint.id === 1) {
         const departingVolume = 'volumeTerrain';
-        const arrivingVolume = arrivingPointAttr.attribut;
+        const arrivingVolume = this.arrivingPoint.attribut;
 
         if ((<any>this.stockOrder)[departingVolume] !== undefined && (<any>this.stockOrder)[arrivingVolume] !== undefined) {
           (<any>this.stockOrder)[departingVolume] -= this.TransferQuantity;
@@ -290,9 +320,9 @@ hideDialogTransfer() {
           this.saveStockOrder();
         }
       }
-      else if (startingPointAttr && arrivingPointAttr && this.startingPoint.id === 2) {
+      else if ( this.startingPoint.id === 2) {
         const departingVolume = 'volumePort';
-        const arrivingVolume = arrivingPointAttr.attribut;
+        const arrivingVolume = this.arrivingPoint.attribut;
 
         if ((<any>this.stockOrder)[departingVolume] !== undefined && (<any>this.stockOrder)[arrivingVolume] !== undefined) {
           (<any>this.stockOrder)[departingVolume] -= this.TransferQuantity;
@@ -300,9 +330,9 @@ hideDialogTransfer() {
           this.saveStockOrder();
         }
       }
-      else if (startingPointAttr && arrivingPointAttr && this.startingPoint.id === 3) {
+      else if ( this.startingPoint.id === 3) {
         const departingVolume = 'volumeQuai';
-        const arrivingVolume = arrivingPointAttr.attribut;
+        const arrivingVolume = this.arrivingPoint.attribut;
 
         if ((<any>this.stockOrder)[departingVolume] !== undefined && (<any>this.stockOrder)[arrivingVolume] !== undefined) {
           (<any>this.stockOrder)[departingVolume] -= this.TransferQuantity;
@@ -316,10 +346,42 @@ hideDialogTransfer() {
     this.isUpdateStockOrder = false;
   }
 
-  saveAddToSaline():void{
-    this.stockOrder.volumeSaline+=this.AddQuantityToSaline;
-    this.saveStockOrder();
-    this.AddToSalineDialog = false;
-    this.isUpdateStockOrder = false;
+  // saveAddToSaline():void{
+  //   // this.stockOrder.volumeSaline+=this.AddQuantityToSaline;
+  //   this.saveStockOrder();
+  //   this.AddToSalineDialog = false;
+  //   this.isUpdateStockOrder = false;
+  // }
+
+  saveUpdateSaline() {
+this.salineService.updateSaline(this.saline).subscribe(value => {
+  this.getSalinesByStockOrder()
+  this.saline=new Saline()
+})
+  }
+
+  public updateSaline(saline: Saline) {
+this.saline=saline;
+  }
+
+deleteSaline(saline: Saline) {
+this.salineService.deleteSaline(saline.id).subscribe(value => this.getSalinesByStockOrder())
+  }
+
+ saveSaline() {
+this.salineService.addSaline(this.saline, this.stockOrder.id).subscribe(value => {
+this.getSalinesByStockOrder();
+this.saline=new Saline()
+})
+
+  }
+
+
+  protected readonly StockOrder = StockOrder;
+
+  public salineV: Saline=new Saline();
+
+  public setValueSaline() {
+    this.stockOrder.salines?this.salineV=this.stockOrder.salines[0]:this.salineV=new Saline();
   }
 }

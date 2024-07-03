@@ -3,6 +3,7 @@ import {environment} from "../environment/environment";
 import {HttpClient} from "@angular/common/http";
 import {Observable} from "rxjs";
 import {StockOrder} from "../Models/stock-order";
+import {Saline} from "../Models/saline";
 
 @Injectable({
   providedIn: 'root'
@@ -29,6 +30,9 @@ export class StockOrderService {
 
   addStockOrder(stockOrder: StockOrder) : Observable<StockOrder>{
     return this.http.post<StockOrder>(`${this.apiUrl}/stockOrders/add`, stockOrder);
+  }
+  getSalinesByStockOrder(stockOrderId: number) : Observable<Saline[]>{
+    return this.http.get<Saline[]>(`${this.apiUrl}/stockOrders/saline/${stockOrderId}` );
   }
 
 }
