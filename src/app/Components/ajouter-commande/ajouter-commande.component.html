@@ -223,7 +223,7 @@
 
           </ng-template>
         <ng-template pTemplate="body" let-lineCommande let-columns="columns" let-editing="editing" let-ri="rowIndex">
-          <tr [pEditableRow]="lineCommande" [pSelectableRow]="lineCommande"  [ngClass]="{'bg-green-300 text-white' : verify(lineCommande)==true,'bg-red-300 text-white' : verify(lineCommande)==false,'bg-white-400 ' : verify(lineCommande)==undefined}">
+          <tr [pEditableRow]="lineCommande" [pSelectableRow]="lineCommande"  [ngClass]="{'bg-green-300 text-white' : verify(lineCommande)==true && getToken()=='ADMIN','bg-red-300 text-white' : verify(lineCommande)==false && getToken()=='ADMIN','bg-white-400 ' : verify(lineCommande)==undefined}">
             <ng-container *ngFor="let col of columns">
 
               <td *ngIf="col.id>28 && col.id<42">
