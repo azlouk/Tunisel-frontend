@@ -244,11 +244,12 @@ commandesCopy: Commande[]=[];
   getAllCommandes() {
     this.loading=true ;
 
-    this.commandeService.getAllCommandeDTO().subscribe((ListCommande:  Commande[]) => {
+    this.commandeService.getAllCommande().subscribe((ListCommande:  Commande[]) => {
       this.commandes=ListCommande;
      this.commandesCopy=[... this.commandes]
-      this.getAllStockOrder();
+
       this.loading=false ;
+      this.getAllStockOrder();
       this.initiaTimeLine();
     }, error => {
       console.log(error)});
