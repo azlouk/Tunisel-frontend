@@ -920,14 +920,14 @@ const mass1= this.getMassSondagePdf(bassinSondage,sondage1);
 
         pert = mass2 - mass1;
         if( ch==0) {
-          if (pert < 0 && this.getTotalRecole(bassinSondage)==0) {
-            this.totalperdue += pert
-          } else {
-            this.totalFabrique += Math.abs(pert)
+          if (pert < 0 ) {
+            this.totalperdue += pert;
+          } else if(pert >= 0 ){
+            this.totalFabrique += Math.abs(pert);
           }
         }
 
-      return roundToDecimalPlaces( pert+this.getTotalRecole(bassinSondage) ,3) ;
+      return roundToDecimalPlaces( pert ,3) ;
     }else if(bassinSondage.sondageList?.length==1){
      return  0;
     }
@@ -974,9 +974,12 @@ const mass1= this.getMassSondagePdf(bassinSondage,sondage1);
 
     if (listFiltree !== undefined) {
       total = listFiltree.reduce((sum, rec) => sum + rec.value, 0);
+      return total;
+    }
+else {
+      return 0;
     }
 
-    return total;
   }
 
   pipeDate(isoDatetimeStr: Date): string {
