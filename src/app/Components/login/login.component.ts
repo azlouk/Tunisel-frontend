@@ -14,6 +14,7 @@ import {RippleModule} from "primeng/ripple";
 import {ChipsModule} from "primeng/chips";
 import Swal from "sweetalert2";
  import {JsonPipe} from "@angular/common";
+import {AuthenticationRequest} from "../../Models/authentication-request";
 
 @Component({
   selector: 'app-login',
@@ -37,7 +38,7 @@ export class LoginComponent implements OnInit{
 
   }
   user: User = {};
-
+  authenticationRequest:AuthenticationRequest=new AuthenticationRequest();
 
 
   ngOnInit() {
@@ -48,10 +49,17 @@ export class LoginComponent implements OnInit{
 
 
  authUser(){
-  this.loginService.loggdinUser(this.user)
+  this.loginService.loggdinUser(this.authenticationRequest)
 
 }
-
+  // authenticateUser(){
+  //   this.loginService.authenticate(this.authenticationRequest).subscribe(value => {
+  //
+  //     this.router.navigate(["/dash"]);
+  //     alert(new JsonPipe().transform(value))
+  //   })
+  //
+  // }
 getPassWord(){
   Swal.fire({
     title: "Veuillez vous saisie vote numéro téléphone",

@@ -6,6 +6,9 @@ import {catchError, Observable} from "rxjs";
 import {JsonPipe} from "@angular/common";
 import Swal from "sweetalert2";
 import {Router} from "@angular/router";
+import {Sondage} from "../Models/sondage";
+import {AuthenticationRequest} from "../Models/authentication-request";
+import {AuthenticationResponse} from "../Models/authentication-response";
 
 @Injectable({
   providedIn: 'root'
@@ -14,20 +17,19 @@ export class LoginService {
 
   apiUrl=environment.apiUrl
   public Islogin: boolean=false;
-  public tokenKey: string="token";
+  public  tokenKey: string="token";
 
   constructor(private http: HttpClient ,   private router: Router) {
   }
 
 
-  loggdinUser(user: User) {
+  loggdinUser(request:AuthenticationRequest) {
 
-    console.log(new JsonPipe().transform(user))
-      this.http.post<any>(`${this.apiUrl}/users/login`, user).subscribe((token:User) => {
+    this.http.post<AuthenticationResponse>(`${this.apiUrl}/users/auth/authenticate`, request).subscribe((token:AuthenticationResponse) => {
         console.log("response data :"+new JsonPipe().transform(token))
-        if((token!=null && token.userType!=undefined)|| true) {
-          // @ts-ignore
-          localStorage.setItem(this.tokenKey, token.userType.toString());
+        if((token!=null && token!=undefined)|| true) {
+
+          localStorage.setItem(this.tokenKey,token.access_token );
           this.router.navigate(['dash']);
         }else {
           Swal.fire({
@@ -51,6 +53,10 @@ export class LoginService {
 
       }) ;
 
+  }
+
+  authenticate(request:AuthenticationRequest ): Observable<AuthenticatorResponse>{
+    return this.http.post<AuthenticatorResponse>(`${this.apiUrl}/users/auth/authenticate`, request);
   }
 
   GetPassword(user: User):Observable<User> {
