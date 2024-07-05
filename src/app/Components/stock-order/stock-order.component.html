@@ -186,43 +186,151 @@
 </div>
 
 
-<p-dialog [(visible)]="TransferDialog" [style]="{width: '800px'}" header="Transfer Quantity" [modal]="true" class="p-fluid">
+
+<p-dialog [(visible)]="TransferDialog" [style]="{width: '1200px'}" header="Transfer Quantity" [modal]="true" class="p-fluid">
   <ng-template pTemplate="content">
-    <div class="flex gap-4 justify-content-between h-16rem">
-      <div class="field ">
+    <h3>Add Transfer</h3>
+    <div class="flex justify-content-between gap-2 align-items-start border border-1 border-round border-gray-400 p-3">
+
+      <div class="">
+        <label for="date">Date Creation</label>
+        <input  class="p-2 shadow-1" type="date" dateFormat="yy-mm-dd"  pInputText id="date"  [(ngModel)]="historyTransfer.dateCreation"  />
+      </div>
+      <div class=" ">
         <label >Starting point</label>
         <p-dropdown [options]="TransferAttributs" [(ngModel)]="startingPoint" [editable]="true" (ngModelChange)="setValueSaline()"  optionLabel="label" class="w-full" ></p-dropdown>
 
       </div>
-      <div class="field " *ngIf="startingPoint==TransferAttributs[0]||arrivingPoint==TransferAttributs[0]">
+      <div class=" " *ngIf="startingPoint==TransferAttributs[0]||arrivingPoint==TransferAttributs[0]">
         <label >Select Volume Saline</label>
         <p-dropdown [options]="stockOrder.salines" [(ngModel)]="salineV"  optionLabel="dateCreation" class="w-full" ></p-dropdown>
 
-       <div class="flex-column flex gap-2 border-1 border-gray-200 mt-2 p-1">
-         <label>Date : {{salineV.dateCreation | date :'dd-MM-YYYY'}}</label>
-         <label>Value : {{salineV.volumeSaline}}</label>
+        <div class="flex-column flex gap-2 border-1 border-gray-200 mt-2 p-1">
+          <label>Date : {{salineV.dateCreation | date :'dd-MM-YYYY'}}</label>
+          <label>Value : {{salineV.volumeSaline}}</label>
 
-       </div>
+        </div>
       </div>
-      <div class="field">
+      <div class="">
         <label >Arriving point</label>
         <p-dropdown [options]="TransferAttributs" [(ngModel)]="arrivingPoint" (ngModelChange)="setValueSaline()" [editable]="true" optionLabel="label" class="w-full" ></p-dropdown>
       </div>
 
-      <div class="field">
+      <div class="">
         <label for="transfer">Transfer Quantity</label>
         <p-inputNumber  id="transfer"  [(ngModel)]="TransferQuantity" mode="decimal" [minFractionDigits]="3" ></p-inputNumber>
       </div>
 
+      <div>
+        <button pButton pRipple label="Save" icon="pi pi-check" class="p-button-text" (click)="saveTransferQuantity()"></button>
+      </div>
     </div>
+    <div class="cart mt-5">
+      <p-table #dt [loading]="loading"
+               [value]="stockOrder.listHistory"
+               [columns]="cols"
+               responsiveLayout="scroll" [rows]="10"
+               [globalFilterFields]="['surface','etat','id','emplacement','nom','dateCreation','reference','description']"
+               [paginator]="true"
+               editMode="row"
+               [rowsPerPageOptions]="[10,20,30]"
+               [showCurrentPageReport]="true" currentPageReportTemplate="Display  {first} to  {last} of  {totalRecords} entries" [(selection)]="selectedSalines" selectionMode="multiple" [rowHover]="true" dataKey="id">
+        <ng-template pTemplate="caption">
+          <div class="flex flex-column md:flex-row md:justify-content-between md:align-items-center">
+            <div class="flex justify-content-between align-items-center w-full">
+              <h5 class="m-0">History Transfer</h5>
+              <div>
+            <span class=" p-input-icon-left ">
+                            <i class="pi pi-search"></i>
+                            <input  type="text" pInputText (input)="onGlobalFilter(dt, $event)" placeholder="Search..."  class="w-full sm:w-auto"/>
+                        </span>
+              </div>
+            </div>
+
+          </div>
+        </ng-template>
+        <ng-template pTemplate="header">
+          <tr>
+            <th style="width: 3rem">
+              <p-tableHeaderCheckbox></p-tableHeaderCheckbox>
+            </th>
+            <th pSortableColumn="id">Id <p-sortIcon field="id"></p-sortIcon></th>
+            <th pSortableColumn="reference">Date Creation<p-sortIcon field="reference"></p-sortIcon></th>
+            <th pSortableColumn="description">Starting Point <p-sortIcon field="description"></p-sortIcon></th>
+            <th pSortableColumn="description">Arriving Point <p-sortIcon field="description"></p-sortIcon></th>
+            <th pSortableColumn="description">Transfer Quantity <p-sortIcon field="description"></p-sortIcon></th>
+
+            <th></th>
+          </tr>
+        </ng-template>
+        <ng-template pTemplate="body" let-history let-editing="editing" >
+          <tr [pEditableRow]="history" >
+            <td>
+              <p-tableCheckbox [value]="history"></p-tableCheckbox>
+            </td>
+            <td >
+              <span class="p-column-title">Id</span>
+              {{history.id}}
+            </td>
+
+            <td >
+              <p-cellEditor>
+                <ng-template pTemplate="input">
+                  <input  class="p-2 shadow-1" type="date" dateFormat="yy-mm-dd"  pInputText   [(ngModel)]="history.dateCreation"  />
+
+                </ng-template>
+                <ng-template pTemplate="output">
+                  {{history.dateCreation|date:'dd-MM-yyyy'}}
+                </ng-template>
+              </p-cellEditor>
+            </td>
+
+            <td >
+                  {{history.startingPoint}}
+            </td>
+            <td >
+                  {{history.arrivingPoint}}
+            </td>
+
+            <td >
+              <p-cellEditor>
+                <ng-template pTemplate="input">
+                  <input
+                    pInputText
+                    type="text"
+                    [(ngModel)]="history.transferQuantity" />
+                </ng-template>
+                <ng-template pTemplate="output">
+                  {{history.transferQuantity}}
+                </ng-template>
+              </p-cellEditor>
+            </td>
+            <td>
+              <div class="flex  align-items-center gap-2">
+                <div class="flex align-items-center justify-content-center gap-2" *ngIf="getToken()=='ADMIN'">
+                  <button *ngIf="!editing" pButton pRipple type="button" pInitEditableRow icon="pi pi-pencil"
+                          (click)="updateHistory(history)"
+                          class="p-button-rounded   mr-2"></button>
+                  <button *ngIf="editing" pButton pRipple type="button"  pSaveEditableRow icon="pi pi-check"
+                          (click)="saveUpdateHistory(history)"
+                          class="p-button-rounded p-button-text  mr-2"></button>
+                </div>
+                <button *ngIf="getToken()=='ADMIN'" pButton pRipple icon="pi pi-trash" class="p-button-rounded p-button-warning mr-2" (click)="deleteHistory(history)"></button>
+              </div>
+            </td>
+          </tr>
+        </ng-template>
+      </p-table>
+
+    </div>
+
   </ng-template>
 
 
 
 
   <ng-template pTemplate="footer">
-    <button pButton pRipple label="Cancel" icon="pi pi-times" class="p-button-text" (click)="hideDialogTransfer()"></button>
-    <button pButton pRipple label="Save" icon="pi pi-check" class="p-button-text" (click)="saveTransferQuantity()"></button>
+    <button pButton pRipple label="Close" icon="pi pi-times" class="p-button-text" (click)="hideDialogTransfer()"></button>
   </ng-template>
 </p-dialog>
 

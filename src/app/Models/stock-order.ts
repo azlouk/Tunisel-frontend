@@ -1,6 +1,7 @@
 import {Bassin} from "./bassin";
 import {Commande} from "./commande";
 import {Saline} from "./saline";
+import {HistoryTransfer} from "./history-transfer";
 
 
 export class StockOrder implements Object{
@@ -16,8 +17,9 @@ volumePort: number;
 volumeQuai: number;
 bassinList: Bassin[];
 commandeList:Commande[];
+ listHistory:HistoryTransfer[];
 
-  constructor(_id: number=0, _reference: string="", _dateCreation: Date=new Date(), _nom: string="", _calibre: number=0, _salines: Saline[]=[], _volumeTerrain: number=0, _volumePort: number=0, _volumeQuai: number=0, _bassinList: Bassin[]=[], _commandeList: Commande[]=[]) {
+  constructor(_id: number=0, _reference: string="", _dateCreation: Date=new Date(), _nom: string="", _calibre: number=0, _salines: Saline[]=[], _volumeTerrain: number=0, _volumePort: number=0, _volumeQuai: number=0, _bassinList: Bassin[]=[], _commandeList: Commande[]=[], _listHistory: HistoryTransfer[]=[]) {
     this.id = _id;
     this.reference = _reference;
     this.dateCreation = _dateCreation;
@@ -29,6 +31,7 @@ commandeList:Commande[];
     this.volumeQuai = _volumeQuai;
     this.bassinList = _bassinList;
     this.commandeList = _commandeList;
+    this.listHistory = _listHistory;
   }
 
   public get _id(): number {
@@ -37,6 +40,14 @@ commandeList:Commande[];
 
   public set _id(value: number) {
     this.id = value;
+  }
+
+  public get _listHistory(): HistoryTransfer[] {
+    return this.listHistory;
+  }
+
+  public set _listHistory(value: HistoryTransfer[]) {
+    this.listHistory = value;
   }
 
   public get _reference(): string {
