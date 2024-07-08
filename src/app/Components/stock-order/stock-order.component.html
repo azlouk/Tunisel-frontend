@@ -94,8 +94,8 @@
             </td>
             <td>
               <div class="flex">
-                <button *ngIf="getToken()=='ADMIN'" pButton pRipple icon="pi pi-arrow-right-arrow-left" class="p-button-rounded p-button-info mr-2" (click)="transferStockOrder(stockOrder)"></button>
-                <button *ngIf="getToken()=='ADMIN'" pButton pRipple icon="pi pi-plus" class="p-button-rounded p-button-secondary mr-2" (click)="AddToSalineStockOrder(stockOrder)"></button>
+                <button *ngIf="getToken()=='ADMIN' ||'EMPLOYER'" pButton pRipple icon="pi pi-arrow-right-arrow-left" class="p-button-rounded p-button-info mr-2" (click)="transferStockOrder(stockOrder)"></button>
+                <button *ngIf="getToken()=='ADMIN' ||'EMPLOYER'" pButton pRipple icon="pi pi-plus" class="p-button-rounded p-button-secondary mr-2" (click)="AddToSalineStockOrder(stockOrder)"></button>
                 <button *ngIf="getToken()=='ADMIN'" pButton pRipple icon="pi pi-pencil" class="p-button-rounded p-button-success mr-2" (click)=" editStockOrder(stockOrder)"></button>
                 <button *ngIf="getToken()=='ADMIN'" pButton pRipple icon="pi pi-trash" class="p-button-rounded p-button-warning mr-2" (click)="deleteStockOrder(stockOrder)"></button>
 
@@ -187,10 +187,10 @@
 
 
 
-<p-dialog [(visible)]="TransferDialog" [style]="{width: '1200px'}" header="Transfer Quantity" [modal]="true" class="p-fluid">
+<p-dialog [(visible)]="TransferDialog" [style]="{width: '1300px'}" header="Transfer Quantity" [modal]="true" class="p-fluid">
   <ng-template pTemplate="content">
     <h3>Add Transfer</h3>
-    <div class="flex justify-content-between gap-2 align-items-start border border-1 border-round border-gray-400 p-3">
+    <div *ngIf="getToken()=='ADMIN'" class="flex justify-content-between gap-2 align-items-start border border-1 border-round border-gray-400 p-3">
 
       <div class="">
         <label for="date">Date Creation</label>
@@ -239,6 +239,25 @@
           <div class="flex flex-column md:flex-row md:justify-content-between md:align-items-center">
             <div class="flex justify-content-between align-items-center w-full">
               <h5 class="m-0">History Transfer</h5>
+              <div class=" flex gap-1">
+                <div class="gap-1 flex align-items-center">Date Start :
+
+                  <input  class="p-2 shadow-1" type="date" dateFormat="dd-MM-yyyy"    pInputText   [(ngModel)]="dateStartTransfer"  />
+
+                </div>
+                <div class="gap-1  flex align-items-center">
+                  Date End :
+
+                  <input  class="p-2 shadow-1" type="date" dateFormat="dd-MM-yyyy"    pInputText   [(ngModel)]="dateEndTransfer"  />
+
+                </div>
+              </div>
+              <p-button (click)="filtreListTransferWithDate(dateStartTransfer,dateEndTransfer)" class=" " icon="pi pi-search" label="Search"></p-button>
+              <p-button (click)="getStockOrderById()" class=" " icon="pi pi-refresh" label="Clear"></p-button>
+
+              <div>
+                <span> <span class="font-bold">Total :</span> {{totalTransferFiltree}}</span>
+              </div>
               <div>
             <span class=" p-input-icon-left ">
                             <i class="pi pi-search"></i>
@@ -336,10 +355,10 @@
 
 <!--======================================-->
 
-<p-dialog [(visible)]="AddToSalineDialog" [style]="{width: '1000px'}" header="Saline" [modal]="true" class="p-fluid">
+<p-dialog [(visible)]="AddToSalineDialog" [style]="{width: '1300px'}" header="Saline" [modal]="true" class="p-fluid">
   <ng-template pTemplate="content">
     <h3>Add Saline</h3>
-    <div class="flex justify-content-between align-items-center border border-1 border-round border-gray-400 p-3">
+    <div *ngIf="getToken()=='ADMIN'" class="flex justify-content-between align-items-center border border-1 border-round border-gray-400 p-3">
       <div class="">
         <label for="dateCreationr">Date Creation</label>
         <input  class="p-2 shadow-1" type="date" dateFormat="yy-mm-dd"  pInputText id="dateCreationr"  [(ngModel)]="saline.dateCreation"  />
@@ -367,6 +386,25 @@
           <div class="flex flex-column md:flex-row md:justify-content-between md:align-items-center">
             <div class="flex justify-content-between align-items-center w-full">
               <h5 class="m-0">Saline management</h5>
+              <div class=" flex gap-1">
+                <div class="gap-1 flex align-items-center">Date Start :
+
+                  <input  class="p-2 shadow-1" type="date" dateFormat="dd-MM-yyyy"    pInputText   [(ngModel)]="dateStartSaline"  />
+
+                </div>
+                <div class="gap-1  flex align-items-center">
+                  Date End :
+
+                  <input  class="p-2 shadow-1" type="date" dateFormat="dd-MM-yyyy"    pInputText   [(ngModel)]="dateEndSaline"  />
+
+                </div>
+              </div>
+              <p-button (click)="filtreListSalineWithDate(dateStartSaline,dateEndSaline)" class=" " icon="pi pi-search" label="Search"></p-button>
+              <p-button (click)="getStockOrderById()" class=" " icon="pi pi-refresh" label="Clear"></p-button>
+
+              <div>
+                <span> <span class="font-bold">Total :</span> {{totalSalineFiltree}}</span>
+              </div>
               <div>
             <span class=" p-input-icon-left ">
                             <i class="pi pi-search"></i>

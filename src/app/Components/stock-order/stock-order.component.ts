@@ -87,7 +87,12 @@ export class StockOrderComponent implements OnInit{
   stockOrder: StockOrder = new StockOrder();
  saline: Saline=new Saline();
  historyTransfer: HistoryTransfer=new HistoryTransfer();
-
+  dateStartTransfer!:Date;
+  dateEndTransfer!:Date;
+  totalTransferFiltree:number=0;
+  dateStartSaline!:Date;
+  dateEndSaline!:Date;
+  totalSalineFiltree:number=0;
   private isUpdateStockOrder=false;
 
   loading:boolean=false ;
@@ -428,5 +433,30 @@ this.backUpHistory=new HistoryTransfer(history.id,history.dateCreation,history.s
 
  return  this.TransferAttributs.find(value => value.label==label);
 
+  }
+
+  public filtreListTransferWithDate(dateStartTransfer: Date, dateEndTransfer: Date) {
+    if (!this.stockOrder.listHistory) return;
+
+    this.stockOrder.listHistory = this.stockOrder.listHistory.filter(history => {
+
+      return new Date(dateStartTransfer)  <= new Date(history.dateCreation) && new Date(dateEndTransfer)  >= new Date(history.dateCreation);
+    });
+    this.stockOrder.listHistory.forEach(his => this.totalTransferFiltree+=his.transferQuantity)
+  }
+  getStockOrderById(){
+    this.totalTransferFiltree=0;
+   this.totalSalineFiltree=0
+    this.stockOrderService.getStockOrderById(this.stockOrder.id).subscribe(value => this.stockOrder=value)
+  }
+
+   filtreListSalineWithDate(dateStartSaline: Date, dateEndSaline: Date) {
+     if (!this.stockOrder.salines) return;
+
+     this.stockOrder.salines = this.stockOrder.salines.filter(history => {
+
+       return new Date(dateStartSaline)  <= new Date(history.dateCreation) && new Date(dateEndSaline)  >= new Date(history.dateCreation);
+     });
+     this.stockOrder.salines.forEach(saline => this.totalSalineFiltree+=saline.volumeSaline)
   }
 }

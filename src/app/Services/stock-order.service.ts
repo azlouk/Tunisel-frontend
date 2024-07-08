@@ -34,5 +34,8 @@ export class StockOrderService {
   getSalinesByStockOrder(stockOrderId: number) : Observable<Saline[]>{
     return this.http.get<Saline[]>(`${this.apiUrl}/stockOrders/saline/${stockOrderId}` );
   }
+  getStockOrderById(id:number):Observable<StockOrder>{
+    return this.http.get<StockOrder>(`${this.apiUrl}/stockOrders/${id}` );
 
+  }
 }
