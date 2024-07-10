@@ -28,6 +28,7 @@ import {SalineService} from "../../Services/saline.service";
 import {HistoryTransfer} from "../../Models/history-transfer";
 import {HistoryTransferService} from "../../Services/history-transfer.service";
 import {log} from "@angular-devkit/build-angular/src/builders/ssr-dev-server";
+import {MessagesModule} from "primeng/messages";
 
 @Component({
   selector: 'app-stock-order',
@@ -52,7 +53,8 @@ import {log} from "@angular-devkit/build-angular/src/builders/ssr-dev-server";
     TooltipModule,
     NgClass,
     MultiSelectModule,
-    RippleModule
+    RippleModule,
+    MessagesModule
   ],
   templateUrl: './stock-order.component.html',
   styleUrl: './stock-order.component.css'
@@ -102,7 +104,10 @@ export class StockOrderComponent implements OnInit{
                 private bassinService :BassinService,
                 private stockOrderService :StockOrderService,
                 private salineService :SalineService,
-                private historyTransferService :HistoryTransferService) { }
+                private historyTransferService :HistoryTransferService) {
+
+    this.salineV=new Saline();
+  }
 
   ngOnInit() {
     this.TransferAttributs= [
@@ -197,6 +202,7 @@ export class StockOrderComponent implements OnInit{
     if(this.isUpdateStockOrder==true) {
 
 
+      console.error(this.stockOrder)
 
         this.stockOrderService.updateStockOrder(this.stockOrder).subscribe(() =>{ this.getAllStockOrder();});
 
@@ -293,12 +299,18 @@ hideDialogTransfer() {
 
 
     if (this.TransferQuantity && this.startingPoint && this.arrivingPoint) {
+      if((this.startingPoint.id==0 || this.arrivingPoint.id==0) && this.salineV==undefined){
+       this.messages=[{ severity: 'error', summary: 'No Volume Saline was Selected' }]
+       }else {
+        this.historyTransfer.startingPoint = this.startingPoint.label;
+        this.historyTransfer.arrivingPoint = this.arrivingPoint.label;
+        this.historyTransfer.transferQuantity = this.TransferQuantity;
+        this.stockOrder.listHistory.push((this.historyTransfer))
+        this.saveQuantityTranferStarAndArriving();
+      }
 
-      this.historyTransfer.startingPoint=this.startingPoint.label;
-      this.historyTransfer.arrivingPoint=this.arrivingPoint.label;
-      this.historyTransfer.transferQuantity=this.TransferQuantity;
-      this.stockOrder.listHistory.push((this.historyTransfer))
-this.saveQuantityTranferStarAndArriving();
+    }else {
+      this.messages=[{ severity: 'error', summary: 'No item was selected' }]
 
     }
 
@@ -306,7 +318,7 @@ this.saveQuantityTranferStarAndArriving();
     this.historyTransfer=new HistoryTransfer()
   }
 saveQuantityTranferStarAndArriving(){
-  if ( this.startingPoint.id === 0) {
+   if ( this.startingPoint.id === 0) {
     const departingVolume = 'volumeSaline';
     const arrivingVolume = this.arrivingPoint.attribut;
 
@@ -331,9 +343,9 @@ saveQuantityTranferStarAndArriving(){
 
     console.error(this.stockOrder.salines)
 
-    this.saveStockOrder();
 
-  }
+
+   }
   else if (this.startingPoint.id === 1) {
     const departingVolume = 'volumeTerrain';
     const arrivingVolume = this.arrivingPoint.attribut;
@@ -341,7 +353,7 @@ saveQuantityTranferStarAndArriving(){
     if ((<any>this.stockOrder)[departingVolume] !== undefined && (<any>this.stockOrder)[arrivingVolume] !== undefined) {
       (<any>this.stockOrder)[departingVolume] -= this.TransferQuantity;
       (<any>this.stockOrder)[arrivingVolume] += this.TransferQuantity;
-      this.saveStockOrder();
+
     }
   }
   else if ( this.startingPoint.id === 2) {
@@ -351,7 +363,7 @@ saveQuantityTranferStarAndArriving(){
     if ((<any>this.stockOrder)[departingVolume] !== undefined && (<any>this.stockOrder)[arrivingVolume] !== undefined) {
       (<any>this.stockOrder)[departingVolume] -= this.TransferQuantity;
       (<any>this.stockOrder)[arrivingVolume] += this.TransferQuantity;
-      this.saveStockOrder();
+
     }
   }
   else if ( this.startingPoint.id === 3) {
@@ -361,9 +373,11 @@ saveQuantityTranferStarAndArriving(){
     if ((<any>this.stockOrder)[departingVolume] !== undefined && (<any>this.stockOrder)[arrivingVolume] !== undefined) {
       (<any>this.stockOrder)[departingVolume] -= this.TransferQuantity;
       (<any>this.stockOrder)[arrivingVolume] += this.TransferQuantity;
-      this.saveStockOrder();
-    }
+     }
   }
+
+  this.stockOrderService.updateStockOrder(this.stockOrder).subscribe(() =>{ this.getAllStockOrder();});
+
 }
 
 
@@ -393,12 +407,13 @@ this.saline=new Saline()
 
   protected readonly StockOrder = StockOrder;
 
-  public salineV: Saline=new Saline();
+  public salineV: Saline;
 
   public setValueSaline() {
     this.stockOrder.salines?this.salineV=this.stockOrder.salines[0]:this.salineV=new Saline();
   }
 backUpHistory:HistoryTransfer=new HistoryTransfer()
+  messages: any;
   public updateHistory( history: HistoryTransfer) {
 this.backUpHistory=new HistoryTransfer(history.id,history.dateCreation,history.startingPoint,history.arrivingPoint,history.transferQuantity);
   }
