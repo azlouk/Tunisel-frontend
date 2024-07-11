@@ -362,9 +362,11 @@ const total=this.getSumSalines(stockSelected)+stockSelected.volumeTerrain+stockS
     this.VolumeAvailble= total
   }
   getSumSalines(stockOrder:StockOrder){
+    const TotalSaline= stockOrder.salines.reduce((sum, saline) => sum+saline.volumeSaline,0)
+    const TotalTransferFromSaline=stockOrder.listHistory.filter(lh=>lh.startingPoint=='Saline volume').reduce((sum, history) => sum+history.transferQuantity,0)
+    const TotalTransferToSaline=stockOrder.listHistory.filter(lh=>lh.arrivingPoint=='Saline volume').reduce((sum, history) => sum+history.transferQuantity,0)
 
-    return  stockOrder.salines.reduce((sum, saline) => sum+saline.volumeSaline,0)
-
+    return  (TotalSaline-TotalTransferFromSaline) +TotalTransferToSaline;
   }
   CalculeTotalInput() {
     this.TotalHarv=0;
