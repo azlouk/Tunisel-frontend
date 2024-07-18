@@ -16,7 +16,6 @@ import {Produit} from "../../Models/produit";
 import {ProduitService} from "../../Services/produit.service";
 import {Article} from "../../Models/article";
 import {ArticleService} from "../../Services/article.service";
-import {Bassin} from "../../Models/bassin";
 import {ListboxModule} from "primeng/listbox";
 import {getToken} from "../../../main";
 

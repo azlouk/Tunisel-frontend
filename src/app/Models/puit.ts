@@ -1,5 +1,6 @@
 import {Bassin} from "./bassin";
 import {AnalysesChimique} from "./analyses-chimique";
+import {Pompe} from "./pompe";
 export interface Puit{
   id?: number;
   reference?: string;
@@ -11,5 +12,6 @@ export interface Puit{
   dateFermeture?: Date;
   bassins?: Bassin[];
   analysesChimiques?: AnalysesChimique[];
+  pompeList?: Pompe[];
 
 }

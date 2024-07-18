@@ -19,10 +19,11 @@
                 <button pButton pRipple icon="pi pi-file-pdf" class="p-button-rounded p-button-secondary mr-2"  (click)=" exportSondage()">Survey</button>
               </div>
 
+              <div class="">
+                <button pButton pRipple icon="pi pi-file-pdf" class="p-button-rounded bg-teal-500 mr-2"  (click)=" exportSuiviBassin()">Supervision</button>
+              </div>
 
             </div>
-
-
 
           </div>
 
@@ -73,10 +74,7 @@
             <td style="width:14%; min-width:10rem;">
               <span class="p-column-title">Description</span>
               {{bassin.description}}
-
-
             </td>
-
 
             <td style="width:14%; min-width:10rem;">
               <span class="p-column-title">Creation Date</span>
@@ -118,8 +116,8 @@
       <ng-template pTemplate="content">
         <div class="field">
         <label for="name">Well</label>
-          <p-dropdown [options]="puits" [(ngModel)]="bassin.bassinPuit" [editable]="true" optionLabel="reference" class="w-full"  [ngClass]="{'ng-invalid ng-dirty' : submitted && !bassin.bassinPuit}"></p-dropdown>
-          <small class="ng-dirty ng-invalid" *ngIf="submitted && !bassin.bassinPuit">Puit est requis.</small>
+          <p-multiSelect [options]="puits"   [(ngModel)]="bassin.puitList"  placeholder="Select a Puits" optionLabel="reference" display="chip" ></p-multiSelect>
+          <small class="ng-dirty ng-invalid" *ngIf="submitted && !bassin.puitList">Puit est requis.</small>
         </div>
 
         <div class="field">
@@ -130,7 +128,6 @@
         <div class="field">
           <label for="Description">Description</label>
           <input type="text" pInputText id="Description"  [(ngModel)]="bassin.description" />
-<!--          <small class="ng-dirty ng-invalid" *ngIf="submitted && !bassin.description">Pseudo is required.</small>-->
         </div>
 
         <div class="field">
@@ -145,17 +142,14 @@
         <div class="field">
           <label for="emplacement">Location</label>
           <input type="text" pInputText id="emplacement"  [(ngModel)]="bassin.emplacement" required autofocus />
-<!--          <small class="ng-dirty ng-invalid" *ngIf="submitted && !bassin.emplacement">Telephone is required.</small>-->
         </div>
         <div class="field">
           <label for="etat">State</label>
           <input type="text" pInputText id="etat"  [(ngModel)]="bassin.etat" />
-<!--          <small class="ng-dirty ng-invalid" *ngIf="submitted && !bassin.etat">Telephone is required.</small>-->
         </div>
         <div class="field">
           <label for="surface">Surface m²</label>
           <p-inputNumber  id="surface"  [(ngModel)]="bassin.surface" mode="decimal" [minFractionDigits]="3" ></p-inputNumber>
-<!--          <small class="ng-dirty ng-invalid" *ngIf="submitted && !bassin.surface">Telephone is required.</small>-->
         </div>
 
       </ng-template>
@@ -194,7 +188,7 @@
 </div>
 
 
-
+<!--=============================================bassin et Analyses PDF=========================================================-->
 <p-dialog header="Chemical and particle size analysis" [(visible)]="visiblePrint" [modal]="true" [style]="{width: '100%'}"     >
   <ng-template pTemplate="content">
 
@@ -362,6 +356,8 @@
 
   </ng-template>
 </p-dialog>
+
+<!--=============================================Recolte=========================================================-->
 <p-dialog [(visible)]="RecolteDialog" [style]="{width: '1300px'}" header="Harvest" [modal]="true" class="p-fluid">
   <ng-template pTemplate="content">
     <h3>Add Harvest</h3>
@@ -500,6 +496,8 @@
     <button pButton pRipple label="Close" icon="pi pi-times" class="p-button-text" (click)="hideDialogRecolte()"></button>
   </ng-template>
 </p-dialog>
+
+<!--=============================================Recolte PDF=========================================================-->
 <p-dialog header="" [(visible)]="RecoltePDF" [modal]="true" [style]="{width: '100%'}"     >
   <ng-template pTemplate="content">
 
@@ -599,7 +597,8 @@
 
   </ng-template>
 </p-dialog>
-<!--====================================sondage=============================-->
+
+<!--=============================================Sondage=========================================================-->
 <p-dialog [(visible)]="SondageDialog" [style]="{width: '1200px'}" header="Survey" [modal]="true" class="p-fluid">
   <ng-template pTemplate="content">
     <h3>Add Survey</h3>
@@ -754,6 +753,8 @@
     <button pButton pRipple label="Close" icon="pi pi-times" class="p-button-text" (click)="hideDialogSondage()"></button>
   </ng-template>
 </p-dialog>
+
+<!--=============================================Sondage PDF=========================================================-->
 <p-dialog header="" [(visible)]="SondaePDF" [modal]="true" [style]="{width: '100%'}"     >
   <ng-template pTemplate="content">
 
@@ -880,6 +881,202 @@
     </div>
   </ng-template>
 
+  <ng-template pTemplate="footer">
+    <p-button icon="pi pi-file-pdf" (click)="SavePDF()" class="text-green-50" label="PDF" pAutoFocus [autofocus]="true"  ></p-button>
+
+  </ng-template>
+</p-dialog>
+
+<!--=============================================suivi Bassin Mensuel PDF=========================================================-->
+<p-dialog header="" [(visible)]="suiviBassinPDF" [modal]="true" [style]="{width: '100%'}"     >
+  <ng-template pTemplate="content">
+
+    <div class="shadow-1 p-2  " >
+
+
+      <div class="card flex justify-content-evenly align-items-center ">
+        <p-dropdown
+          [options]="bassins"
+          [(ngModel)]="BassinSuivi"
+          optionLabel="nom"
+          placeholder="Select Ponds" />
+        <div class="gap-1 flex align-items-center">Month :
+          <p-calendar
+            [(ngModel)]="date"
+            view="month"
+            dateFormat="mm/yy"
+            [readonlyInput]="true" />
+        </div>
+
+
+        <p-button (click)="getAllLigneByMonh(date)" class=" " icon="pi pi-search" label="Search"></p-button>
+
+      </div>
+
+    </div>
+
+
+    <div #pdfpuit class="pt-8 pl-4 pr-4">
+      <div class="flex border-1 w-full justify-content-between mb-6">
+        <div class="flex-initial flex align-items-center justify-content-center   font-bold m-2 px-5 py-3 border-round">
+          <img src="assets/layout/images/logo.png">
+
+        </div>
+        <div class="flex-initial flex align-items-center justify-content-center  text-6xl font-bold m-2 px-5 py-3 border-round">
+          Monthly Pond Supervision
+        </div>
+        <div class="flex-initial border-1 flex     w-25  font-bold m-2 px-5 py-3  ">
+          <div class="col   ">
+            <div class="row  mb-2    w-full  ">BEN GUERDANE, TUNISIA  </div>
+            <div class="row mb-2   w-full text-center    text-1xl font-bold  pi pi-calendar ">{{dateToday | date :"yyyy-MM-dd hh:ss a"}}</div>
+
+          </div>
+        </div>
+      </div>
+
+      <p-table class=" " #dt    styleClass="p-datatable-gridlines" [value]="linesJournaliers" [columns]="cols"  responsiveLayout="scroll"  [globalFilterFields]="['dateCreation']"    dataKey="id">
+
+        <ng-template pTemplate="header" >
+          <tr>
+
+            <th pSortableColumn="dateCreation">Date <p-sortIcon field="dateCreation"></p-sortIcon></th>
+
+            <th>State Pond</th>
+            <th>Harvestable Salt</th>
+            <th>Brine Depth</th>
+            <th>Density Pond</th>
+            <th>Wells Used</th>
+            <th>Density Well</th>
+            <th>Debit</th>
+            <th>Pumping Duration</th>
+            <th>Pumping Volume</th>
+            <th>Observation </th>
+          </tr>
+        </ng-template>
+        <ng-template pTemplate="body"let-lineJournalier let-ri="rowIndex" >
+          <tr>
+
+            <td>
+              <span class="p-column-title">Date</span>
+              {{lineJournalier.dateCreation|date:'dd-MM-yyyy'}}
+            </td>
+
+            <td>
+              <span class="p-column-title">State Pond</span>
+              {{lineJournalier.etatBassin}}
+            </td>
+
+            <td>
+              <span class="p-column-title">Harvestable Salt</span>
+              {{lineJournalier.selRecoltable}}
+            </td>
+
+            <td>
+              <span class="p-column-title">Brine Depth</span>
+              {{lineJournalier.profondeurSaumure}}
+            </td>
+
+            <td>
+              <span class="p-column-title">Density Pond</span>
+              {{lineJournalier.densiteBassin}}
+            </td>
+
+            <td >
+              <span class="p-column-title">Wells Used</span>
+                  <div class="flex flex-column gap-2 ">
+                <ng-container *ngFor="let pui of lineJournalier.puitUtilises">
+                    <div >
+
+              {{pui.reference}}
+                    </div>
+
+                </ng-container>
+                  </div>
+
+            </td>
+
+            <td>
+              <span class="p-column-title">Density Well</span>
+
+                <div class="flex flex-column gap-2 ">
+              <ng-container *ngFor="let liPompe of lineJournalier.journalierPompeList">
+                      <div>
+                  {{liPompe.densitePuit}}
+
+                      </div>
+
+              </ng-container>
+                </div>
+            </td>
+
+            <td>
+              <span class="p-column-title">Debit</span>
+                <div class="flex flex-column gap-2 ">
+              <ng-container *ngFor="let liPompe of lineJournalier.journalierPompeList">
+                  <div>
+
+                  {{liPompe.debit}}
+                  </div>
+
+              </ng-container>
+                </div>
+            </td>
+
+            <td>
+              <span class="p-column-title">Pumping Duration</span>
+                <div class="flex flex-column gap-2 ">
+              <ng-container *ngFor="let liPompe of lineJournalier.journalierPompeList">
+                  <div>
+
+                  {{liPompe.dureePompage}}
+                  </div>
+
+              </ng-container>
+                </div>
+            </td>
+
+            <td>
+              <span class="p-column-title">Pumping Volume</span>
+                <div class="flex flex-column gap-2 ">
+              <ng-container *ngFor="let liPompe of lineJournalier.journalierPompeList">
+                  <div>
+
+                  {{liPompe.volumePompage}}
+                  </div>
+
+              </ng-container>
+                </div>
+            </td>
+
+            <td>
+              <span class="p-column-title">Observation </span>
+            {{lineJournalier.observation}}
+            </td>
+
+          </tr>
+<!--          =============== TOTAL DUREE && TOTAL VOLUME-->
+            <tr  *ngIf="ri+1==linesJournaliers.length">
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td><span>TOTAL : {{getTotalDuree()}}</span></td>
+              <td><span>TOTAL : {{getTotalVolume()}}</span></td>
+              <td></td>
+            </tr>
+
+        </ng-template>
+
+      </p-table>
+
+
+
+    </div>
+  </ng-template>
   <ng-template pTemplate="footer">
     <p-button icon="pi pi-file-pdf" (click)="SavePDF()" class="text-green-50" label="PDF" pAutoFocus [autofocus]="true"  ></p-button>
 

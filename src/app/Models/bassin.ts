@@ -17,7 +17,7 @@ export interface Bassin {
   // sbnls?: Sbnl[];
   analysesChimiques?: AnalysesChimique[];
   analysesPhysiques?: AnalysesPhysique[];
-  bassinPuit?:Puit;
+  puitList?:Puit[];
   recolteList?: Recolte[];
   sondageList?: Sondage[];
 }

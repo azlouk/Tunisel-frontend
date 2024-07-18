@@ -103,6 +103,13 @@
           <small class="ng-dirty ng-invalid" *ngIf="submitted && !puit.reference">Mandatory reference</small>
         </div>
         <div class="field">
+          <p-multiSelect
+            [options]="pompes"
+            [(ngModel)]="puit.pompeList"
+            optionLabel="model"
+            placeholder="Select Pumps" />
+        </div>
+        <div class="field">
           <label for="Description">Description</label>
           <textarea rows="3" cols="30" type="text" pInputText id="Description"  [(ngModel)]="puit.description" required autofocus  ></textarea>
          </div>

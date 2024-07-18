@@ -37,6 +37,8 @@ import {RippleModule} from "primeng/ripple";
  import {SondageService} from "../../Services/sondage.service";
 import {Sondage} from "../../Models/sondage";
 import {FieldsetModule} from "primeng/fieldset";
+import {LigneJournalier} from "../../Models/ligne-journalier";
+import {LigneJournalierService} from "../../Services/ligne-journalier.service";
 
 interface RecolteSummary {
   total: number;
@@ -133,6 +135,9 @@ recoltes:Recolte[]=[];
  listSumRecolte:any;
  listSumRecolteCopy:any;
   public  _selectedColumns: any[]=[];
+  suiviBassinPDF: boolean = false;
+  linesJournaliers:LigneJournalier[]=[];
+  BassinSuivi!:Bassin;
 
   MonthName:String[]=["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"]
   @Input() get selectedColumns(): any[] {
@@ -142,7 +147,10 @@ recoltes:Recolte[]=[];
                 private bassinService :BassinService,
                 private puitService:PuitService,
                 private recolteService:RecolteService,
-                private sondageService:SondageService) { }
+                private sondageService:SondageService,
+                private ligneJournalierService:LigneJournalierService
+                ) { }
+
 
   ngOnInit() {
  this.listSumRecolteCopy=[]
@@ -277,7 +285,7 @@ this.SelectetBassin={analysesPhysiques:[]}
     }
     else
     {
-
+      console.log(new JsonPipe().transform(this.bassin.puitList))
 
         this.bassinService.addBassin(this.bassin).subscribe(() =>{ this.bassinService.getAllBassinsDTO().subscribe((bassins: Bassin[]) => {
             this.bassins = bassins;
@@ -957,6 +965,7 @@ const mass1= this.getMassSondagePdf(bassinSondage,sondage1);
 
 
   protected readonly roundToDecimalPlaces  = roundToDecimalPlaces;
+  public date!: Date;
 
   getTotalRecole(bassinSondage: Bassin): number {
     let total: number = 0;
@@ -1001,5 +1010,61 @@ else {
     });
     this.recoltes.forEach(re => this.totalHarvestFiltree+=re.value)
 
+  }
+
+  // public getDate() {
+  //   alert(
+  //
+  //     this.getMonthFromDateString(this.date)
+  //
+  //   )
+  //   alert( this.getYearFromDateString(this.date))
+  // }
+  // getMonthFromDateString(dateS: Date): string {
+  //   const date = new Date(dateS);
+  //   const month = date.getMonth() + 1;
+  //   return month < 10 ? '0' + month : month.toString();
+  // }
+  getMonthFromDateString(dateS: Date): number {
+    const date = new Date(dateS);
+    return date.getMonth() + 1;
+  }
+  // getYearFromDateString(dateS: Date): string {
+  //   const date = new Date(dateS);
+  //   return date.getFullYear().toString();
+  // }
+  getYearFromDateString(dateS: Date): number {
+    const date = new Date(dateS);
+    return date.getFullYear();
+  }
+
+  public exportSuiviBassin() {
+    this.suiviBassinPDF=true;
+  }
+
+  public getAllLigneByMonh(date: Date) {
+    this.linesJournaliers=[];
+  const month=this.getMonthFromDateString(this.date);
+  const year=this.getYearFromDateString(this.date);
+  let id:number | undefined=0;
+  if(this.BassinSuivi!==undefined)
+    id=this.BassinSuivi.id
+    if(id!==undefined)
+  this.ligneJournalierService.getLigneJournalierByBassinAndMonth(id,month,year).subscribe(value => {
+    this.linesJournaliers = value
+
+  })
+  }
+
+  public getTotalDuree() {
+    return this.linesJournaliers
+      .map(lj => lj.journalierPompeList.reduce((sum, jp) => sum + jp.dureePompage, 0))
+      .reduce((total, duration) => total + duration, 0);
+  }
+
+  public getTotalVolume() {
+    return this.linesJournaliers
+      .map(lj => lj.journalierPompeList.reduce((sum, jp) => sum + jp.volumePompage, 0))
+      .reduce((total, volume) => total + volume, 0);
   }
 }

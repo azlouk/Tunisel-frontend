@@ -27,7 +27,8 @@ export class AppMenuComponent implements OnInit {
         label: 'Main',
         items: [
           {label: 'Dashboard', icon: 'pi pi-fw pi-home', routerLink: ['/dash']},
-          {label: 'Orders/Volumes', icon: 'pi pi-fw pi-home', routerLink: ['/commande']}
+          {label: 'Orders/Volumes', icon: 'pi pi-fw pi-home', routerLink: ['/commande']},
+          {label: 'Daily', icon: 'pi pi-fw pi-home', routerLink: ['/daily']}
         ]
       },
       {
@@ -35,6 +36,7 @@ export class AppMenuComponent implements OnInit {
         items: [
           {label: 'Users', icon: 'pi pi-fw pi-user', routerLink: ['/users']},
           {label: 'Well', icon: 'pi pi-fw pi-filter', routerLink: ['/puits']},
+          {label: 'Pump', icon: 'pi pi-fw pi-filter', routerLink: ['/pompe']},
           {label: 'Pond', icon: 'pi pi-fw pi-check-square', routerLink: ['/bassins']},
 
         ]

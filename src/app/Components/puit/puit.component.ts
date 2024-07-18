@@ -27,6 +27,8 @@ import {getToken} from "../../../main";
 import {utils, WorkBook, WorkSheet, writeFile} from "xlsx";
 import * as Papa from 'papaparse';
 import {TooltipModule} from "primeng/tooltip";
+import {Pompe} from "../../Models/pompe";
+import {PompeService} from "../../Services/pompe.service";
 
 @Component({
   selector: 'app-puit',
@@ -88,7 +90,7 @@ export class PuitComponent implements OnInit {
   private isUpdateUser = false;
   loading: boolean = false;
   ReportedBy:any={}
-
+  pompes:Pompe[]=[];
   public  _selectedColumns: any[]=[];
   @Input() get selectedColumns(): any[] {
     return this._selectedColumns;
@@ -99,8 +101,10 @@ export class PuitComponent implements OnInit {
   }
 
 
-  constructor(private Loginservice:LoginService,  private messageService: MessageService, private puitService: PuitService) {
-  }
+  constructor(private Loginservice:LoginService,
+              private messageService: MessageService,
+              private puitService: PuitService,
+              private pompeService:PompeService) {}
 
 
   ngOnInit() {
@@ -153,9 +157,11 @@ this.ReportedBy=this.Loginservice.getToken()
       {field: 'dateFermeture', header: 'dateFermeture'},
     ];
 
-
+this.getAllPompes();
   }
-
+getAllPompes(){
+    this.pompeService.getAllPompes().subscribe(listPompe =>this.pompes=listPompe )
+}
   openNew() {
     this.puit = {};
     this.puit.reference = "puit-" + this.createId()

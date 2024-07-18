@@ -1,0 +1,166 @@
+<div class="grid">
+  <div class="col-12">
+    <div class="card px-6 py-6">
+      <p-toast></p-toast>
+      <p-toolbar styleClass="mb-4">
+        <ng-template pTemplate="left">
+          <div *ngIf=" getToken()=='ADMIN'"  class="my-2">
+            <button pButton pRipple label="Add" icon="pi pi-plus" class="p-button-success mr-2" (click)="openNew()"></button>
+            <button pButton pRipple label="Delete" icon="pi pi-trash" class="p-button-danger" (click)="deleteSelectedPompe()" [disabled]="!selectedPompe || !selectedPompe.length"></button>
+          </div>
+        </ng-template>
+
+
+      </p-toolbar>
+
+      <p-table #dt [value]="pompes" [columns]="cols"  responsiveLayout="scroll" [rows]="10" [globalFilterFields]="['id','typePompe','model','dimension','poids','puissance']" [paginator]="true" [rowsPerPageOptions]="[10,20,30]" [showCurrentPageReport]="true" currentPageReportTemplate="Display  {first} to  {last} of  {totalRecords} entries" [(selection)]="selectedPompe" selectionMode="multiple" [rowHover]="true" dataKey="id">
+        <ng-template pTemplate="caption">
+          <div class="flex flex-column md:flex-row md:justify-content-between md:align-items-center">
+            <h5 class="m-0">Pump Management </h5>
+            <span class="block mt-2 md:mt-0 p-input-icon-left">
+                            <i class="pi pi-search"></i>
+                            <input  type="text" pInputText (input)="onGlobalFilter(dt, $event)" placeholder="Search..."  class="w-full sm:w-auto"/>
+                        </span>
+
+
+
+          </div>
+        </ng-template>
+        <ng-template pTemplate="header">
+          <tr>
+            <th style="width: 3rem">
+              <p-tableHeaderCheckbox></p-tableHeaderCheckbox>
+            </th>
+            <th pSortableColumn="id">Id <p-sortIcon field="id"></p-sortIcon></th>
+            <th pSortableColumn="typePompe">Pump Type <p-sortIcon field="typePompe"></p-sortIcon></th>
+            <th pSortableColumn="model">Model <p-sortIcon field="model"></p-sortIcon></th>
+            <th pSortableColumn="dimension">Dimension<p-sortIcon field="dimension"></p-sortIcon></th>
+            <th pSortableColumn="poids">weight<p-sortIcon field="poids"></p-sortIcon></th>
+            <th pSortableColumn="puissance">Power<p-sortIcon field="puissance"></p-sortIcon></th>
+
+            <th></th>
+          </tr>
+        </ng-template>
+        <ng-template pTemplate="body" let-pompe >
+          <tr >
+            <td>
+              <p-tableCheckbox [value]="pompe"></p-tableCheckbox>
+            </td>
+            <td style="width:14%; min-width:10rem;"><span class="p-column-title">Id</span>
+              {{pompe.id}}
+            </td>
+            <td style="width:14%; min-width:10rem;">
+              <span class="p-column-title">Pump Type </span>
+              {{pompe.typePompe}}
+            </td>
+            <td style="width:14%; min-width:10rem;">
+              <span class="p-column-title">Model</span>
+              {{pompe.model}}
+
+
+            </td>
+            <td style="width:14%; min-width:10rem;">
+              <span class="p-column-title">Dimension</span>
+              {{pompe.dimension}}
+
+
+            </td>
+
+
+            <td style="width:14%; min-width:10rem;">
+              <span class="p-column-title">weight</span>
+              {{pompe.poids}}
+            </td>
+
+            <td style="width:14%; min-width:10rem;" class="">
+              <span class="p-column-title">Power</span>
+              {{pompe.puissance}}
+
+
+            </td>
+
+            <td>
+              <div *ngIf=" getToken()=='ADMIN'"  class="flex ">
+                <button pButton pRipple icon="pi pi-pencil" class="p-button-rounded p-button-success mr-2" (click)="editPompe(pompe)"></button>
+                <button pButton pRipple icon="pi pi-trash" class="p-button-rounded p-button-warning" (click)="deletePompe(pompe)"></button>
+              </div>
+            </td>
+          </tr>
+        </ng-template>
+      </p-table>
+    </div>
+
+    <p-dialog [(visible)]="pompeDialog" [style]="{width: '450px' }" header="Pump" [modal]="true" class="p-fluid">
+      <ng-template pTemplate="content">
+        <div class="field">
+          <label >Pump Type</label>
+          <p-autoComplete
+            [(ngModel)]="pompe.typePompe"
+            [dropdown]="true"
+            [suggestions]="filtereddataPompeType"
+            (completeMethod)="filterPompe($event)"
+            field="" />
+
+        </div>
+
+        <div class="field">
+          <label for="model">Model</label>
+          <input type="text" pInputText id="model"  [(ngModel)]="pompe.model"  />
+        </div>
+
+        <div class="field">
+          <label for="dimension">Dimension</label>
+          <p-inputNumber  id="dimension"   [(ngModel)]="pompe.dimension" mode="decimal" [minFractionDigits]="3" ></p-inputNumber>
+        </div>
+
+        <div class="field">
+          <label for="weight">Weight</label>
+          <p-inputNumber  id="weight"  [(ngModel)]="pompe.poids" mode="decimal" [minFractionDigits]="3" ></p-inputNumber>
+        </div>
+
+        <div class="field">
+          <label for="power">Power</label>
+          <p-inputNumber t id="power"  [(ngModel)]="pompe.puissance" mode="decimal" [minFractionDigits]="3" ></p-inputNumber>
+        </div>
+
+
+
+
+
+
+      </ng-template>
+
+
+
+
+      <ng-template pTemplate="footer">
+        <button pButton pRipple label="Cancel" icon="pi pi-times" class="p-button-text" (click)="hideDialog()"></button>
+        <button pButton pRipple label="Save" icon="pi pi-check" class="p-button-text" (click)="savePompe()"></button>
+      </ng-template>
+    </p-dialog>
+    <p-dialog [(visible)]="deletePompeDialog" header="Confirm" [modal]="true" [style]="{width:'450px'}">
+      <div class="flex align-items-center justify-content-center">
+        <i class="pi pi-exclamation-triangle mr-3" style="font-size: 2rem"></i>
+        <span >Are you sure you want to delete ?</span>
+      </div>
+      <ng-template pTemplate="footer">
+        <button pButton pRipple icon="pi pi-times" class="p-button-text" label="No" (click)="deletePompeDialog = false"></button>
+        <button pButton pRipple icon="pi pi-check" class="p-button-text" label="Yes" (click)="confirmDelete()"></button>
+      </ng-template>
+    </p-dialog>
+    <p-dialog [(visible)]="deletePompesDialog" header="Confirm" [modal]="true" [style]="{width:'450px'}">
+      <div class="flex align-items-center justify-content-center">
+        <i class="pi pi-exclamation-triangle mr-3" style="font-size: 2rem"></i>
+        <span>You want to remove the selected pompes?</span>
+      </div>
+      <ng-template pTemplate="footer">
+        <button pButton pRipple icon="pi pi-times" class="p-button-text" label="No" (click)="deletePompesDialog = false"></button>
+        <button pButton pRipple icon="pi pi-check" class="p-button-text" label="Yes" (click)="confirmDeleteSelected()"></button>
+      </ng-template>
+    </p-dialog>
+
+
+  </div>
+</div>
+
+

@@ -9,25 +9,25 @@ import {SblfComponent} from "./Components/sblf/sblf.component";
 import {InventaireComponent} from "./Components/inventaire/inventaire.component";
 import {FichevieComponent} from "./Components/fichevie/fichevie.component";
 import {AnalyseChimiqueComponent} from "./Components/analyse-chimique/analyse-chimique.component";
-import {
-  AjouterPrelevmentChimiqueComponent
-} from "./Components/ajouter-prelevment-chimique/ajouter-prelevment-chimique.component";
+import {AjouterPrelevmentChimiqueComponent} from "./Components/ajouter-prelevment-chimique/ajouter-prelevment-chimique.component";
 import {AnalysePhysiqueComponent} from "./Components/analyse-physique/analyse-physique.component";
 import {AjouterPrelevmentPhysiqueComponent} from "./Components/ajouter-prelevment-physique/ajouter-prelevment-physique.component";
 import {LoginComponent} from "./Components/login/login.component";
 import {AuthGuard} from "./guard/AuthGuard";
 import {AjouterInventaireComponent} from "./Components/ajouter-inventaire/ajouter-inventaire.component";
-// import {ProduitDefectueuxComponent} from "./Components/produit-defectueux/produit-defectueux.component";
 import {ArticleComponent} from "./Components/article/article.component";
 import {BandeComponent} from "./Components/bande/bande.component";
 import {ProduitComponent} from "./Components/produit/produit.component";
 import {RapportAnalyseComponent} from "./Components/rapportAnalyse/rapportAnalyse.component";
 import {CommandeComponent} from "./Components/commande/commande.component";
 import {AjouterCommandeComponent} from "./Components/ajouter-commande/ajouter-commande.component";
-import {
-  AjoutFichevieInterventionComponent
-} from "./Components/ajout-fichevie-intervention/ajout-fichevie-intervention.component";
+import {AjoutFichevieInterventionComponent} from "./Components/ajout-fichevie-intervention/ajout-fichevie-intervention.component";
 import {StockOrderComponent} from "./Components/stock-order/stock-order.component";
+import {PompeComponent} from "./Components/pompe/pompe.component";
+import {JournalierComponent} from "./Components/journalier/journalier.component";
+import {
+  AjouterLigneJournalierComponent
+} from "./Components/ajouter-ligne-journalier/ajouter-ligne-journalier.component";
 
 export const routes: Routes = [
   {path:'', component:LoginComponent},
@@ -63,4 +63,7 @@ export const routes: Routes = [
   {path:'ajouterCommande', component:AjouterCommandeComponent,  canActivate:[AuthGuard]},
   {path:'updateCommande/:id', component:AjouterCommandeComponent,  canActivate:[AuthGuard]},
   {path:'stockOrder', component:StockOrderComponent,  canActivate:[AuthGuard]},
+  {path:'pompe', component:PompeComponent,  canActivate:[AuthGuard]},
+  {path:'daily', component:JournalierComponent,  canActivate:[AuthGuard]},
+  {path:'Daily/:id', component:AjouterLigneJournalierComponent,  canActivate:[AuthGuard]},
 ];
