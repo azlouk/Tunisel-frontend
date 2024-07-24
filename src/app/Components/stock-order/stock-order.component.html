@@ -198,22 +198,13 @@
       </div>
       <div class=" ">
         <label >Starting point</label>
-        <p-dropdown [options]="TransferAttributs" [(ngModel)]="startingPoint" [editable]="true" (ngModelChange)="setValueSaline()"  optionLabel="label" class="w-full" ></p-dropdown>
+        <p-dropdown [options]="TransferAttributsStart" [(ngModel)]="startingPoint" [editable]="true" (ngModelChange)="getTransferAttributsFiltredStart()"  optionLabel="label" class="w-full" ></p-dropdown>
 
       </div>
-      <div class=" " *ngIf="startingPoint==TransferAttributs[0]||arrivingPoint==TransferAttributs[0]">
-        <label >Select Volume Saline</label>
-        <p-dropdown [options]="stockOrder.salines" [(ngModel)]="salineV"  optionLabel="dateCreation" class="w-full" ></p-dropdown>
 
-        <div class="flex-column flex gap-2 border-1 border-gray-200 mt-2 p-1">
-          <label>Date : {{salineV.dateCreation | date :'dd-MM-YYYY'}}</label>
-          <label>Value : {{salineV.volumeSaline}}</label>
-
-        </div>
-      </div>
       <div class="">
         <label >Arriving point</label>
-        <p-dropdown [options]="TransferAttributs" [(ngModel)]="arrivingPoint" (ngModelChange)="setValueSaline()" [editable]="true" optionLabel="label" class="w-full" ></p-dropdown>
+        <p-dropdown [options]="TransferAttributsEnd" [(ngModel)]="arrivingPoint" (ngModelChange)="getTransferAttributsFiltredEnd()" [editable]="true" optionLabel="label" class="w-full" ></p-dropdown>
       </div>
 
       <div class="">
@@ -224,7 +215,10 @@
       <div>
         <button pButton pRipple label="Save" icon="pi pi-check" class="p-button-text" (click)="saveTransferQuantity()"></button>
       </div>
+
     </div>
+    <p-messages [(value)]="messages" [enableService]="false" />
+
     <div class="cart mt-5">
       <p-table #dt [loading]="loading"
                [value]="stockOrder.listHistory"
