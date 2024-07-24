@@ -40,5 +40,7 @@ export interface Commande {
    fecn6?:string;
   stockOrder?:StockOrder;
   isLoading?:boolean;
+  analyseReference?:string;
+  departureDate?:Date;
 }
 

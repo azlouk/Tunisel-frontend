@@ -1,8 +1,9 @@
 import { Injectable } from '@angular/core';
 import {environment} from "../environment/environment";
-import {HttpClient} from "@angular/common/http";
+import {HttpClient, HttpHeaders} from "@angular/common/http";
 import {Observable} from "rxjs";
 import {Saline} from "../Models/saline";
+import {getKeyToken} from "../../main";
 
 @Injectable({
   providedIn: 'root'
@@ -14,19 +15,36 @@ export class SalineService {
   constructor(private http: HttpClient) { }
 
   getAllSaline(): Observable<Saline[]> {
-    return this.http.get<Saline[]>(`${this.apiUrl}/salines/read`) ;
-  }
+    const token = getKeyToken();
+    if (token) {
+      const headers = new HttpHeaders().set('Authorization', `Bearer ${token}`).set("Content-Type", "application/json; charset=utf8");
+    return this.http.get<Saline[]>(`${this.apiUrl}/salines/read`, {headers}) ;
+  }else {
+      return  new Observable<any>()}}
 
 
   deleteSaline(SalineId: number | undefined): Observable<any> {
-    return this.http.delete(`${this.apiUrl}/salines/delete/${SalineId}`);
-  }
+    const token = getKeyToken();
+    if (token) {
+      const headers = new HttpHeaders().set('Authorization', `Bearer ${token}`).set("Content-Type", "application/json; charset=utf8");
+    return this.http.delete(`${this.apiUrl}/salines/delete/${SalineId}`, {headers});
+  }else {
+      return  new Observable<any>()}}
+
   updateSaline(Saline: Saline): Observable<Saline> {
-    return this.http.put<Saline>(`${this.apiUrl}/salines/update`, Saline);
-  }
+    const token = getKeyToken();
+    if (token) {
+      const headers = new HttpHeaders().set('Authorization', `Bearer ${token}`).set("Content-Type", "application/json; charset=utf8");
+    return this.http.put<Saline>(`${this.apiUrl}/salines/update`, Saline, {headers});
+  }else {
+      return  new Observable<any>()}}
 
 
   addSaline(Saline: Saline,id:number) : Observable<Saline>{
-    return this.http.post<Saline>(`${this.apiUrl}/salines/add/${id}`, Saline);
-  }
+    const token = getKeyToken();
+    if (token) {
+      const headers = new HttpHeaders().set('Authorization', `Bearer ${token}`).set("Content-Type", "application/json; charset=utf8");
+    return this.http.post<Saline>(`${this.apiUrl}/salines/add/${id}`, Saline, {headers});
+  }else {
+      return  new Observable<any>()}}
 }

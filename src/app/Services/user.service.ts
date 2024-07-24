@@ -1,9 +1,12 @@
 import { Injectable } from '@angular/core';
-import {HttpClient} from "@angular/common/http";
+import {HttpClient, HttpHeaders} from "@angular/common/http";
 import {Observable} from "rxjs";
-import {User} from "../Models/user";
 
 import {environment} from "../environment/environment";
+import {RegisterRequest} from "../Models/register-request";
+import {AuthenticationResponse} from "../Models/authentication-response";
+import {ChangePasswordRequest} from "../Models/change-password-request";
+import {getKeyToken, getToken} from "../../main";
 
 
 
@@ -12,53 +15,64 @@ import {environment} from "../environment/environment";
   providedIn: 'root'
 })
 export class UserService {
- apiUrl=environment.apiUrl
-  constructor(private http: HttpClient) { }
+  apiUrl = environment.apiUrl
 
-  getAllUsers(): Observable<User[]> {
-    return this.http.get<User[]>(`${this.apiUrl}/users/read`) ;
+  constructor(private http: HttpClient) {
   }
 
-  deleteUser(userId: number | undefined): Observable<any> {
-    return this.http.delete(`${this.apiUrl}/users/delete/${userId}`);
-  }
-  // saveUser(user: User): Observable<User> {
-  //  console.log("update");
-  //   return this.http.put<User>(`${this.apiUrl}/admins/${user.id}`, user);
-  // }
-
-
-  addAdmin(user: User) : Observable<User>{
-    console.log("create Admin");
-    return this.http.post<User>(`${this.apiUrl}/admins/add`, user);
-
-  }
-  UpdateAdmin(user: User) : Observable<User>{
-
-    return this.http.put<User>(`${this.apiUrl}/admins/update`, user);
+  getAllUsers(): Observable<RegisterRequest[]> {
+    const token = getKeyToken();
+    // console.log(token)
+    if (token) {
+      const headers = new HttpHeaders().set('Authorization', `Bearer ${token}`).set("Content-Type", "application/json; charset=utf8");
+    return this.http.get<RegisterRequest[]>(`${this.apiUrl}/users/read`, {headers});
+  }else {
+      return  new Observable<any[]>()}
 
   }
 
-  AddEmployer(user: User) {
-    console.log("create Employer");
-    return this.http.post<User>(`${this.apiUrl}/employers/add`, user);
+
+  deleteUser(userId: number): Observable<any> {
+    const token = getKeyToken();
+    if (token) {
+      const headers = new HttpHeaders().set('Authorization', `Bearer ${token}`).set("Content-Type", "application/json; charset=utf8");
+      return this.http.delete(`${this.apiUrl}/users/delete/${userId}`, {headers});
+    }else {
+      return  new Observable<any[]>()}
+  }
+
+
+  register(request: RegisterRequest): Observable<AuthenticationResponse> {
+    const token = getKeyToken();
+    if (token) {
+      const headers = new HttpHeaders().set('Authorization', `Bearer ${token}`).set("Content-Type", "application/json; charset=utf8");
+      return this.http.post<AuthenticationResponse>(`${this.apiUrl}/users/auth/register`, request, {headers});
+    }else {
+      return  new Observable<any>()}
 
   }
 
-  UpdateEmployer(user: User) {
 
-    return this.http.put<User>(`${this.apiUrl}/employers/update`, user);
-
+  changePassword(changePasswordRequest: ChangePasswordRequest): Observable<any> {
+    const token = getKeyToken();
+    console.log(token)
+    if (token) {
+      const headers = new HttpHeaders().set('Authorization', `Bearer ${token}`).set("Content-Type", "application/json; charset=utf8");
+      return this.http.put<any>(`${this.apiUrl}/users/updatePassword`, changePasswordRequest, {headers});
+    }else {
+      return  new Observable<any[]>()}
   }
-  AddCostumer(user: User) {
-    console.log("create Employer");
-    return this.http.post<User>(`${this.apiUrl}/costumers/add`, user);
-
+    getUserConnect(): Observable<RegisterRequest> {
+    const token = getKeyToken();
+    // console.log(token)
+    if (token) {
+      const headers = new HttpHeaders().set('Authorization', `Bearer ${token}`).set("Content-Type", "application/json; charset=utf8");
+    return this.http.get<RegisterRequest>(`${this.apiUrl}/users/userConnecte`,{headers});
+    }else {
+      return  new Observable<any>()}
   }
 
-  UpdateCostumer(user: User) {
 
-    return this.http.put<User>(`${this.apiUrl}/costumers/update`, user);
 
-  }
+
 }

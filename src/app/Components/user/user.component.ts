@@ -1,4 +1,4 @@
-import {Component, OnInit} from '@angular/core';
+import {AfterViewInit, Component, OnInit} from '@angular/core';
 import {Table, TableModule} from "primeng/table";
 import {Product} from "../../Models/product";
  import {MessageService} from "primeng/api";
@@ -11,10 +11,11 @@ import {FileUploadModule} from "primeng/fileupload";
 import {ToolbarModule} from "primeng/toolbar";
 import {ToastModule} from "primeng/toast";
 import {UserService} from "../../Services/user.service";
-import {User} from "../../Models/user";
 import {PasswordModule} from "primeng/password";
 import {InputTextModule} from "primeng/inputtext";
 import {getToken} from "../../../main";
+import {RegisterRequest} from "../../Models/register-request";
+import {ChangePasswordRequest} from "../../Models/change-password-request";
 
 
 @Component({
@@ -38,7 +39,7 @@ import {getToken} from "../../../main";
   templateUrl: './user.component.html',
   styleUrl: './user.component.css'
 })
-export class UserComponent implements OnInit {
+export class UserComponent implements OnInit ,AfterViewInit{
   productDialog: boolean = false;
 
   deleteProductDialog: boolean = false;
@@ -59,11 +60,11 @@ export class UserComponent implements OnInit {
 
   rowsPerPageOptions = [5, 10, 20];
   // ======********============
-  users: User[] = [];
+  users: RegisterRequest[] = [];
 
-  user: User = {};
-
-  selectedUsers: User[] = [];
+  registerRequest:RegisterRequest=new RegisterRequest();
+  changePassword:ChangePasswordRequest=new ChangePasswordRequest();
+  selectedUsers: RegisterRequest[] = [];
 
    isUpdateUser = false;
 
@@ -90,7 +91,7 @@ export class UserComponent implements OnInit {
   }
 
   getAllUsers() {
-    this.userService.getAllUsers().subscribe((v: User[]) => {
+    this.userService.getAllUsers().subscribe((v: RegisterRequest[]) => {
       this.users = v;
     }, error => {
       console.log(error)
@@ -99,10 +100,10 @@ export class UserComponent implements OnInit {
 
   openNew() {
 
-
-    this.user = {userType: "ADMIN"};
+this.isUpdateUser=false
     this.submitted = false;
     this.productDialog = true;
+    this.registerRequest=new RegisterRequest();
   }
 
   deleteSelectedUsers() {
@@ -111,15 +112,15 @@ export class UserComponent implements OnInit {
 
   }
 
-  editProduct(user: User) {
+  editProduct(user: RegisterRequest) {
     this.isUpdateUser = true;
-    this.user = {...user};
+    this.registerRequest = user
     this.productDialog = true;
   }
 
-  deleteProduct(user: User) {
+  deleteProduct(user: RegisterRequest) {
     this.deleteProductDialog = true;
-    this.user = {...user};
+    this.registerRequest = user;
   }
 
   confirmDeleteSelected() {
@@ -141,12 +142,14 @@ export class UserComponent implements OnInit {
 
   confirmDelete() {
     this.deleteProductDialog = false;
-    this.users = this.users.filter(val => val.id !== this.user.id);
-    if (this.user.id != null) {
-      this.userService.deleteUser(this.user.id).subscribe(() => console.log("user deleted"));
-    }
-    this.messageService.add({severity: 'success', summary: 'réussi', detail: 'Utilisateur supprimé', life: 3000});
-    this.user = {};
+
+      this.userService.deleteUser(this.registerRequest.id).subscribe(() => {
+        this.users = this.users.filter(val => val.id !== this.registerRequest.id);
+        console.log("user deleted")
+        this.messageService.add({severity: 'success', summary: 'réussi', detail: 'Utilisateur supprimé', life: 3000});
+
+      });
+
   }
 
   hideDialog() {
@@ -157,52 +160,37 @@ export class UserComponent implements OnInit {
 
 
   saveUser() {
-    console.error(this.user)
+    console.error(this.registerRequest)
     this.submitted = true;
+    if(this.isUpdateUser==false){
+      if (this.registerRequest.email?.trim() && this.registerRequest.password?.trim()) {
 
-    if (this.user.pseudo?.trim() && this.user.mp?.trim()) {
-      if (this.isUpdateUser == true) {
-        if (this.user.userType === "ADMIN") {
-          this.userService.UpdateAdmin(this.user).subscribe(() => {
-            this.getAllUsers();
+        this.userService.register(this.registerRequest).subscribe(value => {
+          console.log(value)
+          this.getAllUsers();
+        })
+      this.productDialog = false
+    }
+    }
+    else{
 
-          })
-        }
-        if (this.user.userType == "EMPLOYER") {
-          this.userService.UpdateEmployer(this.user).subscribe(() => {
-            this.getAllUsers();
-            this.isUpdateUser = false;
-          });
-        }
-        if (this.user.userType == "COSTUMER") {
-          this.userService.UpdateCostumer(this.user).subscribe(() => {
-            this.getAllUsers();
-            this.isUpdateUser = false;
-          });
-        }
-
-
+      if(this.changePassword.currentPassword?.trim() && this.changePassword.newPassword?.trim()&& this.changePassword.confirmationPassword?.trim()){
+        this.userService.register(this.registerRequest).subscribe(value => {
+          console.log(value)
+          this.getAllUsers()
+        })
+        this.userService.changePassword(this.changePassword).subscribe(value => this.getAllUsers())
+      this.productDialog = false
+      }else {
+        this.userService.register(this.registerRequest).subscribe(value => {
+          console.log(value)
+          this.getAllUsers()
+        })
         this.productDialog = false
-      } else {
-        this.isUpdateUser = false;
-        if (this.user.userType === "ADMIN") {
-          this.userService.addAdmin(this.user).subscribe(() => {
-            this.getAllUsers();
-          })
-        }
-        if (this.user.userType == "EMPLOYER") {
-          this.userService.AddEmployer(this.user).subscribe(() => {
-            this.getAllUsers();
-          });
-        }
-        if (this.user.userType == "COSTUMER") {
-          this.userService.AddCostumer(this.user).subscribe(() => {
-            this.getAllUsers();
-          });
-        }
-        this.productDialog = false
+
       }
     }
+
   }
 
 
@@ -216,5 +204,8 @@ export class UserComponent implements OnInit {
   alertOnhide() {
     this.isUpdateUser=false
 
+  }
+
+  public ngAfterViewInit(): void {
   }
 }

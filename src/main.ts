@@ -5,11 +5,17 @@ import { AppComponent } from './app/app.component';
 bootstrapApplication(AppComponent, appConfig)
   .catch((err) => console.error(err));
 
-export function  getToken(){
+export function  getKeyToken(){
   if(localStorage.getItem("token"))
 return localStorage.getItem("token")
  return ""
 
+
+}
+export function  getToken(){
+  if(localStorage.getItem("role"))
+    return localStorage.getItem("role")
+  return ""
 
 }
 

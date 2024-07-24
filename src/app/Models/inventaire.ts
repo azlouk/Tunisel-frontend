@@ -1,5 +1,3 @@
-import {User} from "./user";
-import {ProduitDefectueux} from "./produitDefectueux";
 import {InventaireProduitAssociation} from "./InventaireProduitAssociation";
 
 class Article {

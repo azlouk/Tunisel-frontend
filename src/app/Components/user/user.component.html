@@ -1,4 +1,4 @@
-<div  *ngIf="getToken()=='ADMIN'" class="grid">
+<div  class="grid">
   <div class="col-12">
     <div class="card px-6 py-6">
       <p-toast></p-toast>
@@ -13,7 +13,7 @@
 
       </p-toolbar>
 
-      <p-table #dt [value]="users" [columns]="cols"  responsiveLayout="scroll" [rows]="10" [globalFilterFields]="['id','nom','pseudo','poste','telephone','role']" [paginator]="true" [rowsPerPageOptions]="[10,20,30]" [showCurrentPageReport]="true" currentPageReportTemplate="Display  {first} to  {last} of  {totalRecords} entries" [(selection)]="selectedUsers" selectionMode="multiple" [rowHover]="true" dataKey="id">
+      <p-table #dt [value]="users" [columns]="cols"  responsiveLayout="scroll" [rows]="10" [globalFilterFields]="['id','nom','email','poste','telephone','role']" [paginator]="true" [rowsPerPageOptions]="[10,20,30]" [showCurrentPageReport]="true" currentPageReportTemplate="Display  {first} to  {last} of  {totalRecords} entries" [(selection)]="selectedUsers" selectionMode="multiple" [rowHover]="true" dataKey="id">
         <ng-template pTemplate="caption">
           <div class="flex flex-column md:flex-row md:justify-content-between md:align-items-center">
             <h5 class="m-0">Users management</h5>
@@ -33,7 +33,7 @@
             </th>
             <th pSortableColumn="id">Id <p-sortIcon field="id"></p-sortIcon></th>
             <th pSortableColumn="nom">Name <p-sortIcon field="nom"></p-sortIcon></th>
-            <th pSortableColumn="pseudo">Pseudo <p-sortIcon field="pseudo"></p-sortIcon></th>
+            <th pSortableColumn="email">Email <p-sortIcon field="email"></p-sortIcon></th>
             <th pSortableColumn="poste">Post <p-sortIcon field="poste"></p-sortIcon></th>
             <th pSortableColumn="telephone">Telephone <p-sortIcon field="telephone"></p-sortIcon></th>
             <th pSortableColumn="role">Role <p-sortIcon field="role"></p-sortIcon></th>
@@ -55,7 +55,7 @@
             </td>
             <td style="width:14%; min-width:10rem;">
               <span class="p-column-title">Pseudo</span>
-              {{user.pseudo}}
+              {{user.email}}
 
 
             </td>
@@ -71,8 +71,8 @@
             </td>
 
             <td style="width:14%; min-width:8rem;">
-              <span class="p-column-title">Type</span>
-              {{user.userType}}
+              <span class="p-column-title">Role</span>
+              {{user.role}}
             </td>
 
 
@@ -88,47 +88,65 @@
       </p-table>
     </div>
 
-    <p-dialog (onHide)="alertOnhide()" [(visible)]="productDialog" [style]="{width: '450px'}" header="User "   [modal]="true" class="p-fluid">
+    <p-dialog  [(visible)]="productDialog" [style]="{width: '500px'}" header="User "   [modal]="true" class="p-fluid">
       <ng-template pTemplate="content">
-        <div class="flex justify-content-evenly" *ngIf="!isUpdateUser">
+        <div class="flex justify-content-evenly" >
         <div class="field" >
-          <p-radioButton id="admin" name="user"   value="ADMIN" [(ngModel)]="user.userType" inputId="admin"></p-radioButton>
+          <p-radioButton id="admin" name="user"   value="ADMIN" [(ngModel)]="registerRequest.role" inputId="admin"></p-radioButton>
           <label for="admin" class="ml-2">Admin</label>
         </div>
         <div class="field" >
-          <p-radioButton  id="employer" name="user"   value="EMPLOYER" [(ngModel)]="user.userType" inputId="employer"></p-radioButton>
+          <p-radioButton  id="employer" name="user"   value="EMPLOYER" [(ngModel)]="registerRequest.role" inputId="employer"></p-radioButton>
           <label for="employer" class="ml-2">Employer</label>
         </div>
           <div class="field" >
-          <p-radioButton  id="costumer" name="user"   value="COSTUMER" [(ngModel)]="user.userType" inputId="costumer"></p-radioButton>
+          <p-radioButton  id="costumer" name="user"   value="COSTUMER" [(ngModel)]="registerRequest.role" inputId="costumer"></p-radioButton>
           <label for="costumer" class="ml-2">Costumer</label>
         </div>
         </div>
         <div class="field">
           <label for="name">Name</label>
-          <input type="text" pInputText id="name"  [(ngModel)]="user.nom" />
+          <input type="text" pInputText id="name"  [(ngModel)]="registerRequest.nom" />
         </div>
         <div class="field">
-          <label for="pseudo">Pseudo (email)</label>
-          <input  type="text" pInputText id="pseudo"  [(ngModel)]="user.pseudo" required autofocus [ngClass]="{'ng-invalid ng-dirty' : submitted && !user.pseudo}"/>
-          <small class="ng-dirty ng-invalid" *ngIf="submitted && !user.pseudo">Pseudo est requis.</small>
+          <label for="pseudo">Email </label>
+          <input  type="text" pInputText id="pseudo"  [(ngModel)]="registerRequest.email" required autofocus [ngClass]="{'ng-invalid ng-dirty' : submitted && !registerRequest.email}"/>
+          <small class="ng-dirty ng-invalid" *ngIf="submitted && !registerRequest.email">Email is required.</small>
         </div>
 
         <div class="field">
           <label for="poste">Post</label>
-          <input type="text" pInputText id="poste"  [(ngModel)]="user.poste" />
+          <input type="text" pInputText id="poste"  [(ngModel)]="registerRequest.poste" />
         </div>
         <div class="field">
           <label for="telephone" >Telephone</label>
-          <p-inputNumber   id="telephone" mode="decimal" [(ngModel)]="user.telephone" ></p-inputNumber>
+          <p-inputNumber   id="telephone" mode="decimal" [(ngModel)]="registerRequest.telephone" ></p-inputNumber>
         </div>
 
 
 
-        <div class="field">
+        <div class="field" *ngIf="!isUpdateUser">
             <label for="password">Password</label>
-            <p-password id="password" [(ngModel)]="user.mp" [toggleMask]="true" required autofocus [ngClass]="{'ng-invalid ng-dirty' : submitted && !user.mp}"></p-password>
-            <small class="ng-dirty ng-invalid" *ngIf="submitted && !user.mp">Mot de passe est requis.</small>
+            <p-password id="password" [(ngModel)]="registerRequest.password" [toggleMask]="true" required autofocus [ngClass]="{'ng-invalid ng-dirty' : submitted && !registerRequest.password}"></p-password>
+            <small class="ng-dirty ng-invalid" *ngIf="submitted && !registerRequest.password">Password is required.</small>
+
+        </div>
+        <div class="field" *ngIf="isUpdateUser">
+          <label for="currentpassword">Current Password</label>
+          <p-password id="currentpassword" [(ngModel)]="changePassword.currentPassword" [toggleMask]="true" required autofocus [ngClass]="{'ng-invalid ng-dirty' : submitted && !changePassword.currentPassword}"></p-password>
+          <small class="ng-dirty ng-invalid" *ngIf="submitted && !changePassword.currentPassword">Current Password is required.</small>
+
+        </div>
+        <div class="field" *ngIf="isUpdateUser">
+          <label for="newpassword">New Password</label>
+          <p-password id="newpassword" [(ngModel)]="changePassword.newPassword" [toggleMask]="true" required autofocus [ngClass]="{'ng-invalid ng-dirty' : submitted && !changePassword.newPassword}"></p-password>
+          <small class="ng-dirty ng-invalid" *ngIf="submitted && !changePassword.newPassword">New Password is required.</small>
+
+        </div>
+        <div class="field" *ngIf="isUpdateUser">
+          <label for="confpassword">Confirmation Password</label>
+          <p-password id="confpassword" [(ngModel)]="changePassword.confirmationPassword" [toggleMask]="true" required autofocus [ngClass]="{'ng-invalid ng-dirty' : submitted && !changePassword.confirmationPassword}"></p-password>
+          <small class="ng-dirty ng-invalid" *ngIf="submitted && !changePassword.confirmationPassword">Confirmation Password is required.</small>
 
         </div>
       </ng-template>
@@ -145,7 +163,7 @@
     <p-dialog [(visible)]="deleteProductDialog" header="Confirm" [modal]="true" [style]="{width:'450px'}">
       <div class="flex align-items-center justify-content-center">
         <i class="pi pi-exclamation-triangle mr-3" style="font-size: 2rem"></i>
-        <span *ngIf="user">Are you sure you want to delete <b>{{user.pseudo}}</b>?</span>
+        <span >Are you sure you want to delete <b></b>?</span>
       </div>
       <ng-template pTemplate="footer">
         <button pButton pRipple icon="pi pi-times" class="p-button-text" label="No" (click)="deleteProductDialog = false"></button>

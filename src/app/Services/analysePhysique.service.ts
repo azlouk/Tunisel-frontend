@@ -1,15 +1,14 @@
 import { Injectable } from '@angular/core';
 import {environment} from "../environment/environment";
-import {HttpClient, HttpParams} from "@angular/common/http";
+import {HttpClient, HttpHeaders, HttpParams} from "@angular/common/http";
 import {Observable} from "rxjs";
-import {JsonPipe} from "@angular/common";
-import {Puit} from "../Models/puit";
 import {Bassin} from "../Models/bassin";
 import {Sbnl} from "../Models/sbnl";
 import {Sbl} from "../Models/sbl";
 import {Sblf} from "../Models/sblf";
 import {AnalysesPhysique} from "../Models/analyses-physique";
 import {Bande} from "../Models/bande";
+import {getKeyToken} from "../../main";
 
 @Injectable({
   providedIn: 'root'
@@ -19,46 +18,90 @@ export class AnalysePhysiqueService {
   constructor(private http: HttpClient) { }
 
   getAllAnalysesPhysiques(): Observable<AnalysesPhysique[]> {
-    return this.http.get<AnalysesPhysique[]>(`${this.apiUrl}/analysesPhysiques/read`) ;
-  }
+    const token = getKeyToken();
+    if (token) {
+      const headers = new HttpHeaders().set('Authorization', `Bearer ${token}`).set("Content-Type", "application/json; charset=utf8");
+    return this.http.get<AnalysesPhysique[]>(`${this.apiUrl}/analysesPhysiques/read`, {headers}) ;
+  }else {
+      return  new Observable<any[]>()}}
 
   deleteAnalysesPhysiques(analysesPhysiqueId: number | undefined): Observable<any> {
-    return this.http.delete(`${this.apiUrl}/analysesPhysiques/${analysesPhysiqueId}`);
-  }
-  updateAnalysesPhysiques(analyse: AnalysesPhysique, id:number, ref:string): Observable<AnalysesPhysique> {
-    const params = new HttpParams().set('id', id.toString()).set('ref', ref);
+    const token = getKeyToken();
+    if (token) {
+      const headers = new HttpHeaders().set('Authorization', `Bearer ${token}`).set("Content-Type", "application/json; charset=utf8");
 
-    return this.http.put<AnalysesPhysique>(`${this.apiUrl}/analysesPhysiques/update`, analyse,{params});
-  }
+    return this.http.delete(`${this.apiUrl}/analysesPhysiques/${analysesPhysiqueId}`, {headers});
+  }else {
+      return  new Observable<any>()}}
+
+  updateAnalysesPhysiques(analyse: AnalysesPhysique, id:number, ref:string): Observable<AnalysesPhysique> {
+    const token = getKeyToken();
+    if (token) {
+      const headers = new HttpHeaders().set('Authorization', `Bearer ${token}`).set("Content-Type", "application/json; charset=utf8");
+    const params = new HttpParams().set('id', id.toString()).set('ref', ref);
+      const httpOptions = {
+        headers: headers,
+        params: params
+      };
+    return this.http.put<AnalysesPhysique>(`${this.apiUrl}/analysesPhysiques/update`, analyse,httpOptions);
+  }else {
+      return  new Observable<any>()}}
 
 
 
   getElementByAnalysesPhysiquesId(analyeChimiqueId: number) : Observable<Object[]>{
-    return this.http.get<Object[]>(`${this.apiUrl}/analysesPhysiques/byAnalysePhysique/${analyeChimiqueId}`);
-  }
+    const token = getKeyToken();
+    if (token) {
+      const headers = new HttpHeaders().set('Authorization', `Bearer ${token}`).set("Content-Type", "application/json; charset=utf8");
+    return this.http.get<Object[]>(`${this.apiUrl}/analysesPhysiques/byAnalysePhysique/${analyeChimiqueId}`, {headers});
+  }else {
+      return  new Observable<any>()}}
   getAnalysesPhysiquesById(analyeChimiqueId: number) : Observable<AnalysesPhysique>{
-    return this.http.get<AnalysesPhysique>(`${this.apiUrl}/analysesPhysiques/${analyeChimiqueId}`);
+    const token = getKeyToken();
+    if (token) {
+      const headers = new HttpHeaders().set('Authorization', `Bearer ${token}`).set("Content-Type", "application/json; charset=utf8");
+    return this.http.get<AnalysesPhysique>(`${this.apiUrl}/analysesPhysiques/${analyeChimiqueId}`, {headers});
 
-  }
+  }else {
+      return  new Observable<any>()}}
 
 
   //  =======bassin========
   addAnalysesPhysiquesToBassin(bassin:Bassin) : Observable<void>{
-    return this.http.put<void>(`${this.apiUrl}/analysesPhysiques/AddanalysePhysique/bassin`, bassin);
-  }
+    const token = getKeyToken();
+    if (token) {
+      const headers = new HttpHeaders().set('Authorization', `Bearer ${token}`).set("Content-Type", "application/json; charset=utf8");
+    return this.http.put<void>(`${this.apiUrl}/analysesPhysiques/AddanalysePhysique/bassin`, bassin, {headers});
+  }else {
+      return  new Observable<any>()}}
 
   addAnalysesPhysiquesToSbnl(sbnl:Sbnl) : Observable<void>{
-    return this.http.put<void>(`${this.apiUrl}/analysesPhysiques/AddanalysePhysique/sbnl`, sbnl);
-  }
+    const token = getKeyToken();
+    if (token) {
+      const headers = new HttpHeaders().set('Authorization', `Bearer ${token}`).set("Content-Type", "application/json; charset=utf8");
+    return this.http.put<void>(`${this.apiUrl}/analysesPhysiques/AddanalysePhysique/sbnl`, sbnl, {headers});
+  }else {
+      return  new Observable<any>()}}
   addAnalysesPhysiquesToBande(bande:Bande) : Observable<void>{
-    console.error(new JsonPipe().transform(bande))
-    return this.http.put<void>(`${this.apiUrl}/analysesPhysiques/AddanalysePhysique/bande`, bande);
-  }
+    const token = getKeyToken();
+    if (token) {
+      const headers = new HttpHeaders().set('Authorization', `Bearer ${token}`).set("Content-Type", "application/json; charset=utf8");
+    return this.http.put<void>(`${this.apiUrl}/analysesPhysiques/AddanalysePhysique/bande`, bande, {headers});
+  }else {
+      return  new Observable<any>()}}
   addAnalysesPhysiquesToSbl(sbl:Sbl) : Observable<void>{
-    return this.http.put<void>(`${this.apiUrl}/analysesPhysiques/AddanalysePhysique/sbl`, sbl);
-  }
+    const token = getKeyToken();
+    if (token) {
+      const headers = new HttpHeaders().set('Authorization', `Bearer ${token}`).set("Content-Type", "application/json; charset=utf8");
+    return this.http.put<void>(`${this.apiUrl}/analysesPhysiques/AddanalysePhysique/sbl`, sbl, {headers});
+  }else {
+      return  new Observable<any>()}}
   addAnalysesPhysiquesToSblf(sblf:Sblf) : Observable<void>{
-    return this.http.put<void>(`${this.apiUrl}/analysesPhysiques/AddanalysePhysique/sblf`, sblf);
-  }
+    const token = getKeyToken();
+    if (token) {
+      const headers = new HttpHeaders().set('Authorization', `Bearer ${token}`).set("Content-Type", "application/json; charset=utf8");
+    return this.http.put<void>(`${this.apiUrl}/analysesPhysiques/AddanalysePhysique/sblf`, sblf, {headers});
+  }else {
+      return  new Observable<any>()}}
 
 }

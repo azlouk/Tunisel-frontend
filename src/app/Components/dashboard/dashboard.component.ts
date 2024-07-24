@@ -14,6 +14,8 @@ import {DropdownModule} from "primeng/dropdown";
 import {FormsModule} from "@angular/forms";
 import {LoginService} from "../../Services/login.service";
 import {getToken} from "../../../main";
+import {RegisterRequest} from "../../Models/register-request";
+import {UserService} from "../../Services/user.service";
 
 
 @Component({
@@ -48,8 +50,9 @@ export class DashboardComponent implements OnInit, OnDestroy {
   // puit :Puit[];
   public nbrPuits = 0;
   public dashboardData: Dashboard = new Dashboard(0, 0,0,0);
-
-  constructor(public loginservice: LoginService,  public layoutService: LayoutService, private dashboardService: DashboardService) {
+ public userConnect:RegisterRequest=new RegisterRequest();
+  constructor(public loginservice: LoginService,  public layoutService: LayoutService, private dashboardService: DashboardService,
+              private userService:UserService) {
     this.subscription = this.layoutService.configUpdate$
       .pipe(debounceTime(25))
       .subscribe((config) => {
@@ -58,7 +61,7 @@ export class DashboardComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit() {
-
+    this.getUserConnected();
     this.dashboardService.getCountAnalyseChemique().subscribe((value:any[]) => {
       this.data = value;
       this.initChart();
@@ -224,4 +227,8 @@ export class DashboardComponent implements OnInit, OnDestroy {
       this.subscription.unsubscribe();
     }
   }
+ public getUserConnected(){
+    this.userService.getUserConnect().subscribe(value => this.userConnect=value)
+}
+
 }

@@ -6,6 +6,7 @@ import {Puit} from "../Models/puit";
 import {Sbnl} from "../Models/sbnl";
 import {JsonPipe} from "@angular/common";
 import {parseJson} from "@angular/cli/src/utilities/json-file";
+import {getKeyToken} from "../../main";
 
 @Injectable({
   providedIn: 'root'
@@ -16,28 +17,43 @@ export class SbnlService {
   constructor(private http: HttpClient) { }
 
   getAllSbnls(): Observable<Sbnl[]> {
-    return this.http.get<Sbnl[]>(`${this.apiUrl}/sbnls/read`) ;
-  }
+    const token = getKeyToken();
+    if (token) {
+      const headers = new HttpHeaders().set('Authorization', `Bearer ${token}`).set("Content-Type", "application/json; charset=utf8");
+    return this.http.get<Sbnl[]>(`${this.apiUrl}/sbnls/read`, {headers}) ;
+  }else {
+      return  new Observable<any>()}}
+
   getAllSbnlsDTO(): Observable<Sbnl[]> {
-    return this.http.get<Sbnl[]>(`${this.apiUrl}/sbnls/readDTO`) ;
-  }
+    const token = getKeyToken();
+    if (token) {
+      const headers = new HttpHeaders().set('Authorization', `Bearer ${token}`).set("Content-Type", "application/json; charset=utf8");
+    return this.http.get<Sbnl[]>(`${this.apiUrl}/sbnls/readDTO`, {headers}) ;
+  }else {
+      return  new Observable<any>()}}
 
   deleteSbnl(sbnlId: number | undefined): Observable<any> {
-    return this.http.delete(`${this.apiUrl}/sbnls/delete/${sbnlId}`);
-  }
+    const token = getKeyToken();
+    if (token) {
+      const headers = new HttpHeaders().set('Authorization', `Bearer ${token}`).set("Content-Type", "application/json; charset=utf8");
+    return this.http.delete(`${this.apiUrl}/sbnls/delete/${sbnlId}`, {headers});
+  }else {
+      return  new Observable<any>()}}
+
   updateSbnl(sbnl: Sbnl): Observable<Sbnl> {
-    console.log("update");
-    return this.http.put<Sbnl>(`${this.apiUrl}/sbnls/${sbnl.id}`, sbnl);
-  }
+    const token = getKeyToken();
+    if (token) {
+      const headers = new HttpHeaders().set('Authorization', `Bearer ${token}`).set("Content-Type", "application/json; charset=utf8");
+    return this.http.put<Sbnl>(`${this.apiUrl}/sbnls/${sbnl.id}`, sbnl, {headers});
+  }else {
+      return  new Observable<any>()}}
 
 
   addSbnl(sbnl: Sbnl) : Observable<Sbnl>{
-    console.log(sbnl)
-    const headers = new HttpHeaders().set("Content-Type", "application/json; charset=utf8");
-
-
-
-    return this.http.post<Sbnl>(`${this.apiUrl}/sbnls/add`,JSON.parse(JSON.stringify(sbnl)),{headers});
-
-  }
+    const token = getKeyToken();
+    if (token) {
+      const headers = new HttpHeaders().set('Authorization', `Bearer ${token}`).set("Content-Type", "application/json; charset=utf8");
+    return this.http.post<Sbnl>(`${this.apiUrl}/sbnls/add`,JSON.parse(JSON.stringify(sbnl)), {headers});
+  }else {
+      return  new Observable<any>()}}
 }

@@ -1,45 +1,40 @@
 import {Injectable, OnInit} from '@angular/core';
 import {HttpClient} from "@angular/common/http";
 import {environment} from "../environment/environment";
-import {User} from "../Models/user";
 import {catchError, Observable} from "rxjs";
-import {JsonPipe} from "@angular/common";
 import Swal from "sweetalert2";
 import {Router} from "@angular/router";
+import {AuthenticationRequest} from "../Models/authentication-request";
+import {AuthenticationResponse} from "../Models/authentication-response";
+import {UserService} from "./user.service";
 
 @Injectable({
   providedIn: 'root'
 })
 export class LoginService {
 
+
   apiUrl=environment.apiUrl
   public Islogin: boolean=false;
-  public tokenKey: string="token";
+  public  tokenKey: string="token";
 
-  constructor(private http: HttpClient ,   private router: Router) {
+  constructor(private http: HttpClient ,   private router: Router,private userService:UserService) {
   }
 
 
-  loggdinUser(user: User) {
+  loggdinUser(request:AuthenticationRequest) {
 
-    console.log(new JsonPipe().transform(user))
-      this.http.post<any>(`${this.apiUrl}/users/login`, user).subscribe((token:User) => {
-        console.log("response data :"+new JsonPipe().transform(token))
-        if((token!=null && token.userType!=undefined)|| true) {
-          // @ts-ignore
-          localStorage.setItem(this.tokenKey, token.userType.toString());
-          this.router.navigate(['dash']);
-        }else {
-          Swal.fire({
-            icon: "error",
-            title: "Erreur d'authentification",
-            text: "Utilisateur invalide ou mot de passe incorrect!",
-            // confirmButtonColor: '#d33',
-            confirmButtonText: 'Réessayer'
+    this.http.post<AuthenticationResponse>(`${this.apiUrl}/users/auth/authenticate`, request).subscribe((token:AuthenticationResponse) => {
+      // console.log("response data :"+new JsonPipe().transform(token))
+      if((token!=null && token!=undefined)|| true) {
 
-          });
-        }
-    }, error => {
+        localStorage.setItem(this.tokenKey,token.access_token );
+        this.userService.getUserConnect().subscribe(value => {
+
+        localStorage.setItem("role",value.role);
+        })
+        this.router.navigate(['dash']);
+      }else {
         Swal.fire({
           icon: "error",
           title: "Erreur d'authentification",
@@ -48,20 +43,29 @@ export class LoginService {
           confirmButtonText: 'Réessayer'
 
         });
+      }
+    }, error => {
+      Swal.fire({
+        icon: "error",
+        title: "Erreur d'authentification",
+        text: "Utilisateur invalide ou mot de passe incorrect!",
+        // confirmButtonColor: '#d33',
+        confirmButtonText: 'Réessayer'
 
-      }) ;
+      });
+
+    }) ;
 
   }
 
-  GetPassword(user: User):Observable<User> {
-
-      return this.http.post<User>(`${this.apiUrl}/users/pass`, user) ;
-
-
+  authenticate(request:AuthenticationRequest ): Observable<AuthenticatorResponse>{
+    return this.http.post<AuthenticatorResponse>(`${this.apiUrl}/users/auth/authenticate`, request);
   }
+
 
   public logout() {
     localStorage.removeItem(this.tokenKey);
+    localStorage.removeItem("role");
     this.router.navigate(['/login']);
   }
 

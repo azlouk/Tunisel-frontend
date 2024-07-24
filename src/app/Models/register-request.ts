@@ -1,32 +1,26 @@
-// export interface User {
-//   id?: number;
-//   nom?: string;
-//   telephone?: number;
-//   poste?: string;
-//   pseudo?: string;
-//   mp?: string;
-//  userType?: String;
-// }
 import {Role} from "../Enum/Role";
 
-class User {
-  id: number;
+export class RegisterRequest {
+
+  id: number ;
   nom: string;
-  telephone: number;
   poste: string;
+  telephone: number;
   email: string;
   password: string;
   role: Role;
 
-  constructor(_id: number=0, _nom: string="", _telephone: number=0, _poste: string="", _email: string="", _password: string="", _role: Role=Role.ADMIN) {
+
+  constructor(_id: number=0, _nom: string="", _poste: string="", _telephone: number=0, _email: string="", _password: string="", _role: Role=Role.ADMIN) {
     this.id = _id;
     this.nom = _nom;
-    this.telephone = _telephone;
     this.poste = _poste;
+    this.telephone = _telephone;
     this.email = _email;
     this.password = _password;
     this.role = _role;
   }
+
 
   public get _id(): number {
     return this.id;
@@ -44,20 +38,20 @@ class User {
     this.nom = value;
   }
 
-  public get _telephone(): number {
-    return this.telephone;
-  }
-
-  public set _telephone(value: number) {
-    this.telephone = value;
-  }
-
   public get _poste(): string {
     return this.poste;
   }
 
   public set _poste(value: string) {
     this.poste = value;
+  }
+
+  public get _telephone(): number {
+    return this.telephone;
+  }
+
+  public set _telephone(value: number) {
+    this.telephone = value;
   }
 
   public get _email(): string {
@@ -84,7 +78,3 @@ class User {
     this.role = value;
   }
 }
-
-
-
-

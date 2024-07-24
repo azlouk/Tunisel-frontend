@@ -1,16 +1,18 @@
-import { Component, ElementRef, ViewChild } from '@angular/core';
+import {Component, ElementRef, OnInit, ViewChild} from '@angular/core';
 import { MenuItem } from 'primeng/api';
 import { LayoutService } from "./service/app.layout.service";
 import {LoginService} from "../../Services/login.service";
 import {Router} from "@angular/router";
 import Swal from "sweetalert2";
 import {getToken} from "../../../main";
+import {UserService} from "../../Services/user.service";
+import {RegisterRequest} from "../../Models/register-request";
 
 @Component({
     selector: 'app-topbar',
     templateUrl: './app.topbar.component.html'
 })
-export class AppTopBarComponent {
+export class AppTopBarComponent implements OnInit{
 
     items!: MenuItem[];
 
@@ -19,8 +21,9 @@ export class AppTopBarComponent {
     @ViewChild('topbarmenubutton') topbarMenuButton!: ElementRef;
 
     @ViewChild('topbarmenu') menu!: ElementRef;
-
-    constructor(public layoutService: LayoutService, public loginservice:LoginService, public route:Router) { }
+userConnect:RegisterRequest=new RegisterRequest()
+    constructor(public layoutService: LayoutService, public loginservice:LoginService, public route:Router,
+                private userService:UserService) { }
 
   dec() {
     Swal.fire({
@@ -40,6 +43,11 @@ export class AppTopBarComponent {
 
 
   }
-
+  public getUserConnected(){
+    this.userService.getUserConnect().subscribe(value => this.userConnect=value)
+  }
+  ngOnInit() {
+  this.getUserConnected();
+  }
   protected readonly getToken = getToken;
 }

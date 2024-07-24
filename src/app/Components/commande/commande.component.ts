@@ -2,7 +2,7 @@ import {Component, OnInit} from '@angular/core';
 import {ButtonModule} from "primeng/button";
 import {DialogModule} from "primeng/dialog";
 import {InputTextModule} from "primeng/inputtext";
-import {DatePipe, JsonPipe, NgForOf, NgIf} from "@angular/common";
+import {DatePipe, JsonPipe, NgClass, NgForOf, NgIf} from "@angular/common";
 import {MenuItem, MenuItemCommandEvent, MessageService, SharedModule} from "primeng/api";
 import {Table, TableModule} from "primeng/table";
 import {ToastModule} from "primeng/toast";
@@ -54,7 +54,8 @@ import {LogarithmicScale} from "chart.js";
     InputNumberModule,
     DatePipe,
     TimelineModule,
-    StepsModule
+    StepsModule,
+    NgClass
   ],
   templateUrl: './commande.component.html',
   styleUrl: './commande.component.css'
@@ -400,5 +401,14 @@ commande.ligneCommandes?.forEach(l => {
   sortStockOrdersByCreationDateDesc() {
     this.stockOrders.sort((a, b) => b.dateCreation.getTime() - a.dateCreation.getTime());
     alert(new JsonPipe().transform("after: "+this.stockOrders))
+  }
+
+  public verifyState(commande: Commande) {
+
+    if(commande.etat && commande.etat.replace(" ","").toLowerCase()=='loadingcompleted'){
+      console.log(commande.etat.replace(" ","").toLowerCase())
+      return true;
+    }else return false;
+
   }
 }

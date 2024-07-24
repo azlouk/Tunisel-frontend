@@ -1,9 +1,10 @@
 import { Injectable } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
+import {HttpClient, HttpHeaders} from '@angular/common/http';
 import { Observable } from 'rxjs';
 import {FicheVie} from "../Models/fichevie";
 import {environment} from "../environment/environment";
-import {Bassin} from "../Models/bassin";
+import {getKeyToken} from "../../main";
+
 
 
 @Injectable({
@@ -16,22 +17,43 @@ export class FicheVieService {
   constructor(private http: HttpClient) {}
 
   getFichesVies(): Observable<FicheVie[]> {
-    return this.http.get<FicheVie[]>(`${this.apiUrl}/fichesvies/read`);
-  }  getFicheById(ficheid:number): Observable<FicheVie> {
-    return this.http.get<FicheVie>(`${this.apiUrl}/fichesvies/`+ficheid);
-  }
+    const token = getKeyToken();
+    if (token) {
+      const headers = new HttpHeaders().set('Authorization', `Bearer ${token}`).set("Content-Type", "application/json; charset=utf8");
+    return this.http.get<FicheVie[]>(`${this.apiUrl}/fichesvies/read`, {headers});
+  }else {
+      return  new Observable<any>()}}
+    getFicheById(ficheid:number): Observable<FicheVie> {
+      const token = getKeyToken();
+      if (token) {
+        const headers = new HttpHeaders().set('Authorization', `Bearer ${token}`).set("Content-Type", "application/json; charset=utf8");
+    return this.http.get<FicheVie>(`${this.apiUrl}/fichesvies/`+ficheid, {headers});
+  }else {
+        return  new Observable<any>()}}
 
   createFicheVie(ficheVie: FicheVie): Observable<FicheVie> {
-    return this.http.post<FicheVie>(`${this.apiUrl}/fichesvies/add`, ficheVie);
-  }
+    const token = getKeyToken();
+    if (token) {
+      const headers = new HttpHeaders().set('Authorization', `Bearer ${token}`).set("Content-Type", "application/json; charset=utf8");
+    return this.http.post<FicheVie>(`${this.apiUrl}/fichesvies/add`, ficheVie, {headers});
+  }else {
+      return  new Observable<any>()}}
 
   updateFicheVie(ficheVie: FicheVie): Observable<FicheVie> {
-    return this.http.put<FicheVie>(`${this.apiUrl}/fichesvies/update`, ficheVie);
+    const token = getKeyToken();
+    if (token) {
+      const headers = new HttpHeaders().set('Authorization', `Bearer ${token}`).set("Content-Type", "application/json; charset=utf8");
+    return this.http.put<FicheVie>(`${this.apiUrl}/fichesvies/update`, ficheVie, {headers});
 
-  }
+  }else {
+      return  new Observable<any>()}}
 
   deleteFicheVie(ficheVieId: number | undefined): Observable<any> {
-    return this.http.delete(`${this.apiUrl}/fichesvies/delete/${ficheVieId}`);
-  }
+    const token = getKeyToken();
+    if (token) {
+      const headers = new HttpHeaders().set('Authorization', `Bearer ${token}`).set("Content-Type", "application/json; charset=utf8");
+    return this.http.delete(`${this.apiUrl}/fichesvies/delete/${ficheVieId}`, {headers});
+  }else {
+      return  new Observable<any>()}}
 }
 

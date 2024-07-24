@@ -347,7 +347,6 @@ saveQuantityTranferStarAndArriving(){
     //   }
     // }) ;
 
-    console.error(this.stockOrder.salines)
 
 
 

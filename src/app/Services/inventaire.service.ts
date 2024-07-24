@@ -1,9 +1,10 @@
 import { Injectable } from '@angular/core';
 import {environment} from "../environment/environment";
-import {HttpClient} from "@angular/common/http";
+import {HttpClient, HttpHeaders} from "@angular/common/http";
 import {Observable} from "rxjs";
 import {Inventaire} from "../Models/inventaire";
 import {Produit} from "../Models/produit";
+import {getKeyToken} from "../../main";
 
 
 @Injectable({
@@ -15,25 +16,50 @@ export class InventaireService {
   constructor(private http: HttpClient) {}
 
   getInventaires(): Observable<Inventaire[]> {
-    return this.http.get<Inventaire[]>(`${this.apiUrl}/inventaires/read`);
-  }
+    const token = getKeyToken();
+    if (token) {
+      const headers = new HttpHeaders().set('Authorization', `Bearer ${token}`).set("Content-Type", "application/json; charset=utf8");
+    return this.http.get<Inventaire[]>(`${this.apiUrl}/inventaires/read`, {headers});
+  }else {
+      return  new Observable<any>()}}
   getInventaireById(inventaireid:number): Observable<Inventaire> {
-    return this.http.get<Inventaire>(`${this.apiUrl}/inventaires/`+inventaireid);
-  }
+    const token = getKeyToken();
+    if (token) {
+      const headers = new HttpHeaders().set('Authorization', `Bearer ${token}`).set("Content-Type", "application/json; charset=utf8");
+    return this.http.get<Inventaire>(`${this.apiUrl}/inventaires/`+inventaireid, {headers});
+  }else {
+      return  new Observable<any>()}}
 
   createInventaire(newIinventaire: Inventaire): Observable<Inventaire> {
-    return this.http.post<Inventaire>(`${this.apiUrl}/inventaires/add`, newIinventaire);
-  }
+    const token = getKeyToken();
+    if (token) {
+      const headers = new HttpHeaders().set('Authorization', `Bearer ${token}`).set("Content-Type", "application/json; charset=utf8");
+    return this.http.post<Inventaire>(`${this.apiUrl}/inventaires/add`, newIinventaire, {headers});
+  }else {
+      return  new Observable<any>()}}
 
   updateInventaire(inventaire: Inventaire): Observable<Inventaire> {
-    return this.http.put<Inventaire>(`${this.apiUrl}/inventaires/update/${inventaire.id}`, inventaire);
+    const token = getKeyToken();
+    if (token) {
+      const headers = new HttpHeaders().set('Authorization', `Bearer ${token}`).set("Content-Type", "application/json; charset=utf8");
+    return this.http.put<Inventaire>(`${this.apiUrl}/inventaires/update/${inventaire.id}`, inventaire, {headers});
 
-  }
+  }else {
+      return  new Observable<any>()}}
 
   deleteInventaire(inventaireId: number | undefined): Observable<any> {
-    return this.http.delete(`${this.apiUrl}/inventaires/delete/${inventaireId}`);
-  }
+    const token = getKeyToken();
+    if (token) {
+      const headers = new HttpHeaders().set('Authorization', `Bearer ${token}`).set("Content-Type", "application/json; charset=utf8");
+    return this.http.delete(`${this.apiUrl}/inventaires/delete/${inventaireId}`, {headers});
+  }else {
+      return  new Observable<any>()}}
+
   getProduitFiltre(inventaireId:number): Observable<Produit[]> {
-    return this.http.get<Produit[]>(`${this.apiUrl}/inventaires/${inventaireId}/difference`);
-  }
+    const token = getKeyToken();
+    if (token) {
+      const headers = new HttpHeaders().set('Authorization', `Bearer ${token}`).set("Content-Type", "application/json; charset=utf8");
+    return this.http.get<Produit[]>(`${this.apiUrl}/inventaires/${inventaireId}/difference`, {headers});
+  }else {
+      return  new Observable<any>()}}
 }

@@ -60,6 +60,8 @@
             <th pSortableColumn="Customer">Customer <p-sortIcon field="Customer"></p-sortIcon></th>
             <th pSortableColumn="Laycan">Laycan <p-sortIcon field="Laycan"></p-sortIcon></th>
             <th pSortableColumn="Purchase">Purchase Order <p-sortIcon field="Purchase"></p-sortIcon></th>
+            <th pSortableColumn="analysereference">Analyse Reference <p-sortIcon field="analysereference"></p-sortIcon></th>
+            <th pSortableColumn="departureDate">Departure Date <p-sortIcon field="departureDate"></p-sortIcon></th>
             <th pSortableColumn="Volume">Total Volume<p-sortIcon field="Volume"></p-sortIcon></th>
             <th pSortableColumn="Calibre">Calibre <p-sortIcon field="Calibre"></p-sortIcon></th>
             <th pSortableColumn="etat">Status<p-sortIcon field="etat"></p-sortIcon></th>
@@ -67,7 +69,7 @@
           </tr>
         </ng-template>
         <ng-template pTemplate="body" let-commande >
-          <tr >
+          <tr [ngClass]="{'bg-green-300 text-white' : verifyState(commande)==true && getToken()=='ADMIN' }">
             <td>
               <p-tableCheckbox [value]="commande"></p-tableCheckbox>
 
@@ -89,10 +91,20 @@
             </td> <td >
               <span class="p-column-title">Laycan</span>
               {{commande.laycan}}
-            </td> <td >
+            </td>
+            <td >
               <span class="p-column-title">Purchase Order</span>
               {{commande.purchaseOrder}}
-            </td> <td >
+            </td>
+            <td >
+              <span class="p-column-title">Analyse Reference</span>
+              {{commande.analyseReference}}
+            </td>
+            <td >
+              <span class="p-column-title">Departure Date</span>
+              {{commande.departureDate| date :'dd-MM-yyyy'}}
+            </td>
+            <td >
               <span class="p-column-title">Total Volume</span>
               {{CalculeTotalVolume(commande)}}
             </td>

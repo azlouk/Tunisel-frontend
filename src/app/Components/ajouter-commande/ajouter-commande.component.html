@@ -45,7 +45,14 @@
           <input type="text" pInputText [(ngModel)]="commande.purchaseOrder"    id="purchaseOrder" class="w-full" [disabled]="getToken()!=='ADMIN'" />
           <label for="purchaseOrder">Purchase Order</label>
         </p-floatLabel>
-
+        <p-floatLabel>
+          <input type="text" pInputText [(ngModel)]="commande.analyseReference"    id="analyseReference" class="w-full" [disabled]="getToken()!=='ADMIN'" />
+          <label for="analyseReference">Analyse Reference</label>
+        </p-floatLabel>
+        <p-floatLabel >
+          <p-calendar   id="departureDate" [(ngModel)]="commande.departureDate"  dateFormat="yy-mm-dd"  [showIcon]="true" [disabled]="getToken()!=='ADMIN'"></p-calendar>
+          <label for="departureDate">Departure Date</label>
+        </p-floatLabel>
         <p-floatLabel>
           <p-autoComplete [disabled]="getToken()!=='ADMIN'"
             [(ngModel)]="commande.customer"
@@ -196,7 +203,7 @@
           [scrollable]="true"
           scrollHeight="600px"
           [tableStyle]="{'min-width': '50rem'}"
-          styleClass="p-datatable-gridlines"
+
           selectionMode="single"
           [(selection)]="selectedProduct"
           editMode="row"
