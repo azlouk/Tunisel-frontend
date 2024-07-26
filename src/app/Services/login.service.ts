@@ -7,6 +7,8 @@ import {Router} from "@angular/router";
 import {AuthenticationRequest} from "../Models/authentication-request";
 import {AuthenticationResponse} from "../Models/authentication-response";
 import {UserService} from "./user.service";
+import {getModelDefault, getModelFiltree, getToken} from "../../main";
+import {RegisterRequest} from "../Models/register-request";
 
 @Injectable({
   providedIn: 'root'
@@ -17,24 +19,22 @@ export class LoginService {
   apiUrl=environment.apiUrl
   public Islogin: boolean=false;
   public  tokenKey: string="token";
-
+public user:RegisterRequest=new RegisterRequest();
+  public model!:any[];
   constructor(private http: HttpClient ,   private router: Router,private userService:UserService) {
   }
 
 
-  loggdinUser(request:AuthenticationRequest) {
+async  loggdinUser(request:AuthenticationRequest) {
 
-    this.http.post<AuthenticationResponse>(`${this.apiUrl}/users/auth/authenticate`, request).subscribe((token:AuthenticationResponse) => {
+    this.http.post<AuthenticationResponse>(`${this.apiUrl}/users/auth/authenticate`, request).subscribe(async (token: AuthenticationResponse) => {
       // console.log("response data :"+new JsonPipe().transform(token))
-      if((token!=null && token!=undefined)|| true) {
+      if ((token != null && token != undefined) || true) {
 
-        localStorage.setItem(this.tokenKey,token.access_token );
-        this.userService.getUserConnect().subscribe(value => {
+        localStorage.setItem(this.tokenKey, token.access_token);
+        await this.getUserConnect()
 
-        localStorage.setItem("role",value.role);
-        })
-        this.router.navigate(['dash']);
-      }else {
+      } else {
         Swal.fire({
           icon: "error",
           title: "Erreur d'authentification",
@@ -76,5 +76,21 @@ export class LoginService {
 
   public getToken(): string | null {
     return this.isLoggedIn() ? localStorage.getItem(this.tokenKey) : null;
+  }
+
+ async getUserConnect(){
+    this.userService.getUserConnect().subscribe(value => {
+      this.user=value
+
+      localStorage.setItem("role",value.role);
+      if (this.user.role == "ADMIN" || this.user.role == "EMPLOYER") {
+       this. model=getModelDefault();
+        this.router.navigate(['dash']);
+      } else if (this.user.role == "COSTUMER") {
+        this.model=getModelFiltree();
+        this.router.navigate(['commande']);
+      }
+
+    })
   }
 }

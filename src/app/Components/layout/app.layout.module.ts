@@ -19,6 +19,7 @@ import { AppSidebarComponent } from "./app.sidebar.component";
 import { AppLayoutComponent } from "./app.layout.component";
 import {NgClass, NgForOf, NgIf} from "@angular/common";
 import {AvatarModule} from "primeng/avatar";
+import {ButtonModule} from "primeng/button";
 
 @NgModule({
     declarations: [
@@ -45,7 +46,8 @@ import {AvatarModule} from "primeng/avatar";
         NgClass,
         NgForOf,
         NgIf,
-        AvatarModule
+        AvatarModule,
+        ButtonModule
     ],
     exports: [AppLayoutComponent]
 })

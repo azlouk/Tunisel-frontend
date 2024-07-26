@@ -43,7 +43,13 @@ export class CommandeService {
     return this.http.get<Commande>(`${this.apiUrl}/commandes/${commandeId}`, {headers});
   }else {
       return  new Observable<any>()}}
-
+  getCommandeByIdDTO(commandeId:number): Observable<Commande> {
+    const token = getKeyToken();
+    if (token) {
+      const headers = new HttpHeaders().set('Authorization', `Bearer ${token}`).set("Content-Type", "application/json; charset=utf8");
+      return this.http.get<Commande>(`${this.apiUrl}/commandes/${commandeId}/dto`, {headers});
+    }else {
+      return  new Observable<any>()}}
   deleteCommande(CommandeId: number | undefined): Observable<any> {
     const token = getKeyToken();
     if (token) {

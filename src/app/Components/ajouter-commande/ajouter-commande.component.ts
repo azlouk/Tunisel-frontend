@@ -299,7 +299,7 @@ export class AjouterCommandeComponent implements OnInit{
   }
 getCommandeById(){
   this.loadingcommande=true;
-  this.commandeService.getCommandeById(this.commandeId).subscribe(value => {
+  this.commandeService.getCommandeByIdDTO(this.commandeId).subscribe(value => {
     this.commande = value;
 
         this.selectedColumns=this.commande.dataHeaders || []

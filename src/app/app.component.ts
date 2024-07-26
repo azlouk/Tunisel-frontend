@@ -7,6 +7,7 @@ import {AppLayoutModule} from "./Components/layout/app.layout.module";
 import {LoginService} from "./Services/login.service";
 import {TranslateLoader, TranslatePipe, TranslateService, TranslateStore} from "@ngx-translate/core";
 import {forkJoin} from "rxjs";
+import {getToken} from "../main";
 
 
 @Component({
@@ -28,6 +29,7 @@ constructor(public loginservice:LoginService, public route:Router) {
 }
 
   ngOnInit(): void {
+
   }
 
 }

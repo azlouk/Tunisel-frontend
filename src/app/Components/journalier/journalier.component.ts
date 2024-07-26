@@ -9,8 +9,6 @@ import {MessageService, SharedModule} from "primeng/api";
 import {Table, TableModule} from "primeng/table";
 import {ToastModule} from "primeng/toast";
 import {ToolbarModule} from "primeng/toolbar";
-import {Pompe} from "../../Models/pompe";
-import {PompeService} from "../../Services/pompe.service";
 import {getToken} from "../../../main";
 import {Router} from "@angular/router";
 import {Journalier} from "../../Models/journalier";

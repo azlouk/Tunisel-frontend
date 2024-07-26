@@ -13,9 +13,6 @@ import {Product} from "../../Models/product";
 import {CommandeService} from "../../Services/commande.service";
 import {getToken} from "../../../main";
 import {FormsModule} from "@angular/forms";
- import html2canvas from "html2canvas";
-import jsPDF from "jspdf";
-import {Puit} from "../../Models/puit";
 import {DropdownModule} from "primeng/dropdown";
 import {MultiSelectModule} from "primeng/multiselect";
 import {RippleModule} from "primeng/ripple";
@@ -28,7 +25,6 @@ import * as events from "events";
 import {StepsModule} from "primeng/steps";
 import {StockOrder} from "../../Models/stock-order";
 import {StockOrderService} from "../../Services/stock-order.service";
-import {LogarithmicScale} from "chart.js";
 
 
 
@@ -406,7 +402,6 @@ commande.ligneCommandes?.forEach(l => {
   public verifyState(commande: Commande) {
 
     if(commande.etat && commande.etat.replace(" ","").toLowerCase()=='loadingcompleted'){
-      console.log(commande.etat.replace(" ","").toLowerCase())
       return true;
     }else return false;
 
