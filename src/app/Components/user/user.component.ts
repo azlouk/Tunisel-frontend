@@ -67,12 +67,13 @@ export class UserComponent implements OnInit ,AfterViewInit{
   selectedUsers: RegisterRequest[] = [];
 
    isUpdateUser = false;
+ userConnect!: RegisterRequest;
 
   constructor(  private messageService: MessageService, private userService: UserService) {
   }
 
   ngOnInit() {
-
+this.getUserConnected();
     this.getAllUsers();
     this.cols = [
       {field: 'id', header: 'id'},
@@ -92,7 +93,13 @@ export class UserComponent implements OnInit ,AfterViewInit{
 
   getAllUsers() {
     this.userService.getAllUsers().subscribe((v: RegisterRequest[]) => {
-      this.users = v;
+      if(this.userConnect.role=='EMPLOYER'){
+        this.users=v;
+      this.users =this.users.filter(value => value.id==this.userConnect.id)
+
+      }else {
+        this.users=v;
+      }
     }, error => {
       console.log(error)
     })
@@ -160,7 +167,6 @@ this.isUpdateUser=false
 
 
   saveUser() {
-    console.error(this.registerRequest)
     this.submitted = true;
     if(this.isUpdateUser==false){
       if (this.registerRequest.email?.trim() && this.registerRequest.password?.trim()) {
@@ -179,7 +185,7 @@ this.isUpdateUser=false
           console.log(value)
           this.getAllUsers()
         })
-        this.userService.changePassword(this.changePassword).subscribe(value => this.getAllUsers())
+        this.userService.changePassword(this.changePassword,this.registerRequest.id).subscribe(value => this.getAllUsers())
       this.productDialog = false
       }else {
         this.userService.register(this.registerRequest).subscribe(value => {
@@ -208,4 +214,9 @@ this.isUpdateUser=false
 
   public ngAfterViewInit(): void {
   }
+
+  public getUserConnected(){
+    this.userService.getUserConnect().subscribe(value => this.userConnect=value)
+  }
+
 }

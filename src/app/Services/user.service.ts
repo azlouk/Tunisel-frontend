@@ -53,12 +53,12 @@ export class UserService {
   }
 
 
-  changePassword(changePasswordRequest: ChangePasswordRequest): Observable<any> {
+  changePassword(changePasswordRequest: ChangePasswordRequest,id:number): Observable<any> {
     const token = getKeyToken();
     console.log(token)
     if (token) {
       const headers = new HttpHeaders().set('Authorization', `Bearer ${token}`).set("Content-Type", "application/json; charset=utf8");
-      return this.http.put<any>(`${this.apiUrl}/users/updatePassword`, changePasswordRequest, {headers});
+      return this.http.put<any>(`${this.apiUrl}/users/updatePassword/${id}`, changePasswordRequest, {headers});
     }else {
       return  new Observable<any[]>()}
   }
