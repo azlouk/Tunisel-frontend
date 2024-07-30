@@ -90,7 +90,7 @@
 
     <p-dialog  [(visible)]="productDialog" [style]="{width: '500px'}" header="User "   [modal]="true" class="p-fluid">
       <ng-template pTemplate="content">
-        <div class="flex justify-content-evenly" >
+        <div class="flex justify-content-evenly"*ngIf="getToken()=='ADMIN'" >
         <div class="field" >
           <p-radioButton id="admin" name="user"   value="ADMIN" [(ngModel)]="registerRequest.role" inputId="admin"></p-radioButton>
           <label for="admin" class="ml-2">Admin</label>
