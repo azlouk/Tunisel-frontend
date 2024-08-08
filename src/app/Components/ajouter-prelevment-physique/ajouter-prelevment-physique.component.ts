@@ -33,31 +33,33 @@ import {BandeService} from "../../Services/bande.service";
 import {InputTextareaModule} from "primeng/inputtextarea";
 import {AutoCompleteCompleteEvent, AutoCompleteModule} from "primeng/autocomplete";
 import {getToken} from "../../../main";
+import {RippleModule} from "primeng/ripple";
 
 @Component({
   selector: 'app-ajouter-prelevment-physique',
   standalone: true,
-    imports: [
-        ButtonModule,
-        CalendarModule,
-        CheckboxModule,
-        DialogModule,
-        FloatLabelModule,
-        FormsModule,
-        InputNumberModule,
-        InputTextModule,
-        ListboxModule,
-        NgForOf,
-        NgIf,
-        SharedModule,
-        TabViewModule,
-        ToolbarModule,
-        TooltipModule,
-        DatePipe,
-        TableModule,
-        InputTextareaModule,
-        AutoCompleteModule
-    ],
+  imports: [
+    ButtonModule,
+    CalendarModule,
+    CheckboxModule,
+    DialogModule,
+    FloatLabelModule,
+    FormsModule,
+    InputNumberModule,
+    InputTextModule,
+    ListboxModule,
+    NgForOf,
+    NgIf,
+    SharedModule,
+    TabViewModule,
+    ToolbarModule,
+    TooltipModule,
+    DatePipe,
+    TableModule,
+    InputTextareaModule,
+    AutoCompleteModule,
+    RippleModule
+  ],
   templateUrl: './ajouter-prelevment-physique.component.html',
   styleUrl: './ajouter-prelevment-physique.component.css'
 })
@@ -376,8 +378,10 @@ this.visibale=false;
     this.tamis = {
       refusCumulated: 0,
     };
-    this.visibale=true;
+
+    // this.visibale=true;
     this.isUpdateTamis=false ;
+    this.listeTamis.push({...this.tamis});
 
 
   }
@@ -387,7 +391,7 @@ this.visibale=false;
 
       const tamis=this.listeTamis.findIndex((tt:Tamis)=>tt.calibre===this.tamis.calibre)
          if(tamis!==-1){
-         this.listeTamis[tamis]= {...this.tamis} ;
+         // this.listeTamis[tamis]= {...this.tamis} ;
            this.visibale=false
          }
     }else {
@@ -419,7 +423,7 @@ this.visibale=false;
       }
       else {
 
-        this.listeTamis.push({...this.tamis});
+        // this.listeTamis.push({...this.tamis});
          this.listeTamis.sort((a, b) => {
            // Compare the 'refusCumulated' property of each object
            // @ts-ignore
@@ -510,4 +514,9 @@ this.calculateRefusCumulated();
   }
 
   protected readonly getToken = getToken;
+
+  public updateTamis() {
+
+  }
+
 }

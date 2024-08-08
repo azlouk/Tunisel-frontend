@@ -18,12 +18,10 @@ import {SbnlService} from "../../Services/sbnl.service";
 import {BassinService} from "../../Services/bassin.service";
 import {OverlayPanelModule} from "primeng/overlaypanel";
 import {AnalysesChimique} from "../../Models/analyses-chimique";
-import {Puit} from "../../Models/puit";
 import html2canvas from "html2canvas";
 import jsPDF from "jspdf";
 import {CheckboxModule} from "primeng/checkbox";
 import {AnalysesPhysique} from "../../Models/analyses-physique";
-import {Tamis} from "../../Models/tamis";
 import {ListboxModule} from "primeng/listbox";
 import {getToken} from "../../../main";
 import {AutoFocusModule} from "primeng/autofocus";
@@ -31,6 +29,12 @@ import {TooltipModule} from "primeng/tooltip";
 import * as XLSX from "xlsx";
 import {writeFile} from "xlsx";
 import Swal from "sweetalert2";
+import {MultiSelectModule} from "primeng/multiselect";
+import {RippleModule} from "primeng/ripple";
+import {TransferToBand} from "../../Models/transfer-to-band";
+import {AnalyseChimiqueComponent} from "../analyse-chimique/analyse-chimique.component";
+import {Recolte} from "../../Models/recolte";
+import {TransferToBandService} from "../../Services/transfer-to-band.service";
 
 @Component({
   selector: 'app-sbnl',
@@ -55,13 +59,17 @@ import Swal from "sweetalert2";
     CommonModule,
     ListboxModule,
     AutoFocusModule,
-    TooltipModule
+    TooltipModule,
+    MultiSelectModule,
+    RippleModule,
+    AnalyseChimiqueComponent
   ],
   templateUrl: './sbnl.component.html',
   styleUrl: './sbnl.component.css'
 })
 export class SbnlComponent implements OnInit{
   productDialog: boolean = false;
+  detailsDialog: boolean = false;
 
   deleteProductDialog: boolean = false;
 
@@ -98,10 +106,14 @@ export class SbnlComponent implements OnInit{
   DatefiltrageStart: Date = new Date();
   DatefiltrageEnd: Date = new Date();
   public  _selectedColumns: any[]=[];
+  selectedBassin:Bassin={};
+  TransferToBandDialog:boolean=false;
+  TransferToBand:TransferToBand=new TransferToBand();
+  ListTransfersToBand:TransferToBand[] =[];
   @Input() get selectedColumns(): any[] {
     return this._selectedColumns;
   }
-  constructor(  private messageService: MessageService,private sbnlService :SbnlService,private serviceBassin:BassinService) {}
+  constructor(  private messageService: MessageService,private sbnlService :SbnlService,private serviceBassin:BassinService,private transferToBandService:TransferToBandService) {}
 
   ngOnInit() {
     this.colsfiltre = [
@@ -218,7 +230,7 @@ this.getsbnl()
   saveSbnl() {
     this.submitted = true;
 
-    if (this.sbnl.reference?.trim()&&this.sbnl.sbnlBassin) {
+    if (this.sbnl.reference?.trim() && this.sbnl.bassinList!=undefined && this.sbnl.bassinList?.length>0) {
 
       this.productDialog = false
 
@@ -600,4 +612,62 @@ this.Viderfiltredate()
 
   protected readonly JsonPipe = JsonPipe;
   protected readonly JSON = JSON;
+
+  public openDialog() {
+this.detailsDialog=true;
+  }
+
+  public AddTransferToBand(sbnl: Sbnl) {
+this.TransferToBandDialog=true;
+this.sbnl=sbnl;
+    this. getListTransferToBand();
+  }
+
+  public saveTransferToBand() {
+
+      if ( this.sbnl.id!==undefined)
+        this.transferToBandService.addTransferToBand(this.TransferToBand,this.sbnl.id).subscribe(value => {
+          this. getListTransferToBand();
+          this.TransferToBand=new TransferToBand();
+        })
+
+  }
+
+  public updateTransferToBand(transferToBand: TransferToBand) {
+this.TransferToBand=transferToBand;
+  }
+
+  public saveUpdateTransferToBand() {
+    this.transferToBandService.updateTransferToBand(this.TransferToBand).subscribe(value => {
+      this. getListTransferToBand();
+
+    })
+  }
+
+  public deleteTransferToBand(TransferToBand: any) {
+    this.transferToBandService.deleteTransferToBand(TransferToBand.id).subscribe(value =>     this.ListTransfersToBand= this.ListTransfersToBand.filter(transfer => transfer.id !== TransferToBand.id))
+
+  }
+
+  getListTransferToBand(){
+    if(this.sbnl.id!=undefined)
+    this.sbnlService.getSbnlById(this.sbnl.id).subscribe(value => {
+      if(value.transferToBands!=undefined)
+      this.ListTransfersToBand = value.transferToBands;
+    } )
+  }
+
+  public getQuantitySbnl(sbnl: Sbnl) {
+    let totalTransfer:number=0;
+    let totalRecolte:number=0;
+
+    if(sbnl.transferToBands!=undefined)
+   totalTransfer= sbnl.transferToBands.reduce((sum, transfer) => sum+transfer.quantityTransfer,0)
+ if(sbnl.bassinList!=undefined){
+    sbnl.bassinList?.forEach(bassin => {
+      if(bassin.recolteList!=undefined)
+        totalRecolte =bassin.recolteList.reduce((sum, recolte) => sum + recolte.value, 0)
+    } )}
+return totalRecolte-totalTransfer;
+  }
 }

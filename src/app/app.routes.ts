@@ -54,7 +54,6 @@ export const routes: Routes = [
   {path:'ajouterPrelevmentPhysique', component:AjouterPrelevmentPhysiqueComponent, canActivate:[AuthGuard]},
   {path:'updatePrelevmentPhysique/:id', component:AjouterPrelevmentPhysiqueComponent, canActivate:[AuthGuard]},
   {path:'articles', component:ArticleComponent, canActivate:[AuthGuard]},
-  // {path:'produitdefectueux', component:ProduitDefectueuxComponent,  canActivate:[AuthGuard]},
   {path:'ajouterInventaire', component:AjouterInventaireComponent,  canActivate:[AuthGuard]},
   {path:'produit', component:ProduitComponent , canActivate:[AuthGuard]},
   {path:'editInventaire/:id', component:AjouterInventaireComponent,  canActivate:[AuthGuard]},

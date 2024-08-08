@@ -98,7 +98,7 @@
             </td>
             <td >
               <span class="p-column-title">Analyse Reference</span>
-              {{commande.analyseReference}}
+              <span class="cursor-pointer underline text-blue-700"(click)="OpenReferenceDialoge(commande)" >{{commande.analyseReference}}</span>
             </td>
             <td >
               <span class="p-column-title">Departure Date</span>
@@ -129,6 +129,91 @@
 
             </td>
           </tr>
+          <p-dialog [(visible)]="referenceDialoge" [style]="{width: '1300px'}"  [modal]="true" class="p-fluid">
+            <ng-template pTemplate="content">
+              <h3>More Details</h3>
+
+              <div class=" flex justify-content-end mb-4">
+                <button type="button" pButton pRipple icon="pi pi-file-pdf" (click)="SavePDF();" class="mr-2 p-button-secondary"
+                        pTooltip="PDF" tooltipPosition="bottom"></button>
+
+
+<!--&lt;!&ndash;                  <label class="font-bold"> Choose Calibre : </label>&ndash;&gt;-->
+<!--&lt;!&ndash;                  <p-dropdown [disabled]="getToken()!=='ADMIN'"&ndash;&gt;-->
+<!--&lt;!&ndash;                              [options]="listcalibre"&ndash;&gt;-->
+<!--&lt;!&ndash;                              [(ngModel)]="selectedColumnsCalibre"&ndash;&gt;-->
+<!--&lt;!&ndash;                              optionLabel="header"&ndash;&gt;-->
+<!--&lt;!&ndash;                              placeholder="{{selectedColumnsCalibre!==undefined?selectedColumnsCalibre.header:'0'}}"&ndash;&gt;-->
+
+<!--&lt;!&ndash;                              (ngModelChange)="caliber(selectedColumnsCalibre)"&ndash;&gt;-->
+<!--&lt;!&ndash;                  />&ndash;&gt;-->
+<!--&lt;!&ndash;                  <div *ngIf="isUpdateCommande" >Calibre of Command: {{commande.calibre!==undefined?commande.calibre:'no calibre selected '}}</div>&ndash;&gt;-->
+<!--                </div>-->
+
+
+
+              </div>
+              <div class="card" >
+
+
+                <p-table
+                  [rowHover]="true"
+                  [lazy]="true"
+                  [columns]="selectedColumns"
+                  [value]="listeLignesCommandes"
+                  [scrollable]="true"
+                  scrollHeight="600px"
+                  [tableStyle]="{'min-width': '50rem'}"
+                  styleClass="p-datatable-gridlines"
+                  selectionMode="single"
+                  [(selection)]="selectedProduct"
+                  editMode="row"
+                  id="EXCEL"
+                  #EXCEL
+
+                >
+                  <ng-template pTemplate="caption">
+
+                  </ng-template>
+                  <ng-template pTemplate="header" let-columns>
+                    <tr>
+                      <ng-container *ngFor="let col of columns" >
+                        <th >  {{col.header}}  </th>
+                      </ng-container>
+                    </tr>
+                  </ng-template>
+                  <ng-template pTemplate="body" let-lineCommande let-columns="columns" >
+                    <tr [pEditableRow]="lineCommande" [pSelectableRow]="lineCommande"  >
+                      <ng-container *ngFor="let col of columns">
+
+                        <td *ngIf="col.id>28 && col.id<42">
+                          {{getValueOfligneCommande(col,lineCommande)}}
+                        </td>
+
+                        <td *ngIf="col.id>=0 && col.id<29 || col.id== 42" >
+                          {{getValueOfligneCommande(col, lineCommande)}}
+                        </td>
+
+                      </ng-container>
+
+
+                    </tr>
+
+
+                  </ng-template>
+                </p-table>
+
+              </div>
+            </ng-template>
+
+
+
+
+            <ng-template pTemplate="footer">
+              <button pButton pRipple label="Close" icon="pi pi-times" class="p-button-text" (click)="referenceDialoge=false"></button>
+            </ng-template>
+          </p-dialog>
+
         </ng-template>
       </p-table>
     </div>
@@ -159,158 +244,32 @@
   </div>
 </div>
 
-<!-- Details//////////////////////////////////////////////// -->
 
 
-<!--<div class="card flex justify-content-center">-->
-<!--  <p-dialog header="Details Commande" [(visible)]="visible" [style]="{ width: '80vw', maxWidth: '300vw' }">-->
+<p-dialog header="Loading PDF Command" [(visible)]="visibleCommande" [style]="{ width: '80vw', maxWidth: '300vw' }">
+  <div id="headerpages">
+    <div class=" flex flex-column">
+      <div class="flex   border-1 w-full justify-content-between">
+        <div class="flex-initial flex align-items-center justify-content-center   font-bold m-2 px-5 py-3 border-round">
+          <img src="./assets/logo.png" >
+        </div>
+        <div class="flex-initial flex align-items-center justify-content-center  text-6xl font-bold m-2 px-5 py-3 border-round">
+          Daily monitoring of analyses for the order
+
+        </div>
+        <div class="flex-initial border-1 flex     w-25  font-bold m-2 px-5 py-3  ">
+          <div class="col   ">
+            <div class="row  mb-2    w-full  ">BEN GUERDANE, TUNISIA  </div>
+            <div class="row mb-2   w-full text-center    text-1xl font-bold  pi pi-calendar ">
+              {{pipedate(datenow)}} </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
 
 
-<!--    <div class="card" id="commandepdf">-->
-
-
-
-<!--&lt;!&ndash;      infoPropreTableCommande&ndash;&gt;-->
-<!--      <div class="shadow-1 p-2 gap-1 text-3xl flex   justify-content-evenly">-->
-<!--        <br><br>-->
-<!--        <label class="text-2xl font-bold">Command Date :</label><span-->
-<!--        class="ml-2 text-2xl">{{selectedCommandPrint.dateCommande}}</span><br><br>-->
-<!--        <label class="text-2xl font-bold">Name :</label><span class=" ml-2 text-2xl">{{selectedCommandPrint.nom}}</span><br><br>-->
-<!--        <label class="text-2xl font-bold">Status :</label><span-->
-<!--        class=" ml-2 text-2xl">{{selectedCommandPrint.etat}} </span><br><br>-->
-
-<!--      </div>-->
-<!--      <br><br>-->
-<!--      <br><br>-->
-<!--      <br><br>-->
-<!--      <div class="shadow-1 p-2 gap-1 text-3xl flex flex-column justify-content-evenly">-->
-<!--        <label class="text-2xl font-bold">Creation Date Pond : </label><span-->
-<!--        class=" ml-2 text-2xl">{{selectedCommandPrint.bassin?.dateCreation}}</span>-->
-
-<!--        <label class="text-2xl font-bold">Reference :</label><span-->
-<!--        class="ml-2 text-2xl">{{selectedCommandPrint.bassin?.reference}}</span>-->
-<!--        <label class="text-2xl font-bold">Description :</label><span-->
-<!--        class=" ml-2 text-2xl">{{selectedCommandPrint.bassin?.description}}</span>-->
-<!--        <label class="text-2xl font-bold">Name :</label><span-->
-<!--        class=" ml-2 text-2xl">{{selectedCommandPrint.bassin?.nom}} </span>-->
-<!--        <label class="text-2xl font-bold">Location :</label><span-->
-<!--        class=" ml-2 text-2xl">{{selectedCommandPrint.bassin?.emplacement}} </span>-->
-<!--        <label class="text-2xl font-bold">Status :</label><span-->
-<!--        class=" ml-2 text-2xl">{{selectedCommandPrint.bassin?.etat}} </span>-->
-
-<!--      </div>-->
-<!--&lt;!&ndash;      infoTable&ndash;&gt;-->
-
-<!--      <p-table-->
-<!--        [columns]="selectedColumns"-->
-<!--        [value]="selectedCommandPrint.ligneCommandes!==undefined?selectedCommandPrint.ligneCommandes:[]"-->
-<!--        [tableStyle]="{'min-width': '50rem'}"-->
-<!--        editMode="row"-->
-<!--        id="EXCEL"-->
-<!--        #EXCEL-->
-<!--      >-->
-
-<!--        <ng-template pTemplate="caption">-->
-<!--          <p-multiSelect-->
-<!--            display="chip"-->
-<!--            [options]="cols"-->
-<!--            [(ngModel)]="selectedColumns"-->
-<!--            optionLabel="header"-->
-<!--            selectedItemsLabel="{0} columns selected"-->
-<!--            [style]="{'min-width': '200px'}"-->
-<!--            placeholder="Choose Columns" />-->
-
-
-
-<!--        </ng-template>-->
-<!--        <ng-template pTemplate="header" let-columns>-->
-<!--          <tr>-->
-
-<!--            <th *ngFor="let col of columns">-->
-<!--              {{col.header}}-->
-<!--            </th>-->
-<!--            <th></th>-->
-<!--          </tr>-->
-<!--        </ng-template>-->
-
-<!--        <ng-template pTemplate="body" let-lineCommande let-columns="columns" let-editing="editing" let-ri="rowIndex">-->
-<!--          <tr [pEditableRow]="lineCommande">-->
-<!--            <ng-container *ngFor="let col of columns">-->
-<!--              <td *ngIf="col.id>26 && col.id<39">-->
-<!--                <p-cellEditor>-->
-<!--                  <ng-template pTemplate="input">-->
-<!--                    <input type="text"   pInputText [placeholder]="col.header" [(ngModel)]="lineCommande[col.field]  "(ngModelChange)="CalculeTotal()"/>-->
-<!--                  </ng-template>-->
-<!--                  <ng-template pTemplate="output">-->
-<!--                    {{getValueOfligneCommande(col,lineCommande)}}-->
-<!--                   </ng-template>-->
-<!--                </p-cellEditor>-->
-
-<!--              </td>-->
-
-<!--              <td  *ngIf="col.id>=0 && col.id<27">-->
-
-<!--                {{getValueOfligneCommande(col,lineCommande)}}-->
-<!--              </td>-->
-
-<!--            </ng-container>-->
-
-
-<!--            <td>-->
-<!--              <div class="flex align-items-center gap-2" >-->
-<!--&lt;!&ndash;                <div class="flex align-items-center justify-content-center gap-2">&ndash;&gt;-->
-<!--&lt;!&ndash;                  <button *ngIf="!editing" pButton pRipple type="button" pInitEditableRow icon="pi pi-pencil" (click)="onRowEditInit(lineCommande)" class="p-button-rounded p-button-success mr-2"></button>&ndash;&gt;-->
-<!--&lt;!&ndash;                  <button *ngIf="editing" pButton pRipple type="button" pSaveEditableRow icon="pi pi-check" (click)="onRowEditSave(lineCommande)" class="p-button-rounded p-button-text p-button-success mr-2"></button>&ndash;&gt;-->
-<!--&lt;!&ndash;                </div>&ndash;&gt;-->
-<!--                <div >-->
-<!--&lt;!&ndash;                  <button pButton pRipple icon="pi pi-trash" class="p-button-rounded p-button-warning mr-2" (click)="deleteLineCommande(lineCommande)"></button>&ndash;&gt;-->
-<!--                </div>-->
-<!--              </div>-->
-<!--            </td>-->
-<!--          </tr>-->
-<!--        </ng-template>-->
-<!--      </p-table>-->
-
-<!--      <div class=" flex justify-content-end  ">-->
-<!--        <div class="flex flex-column gap-3 border-1 border-round border-gray-400 p-3">-->
-<!--          <div class="flex align-items-center gap-3 justify-content-between ">-->
-<!--            <label for="stock" class="font-bold">Total Harvset in(T) :</label>-->
-
-<!--            <p-inputNumber  id="stock"  [(ngModel)]="TotalHarv" mode="decimal" [minFractionDigits]="3" ></p-inputNumber>-->
-<!--          </div>-->
-<!--          <div class="flex align-items-center gap-3 justify-content-between">-->
-<!--            <label for="stock1" class="font-bold">Total Production in(T) :</label>-->
-<!--            <p-inputNumber  id="stock1"  [(ngModel)]="TotalProd" mode="decimal" [minFractionDigits]="3" ></p-inputNumber>-->
-
-<!--          </div>-->
-<!--          <div class="flex align-items-center gap-3 justify-content-between">-->
-<!--            <label for="stock2" class="font-bold">Total Transfer Quantity :</label>-->
-<!--            <p-inputNumber  id="stock2"  [(ngModel)]="TotalTrQu" mode="decimal" [minFractionDigits]="3" ></p-inputNumber>-->
-
-<!--          </div>-->
-<!--        </div>-->
-
-<!--      </div>-->
-<!--    </div>-->
-
-
-
-
-
-
-
-
-<!--    <ng-template pTemplate="footer">-->
-
-<!--    <div class="modal-footer-btn">-->
-<!--      <p-button icon="pi pi-file-pdf" (click)="savePdfDetails()" class="text-green-50" label="PDF" pAutoFocus [autofocus]="true"  ></p-button>-->
-<!--      <p-button icon="pi pi-cancel" (click)="cancel()" class="text-green-50" label="Cancel"  ></p-button>-->
-
-<!--    </div>-->
-<!--    </ng-template>-->
-
-<!--  </p-dialog>-->
-<!--</div>-->
+</p-dialog>
 
 
 

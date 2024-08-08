@@ -1,11 +1,8 @@
 
-import {computed, effect, model, OnInit, signal} from '@angular/core';
+import { OnInit} from '@angular/core';
 import {Component} from '@angular/core';
 import {LayoutService} from './service/app.layout.service';
-import {getModelDefault, getModelFiltree, getToken, getTokenn} from "../../../main";
-import {count} from "rxjs";
-import {UserService} from "../../Services/user.service";
-import {RegisterRequest} from "../../Models/register-request";
+import { getToken} from "../../../main";
 import {LoginService} from "../../Services/login.service";
 
 @Component({

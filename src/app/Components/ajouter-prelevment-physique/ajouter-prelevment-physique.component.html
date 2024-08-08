@@ -313,7 +313,7 @@
       </ng-template>
 
     </p-dialog>
-    <p-table #dt [value]="listeTamis" [columns]="cols"  responsiveLayout="scroll" [rows]="10" [globalFilterFields]="['calibre']" [paginator]="true" [rowsPerPageOptions]="[10,20,30,100,200]" [showCurrentPageReport]="true" currentPageReportTemplate="Display  {first} to  {last} of  {totalRecords} entries" [(selection)]="selectedIntervention" selectionMode="multiple" [rowHover]="true" dataKey="id">
+    <p-table #dt [value]="listeTamis" [columns]="cols" dataKey="id" editMode="row"  responsiveLayout="scroll" [rows]="10" [globalFilterFields]="['calibre']" [paginator]="true" [rowsPerPageOptions]="[10,20,30,100,200]" [showCurrentPageReport]="true" currentPageReportTemplate="Display  {first} to  {last} of  {totalRecords} entries" [(selection)]="selectedIntervention" selectionMode="multiple" [rowHover]="true" >
       <ng-template pTemplate="caption">
         <div class="flex flex-column md:flex-row md:justify-content-between md:align-items-center">
           <h5 class="m-0">Thames Management</h5>
@@ -337,15 +337,36 @@
           <th></th>
         </tr>
       </ng-template>
-      <ng-template pTemplate="body" let-tamis >
-        <tr >
+      <ng-template pTemplate="body" let-tamis  let-editing="editing">
+        <tr [pEditableRow]="tamis">
 
           <td ><span class="p-column-title" >Calibre</span>
-            {{tamis.calibre}}
+
+            <p-cellEditor>
+              <ng-template pTemplate="input">
+                <input
+                  pInputText
+                  type="text"
+                  [(ngModel)]="tamis.calibre" />
+              </ng-template>
+              <ng-template pTemplate="output">
+                {{tamis.calibre}}
+              </ng-template>
+            </p-cellEditor>
           </td>
           <td>
             <span class="p-column-title">Weight</span>
-            {{tamis.masse}}
+            <p-cellEditor>
+              <ng-template pTemplate="input">
+                <input
+                  pInputText
+                  type="text"
+                  [(ngModel)]="tamis.masse" />
+              </ng-template>
+              <ng-template pTemplate="output">
+                {{tamis.masse}}
+              </ng-template>
+            </p-cellEditor>
           </td>
           <td >
             <span class="p-column-title">Refus</span>
@@ -367,8 +388,16 @@
 
 
           <div *ngIf=" getToken()=='ADMIN'"  class="flex ">
+            <div class="flex align-items-center justify-content-center gap-2" *ngIf="getToken()=='ADMIN'">
+              <button *ngIf="!editing" pButton pRipple type="button" pInitEditableRow icon="pi pi-pencil"
+                      (click)="updateTamis()"
+                      class="p-button-rounded   mr-2"></button>
+              <button *ngIf="editing" pButton pRipple type="button"  pSaveEditableRow icon="pi pi-check"
+                      (click)="saveTamis()"
+                      class="p-button-rounded p-button-text  mr-2"></button>
+            </div>
             <button pButton pRipple icon="pi pi-trash" class="p-button-rounded p-button-warning" (click)="deleteTamis(tamis)"></button>
-            <button pButton pRipple icon="pi pi-pencil" class="p-button-rounded p-button-success" (click)="editTamis(tamis)"></button>
+<!--            <button pButton pRipple icon="pi pi-pencil" class="p-button-rounded p-button-success" (click)="editTamis(tamis)"></button>-->
           </div>
 
         </tr>

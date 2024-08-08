@@ -81,25 +81,124 @@
             </td>
             <td style="width:14%; min-width:8rem;">
               <span class="p-column-title">Quantity</span>
-              {{sbnl.quantite}}
+              {{getQuantitySbnl(sbnl)}}
             </td>
-            <td style="width:14%; min-width:8rem;" class="surface-overlay       ">
+            <td style="width:14%; min-width:8rem;" class="surface-overlay flex align-items-center gap-2">
               <span class="p-column-title">Pond</span>
-              {{sbnl.sbnlBassin.reference }}
-              <span class="pi pi-eye text-primary cursor-pointer m-2" (click)="opSBNL.toggle($event)"  ></span>
-              <p-overlayPanel #opSBNL>
-                <label class="text-2xl">Name : {{sbnl.sbnlBassin.nom}}</label><br>
-                <label class="text-2xl">Réf : {{sbnl.sbnlBassin.reference}}</label><br>
-                <label class="text-2xl">Description : {{sbnl.sbnlBassin.description}}
-                </label ><br>
-                <label class="text-2xl">State : {{sbnl.sbnlBassin.etat}}</label><br>
-                <label class="text-2xl">Quantity : {{sbnl.sbnlBassin.quantite}}</label><br>
-                <label class="text-2xl">Location : {{sbnl.sbnlBassin.emplacement}}</label><br>
-               </p-overlayPanel>
+<!--              {{bassin.reference }}-->
+              <span class="pi pi-eye text-3xl text-primary cursor-pointer m-2" (click)="openDialog()"  ></span>
+
+              <p-dialog [(visible)]="detailsDialog" [style]="{width: '1300px'}" header="Pond" [modal]="true" class="p-fluid">
+                <ng-template pTemplate="content">
+
+                  <div *ngIf="getToken()=='ADMIN'" class="flex justify-content-between align-items-center border border-1 border-round border-gray-400 p-3">
+                    <div class="flex flex-column gap-2 col-2">
+                      <label> Pond List</label>
+                      <p-dropdown
+                        [options]="sbnl.bassinList"
+                        [(ngModel)]="selectedBassin"
+                        optionLabel="reference"
+                        placeholder="Select a Pond" />
+                    </div>
+
+
+                  </div>
+                  <div class="cart mt-5">
+                    <p-table #dt [loading]="loading"
+                             [value]="selectedBassin.recolteList!==undefined?selectedBassin.recolteList:[]"
+                             [columns]="cols"
+                             responsiveLayout="scroll" [rows]="10"
+                             [globalFilterFields]="['id','date','value']"
+                             [paginator]="true"
+                             editMode="row"
+                             [rowsPerPageOptions]="[10,20,30]"
+                             [showCurrentPageReport]="true" currentPageReportTemplate="Display  {first} to  {last} of  {totalRecords} entries"  selectionMode="multiple" [rowHover]="true" dataKey="id">
+                      <ng-template pTemplate="caption">
+                        <div class="flex flex-column md:flex-row md:justify-content-between md:align-items-center">
+                          <div class="flex justify-content-between align-items-center w-full">
+                            <h5 class="m-0">Harvest management</h5>
+
+
+
+                            <div>
+
+
+            <span class=" p-input-icon-left ">
+                            <i class="pi pi-search"></i>
+                            <input  type="text" pInputText (input)="onGlobalFilter(dt, $event)" placeholder="Search..."  class="w-full sm:w-auto"/>
+                        </span>
+                            </div>
+                          </div>
+
+                        </div>
+                      </ng-template>
+                      <ng-template pTemplate="header">
+                        <tr>
+
+                          <th pSortableColumn="id">Id <p-sortIcon field="id"></p-sortIcon></th>
+                          <th pSortableColumn="date">Date Harvest<p-sortIcon field="date"></p-sortIcon></th>
+                          <th pSortableColumn="value">Value <p-sortIcon field="value"></p-sortIcon></th>
+
+                          <th></th>
+                        </tr>
+                      </ng-template>
+                      <ng-template pTemplate="body" let-recolte let-editing="editing" >
+                        <tr [pEditableRow]="recolte" >
+
+                          <td >
+                            <span class="p-column-title">Id</span>
+                            {{recolte.id}}
+                          </td>
+
+                          <td >
+                            <p-cellEditor>
+                              <ng-template pTemplate="input">
+                                <input  class="p-2 shadow-1" type="date" dateFormat="yy-mm-dd"  pInputText   [(ngModel)]="recolte.dateCreation"  />
+
+                              </ng-template>
+                              <ng-template pTemplate="output">
+                                {{recolte.dateCreation|date:'yyyy-MM-dd'}}
+                              </ng-template>
+                            </p-cellEditor>
+                          </td>
+
+                          <td >
+                            <p-cellEditor>
+                              <ng-template pTemplate="input">
+                                <input
+                                  pInputText
+                                  type="text"
+                                  [(ngModel)]="recolte.value" />
+                              </ng-template>
+                              <ng-template pTemplate="output">
+                                {{recolte.value}}
+                              </ng-template>
+                            </p-cellEditor>
+                          </td>
+
+                          <td>
+
+                          </td>
+                        </tr>
+                      </ng-template>
+                    </p-table>
+
+                  </div>
+
+                </ng-template>
+
+
+
+
+                <ng-template pTemplate="footer">
+                  <button pButton pRipple label="Close" icon="pi pi-times" class="p-button-text" (click)="detailsDialog=false"></button>
+                </ng-template>
+              </p-dialog>
 
             </td>
             <td>
               <div class="flex ">
+                <button *ngIf="getToken()=='ADMIN'||'EMPLOYER'" pButton pRipple  class="p-button-rounded p-button-info mr-2" (click)="AddTransferToBand(sbnl)">Transfer</button>
                 <button *ngIf="getToken()=='ADMIN'" pButton pRipple icon="pi pi-pencil" class="p-button-rounded p-button-success mr-2" (click)="editSbnl(sbnl)"></button>
                 <button *ngIf="getToken()=='ADMIN'" pButton pRipple icon="pi pi-trash" class="p-button-rounded p-button-warning mr-2" (click)="deleteSbnl(sbnl)"></button>
                 <button pButton pRipple icon="pi pi-file-pdf" class="p-button-rounded p-button-primary mr-2"  (click)="exportrapport(sbnl)"></button>
@@ -107,6 +206,141 @@
               </div>
             </td>
           </tr>
+          <!--==============================ADD TRANSFER TO BAND===============================================================================-->
+          <p-dialog [(visible)]="TransferToBandDialog" [style]="{width: '1300px'}" header="Transfer To Band" [modal]="true" class="p-fluid">
+            <ng-template pTemplate="content">
+              <h3>Add Transfer To Band</h3>
+              <div *ngIf="getToken()=='ADMIN'" class="flex justify-content-between align-items-center border border-1 border-round border-gray-400 p-3">
+                <div class="">
+                  <label for="dateCreationr">Date Creation</label>
+                  <input  class="p-2 shadow-1" type="date" dateFormat="yy-mm-dd"  pInputText id="dateCreationr"  [(ngModel)]="TransferToBand.dateCreation"  />
+                </div>
+
+                <div class="">
+                  <label for="value">Transfer Quantity</label>
+                  <p-inputNumber  id="value"  [(ngModel)]="TransferToBand.quantityTransfer" mode="decimal" [minFractionDigits]="3" ></p-inputNumber>
+                </div>
+                <div>
+                  <button pButton pRipple label="Save" icon="pi pi-check" class="p-button-text" (click)="saveTransferToBand()"></button>
+                </div>
+              </div>
+              <div class="cart mt-5">
+                <p-table #dt [loading]="loading"
+                         [value]="ListTransfersToBand"
+                         [columns]="cols"
+                         responsiveLayout="scroll" [rows]="10"
+                         [globalFilterFields]="['id','date','value']"
+                         [paginator]="true"
+                         editMode="row"
+                         [rowsPerPageOptions]="[10,20,30]"
+                         [showCurrentPageReport]="true" currentPageReportTemplate="Display  {first} to  {last} of  {totalRecords} entries"  selectionMode="multiple" [rowHover]="true" dataKey="id">
+                  <ng-template pTemplate="caption">
+                    <div class="flex flex-column md:flex-row md:justify-content-between md:align-items-center">
+                      <div class="flex justify-content-between align-items-center w-full">
+                        <h5 class="m-0">Transfer To Band management</h5>
+                        <!--              <div class=" flex gap-1">-->
+                        <!--                <div class="gap-1 flex align-items-center">Date Start :-->
+
+                        <!--                  <input  class="p-2 shadow-1" type="date" dateFormat="dd-MM-yyyy"    pInputText   [(ngModel)]="dateStartHarvest"  />-->
+
+                        <!--                </div>-->
+                        <!--                <div class="gap-1  flex align-items-center">-->
+                        <!--                  Date End :-->
+
+                        <!--                  <input  class="p-2 shadow-1" type="date" dateFormat="dd-MM-yyyy"    pInputText   [(ngModel)]="dateEndHarvest"  />-->
+
+                        <!--                </div>-->
+                        <!--              </div>-->
+                        <!--              <p-button (click)="filtreListHarvestWithDate(dateStartHarvest,dateEndHarvest)" class=" " icon="pi pi-search" label="Search"></p-button>-->
+                        <!--              <p-button (click)="getAllRecolte()" class=" " icon="pi pi-refresh" label="Clear"></p-button>-->
+
+                        <!--              <div>-->
+                        <!--                <span> <span class="font-bold">Total :</span> {{totalHarvestFiltree}}</span>-->
+                        <!--              </div>-->
+                        <div>
+
+
+            <span class=" p-input-icon-left ">
+                            <i class="pi pi-search"></i>
+                            <input  type="text" pInputText (input)="onGlobalFilter(dt, $event)" placeholder="Search..."  class="w-full sm:w-auto"/>
+                        </span>
+                        </div>
+                      </div>
+
+                    </div>
+                  </ng-template>
+                  <ng-template pTemplate="header">
+                    <tr>
+
+                      <th pSortableColumn="id">Id <p-sortIcon field="id"></p-sortIcon></th>
+                      <th pSortableColumn="date">Date Transfer<p-sortIcon field="date"></p-sortIcon></th>
+                      <th pSortableColumn="value">Transfer Quantity <p-sortIcon field="value"></p-sortIcon></th>
+
+                      <th></th>
+                    </tr>
+                  </ng-template>
+                  <ng-template pTemplate="body" let-TransferToBand
+                               let-editing="editing" >
+                    <tr [pEditableRow]="TransferToBand" >
+
+                      <td >
+                        <span class="p-column-title">Id</span>
+                        {{TransferToBand.id}}
+                      </td>
+
+                      <td >
+                        <p-cellEditor>
+                          <ng-template pTemplate="input">
+                            <input  class="p-2 shadow-1" type="date" dateFormat="yy-mm-dd"  pInputText   [(ngModel)]="TransferToBand.dateCreation"  />
+
+                          </ng-template>
+                          <ng-template pTemplate="output">
+                            {{TransferToBand.dateCreation|date:'yyyy-MM-dd'}}
+                          </ng-template>
+                        </p-cellEditor>
+                      </td>
+
+                      <td >
+                        <p-cellEditor>
+                          <ng-template pTemplate="input">
+                            <input
+                              pInputText
+                              type="text"
+                              [(ngModel)]="TransferToBand.quantityTransfer" />
+                          </ng-template>
+                          <ng-template pTemplate="output">
+                            {{TransferToBand.quantityTransfer}}
+                          </ng-template>
+                        </p-cellEditor>
+                      </td>
+
+                      <td>
+                        <div class="flex  align-items-center gap-2">
+                          <div class="flex align-items-center justify-content-center gap-2" *ngIf="getToken()=='ADMIN'">
+                            <button *ngIf="!editing" pButton pRipple type="button" pInitEditableRow icon="pi pi-pencil"
+                                    (click)="updateTransferToBand(TransferToBand)"
+                                    class="p-button-rounded   mr-2"></button>
+                            <button *ngIf="editing" pButton pRipple type="button"  pSaveEditableRow icon="pi pi-check"
+                                    (click)="saveUpdateTransferToBand()"
+                                    class="p-button-rounded p-button-text  mr-2"></button>
+                          </div>
+                          <button *ngIf="getToken()=='ADMIN'" pButton pRipple icon="pi pi-trash" class="p-button-rounded p-button-warning mr-2" (click)="deleteTransferToBand(TransferToBand)"></button>
+                        </div>
+                      </td>
+                    </tr>
+                  </ng-template>
+                </p-table>
+
+              </div>
+
+            </ng-template>
+
+            <ng-template pTemplate="footer">
+              <button pButton pRipple label="Close" icon="pi pi-times" class="p-button-text" (click)="TransferToBandDialog=false"></button>
+            </ng-template>
+          </p-dialog>
+          <!--==============================ADD TRANSFER TO BAND===============================================================================-->
+
         </ng-template>
       </p-table>
     </div>
@@ -115,8 +349,9 @@
       <ng-template pTemplate="content">
         <div class="field">
           <label for="name">Pond</label>
-          <p-dropdown [options]="bassins" [(ngModel)]="sbnl.sbnlBassin" [editable]="true" optionLabel="reference" class="w-full" [ngClass]="{'ng-invalid ng-dirty' : submitted && !sbnl.sbnlBassin}"></p-dropdown>
-          <small class="ng-dirty ng-invalid" *ngIf="submitted && !sbnl.sbnlBassin">Pond is required.</small>
+          <p-multiSelect [options]="bassins"   [(ngModel)]="sbnl.bassinList"  placeholder="Select a Pond" optionLabel="reference" display="chip" class="w-full" [ngClass]="{'ng-invalid ng-dirty' : submitted && !sbnl.bassinList}" ></p-multiSelect>
+
+          <small class="ng-dirty ng-invalid" *ngIf="submitted && !sbnl.bassinList">Pond is required.</small>
 
         </div>
         <div class="field">
@@ -254,28 +489,6 @@
           </ng-container>
 
 
-          <!--       <th>-->
-          <!--         <p-columnFilter type="date" field="dateAnalyse" display="menu"></p-columnFilter>-->
-
-          <!--         Date Analyse</th>-->
-
-
-          <!--        <th>Temperature °C</th>-->
-          <!--        <th>wind (km/h)</th>-->
-          <!--        <th>humidity  </th>-->
-          <!--        <th>Densite (g/cm 3)</th>-->
-          <!--        <th>Suspended Matter (g)</th>-->
-          <!--        <th>salinite (psu)</th>-->
-          <!--        <th>Calcium (mmol/L)</th>-->
-          <!--        <th>Magnesium (g)</th>-->
-          <!--        <th>Sulfate (g)</th>-->
-          <!--        <th>Insoluble matter (g)</th>-->
-          <!--        <th>Potassium (mmol/L)</th>-->
-          <!--        <th>Sodium (mmol)</th>-->
-          <!--        <th>Chlorure (meq · L–1)</th>-->
-          <!--        <th>pH</th>-->
-          <!--        <th>sodium chloride (g)</th>-->
-          <!--        <th>Ferrocyanure (g/mol)</th>-->
 
         </tr>
       </ng-template>
@@ -373,3 +586,4 @@
     <button type="button" pButton pRipple icon="pi pi-file" (click)="exportcsv()" class="p-button-warning " label="CSV" pTooltip="CSV" ></button>
   </ng-template>
 </p-dialog>
+

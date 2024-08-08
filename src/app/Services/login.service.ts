@@ -85,9 +85,11 @@ async  loggdinUser(request:AuthenticationRequest) {
       localStorage.setItem("role",value.role);
       if (this.user.role == "ADMIN" || this.user.role == "EMPLOYER") {
        this. model=getModelDefault();
+       if(!this.isLoggedIn())
         this.router.navigate(['dash']);
       } else if (this.user.role == "COSTUMER") {
         this.model=getModelFiltree();
+        if(!this.isLoggedIn())
         this.router.navigate(['commande']);
       }
 
