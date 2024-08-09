@@ -35,6 +35,7 @@
             <th style="width: 3rem">
               <p-tableHeaderCheckbox></p-tableHeaderCheckbox>
             </th>
+             <th pSortableColumn="id">ID <p-sortIcon field="id"></p-sortIcon></th>
              <th pSortableColumn="reference">Reference <p-sortIcon field="reference"></p-sortIcon></th>
             <th pSortableColumn="description">Description <p-sortIcon field="description"></p-sortIcon></th>
             <th pSortableColumn="dateCreation">Creation Date<p-sortIcon field="dateCreation"></p-sortIcon></th>
@@ -50,11 +51,15 @@
             <td>
               <p-tableCheckbox [value]="puit"></p-tableCheckbox>
             </td>
-
+            <td style="width:14%; min-width:10rem;">
+              <span class="p-column-title">ID</span>
+              {{puit.id}}
+            </td>
             <td style="width:14%; min-width:10rem;">
               <span class="p-column-title">Reference</span>
               {{puit.reference}}
             </td>
+
             <td style="width:14%; min-width:10rem;">
               <span class="p-column-title">Description</span>
               {{puit.description}}

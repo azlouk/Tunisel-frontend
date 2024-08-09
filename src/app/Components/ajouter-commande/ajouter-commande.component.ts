@@ -301,7 +301,7 @@ getCommandeById(){
   this.loadingcommande=true;
   this.commandeService.getCommandeByIdDTO(this.commandeId).subscribe(value => {
     this.commande = value;
-
+    console.error(this.commande)
         this.selectedColumns=this.commande.dataHeaders || []
         this.listeLignesCommandes = value.ligneCommandes??[];
         this.DatefiltrageStart=this.commande.datestart!==undefined?this.commande.datestart+'' :new Date().toDateString() ;
@@ -435,10 +435,10 @@ getCommandeById(){
  getLineBassin(){
    if(this.commande.bassins) {
      this.commande.bassins.forEach(basin => {
-       console.log("Nom bassin = " + basin.nom)
+
        if (basin.id) {
          this.loadingcommande = true;
-         console.log('data Lignes  ==> ' + new JsonPipe().transform(this.listeLignesCommandes))
+
 
          this.commandeService.getLignesCommandesBassin(basin.id).subscribe(LinesCommandes => {
 
@@ -1552,7 +1552,7 @@ dateAUtilise(a:LineCommande){
   protected readonly Date = Date;
   getAllStockOrder() {
 
-    this.stockOrderService.getAllStockOrder()
+    this.stockOrderService.getAllStockOrderDTO()
       .subscribe((stockOrders: StockOrder[]) => {
         this.stockOrders = stockOrders;
 
@@ -1563,7 +1563,6 @@ dateAUtilise(a:LineCommande){
   public verify(lineCommande: any):Boolean |undefined {
 
     if(lineCommande.analyseChimique==null && lineCommande.analysePhysique==null ){
-    console.log('====> id :'+lineCommande.id)
 
       return false ;
     }

@@ -16,6 +16,7 @@ import {InputTextModule} from "primeng/inputtext";
 import {getToken} from "../../../main";
 import {RegisterRequest} from "../../Models/register-request";
 import {ChangePasswordRequest} from "../../Models/change-password-request";
+import {RippleModule} from "primeng/ripple";
 
 
 @Component({
@@ -34,7 +35,8 @@ import {ChangePasswordRequest} from "../../Models/change-password-request";
     NgClass,
     NgIf,
     PasswordModule,
-    InputTextModule
+    InputTextModule,
+    RippleModule
   ],
   templateUrl: './user.component.html',
   styleUrl: './user.component.css'
@@ -123,6 +125,7 @@ this.isUpdateUser=false
     this.isUpdateUser = true;
     this.registerRequest = user
     this.productDialog = true;
+    this.changePassword=new ChangePasswordRequest()
   }
 
   deleteProduct(user: RegisterRequest) {
@@ -183,7 +186,10 @@ this.isUpdateUser=false
           this.userService.register(this.registerRequest).subscribe(value => {
             console.log(value)
             // this.getAllUsers()
-            this.userService.changePassword(this.changePassword, this.registerRequest.id).subscribe(value => this.getAllUsers())
+            this.userService.changePassword(this.changePassword, this.registerRequest.id).subscribe(value => {
+              this.getAllUsers();
+              this.changePassword=new ChangePasswordRequest()
+            })
             this.productDialog = false
           })
 
