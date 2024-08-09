@@ -1,4 +1,4 @@
-import {AfterViewInit, Component, OnInit} from '@angular/core';
+import {AfterContentInit, AfterViewInit, Component, OnInit} from '@angular/core';
 import {Table, TableModule} from "primeng/table";
 import {Product} from "../../Models/product";
  import {MessageService} from "primeng/api";
@@ -41,7 +41,7 @@ import {RippleModule} from "primeng/ripple";
   templateUrl: './user.component.html',
   styleUrl: './user.component.css'
 })
-export class UserComponent implements OnInit ,AfterViewInit{
+export class UserComponent implements OnInit {
   productDialog: boolean = false;
 
   deleteProductDialog: boolean = false;
@@ -72,10 +72,12 @@ export class UserComponent implements OnInit ,AfterViewInit{
  userConnect!: RegisterRequest;
 
   constructor(  private messageService: MessageService, private userService: UserService) {
+
   }
 
   ngOnInit() {
-this.getUserConnected();
+
+    this.getUserConnected();
     this.getAllUsers();
     this.cols = [
       {field: 'id', header: 'id'},
@@ -218,8 +220,7 @@ this.isUpdateUser=false
 
   }
 
-  public ngAfterViewInit(): void {
-  }
+
 
   public getUserConnected(){
     this.userService.getUserConnect().subscribe(value => this.userConnect=value)

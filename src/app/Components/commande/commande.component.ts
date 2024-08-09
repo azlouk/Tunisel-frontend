@@ -1,4 +1,4 @@
-import {Component, OnInit} from '@angular/core';
+import {Component, ElementRef, OnInit, ViewChild} from '@angular/core';
 import {ButtonModule} from "primeng/button";
 import {DialogModule} from "primeng/dialog";
 import {InputTextModule} from "primeng/inputtext";
@@ -16,7 +16,6 @@ import {FormsModule} from "@angular/forms";
 import {DropdownModule} from "primeng/dropdown";
 import {MultiSelectModule} from "primeng/multiselect";
 import {RippleModule} from "primeng/ripple";
-import {Column} from "jspdf-autotable";
 import {AutoFocusModule} from "primeng/autofocus";
 import {ListboxModule} from "primeng/listbox";
 import {InputNumberModule} from "primeng/inputnumber";
@@ -25,9 +24,21 @@ import * as events from "events";
 import {StepsModule} from "primeng/steps";
 import {StockOrder} from "../../Models/stock-order";
 import {StockOrderService} from "../../Services/stock-order.service";
+import {LineCommande} from "../../Models/lineCommande";
+import {AutoCompleteModule} from "primeng/autocomplete";
+import {BadgeModule} from "primeng/badge";
+import {FloatLabelModule} from "primeng/floatlabel";
+import jsPDF from "jspdf";
+import html2canvas from "html2canvas";
+import autoTable from "jspdf-autotable";
+import Swal from "sweetalert2";
 
 
-
+export interface Column {
+  id:number;
+  field: string;
+  header: string;
+}
 @Component({
   selector: 'app-commande',
   standalone: true,
@@ -51,15 +62,21 @@ import {StockOrderService} from "../../Services/stock-order.service";
     DatePipe,
     TimelineModule,
     StepsModule,
-    NgClass
+    NgClass,
+    AutoCompleteModule,
+    BadgeModule,
+    FloatLabelModule
   ],
   templateUrl: './commande.component.html',
   styleUrl: './commande.component.css'
 })
+
+
 export class CommandeComponent implements OnInit{
 
   itemsData: MenuItem[] | undefined;
 
+  datenow!:any ;
 
   activeIndex: number =0;
 
@@ -86,11 +103,12 @@ export class CommandeComponent implements OnInit{
   ListCommandes: Commande[] = [];
 
   commande:Commande={};
+  commandeReference:Commande={};
  updateCommande:Commande={};
   selectedCommandes:Commande[] = [];
 isUpdateCommande:boolean=false;
   visible: boolean=false;
-  selectedColumns!: Column[];
+  selectedColumns: Column[]=[];
 commandesCopy: Commande[]=[];
   stockOrders: StockOrder[] = [];
   stockSelected!: StockOrder;
@@ -100,12 +118,16 @@ commandesCopy: Commande[]=[];
   TotalTrQu: number=0;
   TotalVolume: number=0;
   VolumeAvailble: number=0;
+  referenceDialoge:boolean=false;
+  visibleCommande: boolean=false;
+
   constructor(private router: Router,
               private messageService: MessageService,
               private commandeService :CommandeService,
               private stockOrderService:StockOrderService) {}
 
   ngOnInit() {
+    this.datenow=new Date() ;
 
     this.cols = [
 
@@ -406,4 +428,494 @@ commande.ligneCommandes?.forEach(l => {
     }else return false;
 
   }
+  listeLignesCommandes:LineCommande[]=[]
+  dataHeaders?:Column[];
+  public OpenReferenceDialoge(commande: Commande) {
+    this.commande=commande
+    this.selectedColumns=commande.dataHeaders || [];
+let liste= commande.ligneCommandes?.filter(lc => {
+      if (lc.analysePhysique != null) {
+        return lc.analysePhysique.reference === commande.analyseReference;
+      } else if (lc.analyseChimique != null) {
+        return lc.analyseChimique.reference === commande.analyseReference;
+      }
+      return false;
+
+
+    });
+if (liste!=undefined){
+  this.listeLignesCommandes=liste
+  this.commande.ligneCommandes=liste;
+}
+
+    this.referenceDialoge = true;
+  }
+  selectedColumnsCalibre!: any;
+  public selectedProduct: any;
+  getValueOfligneCommande(col: any, ligneCommande: any): any {
+
+    if (col.id < 21) {
+      if(col.id==0) {
+        return ligneCommande?.analyseChimique !== null ? this.pipedate(ligneCommande?.analyseChimique[col.field]) :
+          ligneCommande?.analysePhysique !== null && ligneCommande?.analysePhysique !== undefined ? this.pipedate(ligneCommande?.analysePhysique[col.field]) : '-';
+
+      }
+      if(ligneCommande.analyseChimique==null && ligneCommande.analysePhysique!==null && col.field=="reference"){
+        return  ligneCommande.analysePhysique[col.field]
+      }
+      return ligneCommande.analyseChimique!==null ? ligneCommande.analyseChimique[col.field] :"-" ;
+    }
+    else
+    if (col.id > 20 && col.id < 24)
+    {
+      if(col.id==22){
+        return ligneCommande?.analysePhysique?.qualite !== null ? ligneCommande?.analysePhysique?.qualite :
+          ligneCommande?.analyseChimique?.qualite !== null ? ligneCommande?.analyseChimique?.qualite : '-';
+
+
+      }
+      return ligneCommande.analysePhysique!==null  ? ligneCommande.analysePhysique[col.field] : '-';
+    } else
+    if (col.id > 23 && col.id < 29 && this.selectedColumnsCalibre && this.selectedColumnsCalibre.header) {
+      if (ligneCommande.analysePhysique !== null && ligneCommande.analysePhysique.tamisList) {
+        // Use filter to find matching items in tamisList and add checks for undefined items
+        const filteredTamis:any = ligneCommande.analysePhysique.tamisList.find((tamis: any) =>
+          tamis && tamis.calibre == this.selectedColumnsCalibre.header
+        );
+        // Check if filteredTamisList is not empty and return it, otherwise return '-'
+        return filteredTamis!==undefined? filteredTamis[col.field]  : '-';
+      } else {
+        return '-';
+      }
+    }
+
+    else if(col.id==42){
+      // return ligneCommande.analysePhysique!==null  ? ligneCommande.analysePhysique[col.field] : '-';
+      return ligneCommande.related!==null  ? this.getRelatedAnalyse(ligneCommande) : '-';
+
+    }
+    else {
+      // ligneCommande.dateCreation=new Date();
+
+      return ligneCommande!==null  ? ligneCommande[col.field] : '-';
+    }
+
+
+  }
+  pipedate(analyseChimiqueElement: any) {
+    const date:Date=new Date(analyseChimiqueElement+"");
+    const day = String(date.getDate()).padStart(2, '0');
+    const month = String(date.getMonth() + 1).padStart(2, '0'); // Month is 0-indexed
+    const year = date.getFullYear();
+
+    return `${day}-${month}-${year}`;
+
+  }
+  getRelatedAnalyse(lineCommande:LineCommande): string {
+    let related: string = '';
+
+
+    const sbnl = this.commande.sbnls?.find(sbnl => sbnl.analysesChimiques!.find(analyse => analyse.id == lineCommande.analyseChimique?.id) !== undefined || sbnl.analysesPhysiques!.find(analyseph => analyseph.id == lineCommande.analysePhysique?.id) !== undefined)
+    if (sbnl !== undefined && sbnl.reference !== undefined) {
+      related = sbnl.reference;
+    }
+
+
+    const bassin = this.commande.bassins?.find(bassin => bassin.analysesChimiques!.find(analyse => analyse.id == lineCommande.analyseChimique?.id) !== undefined || bassin.analysesPhysiques!.find(analyseph => analyseph.id == lineCommande.analysePhysique?.id) !== undefined)
+    if (bassin !== undefined && bassin.nom !== undefined) {
+      related = bassin.nom;
+    }
+
+
+    const sbl = this.commande.sbls?.find(sbl => sbl.analysesChimiques!.find(analyse => analyse.id == lineCommande.analyseChimique?.id) !== undefined || sbl.analysesPhysiques!.find(analyseph => analyseph.id == lineCommande.analysePhysique?.id) !== undefined)
+    if (sbl !== undefined && sbl.reference !== undefined) {
+      related = sbl.reference;
+    }
+
+    const sblf = this.commande.sblfs?.find(sblf => sblf.analysesChimiques!.find(analyse => analyse.id == lineCommande.analyseChimique?.id) !== undefined || sblf.analysesPhysiques!.find(analyseph => analyseph.id == lineCommande.analysePhysique?.id) !== undefined)
+    if (sblf !== undefined && sblf.reference !== undefined) {
+      related = sblf.reference;
+    }
+
+    const bande = this.commande.bandes?.find(bande => bande.analysesChimiques!.find(analyse => analyse.id == lineCommande.analyseChimique?.id) !== undefined || bande.analysesPhysiques!.find(analyseph => analyseph.id == lineCommande.analysePhysique?.id) !== undefined)
+    if (bande !== undefined && bande.reference !== undefined) {
+      related = bande.reference;
+    }
+
+    return related;
+
+  }
+
+
+
+  headerCopy!:string;
+
+  CountClick:number=0;
+  public SavePDF(): void {
+    let headerPage = document.getElementById("headerpages");
+
+
+    if (this.commande.ligneCommandes) {
+      this.visibleCommande = true;
+
+      setTimeout(() => {
+
+        if(this.CountClick==0)
+        {
+
+          // @ts-ignore
+          this.headerCopy=document.getElementById("headerpages").innerHTML.toString()+"";
+
+
+        }
+
+        let header: string[] = [];
+        let data: any[] = [];
+
+        let sizeimageA4 = 1;
+        this.selectedColumns.forEach(value => {
+          header.push(value.header);
+        });
+        this.listeLignesCommandes.forEach(l => {
+          let ligne: any[] = [];
+          this.selectedColumns.forEach(col => {
+            ligne.push(this.getValueOfligneCommande(col, l));
+          });
+          data.push(ligne);
+        });
+
+        let orientation: string = "p";
+        let format = "a4";
+        if (this.selectedColumns.length > 11) {
+          orientation = "l";
+          if (this.selectedColumns.length < 10) {
+            format = "a4";
+            sizeimageA4 = 1;
+          } else if (this.selectedColumns.length > 10 && this.selectedColumns.length < 16) {
+            format = "a2";
+            sizeimageA4 = 3;
+          } else if (this.selectedColumns.length > 16) {
+            format = "a1";
+            sizeimageA4 = 4;
+          }
+        }
+
+
+        const doc = new jsPDF("l", "mm", format);
+        let headerPage = document.getElementById("headerpages");
+
+        if (headerPage) {
+          if(this.CountClick!=0)
+            headerPage.innerHTML=this.headerCopy ;
+          headerPage.innerHTML +=
+            '<!--      infoPropreTableCommande--> ' +
+            '      <div class="flex me-3 mt-5 p-2 gap-1 text-3xl flex justify-content-evenly">' +
+            '        <br><br>' +
+            '        <label class="text-2xl font-bold">Command Date :</label><span class="ml-2 text-2xl">' + this.commande.dateCommande + '</span>' +
+            '        <label class="text-2xl font-bold">Name :</label><span class="ml-2 text-2xl">' + this.commande.nom + '</span>' +
+            '        <label class="text-2xl font-bold">Status :</label><span class="ml-2 text-2xl">' + this.commande.etat + ' </span>' +
+            '      </div>' +
+            '      <div class="flex p-2 gap-1 text-3xl flex justify-content-evenly">' +
+            // Commented out section
+            // '        <label class="text-2xl font-bold">Creation Date Pond : </label><span class="ml-2 text-2xl">' + this.commande.bassin?.dateCreation + '</span>' +
+            // '        <label class="text-2xl font-bold">Reference :</label><span class="ml-2 text-2xl">' + this.commande.bassin?.reference + '</span>' +
+            // '        <label class="text-2xl font-bold">Description :</label><span class="ml-2 text-2xl">' + this.commande.bassin?.description + '</span>' +
+            // '        <label class="text-2xl font-bold">Name :</label><span class="ml-2 text-2xl">' + this.commande.bassin?.nom + '</span>' +
+            // '        <label class="text-2xl font-bold">Location :</label><span class="ml-2 text-2xl">' + this.commande.bassin?.emplacement + ' </span>' +
+            // '        <label class="text-2xl font-bold">Status :</label><span class="ml-2 text-2xl">' + this.commande.bassin?.etat + ' </span>' +
+            '      </div>' +
+            '<div class="flex justify-content-start">' +
+            '  <div class="flex flex-column gap-3 border-1 border-round border-gray-400 p-3">' +
+            '    <div class="flex align-items-start gap-3 justify-content-between">' +
+            '      <label class="font-bold">Total Harvest in(T) : </label>' +
+            '      <label class="font-bold text-center">' + this.TotalHarv + '</label>' +
+            '    </div>' +
+            '    <div class="flex align-items-center gap-3 justify-content-between ">' +
+            '      <label class="font-bold">Total Production in(T) :</label>' +
+            '      <label class="font-bold text-center">' + this.TotalProd + '</label>' +
+            '    </div>' +
+            '    <div class="flex align-items-center gap-3 justify-content-between ">' +
+            '      <label class="font-bold">Total Transfer Quantity :</label>' +
+            '      <label class="font-bold text-center">' + this.TotalTrQu + '</label>' +
+            '    </div>' +
+            '  </div>' +
+            '</div> <br> <br>' +
+            '      <div class="flex justify-content-between">\n' +
+            '        <div class="flex justify-content-end">\n' +
+            '          <div class="flex flex gap-5 border-1 border-round border-gray-400 p-3">\n' +
+            '              <label class="font-bold mr-4">TUNISEL average analysis: </label>\n ' +
+            '            <div class="flex align-items-start gap-3 justify-content-between">\n' +
+            '              <label class="font-bold ">% Cum Pass: </label>\n' +
+            '              <label class="font-bold text-center">' + this.calculerMoyennes().passCumulated.toFixed(3) + '</label>\n' +
+            '            </div>\n' +
+            '            <div class="flex align-items-start gap-3 justify-content-between">\n' +
+            '              <label class="font-bold">%H₂O: </label>\n' +
+            '              <label class="font-bold text-center">' + this.calculerMoyennes().humidite.toFixed(3) + '</label>\n' +
+            '            </div>\n' +
+            '            <div class="flex align-items-start gap-3 justify-content-between">\n' +
+            '              <label class="font-bold">%Mg: </label>\n' +
+            '              <label class="font-bold text-center">' + this.calculerMoyennes().magnesium.toFixed(3) + '</label>\n' +
+            '            </div>\n' +
+            '            <div class="flex align-items-start gap-3 justify-content-between">\n' +
+            '              <label class="font-bold">%SO₄: </label>\n' +
+            '              <label class="font-bold text-center">' + this.calculerMoyennes().sulfate.toFixed(3) + '</label>\n' +
+            '            </div>\n' +
+            '            <div class="flex align-items-start gap-3 justify-content-between">\n' +
+            '              <label class="font-bold">%NaCL: </label>\n' +
+            '              <label class="font-bold text-center">' + this.calculerMoyennes().chlorureDeSodium.toFixed(3) + '</label>\n' +
+            '            </div>\n' +
+            '            <div class="flex align-items-start gap-3 justify-content-between">\n' +
+            '              <label class="font-bold">%MI: </label>\n' +
+            '              <label class="font-bold text-center">' + this.calculerMoyennes().matiereInsoluble.toFixed(3) + '</label>\n' +
+            '            </div>\n' +
+            '            <div class="flex align-items-start gap-3 justify-content-between">\n' +
+            '              <label class="font-bold">Fe(CN)₆: </label>\n' +
+            '              <label class="font-bold text-center">' + this.calculerMoyennes().ferrocyanure.toFixed(3) + '</label>\n' +
+            '            </div>\n' +
+            '          </div>\n' +
+            '<div class="gap-3 border-1 border-round border-gray-400 p-3 ml-3"> ' +
+            '<div class="flex align-items-center ">\n' +
+            '              <label class="font-bold mr-4">Customer analysis: </label>\n <br>' +
+            '              <label class="font-bold">Date :' + this.commande.dateCustomer + '</label>\n' +
+            '            </div>\n' +
+            '            <div class="flex align-items-start gap-3 justify-content-between">\n' +
+            '            <div class="flex align-items-start gap-3 justify-content-between">\n' +
+            '              <p-floatLabel>\n' +
+            '                <label class="font-bold">H₂O : ' + this.commande.h2o + '</label>\n' +
+            '              </p-floatLabel>\n' +
+            '            </div>\n' +
+            '            <div class="flex align-items-start gap-3 justify-content-between">\n' +
+            '              <p-floatLabel>\n' +
+            '                <label class="font-bold">Mg : ' + this.commande.mg + '</label>\n' +
+            '              </p-floatLabel>\n' +
+            '            </div>\n' +
+            '            <div class="flex align-items-start gap-3 justify-content-between">\n' +
+            '              <p-floatLabel>\n' +
+            '                <label class="font-bold">SO₄ : ' + this.commande.so4 + '</label>\n' +
+            '              </p-floatLabel>\n' +
+            '            </div>\n' +
+            '            <div class="flex align-items-start gap-3 justify-content-between">\n' +
+            '              <p-floatLabel>\n' +
+            '                <label class="font-bold">NaCL : ' + this.commande.nacl + '</label>\n' +
+            '              </p-floatLabel>\n' +
+            '            </div>\n' +
+            '            <div class="flex align-items-start gap-3 justify-content-between">\n' +
+            '              <p-floatLabel>\n' +
+            '                <label class="font-bold">MI :' + this.commande.mi + '</label>\n' +
+            '              </p-floatLabel>\n' +
+            '            </div>\n' +
+            '            <div class="flex align-items-start gap-3 justify-content-between">\n' +
+            '              <p-floatLabel>\n' +
+            '                <label class="font-bold">Fe(CN)₆ :' + this.commande.fecn6 + '</label>\n' +
+            '              </p-floatLabel>\n' +
+            '            </div>\n' +
+            '            </div>\n' +
+            '            </div>' +
+            '</div>';
+        }
+
+        if (headerPage)
+          html2canvas(headerPage, { scale: 1 }).then((canvas) => {
+            const imgData = canvas.toDataURL('image/png');
+            const imgWidth = 210; // PDF width
+            const imgHeight = (canvas.height * imgWidth) / canvas.width; // Maintain aspect ratio
+            doc.addImage(imgData, 'png', 2, 2, imgWidth * sizeimageA4, imgHeight * sizeimageA4);
+            autoTable(doc, { startY: imgHeight + (60 * sizeimageA4) });
+
+            autoTable(doc, {
+              head: [header],
+              body: data,
+            });
+            doc.save('Print_' + Math.random().toFixed(4) + '.pdf');
+          });
+
+        this.visibleCommande = false;
+        this.CountClick++;
+      }, this.commande.ligneCommandes!.length * 100);
+    } else {
+      Swal.fire({ title: "Error", text: "No data found to print", icon: "error" });
+    }
+
+  }
+  calculerMoyennes():
+    { passCumulated: number,humidite: number,magnesium: number,sulfate: number,chlorureDeSodium: number, matiereInsoluble: number, ferrocyanure: number } {
+
+    let totalHumidite = 0;
+
+    let totalMagnesium = 0;
+    let totalSulfate = 0;
+    let totalMatiereInsoluble = 0;
+
+    let totalchlorureDeSodium = 0;
+
+    let totalferrocyanure = 0;
+    let totalPassCum:number = 0;
+
+
+
+
+    let countPassCum = 0;
+    let countHumidite = 0;
+    let countMagnesium = 0;
+    let countSulfate = 0;
+    let countMatiereInsoluble = 0;
+    let countchlorureDeSodium = 0;
+    let countferrocyanure = 0;
+
+
+    this.listeLignesCommandes.forEach((lineCommande) => {
+
+      // if (lineCommande.analysePhysique) {
+      //
+      //   if (lineCommande.analysePhysique.tamisList !== undefined) {
+      //     lineCommande.analysePhysique.tamisList.forEach(value => {
+      //       if(value.passCumulated)
+      //       { totalPassCum += Number(value.passCumulated);
+      //         countPassCum++;}
+      //
+      //     })
+      //   }
+      //
+      //   }
+
+      if (lineCommande.analysePhysique) {
+        if (lineCommande.analysePhysique.tamisList !== undefined ) {
+          lineCommande.analysePhysique.tamisList.forEach(value => {
+
+            if (this.selectedColumnsCalibre!==undefined && value.passCumulated !== undefined && value.passCumulated !== null && value.calibre==parseFloat(this.selectedColumnsCalibre.header)) {
+              // Convertir la valeur en chaîne pour s'assurer que 'match' peut être utilisé
+              let passCumulatedString = value.passCumulated;
+
+              // Utiliser une expression régulière pour extraire la partie numérique de la chaîne
+              let passCumulatedValue = passCumulatedString
+
+              // Si une partie numérique est trouvée, elle est convertie en nombre
+              if (passCumulatedValue) {
+                // console.log('passCumulatedNumber: '+ passCumulatedValue)
+
+                // let passCumulatedNumber = Number(passCumulatedValue[0]);
+
+                // Vérifier si le nombre est supérieur à 0
+
+                totalPassCum += passCumulatedValue;
+                countPassCum++;
+                // console.log('countPassCum: '+countPassCum)
+                // console.log('totalPassCum: '+totalPassCum)
+
+              }
+            }
+          });
+        }
+      }
+
+      //console.log('liste de ligne commande'+new JsonPipe().transform(lineCommande))
+
+      if (lineCommande.analyseChimique) {
+
+        if (lineCommande.analyseChimique.humidite !== undefined &&  lineCommande.analyseChimique.humidite !== null) {
+
+          if (lineCommande.analyseChimique.humidite !== undefined &&  lineCommande.analyseChimique.humidite !== null) {
+            const humidite:number[]=this.extractDoublesFromString(lineCommande.analyseChimique.humidite);
+            // Si une partie numérique est trouvée, elle est convertie en nombre
+            if (humidite.length!=0) {
+              totalHumidite += humidite[0];
+              countHumidite++;
+
+            }
+          }
+
+        }
+
+        if (lineCommande.analyseChimique.magnesium !== undefined &&  lineCommande.analyseChimique.magnesium !== null) {
+          const magnes:number[]=this.extractDoublesFromString(lineCommande.analyseChimique.magnesium);
+          // Si une partie numérique est trouvée, elle est convertie en nombre
+          if (magnes.length!=0) {
+            totalMagnesium += magnes[0];
+            countMagnesium++;
+
+          }
+        }
+
+        if (lineCommande.analyseChimique.sulfate !== undefined &&    lineCommande.analyseChimique.sulfate !== null) {
+
+          if (lineCommande.analyseChimique.sulfate !== undefined &&  lineCommande.analyseChimique.sulfate !== null) {
+            const sulfate:number[]=this.extractDoublesFromString(lineCommande.analyseChimique.sulfate);
+            // Si une partie numérique est trouvée, elle est convertie en nombre
+            if (sulfate.length!=0) {
+              totalSulfate += sulfate[0];
+              countSulfate++;
+
+            }
+          }
+
+        }
+
+        if (lineCommande.analyseChimique.chlorureDeSodium !== undefined &&   lineCommande.analyseChimique.chlorureDeSodium !== null) {
+
+          if (lineCommande.analyseChimique.chlorureDeSodium !== undefined &&  lineCommande.analyseChimique.chlorureDeSodium !== null) {
+            const chlorureDeSodium:number[]=this.extractDoublesFromString(lineCommande.analyseChimique.chlorureDeSodium);
+            // Si une partie numérique est trouvée, elle est convertie en nombre
+            if (chlorureDeSodium.length!=0) {
+              totalchlorureDeSodium += chlorureDeSodium[0];
+              countchlorureDeSodium++;
+
+            }
+          }
+
+        }
+
+        if (lineCommande.analyseChimique.matiereInsoluble !== undefined &&  lineCommande.analyseChimique.matiereInsoluble !== null) {
+
+          if (lineCommande.analyseChimique.matiereInsoluble !== undefined && lineCommande.analyseChimique.matiereInsoluble !== null) {
+            const matiereInsoluble: number[] = this.extractDoublesFromString(lineCommande.analyseChimique.matiereInsoluble);
+            // Si une partie numérique est trouvée, elle est convertie en nombre
+            if (matiereInsoluble.length != 0) {
+              totalMatiereInsoluble += matiereInsoluble[0];
+              countMatiereInsoluble++;
+
+            }
+          }
+
+        }
+
+        if (lineCommande.analyseChimique.ferrocyanure !== undefined &&   lineCommande.analyseChimique.ferrocyanure !== null) {
+          if (lineCommande.analyseChimique.ferrocyanure !== undefined &&  lineCommande.analyseChimique.ferrocyanure !== null) {
+            const ferrocyanure:number[]=this.extractDoublesFromString(lineCommande.analyseChimique.ferrocyanure);
+            // Si une partie numérique est trouvée, elle est convertie en nombre
+            if (ferrocyanure.length!=0) {
+              totalferrocyanure += ferrocyanure[0];
+              countferrocyanure++;
+
+            }
+
+          }
+        }
+
+      }
+    });
+
+    return {
+
+
+      passCumulated: countPassCum > 0 ? totalPassCum / countPassCum : 0,
+      humidite: countHumidite > 0 ? totalHumidite / countHumidite : 0,
+      magnesium: countMagnesium > 0 ? totalMagnesium / countMagnesium : 0,
+
+      sulfate: countSulfate > 0 ? totalSulfate / countSulfate : 0,
+      chlorureDeSodium: countchlorureDeSodium > 0 ? totalchlorureDeSodium / countchlorureDeSodium : 0,
+      ferrocyanure: countferrocyanure > 0 ? totalferrocyanure / countferrocyanure : 0,
+      matiereInsoluble: countMatiereInsoluble > 0 ? totalMatiereInsoluble / countMatiereInsoluble : 0,
+
+    };
+  }
+  extractDoublesFromString(input: string): number[] {
+    const regex = /-?\d+(\.\d+)?/g;
+    const matches = input.match(regex);
+    if (matches) {
+      return matches.map(match => parseFloat(match));
+    } else {
+      return [];
+    }
+  }
+
 }
