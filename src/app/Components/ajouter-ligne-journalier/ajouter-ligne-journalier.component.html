@@ -4,22 +4,29 @@
       <ng-template pTemplate="end"  >
         <div class=" my-2 " >
 
-          <button pButton pRipple label="Back" icon="pi pi-arrow-left" class="p-button-success mr-2 " (click)="retour()"></button>
+          <button pButton pRipple label="Back" icon="pi pi-arrow-left" class="p-button-secondary mr-2 " (click)="retour()"></button>
         </div>
       </ng-template>
       <h4>{{isUpdateAnalysePhysique?'Update':'Add'}} Line Daily</h4>
     </p-toolbar>
 
+    <div class=" flex col-12 justify-content-end  ">
+      <button *ngIf=" getToken()=='ADMIN'" pButton label="Add Line Daily" icon="pi pi-plus" class="p-button-success " (click)="ajouterJournalierPompe()"></button>
+    </div>
 
     <p-table #dt
              [value]="journalier.ligneJournalierList"
              [columns]="cols"
-             responsiveLayout="scroll" [rows]="10"
-             [globalFilterFields]="['id','date','value']"
-             [paginator]="true"
+             responsiveLayout="scroll"
+             [globalFilterFields]="['dateCreation','bassin','puitUtilises','etatBassin','selRecoltable','profondeurSaumure','densiteBassin','meteo','observation','journalierPompe']"
              editMode="row"
+             dataKey="id"
+             styleClass="p-datatable-striped"
+             [scrollable]="true"
+             scrollHeight="500px"
+             [tableStyle]="{ 'min-height': '40rem' }"
              [rowsPerPageOptions]="[10,20,30]"
-             [showCurrentPageReport]="true" currentPageReportTemplate="Display  {first} to  {last} of  {totalRecords} entries" [(selection)]="selectedLigneJournalier" selectionMode="multiple" [rowHover]="true" dataKey="id ">
+             [showCurrentPageReport]="true" currentPageReportTemplate="Display  {first} to  {last} of  {totalRecords} entries" [(selection)]="selectedLigneJournalier" selectionMode="multiple" [rowHover]="true" >
       <ng-template pTemplate="caption">
         <div class="flex flex-column md:flex-row md:justify-content-between md:align-items-center">
           <div class="flex justify-content-between align-items-center w-full">
@@ -35,11 +42,10 @@
         </div>
       </ng-template>
       <ng-template pTemplate="header">
-        <tr >
+        <tr class="">
           <th style="width: 3rem">
             <p-tableHeaderCheckbox></p-tableHeaderCheckbox>
           </th>
-          <th pSortableColumn="id" >Id <p-sortIcon field="id"></p-sortIcon ></th>
           <th pSortableColumn="dateCreation">Creation date<p-sortIcon field="dateCreation"></p-sortIcon></th>
           <th pSortableColumn="bassin">Pond<p-sortIcon field="bassin"></p-sortIcon></th>
           <th pSortableColumn="puitUtilises">Wells Used<p-sortIcon field="puitUtilises"></p-sortIcon></th>
@@ -55,15 +61,13 @@
         </tr>
       </ng-template>
       <ng-template pTemplate="body" let-ligneJournalier let-editing="editing" >
-        <tr [pEditableRow]="ligneJournalier"[style]="{height:'400PX'}"
+        <tr [pEditableRow]="ligneJournalier" class="align-content-start "
         >
+
           <td>
             <p-tableCheckbox [value]="ligneJournalier"></p-tableCheckbox>
           </td>
-          <td >
-            <span class="p-column-title">Id</span>
-            {{ligneJournalier.id}}
-          </td>
+
 
           <td >
             <p-cellEditor>
@@ -81,12 +85,18 @@
             <p-cellEditor>
               <ng-template pTemplate="input">
 
+              <div class="z-5">
 
                 <p-dropdown
                   [options]="bassins"
                   [(ngModel)]="ligneJournalier.bassin"
                   optionLabel="nom"
-                  placeholder="Select a Pond" />
+                  placeholder="Select a Pond"
+
+
+              />
+</div>
+
               </ng-template>
               <ng-template pTemplate="output">
 
@@ -98,7 +108,7 @@
           <td >
             <p-cellEditor>
               <ng-template pTemplate="input">
-                <p-multiSelect [options]="puits"   [(ngModel)]="ligneJournalier.puitUtilises"  placeholder="Select a Puits"   optionLabel="reference" display="chip" ></p-multiSelect>
+                <p-multiSelect [options]="puits"      [(ngModel)]="ligneJournalier.puitUtilises"  placeholder="Select a Puits"   optionLabel="reference" display="chip" ></p-multiSelect>
 
               </ng-template>
               <ng-template pTemplate="output">
@@ -197,9 +207,7 @@
 
 
 
-    <div class=" flex col-12 justify-content-end mt-6 ">
-      <button *ngIf=" getToken()=='ADMIN'" pButton label="Add Line Daily" icon="pi pi-plus" class="p-button-success " (click)="ajouterJournalierPompe()"></button>
-    </div>
+
 
 
 
@@ -252,8 +260,9 @@
                [columns]="cols"
                responsiveLayout="scroll" [rows]="10"
                [globalFilterFields]="['surface','etat','id','emplacement','nom','dateCreation','reference','description']"
-               [paginator]="true"
                editMode="row"
+               scrollHeight="300px"
+               [tableStyle]="{ 'min-height': '20rem' }"
                [rowsPerPageOptions]="[10,20,30]"
                [showCurrentPageReport]="true" currentPageReportTemplate="Display  {first} to  {last} of  {totalRecords} entries" [(selection)]="selectedJournalierPompes" selectionMode="multiple" [rowHover]="true" dataKey="id">
         <ng-template pTemplate="caption">
@@ -286,10 +295,10 @@
             <th></th>
           </tr>
         </ng-template>
-        <ng-template pTemplate="body" let-jrPompe let-editing="editing" >
-          <tr [pEditableRow]="jrPompe" >
+        <ng-template pTemplate="body" let-journalierPompe let-editing="editing" >
+          <tr [pEditableRow]="journalierPompe" >
             <td>
-              <p-tableCheckbox [value]="jrPompe"></p-tableCheckbox>
+              <p-tableCheckbox [value]="journalierPompe"></p-tableCheckbox>
             </td>
 
 
@@ -300,7 +309,7 @@
 
                 </ng-template>
                 <ng-template pTemplate="output">
-                  {{jrPompe.pompe.model}}
+                  {{journalierPompe.pompe.model}}
                 </ng-template>
               </p-cellEditor>
             </td>
@@ -311,7 +320,7 @@
 
                 </ng-template>
                 <ng-template pTemplate="output">
-                  {{jrPompe.densitePuit}}
+                  {{journalierPompe.densitePuit}}
                 </ng-template>
               </p-cellEditor>
             </td>
@@ -322,7 +331,7 @@
 
                 </ng-template>
                 <ng-template pTemplate="output">
-                  {{jrPompe.dureePompage}}
+                  {{journalierPompe.dureePompage}}
                 </ng-template>
               </p-cellEditor>
             </td>
@@ -333,12 +342,12 @@
 
                 </ng-template>
                 <ng-template pTemplate="output">
-                  {{jrPompe.debit}}
+                  {{journalierPompe.debit}}
                 </ng-template>
               </p-cellEditor>
             </td>
             <td >
-                  {{jrPompe.volumePompage}}
+                  {{journalierPompe.volumePompage}}
             </td>
 
             <td >
@@ -348,7 +357,7 @@
 
                 </ng-template>
                 <ng-template pTemplate="output">
-                  {{jrPompe.heursPanne}}
+                  {{journalierPompe.heursPanne}}
                 </ng-template>
               </p-cellEditor>
             </td>
@@ -359,7 +368,7 @@
 
                 </ng-template>
                 <ng-template pTemplate="output">
-                  {{jrPompe.heursArret}}
+                  {{journalierPompe.heursArret}}
                 </ng-template>
               </p-cellEditor>
             </td>
@@ -368,13 +377,13 @@
               <div class="flex  align-items-center gap-2">
                 <div class="flex align-items-center justify-content-center gap-2" *ngIf="getToken()=='ADMIN'">
                   <button *ngIf="!editing" pButton pRipple type="button" pInitEditableRow icon="pi pi-pencil"
-                          (click)="updateJournalierPompe(jrPompe)"
+                          (click)="updateJournalierPompe()"
                           class="p-button-rounded   mr-2"></button>
                   <button *ngIf="editing" pButton pRipple type="button"  pSaveEditableRow icon="pi pi-check"
-                          (click)="saveUpdateJounalierPompe()"
+                          (click)="saveUpdateJounalierPompe(journalierPompe)"
                           class="p-button-rounded p-button-text  mr-2"></button>
                 </div>
-                <button *ngIf="getToken()=='ADMIN'" pButton pRipple icon="pi pi-trash" class="p-button-rounded p-button-warning mr-2" (click)="deleteJounalierPompe(jrPompe)"></button>
+                <button *ngIf="getToken()=='ADMIN'" pButton pRipple icon="pi pi-trash" class="p-button-rounded p-button-warning mr-2" (click)="deleteJounalierPompe(journalierPompe)"></button>
               </div>
             </td>
           </tr>

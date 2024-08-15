@@ -67,6 +67,7 @@
 
             <td>
               <div *ngIf=" getToken()=='ADMIN'"  class="flex ">
+                <button pButton pRipple label="Add Lines " class="p-button-rounded p-button-info mr-2" (click)="addLineJournalier(journalier1)"></button>
                 <button pButton pRipple icon="pi pi-pencil" class="p-button-rounded p-button-success mr-2" (click)="editJouenalier(journalier1)"></button>
                 <button pButton pRipple icon="pi pi-trash" class="p-button-rounded p-button-warning" (click)="deleteJouenalier(journalier1)"></button>
               </div>

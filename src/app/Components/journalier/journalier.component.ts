@@ -102,11 +102,15 @@ export class JournalierComponent implements OnInit{
   }
 
   editJouenalier(journalier1: Journalier) {
-    // this.isUpdatePompe=true;
+    this.isUpdatePompe=true;
+    this.journalier=journalier1
+    this.journalierDialog = true;
+  }
+
+  addLineJournalier(journalier1: Journalier){
     this.router.navigate([`/Daily/${journalier1.id}`]);
 
     console.error(new JsonPipe().transform(journalier1))
-    // this.journalierDialog = true;
   }
 
   deleteJouenalier(journalier: Journalier) {

@@ -156,7 +156,8 @@ this.pompeService.getAllPompes().subscribe(value => this.pompes=value)
 
 
   ajouterJournalierPompe() {
-    this.journalier.ligneJournalierList.push(new LigneJournalier())
+
+    this.journalier.ligneJournalierList.push(new LigneJournalier(new Date().getTime()))
   }
 
 
@@ -182,11 +183,12 @@ this.ligneJournalierService.deleteLigneJournalier(ligneJournalier.id).subscribe(
   }
   // =======================JournalierPompe=======================
 
-  public updateJournalierPompe(jounalierPompe: JournalierPompe) {
-this.journalierPompe=jounalierPompe;
+  public updateJournalierPompe() {
+
   }
 
-  public saveUpdateJounalierPompe() {
+  public saveUpdateJounalierPompe(jounalierPompe: JournalierPompe) {
+    this.journalierPompe=jounalierPompe;
     this.journalierPompe.volumePompage=this.journalierPompe.debit*this.journalierPompe.dureePompage;
 this.jounalierPompeService.updateJournalierPompe(this.journalierPompe).subscribe(value =>
   // @ts-ignore

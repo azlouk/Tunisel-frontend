@@ -43,6 +43,7 @@ import {AutoCompleteModule} from "primeng/autocomplete";
 import {InputTextareaModule} from "primeng/inputtextarea";
 import {getToken} from "../../../main";
 import {RapportAnalyseService} from "../../Services/rapport-analyse.service";
+import {RippleModule} from "primeng/ripple";
 
 @Component({
   selector: 'app-analyse',
@@ -72,7 +73,8 @@ import {RapportAnalyseService} from "../../Services/rapport-analyse.service";
     TableModule,
     ToastModule,
     AutoCompleteModule,
-    InputTextareaModule
+    InputTextareaModule,
+    RippleModule
   ],
   templateUrl: './rapportAnalyse.component.html',
   styleUrl: './rapportAnalyse.component.css'
@@ -647,26 +649,36 @@ export class RapportAnalyseComponent {
   }
 
 
+  // ajouterTamis() {
+  //   this.tamis = {}
+  //   this.visibale = true;
+  //   this.isUpdateTamis = false;
+  // }
   ajouterTamis() {
-    this.tamis = {}
-    this.visibale = true;
-    this.isUpdateTamis = false;
+
+    this.tamis = {
+      refusCumulated: 0,
+    };
+
+    // this.visibale=true;
+    this.isUpdateTamis=false ;
+    this.listeTamis.push({...this.tamis});
+
+
   }
 
   saveTamis() {
+    if(this.isUpdateTamis){
 
-    if (this.isUpdateTamis) {
-
-      const tamis = this.listeTamis.findIndex((tt: Tamis) => tt.calibre === this.tamis.calibre)
-      if (tamis !== -1) {
-        this.listeTamis[tamis] = {...this.tamis};
-        this.visibale = false
-
+      const tamis=this.listeTamis.findIndex((tt:Tamis)=>tt.calibre===this.tamis.calibre)
+      if(tamis!==-1){
+        // this.listeTamis[tamis]= {...this.tamis} ;
+        this.visibale=false
       }
-    } else {
-      const tamis = this.listeTamis.findIndex((t: Tamis) => t.calibre === this.tamis.calibre)
-      if (tamis !== -1) {
-        this.visibale = false
+    }else {
+      const tamis=this.listeTamis.findIndex((t:Tamis)=>t.calibre===this.tamis.calibre)
+      if(tamis!==-1){
+        this.visibale=false
         Swal.fire({
           title: "Duplication?",
           text: "Calibre déja exist les valeur sera modifié!",
@@ -675,31 +687,36 @@ export class RapportAnalyseComponent {
           confirmButtonColor: "#3085d6",
           cancelButtonColor: "#d33",
           confirmButtonText: "Oui, modifié!",
-          cancelButtonText: "Cancel"
+          cancelButtonText:"Cancel"
         }).then((result) => {
           if (result.isConfirmed) {
-            this.listeTamis[tamis].calibre = this.tamis.calibre;
-            this.listeTamis[tamis].masse = this.tamis.masse;
-            this.listeTamis[tamis].refus = this.tamis.refus;
-            this.listeTamis[tamis].refusCumulated = this.tamis.refusCumulated;
-            this.listeTamis[tamis].passCumulated = this.tamis.passCumulated;
-            this.visibale = false
+            this.listeTamis[tamis].calibre=this.tamis.calibre ;
+            this.listeTamis[tamis].masse=this.tamis.masse ;
+            this.listeTamis[tamis].refus=this.tamis.refus ;
+            this.listeTamis[tamis].refusCumulated=this.tamis.refusCumulated ;
+            this.listeTamis[tamis].passCumulated=this.tamis.passCumulated ;
+            this.visibale=false
+
           }
         });
 
 
-      } else {
+      }
+      else {
 
-        this.listeTamis.push({...this.tamis});
-        this.visibale = false
+        // this.listeTamis.push({...this.tamis});
+        this.listeTamis.sort((a, b) => {
+          // Compare the 'refusCumulated' property of each object
+          // @ts-ignore
+          return b.calibre - a.calibre;
+        });
+        this.visibale=false
+
       }
     }
 
-    this.listeTamis.sort((a, b) => {
-      // Compare the 'refusCumulated' property of each object
-      // @ts-ignore
-      return b.calibre - a.calibre;
-    });
+
+
   }
 
   editTamis(tamis: Tamis) {
@@ -792,6 +809,10 @@ export class RapportAnalyseComponent {
   }
 
   protected readonly getToken = getToken;
+
+  updateTamis() {
+
+  }
 }
 interface AutoCompleteCompleteEvent {
   originalEvent: Event;
