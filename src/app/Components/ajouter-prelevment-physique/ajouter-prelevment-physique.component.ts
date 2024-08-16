@@ -86,7 +86,7 @@ export class AjouterPrelevmentPhysiqueComponent implements OnInit{
   visibale:boolean=false;
   listeTamis:Tamis[]=[];
   tamis: Tamis = {
-    refusCumulated: 0,
+    id: new Date().getTime(),
 
   };
   isUpdateTamis:boolean=false ;
@@ -376,84 +376,26 @@ this.visibale=false;
   ajouterTamis() {
 
     this.tamis = {
-      refusCumulated: 0,
+      id:new Date().getTime()
     };
 
     // this.visibale=true;
     this.isUpdateTamis=false ;
-    this.listeTamis.push({...this.tamis});
+    this.listeTamis.push(this.tamis);
 
 
   }
 
   saveTamis() {
-     if(this.isUpdateTamis){
-
-      const tamis=this.listeTamis.findIndex((tt:Tamis)=>tt.calibre===this.tamis.calibre)
-         if(tamis!==-1){
-         // this.listeTamis[tamis]= {...this.tamis} ;
-           this.visibale=false
-         }
-    }else {
-      const tamis=this.listeTamis.findIndex((t:Tamis)=>t.calibre===this.tamis.calibre)
-       if(tamis!==-1){
-        this.visibale=false
-        Swal.fire({
-          title: "Duplication?",
-          text: "Calibre déja exist les valeur sera modifié!",
-          icon: "warning",
-          showCancelButton: true,
-          confirmButtonColor: "#3085d6",
-          cancelButtonColor: "#d33",
-          confirmButtonText: "Oui, modifié!",
-          cancelButtonText:"Cancel"
-        }).then((result) => {
-          if (result.isConfirmed) {
-            this.listeTamis[tamis].calibre=this.tamis.calibre ;
-            this.listeTamis[tamis].masse=this.tamis.masse ;
-            this.listeTamis[tamis].refus=this.tamis.refus ;
-            this.listeTamis[tamis].refusCumulated=this.tamis.refusCumulated ;
-            this.listeTamis[tamis].passCumulated=this.tamis.passCumulated ;
-            this.visibale=false
-
-          }
-        });
-
-
-      }
-      else {
-
-        // this.listeTamis.push({...this.tamis});
-         this.listeTamis.sort((a, b) => {
-           // Compare the 'refusCumulated' property of each object
-           // @ts-ignore
-           return b.calibre - a.calibre;
-         });
-        this.visibale=false
-
-      }
-    }
-
-
+    this.listeTamis.sort((a, b) => {
+      // Compare the 'refusCumulated' property of each object
+      // @ts-ignore
+      return b.calibre - a.calibre;
+    });
 
   }
-
-  editTamis(tamis: Tamis) {
-    this.isUpdateTamis=true ;
-    this.visibale=true;
-     this.tamis={...tamis}
-
-  }
-
   calculateTotalMass(): number {
-    let totalMasse = 0;
-    for (const tamis of this.listeTamis) {
-      if (tamis.masse){
-      totalMasse += tamis.masse;
-
-    }}
-    console.log('=========>>>>>>>>>>totle Weight: ',totalMasse);
-    return totalMasse;
+    return this.listeTamis.reduce((previousValue, currentValue) =>previousValue+ (currentValue!==undefined && currentValue.masse!=undefined?parseFloat(currentValue.masse.toString()):0) ,0);
   }
   calculateRefus(total:number) {
 
@@ -517,6 +459,9 @@ this.calculateRefusCumulated();
 
   public updateTamis() {
 
+  }
+  calculTotalRefus() {
+    return this.listeTamis.reduce((previousValue, currentValue) => previousValue+ (currentValue!==undefined && currentValue.refus!=undefined?parseFloat(currentValue.refus.toString()):0),0)
   }
 
 }

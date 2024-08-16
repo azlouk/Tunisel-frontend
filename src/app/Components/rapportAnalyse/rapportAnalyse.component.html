@@ -222,7 +222,7 @@
 
         </p-dialog>
 
-        <p-table #dt [value]="listeTamis" [columns]="cols" dataKey="id" editMode="row"  responsiveLayout="scroll" [rows]="10" [globalFilterFields]="['calibre']" [paginator]="true" [rowsPerPageOptions]="[10,20,30,100,200]" [showCurrentPageReport]="true" currentPageReportTemplate="Display  {first} to  {last} of  {totalRecords} entries" [(selection)]="selectedIntervention" selectionMode="multiple" [rowHover]="true" >
+        <p-table #dt [value]="listeTamis"  styleClass="p-datatable-striped" [scrollable]="true" [scrollHeight]="'400px'" [columns]="cols"   editMode="row"  responsiveLayout="scroll"   [globalFilterFields]="['calibre']"    [showCurrentPageReport]="true" currentPageReportTemplate="Display  {first} to  {last} of  {totalRecords} entries" [(selection)]="selectedIntervention" selectionMode="multiple" [rowHover]="true" >
           <ng-template pTemplate="caption">
             <div class="flex flex-column md:flex-row md:justify-content-between md:align-items-center">
               <h5 class="m-0">Thames Management</h5>
@@ -296,7 +296,7 @@
 
 
 
-              <div *ngIf=" getToken()=='ADMIN'"  class="flex ">
+              <div *ngIf=" getToken()=='ADMIN'"  class="flex mt-2 ">
                 <div class="flex align-items-center justify-content-center gap-2" *ngIf="getToken()=='ADMIN'">
                   <button *ngIf="!editing" pButton pRipple type="button" pInitEditableRow icon="pi pi-pencil"
                           (click)="updateTamis()"
@@ -310,8 +310,20 @@
               </div>
 
             </tr>
+
+          </ng-template>
+          <ng-template pTemplate="footer">
+            <tr >
+              <td class="text-3xl">Total </td>
+              <td>{{calculateTotalMass().toFixed(2)}}</td>
+              <td>{{calculTotalRefus().toFixed(2)}}</td>
+              <td></td>
+              <td></td>
+              <td></td>
+            </tr>
           </ng-template>
         </p-table>
+
       </div>
       <div class=" flex col-12 justify-content-end">
         <button pButton label="calculate" icon="pi pi-check" class=" " (click)="calculateTamis()"></button>
