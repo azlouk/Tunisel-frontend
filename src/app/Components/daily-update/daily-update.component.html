@@ -40,7 +40,7 @@
         </div>
       </div>
 
-      <p-table class=" " #dt styleClass="p-datatable-gridlines" [value]="listDateDaily"     styleClass="p-datatable-striped"  responsiveLayout="scroll" [globalFilterFields]="['dateCreation']" dataKey="id">
+      <p-table class=" " #dt     styleClass="p-datatable-gridlines" [value]="listDateDaily"       responsiveLayout="scroll" [globalFilterFields]="['dateCreation']" dataKey="id">
 
         <ng-template pTemplate="header" >
 
@@ -48,10 +48,10 @@
 
 
           <tr>
-            <th  rowspan="2" pSortableColumn="dateCreation">Date <p-sortIcon field="dateCreation"></p-sortIcon></th>
-            <th colspan="2">Harvest</th>
-            <th [attr.colspan]="getuniqueCalibresProduction().length + 1">Production</th>
-            <th  [attr.colspan]="getuniqueCalibresTransfer()">Transfer</th>
+            <th  rowspan="2" pSortableColumn="date">Date <p-sortIcon field="date"></p-sortIcon></th>
+            <th colspan="2" class="text-center">Harvest</th>
+            <th class="text-center" [attr.colspan]="getuniqueCalibresProduction().length + 1">Production</th>
+            <th class="text-center" [attr.colspan]="getuniqueCalibresTransfer()">Transfer</th>
           </tr>
           <tr>
             <th>T</th>
