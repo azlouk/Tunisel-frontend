@@ -29,33 +29,35 @@ import {HistoryTransfer} from "../../Models/history-transfer";
 import {HistoryTransferService} from "../../Services/history-transfer.service";
 import {log} from "@angular-devkit/build-angular/src/builders/ssr-dev-server";
 import {MessagesModule} from "primeng/messages";
+import {InputTextareaModule} from "primeng/inputtextarea";
 
 @Component({
   selector: 'app-stock-order',
   standalone: true,
-  imports: [
-    AutoFocusModule,
-    ButtonModule,
-    CheckboxModule,
-    DatePipe,
-    DialogModule,
-    DropdownModule,
-    FormsModule,
-    InputNumberModule,
-    InputTextModule,
-    ListboxModule,
-    NgForOf,
-    NgIf,
-    SharedModule,
-    TableModule,
-    ToastModule,
-    ToolbarModule,
-    TooltipModule,
-    NgClass,
-    MultiSelectModule,
-    RippleModule,
-    MessagesModule
-  ],
+    imports: [
+        AutoFocusModule,
+        ButtonModule,
+        CheckboxModule,
+        DatePipe,
+        DialogModule,
+        DropdownModule,
+        FormsModule,
+        InputNumberModule,
+        InputTextModule,
+        ListboxModule,
+        NgForOf,
+        NgIf,
+        SharedModule,
+        TableModule,
+        ToastModule,
+        ToolbarModule,
+        TooltipModule,
+        NgClass,
+        MultiSelectModule,
+        RippleModule,
+        MessagesModule,
+        InputTextareaModule
+    ],
   templateUrl: './stock-order.component.html',
   styleUrl: './stock-order.component.css'
 })
@@ -397,6 +399,7 @@ this.salineService.updateSaline(this.saline).subscribe(value => {
   }
 
   public updateSaline(saline: Saline) {
+    this.saline.nomBassin=this.selectedBassin.nom;
 this.saline=saline;
   }
 
@@ -405,6 +408,8 @@ this.salineService.deleteSaline(saline.id).subscribe(value => this.getSalinesByS
   }
 
  saveSaline() {
+
+this.saline.nomBassin=this.selectedBassin.nom;
 this.salineService.addSaline(this.saline, this.stockOrder.id).subscribe(value => {
 this.getSalinesByStockOrder();
 this.saline=new Saline()
@@ -430,6 +435,7 @@ this.saline=new Saline()
   }
 backUpHistory:HistoryTransfer=new HistoryTransfer()
   messages: any;
+  public selectedBassin: Bassin={};
   public updateHistory( history: HistoryTransfer) {
 this.backUpHistory=new HistoryTransfer(history.id,history.dateCreation,history.startingPoint,history.arrivingPoint,history.transferQuantity);
   }

@@ -1,0 +1,170 @@
+<!--=============================================suivi Bassin Mensuel PDF=========================================================-->
+<div class="card">
+<div >
+
+    <div class="shadow-1 p-2  " >
+
+
+      <div class="card flex justify-content-evenly align-items-center ">
+        <div class="gap-1 flex align-items-center">Month :
+          <p-calendar
+            [(ngModel)]="date"
+            view="month"
+            dateFormat="mm/yy"
+            [readonlyInput]="true" />
+        </div>
+
+
+        <p-button (click)="getDataByDay(date)" class=" " icon="pi pi-search" label="Search"></p-button>
+
+      </div>
+
+    </div>
+
+
+    <div #pdfpuit class="pt-8 pl-4 pr-4">
+      <div class="flex border-1 w-full justify-content-between mb-6">
+        <div class="flex-initial flex align-items-center justify-content-center   font-bold m-2 px-5 py-3 border-round">
+          <img src="assets/layout/images/logo.png">
+
+        </div>
+        <div class="flex-initial flex align-items-center justify-content-center  text-6xl font-bold m-2 px-5 py-3 border-round">
+          Daily monitoring month
+        </div>
+        <div class="flex-initial border-1 flex     w-25  font-bold m-2 px-5 py-3  ">
+          <div class="col   ">
+            <div class="row  mb-2    w-full  ">BEN GUERDANE, TUNISIA  </div>
+            <div class="row mb-2   w-full text-center    text-1xl font-bold  pi pi-calendar ">{{dateToday | date :"yyyy-MM-dd hh:ss a"}}</div>
+
+          </div>
+        </div>
+      </div>
+
+      <p-table class=" " #dt     styleClass="p-datatable-gridlines" [value]="listDateDaily"       responsiveLayout="scroll" [globalFilterFields]="['dateCreation']" dataKey="id">
+
+        <ng-template pTemplate="header" >
+
+
+
+
+          <tr>
+            <th  rowspan="2" pSortableColumn="date">Date <p-sortIcon field="date"></p-sortIcon></th>
+            <th colspan="2" class="text-center">Harvest</th>
+            <th class="text-center" [attr.colspan]="getuniqueCalibresProduction().length + 1">Production</th>
+            <th class="text-center" [attr.colspan]="getuniqueCalibresTransfer()">Transfer</th>
+          </tr>
+          <tr>
+            <th>T</th>
+            <th>Pond</th>
+<!--          </tr>-->
+
+<!--          <tr>-->
+            <ng-container *ngFor="let calibre of getuniqueCalibresProduction()">
+              <th>Quality 0-{{ calibre }}</th>
+            </ng-container>
+            <th>Pond</th>
+<!--          </tr>-->
+
+
+
+<!--          <tr>-->
+            <ng-container *ngFor="let calibreTransfer of getuniqueCalibresTransfer()">
+            <th>Lot weight 0-{{calibreTransfer}}</th>
+            </ng-container>
+          </tr>
+
+
+
+
+        </ng-template>
+        <ng-template pTemplate="body" let-dateDaily let-ri="rowIndex">
+          <tr>
+            <td>
+              <span class="p-column-title">Date</span>
+              {{ dateDaily.date | date: 'dd-MM-yyyy' }}
+            </td>
+
+            <td>
+              <span class="p-column-title">T</span>
+              <ng-container *ngFor="let harvest of dateDaily.dataDaily.harvestList; let i = index">
+                <div class="flex flex-column gap-2">
+
+
+                {{ harvest.t  }}<span *ngIf="i < dateDaily.dataDaily.harvestList.length - 1"> </span>
+                </div>
+              </ng-container>
+            </td>
+
+            <td>
+              <span class="p-column-title">Pond</span>
+              <ng-container *ngFor="let harvest of dateDaily.dataDaily.harvestList; let i = index">
+                <div class="flex flex-column gap-2">
+
+                {{ harvest.t !== 0 ? harvest.pondeName : '-' }}<span *ngIf="i < dateDaily.dataDaily.harvestList.length - 1"> </span>
+                </div>
+              </ng-container>
+            </td>
+            <ng-container *ngFor="let calibre of getuniqueCalibresProduction()">
+              <td>
+                <span class="p-column-title">Quality plus calibre</span>
+                  <ng-container *ngFor="let production of dateDaily.dataDaily.productionList; let i = index">
+                <ng-container *ngIf=" production.calibre == calibre; else noCalibre">
+                    <div class="flex flex-column gap-2" >
+                      {{ production.value }}<span *ngIf="i < dateDaily.dataDaily.productionList.length - 1"> </span>
+                    </div>
+                  </ng-container>
+                </ng-container>
+                <ng-template #noCalibre>
+                  <div class="flex flex-column gap-2">
+                    -
+                  </div>
+                </ng-template>
+              </td>
+            </ng-container>
+
+
+
+            <td>
+              <span class="p-column-title">Pond</span>
+              <ng-container *ngFor="let production of dateDaily.dataDaily.productionList; let i = index">
+
+                <div class="flex flex-column gap-2">
+
+                  {{ production.value !== 0 ? production.pondeName : '-' }}<span *ngIf="i < dateDaily.dataDaily.productionList.length - 1"> </span>
+                </div>
+              </ng-container>
+            </td>
+            <ng-container  *ngFor="let calibre of getuniqueCalibresTransfer()">
+
+            <td>
+              <span class="p-column-title">Lot weight plus calibre</span>
+              <ng-container *ngFor="let transfer of dateDaily.dataDaily.transferList; let i = index">
+                <ng-container *ngIf=" transfer.calibre == calibre; else noCalibreTransfer">
+                <div class="flex flex-column gap-2">
+
+                  {{ transfer.masse }}<span *ngIf="i < dateDaily.dataDaily.transferList.length - 1"> </span>
+                </div>
+                  </ng-container>
+              </ng-container>
+              <ng-template #noCalibreTransfer>
+                <div class="flex flex-column gap-2">
+                  -
+                </div>
+              </ng-template>
+            </td>
+            </ng-container>
+
+          </tr>
+        </ng-template>
+
+      </p-table>
+
+
+
+    </div>
+  </div>
+  <div class="flex justify-content-end mt-5">
+    <p-button icon="pi pi-file-pdf" (click)="SavePDF()" class="text-green-50" label="PDF" pAutoFocus [autofocus]="true"  ></p-button>
+
+  </div>
+</div>

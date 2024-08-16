@@ -5,14 +5,18 @@ export class HistoryTransfer {
   startingPoint: string;
   arrivingPoint: string;
   transferQuantity: number;
+ observation:string;
+ rainQuantityZarzis:string;
 
 
-  constructor(_id: number=0, _dateCreation: Date=new Date(), _startingPoint: string="", _arrivingPoint: string="", _transferQuantity: number=0) {
+  constructor(_id: number=0, _dateCreation: Date=new Date(), _startingPoint: string="", _arrivingPoint: string="", _transferQuantity: number=0, _observation: string="", _rainQuantityZarzis: string="") {
     this.id = _id;
     this.dateCreation = _dateCreation;
     this.startingPoint = _startingPoint;
     this.arrivingPoint = _arrivingPoint;
     this.transferQuantity = _transferQuantity;
+    this.observation = _observation;
+    this.rainQuantityZarzis = _rainQuantityZarzis;
   }
 
   public get _id(): number {

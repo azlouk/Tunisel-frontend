@@ -2,61 +2,57 @@ import { Injectable } from '@angular/core';
 import {environment} from "../environment/environment";
 import {HttpClient, HttpHeaders} from "@angular/common/http";
 import {Observable} from "rxjs";
-import {Bande} from "../Models/bande";
 import {getKeyToken} from "../../main";
-import {Sbnl} from "../Models/sbnl";
+import {TraitementStock} from "../Models/traitement-stock";
 
 @Injectable({
   providedIn: 'root'
 })
-export class BandeService {
+export class TraitementStockService {
+
 
   apiUrl=environment.apiUrl
   constructor(private http: HttpClient) { }
 
-  getAllBandes(): Observable<Bande[]> {
+  getAllTraitementStock(): Observable<TraitementStock[]> {
     const token = getKeyToken();
     if (token) {
       const headers = new HttpHeaders().set('Authorization', `Bearer ${token}`).set("Content-Type", "application/json; charset=utf8");
-    return this.http.get<Bande[]>(`${this.apiUrl}/bandes/read`, {headers}) ;
-  }else {
-      return  new Observable<any>()}}
-  getAllBandesDTO(): Observable<Bande[]> {
-    const token = getKeyToken();
-    if (token) {
-      const headers = new HttpHeaders().set('Authorization', `Bearer ${token}`).set("Content-Type", "application/json; charset=utf8");
-    return this.http.get<Bande[]>(`${this.apiUrl}/bandes/readDTO`, {headers}) ;
-  }else {
-      return  new Observable<any>()}}
-  getBandeById(id:number): Observable<Bande> {
-    const token = getKeyToken();
-    if (token) {
-      const headers = new HttpHeaders().set('Authorization', `Bearer ${token}`).set("Content-Type", "application/json; charset=utf8");
-      return this.http.get<Bande>(`${this.apiUrl}/bandes/${id}`, {headers}) ;
+      return this.http.get<TraitementStock[]>(`${this.apiUrl}/traitementStock/read`, {headers}) ;
     }else {
       return  new Observable<any>()}}
-  deleteBande(bandeId: number | undefined): Observable<any> {
+  getTraitementStockById(id:number): Observable<TraitementStock> {
     const token = getKeyToken();
     if (token) {
       const headers = new HttpHeaders().set('Authorization', `Bearer ${token}`).set("Content-Type", "application/json; charset=utf8");
-    return this.http.delete(`${this.apiUrl}/bandes/delete/${bandeId}`, {headers});
-  }else {
+      return this.http.get<TraitementStock>(`${this.apiUrl}/traitementStock/${id}`, {headers}) ;
+    }else {
       return  new Observable<any>()}}
-  updateBande(bande: Bande): Observable<Bande> {
+
+  deleteTraitementStock(TraitementStockId: number | undefined): Observable<any> {
     const token = getKeyToken();
     if (token) {
       const headers = new HttpHeaders().set('Authorization', `Bearer ${token}`).set("Content-Type", "application/json; charset=utf8");
-    return this.http.put<Bande>(`${this.apiUrl}/bandes/update`, bande,{headers});
-  }else {
+      return this.http.delete(`${this.apiUrl}/traitementStock/delete/${TraitementStockId}`, {headers});
+    }else {
       return  new Observable<any>()}}
 
-
-  addBande(bande: Bande) : Observable<Bande>{
+  updateTraitementStock(traitementStock: TraitementStock): Observable<TraitementStock> {
     const token = getKeyToken();
     if (token) {
       const headers = new HttpHeaders().set('Authorization', `Bearer ${token}`).set("Content-Type", "application/json; charset=utf8");
-    return this.http.post<Bande>(`${this.apiUrl}/bandes/add`, bande,{headers});
-
-  }else {
+      return this.http.put<TraitementStock>(`${this.apiUrl}/traitementStock/update`, traitementStock, {headers});
+    }else {
       return  new Observable<any>()}}
+
+
+  addTraitementStock(traitementStock: TraitementStock, id:number) : Observable<TraitementStock>{
+    const token = getKeyToken();
+    if (token) {
+      const headers = new HttpHeaders().set('Authorization', `Bearer ${token}`).set("Content-Type", "application/json; charset=utf8");
+      return this.http.post<TraitementStock>(`${this.apiUrl}/traitementStock/add/${id}`, traitementStock, {headers});
+    }else {
+      return  new Observable<any>()}}
+
+
 }

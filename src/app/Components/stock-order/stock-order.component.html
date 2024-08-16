@@ -187,10 +187,10 @@
 
 
 
-<p-dialog [(visible)]="TransferDialog" [style]="{width: '1300px'}" header="Transfer Quantity" [modal]="true" class="p-fluid">
+<p-dialog [(visible)]="TransferDialog"  [maximizable]="true"  [style]="{width: '1300px'}" header="Transfer Quantity" [modal]="true" class="p-fluid">
   <ng-template pTemplate="content">
     <h3>Add Transfer</h3>
-    <div *ngIf="getToken()=='ADMIN'" class="flex justify-content-between gap-2 align-items-start border border-1 border-round border-gray-400 p-3">
+    <div *ngIf="getToken()=='ADMIN'" class="flex justify-content-between gap-2 align-items-center border border-1 border-round border-gray-400 p-3">
 
       <div class="">
         <label for="date">Date Creation</label>
@@ -211,7 +211,19 @@
         <label for="transfer">Transfer Quantity</label>
         <p-inputNumber  id="transfer"  [(ngModel)]="TransferQuantity" mode="decimal" [minFractionDigits]="3" ></p-inputNumber>
       </div>
-
+      <div class="">
+        <label >Rain Quantity Zarzis</label>
+        <input type="text" pInputText  [(ngModel)]="historyTransfer.rainQuantityZarzis"  />
+      </div>
+      <div class="">
+        <label >Observation</label>
+        <textarea
+          rows="2"
+          cols="10"
+          pInputTextarea
+          [(ngModel)]="historyTransfer.observation">
+      </textarea>
+      </div>
       <div>
         <button pButton pRipple label="Save" icon="pi pi-check" class="p-button-text" (click)="saveTransferQuantity()"></button>
       </div>
@@ -223,12 +235,14 @@
       <p-table #dt [loading]="loading"
                [value]="stockOrder.listHistory"
                [columns]="cols"
-               responsiveLayout="scroll" [rows]="10"
+               responsiveLayout="scroll"
                [globalFilterFields]="['surface','etat','id','emplacement','nom','dateCreation','reference','description']"
-               [paginator]="true"
+               [scrollable]="true"
+               [tableStyle]="{ 'min-height': '25rem' }"
+               [scrollHeight]="'400px'"
                editMode="row"
-               [rowsPerPageOptions]="[10,20,30]"
-               [showCurrentPageReport]="true" currentPageReportTemplate="Display  {first} to  {last} of  {totalRecords} entries" [(selection)]="selectedSalines" selectionMode="multiple" [rowHover]="true" dataKey="id">
+
+            [(selection)]="selectedSalines" selectionMode="multiple" [rowHover]="true" dataKey="id">
         <ng-template pTemplate="caption">
           <div class="flex flex-column md:flex-row md:justify-content-between md:align-items-center">
             <div class="flex justify-content-between align-items-center w-full">
@@ -264,23 +278,21 @@
         </ng-template>
         <ng-template pTemplate="header">
           <tr>
-            <th style="width: 3rem">
-              <p-tableHeaderCheckbox></p-tableHeaderCheckbox>
-            </th>
+
             <th pSortableColumn="id">Id <p-sortIcon field="id"></p-sortIcon></th>
             <th pSortableColumn="reference">Date Creation<p-sortIcon field="reference"></p-sortIcon></th>
             <th pSortableColumn="description">Starting Point <p-sortIcon field="description"></p-sortIcon></th>
             <th pSortableColumn="description">Arriving Point <p-sortIcon field="description"></p-sortIcon></th>
             <th pSortableColumn="description">Transfer Quantity <p-sortIcon field="description"></p-sortIcon></th>
+            <th pSortableColumn="description">Rain Quantity Zarzis <p-sortIcon field="description"></p-sortIcon></th>
+            <th pSortableColumn="description">Observation <p-sortIcon field="description"></p-sortIcon></th>
 
             <th></th>
           </tr>
         </ng-template>
         <ng-template pTemplate="body" let-history let-editing="editing" >
           <tr [pEditableRow]="history" >
-            <td>
-              <p-tableCheckbox [value]="history"></p-tableCheckbox>
-            </td>
+
             <td >
               <span class="p-column-title">Id</span>
               {{history.id}}
@@ -318,6 +330,32 @@
                 </ng-template>
               </p-cellEditor>
             </td>
+            <td >
+              <p-cellEditor>
+                <ng-template pTemplate="input">
+                  <input
+                    pInputText
+                    type="text"
+                    [(ngModel)]="history.rainQuantityZarzis" />
+                </ng-template>
+                <ng-template pTemplate="output">
+                  {{history.rainQuantityZarzis}}
+                </ng-template>
+              </p-cellEditor>
+            </td>
+            <td >
+              <p-cellEditor>
+                <ng-template pTemplate="input">
+                  <input
+                    pInputText
+                    type="text"
+                    [(ngModel)]="history.observation" />
+                </ng-template>
+                <ng-template pTemplate="output">
+                  {{history.observation}}
+                </ng-template>
+              </p-cellEditor>
+            </td>
             <td>
               <div class="flex  align-items-center gap-2">
                 <div class="flex align-items-center justify-content-center gap-2" *ngIf="getToken()=='ADMIN'">
@@ -349,33 +387,65 @@
 
 <!--======================================-->
 
-<p-dialog [(visible)]="AddToSalineDialog" [style]="{width: '1300px'}" header="Saline" [modal]="true" class="p-fluid">
+<p-dialog [(visible)]="AddToSalineDialog"  [maximizable]="true"   [style]="{width: '1400px'}" header="Saline" [modal]="true" class="p-fluid">
   <ng-template pTemplate="content">
     <h3>Add Saline</h3>
-    <div *ngIf="getToken()=='ADMIN'" class="flex justify-content-between align-items-center border border-1 border-round border-gray-400 p-3">
+
+    <div class="flex flex-column border border-1 border-round border-gray-400 p-3 gap-2">
+    <div *ngIf="getToken()=='ADMIN'" class="flex justify-content-between align-items-center gap-2 ">
       <div class="">
         <label for="dateCreationr">Date Creation</label>
         <input  class="p-2 shadow-1" type="date" dateFormat="yy-mm-dd"  pInputText id="dateCreationr"  [(ngModel)]="saline.dateCreation"  />
       </div>
+     <div>
+       <label for="dateCreationr">Pond Available</label>
+
+      <p-dropdown
+        [options]="stockOrder.bassinList"
+        [(ngModel)]="selectedBassin"
+        optionLabel="nom"
+        placeholder="Select a Pond" />
+     </div>
+
 
       <div class="">
         <label for="Volume">Volume Saline</label>
         <p-inputNumber  id="Volume"  [(ngModel)]="saline.volumeSaline" mode="decimal" [minFractionDigits]="3" ></p-inputNumber>
       </div>
-      <div>
-        <button pButton pRipple label="Save" icon="pi pi-check" class="p-button-text" (click)="saveSaline()"></button>
+      <div class="">
+        <label >Rain Quantity Bengardene</label>
+        <input type="text" pInputText  [(ngModel)]="saline.rainQuantityBengardene"  />
       </div>
+      <div class="">
+        <label >Temperature</label>
+        <input type="text" pInputText  [(ngModel)]="saline.temperature"  />
+      </div>
+
     </div>
+    <div class="">
+      <label >Observation</label>
+      <textarea
+        rows="2"
+        cols="10"
+        pInputTextarea
+        [(ngModel)]="saline.observation">
+      </textarea>
+    </div>
+      <div class ="flex justify-content-end w-full">
+        <p-button  [outlined]="true"  label="Save" icon="pi pi-check" class="p-button-text w-1" (click)="saveSaline()"></p-button>
+      </div>
+   </div>
     <div class="cart mt-5">
       <p-table #dt [loading]="loading"
                [value]="stockOrder.salines"
                [columns]="cols"
-               responsiveLayout="scroll" [rows]="10"
+               responsiveLayout="scroll"
                [globalFilterFields]="['surface','etat','id','emplacement','nom','dateCreation','reference','description']"
-               [paginator]="true"
+               [scrollable]="true"
+               [tableStyle]="{ 'min-height': '25rem' }"
+               [scrollHeight]="'400px'"
                editMode="row"
-               [rowsPerPageOptions]="[10,20,30]"
-               [showCurrentPageReport]="true" currentPageReportTemplate="Display  {first} to  {last} of  {totalRecords} entries" [(selection)]="selectedSalines" selectionMode="multiple" [rowHover]="true" dataKey="id">
+               [(selection)]="selectedSalines" selectionMode="multiple" [rowHover]="true" dataKey="id">
         <ng-template pTemplate="caption">
           <div class="flex flex-column md:flex-row md:justify-content-between md:align-items-center">
             <div class="flex justify-content-between align-items-center w-full">
@@ -411,21 +481,21 @@
         </ng-template>
         <ng-template pTemplate="header">
           <tr>
-            <th style="width: 3rem">
-              <p-tableHeaderCheckbox></p-tableHeaderCheckbox>
-            </th>
+
             <th pSortableColumn="id">Id <p-sortIcon field="id"></p-sortIcon></th>
             <th pSortableColumn="reference">Date Creation<p-sortIcon field="reference"></p-sortIcon></th>
+            <th pSortableColumn="reference">Pond Name<p-sortIcon field="reference"></p-sortIcon></th>
             <th pSortableColumn="description">Volume Saline <p-sortIcon field="description"></p-sortIcon></th>
+            <th pSortableColumn="description">Rain Quantity Bengardene <p-sortIcon field="description"></p-sortIcon></th>
+            <th pSortableColumn="description">Temperature <p-sortIcon field="description"></p-sortIcon></th>
+            <th pSortableColumn="description">Observation<p-sortIcon field="description"></p-sortIcon></th>
 
             <th></th>
           </tr>
         </ng-template>
         <ng-template pTemplate="body" let-saline let-editing="editing" >
           <tr [pEditableRow]="saline" >
-            <td>
-              <p-tableCheckbox [value]="saline"></p-tableCheckbox>
-            </td>
+
             <td >
               <span class="p-column-title">Id</span>
               {{saline.id}}
@@ -442,7 +512,20 @@
                 </ng-template>
               </p-cellEditor>
             </td>
-
+            <td >
+              <p-cellEditor>
+                <ng-template pTemplate="input">
+                  <p-dropdown
+                    [options]="stockOrder.bassinList"
+                    [(ngModel)]="selectedBassin"
+                    optionLabel="nom"
+                    placeholder="Select a Pond" />
+                </ng-template>
+                <ng-template pTemplate="output">
+                  {{saline.nomBassin}}
+                </ng-template>
+              </p-cellEditor>
+            </td>
             <td >
               <p-cellEditor>
                 <ng-template pTemplate="input">
@@ -456,7 +539,47 @@
                 </ng-template>
               </p-cellEditor>
             </td>
-
+            <td >
+              <p-cellEditor>
+                <ng-template pTemplate="input">
+                  <input
+                    pInputText
+                    type="text"
+                    [(ngModel)]="saline.rainQuantityBengardene" />
+                </ng-template>
+                <ng-template pTemplate="output">
+                  {{saline.rainQuantityBengardene}}
+                </ng-template>
+              </p-cellEditor>
+            </td>
+            <td >
+              <p-cellEditor>
+                <ng-template pTemplate="input">
+                  <input
+                    pInputText
+                    type="text"
+                    [(ngModel)]="saline.temperature" />
+                </ng-template>
+                <ng-template pTemplate="output">
+                  {{saline.temperature}}
+                </ng-template>
+              </p-cellEditor>
+            </td>
+            <td >
+              <p-cellEditor>
+                <ng-template pTemplate="input">
+                  <textarea
+                    rows="2"
+                    cols="10"
+                    pInputTextarea
+                    [(ngModel)]="saline.observation">
+                  </textarea>
+                </ng-template>
+                <ng-template pTemplate="output">
+                  {{saline.observation}}
+                </ng-template>
+              </p-cellEditor>
+            </td>
             <td>
               <div class="flex  align-items-center gap-2">
                 <div class="flex align-items-center justify-content-center gap-2" *ngIf="getToken()=='ADMIN'">
