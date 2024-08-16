@@ -666,7 +666,7 @@ this.TransferToBand=transferToBand;
  if(sbnl.bassinList!=undefined){
     sbnl.bassinList?.forEach(bassin => {
       if(bassin.recolteList!=undefined)
-        totalRecolte =bassin.recolteList.reduce((sum, recolte) => sum + recolte.value, 0)
+        totalRecolte +=bassin.recolteList.reduce((sum, recolte) => sum + recolte.value, 0)
     } )}
 return totalRecolte-totalTransfer;
   }

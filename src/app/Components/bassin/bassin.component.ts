@@ -1002,6 +1002,7 @@ else {
 
 
   filtreListHarvestWithDate(dateStartHarvest:Date, dateEndHarvest:Date) {
+   this. totalHarvestFiltree=0
     if (!this.recoltes) return;
 
     this.recoltes = this.recoltes.filter(recolte => {
@@ -1012,27 +1013,12 @@ else {
 
   }
 
-  // public getDate() {
-  //   alert(
-  //
-  //     this.getMonthFromDateString(this.date)
-  //
-  //   )
-  //   alert( this.getYearFromDateString(this.date))
-  // }
-  // getMonthFromDateString(dateS: Date): string {
-  //   const date = new Date(dateS);
-  //   const month = date.getMonth() + 1;
-  //   return month < 10 ? '0' + month : month.toString();
-  // }
+
   getMonthFromDateString(dateS: Date): number {
     const date = new Date(dateS);
     return date.getMonth() + 1;
   }
-  // getYearFromDateString(dateS: Date): string {
-  //   const date = new Date(dateS);
-  //   return date.getFullYear().toString();
-  // }
+
   getYearFromDateString(dateS: Date): number {
     const date = new Date(dateS);
     return date.getFullYear();

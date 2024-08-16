@@ -190,9 +190,9 @@
                   <p><span class="font-bold"> Quantity: </span>{{selectedBande.quantite}}</p>
                 </div>
 
-                <div class="field">
-                  <p><span class="font-bold"> Quantity Refusal: </span>{{selectedBande.quantiteRefus}}</p>
-                </div>
+<!--                <div class="field">-->
+<!--                  <p><span class="font-bold"> Quantity Refusal: </span>{{selectedBande.quantiteRefus}}</p>-->
+<!--                </div>-->
 
 
               </ng-template>
@@ -289,22 +289,6 @@
           <label>Weight</label>
         </p-floatLabel>
 
-<!--        <p-floatLabel>-->
-<!--          <p-inputNumber id="nomVisa" class="w-full " [(ngModel)]="tamis.refus" mode="decimal" locale="en-US" [minFractionDigits]="3"></p-inputNumber>-->
-<!--          <label>Refus</label>-->
-<!--        </p-floatLabel>-->
-
-<!--        <p-floatLabel>-->
-<!--          <p-inputNumber id="natureAction" class="" [(ngModel)]="tamis.refusCumulated" mode="decimal" locale="en-US" [minFractionDigits]="3"></p-inputNumber>-->
-<!--          <label>Refus Cumulated</label>-->
-<!--        </p-floatLabel>-->
-
-<!--        <p-floatLabel>-->
-<!--          <p-inputNumber id="observation" class="w-full " [(ngModel)]="tamis.passCumulated"  mode="decimal" locale="en-US" [minFractionDigits]="3"></p-inputNumber>-->
-<!--          <label>Pass Cumulated</label>-->
-<!--        </p-floatLabel>-->
-
-
 
       </div>
       <ng-template pTemplate="footer">
@@ -313,7 +297,7 @@
       </ng-template>
 
     </p-dialog>
-    <p-table #dt [value]="listeTamis" [columns]="cols" dataKey="id" editMode="row"  responsiveLayout="scroll" [rows]="10" [globalFilterFields]="['calibre']" [paginator]="true" [rowsPerPageOptions]="[10,20,30,100,200]" [showCurrentPageReport]="true" currentPageReportTemplate="Display  {first} to  {last} of  {totalRecords} entries" [(selection)]="selectedIntervention" selectionMode="multiple" [rowHover]="true" >
+    <p-table #dt [value]="listeTamis"  dataKey="id" editMode="row"  responsiveLayout="scroll" [rows]="10" [globalFilterFields]="['calibre']" [paginator]="true" [rowsPerPageOptions]="[10,20,30,100,200]" [showCurrentPageReport]="true" currentPageReportTemplate="Display  {first} to  {last} of  {totalRecords} entries" [(selection)]="selectedIntervention" selectionMode="multiple" [rowHover]="true" >
       <ng-template pTemplate="caption">
         <div class="flex flex-column md:flex-row md:justify-content-between md:align-items-center">
           <h5 class="m-0">Thames Management</h5>

@@ -376,12 +376,12 @@ this.visibale=false;
   ajouterTamis() {
 
     this.tamis = {
-      refusCumulated: 0,
+      id:new Date().getTime()
     };
 
     // this.visibale=true;
     this.isUpdateTamis=false ;
-    this.listeTamis.push({...this.tamis});
+    this.listeTamis.push(this.tamis);
 
 
   }

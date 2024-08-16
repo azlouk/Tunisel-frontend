@@ -2,10 +2,8 @@ import {Component, ElementRef, Input, ViewChild} from '@angular/core';
 import {ButtonModule} from "primeng/button";
 import {CalendarModule} from "primeng/calendar";
 import {CheckboxModule} from "primeng/checkbox";
-import {CommonModule, DatePipe, JsonPipe, NgClass, NgForOf, NgIf} from "@angular/common";
+import {CommonModule, DatePipe, JsonPipe, NgClass, NgIf} from "@angular/common";
 import {DialogModule} from "primeng/dialog";
-import {DropdownModule} from "primeng/dropdown";
-import {InputNumberModule} from "primeng/inputnumber";
 import {InputTextModule} from "primeng/inputtext";
 import {ListboxModule} from "primeng/listbox";
 import {OverlayPanelModule} from "primeng/overlaypanel";
@@ -19,7 +17,6 @@ import {Sbnl} from "../../Models/sbnl";
  import {SbnlService} from "../../Services/sbnl.service";
 import {AnalysesChimique} from "../../Models/analyses-chimique";
 import {AnalysesPhysique} from "../../Models/analyses-physique";
-import {Tamis} from "../../Models/tamis";
 import html2canvas from "html2canvas";
 import jsPDF from "jspdf";
 import {Bande} from "../../Models/bande";
@@ -27,12 +24,16 @@ import {BandeService} from "../../Services/bande.service";
 import {AutoFocusModule} from "primeng/autofocus";
 import {PasswordModule} from "primeng/password";
 import {RadioButtonModule} from "primeng/radiobutton";
-import {error} from "@angular/compiler-cli/src/transformers/util";
 import Swal from "sweetalert2";
 import {getToken} from "../../../main";
 import * as XLSX from "xlsx";
 import {writeFile} from "xlsx";
 import {TooltipModule} from "primeng/tooltip";
+import {MultiSelectModule} from "primeng/multiselect";
+import {RippleModule} from "primeng/ripple";
+import {TraitementStock} from "../../Models/traitement-stock";
+import {TraitementStockService} from "../../Services/traitement-stock.service";
+import {TransferToBand} from "../../Models/transfer-to-band";
 
 @Component({
   selector: 'app-bande',
@@ -57,7 +58,9 @@ import {TooltipModule} from "primeng/tooltip";
     CommonModule,
     ListboxModule,
     AutoFocusModule,
-    TooltipModule
+    TooltipModule,
+    MultiSelectModule,
+    RippleModule
 
   ],
   templateUrl: './bande.component.html',
@@ -92,7 +95,8 @@ export class BandeComponent {
   private isUpdatebande=false;
   sbnls: Sbnl[] = [];
   SelectAll: boolean = false;
-
+  detailsDialog: boolean = false;
+  TraitementStockDialog: boolean = false;
   @ViewChild("pdfpuit") htmlContent: ElementRef | undefined;
   visiblePrint: boolean = false;
   dateToday: Date = new Date();
@@ -100,10 +104,13 @@ export class BandeComponent {
   DatefiltrageStart: Date = new Date();
   DatefiltrageEnd: Date = new Date();
   public  _selectedColumns: any[]=[];
+  traitementStock:TraitementStock=new TraitementStock();
+  ListTraitementStock:TraitementStock[] =[];
   @Input() get selectedColumns(): any[] {
     return this._selectedColumns;
   }
-  constructor(  private messageService: MessageService,private sbnlService :SbnlService,private bandeService:BandeService) {}
+  constructor(  private messageService: MessageService,private sbnlService :SbnlService,private bandeService:BandeService,
+                private traitementStockService:TraitementStockService) {}
 
   ngOnInit() {
     this.colsfiltre = [
@@ -558,6 +565,53 @@ console.log('=====>>>>> export: ',new JsonPipe().transform(bande))
 
   protected readonly getToken = getToken;
   loading: boolean=false;
+  public selectedSbnl: Sbnl={};
 
 
+  public openDialog() {
+    this.detailsDialog=true;
+
+  }
+
+  public AddTraitementStock(b: Bande) {
+    this.TraitementStockDialog=true;
+    this.bande=b;
+    this. getListTraitementStock();
+  }
+
+  public saveTraitementStock() {
+
+    if ( this.bande.id!==undefined)
+      this.traitementStockService.addTraitementStock(this.traitementStock,this.bande.id).subscribe(value => {
+        this. getListTraitementStock();
+        this.traitementStock=new TraitementStock();
+      })
+
+  }
+  getListTraitementStock(){
+    if(this.bande.id!=undefined)
+      this.bandeService.getBandeById(this.bande.id).subscribe(value => {
+        if(value.traitementStocks!=undefined)
+          this.ListTraitementStock = value.traitementStocks;
+      } )
+  }
+
+  protected readonly TransferToBand = TransferToBand;
+
+  public updateTraitementStock(traitement: TraitementStock) {
+    this.traitementStock=traitement;
+
+  }
+
+  public saveUpdateTraitementStock() {
+    this.traitementStockService.updateTraitementStock(this.traitementStock).subscribe(value => {
+      this. getListTraitementStock();
+
+    })
+  }
+
+  public deleteTraitementStock(traitementStock: TraitementStock) {
+    this.traitementStockService.deleteTraitementStock(traitementStock.id).subscribe(value =>     this.ListTraitementStock= this.ListTraitementStock.filter(traitement => traitement.id !== traitementStock.id))
+
+  }
 }

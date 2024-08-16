@@ -189,7 +189,7 @@
 
 
 <!--=============================================bassin et Analyses PDF=========================================================-->
-<p-dialog header="Chemical and particle size analysis" [(visible)]="visiblePrint" [modal]="true" [style]="{width: '100%'}"     >
+<p-dialog header="Chemical and particle size analysis"  [maximizable]="true"  [(visible)]="visiblePrint" [modal]="true" [style]="{width: '100%'}"     >
   <ng-template pTemplate="content">
 
   <div class="shadow-1 p-2  " >chemical filtration  :
@@ -358,10 +358,10 @@
 </p-dialog>
 
 <!--=============================================Recolte=========================================================-->
-<p-dialog [(visible)]="RecolteDialog" [style]="{width: '1300px'}" header="Harvest" [modal]="true" class="p-fluid">
+<p-dialog [(visible)]="RecolteDialog"  [maximizable]="true"  [style]="{width: '1300px'}" header="Harvest" [modal]="true" class="p-fluid">
   <ng-template pTemplate="content">
     <h3>Add Harvest</h3>
-<div *ngIf="getToken()=='ADMIN'" class="flex justify-content-between align-items-center border border-1 border-round border-gray-400 p-3">
+<div *ngIf="getToken()=='ADMIN'" class="flex justify-content-between gap-2 align-items-center border border-1 border-round border-gray-400 p-3">
     <div class="">
       <label for="dateCreationr">Date Creation</label>
       <input  class="p-2 shadow-1" type="date" dateFormat="yy-mm-dd"  pInputText id="dateCreationr"  [(ngModel)]="recolte.dateCreation"  />
@@ -370,6 +370,23 @@
     <div class="">
       <label for="value">Value</label>
       <p-inputNumber  id="value"  [(ngModel)]="recolte.value" mode="decimal" [minFractionDigits]="3" ></p-inputNumber>
+    </div>
+  <div class="">
+    <label >Rain Quantity Bengardene</label>
+    <input type="text" pInputText  [(ngModel)]="recolte.rainQuantityBengardene"  />
+  </div>
+  <div class="">
+    <label >Temperature</label>
+    <input type="text" pInputText  [(ngModel)]="recolte.temperature"  />
+  </div>
+    <div class="">
+      <label >Observation</label>
+      <textarea
+        rows="2"
+        cols="10"
+        pInputTextarea
+        [(ngModel)]="recolte.observation">
+      </textarea>
     </div>
   <div>
     <button pButton pRipple label="Save" icon="pi pi-check" class="p-button-text" (click)="saveRecolte()"></button>
@@ -381,10 +398,11 @@
                [columns]="cols"
                responsiveLayout="scroll" [rows]="10"
                [globalFilterFields]="['id','date','value']"
-               [paginator]="true"
+               [scrollable]="true"
+               [tableStyle]="{ 'min-height': '25rem' }"
+               [scrollHeight]="'400px'"
                editMode="row"
-               [rowsPerPageOptions]="[10,20,30]"
-               [showCurrentPageReport]="true" currentPageReportTemplate="Display  {first} to  {last} of  {totalRecords} entries" [(selection)]="selectedBassins" selectionMode="multiple" [rowHover]="true" dataKey="id">
+               [(selection)]="selectedBassins" selectionMode="multiple" [rowHover]="true" dataKey="id">
         <ng-template pTemplate="caption">
           <div class="flex flex-column md:flex-row md:justify-content-between md:align-items-center">
             <div class="flex justify-content-between align-items-center w-full">
@@ -428,6 +446,9 @@
             <th pSortableColumn="id">Id <p-sortIcon field="id"></p-sortIcon></th>
             <th pSortableColumn="date">Date Harvest<p-sortIcon field="date"></p-sortIcon></th>
             <th pSortableColumn="value">Value <p-sortIcon field="value"></p-sortIcon></th>
+            <th pSortableColumn="value">Rain Quantity Bengardene <p-sortIcon field="value"></p-sortIcon></th>
+            <th pSortableColumn="value">Temperature <p-sortIcon field="value"></p-sortIcon></th>
+            <th pSortableColumn="value">Observation<p-sortIcon field="value"></p-sortIcon></th>
 
             <th></th>
           </tr>
@@ -467,7 +488,47 @@
                 </ng-template>
               </p-cellEditor>
             </td>
-
+            <td >
+              <p-cellEditor>
+                <ng-template pTemplate="input">
+                  <input
+                    pInputText
+                    type="text"
+                    [(ngModel)]="recolte.rainQuantityBengardene" />
+                </ng-template>
+                <ng-template pTemplate="output">
+                  {{recolte.rainQuantityBengardene}}
+                </ng-template>
+              </p-cellEditor>
+            </td>
+            <td >
+              <p-cellEditor>
+                <ng-template pTemplate="input">
+                  <input
+                    pInputText
+                    type="text"
+                    [(ngModel)]="recolte.temperature" />
+                </ng-template>
+                <ng-template pTemplate="output">
+                  {{recolte.temperature}}
+                </ng-template>
+              </p-cellEditor>
+            </td>
+            <td >
+              <p-cellEditor>
+                <ng-template pTemplate="input">
+                  <textarea
+                    rows="2"
+                    cols="10"
+                    pInputTextarea
+                    [(ngModel)]="recolte.observation">
+                  </textarea>
+                </ng-template>
+                <ng-template pTemplate="output">
+                  {{recolte.observation}}
+                </ng-template>
+              </p-cellEditor>
+            </td>
             <td>
               <div class="flex  align-items-center gap-2">
                 <div class="flex align-items-center justify-content-center gap-2" *ngIf="getToken()=='ADMIN'">
@@ -498,7 +559,7 @@
 </p-dialog>
 
 <!--=============================================Recolte PDF=========================================================-->
-<p-dialog header="" [(visible)]="RecoltePDF" [modal]="true" [style]="{width: '100%'}"     >
+<p-dialog header="" [(visible)]="RecoltePDF"  [maximizable]="true" [modal]="true" [style]="{width: '100%'}"     >
   <ng-template pTemplate="content">
 
     <div class="shadow-1 p-2  " >Pond filtration  :
@@ -599,7 +660,7 @@
 </p-dialog>
 
 <!--=============================================Sondage=========================================================-->
-<p-dialog [(visible)]="SondageDialog" [style]="{width: '1200px'}" header="Survey" [modal]="true" class="p-fluid">
+<p-dialog [(visible)]="SondageDialog" [maximizable]="true"  [style]="{width: '1200px'}" header="Survey" [modal]="true" class="p-fluid">
   <ng-template pTemplate="content">
     <h3>Add Survey</h3>
     <div class="flex justify-content-between align-items-center border border-1 border-round border-gray-400 p-3">
@@ -627,12 +688,13 @@
       <p-table #dt [loading]="loading"
                [value]="sondages"
                [columns]="cols"
-               responsiveLayout="scroll" [rows]="10"
+               responsiveLayout="scroll"
                [globalFilterFields]="['surface','etat','id','emplacement','nom','dateCreation','reference','description']"
-               [paginator]="true"
+               [scrollable]="true"
+               [tableStyle]="{ 'min-height': '25rem' }"
+               [scrollHeight]="'400px'"
                editMode="row"
-               [rowsPerPageOptions]="[10,20,30]"
-               [showCurrentPageReport]="true" currentPageReportTemplate="Display  {first} to  {last} of  {totalRecords} entries" [(selection)]="selectedBassins" selectionMode="multiple" [rowHover]="true" dataKey="id">
+           [(selection)]="selectedBassins" selectionMode="multiple" [rowHover]="true" dataKey="id">
         <ng-template pTemplate="caption">
           <div class="flex flex-column md:flex-row md:justify-content-between md:align-items-center">
             <div class="flex justify-content-between align-items-center w-full">
@@ -755,7 +817,7 @@
 </p-dialog>
 
 <!--=============================================Sondage PDF=========================================================-->
-<p-dialog header="" [(visible)]="SondaePDF" [modal]="true" [style]="{width: '100%'}"     >
+<p-dialog header="" [(visible)]="SondaePDF" [maximizable]="true"  [modal]="true" [style]="{width: '100%'}"     >
   <ng-template pTemplate="content">
 
     <div class="shadow-1 p-2  " >
@@ -888,7 +950,7 @@
 </p-dialog>
 
 <!--=============================================suivi Bassin Mensuel PDF=========================================================-->
-<p-dialog header="" [(visible)]="suiviBassinPDF" [modal]="true" [style]="{width: '100%'}"     >
+<p-dialog header="" [(visible)]="suiviBassinPDF"  [maximizable]="true"  [modal]="true" [style]="{width: '100%'}"     >
   <ng-template pTemplate="content">
 
     <div class="shadow-1 p-2  " >

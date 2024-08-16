@@ -30,7 +30,8 @@ export function getModelDefault(){
       label: 'Main',
       items: [
         {label: 'Dashboard', icon: 'pi pi-fw pi-home', routerLink: ['/dash']},
-        {label: 'Daily', icon: 'pi pi-clipboard', routerLink: ['/daily']}
+        // {label: 'Daily', icon: 'pi pi-clipboard', routerLink: ['/daily']},
+        {label: 'Daily Update', icon: 'pi pi-clipboard', routerLink: ['/DailyUpdate']}
 
       ]
     },

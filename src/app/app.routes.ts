@@ -28,6 +28,7 @@ import {JournalierComponent} from "./Components/journalier/journalier.component"
 import {
   AjouterLigneJournalierComponent
 } from "./Components/ajouter-ligne-journalier/ajouter-ligne-journalier.component";
+import {DailyUpdateComponent} from "./Components/daily-update/daily-update.component";
 
 export const routes: Routes = [
   {path:'', component:LoginComponent},
@@ -65,4 +66,5 @@ export const routes: Routes = [
   {path:'pompe', component:PompeComponent,  canActivate:[AuthGuard]},
   {path:'daily', component:JournalierComponent,  canActivate:[AuthGuard]},
   {path:'Daily/:id', component:AjouterLigneJournalierComponent,  canActivate:[AuthGuard]},
+  {path:'DailyUpdate', component:DailyUpdateComponent,  canActivate:[AuthGuard]},
 ];

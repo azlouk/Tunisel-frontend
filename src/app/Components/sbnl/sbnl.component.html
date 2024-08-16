@@ -85,7 +85,6 @@
             </td>
             <td style="width:14%; min-width:8rem;" class="surface-overlay flex align-items-center gap-2">
               <span class="p-column-title">Pond</span>
-<!--              {{bassin.reference }}-->
               <span class="pi pi-eye text-3xl text-primary cursor-pointer m-2" (click)="openDialog()"  ></span>
 
               <p-dialog [(visible)]="detailsDialog" [style]="{width: '1300px'}" header="Pond" [modal]="true" class="p-fluid">
@@ -198,7 +197,7 @@
             </td>
             <td>
               <div class="flex ">
-                <button *ngIf="getToken()=='ADMIN'||'EMPLOYER'" pButton pRipple  class="p-button-rounded p-button-info mr-2" (click)="AddTransferToBand(sbnl)">Transfer</button>
+                <button *ngIf="getToken()=='ADMIN'" pButton pRipple  class="p-button-rounded p-button-info mr-2" (click)="AddTransferToBand(sbnl)">Transfer</button>
                 <button *ngIf="getToken()=='ADMIN'" pButton pRipple icon="pi pi-pencil" class="p-button-rounded p-button-success mr-2" (click)="editSbnl(sbnl)"></button>
                 <button *ngIf="getToken()=='ADMIN'" pButton pRipple icon="pi pi-trash" class="p-button-rounded p-button-warning mr-2" (click)="deleteSbnl(sbnl)"></button>
                 <button pButton pRipple icon="pi pi-file-pdf" class="p-button-rounded p-button-primary mr-2"  (click)="exportrapport(sbnl)"></button>

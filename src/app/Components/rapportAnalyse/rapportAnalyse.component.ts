@@ -730,7 +730,7 @@ export class RapportAnalyseComponent {
         totalMasse += tamis.masse;
 
       }}
-
+    console.log('=========>>>>>>>>>>totle Weight: ',totalMasse);
     return totalMasse;
   }
   calculateRefus(total:number) {
