@@ -394,15 +394,11 @@ saveQuantityTranferStarAndArriving(){
 }
 
 
-  saveUpdateSaline() {
-this.salineService.updateSaline(this.saline).subscribe(value => {
-  this.getSalinesByStockOrder()
-  this.saline=new Saline()
-})
-  }
+
 
   public updateSaline(saline: Saline) {
-    this.saline.nomBassin=this.selectedBassin.nom;
+
+    this.selectedBassin=this.stockOrder.bassinList.find(value => value.nom==saline.nomBassin);
 this.saline=saline;
   }
 
@@ -411,9 +407,9 @@ this.salineService.deleteSaline(saline.id).subscribe(value => this.getSalinesByS
   }
 
  saveSaline() {
-   console.info(this.saline.dateCreation)
 
-this.saline.nomBassin=this.selectedBassin.nom;
+// @ts-ignore
+   this.saline.nomBassin=this.selectedBassin.nom;
 this.salineService.addSaline(this.saline, this.stockOrder.id).subscribe(value => {
 this.getSalinesByStockOrder();
 this.saline=new Saline()
@@ -439,14 +435,14 @@ this.saline=new Saline()
   }
 backUpHistory:HistoryTransfer=new HistoryTransfer()
   messages: any;
-  public selectedBassin: Bassin={};
+  public selectedBassin: Bassin | undefined={};
   public updateHistory( history: HistoryTransfer) {
-this.backUpHistory=new HistoryTransfer(history.id,history.dateCreation,history.startingPoint,history.arrivingPoint,history.transferQuantity);
+this.backUpHistory=new HistoryTransfer(history.id,history.dateCreation,history.startingPoint,history.arrivingPoint,history.transferQuantity,history.observation,history.rainQuantityZarzis);
   }
 
   public saveUpdateHistory(history: HistoryTransfer) {
-    console.error(this.backUpHistory)
-    console.log(history)
+    // console.error(this.backUpHistory)
+    // console.log(history)
     if(this.backUpHistory.transferQuantity<history.transferQuantity){
    this.startingPoint=   this.getTransferAttributsByLabel(history.startingPoint);
    this.arrivingPoint=   this.getTransferAttributsByLabel(history.arrivingPoint);
@@ -458,6 +454,7 @@ this.backUpHistory=new HistoryTransfer(history.id,history.dateCreation,history.s
       this.TransferQuantity=this.backUpHistory.transferQuantity-history.transferQuantity;
     }
     this.saveQuantityTranferStarAndArriving();
+    this.historyTransfer=new HistoryTransfer();
   }
 
     public deleteHistory(history: HistoryTransfer) {

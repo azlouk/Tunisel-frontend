@@ -38,7 +38,7 @@ export class DailyUpdateComponent implements OnInit{
 
 
   dateToday: Date = new Date();
-  public date!: Date;
+  public date: Date=new Date();
   listDateDaily:DateDaily[]=[];
   @ViewChild("pdfpuit") htmlContent: ElementRef | undefined;
   constructor(private dailyUpdateService:DailyUpdateService ) {
@@ -66,17 +66,7 @@ export class DailyUpdateComponent implements OnInit{
     const date = new Date(dateS);
     return date.getFullYear();
   }
-  // public getTotalDuree() {
-  //   return this.linesJournaliers
-  //     .map(lj => lj.journalierPompeList.reduce((sum, jp) => sum + jp.dureePompage, 0))
-  //     .reduce((total, duration) => total + duration, 0);
-  // }
 
-  // public getTotalVolume() {
-  //   return this.linesJournaliers
-  //     .map(lj => lj.journalierPompeList.reduce((sum, jp) => sum + jp.volumePompage, 0))
-  //     .reduce((total, volume) => total + volume, 0);
-  // }
 
   public SavePDF(): void {
 
