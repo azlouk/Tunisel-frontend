@@ -13,8 +13,8 @@ export interface Bande {
   etat?: string;
   quantite?: number;
   stockType?:StockType ;
-  // bandeSbnl?:Sbnl;
-  // quantiteRefus?:number;
+  bandeSbnl?:Sbnl;
+  quantiteRefus?:number;
   analysesChimiques?: AnalysesChimique[];
   analysesPhysiques?: AnalysesPhysique[];
   traitementStocks?:TraitementStock[];
