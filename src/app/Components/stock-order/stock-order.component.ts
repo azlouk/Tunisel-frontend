@@ -30,34 +30,36 @@ import {HistoryTransferService} from "../../Services/history-transfer.service";
 import {log} from "@angular-devkit/build-angular/src/builders/ssr-dev-server";
 import {MessagesModule} from "primeng/messages";
 import {InputTextareaModule} from "primeng/inputtextarea";
+import {CalendarModule} from "primeng/calendar";
 
 @Component({
   selector: 'app-stock-order',
   standalone: true,
-    imports: [
-        AutoFocusModule,
-        ButtonModule,
-        CheckboxModule,
-        DatePipe,
-        DialogModule,
-        DropdownModule,
-        FormsModule,
-        InputNumberModule,
-        InputTextModule,
-        ListboxModule,
-        NgForOf,
-        NgIf,
-        SharedModule,
-        TableModule,
-        ToastModule,
-        ToolbarModule,
-        TooltipModule,
-        NgClass,
-        MultiSelectModule,
-        RippleModule,
-        MessagesModule,
-        InputTextareaModule
-    ],
+  imports: [
+    AutoFocusModule,
+    ButtonModule,
+    CheckboxModule,
+    DatePipe,
+    DialogModule,
+    DropdownModule,
+    FormsModule,
+    InputNumberModule,
+    InputTextModule,
+    ListboxModule,
+    NgForOf,
+    NgIf,
+    SharedModule,
+    TableModule,
+    ToastModule,
+    ToolbarModule,
+    TooltipModule,
+    NgClass,
+    MultiSelectModule,
+    RippleModule,
+    MessagesModule,
+    InputTextareaModule,
+    CalendarModule
+  ],
   templateUrl: './stock-order.component.html',
   styleUrl: './stock-order.component.css'
 })
@@ -108,6 +110,7 @@ export class StockOrderComponent implements OnInit{
                 private bassinService :BassinService,
                 private stockOrderService :StockOrderService,
                 private salineService :SalineService,
+                private datepipe:DatePipe,
                 private historyTransferService :HistoryTransferService) {
 
    }
@@ -408,6 +411,7 @@ this.salineService.deleteSaline(saline.id).subscribe(value => this.getSalinesByS
   }
 
  saveSaline() {
+   console.info(this.saline.dateCreation)
 
 this.saline.nomBassin=this.selectedBassin.nom;
 this.salineService.addSaline(this.saline, this.stockOrder.id).subscribe(value => {
@@ -500,4 +504,6 @@ this.backUpHistory=new HistoryTransfer(history.id,history.dateCreation,history.s
   getTransferAttributs() {
     return undefined;
   }
+
+  protected readonly Saline = Saline;
 }
