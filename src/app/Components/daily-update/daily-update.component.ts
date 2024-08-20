@@ -68,20 +68,49 @@ export class DailyUpdateComponent implements OnInit{
   }
 
 
+  // public SavePDF(): void {
+  //   if (this.htmlContent) {
+  //     html2canvas(this.htmlContent.nativeElement, {scale: 1}).then((canvas) => {
+  //       const imgData = canvas.toDataURL('image/png');
+  //       const pdf = new jsPDF('p', 'mm', 'a4');
+  //       const imgWidth = 210; // PDF width
+  //       const imgHeight = (canvas.height * imgWidth) / canvas.width; // Maintain aspect ratio
+  //       pdf.addImage(imgData, 'png', 2, 2, imgWidth, imgHeight);
+  //       pdf.save('Print_' + Math.random() + '.pdf');
+  //     });
+  //   }
+  // }
+
   public SavePDF(): void {
     if (this.htmlContent) {
-      html2canvas(this.htmlContent.nativeElement, {scale: 1}).then((canvas) => {
-        const imgData = canvas.toDataURL('image/png');
+      html2canvas(this.htmlContent.nativeElement, { scale: 1 }).then((canvas) => {
+        const imgWidth = 210; // PDF width in mm
+        const pageHeight = 297; // PDF height in mm
+        const imgHeight = (canvas.height * imgWidth) / canvas.width; // Calculating image height while maintaining aspect ratio
+        const heightLeft = imgHeight;
         const pdf = new jsPDF('p', 'mm', 'a4');
-        const imgWidth = 210; // PDF width
-        const imgHeight = (canvas.height * imgWidth) / canvas.width; // Maintain aspect ratio
-        pdf.addImage(imgData, 'png', 2, 2, imgWidth, imgHeight);
+        let position = 0;
+
+        if (heightLeft <= pageHeight) {
+          // If content fits on one page
+          pdf.addImage(canvas.toDataURL('image/png'), 'PNG', 0, 0, imgWidth, imgHeight);
+        } else {
+          // If content exceeds one page
+          while (position < heightLeft) {
+            const imgData = canvas.toDataURL('image/png');
+            pdf.addImage(imgData, 'PNG', 0, position, imgWidth, imgHeight);
+            position -= pageHeight; // Move position to the next page
+            if (position < heightLeft) {
+              pdf.addPage(); // Add a new page if there's more content
+            }
+          }
+        }
+
         pdf.save('Print_' + Math.random() + '.pdf');
       });
     }
-
-
   }
+
 
   getuniqueCalibresProduction(): number[] {
     const calibres = new Set<number>();

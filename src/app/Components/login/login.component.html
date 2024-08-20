@@ -1,4 +1,4 @@
-<div class="surface-ground flex align-items-center justify-content-center min-h-screen min-w-screen overflow-hidden">
+<div  class="surface-ground flex align-items-center justify-content-center min-h-screen min-w-screen overflow-hidden">
   <div class="flex flex-column align-items-center justify-content-center">
     <div style="border-radius:56px; padding:0.3rem; background: linear-gradient(180deg, var(--primary-color) 10%, rgba(33, 150, 243, 0) 30%);">
       <div class="w-full surface-card py-8 px-5 sm:px-8" style="border-radius:53px">
@@ -15,11 +15,20 @@
           <label for="password1" class="block text-900 font-medium text-xl mb-2">Password</label>
           <p-password id="password1" [(ngModel)]="authentificationRequest.password" placeholder="Password" [toggleMask]="true" styleClass="mb-5" inputStyleClass="w-full p-3 md:w-30rem"></p-password>
 
-          <div class="flex align-items-center justify-content-between mb-5 gap-5">
-           <span class="text-primary cursor-pointer" (click)="getPassWord()">Password Forget ?</span>
+<!--          <div class="flex align-items-center justify-content-between mb-5 gap-5">-->
+<!--&lt;!&ndash;           <span class="text-primary cursor-pointer" (click)="getPassWord()">Password Forget ?</span>&ndash;&gt;-->
 
+<!--          </div>-->
+          <div class="flex flex-column   gap-4 mt-7">
+
+            <div [hidden]="loginService.hiddenSpinner">
+              <p-progressBar mode="indeterminate" [style]="{'height': '6px'}"   />
+            </div>
+            <div class="flex w-full ">
+
+          <button pButton pRipple label="Login" class=" w-full  text-xl " (click)="authUser()" ></button>
+            </div>
           </div>
-          <button pButton pRipple label="Login" class="w-full p-3 text-xl" (click)="authUser()" ></button>
         </div>
       </div>
     </div>

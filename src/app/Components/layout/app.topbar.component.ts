@@ -23,7 +23,7 @@ export class AppTopBarComponent implements OnInit{
     @ViewChild('topbarmenu') menu!: ElementRef;
 userConnect:RegisterRequest=new RegisterRequest()
     constructor(public layoutService: LayoutService, public loginservice:LoginService, public route:Router,
-                private userService:UserService) { }
+                private userService:UserService,private router:Router) { }
 
   dec() {
     Swal.fire({
@@ -44,7 +44,12 @@ userConnect:RegisterRequest=new RegisterRequest()
 
   }
   public getUserConnected(){
-    this.userService.getUserConnect().subscribe(value => this.userConnect=value)
+    this.userService.getUserConnect().subscribe(value => {
+      this.userConnect = value
+    },error => {
+     localStorage.clear();
+
+    })
   }
   ngOnInit() {
   this.getUserConnected();
