@@ -133,7 +133,14 @@
             </ng-container>
 
             <td>
-              {{ dateDaily.observations }}
+              <div class="flex flex-column gap-2">
+
+             <span *ngIf="getLengthofObeservation(dateDaily.observationsHarvest)"><span class="font-bold">Observation Harest:</span>  {{ dateDaily.observationsHarvest }}</span>
+             <span *ngIf="getLengthofObeservation(dateDaily.observationsProduction)"><span class="font-bold">Observation Production:</span>  {{ dateDaily.observationsProduction }}</span>
+             <span *ngIf="getLengthofObeservation(dateDaily.observationsTransfer)"><span class="font-bold">Observation Transfer:</span>  {{ dateDaily.observationsTransfer }}</span>
+
+              </div>
+
             </td>
           </tr>
         </ng-template>

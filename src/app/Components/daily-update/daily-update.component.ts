@@ -69,10 +69,7 @@ export class DailyUpdateComponent implements OnInit{
 
 
   public SavePDF(): void {
-
     if (this.htmlContent) {
-
-
       html2canvas(this.htmlContent.nativeElement, {scale: 1}).then((canvas) => {
         const imgData = canvas.toDataURL('image/png');
         const pdf = new jsPDF('p', 'mm', 'a4');
@@ -81,12 +78,11 @@ export class DailyUpdateComponent implements OnInit{
         pdf.addImage(imgData, 'png', 2, 2, imgWidth, imgHeight);
         pdf.save('Print_' + Math.random() + '.pdf');
       });
-
-
     }
 
 
   }
+
   getuniqueCalibresProduction(): number[] {
     const calibres = new Set<number>();
     this.listDateDaily.forEach(dateDaily =>
@@ -106,4 +102,8 @@ export class DailyUpdateComponent implements OnInit{
     return Array.from(calibres);
   }
 
+  public getLengthofObeservation(observation: string) {
+
+    return observation.length!=0 || observation.trim()!="";
+  }
 }
