@@ -30,34 +30,36 @@ import {HistoryTransferService} from "../../Services/history-transfer.service";
 import {log} from "@angular-devkit/build-angular/src/builders/ssr-dev-server";
 import {MessagesModule} from "primeng/messages";
 import {InputTextareaModule} from "primeng/inputtextarea";
+import {CalendarModule} from "primeng/calendar";
 
 @Component({
   selector: 'app-stock-order',
   standalone: true,
-    imports: [
-        AutoFocusModule,
-        ButtonModule,
-        CheckboxModule,
-        DatePipe,
-        DialogModule,
-        DropdownModule,
-        FormsModule,
-        InputNumberModule,
-        InputTextModule,
-        ListboxModule,
-        NgForOf,
-        NgIf,
-        SharedModule,
-        TableModule,
-        ToastModule,
-        ToolbarModule,
-        TooltipModule,
-        NgClass,
-        MultiSelectModule,
-        RippleModule,
-        MessagesModule,
-        InputTextareaModule
-    ],
+  imports: [
+    AutoFocusModule,
+    ButtonModule,
+    CheckboxModule,
+    DatePipe,
+    DialogModule,
+    DropdownModule,
+    FormsModule,
+    InputNumberModule,
+    InputTextModule,
+    ListboxModule,
+    NgForOf,
+    NgIf,
+    SharedModule,
+    TableModule,
+    ToastModule,
+    ToolbarModule,
+    TooltipModule,
+    NgClass,
+    MultiSelectModule,
+    RippleModule,
+    MessagesModule,
+    InputTextareaModule,
+    CalendarModule
+  ],
   templateUrl: './stock-order.component.html',
   styleUrl: './stock-order.component.css'
 })
@@ -108,6 +110,7 @@ export class StockOrderComponent implements OnInit{
                 private bassinService :BassinService,
                 private stockOrderService :StockOrderService,
                 private salineService :SalineService,
+                private datepipe:DatePipe,
                 private historyTransferService :HistoryTransferService) {
 
    }
@@ -391,15 +394,11 @@ saveQuantityTranferStarAndArriving(){
 }
 
 
-  saveUpdateSaline() {
-this.salineService.updateSaline(this.saline).subscribe(value => {
-  this.getSalinesByStockOrder()
-  this.saline=new Saline()
-})
-  }
+
 
   public updateSaline(saline: Saline) {
-    this.saline.nomBassin=this.selectedBassin.nom;
+
+    this.selectedBassin=this.stockOrder.bassinList.find(value => value.nom==saline.nomBassin);
 this.saline=saline;
   }
 
@@ -409,7 +408,8 @@ this.salineService.deleteSaline(saline.id).subscribe(value => this.getSalinesByS
 
  saveSaline() {
 
-this.saline.nomBassin=this.selectedBassin.nom;
+// @ts-ignore
+   this.saline.nomBassin=this.selectedBassin.nom;
 this.salineService.addSaline(this.saline, this.stockOrder.id).subscribe(value => {
 this.getSalinesByStockOrder();
 this.saline=new Saline()
@@ -435,14 +435,14 @@ this.saline=new Saline()
   }
 backUpHistory:HistoryTransfer=new HistoryTransfer()
   messages: any;
-  public selectedBassin: Bassin={};
+  public selectedBassin: Bassin | undefined={};
   public updateHistory( history: HistoryTransfer) {
-this.backUpHistory=new HistoryTransfer(history.id,history.dateCreation,history.startingPoint,history.arrivingPoint,history.transferQuantity);
+this.backUpHistory=new HistoryTransfer(history.id,history.dateCreation,history.startingPoint,history.arrivingPoint,history.transferQuantity,history.observation,history.rainQuantityZarzis);
   }
 
   public saveUpdateHistory(history: HistoryTransfer) {
-    console.error(this.backUpHistory)
-    console.log(history)
+    // console.error(this.backUpHistory)
+    // console.log(history)
     if(this.backUpHistory.transferQuantity<history.transferQuantity){
    this.startingPoint=   this.getTransferAttributsByLabel(history.startingPoint);
    this.arrivingPoint=   this.getTransferAttributsByLabel(history.arrivingPoint);
@@ -454,6 +454,7 @@ this.backUpHistory=new HistoryTransfer(history.id,history.dateCreation,history.s
       this.TransferQuantity=this.backUpHistory.transferQuantity-history.transferQuantity;
     }
     this.saveQuantityTranferStarAndArriving();
+    this.historyTransfer=new HistoryTransfer();
   }
 
     public deleteHistory(history: HistoryTransfer) {
@@ -500,4 +501,6 @@ this.backUpHistory=new HistoryTransfer(history.id,history.dateCreation,history.s
   getTransferAttributs() {
     return undefined;
   }
+
+  protected readonly Saline = Saline;
 }

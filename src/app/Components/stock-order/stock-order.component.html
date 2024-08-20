@@ -193,8 +193,13 @@
     <div *ngIf="getToken()=='ADMIN'" class="flex justify-content-between gap-2 align-items-center border border-1 border-round border-gray-400 p-3">
 
       <div class="">
-        <label for="date">Date Creation</label>
-        <input  class="p-2 shadow-1" type="date" dateFormat="yy-mm-dd"  pInputText id="date"  [(ngModel)]="historyTransfer.dateCreation"  />
+        <label >Date Creation</label>
+        <p-calendar
+          [(ngModel)]="historyTransfer.dateCreation"
+          [showIcon]="true"
+          [showOnFocus]="false"
+          [dateFormat]="'dd-mm-yy'"
+          inputId="buttondisplay" />
       </div>
       <div class=" ">
         <label >Starting point</label>
@@ -301,11 +306,16 @@
             <td >
               <p-cellEditor>
                 <ng-template pTemplate="input">
-                  <input  class="p-2 shadow-1" type="date" dateFormat="yy-mm-dd"  pInputText   [(ngModel)]="history.dateCreation"  />
+                  <p-calendar
+                    [(ngModel)]="history.dateCreation"
+                    [showIcon]="true"
+                    [showOnFocus]="false"
+                    [dateFormat]="'dd-mm-yy'"
+                    inputId="buttondisplay" />
 
                 </ng-template>
                 <ng-template pTemplate="output">
-                  {{history.dateCreation|date:'dd-MM-yyyy'}}
+                  {{history.dateCreation|date:'dd-MM-yy'}}
                 </ng-template>
               </p-cellEditor>
             </td>
@@ -394,11 +404,16 @@
     <div class="flex flex-column border border-1 border-round border-gray-400 p-3 gap-2">
     <div *ngIf="getToken()=='ADMIN'" class="flex justify-content-between align-items-center gap-2 ">
       <div class="">
-        <label for="dateCreationr">Date Creation</label>
-        <input  class="p-2 shadow-1" type="date" dateFormat="yy-mm-dd"  pInputText id="dateCreationr"  [(ngModel)]="saline.dateCreation"  />
+        <label >Date Creation</label>
+        <p-calendar
+          [(ngModel)]="saline.dateCreation"
+          [showIcon]="true"
+          [showOnFocus]="false"
+          [dateFormat]="'dd-mm-yy'"
+          inputId="buttondisplay" />
       </div>
      <div>
-       <label for="dateCreationr">Pond Available</label>
+       <label >Pond Available</label>
 
       <p-dropdown
         [options]="stockOrder.bassinList"
@@ -504,11 +519,15 @@
             <td >
               <p-cellEditor>
                 <ng-template pTemplate="input">
-                  <input  class="p-2 shadow-1" type="date" dateFormat="yy-mm-dd"  pInputText   [(ngModel)]="saline.dateCreation"  />
-
+                  <p-calendar
+                    [(ngModel)]="saline.dateCreation"
+                    [showIcon]="true"
+                    [showOnFocus]="false"
+                    [dateFormat]="'dd-mm-yy'"
+                    inputId="buttondisplay" />
                 </ng-template>
                 <ng-template pTemplate="output">
-                  {{saline.dateCreation|date:'dd-MM-yyyy'}}
+                  {{saline.dateCreation|date:'dd-MM-yy'}}
                 </ng-template>
               </p-cellEditor>
             </td>
@@ -587,7 +606,7 @@
                           (click)="updateSaline(saline)"
                           class="p-button-rounded   mr-2"></button>
                   <button *ngIf="editing" pButton pRipple type="button"  pSaveEditableRow icon="pi pi-check"
-                          (click)="saveUpdateSaline()"
+                          (click)="saveSaline()"
                           class="p-button-rounded p-button-text  mr-2"></button>
                 </div>
                 <button *ngIf="getToken()=='ADMIN'" pButton pRipple icon="pi pi-trash" class="p-button-rounded p-button-warning mr-2" (click)="deleteSaline(saline)"></button>

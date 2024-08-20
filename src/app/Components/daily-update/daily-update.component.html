@@ -40,42 +40,26 @@
         </div>
       </div>
 
-      <p-table class=" " #dt     styleClass="p-datatable-gridlines" [value]="listDateDaily"       responsiveLayout="scroll" [globalFilterFields]="['dateCreation']" dataKey="id">
-
-        <ng-template pTemplate="header" >
-
-
-
-
+      <p-table class="" #dt styleClass="p-datatable-gridlines" [value]="listDateDaily" responsiveLayout="scroll" [globalFilterFields]="['dateCreation']" dataKey="id">
+        <ng-template pTemplate="header">
           <tr>
-            <th  rowspan="2" pSortableColumn="date">Date <p-sortIcon field="date"></p-sortIcon></th>
+            <th rowspan="2" pSortableColumn="date">Date <p-sortIcon field="date"></p-sortIcon></th>
             <th colspan="2" class="text-center">Harvest</th>
-            <th class="text-center" [attr.colspan]="getuniqueCalibresProduction().length + 1">Production</th>
-            <th class="text-center" [attr.colspan]="getuniqueCalibresTransfer()">Transfer</th>
+            <th class="text-center" [attr.colspan]="getuniqueCalibresProduction().length +1">Production</th>
+            <th class="text-center" [attr.colspan]="getuniqueCalibresTransfer().length ">Transfer</th>
+            <th rowspan="2">Observation (Harvest, Production, Transfer)</th>
           </tr>
           <tr>
             <th>T</th>
             <th>Pond</th>
-<!--          </tr>-->
-
-<!--          <tr>-->
             <ng-container *ngFor="let calibre of getuniqueCalibresProduction()">
               <th>Quality 0-{{ calibre }}</th>
             </ng-container>
             <th>Pond</th>
-<!--          </tr>-->
-
-
-
-<!--          <tr>-->
             <ng-container *ngFor="let calibreTransfer of getuniqueCalibresTransfer()">
-            <th>Lot weight 0-{{calibreTransfer}}</th>
+              <th>Lot weight 0-{{ calibreTransfer }}</th>
             </ng-container>
           </tr>
-
-
-
-
         </ng-template>
         <ng-template pTemplate="body" let-dateDaily let-ri="rowIndex">
           <tr>
@@ -84,33 +68,32 @@
               {{ dateDaily.date | date: 'dd-MM-yyyy' }}
             </td>
 
+
             <td>
               <span class="p-column-title">T</span>
-              <ng-container *ngFor="let harvest of dateDaily.dataDaily.harvestList; let i = index">
+              <ng-container *ngFor="let harvest of dateDaily.dataDaily.harvestList">
                 <div class="flex flex-column gap-2">
-
-
-                {{ harvest.t  }}<span *ngIf="i < dateDaily.dataDaily.harvestList.length - 1"> </span>
+                  {{ harvest.t }}
                 </div>
               </ng-container>
             </td>
-
             <td>
               <span class="p-column-title">Pond</span>
-              <ng-container *ngFor="let harvest of dateDaily.dataDaily.harvestList; let i = index">
+              <ng-container *ngFor="let harvest of dateDaily.dataDaily.harvestList">
                 <div class="flex flex-column gap-2">
-
-                {{ harvest.t !== 0 ? harvest.pondeName : '-' }}<span *ngIf="i < dateDaily.dataDaily.harvestList.length - 1"> </span>
+                  {{ harvest.t !== 0 ? harvest.pondeName : '-' }}
                 </div>
               </ng-container>
             </td>
+
+
             <ng-container *ngFor="let calibre of getuniqueCalibresProduction()">
               <td>
                 <span class="p-column-title">Quality plus calibre</span>
-                  <ng-container *ngFor="let production of dateDaily.dataDaily.productionList; let i = index">
-                <ng-container *ngIf=" production.calibre == calibre; else noCalibre">
-                    <div class="flex flex-column gap-2" >
-                      {{ production.value }}<span *ngIf="i < dateDaily.dataDaily.productionList.length - 1"> </span>
+                <ng-container *ngFor="let production of dateDaily.dataDaily.productionList">
+                  <ng-container *ngIf="production.calibre === calibre; else noCalibre">
+                    <div class="flex flex-column gap-2">
+                      {{ production.value }}
                     </div>
                   </ng-container>
                 </ng-container>
@@ -121,42 +104,46 @@
                 </ng-template>
               </td>
             </ng-container>
-
-
-
             <td>
               <span class="p-column-title">Pond</span>
-              <ng-container *ngFor="let production of dateDaily.dataDaily.productionList; let i = index">
-
+              <ng-container *ngFor="let production of dateDaily.dataDaily.productionList">
                 <div class="flex flex-column gap-2">
-
-                  {{ production.value !== 0 ? production.pondeName : '-' }}<span *ngIf="i < dateDaily.dataDaily.productionList.length - 1"> </span>
+                  {{ production.value !== 0 ? production.pondeName : '-' }}
                 </div>
               </ng-container>
             </td>
-            <ng-container  *ngFor="let calibre of getuniqueCalibresTransfer()">
 
-            <td>
-              <span class="p-column-title">Lot weight plus calibre</span>
-              <ng-container *ngFor="let transfer of dateDaily.dataDaily.transferList; let i = index">
-                <ng-container *ngIf=" transfer.calibre == calibre; else noCalibreTransfer">
-                <div class="flex flex-column gap-2">
 
-                  {{ transfer.masse }}<span *ngIf="i < dateDaily.dataDaily.transferList.length - 1"> </span>
-                </div>
+            <ng-container *ngFor="let calibre of getuniqueCalibresTransfer()">
+              <td>
+                <span class="p-column-title">Lot weight plus calibre</span>
+                <ng-container *ngFor="let transfer of dateDaily.dataDaily.transferList">
+                  <ng-container *ngIf="transfer.calibre === calibre; else noCalibreTransfer">
+                    <div class="flex flex-column gap-2">
+                      {{ transfer.masse }}
+                    </div>
                   </ng-container>
-              </ng-container>
-              <ng-template #noCalibreTransfer>
-                <div class="flex flex-column gap-2">
-                  -
-                </div>
-              </ng-template>
-            </td>
+                </ng-container>
+                <ng-template #noCalibreTransfer>
+                  <div class="flex flex-column gap-2">
+                    -
+                  </div>
+                </ng-template>
+              </td>
             </ng-container>
 
+            <td>
+              <div class="flex flex-column gap-2">
+
+             <span *ngIf="getLengthofObeservation(dateDaily.observationsHarvest)"><span class="font-bold">Observation Harest:</span>  {{ dateDaily.observationsHarvest }}</span>
+             <span *ngIf="getLengthofObeservation(dateDaily.observationsProduction)"><span class="font-bold">Observation Production:</span>  {{ dateDaily.observationsProduction }}</span>
+             <span *ngIf="getLengthofObeservation(dateDaily.observationsTransfer)"><span class="font-bold">Observation Transfer:</span>  {{ dateDaily.observationsTransfer }}</span>
+
+              </div>
+
+            </td>
           </tr>
         </ng-template>
-
       </p-table>
 
 

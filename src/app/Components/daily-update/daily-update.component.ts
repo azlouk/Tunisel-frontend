@@ -38,7 +38,7 @@ export class DailyUpdateComponent implements OnInit{
 
 
   dateToday: Date = new Date();
-  public date!: Date;
+  public date: Date=new Date();
   listDateDaily:DateDaily[]=[];
   @ViewChild("pdfpuit") htmlContent: ElementRef | undefined;
   constructor(private dailyUpdateService:DailyUpdateService ) {
@@ -66,23 +66,10 @@ export class DailyUpdateComponent implements OnInit{
     const date = new Date(dateS);
     return date.getFullYear();
   }
-  // public getTotalDuree() {
-  //   return this.linesJournaliers
-  //     .map(lj => lj.journalierPompeList.reduce((sum, jp) => sum + jp.dureePompage, 0))
-  //     .reduce((total, duration) => total + duration, 0);
-  // }
 
-  // public getTotalVolume() {
-  //   return this.linesJournaliers
-  //     .map(lj => lj.journalierPompeList.reduce((sum, jp) => sum + jp.volumePompage, 0))
-  //     .reduce((total, volume) => total + volume, 0);
-  // }
 
   public SavePDF(): void {
-
     if (this.htmlContent) {
-
-
       html2canvas(this.htmlContent.nativeElement, {scale: 1}).then((canvas) => {
         const imgData = canvas.toDataURL('image/png');
         const pdf = new jsPDF('p', 'mm', 'a4');
@@ -91,12 +78,11 @@ export class DailyUpdateComponent implements OnInit{
         pdf.addImage(imgData, 'png', 2, 2, imgWidth, imgHeight);
         pdf.save('Print_' + Math.random() + '.pdf');
       });
-
-
     }
 
 
   }
+
   getuniqueCalibresProduction(): number[] {
     const calibres = new Set<number>();
     this.listDateDaily.forEach(dateDaily =>
@@ -116,4 +102,8 @@ export class DailyUpdateComponent implements OnInit{
     return Array.from(calibres);
   }
 
+  public getLengthofObeservation(observation: string) {
+
+    return observation.length!=0 || observation.trim()!="";
+  }
 }
