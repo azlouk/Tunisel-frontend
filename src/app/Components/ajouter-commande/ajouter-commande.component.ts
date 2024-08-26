@@ -1329,7 +1329,7 @@ dateAUtilise(a:LineCommande){
   protected readonly Date = Date;
   getAllStockOrder() {
 
-    this.stockOrderService.getAllStockOrder()
+    this.stockOrderService.getAllStockOrderDTO()
       .subscribe((stockOrders: StockOrder[]) => {
         this.stockOrders = stockOrders;
 

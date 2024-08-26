@@ -74,7 +74,7 @@
             </td>
             <td style="width:14%; min-width:8rem;">
               <span class="p-column-title">Total Quantity</span>
-              {{b.quantite}}
+              {{getTotalQuantity(b)}}
             </td>
 
             <td style="width:14%; min-width:8rem;" class="surface-overlay       ">
@@ -397,14 +397,11 @@
           <label for="etat">State</label>
           <input type="text" pInputText id="etat"  [(ngModel)]="bande.etat" required autofocus [ngClass]="{'ng-invalid ng-dirty' : submitted && !bande.etat}"/>
         </div>
-        <div class="field">
-          <label for="quantite">Total Quantity</label>
-          <p-inputNumber Id="quantite" mode="decimal" [minFractionDigits]="3" [(ngModel)]="bande.quantite"  [ngClass]="{'ng-invalid ng-dirty' : submitted && !bande.quantite}" ></p-inputNumber>
-        </div>
 <!--        <div class="field">-->
-<!--          <label for="quantiterefus">Quantity Refusal</label>-->
-<!--          <p-inputNumber Id="quantiterefus"  mode="decimal"  [(ngModel)]="bande.quantiteRefus"  [ngClass]="{'ng-invalid ng-dirty' : submitted && !bande.quantiteRefus}"></p-inputNumber>-->
+<!--          <label for="quantite">Total Quantity</label>-->
+<!--          <p-inputNumber Id="quantite" mode="decimal" [minFractionDigits]="3" [(ngModel)]="bande.quantite"  [ngClass]="{'ng-invalid ng-dirty' : submitted && !bande.quantite}" ></p-inputNumber>-->
 <!--        </div>-->
+
 
       </ng-template>
 
