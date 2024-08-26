@@ -10,6 +10,7 @@ import {RippleModule} from "primeng/ripple";
 import {ChipsModule} from "primeng/chips";
 import Swal from "sweetalert2";
 import {AuthenticationRequest} from "../../Models/authentication-request";
+import {ProgressBarModule} from "primeng/progressbar";
 
 @Component({
   selector: 'app-login',
@@ -21,7 +22,8 @@ import {AuthenticationRequest} from "../../Models/authentication-request";
     RouterLink,
     ButtonModule,
     RippleModule,
-    ChipsModule
+    ChipsModule,
+    ProgressBarModule
   ],
   templateUrl: './login.component.html',
   styleUrl: './login.component.css'
@@ -29,10 +31,11 @@ import {AuthenticationRequest} from "../../Models/authentication-request";
 })
 export class LoginComponent implements OnInit{
 
-  constructor(private loginService: LoginService,private router: Router) {
+  constructor(public loginService: LoginService,private router: Router) {
 
   }
   authentificationRequest:AuthenticationRequest=new AuthenticationRequest();
+  public hiddenSpinner:boolean= true;
 
 
   ngOnInit() {
@@ -43,8 +46,9 @@ export class LoginComponent implements OnInit{
 
 
  authUser(){
+    this.hiddenSpinner=false;
   this.loginService.loggdinUser(this.authentificationRequest)
-
+   this.authentificationRequest=new AuthenticationRequest();
 }
 
 getPassWord(){

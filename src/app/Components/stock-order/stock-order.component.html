@@ -15,7 +15,7 @@
 
       </p-toolbar>
 
-      <p-table #dt [loading]="loading" [value]="stockOrders" [columns]="cols"  responsiveLayout="scroll" [rows]="10" [globalFilterFields]="['id','name','calibre','terrain','quai','total','reference','saline','dateCreation','port']" [paginator]="true" [rowsPerPageOptions]="[10,20,30]" [showCurrentPageReport]="true" currentPageReportTemplate="Display  {first} to  {last} of  {totalRecords} entries" [(selection)]="selectedStockOrders" selectionMode="multiple" [rowHover]="true" dataKey="id">
+      <p-table #dt [loading]="loading" [value]="stockOrders" [columns]="cols"  responsiveLayout="scroll" [rows]="10" [globalFilterFields]="['id','reference','name','dateCreation','calibre','volumeSaline','volumeTerrain','volumePort','volumeQuai','volumeTotal']" [paginator]="true" [rowsPerPageOptions]="[10,20,30]" [showCurrentPageReport]="true" currentPageReportTemplate="Display  {first} to  {last} of  {totalRecords} entries" [(selection)]="selectedStockOrders" selectionMode="multiple" [rowHover]="true" dataKey="id">
         <ng-template pTemplate="caption">
           <div class="flex flex-column md:flex-row md:justify-content-between md:align-items-center">
             <h5 class="m-0">Stock Order management</h5>
@@ -38,11 +38,11 @@
             <th pSortableColumn="name">Name <p-sortIcon field="name"></p-sortIcon></th>
             <th pSortableColumn="dateCreation">Creation Date<p-sortIcon field="dateCreation"></p-sortIcon></th>
             <th pSortableColumn="calibre">Calibre <p-sortIcon field="calibre"></p-sortIcon></th>
-            <th pSortableColumn="saline">Saline volume <p-sortIcon field="saline"></p-sortIcon></th>
-            <th pSortableColumn="terrain">Terrain volume<p-sortIcon field="terrain"></p-sortIcon></th>
-            <th pSortableColumn="port">Port volume<p-sortIcon field="port"></p-sortIcon></th>
-            <th pSortableColumn="quai">Quai volume <p-sortIcon field="quai"></p-sortIcon></th>
-            <th pSortableColumn="total">Total volume<p-sortIcon field="total"></p-sortIcon></th>
+            <th pSortableColumn="volumeSaline">Saline volume <p-sortIcon field="volumeSaline"></p-sortIcon></th>
+            <th pSortableColumn="volumeTerrain">Terrain volume<p-sortIcon field="volumeTerrain"></p-sortIcon></th>
+            <th pSortableColumn="volumePort">Port volume<p-sortIcon field="volumePort"></p-sortIcon></th>
+            <th pSortableColumn="volumeQuai">Quai volume <p-sortIcon field="volumeQuai"></p-sortIcon></th>
+            <th pSortableColumn="volumeTotal">Total volume</th>
             <th></th>
           </tr>
         </ng-template>
@@ -455,7 +455,7 @@
                [value]="stockOrder.salines"
                [columns]="cols"
                responsiveLayout="scroll"
-               [globalFilterFields]="['surface','etat','id','emplacement','nom','dateCreation','reference','description']"
+               [globalFilterFields]="['id','dateCreation','pondName','volumeSaline','rainQuantityBengardene','temperature','observation']"
                [scrollable]="true"
                [tableStyle]="{ 'min-height': '25rem' }"
                [scrollHeight]="'400px'"
@@ -498,12 +498,12 @@
           <tr>
 
             <th pSortableColumn="id">Id <p-sortIcon field="id"></p-sortIcon></th>
-            <th pSortableColumn="reference">Date Creation<p-sortIcon field="reference"></p-sortIcon></th>
-            <th pSortableColumn="reference">Pond Name<p-sortIcon field="reference"></p-sortIcon></th>
-            <th pSortableColumn="description">Volume Saline <p-sortIcon field="description"></p-sortIcon></th>
-            <th pSortableColumn="description">Rain Quantity Bengardene <p-sortIcon field="description"></p-sortIcon></th>
-            <th pSortableColumn="description">Temperature <p-sortIcon field="description"></p-sortIcon></th>
-            <th pSortableColumn="description">Observation<p-sortIcon field="description"></p-sortIcon></th>
+            <th pSortableColumn="dateCreation">Date Creation<p-sortIcon field="dateCreation"></p-sortIcon></th>
+            <th pSortableColumn="pondName">Pond Name<p-sortIcon field="pondName"></p-sortIcon></th>
+            <th pSortableColumn="volumeSaline">Volume Saline <p-sortIcon field="volumeSaline"></p-sortIcon></th>
+            <th pSortableColumn="rainQuantityBengardene">Rain Quantity Bengardene <p-sortIcon field="rainQuantityBengardene"></p-sortIcon></th>
+            <th pSortableColumn="temperature">Temperature <p-sortIcon field="temperature"></p-sortIcon></th>
+            <th pSortableColumn="observation">Observation<p-sortIcon field="observation"></p-sortIcon></th>
 
             <th></th>
           </tr>

@@ -15,7 +15,7 @@ import {RegisterRequest} from "../Models/register-request";
 })
 export class LoginService {
 
-
+    hiddenSpinner:boolean=true;
   apiUrl=environment.apiUrl
   public Islogin: boolean=false;
   public  tokenKey: string="token";
@@ -26,14 +26,14 @@ public user:RegisterRequest=new RegisterRequest();
 
 
 async  loggdinUser(request:AuthenticationRequest) {
-
+this.hiddenSpinner=false;
     this.http.post<AuthenticationResponse>(`${this.apiUrl}/users/auth/authenticate`, request).subscribe(async (token: AuthenticationResponse) => {
       // console.log("response data :"+new JsonPipe().transform(token))
       if ((token != null && token != undefined) || true) {
 
         localStorage.setItem(this.tokenKey, token.access_token);
         await this.getUserConnect()
-
+this.hiddenSpinner=true;
       } else {
         Swal.fire({
           icon: "error",
@@ -43,6 +43,8 @@ async  loggdinUser(request:AuthenticationRequest) {
           confirmButtonText: 'Réessayer'
 
         });
+        this.hiddenSpinner=true;
+
       }
     }, error => {
       Swal.fire({
@@ -53,7 +55,7 @@ async  loggdinUser(request:AuthenticationRequest) {
         confirmButtonText: 'Réessayer'
 
       });
-
+      this.hiddenSpinner=true;
     }) ;
 
   }

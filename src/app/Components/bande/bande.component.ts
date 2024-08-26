@@ -34,6 +34,7 @@ import {RippleModule} from "primeng/ripple";
 import {TraitementStock} from "../../Models/traitement-stock";
 import {TraitementStockService} from "../../Services/traitement-stock.service";
 import {TransferToBand} from "../../Models/transfer-to-band";
+import {LoginService} from "../../Services/login.service";
 
 @Component({
   selector: 'app-bande',
@@ -614,4 +615,21 @@ console.log('=====>>>>> export: ',new JsonPipe().transform(bande))
     this.traitementStockService.deleteTraitementStock(traitementStock.id).subscribe(value =>     this.ListTraitementStock= this.ListTraitementStock.filter(traitement => traitement.id !== traitementStock.id))
 
   }
+
+  public getTotalQuantity(b: Bande) {
+    let totalTransfer:number=0;
+    let totalTraitment:number=0;
+
+    if(b.traitementStocks!=undefined){
+      totalTraitment= b.traitementStocks.reduce((sum, traitmentStock) => sum+traitmentStock.sortieB1+traitmentStock.sortieB2+traitmentStock.refus,0)
+    }
+    if(b.sbnlList!=undefined){
+      b.sbnlList?.forEach(sbnl => {
+        if(sbnl.transferToBands!=undefined)
+          totalTransfer +=sbnl.transferToBands.reduce((sum, transfer) => sum + transfer.quantityTransfer, 0)
+      } )}
+    return totalTransfer-totalTraitment;
+  }
+
+
 }
