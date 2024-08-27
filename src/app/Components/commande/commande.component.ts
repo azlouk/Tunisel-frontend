@@ -1,4 +1,4 @@
-import {Component, ElementRef, OnInit, ViewChild} from '@angular/core';
+import {Component,  OnInit} from '@angular/core';
 import {ButtonModule} from "primeng/button";
 import {DialogModule} from "primeng/dialog";
 import {InputTextModule} from "primeng/inputtext";
@@ -101,10 +101,8 @@ export class CommandeComponent implements OnInit{
   // ======********============
 
   commandes:Commande[] = [];
-  ListCommandes: Commande[] = [];
 
   commande:Commande={};
-  commandeReference:Commande={};
  updateCommande:Commande={};
   selectedCommandes:Commande[] = [];
 isUpdateCommande:boolean=false;
@@ -122,7 +120,6 @@ commandesCopy: Commande[]=[];
   referenceDialoge:boolean=false;
   visibleCommande: boolean=false;
   listcalibre:Column[]=[];
-  private selected: any;
   constructor(private router: Router,
               private messageService: MessageService,
               private commandeService :CommandeService,
@@ -266,13 +263,13 @@ commandesCopy: Commande[]=[];
   getAllCommandes() {
     this.loading=true ;
 
-    this.commandeService.getAllCommande().subscribe((ListCommande:  Commande[]) => {
+    this.commandeService.getAllCommandeDTO().subscribe((ListCommande:  Commande[]) => {
       this.commandes=ListCommande;
      this.commandesCopy=[... this.commandes]
-
-      this.loading=false ;
       this.getAllStockOrder();
       this.initiaTimeLine();
+      this.loading=false ;
+
     }, error => {
       console.log(error)});
         }
@@ -303,7 +300,6 @@ commandesCopy: Commande[]=[];
   //   else return total
   // }
 
-  protected readonly events = events;
 
 
   onActiveIndexChange(event: number) {
@@ -390,26 +386,9 @@ const total=this.getSumSalines(stockSelected)+stockSelected.volumeTerrain+stockS
 
     return  (TotalSaline-TotalTransferFromSaline) +TotalTransferToSaline;
   }
-  CalculeTotalInput() {
-    this.TotalHarv=0;
-    this.TotalTrQu=0;
-    this.TotalProd=0 ;
-    this.ListCommandes.forEach(com => com.ligneCommandes &&  com.ligneCommandes.forEach(l =>{
-
-      if(l.quantityRecolte)
-        this.TotalHarv+=parseFloat(l.quantityRecolte+'');
-      if(l.quantityProduction)
-        this.TotalProd+=parseFloat(l.quantityProduction+'')
-      if(l.quantiteTransfert)
-        this.TotalTrQu+=parseFloat(l.quantiteTransfert+'');
-
-    } ))
-  }
 
   CalculeTotalVolume(commande:Commande):number {
-    // this.TotalHarv=0;
-    // this.TotalTrQu=0;
-    // this.TotalProd=0 ;
+
     this.TotalVolume=0 ;
 commande.ligneCommandes?.forEach(l => {
   if(l.quantiteTransfert)
@@ -419,10 +398,7 @@ commande.ligneCommandes?.forEach(l => {
     return  this.TotalVolume;
 
     }
-  sortStockOrdersByCreationDateDesc() {
-    this.stockOrders.sort((a, b) => b.dateCreation.getTime() - a.dateCreation.getTime());
-    alert(new JsonPipe().transform("after: "+this.stockOrders))
-  }
+
 
   public verifyState(commande: Commande) {
 
@@ -432,7 +408,6 @@ commande.ligneCommandes?.forEach(l => {
 
   }
   listeLignesCommandes:LineCommande[]=[]
-  dataHeaders?:Column[];
   public OpenReferenceDialoge(commande: Commande) {
     this.commande=commande
     if (this.commande.calibre!=undefined)
