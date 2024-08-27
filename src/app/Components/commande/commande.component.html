@@ -133,25 +133,24 @@
             <ng-template pTemplate="content">
               <h3>More Details</h3>
 
-              <div class=" flex justify-content-end mb-4">
-                <button type="button" pButton pRipple icon="pi pi-file-pdf" (click)="SavePDF();" class="mr-2 p-button-secondary"
+              <div class=" flex justify-content-end  mb-4 align-items-center gap-2">
+
+
+
+
+                <label class="font-bold"> Choose Calibre : </label>
+                <p-dropdown [disabled]="true"
+                            [options]="listcalibre"
+                            [(ngModel)]="selectedColumnsCalibre"
+                            optionLabel="header"
+                            placeholder="{{selectedColumnsCalibre!==undefined?selectedColumnsCalibre.header:'0'}}"
+
+                            (ngModelChange)="caliber(selectedColumnsCalibre)"
+                />
+<!--                <div  >Calibre of Command: {{commande.calibre!==undefined?commande.calibre:'no calibre selected '}}</div>-->
+
+                <button type="button" pButton pRipple icon="pi pi-file-pdf" (click)="SavePDF();" class="mr-2 ml-4 p-button-secondary"
                         pTooltip="PDF" tooltipPosition="bottom"></button>
-
-
-<!--&lt;!&ndash;                  <label class="font-bold"> Choose Calibre : </label>&ndash;&gt;-->
-<!--&lt;!&ndash;                  <p-dropdown [disabled]="getToken()!=='ADMIN'"&ndash;&gt;-->
-<!--&lt;!&ndash;                              [options]="listcalibre"&ndash;&gt;-->
-<!--&lt;!&ndash;                              [(ngModel)]="selectedColumnsCalibre"&ndash;&gt;-->
-<!--&lt;!&ndash;                              optionLabel="header"&ndash;&gt;-->
-<!--&lt;!&ndash;                              placeholder="{{selectedColumnsCalibre!==undefined?selectedColumnsCalibre.header:'0'}}"&ndash;&gt;-->
-
-<!--&lt;!&ndash;                              (ngModelChange)="caliber(selectedColumnsCalibre)"&ndash;&gt;-->
-<!--&lt;!&ndash;                  />&ndash;&gt;-->
-<!--&lt;!&ndash;                  <div *ngIf="isUpdateCommande" >Calibre of Command: {{commande.calibre!==undefined?commande.calibre:'no calibre selected '}}</div>&ndash;&gt;-->
-<!--                </div>-->
-
-
-
               </div>
               <div class="card" >
 
