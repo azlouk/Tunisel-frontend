@@ -30,13 +30,14 @@
         <label class="font-bold mr-4">Filtre By Stock :</label>
         <p-dropdown [options]="stockOrders" [(ngModel)]="stockSelected" [editable]="true" optionLabel="nom" class="w-full" (ngModelChange)="filtreByStock(stockSelected)"></p-dropdown>
         </div>
+
         <div class="">
           <label class="font-bold mr-4">Volume Availble :</label>
           <label class="font-bold ">{{VolumeAvailble}}</label>
         </div>
       </div>
 
-      <p-table #dt [loading]="loading" [value]="commandes" [columns]="cols"  responsiveLayout="scroll" [rows]="10" [globalFilterFields]="['id','nom','etat','dateCommande']" [paginator]="true" [rowsPerPageOptions]="[10,20,30,200,500]" [showCurrentPageReport]="true" currentPageReportTemplate="Display from {first} to {last} of {totalRecords} items" [(selection)]="selectedCommandes" selectionMode="multiple" [rowHover]="true" dataKey="id">
+      <p-table #dt [loading]="loading"  [value]="commandes" [columns]="cols"  responsiveLayout="scroll" [rows]="10" [globalFilterFields]="['id','nom','etat','dateCommande']" [paginator]="true" [rowsPerPageOptions]="[10,20,30,200,500]" [showCurrentPageReport]="true" currentPageReportTemplate="Display from {first} to {last} of {totalRecords} items" [(selection)]="selectedCommandes" selectionMode="multiple" [rowHover]="true" dataKey="id">
         <ng-template pTemplate="caption">
           <div class="flex flex-column md:flex-row md:justify-content-between md:align-items-center">
             <h5 class="m-0">Order List </h5>

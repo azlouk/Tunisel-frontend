@@ -110,7 +110,7 @@ isUpdateCommande:boolean=false;
   selectedColumns: Column[]=[];
 commandesCopy: Commande[]=[];
   stockOrders: StockOrder[] = [];
-  stockSelected!: StockOrder;
+  stockSelected: StockOrder=new StockOrder();
 
   TotalHarv: number=0;
   TotalProd: number=0;
@@ -176,6 +176,7 @@ commandesCopy: Commande[]=[];
 
 
     this. getAllCommandes() ;
+    // this.getAllStockOrder();
 
     this.cols = [
       { field: 'id', header: 'id' },
@@ -207,7 +208,7 @@ commandesCopy: Commande[]=[];
     this.router.navigate([`/updateCommande/${commande.id}`]);
     this.isUpdateCommande=true;
     this.commande = { ...commande };
-    console.error(commande.datestart)
+
     this.updateCommande = { ...commande };
   }
 
@@ -273,6 +274,23 @@ commandesCopy: Commande[]=[];
     }, error => {
       console.log(error)});
         }
+  getAllStockOrder() {
+    this.stockOrderService.getAllStockOrder()
+      .subscribe((stockOrders: any[]) => {
+        this.initiaTimeLine();
+
+        this.stockOrders = stockOrders.map(stockOrder => ({
+
+          ...stockOrder,
+          dateCreation: new Date(stockOrder.dateCreation)
+
+        })).sort((a: StockOrder, b: StockOrder) => b.dateCreation.getTime() - a.dateCreation.getTime());
+        this.stockSelected = this.stockOrders[0];
+        this. filtreByStock( this.stockSelected );
+      }, error => {
+        console.log(error);
+      });
+  }
 
 
 
@@ -343,19 +361,6 @@ commandesCopy: Commande[]=[];
 
 
 
-  getAllStockOrder() {
-    this.stockOrderService.getAllStockOrder()
-      .subscribe((stockOrders: any[]) => {
-        this.stockOrders = stockOrders.map(stockOrder => ({
-          ...stockOrder,
-          dateCreation: new Date(stockOrder.dateCreation)
-        })).sort((a: StockOrder, b: StockOrder) => b.dateCreation.getTime() - a.dateCreation.getTime());
-        this.stockSelected = this.stockOrders[0];
-       this. filtreByStock( this.stockSelected );
-      }, error => {
-        console.log(error);
-      });
-  }
 
 
 
@@ -918,4 +923,9 @@ if (liste!=undefined){
 
     });
   }
+
+
+
+
+
 }

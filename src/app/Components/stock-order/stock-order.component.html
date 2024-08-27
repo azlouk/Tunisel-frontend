@@ -194,12 +194,9 @@
 
       <div class="">
         <label >Date Creation</label>
-        <p-calendar
-          [(ngModel)]="historyTransfer.dateCreation"
-          [showIcon]="true"
-          [showOnFocus]="false"
-          [dateFormat]="'dd-mm-yy'"
-          inputId="buttondisplay" />
+
+        <input  class="p-2 shadow-1" type="date" dateFormat="dd-MM-yyyy"    pInputText   [(ngModel)]="historyTransfer.dateCreation"  />
+
       </div>
       <div class=" ">
         <label >Starting point</label>
@@ -241,7 +238,7 @@
                [value]="stockOrder.listHistory"
                [columns]="cols"
                responsiveLayout="scroll"
-               [globalFilterFields]="['surface','etat','id','emplacement','nom','dateCreation','reference','description']"
+               [globalFilterFields]="['id','dateCreation','startingPoint','arrivingPoint','transferQuantity','rainQuantityZarzis','observation']"
                [scrollable]="true"
                [tableStyle]="{ 'min-height': '25rem' }"
                [scrollHeight]="'400px'"
@@ -285,12 +282,13 @@
           <tr>
 
             <th pSortableColumn="id">Id <p-sortIcon field="id"></p-sortIcon></th>
-            <th pSortableColumn="reference">Date Creation<p-sortIcon field="reference"></p-sortIcon></th>
-            <th pSortableColumn="description">Starting Point <p-sortIcon field="description"></p-sortIcon></th>
-            <th pSortableColumn="description">Arriving Point <p-sortIcon field="description"></p-sortIcon></th>
-            <th pSortableColumn="description">Transfer Quantity <p-sortIcon field="description"></p-sortIcon></th>
-            <th pSortableColumn="description">Rain Quantity Zarzis <p-sortIcon field="description"></p-sortIcon></th>
-            <th pSortableColumn="description">Observation <p-sortIcon field="description"></p-sortIcon></th>
+            <th pSortableColumn="dateCreation">Date Creation<p-sortIcon field="dateCreation"></p-sortIcon></th>
+            <th pSortableColumn="startingPoint">Starting Point <p-sortIcon field="startingPoint"></p-sortIcon></th>
+            <th pSortableColumn="arrivingPoint">Arriving Point <p-sortIcon field="arrivingPoint"></p-sortIcon></th>
+            <th pSortableColumn="transferQuantity">Transfer Quantity <p-sortIcon field="transferQuantity"></p-sortIcon></th>
+            <th pSortableColumn="rainQuantityZarzis">Rain Quantity Zarzis <p-sortIcon field="rainQuantityZarzis"></p-sortIcon></th>
+            <th pSortableColumn="observation">Observation <p-sortIcon field="observation"></p-sortIcon></th>
+
 
             <th></th>
           </tr>
@@ -306,12 +304,9 @@
             <td >
               <p-cellEditor>
                 <ng-template pTemplate="input">
-                  <p-calendar
-                    [(ngModel)]="history.dateCreation"
-                    [showIcon]="true"
-                    [showOnFocus]="false"
-                    [dateFormat]="'dd-mm-yy'"
-                    inputId="buttondisplay" />
+
+                  <input  class="p-2 shadow-1" type="date" dateFormat="dd-MM-yyyy"    pInputText   [(ngModel)]="history.dateCreation"  />
+
 
                 </ng-template>
                 <ng-template pTemplate="output">
