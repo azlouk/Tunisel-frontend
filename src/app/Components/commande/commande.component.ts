@@ -32,6 +32,7 @@ import jsPDF from "jspdf";
 import html2canvas from "html2canvas";
 import autoTable from "jspdf-autotable";
 import Swal from "sweetalert2";
+import {TamisService} from "../../Services/tamis.service";
 
 
 export interface Column {
@@ -120,11 +121,13 @@ commandesCopy: Commande[]=[];
   VolumeAvailble: number=0;
   referenceDialoge:boolean=false;
   visibleCommande: boolean=false;
-
+  listcalibre:Column[]=[];
+  private selected: any;
   constructor(private router: Router,
               private messageService: MessageService,
               private commandeService :CommandeService,
-              private stockOrderService:StockOrderService) {}
+              private stockOrderService:StockOrderService,
+              private tamisService:TamisService) {}
 
   ngOnInit() {
     this.datenow=new Date() ;
@@ -432,6 +435,9 @@ commande.ligneCommandes?.forEach(l => {
   dataHeaders?:Column[];
   public OpenReferenceDialoge(commande: Commande) {
     this.commande=commande
+    if (this.commande.calibre!=undefined)
+
+    this.getCalibre();
     this.selectedColumns=commande.dataHeaders || [];
 let liste= commande.ligneCommandes?.filter(lc => {
       if (lc.analysePhysique != null) {
@@ -917,5 +923,24 @@ if (liste!=undefined){
       return [];
     }
   }
+  caliber(selectedColumnsCalibre: any) {
+    this.selectedColumnsCalibre=selectedColumnsCalibre ;
+  }
+  getCalibre() {
 
+    this.tamisService.getDistinctCalibres().subscribe(value => {
+
+      value.forEach((value1: number) => {
+        if(this.listcalibre.length<value.length){
+          this.listcalibre.push({ id: value1, field: '', header: value1.toString() });}
+        // if(this.isUpdateCommande){
+          if(value1.toString()==this.commande.calibre){
+            this.selectedColumnsCalibre={ id: value1, field: '', header: value1.toString() }
+
+          }
+        // }
+      });
+
+    });
+  }
 }
