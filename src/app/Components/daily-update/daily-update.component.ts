@@ -34,34 +34,42 @@ import {Production} from "../../Models/production";
   templateUrl: './daily-update.component.html',
   styleUrl: './daily-update.component.css'
 })
-export class DailyUpdateComponent implements OnInit{
+export class DailyUpdateComponent implements OnInit {
 
 
   dateToday: Date = new Date();
-  public date: Date=new Date();
-  listDateDaily:DateDaily[]=[];
+  public date: Date = new Date();
+  listDateDaily: DateDaily[] = [];
   @ViewChild("pdfpuit") htmlContent: ElementRef | undefined;
-  constructor(private dailyUpdateService:DailyUpdateService ) {
+  loadDaily: boolean = false;
+
+  constructor(private dailyUpdateService: DailyUpdateService) {
   }
+
   public ngOnInit(): void {
 
 
   }
+
   public getDataByDay(date: Date) {
-    this.listDateDaily=[];
-    const month=this.getMonthFromDateString(this.date);
-    const year=this.getYearFromDateString(this.date);
-      this.dailyUpdateService.getDataByDay(month,year).subscribe(value => {
-        this.listDateDaily = value
-        console.log(new JsonPipe().transform(this.listDateDaily))
-          this.getuniqueCalibresProduction();
-          this.getuniqueCalibresTransfer();
-      })
+    this.listDateDaily = [];
+    const month = this.getMonthFromDateString(this.date);
+    const year = this.getYearFromDateString(this.date);
+    this.loadDaily = true;
+    this.dailyUpdateService.getDataByDay(month, year).subscribe(value => {
+      this.listDateDaily = value
+      this.loadDaily = false
+      console.log(new JsonPipe().transform(this.listDateDaily))
+      this.getuniqueCalibresProduction();
+      this.getuniqueCalibresTransfer();
+    })
   }
+
   getMonthFromDateString(dateS: Date): number {
     const date = new Date(dateS);
     return date.getMonth() + 1;
   }
+
   getYearFromDateString(dateS: Date): number {
     const date = new Date(dateS);
     return date.getFullYear();
@@ -79,37 +87,39 @@ export class DailyUpdateComponent implements OnInit{
   //       pdf.save('Print_' + Math.random() + '.pdf');
   //     });
   //   }
-  // }
-
   public SavePDF(): void {
     if (this.htmlContent) {
-      html2canvas(this.htmlContent.nativeElement, { scale: 1 }).then((canvas) => {
-        const imgWidth = 210; // PDF width in mm
-        const pageHeight = 297; // PDF height in mm
-        const imgHeight = (canvas.height * imgWidth) / canvas.width; // Calculating image height while maintaining aspect ratio
-        const heightLeft = imgHeight;
+      html2canvas(this.htmlContent.nativeElement, {scale: 1}).then((canvas) => {
+        const imgData = canvas.toDataURL('image/png');
         const pdf = new jsPDF('p', 'mm', 'a4');
-        let position = 0;
+        const pageWidth = pdf.internal.pageSize.getWidth();
+        const pageHeight = pdf.internal.pageSize.getHeight();
+        const imgWidth = pageWidth - 4; // Adjust for margins
+        const imgHeight = (canvas.height * imgWidth) / canvas.width; // Maintain aspect ratio
 
-        if (heightLeft <= pageHeight) {
-          // If content fits on one page
-          pdf.addImage(canvas.toDataURL('image/png'), 'PNG', 0, 0, imgWidth, imgHeight);
-        } else {
-          // If content exceeds one page
-          while (position < heightLeft) {
-            const imgData = canvas.toDataURL('image/png');
-            pdf.addImage(imgData, 'PNG', 0, position, imgWidth, imgHeight);
-            position -= pageHeight; // Move position to the next page
-            if (position < heightLeft) {
-              pdf.addPage(); // Add a new page if there's more content
+        let position = 0;
+        if (imgHeight > pageHeight) {
+          // If the content is taller than a single page, split it into multiple pages
+          let remainingHeight = imgHeight;
+          while (remainingHeight > 0) {
+            pdf.addImage(imgData, 'PNG', 2, position, imgWidth, imgHeight);
+            remainingHeight -= pageHeight;
+            position -= pageHeight;
+            if (remainingHeight > 0) {
+              pdf.addPage();
             }
           }
+        } else {
+          // If the content fits on a single page
+          pdf.addImage(imgData, 'PNG', 2, 2, imgWidth, imgHeight);
         }
 
         pdf.save('Print_' + Math.random() + '.pdf');
       });
     }
   }
+
+
 
 
   getuniqueCalibresProduction(): number[] {
@@ -131,8 +141,8 @@ export class DailyUpdateComponent implements OnInit{
     return Array.from(calibres);
   }
 
-  public getLengthofObeservation(observation: string) {
+  public getLengthOfObservation(observation: any) {
 
-    return observation.length!=0 || observation.trim()!="";
+    return observation && observation !== 'null' && observation.trim() !== '';
   }
 }

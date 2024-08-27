@@ -40,7 +40,7 @@
         </div>
       </div>
 
-      <p-table class="" #dt styleClass="p-datatable-gridlines" [value]="listDateDaily" responsiveLayout="scroll" [globalFilterFields]="['dateCreation']" dataKey="id">
+      <p-table class="" [loading]="loadDaily" #dt styleClass="p-datatable-gridlines" [value]="listDateDaily" responsiveLayout="scroll" [globalFilterFields]="['dateCreation']" dataKey="id">
         <ng-template pTemplate="header">
           <tr>
             <th rowspan="2" pSortableColumn="date">Date <p-sortIcon field="date"></p-sortIcon></th>
@@ -135,9 +135,12 @@
             <td>
               <div class="flex flex-column gap-2">
 
-             <span *ngIf="getLengthofObeservation(dateDaily.observationsHarvest)"><span class="font-bold">Observation Harest:</span>  {{ dateDaily.observationsHarvest }}</span>
-             <span *ngIf="getLengthofObeservation(dateDaily.observationsProduction)"><span class="font-bold">Observation Production:</span>  {{ dateDaily.observationsProduction }}</span>
-             <span *ngIf="getLengthofObeservation(dateDaily.observationsTransfer)"><span class="font-bold">Observation Transfer:</span>  {{ dateDaily.observationsTransfer }}</span>
+             <span *ngIf="getLengthOfObservation(dateDaily.observationsHarvest)"><span class="font-bold">Observation Harest:</span>  {{ dateDaily.observationsHarvest }}</span>
+             <span *ngIf="getLengthOfObservation(dateDaily.observationsProduction)"><span class="font-bold">Observation Production:</span>  {{ dateDaily.observationsProduction }}</span>
+             <span *ngIf="getLengthOfObservation(dateDaily.observationsTransfer)">
+               <span class="font-bold">Observation Transfer:</span>
+               {{ dateDaily.observationsTransfer }}
+             </span>
 
               </div>
 

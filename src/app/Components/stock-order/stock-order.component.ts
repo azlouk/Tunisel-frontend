@@ -437,7 +437,7 @@ backUpHistory:HistoryTransfer=new HistoryTransfer()
   messages: any;
   public selectedBassin: Bassin | undefined={};
   public updateHistory( history: HistoryTransfer) {
-this.backUpHistory=new HistoryTransfer(history.id,history.dateCreation,history.startingPoint,history.arrivingPoint,history.transferQuantity,history.observation,history.rainQuantityZarzis);
+this.backUpHistory=new HistoryTransfer();
   }
 
   public saveUpdateHistory(history: HistoryTransfer) {
