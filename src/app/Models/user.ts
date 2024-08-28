@@ -9,7 +9,7 @@
 // }
 import {Role} from "../Enum/Role";
 
-class User {
+export class User {
   id: number;
   nom: string;
   telephone: number;
