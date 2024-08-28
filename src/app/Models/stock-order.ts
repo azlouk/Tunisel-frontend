@@ -4,35 +4,35 @@ import {Saline} from "./saline";
 import {HistoryTransfer} from "./history-transfer";
 
 
-export class StockOrder implements Object{
+export class StockOrder{
+   id: number;
+   reference: string;
+   dateCreation: Date;
+   nom: string;
+   calibre: number;
 
-id: number;
-reference: string;
-dateCreation: Date;
-nom: string;
-calibre: number;
-salines: Saline[];
-volumeTerrain: number;
-volumePort: number;
-volumeQuai: number;
-bassinList: Bassin[];
-commandeList:Commande[];
- listHistory:HistoryTransfer[];
+   volumeTerrain: number;
+   volumePort: number;
+   volumeQuai: number;
 
-  constructor(_id: number=0, _reference: string="", _dateCreation: Date=new Date(), _nom: string="", _calibre: number=0, _salines: Saline[]=[], _volumeTerrain: number=0, _volumePort: number=0, _volumeQuai: number=0, _bassinList: Bassin[]=[], _commandeList: Commande[]=[], _listHistory: HistoryTransfer[]=[]) {
+   bassinList: Bassin[];
+   salines: Saline[];
+   listHistory: HistoryTransfer[];
+
+  constructor(_id: number=0, _reference: string="", _dateCreation: Date=new Date(), _nom: string="", _calibre: number=0, _volumeTerrain: number=0, _volumePort: number=0, _volumeQuai: number=0, _bassinList: Bassin[]=[], _salines: Saline[]=[], _listHistory: HistoryTransfer[]=[]) {
     this.id = _id;
     this.reference = _reference;
     this.dateCreation = _dateCreation;
     this.nom = _nom;
     this.calibre = _calibre;
-    this.salines = _salines;
     this.volumeTerrain = _volumeTerrain;
     this.volumePort = _volumePort;
     this.volumeQuai = _volumeQuai;
     this.bassinList = _bassinList;
-    this.commandeList = _commandeList;
+    this.salines = _salines;
     this.listHistory = _listHistory;
   }
+
 
   public get _id(): number {
     return this.id;
@@ -40,14 +40,6 @@ commandeList:Commande[];
 
   public set _id(value: number) {
     this.id = value;
-  }
-
-  public get _listHistory(): HistoryTransfer[] {
-    return this.listHistory;
-  }
-
-  public set _listHistory(value: HistoryTransfer[]) {
-    this.listHistory = value;
   }
 
   public get _reference(): string {
@@ -82,14 +74,6 @@ commandeList:Commande[];
     this.calibre = value;
   }
 
-  public get _salines(): Saline[] {
-    return this.salines;
-  }
-
-  public set _salines(value: Saline[]) {
-    this.salines = value;
-  }
-
   public get _volumeTerrain(): number {
     return this.volumeTerrain;
   }
@@ -122,15 +106,19 @@ commandeList:Commande[];
     this.bassinList = value;
   }
 
-  public get _commandeList(): Commande[] {
-    return this.commandeList;
+  public get _salines(): Saline[] {
+    return this.salines;
   }
 
-  public set _commandeList(value: Commande[]) {
-    this.commandeList = value;
+  public set _salines(value: Saline[]) {
+    this.salines = value;
   }
 
+  public get _listHistory(): HistoryTransfer[] {
+    return this.listHistory;
+  }
 
-
-
+  public set _listHistory(value: HistoryTransfer[]) {
+    this.listHistory = value;
+  }
 }

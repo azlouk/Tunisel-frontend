@@ -1,12 +1,4 @@
-// export interface User {
-//   id?: number;
-//   nom?: string;
-//   telephone?: number;
-//   poste?: string;
-//   pseudo?: string;
-//   mp?: string;
-//  userType?: String;
-// }
+
 import {Role} from "../Enum/Role";
 
 export class User {

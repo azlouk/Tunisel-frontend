@@ -5,6 +5,8 @@ import {Observable} from "rxjs";
 import {StockOrder} from "../Models/stock-order";
 import {Saline} from "../Models/saline";
 import {getKeyToken} from "../../main";
+import {LoginService} from "./login.service";
+import {JsonPipe} from "@angular/common";
 
 @Injectable({
   providedIn: 'root'
@@ -48,6 +50,7 @@ export class StockOrderService {
 
 
   addStockOrder(stockOrder: StockOrder) : Observable<StockOrder>{
+    console.log("----> :"+new JsonPipe().transform(stockOrder))
     const token = getKeyToken();
     if (token) {
       const headers = new HttpHeaders().set('Authorization', `Bearer ${token}`).set("Content-Type", "application/json; charset=utf8");
