@@ -400,12 +400,9 @@
     <div *ngIf="getToken()=='ADMIN'" class="flex justify-content-between align-items-center gap-2 ">
       <div class="">
         <label >Date Creation</label>
-        <p-calendar
-          [(ngModel)]="saline.dateCreation"
-          [showIcon]="true"
-          [showOnFocus]="false"
-          [dateFormat]="'dd-mm-yy'"
-          inputId="buttondisplay" />
+
+        <input  class="p-2 shadow-1" type="date" dateFormat="dd-MM-yyyy"    pInputText   [(ngModel)]="saline.dateCreation"  />
+
       </div>
      <div>
        <label >Pond Available</label>
@@ -514,12 +511,8 @@
             <td >
               <p-cellEditor>
                 <ng-template pTemplate="input">
-                  <p-calendar
-                    [(ngModel)]="saline.dateCreation"
-                    [showIcon]="true"
-                    [showOnFocus]="false"
-                    [dateFormat]="'dd-mm-yy'"
-                    inputId="buttondisplay" />
+                  <input  class="p-2 shadow-1" type="date" dateFormat="dd-MM-yyyy"    pInputText   [(ngModel)]="saline.dateCreation"  />
+
                 </ng-template>
                 <ng-template pTemplate="output">
                   {{saline.dateCreation|date:'dd-MM-yy'}}

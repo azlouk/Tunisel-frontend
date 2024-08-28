@@ -422,23 +422,23 @@ this.backUpHistory=new HistoryTransfer(history.id,history.dateCreation,history.s
 
   }
 
-  public saveUpdateHistory(history: HistoryTransfer) {
-    console.error(this.backUpHistory)
-    console.log(history)
-    this.startingPoint=   this.getTransferAttributsByLabel(history.startingPoint);
-    this.arrivingPoint=   this.getTransferAttributsByLabel(history.arrivingPoint);
-    if(this.backUpHistory.transferQuantity<history.transferQuantity){
 
-   this.TransferQuantity=history.transferQuantity-this.backUpHistory.transferQuantity;
+  public saveUpdateHistory(history: HistoryTransfer) {
+    // console.error(this.backUpHistory)
+    // console.log(history)
+    if(this.backUpHistory.transferQuantity<history.transferQuantity){
+      this.startingPoint=   this.getTransferAttributsByLabel(history.startingPoint);
+      this.arrivingPoint=   this.getTransferAttributsByLabel(history.arrivingPoint);
+      this.TransferQuantity=history.transferQuantity-this.backUpHistory.transferQuantity;
 
     } else if(this.backUpHistory.transferQuantity>history.transferQuantity){
-
+      this.arrivingPoint=   this.getTransferAttributsByLabel(history.startingPoint);
+      this. startingPoint=   this.getTransferAttributsByLabel(history.arrivingPoint);
       this.TransferQuantity=this.backUpHistory.transferQuantity-history.transferQuantity;
     }
     this.saveQuantityTranferStarAndArriving();
     this.historyTransfer=new HistoryTransfer();
   }
-
     public deleteHistory(history: HistoryTransfer) {
 
       this.TransferQuantity=history.transferQuantity;
