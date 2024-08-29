@@ -375,6 +375,7 @@ commandesCopy: Commande[]=[];
       return commande.stockOrder && commande.stockOrder.id === stockSelected.id;
     });
     this.calculVolumeAvailble(stockSelected);
+    this.getAllCommandesByStockOrdersId(stockSelected.id)
 
   }
 
