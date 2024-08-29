@@ -116,4 +116,14 @@ export class CommandeService {
     return this.http.get<LineCommande[]>(`${this.apiUrl}/commandes/linesCommandesBande/${bandeId}`, {headers}) ;
   }else {
       return  new Observable<any>()}}
+
+
+
+  getAllCommandeByStockOrderId(stockOrderId:number): Observable<Commande[]> {
+    const token = getKeyToken();
+    if (token) {
+      const headers = new HttpHeaders().set('Authorization', `Bearer ${token}`).set("Content-Type", "application/json; charset=utf8");
+      return this.http.get<Commande[]>(`${this.apiUrl}/commandes/byStockOrder/${stockOrderId}`, {headers}) ;
+    }else {
+      return  new Observable<any>()}}
 }

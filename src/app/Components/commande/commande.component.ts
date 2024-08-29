@@ -110,7 +110,7 @@ isUpdateCommande:boolean=false;
   selectedColumns: Column[]=[];
 commandesCopy: Commande[]=[];
   stockOrders: StockOrder[] = [];
-  stockSelected: StockOrder=new StockOrder();
+  stockSelected!: StockOrder;
 
   TotalHarv: number=0;
   TotalProd: number=0;
@@ -225,7 +225,7 @@ commandesCopy: Commande[]=[];
         () => {
           this.messageService.add({ severity: 'success', summary: 'Successful', detail: 'User Deleted', life: 3000 });
 
-          this.getAllCommandes();
+          this.getAllCommandes(this.stockSelected.id);
           if(this.commande.stockOrder)
             this.calculVolumeAvailble(this.commande.stockOrder);
         },
@@ -243,7 +243,7 @@ commandesCopy: Commande[]=[];
       this.commandeService.deleteCommande(this.commande.id).subscribe(() => {
         console.log("Command Deleted")
         this.messageService.add({ severity: 'success', summary: 'Successful', detail: 'Command Deleted', life: 3000 });
-        this.getAllCommandes();
+        this.getAllCommandes(this.stockSelected.id);
         if(this.commande.stockOrder)
         this.calculVolumeAvailble(this.commande.stockOrder);
       });
@@ -261,16 +261,12 @@ commandesCopy: Commande[]=[];
     table.filterGlobal((event.target as HTMLInputElement).value, 'contains');
   }
 
-  getAllCommandes() {
+  getAllCommandes(id:number) {
     this.loading=true ;
-
-    this.commandeService.getAllCommandeDTO().subscribe((ListCommande:  Commande[]) => {
+    this.commandeService.getAllCommandeByStockOrderId(id).subscribe((ListCommande:  Commande[]) => {
       this.commandes=ListCommande;
     this.commandesCopy=[... this.commandes]
-
       this.initiaTimeLine();
-
-
       this.loading=false ;
 
     }, error => {
@@ -289,7 +285,7 @@ commandesCopy: Commande[]=[];
         })).sort((a: StockOrder, b: StockOrder) => b.dateCreation.getTime() - a.dateCreation.getTime());
         this.stockSelected = this.stockOrders[0];
         this. filtreByStock( this.stockSelected );
-        this.getAllCommandes()
+        this.getAllCommandes(this.stockSelected.id)
       }, error => {
         console.log(error);
       });
