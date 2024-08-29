@@ -283,12 +283,14 @@ export class StockOrderComponent implements OnInit{
       this.TransferDialog=true;
       this.stockOrder=stockOrder;
     this.isUpdateStockOrder=true;
+    this.historyTransfer=new HistoryTransfer();
   }
  AddToSalineStockOrder(stockOrder: StockOrder) {
     this.AddQuantityToSaline=0;
     this.AddToSalineDialog=true;
     this.stockOrder=stockOrder;
     this.isUpdateStockOrder=true;
+   this.saline=new Saline()
 
 
   }
@@ -422,7 +424,6 @@ this.backUpHistory=new HistoryTransfer(history.id,history.dateCreation,history.s
 
   }
 
-
   public saveUpdateHistory(history: HistoryTransfer) {
     // console.error(this.backUpHistory)
     // console.log(history)
@@ -435,16 +436,19 @@ this.backUpHistory=new HistoryTransfer(history.id,history.dateCreation,history.s
       this.arrivingPoint=   this.getTransferAttributsByLabel(history.startingPoint);
       this. startingPoint=   this.getTransferAttributsByLabel(history.arrivingPoint);
       this.TransferQuantity=this.backUpHistory.transferQuantity-history.transferQuantity;
-    }
+    }else {
+         this.historyTransferService.updateHistoryTransfer(history).subscribe(value => console.log(value))
+        }
     this.saveQuantityTranferStarAndArriving();
     this.historyTransfer=new HistoryTransfer();
   }
     public deleteHistory(history: HistoryTransfer) {
-
+      this.arrivingPoint=   this.getTransferAttributsByLabel(history.startingPoint);
+      this. startingPoint=   this.getTransferAttributsByLabel(history.arrivingPoint);
       this.TransferQuantity=history.transferQuantity;
       this.stockOrder.listHistory=this.stockOrder.listHistory.filter(value => value.id!==history.id) ;
       this.saveQuantityTranferStarAndArriving();
-      //this.historyTransferService.deleteHistoryTransfer(history.id).subscribe(value => this.getAllStockOrder())
+      this.historyTransferService.deleteHistoryTransfer(history.id).subscribe(value => this.getAllStockOrder())
 
   }
 

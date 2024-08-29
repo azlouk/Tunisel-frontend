@@ -7,7 +7,7 @@
           <div class="my-2">
             <button *ngIf="getToken()=='ADMIN'" keep pButton pRipple label="Add" icon="pi pi-plus" class="p-button-success mr-2" (click)="openNew()"></button>
             <button *ngIf="getToken()=='ADMIN'" keep pButton pRipple label="Delete" icon="pi pi-trash" class="p-button-danger mr-2" (click)="deleteSelectedAnalysesPhysiques()" [disabled]="!selectedCommandes || !selectedCommandes.length"></button>
-            <button pButton pRipple label="Refresh" icon="pi pi-refresh" class="p-button-primary mr-2" (click)="getAllCommandes()"  ></button>
+<!--            <button pButton pRipple label="Refresh" icon="pi pi-refresh" class="p-button-primary mr-2" (click)="getAllCommandes()"  ></button>-->
 
           </div>
         </ng-template>
