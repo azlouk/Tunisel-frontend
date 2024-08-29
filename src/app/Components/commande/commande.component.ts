@@ -225,7 +225,7 @@ commandesCopy: Commande[]=[];
         () => {
           this.messageService.add({ severity: 'success', summary: 'Successful', detail: 'User Deleted', life: 3000 });
 
-          this.getAllCommandes(this.stockSelected.id);
+          this.getAllCommandesByStockOrdersId(this.stockSelected.id);
           if(this.commande.stockOrder)
             this.calculVolumeAvailble(this.commande.stockOrder);
         },
@@ -243,7 +243,7 @@ commandesCopy: Commande[]=[];
       this.commandeService.deleteCommande(this.commande.id).subscribe(() => {
         console.log("Command Deleted")
         this.messageService.add({ severity: 'success', summary: 'Successful', detail: 'Command Deleted', life: 3000 });
-        this.getAllCommandes(this.stockSelected.id);
+        this.getAllCommandesByStockOrdersId(this.stockSelected.id);
         if(this.commande.stockOrder)
         this.calculVolumeAvailble(this.commande.stockOrder);
       });
@@ -261,7 +261,7 @@ commandesCopy: Commande[]=[];
     table.filterGlobal((event.target as HTMLInputElement).value, 'contains');
   }
 
-  getAllCommandes(id:number) {
+  getAllCommandesByStockOrdersId(id:number) {
     this.loading=true ;
     this.commandeService.getAllCommandeByStockOrderId(id).subscribe((ListCommande:  Commande[]) => {
       this.commandes=ListCommande;
@@ -285,7 +285,7 @@ commandesCopy: Commande[]=[];
         })).sort((a: StockOrder, b: StockOrder) => b.dateCreation.getTime() - a.dateCreation.getTime());
         this.stockSelected = this.stockOrders[0];
         this. filtreByStock( this.stockSelected );
-        this.getAllCommandes(this.stockSelected.id)
+        this.getAllCommandesByStockOrdersId(this.stockSelected.id)
       }, error => {
         console.log(error);
       });
