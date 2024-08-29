@@ -93,8 +93,8 @@ export class StockOrderComponent implements OnInit{
   TransferAttributsStart:any[]=[]
   TransferAttributsEnd:any[]=[]
   stockOrder!: StockOrder;
- saline: Saline=new Saline();
- historyTransfer: HistoryTransfer=new HistoryTransfer();
+  saline: Saline=new Saline();
+  historyTransfer: HistoryTransfer=new HistoryTransfer();
   dateStartTransfer!:Date;
   dateEndTransfer!:Date;
   totalTransferFiltree:number=0;
@@ -113,7 +113,7 @@ export class StockOrderComponent implements OnInit{
                 private datepipe:DatePipe,
                 private historyTransferService :HistoryTransferService) {
 
-   }
+  }
 
   ngOnInit() {
     this.TransferAttributs= [
@@ -212,7 +212,7 @@ export class StockOrderComponent implements OnInit{
 
       console.error(this.stockOrder)
 
-        this.stockOrderService.updateStockOrder(this.stockOrder).subscribe(() =>{ this.getAllStockOrder();});
+      this.stockOrderService.updateStockOrder(this.stockOrder).subscribe(() =>{ this.getAllStockOrder();});
 
 
       this.isUpdateStockOrder=false;
@@ -255,21 +255,21 @@ export class StockOrderComponent implements OnInit{
   }
 
   protected readonly getToken = getToken;
- startingPoint: any;
- arrivingPoint: any;
- TransferQuantity: any;
- AddQuantityToSaline: any;
+  startingPoint: any;
+  arrivingPoint: any;
+  TransferQuantity: any;
+  AddQuantityToSaline: any;
 
 
   calculTotalVolume(stockOrder:StockOrder):number {
 
-  return this.getSumSalines(stockOrder)+stockOrder.volumeTerrain+stockOrder.volumePort+stockOrder.volumeQuai;
+    return this.getSumSalines(stockOrder)+stockOrder.volumeTerrain+stockOrder.volumePort+stockOrder.volumeQuai;
 
   }
   // ===================Sum=========================
 
   getSumSalines(stockOrder:StockOrder){
-   const TotalSaline= stockOrder.salines.reduce((sum, saline) => sum+saline.volumeSaline,0)
+    const TotalSaline= stockOrder.salines.reduce((sum, saline) => sum+saline.volumeSaline,0)
     const TotalTransferFromSaline=stockOrder.listHistory.filter(lh=>lh.startingPoint=='Saline volume').reduce((sum, history) => sum+history.transferQuantity,0)
     const TotalTransferToSaline=stockOrder.listHistory.filter(lh=>lh.arrivingPoint=='Saline volume').reduce((sum, history) => sum+history.transferQuantity,0)
 
@@ -280,29 +280,29 @@ export class StockOrderComponent implements OnInit{
   public salines: any;
   public selectedSalines: any;
   transferStockOrder(stockOrder: StockOrder) {
-      this.TransferDialog=true;
-      this.stockOrder=stockOrder;
+    this.TransferDialog=true;
+    this.stockOrder=stockOrder;
     this.isUpdateStockOrder=true;
     this.historyTransfer=new HistoryTransfer();
   }
- AddToSalineStockOrder(stockOrder: StockOrder) {
+  AddToSalineStockOrder(stockOrder: StockOrder) {
     this.AddQuantityToSaline=0;
     this.AddToSalineDialog=true;
     this.stockOrder=stockOrder;
     this.isUpdateStockOrder=true;
-   this.saline=new Saline()
+    this.saline=new Saline()
 
 
   }
   getSalinesByStockOrder(){
     this.stockOrderService.getSalinesByStockOrder(this.stockOrder.id).subscribe(value => this.stockOrder.salines=value)
-}
-hideDialogTransfer() {
+  }
+  hideDialogTransfer() {
     this.TransferDialog=false;
 
   }hideDialogAddToSaline() {
     this.AddToSalineDialog=false;
-
+this.getAllStockOrder();
   }
 
 
@@ -313,11 +313,13 @@ hideDialogTransfer() {
 
     if (this.TransferQuantity && this.startingPoint && this.arrivingPoint) {
 
-        this.historyTransfer.startingPoint = this.startingPoint.label;
-        this.historyTransfer.arrivingPoint = this.arrivingPoint.label;
-        this.historyTransfer.transferQuantity = this.TransferQuantity;
-        this.stockOrder.listHistory.push((this.historyTransfer))
-        this.saveQuantityTranferStarAndArriving();
+      this.historyTransfer.startingPoint = this.startingPoint.label;
+      this.historyTransfer.arrivingPoint = this.arrivingPoint.label;
+      this.historyTransfer.transferQuantity = this.TransferQuantity;
+      this.stockOrder.listHistory.push((this.historyTransfer))
+      this.saveQuantityTranferStarAndArriving().then(value => {
+       value!=null && value!=undefined ? this.stockOrder=value:this.getAllStockOrder() ;
+      });
 
 
     }else {
@@ -328,7 +330,7 @@ hideDialogTransfer() {
     this.isUpdateStockOrder = false;
     this.historyTransfer=new HistoryTransfer()
   }
-saveQuantityTranferStarAndArriving(){
+   async  saveQuantityTranferStarAndArriving(){
     if(this.startingPoint ) {
       if (this.startingPoint.id === 0) {
         const departingVolume = 'volumeSaline';
@@ -367,11 +369,10 @@ saveQuantityTranferStarAndArriving(){
         }
       }
 
-      this.stockOrderService.updateStockOrder(this.stockOrder).subscribe(() => {
-        this.getAllStockOrder();
-      });
-    }else console.log(this.startingPoint)
-}
+      return await  this.stockOrderService.updateStockOrder(this.stockOrder).toPromise()
+    }
+    return null
+  }
 
 
 
@@ -379,21 +380,21 @@ saveQuantityTranferStarAndArriving(){
   public updateSaline(saline: Saline) {
 
     this.selectedBassin=this.stockOrder.bassinList.find(value => value.nom==saline.nomBassin);
-this.saline=saline;
+    this.saline=saline;
   }
 
-deleteSaline(saline: Saline) {
-this.salineService.deleteSaline(saline.id).subscribe(value => this.getSalinesByStockOrder())
+  deleteSaline(saline: Saline) {
+    this.salineService.deleteSaline(saline.id).subscribe(value => this.getSalinesByStockOrder())
   }
 
- saveSaline() {
+  saveSaline() {
 
 // @ts-ignore
-   this.saline.nomBassin=this.selectedBassin.nom;
-this.salineService.addSaline(this.saline, this.stockOrder.id).subscribe(value => {
-this.getSalinesByStockOrder();
-this.saline=new Saline()
-})
+    this.saline.nomBassin=this.selectedBassin.nom;
+    this.salineService.addSaline(this.saline, this.stockOrder.id).subscribe(value => {
+      this.getSalinesByStockOrder();
+      this.saline=new Saline()
+    })
 
   }
 
@@ -401,25 +402,25 @@ this.saline=new Saline()
   protected readonly StockOrder = StockOrder;
 
   public getTransferAttributsFiltredStart() {
-       if(this.startingPoint!=undefined)
+    if(this.startingPoint!=undefined)
       this.TransferAttributsEnd=this.TransferAttributs.filter(t=>t.id!=this.startingPoint.id)
-     else
-        this.TransferAttributsEnd=[...this.TransferAttributs] ;
-   }
-   public getTransferAttributsFiltredEnd() {
+    else
+      this.TransferAttributsEnd=[...this.TransferAttributs] ;
+  }
+  public getTransferAttributsFiltredEnd() {
 
-     if(this.arrivingPoint!=undefined)
+    if(this.arrivingPoint!=undefined)
       this.TransferAttributsStart=this.TransferAttributs.filter(t=>t.id!=this.arrivingPoint.id)
     else
       this.TransferAttributsStart=[...this.TransferAttributs] ;
   }
-backUpHistory!:HistoryTransfer;
+  backUpHistory!:HistoryTransfer;
   messages: any;
   public selectedBassin: Bassin | undefined={};
   public updateHistory( history: HistoryTransfer) {
 
     console.info(history)
-this.backUpHistory=new HistoryTransfer(history.id,history.dateCreation,history.startingPoint,history.arrivingPoint,history.transferQuantity,history.observation,history.rainQuantityZarzis);
+    this.backUpHistory=new HistoryTransfer(history.id,history.dateCreation,history.startingPoint,history.arrivingPoint,history.transferQuantity,history.observation,history.rainQuantityZarzis);
 
 
   }
@@ -437,24 +438,28 @@ this.backUpHistory=new HistoryTransfer(history.id,history.dateCreation,history.s
       this. startingPoint=   this.getTransferAttributsByLabel(history.arrivingPoint);
       this.TransferQuantity=this.backUpHistory.transferQuantity-history.transferQuantity;
     }else {
-         this.historyTransferService.updateHistoryTransfer(history).subscribe(value => console.log(value))
-        }
+      this.historyTransferService.updateHistoryTransfer(history).subscribe(value => console.log(value))
+    }
     this.saveQuantityTranferStarAndArriving();
     this.historyTransfer=new HistoryTransfer();
   }
-    public deleteHistory(history: HistoryTransfer) {
-      this.arrivingPoint=   this.getTransferAttributsByLabel(history.startingPoint);
-      this. startingPoint=   this.getTransferAttributsByLabel(history.arrivingPoint);
-      this.TransferQuantity=history.transferQuantity;
-      this.stockOrder.listHistory=this.stockOrder.listHistory.filter(value => value.id!==history.id) ;
-      this.saveQuantityTranferStarAndArriving();
-      this.historyTransferService.deleteHistoryTransfer(history.id).subscribe(value => this.getAllStockOrder())
+  public deleteHistory(history: HistoryTransfer) {
+    this.arrivingPoint=   this.getTransferAttributsByLabel(history.startingPoint);
+    this. startingPoint=   this.getTransferAttributsByLabel(history.arrivingPoint);
+    this.TransferQuantity=history.transferQuantity;
+    this.stockOrder.listHistory=this.stockOrder.listHistory.filter(value => value.id!==history.id) ;
+        this.saveQuantityTranferStarAndArriving().then(value => {
+          this.historyTransferService.deleteHistoryTransfer(history.id).subscribe(value => this.getAllStockOrder())
+          this.historyTransfer=new HistoryTransfer();
+        });
+
+
 
   }
 
   getTransferAttributsByLabel(label:string){
 
- return  this.TransferAttributs.find(value => value.label==label);
+    return  this.TransferAttributs.find(value => value.label==label);
 
   }
 
@@ -469,18 +474,18 @@ this.backUpHistory=new HistoryTransfer(history.id,history.dateCreation,history.s
   }
   getStockOrderById(){
     this.totalTransferFiltree=0;
-   this.totalSalineFiltree=0
+    this.totalSalineFiltree=0
     this.stockOrderService.getStockOrderById(this.stockOrder.id).subscribe(value => this.stockOrder=value)
   }
 
-   filtreListSalineWithDate(dateStartSaline: Date, dateEndSaline: Date) {
-     if (!this.stockOrder.salines) return;
+  filtreListSalineWithDate(dateStartSaline: Date, dateEndSaline: Date) {
+    if (!this.stockOrder.salines) return;
 
-     this.stockOrder.salines = this.stockOrder.salines.filter(history => {
+    this.stockOrder.salines = this.stockOrder.salines.filter(history => {
 
-       return new Date(dateStartSaline)  <= new Date(history.dateCreation) && new Date(dateEndSaline)  >= new Date(history.dateCreation);
-     });
-     this.stockOrder.salines.forEach(saline => this.totalSalineFiltree+=saline.volumeSaline)
+      return new Date(dateStartSaline)  <= new Date(history.dateCreation) && new Date(dateEndSaline)  >= new Date(history.dateCreation);
+    });
+    this.stockOrder.salines.forEach(saline => this.totalSalineFiltree+=saline.volumeSaline)
   }
 
   getTransferAttributs() {
@@ -488,4 +493,9 @@ this.backUpHistory=new HistoryTransfer(history.id,history.dateCreation,history.s
   }
 
   protected readonly Saline = Saline;
+
+
+  getIsHide() {
+    alert('ok')
+  }
 }
