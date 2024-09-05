@@ -218,8 +218,6 @@
     </div>
           </ng-template>
           <ng-template pTemplate="header" let-columns>
-
-
             <tr>
             <ng-container *ngFor="let col of columns" >
               <th *ngIf="col.id!==0"  >  {{col.header}}  </th>

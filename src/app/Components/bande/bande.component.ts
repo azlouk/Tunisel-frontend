@@ -171,9 +171,9 @@ export class BandeComponent {
     this.productDialog = true;
   }
 
-  deleteBande() {
+  deleteBande(bande :Bande) {
     this.deleteProductDialog = true;
-
+    this.bande=bande;
 
   }
 
@@ -201,11 +201,11 @@ export class BandeComponent {
     this.selectedBandes = [];
   }
 
-  confirmDelete(bande :Bande) {
+  confirmDelete() {
     this.deleteProductDialog = false;
 
-    if (bande.id!= null) {
-      this.bandeService.deleteBande(bande.id).subscribe(() => { this.bandes = this.bandes.filter(val => val.id !== bande.id);
+    if (this.bande.id!= null) {
+      this.bandeService.deleteBande(this.bande.id).subscribe(() => { this.bandes = this.bandes.filter(val => val.id !== this.bande.id);
         this.messageService.add({ severity: 'success', summary: 'successful', detail: 'Bande Deleted', life: 3000 });
 
       },error => {
@@ -569,12 +569,13 @@ console.log('=====>>>>> export: ',new JsonPipe().transform(bande))
   public selectedSbnl: Sbnl={};
 
 
-  public openDialog() {
+  public openDialog(b:Bande) {
     this.detailsDialog=true;
-
+      this.bande=b;
   }
 
   public AddTraitementStock(b: Bande) {
+    console.log("traitment")
     this.TraitementStockDialog=true;
     this.bande=b;
     this. getListTraitementStock();

@@ -30,6 +30,13 @@ import {TooltipModule} from "primeng/tooltip";
 import * as XLSX from "xlsx";
 import {writeFile} from "xlsx";
 import Swal from "sweetalert2";
+import {MultiSelectModule} from "primeng/multiselect";
+import {Crible} from "../../Models/crible";
+import {CribleService} from "../../Services/crible.service";
+import {Concasseur} from "../../Models/concasseur";
+import {ConcasseurService} from "../../Services/concasseur.service";
+import {transferArrayItem} from "@angular/cdk/drag-drop";
+import {RippleModule} from "primeng/ripple";
 
 @Component({
   selector: 'app-sbl',
@@ -49,13 +56,13 @@ import Swal from "sweetalert2";
     OverlayPanelModule,
     CheckboxModule,
     ListboxModule,
-    DatePipe, CommonModule, AutoFocusModule, TooltipModule,
+    DatePipe, CommonModule, AutoFocusModule, TooltipModule, MultiSelectModule, RippleModule,
 
   ],
   templateUrl: './sbl.component.html',
   styleUrl: './sbl.component.css'
 })
-export class SblComponent implements OnInit{
+export class SblComponent implements OnInit {
   productDialog: boolean = false;
 
   deleteProductDialog: boolean = false;
@@ -78,12 +85,12 @@ export class SblComponent implements OnInit{
   // ======********============
   sbls: Sbl[] = [];
 
-  sbl:Sbl={};
+  sbl: Sbl = {};
 
   selectedSbls: Sbl[] = [];
   bandes: Bande[] = [];
-  Selectetsbl:Sbl={}
-  private isUpdateSbl=false;
+  Selectetsbl: Sbl = {}
+  private isUpdateSbl = false;
   SelectAll: boolean = false;
   @ViewChild("pdfpuit") htmlContent: ElementRef | undefined;
   visiblePrint: boolean = false;
@@ -91,52 +98,93 @@ export class SblComponent implements OnInit{
 
   DatefiltrageStart: Date = new Date();
   DatefiltrageEnd: Date = new Date();
-  public  _selectedColumns: any[]=[];
+  public _selectedColumns: any[] = [];
+  cribles: Crible[] = [];
+  concasseurs: Concasseur[] = [];
+  calibres: number[] = [];
+  detailsDialog: boolean=false;
+  detailsDialogCrible: boolean=false;
+  detailsDialogConcasseur: boolean=false;
+  selectedBande:Bande={};
+  selectedCrible:Crible=new Crible();
+  selectedConcasseur:Concasseur=new Concasseur();
   @Input() get selectedColumns(): any[] {
     return this._selectedColumns;
   }
-  constructor( private messageService: MessageService,private sblService :SblService,private bandeService:BandeService) {}
+
+  constructor(private messageService: MessageService, private sblService: SblService,
+              private bandeService: BandeService,
+              private cribleService: CribleService,
+              private concasseurService: ConcasseurService) {
+  }
 
   ngOnInit() {
     this.colsfiltre = [
-      {id:0, field: 'reference', header: 'reference' ,hide:true},
-      { id:1, field: 'dateAnalyse', header: 'Date Analyse' ,hide:false},
-      {id:2,  field: 'temperature', header: 'Temperature ' ,hide:false},
-      { id:3, field: 'vent', header: 'wind ' ,hide:false},
-      { id:4, field: 'humidite', header: 'humidity' ,hide:false},
-      {id:5,  field: 'densite', header: 'Densite ',hide:false },
-      {id:6,  field: 'matiereEnSuspension', header: 'Suspended Matter ',hide:false },
-      { id:7, field: 'salinite', header: 'salinite ' ,hide:false},
-      {id:8,  field: 'calcium', header: 'Calcium ' ,hide:false},
-      { id:9, field: 'magnesium', header: 'Magnesium ' ,hide:false},
-      { id:10, field: 'sulfate', header: 'Sulfate ' ,hide:false},
-      { id:11, field: 'matiereInsoluble', header: 'Insoluble matter ',hide:false },
-      { id:12, field: 'potassium', header: 'Potassium ' ,hide:false},
-      { id:13, field: 'sodium', header: 'Sodium ' ,hide:false},
-      {id:14,  field: 'chlorure', header: 'Chlorure ' ,hide:false},
-      { id:15, field: 'ph', header: 'pH' ,hide:false},
-      { id:16, field: 'chlorureDeSodium', header: 'sodium chloride ' ,hide:false},
-      {id:17,  field: 'ferrocyanure', header: 'Ferrocyanure ' ,hide:false},
+      {id: 0, field: 'reference', header: 'reference', hide: true},
+      {id: 1, field: 'dateAnalyse', header: 'Date Analyse', hide: false},
+      {id: 2, field: 'temperature', header: 'Temperature ', hide: false},
+      {id: 3, field: 'vent', header: 'wind ', hide: false},
+      {id: 4, field: 'humidite', header: 'humidity', hide: false},
+      {id: 5, field: 'densite', header: 'Densite ', hide: false},
+      {id: 6, field: 'matiereEnSuspension', header: 'Suspended Matter ', hide: false},
+      {id: 7, field: 'salinite', header: 'salinite ', hide: false},
+      {id: 8, field: 'calcium', header: 'Calcium ', hide: false},
+      {id: 9, field: 'magnesium', header: 'Magnesium ', hide: false},
+      {id: 10, field: 'sulfate', header: 'Sulfate ', hide: false},
+      {id: 11, field: 'matiereInsoluble', header: 'Insoluble matter ', hide: false},
+      {id: 12, field: 'potassium', header: 'Potassium ', hide: false},
+      {id: 13, field: 'sodium', header: 'Sodium ', hide: false},
+      {id: 14, field: 'chlorure', header: 'Chlorure ', hide: false},
+      {id: 15, field: 'ph', header: 'pH', hide: false},
+      {id: 16, field: 'chlorureDeSodium', header: 'sodium chloride ', hide: false},
+      {id: 17, field: 'ferrocyanure', header: 'Ferrocyanure ', hide: false},
     ];
 
     this._selectedColumns = this.colsfiltre;
-    this.getAllSbl() ;
+    this.getAllSbl();
     this.cols = [
-      { field: 'id', header: 'id' },
-      { field: 'reference', header: 'reference' },
-      { field: 'description', header: 'description' },
-      { field: 'dateCreation', header: 'dateCreation' },
-      { field: 'nom', header: 'nom' },
-      { field: 'emplacement', header: 'emplacement' },
-      { field: 'etat', header: 'etat' },
-      { field: 'dateFermeture', header: 'dateFermeture' },
+      {field: 'id', header: 'id'},
+      {field: 'reference', header: 'reference'},
+      {field: 'description', header: 'description'},
+      {field: 'dateCreation', header: 'dateCreation'},
+      {field: 'nom', header: 'nom'},
+      {field: 'emplacement', header: 'emplacement'},
+      {field: 'etat', header: 'etat'},
+      {field: 'dateFermeture', header: 'dateFermeture'},
     ];
-
+    this.getAllCribles();
+    this.getAllConcasseurs();
 
   }
 
+  getAllCribles() {
+    this.loading = true;
+
+    this.cribleService.getAllCribles().subscribe((value: Crible[]) => {
+      this.cribles = value;
+      this.loading = false;
+
+    }, error => {
+      console.log(error)
+    })
+
+  }
+
+  getAllConcasseurs() {
+    this.loading = true;
+
+    this.concasseurService.getAllConcasseurs().subscribe((value: Concasseur[]) => {
+      this.concasseurs = value;
+      this.loading = false;
+
+    }, error => {
+      console.log(error)
+    })
+  }
+
   openNew() {
-    this.sbl={} ;
+    this.sbl = {};
+    console.log("sbl: " + new JsonPipe().transform(this.sbl.bandeList))
     this.submitted = false;
     this.productDialog = true;
   }
@@ -148,14 +196,15 @@ export class SblComponent implements OnInit{
   }
 
   editSbl(sbl: Sbl) {
-    this.isUpdateSbl=true;
-    this.sbl= {...sbl} ;
+    this.isUpdateSbl = true;
+    this.sbl = {...sbl};
     this.productDialog = true;
+    this.getCalibresBySelectedBandes(sbl.bandeList);
   }
 
   deleteSbl(sbl: Sbl) {
     this.deleteProductDialog = true;
-    this.sbl= {...sbl} ;
+    this.sbl = {...sbl};
   }
 
   confirmDeleteSelected() {
@@ -163,8 +212,8 @@ export class SblComponent implements OnInit{
     this.selectedSbls.forEach(selectedSbl => {
       this.sblService.deleteSbl(selectedSbl.id).subscribe(
         () => {
-          this.sbls = this.sbls.filter(sbl =>sbl.id !== selectedSbl.id);
-          this.messageService.add({ severity: 'success', summary: 'Successful', detail: 'Sbl Deleted', life: 3000 });
+          this.sbls = this.sbls.filter(sbl => sbl.id !== selectedSbl.id);
+          this.messageService.add({severity: 'success', summary: 'Successful', detail: 'Sbl Deleted', life: 3000});
 
         },
         (error) => {
@@ -173,7 +222,7 @@ export class SblComponent implements OnInit{
             title: "Can not deleted",
             text: "Washed related with Washed ship !",
           })
-          console.error( error);
+          console.error(error);
         }
       );
     });
@@ -183,13 +232,13 @@ export class SblComponent implements OnInit{
   confirmDelete() {
     this.deleteProductDialog = false;
     console.log("this.sbl.id", this.sbl.id);
-    if (this.sbl.id!= null) {
+    if (this.sbl.id != null) {
       this.sblService.deleteSbl(this.sbl.id).subscribe(() => {
         this.sbls = this.sbls.filter(val => val.id !== this.sbl.id);
 
-        this.messageService.add({ severity: 'success', summary: 'Successful', detail: 'Sbl Deleted', life: 3000 });
+        this.messageService.add({severity: 'success', summary: 'Successful', detail: 'Sbl Deleted', life: 3000});
 
-      },error => {
+      }, error => {
         Swal.fire({
           icon: "error",
           title: "Can not deleted",
@@ -207,9 +256,9 @@ export class SblComponent implements OnInit{
 
   saveSbl() {
     this.submitted = false;
-    this.productDialog=false
-    if(this.isUpdateSbl==true) {
-      this.sblService.updateSbl(this.sbl).subscribe(() =>{
+    this.productDialog = false
+    if (this.isUpdateSbl == true) {
+      this.sblService.updateSbl(this.sbl).subscribe(() => {
         this.sblService.getAllSblDTO().subscribe((sbls: Sbl[]) => {
           this.sbls = sbls;
 
@@ -217,10 +266,8 @@ export class SblComponent implements OnInit{
       });
       console.log('Sbl updated');
 
-      this.isUpdateSbl=false;
-    }
-    else
-    {
+      this.isUpdateSbl = false;
+    } else {
       this.sblService.addSbl(this.sbl).subscribe(() => {
         this.sblService.getAllSblDTO().subscribe((sbls: Sbl[]) => {
           this.sbls = sbls;
@@ -231,34 +278,31 @@ export class SblComponent implements OnInit{
   }
 
 
-
-
-
   onGlobalFilter(table: Table, event: Event) {
     table.filterGlobal((event.target as HTMLInputElement).value, 'contains');
   }
 
 
-
-
   getAllSbl() {
-    this.loading=true ;
+    this.loading = true;
 
-    this.sblService.getAllSblDTO().subscribe((v:  Sbl[]) => {
-      this.sbls=v;
+    this.sblService.getAllSblDTO().subscribe((v: Sbl[]) => {
+      this.sbls = v;
       // console.log(new JsonPipe().transform("====================>>>>>>"+this.sbls))
-      this.loading=false ;
+      this.loading = false;
 
-    },error => {
-      console.log(error)})
-    this.loading=true ;
+    }, error => {
+      console.log(error)
+    })
+    this.loading = true;
 
-    this.bandeService.getAllBandesDTO().subscribe((v:  Sbnl[]) => {
-      this.bandes=v;
-      this.loading=false ;
+    this.bandeService.getAllBandesDTO().subscribe((v: Sbnl[]) => {
+      this.bandes = v;
+      this.loading = false;
 
-    },error => {
-      console.log(error)})
+    }, error => {
+      console.log(error)
+    })
   }
 
 
@@ -266,24 +310,22 @@ export class SblComponent implements OnInit{
 
     this.Selectetsbl = Sbl;
     this.visiblePrint = true
-    console.log("---->"+new JsonPipe().transform(this.Selectetsbl));
+    console.log("---->" + new JsonPipe().transform(this.Selectetsbl));
   }
-
-
 
 
   filtredate() {
     this.Viderfiltredate()
-    const data=this.Selectetsbl.analysesChimiques !== undefined ? this.Selectetsbl.analysesChimiques : []
-    const newAnalyse:AnalysesChimique[] =[]
+    const data = this.Selectetsbl.analysesChimiques !== undefined ? this.Selectetsbl.analysesChimiques : []
+    const newAnalyse: AnalysesChimique[] = []
     data.forEach(v => {
 
-      if(v.dateAnalyse!==undefined){
-        console.log(typeof v.dateAnalyse )
-        const d=v.dateAnalyse+"";
-        const dateana:Date=new Date(d)
+      if (v.dateAnalyse !== undefined) {
+        console.log(typeof v.dateAnalyse)
+        const d = v.dateAnalyse + "";
+        const dateana: Date = new Date(d)
         console.log("-D-->" + dateana)
-        if (  this.AfterTodate(this.DatefiltrageStart,dateana) &&  this.AfterTodate(dateana,this.DatefiltrageEnd)) {
+        if (this.AfterTodate(this.DatefiltrageStart, dateana) && this.AfterTodate(dateana, this.DatefiltrageEnd)) {
           newAnalyse.push(v);
         } else {
           console.log("no compare")
@@ -293,15 +335,14 @@ export class SblComponent implements OnInit{
       }
 
     })
-    this.Selectetsbl.analysesChimiques=[...newAnalyse] ;
+    this.Selectetsbl.analysesChimiques = [...newAnalyse];
     // console.log(new JsonPipe().transform(data))
-
 
 
   }
 
   clear(dt1: Table) {
-    dt1.clear() ;
+    dt1.clear();
   }
 
   Viderfiltredate() {
@@ -319,17 +360,18 @@ export class SblComponent implements OnInit{
   getAnalyse() {
     return this.Selectetsbl.analysesChimiques !== undefined ? this.Selectetsbl.analysesChimiques : []
   }
+
   getAnalyseGranoli() {
-    const data=this.Selectetsbl.analysesPhysiques !== undefined ? this.Selectetsbl.analysesPhysiques : []
-    const newAnalyse:AnalysesPhysique[] =[]
+    const data = this.Selectetsbl.analysesPhysiques !== undefined ? this.Selectetsbl.analysesPhysiques : []
+    const newAnalyse: AnalysesPhysique[] = []
     data.forEach(v => {
 
-      if(v.dateAnalyse!==undefined){
-        console.log(typeof v.dateAnalyse )
-        const d=v.dateAnalyse+"";
-        const dateana:Date=new Date(d)
+      if (v.dateAnalyse !== undefined) {
+        console.log(typeof v.dateAnalyse)
+        const d = v.dateAnalyse + "";
+        const dateana: Date = new Date(d)
         console.log("-D-->" + dateana)
-        if (  this.AfterTodate(this.DatefiltrageStart,dateana) &&  this.AfterTodate(dateana,this.DatefiltrageEnd)) {
+        if (this.AfterTodate(this.DatefiltrageStart, dateana) && this.AfterTodate(dateana, this.DatefiltrageEnd)) {
           newAnalyse.push(v);
         } else {
           console.log("no compare")
@@ -338,7 +380,7 @@ export class SblComponent implements OnInit{
       }
 
     })
-    this.Selectetsbl.analysesPhysiques=[...newAnalyse] ;
+    this.Selectetsbl.analysesPhysiques = [...newAnalyse];
 
     return this.Selectetsbl.analysesPhysiques !== undefined ? this.Selectetsbl.analysesPhysiques : []
   }
@@ -346,11 +388,11 @@ export class SblComponent implements OnInit{
 
   colsfiltre: any[] = [];
   // ListTamisSelected: Tamis={};
-  SelectedsbnlPrintAnalyse: AnalysesPhysique={};
-  getColsfiltr() {
-    return this.colsfiltre.filter(value => value.hide==true)
-  }
+  SelectedsbnlPrintAnalyse: AnalysesPhysique = {};
 
+  getColsfiltr() {
+    return this.colsfiltre.filter(value => value.hide == true)
+  }
 
 
   public SavePDF(): void {
@@ -375,15 +417,16 @@ export class SblComponent implements OnInit{
 
 
   getTamisFiltred() {
-    return this.SelectedsbnlPrintAnalyse.tamisList==undefined?[]:this.SelectedsbnlPrintAnalyse.tamisList
-  }
-  AfterTodate(date1:Date , date2:Date):boolean{
-    console.log(date1+"<"+date2)
-    return date1.getDay()<=date2.getDay() && date1.getMonth()<=date2.getMonth() && date1.getFullYear()<=date2.getFullYear()
+    return this.SelectedsbnlPrintAnalyse.tamisList == undefined ? [] : this.SelectedsbnlPrintAnalyse.tamisList
   }
 
-    protected readonly getToken = getToken;
-  loading: boolean=false;
+  AfterTodate(date1: Date, date2: Date): boolean {
+    console.log(date1 + "<" + date2)
+    return date1.getDay() <= date2.getDay() && date1.getMonth() <= date2.getMonth() && date1.getFullYear() <= date2.getFullYear()
+  }
+
+  protected readonly getToken = getToken;
+  loading: boolean = false;
 
   ExportExcel() {
     try {
@@ -401,17 +444,17 @@ export class SblComponent implements OnInit{
       const ws: XLSX.WorkSheet = XLSX.utils.json_to_sheet([]);
 
       // Add headers to the worksheet
-      XLSX.utils.sheet_add_aoa(ws, headers.titre, { origin: 'D1' });
-      XLSX.utils.sheet_add_aoa(ws, headers.titre1, { origin: 'A3' });
-      XLSX.utils.sheet_add_aoa(ws, headers.titreBassin, { origin: 'A5' });
-      XLSX.utils.sheet_add_aoa(ws, headers.titre2, { origin: 'A14' });
-      XLSX.utils.sheet_add_aoa(ws, headers.titreAnalysePhysique, { origin: 'A16' });
+      XLSX.utils.sheet_add_aoa(ws, headers.titre, {origin: 'D1'});
+      XLSX.utils.sheet_add_aoa(ws, headers.titre1, {origin: 'A3'});
+      XLSX.utils.sheet_add_aoa(ws, headers.titreBassin, {origin: 'A5'});
+      XLSX.utils.sheet_add_aoa(ws, headers.titre2, {origin: 'A14'});
+      XLSX.utils.sheet_add_aoa(ws, headers.titreAnalysePhysique, {origin: 'A16'});
 
       // Add Bassin data
       const bassinData = [
         [this.Selectetsbl.reference, this.Selectetsbl.dateStock]
       ];
-      XLSX.utils.sheet_add_json(ws, bassinData, { origin: 'A6', skipHeader: true });
+      XLSX.utils.sheet_add_json(ws, bassinData, {origin: 'A6', skipHeader: true});
 
       // Add Analyse Physique data
       const analysePhyData = [
@@ -423,7 +466,7 @@ export class SblComponent implements OnInit{
           this.SelectedsbnlPrintAnalyse.description
         ]
       ];
-      XLSX.utils.sheet_add_json(ws, analysePhyData, { origin: 'A17', skipHeader: true });
+      XLSX.utils.sheet_add_json(ws, analysePhyData, {origin: 'A17', skipHeader: true});
 
       // Helper function to format dates
       const formatDate = (cell: any): any => {
@@ -439,7 +482,7 @@ export class SblComponent implements OnInit{
         if (element) {
           const wsTable: XLSX.WorkSheet = XLSX.utils.table_to_sheet(element);
 
-          let tableData: any[][] = XLSX.utils.sheet_to_json(wsTable, { header: 1 }) as any[][];
+          let tableData: any[][] = XLSX.utils.sheet_to_json(wsTable, {header: 1}) as any[][];
 
           // Determine the index of the column containing 'Date Analyse'
           let dateColumnIndex = -1;
@@ -458,7 +501,7 @@ export class SblComponent implements OnInit{
           }));
 
           // tableData = tableData.map(row => row.map(cell => formatDate(cell)));
-          XLSX.utils.sheet_add_aoa(ws, formattedTableData, { origin: `A${startRow}`});
+          XLSX.utils.sheet_add_aoa(ws, formattedTableData, {origin: `A${startRow}`});
         }
       };
       // Add HTML table data to worksheet
@@ -515,7 +558,7 @@ export class SblComponent implements OnInit{
         if (element) {
           const wsTable: XLSX.WorkSheet = XLSX.utils.table_to_sheet(element);
 
-          let tableData: any[][] = XLSX.utils.sheet_to_json(wsTable, { header: 1 }) as any[][];
+          let tableData: any[][] = XLSX.utils.sheet_to_json(wsTable, {header: 1}) as any[][];
 
           // Determine the index of the column containing 'Date Analyse'
           let dateColumnIndex: number = -1;
@@ -545,7 +588,7 @@ export class SblComponent implements OnInit{
       const csv: string = csvData.join('\n');
 
       // Create a Blob from CSV data
-      const blob: Blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
+      const blob: Blob = new Blob([csv], {type: 'text/csv;charset=utf-8;'});
       const url: string = URL.createObjectURL(blob);
 
       // Create a link and trigger the download
@@ -559,10 +602,78 @@ export class SblComponent implements OnInit{
       console.error('Error exporting CSV file:', error);
     }
   }
+
   SelectAllCheck() {
     this.colsfiltre.forEach(value => {
       value.hide = this.SelectAll;
     })
   }
 
+
+  getCalibresBySelectedBandes(bandesList: Bande[] | undefined) {
+    const uniqueCalibres = new Set<number>(); // Use Set to avoid duplicates
+    if (bandesList !== undefined) {
+      bandesList.forEach(bande =>
+        bande.traitementStocks?.forEach(traitement => {
+          uniqueCalibres.add(traitement.calibreB1); // Add calibreB1
+          uniqueCalibres.add(traitement.calibreB2); // Add calibreB2
+        })
+      );
+
+      this.calibres = Array.from(uniqueCalibres); // Convert Set back to array
+    }
+  }
+
+  public getTotalQuantitySbl(sbl: Sbl):number {
+    let totalCrible: number = 0;
+    let totalConcasseur: number = 0;
+    let totalBande: number = 0;
+
+    // Calculate totalBande
+    if (sbl.bandeList && sbl.bandeList.length > 0) {
+      sbl.bandeList.forEach(bande => {
+        bande.traitementStocks?.forEach(traitement => {
+          if (traitement.calibreB1 === sbl.calibre) {
+            totalBande += traitement.sortieB1;
+          }
+          if (traitement.calibreB2 === sbl.calibre) {
+            totalBande += traitement.sortieB2;
+          }
+        });
+      });
+    }
+
+    // Calculate totalCrible
+    if (sbl.cribleList && sbl.cribleList.length > 0) {
+      sbl.cribleList.forEach(crible => {
+        totalCrible += crible.resultCribles?.reduce((sum, result) => sum + result.bigSalt, 0) || 0;
+      });
+    }
+
+    // Calculate totalConcasseur
+    if (sbl.concasseurList && sbl.concasseurList.length > 0) {
+      sbl.concasseurList.forEach(concasseur => {
+        totalConcasseur += concasseur.resultConcasseurs?.reduce((sum, resultConcasseur) => sum + resultConcasseur.result, 0) || 0;
+      });
+    }
+
+    return totalCrible+ totalConcasseur +totalBande;
+  }
+
+
+  public openDialogBand(sbl: Sbl) {
+    this.detailsDialog=true;
+    this.sbl=sbl;
+  }
+
+
+  public openDialogCrible(sbl: Sbl) {
+    this.detailsDialogCrible=true;
+    this.sbl=sbl;
+  }
+
+  public openDialogConcasseur(sbl: any) {
+    this.detailsDialogConcasseur=true;
+    this.sbl=sbl;
+  }
 }

@@ -47,7 +47,11 @@ userConnect:RegisterRequest=new RegisterRequest()
     this.userService.getUserConnect().subscribe(value => {
       this.userConnect = value
     },error => {
-     localStorage.clear();
+
+        this.loginservice.logout()
+      window.location.reload(); // Recharge la page
+
+
 
     })
   }

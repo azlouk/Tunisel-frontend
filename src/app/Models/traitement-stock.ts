@@ -1,16 +1,21 @@
 export class TraitementStock {
-  id: number ;
-  dateCreation: Date ;
-  sortieB1: number ;
-  sortieB2: number ;
-  refus: number ;
+   id: number;
+   dateCreation: Date;
+   sortieB1: number;
+   sortieB2: number;
+   refus: number;
+   calibreB1: number;
+   calibreB2: number;
 
-  constructor(_id: number=0, _dateCreation: Date=new Date(), _sortieB1: number=0, _sortieB2: number=0, _refus: number=0) {
+
+  constructor(_id: number=0, _dateCreation: Date=new Date(), _sortieB1: number=0, _sortieB2: number=0, _refus: number=0, _calibreB1: number=0, _calibreB2: number=0) {
     this.id = _id;
     this.dateCreation = _dateCreation;
     this.sortieB1 = _sortieB1;
     this.sortieB2 = _sortieB2;
     this.refus = _refus;
+    this.calibreB1 = _calibreB1;
+    this.calibreB2 = _calibreB2;
   }
 
   public get _id(): number {
@@ -51,5 +56,21 @@ export class TraitementStock {
 
   public set _refus(value: number) {
     this.refus = value;
+  }
+
+  public get _calibreB1(): number {
+    return this.calibreB1;
+  }
+
+  public set _calibreB1(value: number) {
+    this.calibreB1 = value;
+  }
+
+  public get _calibreB2(): number {
+    return this.calibreB2;
+  }
+
+  public set _calibreB2(value: number) {
+    this.calibreB2 = value;
   }
 }

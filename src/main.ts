@@ -68,6 +68,8 @@ export function getModelDefault(){
       items: [
         {label: 'Unwashed', icon: 'pi pi-fw pi-box', routerLink: ['sbnls']},
         {label: 'Band', icon: 'pi pi-fw pi-box', routerLink: ['bandes']},
+        {label: 'Crible', icon: 'pi pi-fw pi-box', routerLink: ['cribles']},
+        {label: 'Concasseur', icon: 'pi pi-fw pi-box', routerLink: ['concasseurs']},
         {label: 'Washed', icon: 'pi pi-fw pi-box', routerLink: ['/sbls']},
         {label: 'Washed Ship', icon: 'pi pi-fw pi-box', routerLink: ['/sblfs']},
 

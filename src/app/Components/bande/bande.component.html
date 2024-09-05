@@ -79,296 +79,308 @@
 
             <td style="width:14%; min-width:8rem;" class="surface-overlay       ">
               <span class="p-column-title">Sbnl</span>
-              <span class="pi pi-eye text-3xl text-primary cursor-pointer m-2" (click)="openDialog()"  ></span>
-
-              <p-dialog [(visible)]="detailsDialog" [style]="{width: '1300px'}" header="Stock Unwashed" [modal]="true" class="p-fluid">
-                <ng-template pTemplate="content">
-
-                  <div *ngIf="getToken()=='ADMIN'" class="flex justify-content-between align-items-center border border-1 border-round border-gray-400 p-3">
-                    <div class="flex flex-column gap-2 col-2">
-                      <label> Stock Unwashed List</label>
-                      <p-dropdown
-                        [options]="b.sbnlList"
-                        [(ngModel)]="selectedSbnl"
-                        optionLabel="reference"
-                        placeholder="Select a Stock Unwashed" />
-                    </div>
+              <span class="pi pi-eye text-3xl text-primary cursor-pointer m-2" (click)="openDialog(b)"  ></span>
 
 
-                  </div>
-                  <div class="cart mt-5">
-                    <p-table #dt [loading]="loading"
-                             [value]="selectedSbnl.transferToBands!==undefined?selectedSbnl.transferToBands:[]"
-                             [columns]="cols"
-                             responsiveLayout="scroll" [rows]="10"
-                             [globalFilterFields]="['id','date','value']"
-                             [paginator]="true"
-                             editMode="row"
-                             [rowsPerPageOptions]="[10,20,30]"
-                             [showCurrentPageReport]="true" currentPageReportTemplate="Display  {first} to  {last} of  {totalRecords} entries"  selectionMode="multiple" [rowHover]="true" dataKey="id">
-                      <ng-template pTemplate="caption">
-                        <div class="flex flex-column md:flex-row md:justify-content-between md:align-items-center">
-                          <div class="flex justify-content-between align-items-center w-full">
-                            <h5 class="m-0">Transfer to Band management</h5>
-
-
-
-                            <div>
-
-
-            <span class=" p-input-icon-left ">
-                            <i class="pi pi-search"></i>
-                            <input  type="text" pInputText (input)="onGlobalFilter(dt, $event)" placeholder="Search..."  class="w-full sm:w-auto"/>
-                        </span>
-                            </div>
-                          </div>
-
-                        </div>
-                      </ng-template>
-                      <ng-template pTemplate="header">
-                        <tr>
-
-                          <th pSortableColumn="id">Id <p-sortIcon field="id"></p-sortIcon></th>
-                          <th pSortableColumn="date">Date Creation<p-sortIcon field="date"></p-sortIcon></th>
-                          <th pSortableColumn="value">Transfer Quantity <p-sortIcon field="value"></p-sortIcon></th>
-
-                          <th></th>
-                        </tr>
-                      </ng-template>
-                      <ng-template pTemplate="body" let-transfer let-editing="editing" >
-                        <tr [pEditableRow]="transfer" >
-
-                          <td >
-                            <span class="p-column-title">Id</span>
-                            {{transfer.id}}
-                          </td>
-
-                          <td >
-                                {{transfer.dateCreation|date:'yyyy-MM-dd'}}
-                          </td>
-
-                          <td >
-                                {{transfer.quantityTransfer}}
-                          </td>
-
-                          <td>
-
-                          </td>
-                        </tr>
-                      </ng-template>
-                    </p-table>
-
-                  </div>
-
-                </ng-template>
-
-
-
-
-                <ng-template pTemplate="footer">
-                  <button pButton pRipple label="Close" icon="pi pi-times" class="p-button-text" (click)="detailsDialog=false"></button>
-                </ng-template>
-              </p-dialog>
-
-              <p-dialog [(visible)]="deleteProductDialog" header="Confirm" [modal]="true" [style]="{width:'450px'}">
-                <div class="flex align-items-center justify-content-center">
-                  <i class="pi pi-exclamation-triangle mr-3" style="font-size: 2rem"></i>
-                  <span *ngIf="bande">Are you sure you want to delete<b>{{bande.reference}}</b>?</span>
-                </div>
-                <ng-template pTemplate="footer">
-                  <button *ngIf="getToken()=='ADMIN'" pButton pRipple icon="pi pi-times" class="p-button-text" label="No" (click)="deleteProductDialog = false"></button>
-                  <button  *ngIf="getToken()=='ADMIN'" pButton pRipple icon="pi pi-check" class="p-button-text" label="Yes" (click)="confirmDelete(b)"></button>
-                </ng-template>
-              </p-dialog>
 
             </td>
             <td>
               <div class="flex gap-2">
                 <button *ngIf="getToken()=='ADMIN'" pButton pRipple  class="p-button-rounded p-button-info " (click)="AddTraitementStock(b)">Traitement</button>
                 <button *ngIf="getToken()=='ADMIN'" pButton pRipple icon="pi pi-pencil" class="p-button-rounded p-button-success " (click)="editBande(b)"></button>
-                <button *ngIf="getToken()=='ADMIN'" pButton pRipple icon="pi pi-trash" class="p-button-rounded p-button-warning " (click)="deleteBande()"></button>
+                <button *ngIf="getToken()=='ADMIN'" pButton pRipple icon="pi pi-trash" class="p-button-rounded p-button-warning " (click)="deleteBande(b)"></button>
                 <button pButton pRipple icon="pi pi-file-pdf" class="p-button-rounded p-button-primary"  (click)="exportrapport(b)"></button>
 
               </div>
             </td>
           </tr>
-          <!--==============================ADD TRAITEMENT STOCK===============================================================================-->
-          <p-dialog [(visible)]="TraitementStockDialog" [style]="{width: '1300px'}" header="Stock Processing" [modal]="true" class="p-fluid">
-            <ng-template pTemplate="content">
-              <h3>Add Stock Processing</h3>
-              <div *ngIf="getToken()=='ADMIN'" class="flex justify-content-between align-items-center border border-1 border-round border-gray-400 p-3">
-                <div class="">
-                  <label for="dateCreationr">Date Creation</label>
-                  <input  class="p-2 shadow-1" type="date" dateFormat="yy-mm-dd"  pInputText id="dateCreationr"  [(ngModel)]="traitementStock.dateCreation"  />
-                </div>
 
-                <div class="">
-                  <label for="outputB1">Output B1</label>
-                  <p-inputNumber  id="outputB1"  [(ngModel)]="traitementStock.sortieB1" mode="decimal" [minFractionDigits]="3" ></p-inputNumber>
-                </div>
+        </ng-template>
+      </p-table>
+      <p-dialog [(visible)]="detailsDialog" [style]="{width: '1300px'}" header="Stock Unwashed" [modal]="true" class="p-fluid">
+        <ng-template pTemplate="content">
+
+          <div *ngIf="getToken()=='ADMIN'" class="flex justify-content-between align-items-center border border-1 border-round border-gray-400 p-3">
+            <div class="flex flex-column gap-2 col-2">
+              <label> Stock Unwashed List</label>
+              <p-dropdown
+                [options]="this.bande.sbnlList"
+                [(ngModel)]="selectedSbnl"
+                optionLabel="reference"
+                placeholder="Select a Stock Unwashed" />
+            </div>
 
 
-                <div class="">
-                  <label for="outputB2">Output B2</label>
-                  <p-inputNumber  id="outputB2"  [(ngModel)]="traitementStock.sortieB2" mode="decimal" [minFractionDigits]="3" ></p-inputNumber>
-                </div>
-                <div class="">
-                  <label for="refus">Refus</label>
-                  <p-inputNumber  id="refus"  [(ngModel)]="traitementStock.refus" mode="decimal" [minFractionDigits]="3" ></p-inputNumber>
-                </div>
-                <div>
-                  <button pButton pRipple label="Save" icon="pi pi-check" class="p-button-text" (click)="saveTraitementStock()"></button>
-                </div>
-              </div>
-              <div class="cart mt-5">
-                <p-table #dt [loading]="loading"
-                         [value]="ListTraitementStock"
-                         [columns]="cols"
-                         responsiveLayout="scroll" [rows]="10"
-                         [globalFilterFields]="['id','date','value']"
-                         [paginator]="true"
-                         editMode="row"
-                         [rowsPerPageOptions]="[10,20,30]"
-                         [showCurrentPageReport]="true" currentPageReportTemplate="Display  {first} to  {last} of  {totalRecords} entries"  selectionMode="multiple" [rowHover]="true" dataKey="id">
-                  <ng-template pTemplate="caption">
-                    <div class="flex flex-column md:flex-row md:justify-content-between md:align-items-center">
-                      <div class="flex justify-content-between align-items-center w-full">
-                        <h5 class="m-0">Stock Processing management</h5>
-                        <!--              <div class=" flex gap-1">-->
-                        <!--                <div class="gap-1 flex align-items-center">Date Start :-->
+          </div>
+          <div class="cart mt-5">
+            <p-table #dt [loading]="loading"
+                     [value]="selectedSbnl.transferToBands!==undefined?selectedSbnl.transferToBands:[]"
+                     [columns]="cols"
+                     responsiveLayout="scroll" [rows]="10"
+                     [globalFilterFields]="['id','date','value']"
+                     [paginator]="true"
+                     editMode="row"
+                     [rowsPerPageOptions]="[10,20,30]"
+                     [showCurrentPageReport]="true" currentPageReportTemplate="Display  {first} to  {last} of  {totalRecords} entries"  selectionMode="multiple" [rowHover]="true" dataKey="id">
+              <ng-template pTemplate="caption">
+                <div class="flex flex-column md:flex-row md:justify-content-between md:align-items-center">
+                  <div class="flex justify-content-between align-items-center w-full">
+                    <h5 class="m-0">Transfer to Band management</h5>
 
-                        <!--                  <input  class="p-2 shadow-1" type="date" dateFormat="dd-MM-yyyy"    pInputText   [(ngModel)]="dateStartHarvest"  />-->
 
-                        <!--                </div>-->
-                        <!--                <div class="gap-1  flex align-items-center">-->
-                        <!--                  Date End :-->
 
-                        <!--                  <input  class="p-2 shadow-1" type="date" dateFormat="dd-MM-yyyy"    pInputText   [(ngModel)]="dateEndHarvest"  />-->
-
-                        <!--                </div>-->
-                        <!--              </div>-->
-                        <!--              <p-button (click)="filtreListHarvestWithDate(dateStartHarvest,dateEndHarvest)" class=" " icon="pi pi-search" label="Search"></p-button>-->
-                        <!--              <p-button (click)="getAllRecolte()" class=" " icon="pi pi-refresh" label="Clear"></p-button>-->
-
-                        <!--              <div>-->
-                        <!--                <span> <span class="font-bold">Total :</span> {{totalHarvestFiltree}}</span>-->
-                        <!--              </div>-->
-                        <div>
+                    <div>
 
 
             <span class=" p-input-icon-left ">
                             <i class="pi pi-search"></i>
                             <input  type="text" pInputText (input)="onGlobalFilter(dt, $event)" placeholder="Search..."  class="w-full sm:w-auto"/>
                         </span>
-                        </div>
-                      </div>
-
                     </div>
-                  </ng-template>
-                  <ng-template pTemplate="header">
-                    <tr>
+                  </div>
 
-                      <th pSortableColumn="id">Id <p-sortIcon field="id"></p-sortIcon></th>
-                      <th pSortableColumn="date">Date Traitement<p-sortIcon field="date"></p-sortIcon></th>
-                      <th pSortableColumn="outputB1">Output B1  <p-sortIcon field="outputB1"></p-sortIcon></th>
-                      <th pSortableColumn="outputB2">Output B2<p-sortIcon field="outputB2"></p-sortIcon></th>
-                      <th pSortableColumn="refus">Refus <p-sortIcon field="refus"></p-sortIcon></th>
+                </div>
+              </ng-template>
+              <ng-template pTemplate="header">
+                <tr>
 
-                      <th></th>
-                    </tr>
-                  </ng-template>
-                  <ng-template pTemplate="body" let-traitementStock
-                               let-editing="editing" >
-                    <tr [pEditableRow]="traitementStock" >
+                  <th pSortableColumn="id">Id <p-sortIcon field="id"></p-sortIcon></th>
+                  <th pSortableColumn="date">Date Creation<p-sortIcon field="date"></p-sortIcon></th>
+                  <th pSortableColumn="value">Transfer Quantity <p-sortIcon field="value"></p-sortIcon></th>
 
-                      <td >
-                        <span class="p-column-title">Id</span>
-                        {{traitementStock.id}}
-                      </td>
+                  <th></th>
+                </tr>
+              </ng-template>
+              <ng-template pTemplate="body" let-transfer let-editing="editing" >
+                <tr [pEditableRow]="transfer" >
 
-                      <td >
-                        <p-cellEditor>
-                          <ng-template pTemplate="input">
-                            <input  class="p-2 shadow-1" type="date" dateFormat="yy-mm-dd"  pInputText   [(ngModel)]="traitementStock.dateCreation"  />
+                  <td >
+                    <span class="p-column-title">Id</span>
+                    {{transfer.id}}
+                  </td>
 
-                          </ng-template>
-                          <ng-template pTemplate="output">
-                            {{traitementStock.dateCreation|date:'yyyy-MM-dd'}}
-                          </ng-template>
-                        </p-cellEditor>
-                      </td>
+                  <td >
+                    {{transfer.dateCreation|date:'yyyy-MM-dd'}}
+                  </td>
 
-                      <td >
-                        <p-cellEditor>
-                          <ng-template pTemplate="input">
-                            <input
-                              pInputText
-                              type="text"
-                              [(ngModel)]="traitementStock.sortieB1" />
-                          </ng-template>
-                          <ng-template pTemplate="output">
-                            {{traitementStock.sortieB1}}
-                          </ng-template>
-                        </p-cellEditor>
-                      </td>
-                      <td >
-                        <p-cellEditor>
-                          <ng-template pTemplate="input">
-                            <input
-                              pInputText
-                              type="text"
-                              [(ngModel)]="traitementStock.sortieB2" />
-                          </ng-template>
-                          <ng-template pTemplate="output">
-                            {{traitementStock.sortieB2}}
-                          </ng-template>
-                        </p-cellEditor>
-                      </td>
-                      <td >
-                        <p-cellEditor>
-                          <ng-template pTemplate="input">
-                            <input
-                              pInputText
-                              type="text"
-                              [(ngModel)]="traitementStock.refus" />
-                          </ng-template>
-                          <ng-template pTemplate="output">
-                            {{traitementStock.refus}}
-                          </ng-template>
-                        </p-cellEditor>
-                      </td>
+                  <td >
+                    {{transfer.quantityTransfer}}
+                  </td>
+
+                  <td>
+
+                  </td>
+                </tr>
+              </ng-template>
+            </p-table>
+          </div>
+        </ng-template>
+        <ng-template pTemplate="footer">
+          <button pButton pRipple label="Close" icon="pi pi-times" class="p-button-text" (click)="detailsDialog=false"></button>
+        </ng-template>
+      </p-dialog>
+
+      <p-dialog [(visible)]="deleteProductDialog" header="Confirm" [modal]="true" [style]="{width:'450px'}">
+        <div class="flex align-items-center justify-content-center">
+          <i class="pi pi-exclamation-triangle mr-3" style="font-size: 2rem"></i>
+          <span >Are you sure you want to delete ?</span>
+        </div>
+        <ng-template pTemplate="footer">
+          <button *ngIf="getToken()=='ADMIN'" pButton pRipple icon="pi pi-times" class="p-button-text" label="No" (click)="deleteProductDialog = false"></button>
+          <button  *ngIf="getToken()=='ADMIN'" pButton pRipple icon="pi pi-check" class="p-button-text" label="Yes" (click)="confirmDelete()"></button>
+        </ng-template>
+      </p-dialog>
+
+    </div>
+    <!--==============================ADD TRAITEMENT STOCK===============================================================================-->
+    <p-dialog [(visible)]="TraitementStockDialog" [style]="{width: '1300px'}" header="Stock Processing" [modal]="true" class="p-fluid">
+      <ng-template pTemplate="content">
+        <h3>Add Stock Processing</h3>
+        <div *ngIf="getToken()=='ADMIN'" class="flex justify-content-between align-items-center gap-2 border border-1 border-round border-gray-400 p-3">
+          <div class="">
+            <label for="dateCreationr">Date Creation</label>
+            <input  class="p-2 shadow-1" type="date" dateFormat="yy-mm-dd"  pInputText id="dateCreationr"  [(ngModel)]="traitementStock.dateCreation"  />
+          </div>
+          <div class="">
+            <label for="calibreB1">Calibre B1</label>
+            <p-inputNumber  id="calibreB1"  [(ngModel)]="traitementStock.calibreB1" mode="decimal" [minFractionDigits]="3" ></p-inputNumber>
+          </div>
+          <div class="">
+                              <label for="outputB1">Output B1</label>
+                              <p-inputNumber  id="outputB1"  [(ngModel)]="traitementStock.sortieB1" mode="decimal" [minFractionDigits]="3" ></p-inputNumber>
+          </div>
+
+          <div class="">
+            <label for="calibreB2">Calibre B2</label>
+            <p-inputNumber  id="calibreB2"  [(ngModel)]="traitementStock.calibreB2" mode="decimal" [minFractionDigits]="3" ></p-inputNumber>
+          </div>
+          <div class="">
+                              <label for="outputB2">Output B2</label>
+                              <p-inputNumber  id="outputB2"  [(ngModel)]="traitementStock.sortieB2" mode="decimal" [minFractionDigits]="3" ></p-inputNumber>
+          </div>
+          <div class="">
+                              <label for="refus">Refus</label>
+                              <p-inputNumber  id="refus"  [(ngModel)]="traitementStock.refus" mode="decimal" [minFractionDigits]="3" ></p-inputNumber>
+          </div>
+          <div>
+            <button pButton pRipple label="Save" icon="pi pi-check" class="p-button-text" (click)="saveTraitementStock()"></button>
+          </div>
+        </div>
+        <div class="cart mt-5">
+          <p-table #dt [loading]="loading"
+                   [value]="ListTraitementStock"
+                   [columns]="cols"
+                   responsiveLayout="scroll" [rows]="10"
+                   [globalFilterFields]="['id','date','calibreB1','calibreB2','outputB2','refus','outputB1']"
+                   [paginator]="true"
+                   editMode="row"
+                   [rowsPerPageOptions]="[10,20,30]"
+                   [showCurrentPageReport]="true" currentPageReportTemplate="Display  {first} to  {last} of  {totalRecords} entries"  selectionMode="multiple" [rowHover]="true" dataKey="id">
+            <ng-template pTemplate="caption">
+              <div class="flex flex-column md:flex-row md:justify-content-between md:align-items-center">
+                <div class="flex justify-content-between align-items-center w-full">
+                  <h5 class="m-0">Stock Processing management</h5>
+
+                  <div>
 
 
-                      <td>
-                        <div class="flex  align-items-center gap-2">
-                          <div class="flex align-items-center justify-content-center gap-2" *ngIf="getToken()=='ADMIN'">
-                            <button *ngIf="!editing" pButton pRipple type="button" pInitEditableRow icon="pi pi-pencil"
-                                    (click)="updateTraitementStock(traitementStock)"
-                                    class="p-button-rounded   mr-2"></button>
-                            <button *ngIf="editing" pButton pRipple type="button"  pSaveEditableRow icon="pi pi-check"
-                                    (click)="saveUpdateTraitementStock()"
-                                    class="p-button-rounded p-button-text  mr-2"></button>
-                          </div>
-                          <button *ngIf="getToken()=='ADMIN'" pButton pRipple icon="pi pi-trash" class="p-button-rounded p-button-warning mr-2" (click)="deleteTraitementStock(traitementStock)"></button>
-                        </div>
-                      </td>
-                    </tr>
-                  </ng-template>
-                </p-table>
+            <span class=" p-input-icon-left ">
+                            <i class="pi pi-search"></i>
+                            <input  type="text" pInputText (input)="onGlobalFilter(dt, $event)" placeholder="Search..."  class="w-full sm:w-auto"/>
+                        </span>
+                  </div>
+                </div>
 
               </div>
-
             </ng-template>
+            <ng-template pTemplate="header">
+              <tr>
 
-            <ng-template pTemplate="footer">
-              <button pButton pRipple label="Close" icon="pi pi-times" class="p-button-text" (click)="TraitementStockDialog=false"></button>
+                <th pSortableColumn="id">Id <p-sortIcon field="id"></p-sortIcon></th>
+                <th pSortableColumn="date">Date Traitement<p-sortIcon field="date"></p-sortIcon></th>
+                <th pSortableColumn="calibreB1">Calibre B1  <p-sortIcon field="calibreB1"></p-sortIcon></th>
+                <th pSortableColumn="outputB1">Output B1  <p-sortIcon field="outputB1"></p-sortIcon></th>
+                <th pSortableColumn="calibreB2">Calibre B2<p-sortIcon field="calibreB2"></p-sortIcon></th>
+                <th pSortableColumn="outputB2">Output B2<p-sortIcon field="outputB2"></p-sortIcon></th>
+                <th pSortableColumn="refus">Refus <p-sortIcon field="refus"></p-sortIcon></th>
+
+                <th></th>
+              </tr>
             </ng-template>
-          </p-dialog>
-          <!--==============================ADD TRAITEMENT STOCK===============================================================================-->
+            <ng-template pTemplate="body" let-traitementStock
+                         let-editing="editing" >
+              <tr [pEditableRow]="traitementStock" >
 
-        </ng-template>
-      </p-table>
-    </div>
+                <td >
+                  <span class="p-column-title">Id</span>
+                  {{traitementStock.id}}
+                </td>
+
+                <td >
+                  <p-cellEditor>
+                    <ng-template pTemplate="input">
+                      <input  class="p-2 shadow-1" type="date" dateFormat="yy-mm-dd"  pInputText   [(ngModel)]="traitementStock.dateCreation"  />
+
+                    </ng-template>
+                    <ng-template pTemplate="output">
+                      {{traitementStock.dateCreation|date:'yyyy-MM-dd'}}
+                    </ng-template>
+                  </p-cellEditor>
+                </td>
+                <td >
+                  <p-cellEditor>
+                    <ng-template pTemplate="input">
+                      <input
+                        pInputText
+                        type="text"
+                        [(ngModel)]="traitementStock.calibreB1" />
+                    </ng-template>
+                    <ng-template pTemplate="output">
+                      {{traitementStock.calibreB1}}
+                    </ng-template>
+                  </p-cellEditor>
+                </td>
+                <td >
+                  <p-cellEditor>
+                    <ng-template pTemplate="input">
+                      <input
+                        pInputText
+                        type="text"
+                        [(ngModel)]="traitementStock.sortieB1" />
+                    </ng-template>
+                    <ng-template pTemplate="output">
+                      {{traitementStock.sortieB1}}
+                    </ng-template>
+                  </p-cellEditor>
+                </td>
+
+                <td >
+                  <p-cellEditor>
+                    <ng-template pTemplate="input">
+                      <input
+                        pInputText
+                        type="text"
+                        [(ngModel)]="traitementStock.calibreB2" />
+                    </ng-template>
+                    <ng-template pTemplate="output">
+                      {{traitementStock.calibreB2}}
+                    </ng-template>
+                  </p-cellEditor>
+                </td>
+                <td >
+                  <p-cellEditor>
+                    <ng-template pTemplate="input">
+                      <input
+                        pInputText
+                        type="text"
+                        [(ngModel)]="traitementStock.sortieB2" />
+                    </ng-template>
+                    <ng-template pTemplate="output">
+                      {{traitementStock.sortieB2}}
+                    </ng-template>
+                  </p-cellEditor>
+                </td>
+                <td >
+                  <p-cellEditor>
+                    <ng-template pTemplate="input">
+                      <input
+                        pInputText
+                        type="text"
+                        [(ngModel)]="traitementStock.refus" />
+                    </ng-template>
+                    <ng-template pTemplate="output">
+                      {{traitementStock.refus}}
+                    </ng-template>
+                  </p-cellEditor>
+                </td>
+
+
+                <td>
+                  <div class="flex  align-items-center gap-2">
+                    <div class="flex align-items-center justify-content-center gap-2" *ngIf="getToken()=='ADMIN'">
+                      <button *ngIf="!editing" pButton pRipple type="button" pInitEditableRow icon="pi pi-pencil"
+                              (click)="updateTraitementStock(traitementStock)"
+                              class="p-button-rounded   mr-2"></button>
+                      <button *ngIf="editing" pButton pRipple type="button"  pSaveEditableRow icon="pi pi-check"
+                              (click)="saveUpdateTraitementStock()"
+                              class="p-button-rounded p-button-text  mr-2"></button>
+                    </div>
+                    <button *ngIf="getToken()=='ADMIN'" pButton pRipple icon="pi pi-trash" class="p-button-rounded p-button-warning mr-2" (click)="deleteTraitementStock(traitementStock)"></button>
+                  </div>
+                </td>
+              </tr>
+            </ng-template>
+          </p-table>
+
+        </div>
+
+      </ng-template>
+
+      <ng-template pTemplate="footer">
+        <button pButton pRipple label="Close" icon="pi pi-times" class="p-button-text" (click)="TraitementStockDialog=false"></button>
+      </ng-template>
+    </p-dialog>
+    <!--==============================ADD TRAITEMENT STOCK===============================================================================-->
 
     <p-dialog [(visible)]="productDialog" [style]="{width: '450px'}" header="Bande" [modal]="true" class="p-fluid">
       <ng-template pTemplate="content">

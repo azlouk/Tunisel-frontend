@@ -26,11 +26,11 @@ export class DashboardService {
 
   }
 
-  getCountAnalyseChemique(): Observable<any[]> {
+  getCountTotalAnalysesChimiques(): Observable<any[]> {
     const token = getKeyToken();
     if (token) {
       const headers = new HttpHeaders().set('Authorization', `Bearer ${token}`).set("Content-Type", "application/json; charset=utf8");
-    return this.http.get<any[]>(`${this.apiUrl}/analysechimiques/count-by-month`, {headers});
+    return this.http.get<any[]>(`${this.apiUrl}/statistiques/count-by-month-total-chimiques`, {headers});
   }else {
       return  new Observable<any[]>()}
   }
@@ -40,7 +40,7 @@ export class DashboardService {
     const token = getKeyToken();
     if (token) {
       const headers = new HttpHeaders().set('Authorization', `Bearer ${token}`).set("Content-Type", "application/json; charset=utf8");
-    return this.http.get<any[]>(`${this.apiUrl}/analysesPhysiques/count-by-month`, {headers});
+    return this.http.get<any[]>(`${this.apiUrl}/statistiques/count-by-month-bassin`, {headers});
   }else {
       return  new Observable<any[]>()}
   }

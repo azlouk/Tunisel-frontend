@@ -1,0 +1,400 @@
+<div class="grid">
+  <div class="col-12">
+    <div class="card px-6 py-6">
+      <p-toast></p-toast>
+      <p-toolbar styleClass="mb-4">
+        <ng-template pTemplate="left">
+          <div class="my-2">
+            <button *ngIf="getToken()=='ADMIN'" pButton pRipple label="Add" icon="pi pi-plus" class="p-button-success mr-2" (click)="openNew()"></button>
+            <button  *ngIf="getToken()=='ADMIN'" pButton pRipple label="Delete" icon="pi pi-trash" class="p-button-danger mr-2" (click)="deleteSelectedSbls()" [disabled]="!selectedCribles || !selectedCribles.length"></button>
+            <button pButton pRipple label="Refresh" icon="pi pi-refresh" class="p-button-primary mr-2" (click)="getAllCribles()"  ></button>
+
+          </div>
+        </ng-template>
+
+
+      </p-toolbar>
+
+      <p-table  [loading]="loading" #dt [value]="cribles" responsiveLayout="scroll" [rows]="10" [globalFilterFields]="['id','nom','reference','description','etat','bandeList']" [paginator]="true" [rowsPerPageOptions]="[10,20,30]" [showCurrentPageReport]="true" currentPageReportTemplate="Display  {first} to  {last} of  {totalRecords} entries" [(selection)]="selectedCribles" selectionMode="multiple" [rowHover]="true" dataKey="id">
+        <ng-template pTemplate="caption">
+          <div class="flex flex-column md:flex-row md:justify-content-between md:align-items-center">
+            <h5 class="m-0">Management of Crible</h5>
+            <span class="block mt-2 md:mt-0 p-input-icon-left">
+                            <i class="pi pi-search"></i>
+                            <input  type="text" pInputText (input)="onGlobalFilter(dt, $event)" placeholder="Search..."  class="w-full sm:w-auto"/>
+                        </span>
+
+
+
+          </div>
+        </ng-template>
+        <ng-template pTemplate="header">
+          <tr>
+            <th style="width: 3rem">
+              <p-tableHeaderCheckbox></p-tableHeaderCheckbox>
+            </th>
+            <th pSortableColumn="id">Id <p-sortIcon field="id"></p-sortIcon></th>
+            <th pSortableColumn="nom">Name <p-sortIcon field="nom"></p-sortIcon></th>
+            <th pSortableColumn="reference">Reference <p-sortIcon field="reference"></p-sortIcon></th>
+            <th pSortableColumn="description">Description <p-sortIcon field="description"></p-sortIcon></th>
+            <th pSortableColumn="etat">State <p-sortIcon field="etat"></p-sortIcon></th>
+            <th pSortableColumn="quantity">Quantity <p-sortIcon field="quantity"></p-sortIcon></th>
+            <th pSortableColumn="bandeList">Band <p-sortIcon field="bandeList"></p-sortIcon></th>
+            <th>Action</th>
+
+          </tr>
+        </ng-template>
+        <ng-template pTemplate="body" let-crible >
+          <tr >
+            <td>
+              <p-tableCheckbox [value]="crible"></p-tableCheckbox>
+            </td>
+            <td style="width:14%; min-width:10rem;"><span class="p-column-title">Id</span>
+              {{crible.id}}
+            </td>
+            <td style="width:14%; min-width:10rem;">
+              <span class="p-column-title">Name</span>
+              {{crible.nom}}
+            </td>
+            <td style="width:14%; min-width:10rem;">
+              <span class="p-column-title">Reference</span>
+              {{crible.reference}}
+            </td>
+
+            <td style="width:14%; min-width:10rem;">
+              <span class="p-column-title">Description</span>
+              {{crible.description}}
+            </td>
+
+            <td style="width:14%; min-width:8rem;">
+              <span class="p-column-title">State</span>
+              {{crible.etat}}
+            </td>
+
+            <td style="width:14%; min-width:8rem;">
+              <span class="p-column-title">State</span>
+              {{getTotalQuantityCrible(crible)}}
+            </td>
+            <td style="width:14%; min-width:8rem;">
+
+              <span class="p-column-title">Band</span>
+              <span class="pi pi-eye text-3xl text-primary cursor-pointer m-2" (click)="openDialog(crible)"  ></span>
+
+            </td>
+
+            <td>
+              <div class="flex align-items-center gap-2">
+                <button *ngIf="getToken()=='ADMIN'" pButton pRipple  class="p-button-rounded p-button-info " (click)="AddResultCrible(crible)">ResultCrible </button>
+                <button *ngIf="getToken()=='ADMIN'" pButton pRipple icon="pi pi-pencil" class="p-button-rounded p-button-success mr-2" (click)="editCrible(crible)"></button>
+                <button *ngIf="getToken()=='ADMIN'" pButton pRipple icon="pi pi-trash" class="p-button-rounded p-button-warning mr-2" (click)="deleteCrible(crible)"></button>
+              </div>
+            </td>
+          </tr>
+        </ng-template>
+      </p-table>
+    </div>
+    <p-dialog [(visible)]="detailsDialog" [style]="{width: '1300px'}"  [modal]="true" class="p-fluid">
+      <ng-template pTemplate="content">
+
+        <div *ngIf="getToken()=='ADMIN'" class="flex justify-content-between align-items-center border border-1 border-round border-gray-400 p-3">
+          <div class="flex flex-column gap-2 col-2">
+            <label> Band List</label>
+            <p-dropdown
+              [options]="this.crible.bandeList"
+              [(ngModel)]="selectedBande"
+              optionLabel="reference"
+              placeholder="Select a Band" />
+          </div>
+
+
+        </div>
+        <div class="cart mt-5">
+          <p-table #dt [loading]="loading"
+                   [value]="selectedBande.traitementStocks!==undefined?selectedBande.traitementStocks:[]"
+
+                   responsiveLayout="scroll" [rows]="10"
+                   [globalFilterFields]="['id','date','value']"
+                   [paginator]="true"
+                   editMode="row"
+                   [rowsPerPageOptions]="[10,20,30]"
+                   [showCurrentPageReport]="true" currentPageReportTemplate="Display  {first} to  {last} of  {totalRecords} entries"  selectionMode="multiple" [rowHover]="true" dataKey="id">
+            <ng-template pTemplate="caption">
+              <div class="flex flex-column md:flex-row md:justify-content-between md:align-items-center">
+                <div class="flex justify-content-between align-items-center w-full">
+                  <h5 class="m-0">Stock Processing</h5>
+
+
+
+                  <div>
+
+
+            <span class=" p-input-icon-left ">
+                            <i class="pi pi-search"></i>
+                            <input  type="text" pInputText (input)="onGlobalFilter(dt, $event)" placeholder="Search..."  class="w-full sm:w-auto"/>
+                        </span>
+                  </div>
+                </div>
+
+              </div>
+            </ng-template>
+            <ng-template pTemplate="header">
+              <tr>
+
+                <th pSortableColumn="id">Id <p-sortIcon field="id"></p-sortIcon></th>
+                <th pSortableColumn="date">Date Traitement<p-sortIcon field="date"></p-sortIcon></th>
+                <th pSortableColumn="calibreB1">Calibre B1  <p-sortIcon field="calibreB1"></p-sortIcon></th>
+                <th pSortableColumn="outputB1">Output B1  <p-sortIcon field="outputB1"></p-sortIcon></th>
+                <th pSortableColumn="calibreB2">Calibre B2<p-sortIcon field="calibreB2"></p-sortIcon></th>
+                <th pSortableColumn="outputB2">Output B2<p-sortIcon field="outputB2"></p-sortIcon></th>
+                <th pSortableColumn="refus">Refus <p-sortIcon field="refus"></p-sortIcon></th>
+
+              </tr>
+            </ng-template>
+            <ng-template pTemplate="body" let-traitementStock let-editing="editing" >
+              <tr [pEditableRow]="traitementStock" >
+
+                <td >
+                  <span class="p-column-title">Id</span>
+                  {{traitementStock.id}}
+                </td>
+
+                <td >
+                  {{traitementStock.dateCreation|date:'yyyy-MM-dd'}}
+                </td>
+
+                <td >
+                  {{traitementStock.calibreB1}}
+                </td>
+
+                <td >
+                  {{traitementStock.sortieB1}}
+                </td>
+
+                <td >
+                  {{traitementStock.calibreB2}}
+                </td>
+
+                <td >
+                  {{traitementStock.sortieB2}}
+                </td>
+
+                <td >
+                  {{traitementStock.refus}}
+                </td>
+
+              </tr>
+            </ng-template>
+          </p-table>
+        </div>
+      </ng-template>
+      <ng-template pTemplate="footer">
+        <button pButton pRipple label="Close" icon="pi pi-times" class="p-button-text" (click)="detailsDialog=false"></button>
+      </ng-template>
+    </p-dialog>
+
+    <p-dialog [(visible)]="cribleDialog" [style]="{width: '450px'}" header="Crible" [modal]="true" class="p-fluid">
+      <ng-template pTemplate="content">
+        <div class="field">
+          <label>Band</label>
+          <p-multiSelect [options]="bandes"   [(ngModel)]="crible.bandeList"  placeholder="Select a Band" optionLabel="reference" display="chip" class="w-full"  ></p-multiSelect>
+
+        </div>
+        <div class="field">
+          <label for="name">Name</label>
+          <input type="text" pInputText id="name"  [(ngModel)]="crible.nom" required autofocus [ngClass]="{'ng-invalid ng-dirty' : submitted && !crible.nom}"/>
+<!--          <small class="ng-dirty ng-invalid" *ngIf="submitted && !sbl.reference">Reference is required.</small>-->
+        </div>
+        <div class="field">
+          <label for="reference">Reference</label>
+          <input type="text" pInputText id="reference"  [(ngModel)]="crible.reference" required autofocus />
+<!--                    <small class="ng-dirty ng-invalid" *ngIf="submitted && !sbl.description">Pseudo is required.</small>-->
+        </div>
+
+        <div class="field">
+          <label for="description">Description</label>
+          <input type="text" pInputText id="description"  [(ngModel)]="crible.description" required autofocus />
+
+          <!--          <input  class="p-2 shadow-1" type="date" pInputText id="dateCreation"  [(ngModel)]="sbl.dateStock"  />-->
+        </div>
+
+        <div class="field">
+
+          <label for="etat">State</label>
+          <input type="text" pInputText id="etat"  [(ngModel)]="crible.etat" required autofocus />
+<!--                    <small class="ng-dirty ng-invalid" *ngIf="submitted && !sbl.emplacement">Telephone is required.</small>-->
+        </div>
+
+
+      </ng-template>
+
+
+
+
+      <ng-template pTemplate="footer">
+        <button pButton pRipple label="Cancel" icon="pi pi-times" class="p-button-text" (click)="hideDialog()"></button>
+        <button pButton pRipple label="Add" icon="pi pi-check" class="p-button-text" (click)="saveCrible()"></button>
+      </ng-template>
+    </p-dialog>
+
+    <!--==============================ADD TRAITEMENT STOCK===============================================================================-->
+    <p-dialog [(visible)]="resultCribleDialog" [style]="{width: '1300px'}" header="Result Crible" [modal]="true" class="p-fluid">
+      <ng-template pTemplate="content">
+        <h3>Add Result Crible</h3>
+        <div *ngIf="getToken()=='ADMIN'" class="flex justify-content-between align-items-center border border-1 border-round border-gray-400 p-3">
+          <div class="">
+            <label for="dateCreationr">Date Creation</label>
+            <input  class="p-2 shadow-1" type="date" dateFormat="yy-mm-dd"  pInputText id="dateCreationr"  [(ngModel)]="resultCrible.dateCreation"  />
+          </div>
+
+          <div class="">
+            <label for="bisSalt">Big Salt</label>
+            <p-inputNumber  id="bisSalt"  [(ngModel)]="resultCrible.bigSalt" mode="decimal" [minFractionDigits]="3" ></p-inputNumber>
+          </div>
+
+          <div class="">
+            <label for="refus">Refus</label>
+            <p-inputNumber  id="refus"  [(ngModel)]="resultCrible.refus" mode="decimal" [minFractionDigits]="3" ></p-inputNumber>
+          </div>
+          <div>
+            <button pButton pRipple label="Save" icon="pi pi-check" class="p-button-text" (click)="saveResultCrible()"></button>
+          </div>
+        </div>
+        <div class="cart mt-5">
+          <p-table #dt [loading]="loading"
+                   [value]="ListResultCribles"
+                   responsiveLayout="scroll" [rows]="10"
+                   [globalFilterFields]="['id','dateCreation','bigSalt','refus']"
+                   [paginator]="true"
+                   editMode="row"
+                   [rowsPerPageOptions]="[10,20,30]"
+                   [showCurrentPageReport]="true" currentPageReportTemplate="Display  {first} to  {last} of  {totalRecords} entries"  selectionMode="multiple" [rowHover]="true" dataKey="id">
+            <ng-template pTemplate="caption">
+              <div class="flex flex-column md:flex-row md:justify-content-between md:align-items-center">
+                <div class="flex justify-content-between align-items-center w-full">
+                  <h5 class="m-0">Result Crible management</h5>
+
+                  <div>
+
+
+            <span class=" p-input-icon-left ">
+                            <i class="pi pi-search"></i>
+                            <input  type="text" pInputText (input)="onGlobalFilter(dt, $event)" placeholder="Search..."  class="w-full sm:w-auto"/>
+                        </span>
+                  </div>
+                </div>
+
+              </div>
+            </ng-template>
+            <ng-template pTemplate="header">
+              <tr>
+
+                <th pSortableColumn="id">Id <p-sortIcon field="id"></p-sortIcon></th>
+                <th pSortableColumn="dateCreation">Date Result<p-sortIcon field="dateCreation"></p-sortIcon></th>
+                <th pSortableColumn="bigSalt">Big Salt <p-sortIcon field="bigSalt"></p-sortIcon></th>
+                <th pSortableColumn="refus">Refus <p-sortIcon field="refus"></p-sortIcon></th>
+
+                <th></th>
+              </tr>
+            </ng-template>
+            <ng-template pTemplate="body" let-resultCrible
+                         let-editing="editing" >
+              <tr [pEditableRow]="resultCrible" >
+
+                <td >
+                  <span class="p-column-title">Id</span>
+                  {{resultCrible.id}}
+                </td>
+
+                <td >
+                  <p-cellEditor>
+                    <ng-template pTemplate="input">
+                      <input  class="p-2 shadow-1" type="date" dateFormat="yy-mm-dd"  pInputText   [(ngModel)]="resultCrible.dateCreation"  />
+
+                    </ng-template>
+                    <ng-template pTemplate="output">
+                      {{resultCrible.dateCreation|date:'yyyy-MM-dd'}}
+                    </ng-template>
+                  </p-cellEditor>
+                </td>
+
+                <td >
+                  <p-cellEditor>
+                    <ng-template pTemplate="input">
+                      <input
+                        pInputText
+                        type="text"
+                        [(ngModel)]="resultCrible.bigSalt" />
+                    </ng-template>
+                    <ng-template pTemplate="output">
+                      {{resultCrible.bigSalt}}
+                    </ng-template>
+                  </p-cellEditor>
+                </td>
+
+                <td >
+                  <p-cellEditor>
+                    <ng-template pTemplate="input">
+                      <input
+                        pInputText
+                        type="text"
+                        [(ngModel)]="resultCrible.refus" />
+                    </ng-template>
+                    <ng-template pTemplate="output">
+                      {{resultCrible.refus}}
+                    </ng-template>
+                  </p-cellEditor>
+                </td>
+
+
+                <td>
+                  <div class="flex  align-items-center gap-2">
+                    <div class="flex align-items-center justify-content-center gap-2" *ngIf="getToken()=='ADMIN'">
+                      <button *ngIf="!editing" pButton pRipple type="button" pInitEditableRow icon="pi pi-pencil"
+                              (click)="updateResultCrible(resultCrible)"
+                              class="p-button-rounded   mr-2"></button>
+                      <button *ngIf="editing" pButton pRipple type="button"  pSaveEditableRow icon="pi pi-check"
+                              (click)="saveUpdateResultCrible()"
+                              class="p-button-rounded p-button-text  mr-2"></button>
+                    </div>
+                    <button *ngIf="getToken()=='ADMIN'" pButton pRipple icon="pi pi-trash" class="p-button-rounded p-button-warning mr-2" (click)="deleteResultCrible(resultCrible)"></button>
+                  </div>
+                </td>
+              </tr>
+            </ng-template>
+          </p-table>
+
+        </div>
+
+      </ng-template>
+
+      <ng-template pTemplate="footer">
+        <button pButton pRipple label="Close" icon="pi pi-times" class="p-button-text" (click)="hideDialogResult()"></button>
+      </ng-template>
+    </p-dialog>
+    <!--==============================ADD TRAITEMENT STOCK===============================================================================-->
+
+    <p-dialog [(visible)]="deleteClibleDialog" header="Confirm" [modal]="true" [style]="{width:'450px'}">
+      <div class="flex align-items-center justify-content-center">
+        <i class="pi pi-exclamation-triangle mr-3" style="font-size: 2rem"></i>
+        <span >Are you sure you want to delete ?</span>
+      </div>
+      <ng-template pTemplate="footer">
+        <button pButton pRipple icon="pi pi-times" class="p-button-text" label="Cancel" (click)="deleteClibleDialog = false"></button>
+        <button pButton pRipple icon="pi pi-check" class="p-button-text" label="Yes" (click)="confirmDelete()"></button>
+      </ng-template>
+    </p-dialog>
+
+    <p-dialog [(visible)]="deleteCliblesDialog" header="Add" [modal]="true" [style]="{width:'450px'}">
+      <div class="flex align-items-center justify-content-center">
+        <i class="pi pi-exclamation-triangle mr-3" style="font-size: 2rem"></i>
+        <span>Do you really want to delete?</span>
+      </div>
+      <ng-template pTemplate="footer">
+        <button pButton pRipple icon="pi pi-times" class="p-button-text" label="No" (click)="deleteCliblesDialog = false"></button>
+        <button pButton pRipple icon="pi pi-check" class="p-button-text" label="Yes" (click)="confirmDeleteSelected()"></button>
+      </ng-template>
+    </p-dialog>
+  </div>
+</div>
+
+

@@ -300,7 +300,7 @@ getCommandeById(){
   this.loadingcommande=true;
   this.commandeService.getCommandeByIdDTO(this.commandeId).subscribe(value => {
     this.commande = value;
-    console.error(this.commande)
+    // console.error(this.commande)
         this.selectedColumns=this.commande.dataHeaders || []
         this.listeLignesCommandes = value.ligneCommandes??[];
         this.DatefiltrageStart=this.commande.datestart!==undefined?this.commande.datestart+'' :new Date().toDateString() ;

@@ -454,7 +454,7 @@ this.getAllStockOrder();
         });
 
 
-
+      this.historyTransfer=new HistoryTransfer();
   }
 
   getTransferAttributsByLabel(label:string){

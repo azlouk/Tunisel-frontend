@@ -147,6 +147,22 @@
             </td>
           </tr>
         </ng-template>
+        <ng-template pTemplate="footer">
+          <tr>
+            <td> <span class="font-bold">Total</span></td>
+            <td>{{getTotalHarvest()}}</td>
+            <td></td>
+            <ng-container *ngFor="let calibre of getuniqueCalibresProduction()">
+              <td>{{getTotalProductionQuantity(calibre)}}</td>
+              </ng-container>
+              <td></td>
+            <ng-container *ngFor="let calibre of getuniqueCalibresTransfer()">
+              <td>{{getTotalTransferQuantity(calibre)}}</td>
+
+            </ng-container>
+            <td></td>
+          </tr>
+        </ng-template>
       </p-table>
 
 

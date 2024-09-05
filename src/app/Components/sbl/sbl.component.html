@@ -40,7 +40,9 @@
             <th pSortableColumn="emplacement">Location <p-sortIcon field="emplacement"></p-sortIcon></th>
             <th pSortableColumn="etat">State <p-sortIcon field="etat"></p-sortIcon></th>
             <th pSortableColumn="quantite">Quantity <p-sortIcon field="quantite"></p-sortIcon></th>
-            <th pSortableColumn="type">Band <p-sortIcon field="type"></p-sortIcon></th>
+            <th pSortableColumn="band">Band </th>
+            <th pSortableColumn="crible">Crible </th>
+            <th pSortableColumn="concasseur">Concasseur </th>
             <th>Action</th>
 
           </tr>
@@ -80,22 +82,19 @@
             </td>
             <td style="width:14%; min-width:8rem;">
               <span class="p-column-title">Quantity</span>
-              {{sbl.quantite}}
+              {{getTotalQuantitySbl(sbl)}}
             </td>
             <td style="width:14%; min-width:8rem;">
-
               <span class="p-column-title">Band</span>
-              {{sbl.sblBande.reference }}
-              <span class="pi pi-eye text-primary cursor-pointer m-2" (click)="opSBL.toggle($event)"  ></span>
-              <p-overlayPanel #opSBL>
-
-                <label class="text-2xl">Réf : {{sbl.sblBande.reference}}</label><br>
-                <label class="text-2xl">Description : {{sbl.sblBande.description}}
-                </label ><br>
-                <label class="text-2xl">State : {{sbl.sblBande.etat}}</label><br>
-                <label class="text-2xl">Quantity : {{sbl.sblBande.quantite}}</label><br>
-                <label class="text-2xl">Location : {{sbl.sblBande.emplacement}}</label><br>
-              </p-overlayPanel>
+              <span class="pi pi-eye text-3xl text-primary cursor-pointer m-2" (click)="openDialogBand(sbl)"  ></span>
+            </td>
+            <td style="width:14%; min-width:8rem;">
+              <span class="p-column-title">Band</span>
+              <span class="pi pi-eye text-3xl text-primary cursor-pointer m-2" (click)="openDialogCrible(sbl)"  ></span>
+            </td>
+            <td style="width:14%; min-width:8rem;">
+              <span class="p-column-title">Band</span>
+              <span class="pi pi-eye text-3xl text-primary cursor-pointer m-2" (click)="openDialogConcasseur(sbl)"  ></span>
             </td>
             <td>
               <div class="flex ">
@@ -109,22 +108,317 @@
         </ng-template>
       </p-table>
     </div>
-
-    <p-dialog [(visible)]="productDialog" [style]="{width: '450px'}" header="Washed" [modal]="true" class="p-fluid">
+    <!--    =========DETAILS BANDlIST-->
+    <p-dialog [(visible)]="detailsDialog" [style]="{width: '1300px'}"  [modal]="true" class="p-fluid">
       <ng-template pTemplate="content">
+
+        <div *ngIf="getToken()=='ADMIN'" class="flex justify-content-between align-items-center border border-1 border-round border-gray-400 p-3">
+          <div class="flex flex-column gap-2 col-2">
+            <label> Band List</label>
+            <p-dropdown
+              [options]="this.sbl.bandeList"
+              [(ngModel)]="selectedBande"
+              optionLabel="reference"
+              placeholder="Select a Band" />
+          </div>
+
+
+        </div>
+        <div class="cart mt-5">
+          <p-table #dt [loading]="loading"
+                   [value]="selectedBande.traitementStocks!==undefined?selectedBande.traitementStocks:[]"
+
+                   responsiveLayout="scroll" [rows]="10"
+                   [globalFilterFields]="['id','date','value']"
+                   [paginator]="true"
+                   editMode="row"
+                   [rowsPerPageOptions]="[10,20,30]"
+                   [showCurrentPageReport]="true" currentPageReportTemplate="Display  {first} to  {last} of  {totalRecords} entries"  selectionMode="multiple" [rowHover]="true" dataKey="id">
+            <ng-template pTemplate="caption">
+              <div class="flex flex-column md:flex-row md:justify-content-between md:align-items-center">
+                <div class="flex justify-content-between align-items-center w-full">
+                  <h5 class="m-0">Stock Processing</h5>
+
+
+
+                  <div>
+
+
+            <span class=" p-input-icon-left ">
+                            <i class="pi pi-search"></i>
+                            <input  type="text" pInputText (input)="onGlobalFilter(dt, $event)" placeholder="Search..."  class="w-full sm:w-auto"/>
+                        </span>
+                  </div>
+                </div>
+
+              </div>
+            </ng-template>
+            <ng-template pTemplate="header">
+              <tr>
+
+                <th pSortableColumn="id">Id <p-sortIcon field="id"></p-sortIcon></th>
+                <th pSortableColumn="date">Date Traitement<p-sortIcon field="date"></p-sortIcon></th>
+                <th pSortableColumn="calibreB1">Calibre B1  <p-sortIcon field="calibreB1"></p-sortIcon></th>
+                <th pSortableColumn="outputB1">Output B1  <p-sortIcon field="outputB1"></p-sortIcon></th>
+                <th pSortableColumn="calibreB2">Calibre B2<p-sortIcon field="calibreB2"></p-sortIcon></th>
+                <th pSortableColumn="outputB2">Output B2<p-sortIcon field="outputB2"></p-sortIcon></th>
+                <th pSortableColumn="refus">Refus <p-sortIcon field="refus"></p-sortIcon></th>
+
+              </tr>
+            </ng-template>
+            <ng-template pTemplate="body" let-traitementStock let-editing="editing" >
+              <tr [pEditableRow]="traitementStock" >
+
+                <td >
+                  <span class="p-column-title">Id</span>
+                  {{traitementStock.id}}
+                </td>
+
+                <td >
+                  {{traitementStock.dateCreation|date:'yyyy-MM-dd'}}
+                </td>
+
+                <td >
+                  {{traitementStock.calibreB1}}
+                </td>
+
+                <td >
+                  {{traitementStock.sortieB1}}
+                </td>
+
+                <td >
+                  {{traitementStock.calibreB2}}
+                </td>
+
+                <td >
+                  {{traitementStock.sortieB2}}
+                </td>
+
+                <td >
+                  {{traitementStock.refus}}
+                </td>
+
+              </tr>
+            </ng-template>
+          </p-table>
+        </div>
+      </ng-template>
+      <ng-template pTemplate="footer">
+        <button pButton pRipple label="Close" icon="pi pi-times" class="p-button-text" (click)="detailsDialog=false"></button>
+      </ng-template>
+    </p-dialog>
+    <!--    =========DETAILS BAND lIST-->
+
+    <!--    =========DETAILS CRIBLE lIST-->
+    <p-dialog [(visible)]="detailsDialogCrible" [style]="{width: '1300px'}"  [modal]="true" class="p-fluid">
+      <ng-template pTemplate="content">
+
+        <div *ngIf="getToken()=='ADMIN'" class="flex justify-content-between align-items-center border border-1 border-round border-gray-400 p-3">
+          <div class="flex flex-column gap-2 col-2">
+            <label> Crible List</label>
+            <p-dropdown
+              [options]="sbl.cribleList"
+              [(ngModel)]="selectedCrible"
+              optionLabel="reference"
+              placeholder="Select a Crible" />
+          </div>
+
+
+        </div>
+        <div class="cart mt-5">
+          <p-table #dt [loading]="loading"
+                   [value]="selectedCrible.resultCribles!==undefined?selectedCrible.resultCribles:[]"
+
+                   responsiveLayout="scroll" [rows]="10"
+                   [globalFilterFields]="['id','date','value']"
+                   [paginator]="true"
+                   editMode="row"
+                   [rowsPerPageOptions]="[10,20,30]"
+                   [showCurrentPageReport]="true" currentPageReportTemplate="Display  {first} to  {last} of  {totalRecords} entries"  selectionMode="multiple" [rowHover]="true" dataKey="id">
+            <ng-template pTemplate="caption">
+              <div class="flex flex-column md:flex-row md:justify-content-between md:align-items-center">
+                <div class="flex justify-content-between align-items-center w-full">
+                  <h5 class="m-0">Result Crible</h5>
+
+
+
+                  <div>
+
+
+            <span class=" p-input-icon-left ">
+                            <i class="pi pi-search"></i>
+                            <input  type="text" pInputText (input)="onGlobalFilter(dt, $event)" placeholder="Search..."  class="w-full sm:w-auto"/>
+                        </span>
+                  </div>
+                </div>
+
+              </div>
+            </ng-template>
+            <ng-template pTemplate="header">
+              <tr>
+
+                <th pSortableColumn="id">Id <p-sortIcon field="id"></p-sortIcon></th>
+                <th pSortableColumn="date">Date Traitement<p-sortIcon field="date"></p-sortIcon></th>
+                <th pSortableColumn="bigSalt">Big Salt  <p-sortIcon field="bigSalt"></p-sortIcon></th>
+                <th pSortableColumn="refus">Refus <p-sortIcon field="refus"></p-sortIcon></th>
+
+              </tr>
+            </ng-template>
+            <ng-template pTemplate="body" let-resultCrible let-editing="editing" >
+              <tr [pEditableRow]="resultCrible" >
+
+
+                <td >
+                  <span class="p-column-title">Id</span>
+                  {{resultCrible.id}}
+                </td>
+
+                <td >
+
+                  {{resultCrible.dateCreation|date:'yyyy-MM-dd'}}
+
+                </td>
+
+                <td >
+
+                  {{resultCrible.bigSalt}}
+
+                </td>
+
+                <td >
+
+                  {{resultCrible.refus}}
+                </td>
+              </tr>
+            </ng-template>
+          </p-table>
+        </div>
+      </ng-template>
+      <ng-template pTemplate="footer">
+        <button pButton pRipple label="Close" icon="pi pi-times" class="p-button-text" (click)="detailsDialogCrible=false"></button>
+      </ng-template>
+    </p-dialog>
+    <!--    =========DETAILS CRIBLE lIST-->
+
+    <!--    =========DETAILS CONCASSEUR lIST-->
+    <p-dialog [(visible)]="detailsDialogConcasseur" [style]="{width: '1300px'}"  [modal]="true" class="p-fluid">
+      <ng-template pTemplate="content">
+
+        <div *ngIf="getToken()=='ADMIN'" class="flex justify-content-between align-items-center border border-1 border-round border-gray-400 p-3">
+          <div class="flex flex-column gap-2 col-2">
+            <label> Concasseur List</label>
+            <p-dropdown
+              [options]="sbl.concasseurList"
+              [(ngModel)]="selectedConcasseur"
+              optionLabel="reference"
+              placeholder="Select a Concasseur" />
+          </div>
+
+
+        </div>
+        <div class="cart mt-5">
+          <p-table #dt [loading]="loading"
+                   [value]="selectedConcasseur.resultConcasseurs!==undefined?selectedConcasseur.resultConcasseurs:[]"
+
+                   responsiveLayout="scroll" [rows]="10"
+                   [globalFilterFields]="['id','date','value']"
+                   [paginator]="true"
+                   editMode="row"
+                   [rowsPerPageOptions]="[10,20,30]"
+                   [showCurrentPageReport]="true" currentPageReportTemplate="Display  {first} to  {last} of  {totalRecords} entries"  selectionMode="multiple" [rowHover]="true" dataKey="id">
+            <ng-template pTemplate="caption">
+              <div class="flex flex-column md:flex-row md:justify-content-between md:align-items-center">
+                <div class="flex justify-content-between align-items-center w-full">
+                  <h5 class="m-0">Result Concasseur</h5>
+
+
+
+                  <div>
+
+
+            <span class=" p-input-icon-left ">
+                            <i class="pi pi-search"></i>
+                            <input  type="text" pInputText (input)="onGlobalFilter(dt, $event)" placeholder="Search..."  class="w-full sm:w-auto"/>
+                        </span>
+                  </div>
+                </div>
+
+              </div>
+            </ng-template>
+            <ng-template pTemplate="header">
+              <tr>
+
+                <th pSortableColumn="id">Id <p-sortIcon field="id"></p-sortIcon></th>
+                <th pSortableColumn="dateCreation">Date Creation<p-sortIcon field="dateCreation"></p-sortIcon></th>
+                <th pSortableColumn="result">Result <p-sortIcon field="result"></p-sortIcon></th>
+
+              </tr>
+            </ng-template>
+            <ng-template pTemplate="body" let-resultConcasseur let-editing="editing" >
+              <tr [pEditableRow]="resultConcasseur" >
+
+
+                <td >
+                  <span class="p-column-title">Id</span>
+                  {{resultConcasseur.id}}
+                </td>
+
+                <td >
+
+                  {{resultConcasseur.dateCreation|date:'yyyy-MM-dd'}}
+
+                </td>
+
+                <td >
+
+                  {{resultConcasseur.result}}
+
+                </td>
+
+
+              </tr>
+            </ng-template>
+          </p-table>
+        </div>
+      </ng-template>
+      <ng-template pTemplate="footer">
+        <button pButton pRipple label="Close" icon="pi pi-times" class="p-button-text" (click)="detailsDialogConcasseur=false"></button>
+      </ng-template>
+    </p-dialog>
+    <!--    =========DETAILS CONCASSEUR lIST-->
+    <p-dialog [(visible)]="productDialog" [style]="{width: '600px'}" header="Washed" [maximizable]="true" [modal]="true" class="p-fluid">
+
+      <ng-template pTemplate="content">
+
         <div class="field">
           <label>Band</label>
-          <p-dropdown [options]="bandes" [(ngModel)]="sbl.sblBande" [editable]="true" optionLabel="reference" class="w-full"></p-dropdown>
+          <p-multiSelect [options]="bandes"   [(ngModel)]="sbl.bandeList"  placeholder="Select a Band" optionLabel="reference" display="chip" class="w-full" (ngModelChange)="getCalibresBySelectedBandes(sbl.bandeList)" ></p-multiSelect>
         </div>
+
+        <div class="field" *ngIf="sbl.bandeList && sbl.bandeList.length > 0">
+          <label >Calibre</label>
+          <p-dropdown [options]="calibres" [(ngModel)]="sbl.calibre"   class="w-full" ></p-dropdown>
+        </div>
+
+        <div class="field">
+          <label>Crible</label>
+          <p-multiSelect [options]="cribles"   [(ngModel)]="sbl.cribleList"  placeholder="Select a Crible" optionLabel="reference" display="chip" class="w-full"  ></p-multiSelect>
+        </div>
+
+        <div class="field">
+          <label>Concasseur</label>
+          <p-multiSelect [options]="concasseurs"   [(ngModel)]="sbl.concasseurList"  placeholder="Select a Concasseur" optionLabel="reference" display="chip" class="w-full"  ></p-multiSelect>
+        </div>
+
         <div class="field">
           <label for="reference">Reference</label>
           <input type="text" pInputText id="reference"  [(ngModel)]="sbl.reference" required autofocus [ngClass]="{'ng-invalid ng-dirty' : submitted && !sbl.reference}"/>
           <small class="ng-dirty ng-invalid" *ngIf="submitted && !sbl.reference">Reference is required.</small>
         </div>
+
         <div class="field">
           <label for="Description">Description</label>
           <input type="text" pInputText id="Description"  [(ngModel)]="sbl.description" required autofocus />
-<!--          <small class="ng-dirty ng-invalid" *ngIf="submitted && !sbl.description">Pseudo is required.</small>-->
         </div>
 
         <div class="field">
@@ -133,37 +427,27 @@
         </div>
 
         <div class="field">
-
           <label for="emplacement">Location</label>
           <input type="text" pInputText id="emplacement"  [(ngModel)]="sbl.emplacement" required autofocus />
-<!--          <small class="ng-dirty ng-invalid" *ngIf="submitted && !sbl.emplacement">Telephone is required.</small>-->
         </div>
-
-
 
         <div class="field">
           <label for="etat">State</label>
           <input type="text" pInputText id="etat"  [(ngModel)]="sbl.etat" required autofocus />
         </div>
-        <div class="field">
-          <label for="quantite">Quantity</label>
-          <p-inputNumber Id="quantite" mode="decimal" [minFractionDigits]="3" [(ngModel)]="sbl.quantite"   ></p-inputNumber>
 
-        </div>
-
-
-
-
+<!--        <div class="field">-->
+<!--          <label for="quantite">Quantity</label>-->
+<!--          <p-inputNumber Id="quantite" mode="decimal" [minFractionDigits]="3" [(ngModel)]="sbl.quantite"   ></p-inputNumber>-->
+<!--        </div>-->
 
       </ng-template>
-
-
-
 
       <ng-template pTemplate="footer">
         <button pButton pRipple label="Cancel" icon="pi pi-times" class="p-button-text" (click)="hideDialog()"></button>
         <button pButton pRipple label="Add" icon="pi pi-check" class="p-button-text" (click)="saveSbl()"></button>
       </ng-template>
+
     </p-dialog>
 
     <p-dialog [(visible)]="deleteProductDialog" header="Confirm" [modal]="true" [style]="{width:'450px'}">

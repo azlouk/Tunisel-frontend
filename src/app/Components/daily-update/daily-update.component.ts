@@ -14,6 +14,7 @@ import {DateDaily} from "../../Models/date-daily";
 import {DailyUpdateService} from "../../Services/daily-update.service";
 import {Transfer} from "../../Models/transfer";
 import {Production} from "../../Models/production";
+import {log} from "@angular-devkit/build-angular/src/builders/ssr-dev-server";
 
 @Component({
   selector: 'app-daily-update',
@@ -144,5 +145,34 @@ export class DailyUpdateComponent implements OnInit {
   public getLengthOfObservation(observation: any) {
 
     return observation && observation !== 'null' && observation.trim() !== '';
+  }
+
+  public getTotalHarvest(): number {
+    let totalHarvest: number = 0;
+    this.listDateDaily.forEach(dateDaily => {
+      totalHarvest += dateDaily.dataDaily.harvestList
+        .reduce((sum, harvest) => sum + harvest.t, 0);
+    });
+    return totalHarvest;
+  }
+
+
+  public getTotalProductionQuantity(calibre: number): number {
+    let totalProQuantity: number = 0;
+    this.listDateDaily.forEach(dateDaily => {
+      totalProQuantity += dateDaily.dataDaily.productionList
+        .filter(production => production.calibre === calibre) // Filter by calibre
+        .reduce((sum, production) => sum + production.value, 0); // Sum the filtered values
+    });
+    return totalProQuantity;
+  }
+
+
+  public getTotalTransferQuantity(calibre:number) {
+    let totalTransQuantity:number=0;
+    this.listDateDaily.forEach(dateDaily => dateDaily.dataDaily.transferList
+      .filter(transfer => transfer.calibre === calibre) // Filter by calibre
+      .reduce((previousValue, currentValue) =>totalTransQuantity+=previousValue+ currentValue.masse ,0))
+    return totalTransQuantity;
   }
 }
