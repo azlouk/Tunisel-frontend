@@ -50,7 +50,6 @@ export class DashboardComponent implements OnInit {
   getCountTotalAnalysesChimiques(){
     this.dashboardService.getCountTotalAnalysesChimiques().subscribe((value:any[]) => {
       this.totalChimiques = value;
-      console.log("tt chimiques: "+new JsonPipe().transform(value))
 
       this.initChart();
     } );
@@ -58,7 +57,6 @@ export class DashboardComponent implements OnInit {
   getCountAnalyseChemiqueBassin(){
     this.dashboardService.getCountAnalyseChemiqueBassin().subscribe((value:any[])=> {
       this.basin = value;
-      console.log("tt chimiques bassin: "+new JsonPipe().transform(value))
       this.initChart();
     } );
   }

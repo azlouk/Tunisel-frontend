@@ -4,6 +4,7 @@ import {AnalysesPhysique} from "./analyses-physique";
 import {Bande} from "./bande";
 import {Crible} from "./crible";
 import {Concasseur} from "./concasseur";
+import {StockOrder} from "./stock-order";
 
 export interface Sbl {
 
@@ -21,4 +22,5 @@ export interface Sbl {
   cribleList?: Crible[];
   concasseurList?: Concasseur[];
   calibre?: number ;
+  stockOrderList?:StockOrder[];
 }

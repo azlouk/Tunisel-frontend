@@ -101,6 +101,7 @@ export class CribleComponent implements OnInit{
     this.crible=new Crible();
     this.submitted = false;
     this.cribleDialog = true;
+   this.getAllBandes()
   }
 
   deleteSelectedSbls() {
@@ -113,6 +114,8 @@ export class CribleComponent implements OnInit{
     this.isUpdateCrible=true;
     this.crible= crible ;
     this.cribleDialog = true;
+    this.getAllBandes()
+
   }
 
   deleteCrible(crible: Crible) {
@@ -276,5 +279,8 @@ export class CribleComponent implements OnInit{
   public hideDialogResult() {
   this.getAllCribles();
   this.resultCribleDialog=false;
+  }
+  getAllBandes(){
+    this.bandeService.getAllBandesDTO().subscribe(value => this.bandes=value)
   }
 }

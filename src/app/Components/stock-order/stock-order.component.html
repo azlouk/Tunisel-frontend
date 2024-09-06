@@ -15,7 +15,7 @@
 
       </p-toolbar>
 
-      <p-table #dt [loading]="loading" [value]="stockOrders" [columns]="cols"  responsiveLayout="scroll" [rows]="10" [globalFilterFields]="['id','reference','name','dateCreation','calibre','volumeSaline','volumeTerrain','volumePort','volumeQuai','volumeTotal']" [paginator]="true" [rowsPerPageOptions]="[10,20,30]" [showCurrentPageReport]="true" currentPageReportTemplate="Display  {first} to  {last} of  {totalRecords} entries" [(selection)]="selectedStockOrders" selectionMode="multiple" [rowHover]="true" dataKey="id">
+      <p-table  [loading]="loading" #dt [value]="stockOrders" [columns]="cols"  responsiveLayout="scroll" [rows]="10" [globalFilterFields]="['id','reference','description','dateStock','emplacement','etat','quantite','type']" [paginator]="true" [rowsPerPageOptions]="[10,20,30]" [showCurrentPageReport]="true" currentPageReportTemplate="Display  {first} to  {last} of  {totalRecords} entries" [(selection)]="selectedStockOrders" selectionMode="multiple" [rowHover]="true" dataKey="id">
         <ng-template pTemplate="caption">
           <div class="flex flex-column md:flex-row md:justify-content-between md:align-items-center">
             <h5 class="m-0">Stock Order management</h5>
@@ -109,9 +109,15 @@
 
     <p-dialog [(visible)]="productDialog" [style]="{width: '600px'}" header="Pond details" [modal]="true" class="p-fluid">
       <ng-template pTemplate="content">
+
+
         <div class="field">
           <label for="bassin">Pond</label>
           <p-multiSelect id="bassin" [options]="bassins"    [(ngModel)]="stockOrder.bassinList"  placeholder="Select a Pond" optionLabel="reference" display="chip" ></p-multiSelect>
+        </div>
+        <div class="field">
+          <label>Washed</label>
+          <p-dropdown [options]="sbls" [(ngModel)]="stockOrder.sbl"   class="w-full" placeholder="Select a Washed" optionLabel="reference" display="chip" ></p-dropdown>
 
         </div>
 

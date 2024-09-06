@@ -26,7 +26,6 @@ import {SblfService} from "../../Services/sblf.service";
 import {CheckboxModule} from "primeng/checkbox";
 import {AnalysesChimique} from "../../Models/analyses-chimique";
 import {AnalyseChimiqueService} from "../../Services/analyse-chimique.service";
-import {AnalyseChimiqueComponent} from "../analyse-chimique/analyse-chimique.component";
 import {DialogModule} from "primeng/dialog";
 import {DropdownModule} from "primeng/dropdown";
 import Swal from "sweetalert2";

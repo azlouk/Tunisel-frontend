@@ -31,6 +31,8 @@ import {log} from "@angular-devkit/build-angular/src/builders/ssr-dev-server";
 import {MessagesModule} from "primeng/messages";
 import {InputTextareaModule} from "primeng/inputtextarea";
 import {CalendarModule} from "primeng/calendar";
+import {Sbl} from "../../Models/sbl";
+import {SblService} from "../../Services/sbl.service";
 
 @Component({
   selector: 'app-stock-order',
@@ -104,6 +106,7 @@ export class StockOrderComponent implements OnInit{
   private isUpdateStockOrder=false;
 
   loading:boolean=false ;
+  public sbls: Sbl[]=[];
 
 
   constructor(  private messageService: MessageService,
@@ -111,7 +114,8 @@ export class StockOrderComponent implements OnInit{
                 private stockOrderService :StockOrderService,
                 private salineService :SalineService,
                 private datepipe:DatePipe,
-                private historyTransferService :HistoryTransferService) {
+                private historyTransferService :HistoryTransferService,
+                private sblService:SblService) {
 
   }
 
@@ -129,11 +133,16 @@ export class StockOrderComponent implements OnInit{
     this.getAllStockOrder();
   }
 
+  getAllSbls(){
+    this.sblService.getAllSblDTO().subscribe(value => this.sbls=value)
+  }
   openNew() {
     this.stockOrder = new StockOrder();
 
     this.submitted = false;
     this.productDialog = true;
+    this.getAllSbls();
+
   }
 
   deleteSelectedBassins() {
@@ -145,6 +154,7 @@ export class StockOrderComponent implements OnInit{
   editStockOrder(stockOrder: StockOrder) {
     this.isUpdateStockOrder=true;
     this.stockOrder = stockOrder ;
+    this.getAllSbls();
 
     this.productDialog = true;
   }
@@ -210,7 +220,7 @@ export class StockOrderComponent implements OnInit{
     if(this.isUpdateStockOrder==true) {
 
 
-      console.error(this.stockOrder)
+      // console.error(this.stockOrder)
 
       this.stockOrderService.updateStockOrder(this.stockOrder).subscribe(() =>{ this.getAllStockOrder();});
 
@@ -245,7 +255,7 @@ export class StockOrderComponent implements OnInit{
   }
   getAllStockOrder() {
     this.loading=true ;
-    this.stockOrderService.getAllStockOrder()
+    this.stockOrderService.getAllStockOrderDTO()
       .subscribe((stockOrders: StockOrder[]) => {
         this.stockOrders = stockOrders;
         this.loading=false ;
@@ -495,7 +505,5 @@ this.getAllStockOrder();
   protected readonly Saline = Saline;
 
 
-  getIsHide() {
-    alert('ok')
-  }
+
 }

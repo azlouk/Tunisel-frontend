@@ -184,8 +184,9 @@ export class SblComponent implements OnInit {
 
   openNew() {
     this.sbl = {};
-    console.log("sbl: " + new JsonPipe().transform(this.sbl.bandeList))
+    // console.log("sbl: " + new JsonPipe().transform(this.sbl.bandeList))
     this.submitted = false;
+
     this.productDialog = true;
   }
 
@@ -231,7 +232,7 @@ export class SblComponent implements OnInit {
 
   confirmDelete() {
     this.deleteProductDialog = false;
-    console.log("this.sbl.id", this.sbl.id);
+    // console.log("this.sbl.id", this.sbl.id);
     if (this.sbl.id != null) {
       this.sblService.deleteSbl(this.sbl.id).subscribe(() => {
         this.sbls = this.sbls.filter(val => val.id !== this.sbl.id);
@@ -288,7 +289,7 @@ export class SblComponent implements OnInit {
 
     this.sblService.getAllSblDTO().subscribe((v: Sbl[]) => {
       this.sbls = v;
-      // console.log(new JsonPipe().transform("====================>>>>>>"+this.sbls))
+      // console.log("====================>>>>>>"+new JsonPipe().transform(this.sbls))
       this.loading = false;
 
     }, error => {
@@ -310,7 +311,7 @@ export class SblComponent implements OnInit {
 
     this.Selectetsbl = Sbl;
     this.visiblePrint = true
-    console.log("---->" + new JsonPipe().transform(this.Selectetsbl));
+    // console.log("---->" + new JsonPipe().transform(this.Selectetsbl));
   }
 
 
@@ -321,10 +322,10 @@ export class SblComponent implements OnInit {
     data.forEach(v => {
 
       if (v.dateAnalyse !== undefined) {
-        console.log(typeof v.dateAnalyse)
+        // console.log(typeof v.dateAnalyse)
         const d = v.dateAnalyse + "";
         const dateana: Date = new Date(d)
-        console.log("-D-->" + dateana)
+        // console.log("-D-->" + dateana)
         if (this.AfterTodate(this.DatefiltrageStart, dateana) && this.AfterTodate(dateana, this.DatefiltrageEnd)) {
           newAnalyse.push(v);
         } else {
@@ -367,10 +368,10 @@ export class SblComponent implements OnInit {
     data.forEach(v => {
 
       if (v.dateAnalyse !== undefined) {
-        console.log(typeof v.dateAnalyse)
+        // console.log(typeof v.dateAnalyse)
         const d = v.dateAnalyse + "";
         const dateana: Date = new Date(d)
-        console.log("-D-->" + dateana)
+        // console.log("-D-->" + dateana)
         if (this.AfterTodate(this.DatefiltrageStart, dateana) && this.AfterTodate(dateana, this.DatefiltrageEnd)) {
           newAnalyse.push(v);
         } else {
@@ -421,7 +422,7 @@ export class SblComponent implements OnInit {
   }
 
   AfterTodate(date1: Date, date2: Date): boolean {
-    console.log(date1 + "<" + date2)
+    // console.log(date1 + "<" + date2)
     return date1.getDay() <= date2.getDay() && date1.getMonth() <= date2.getMonth() && date1.getFullYear() <= date2.getFullYear()
   }
 
@@ -628,6 +629,7 @@ export class SblComponent implements OnInit {
     let totalCrible: number = 0;
     let totalConcasseur: number = 0;
     let totalBande: number = 0;
+    let totalSalinesStockOrder: number = 0;
 
     // Calculate totalBande
     if (sbl.bandeList && sbl.bandeList.length > 0) {
@@ -643,12 +645,6 @@ export class SblComponent implements OnInit {
       });
     }
 
-    // Calculate totalCrible
-    if (sbl.cribleList && sbl.cribleList.length > 0) {
-      sbl.cribleList.forEach(crible => {
-        totalCrible += crible.resultCribles?.reduce((sum, result) => sum + result.bigSalt, 0) || 0;
-      });
-    }
 
     // Calculate totalConcasseur
     if (sbl.concasseurList && sbl.concasseurList.length > 0) {
@@ -656,8 +652,22 @@ export class SblComponent implements OnInit {
         totalConcasseur += concasseur.resultConcasseurs?.reduce((sum, resultConcasseur) => sum + resultConcasseur.result, 0) || 0;
       });
     }
+    // Calculate totalCrible
+    if (sbl.cribleList && sbl.cribleList.length > 0) {
+      sbl.cribleList.forEach(crible => {
+        totalCrible += crible.resultCribles?.reduce((sum, result) => sum + result.bigSalt, 0) || 0;
+      });
+    }
 
-    return totalCrible+ totalConcasseur +totalBande;
+
+    // Calculate totalSalinesStockOrder
+    if (sbl.stockOrderList && sbl.stockOrderList.length > 0) {
+      sbl.stockOrderList.forEach(stockOrder => {
+        totalSalinesStockOrder += stockOrder.salines?.reduce((sum, saline) => sum + saline.volumeSaline, 0) || 0;
+      });
+    }
+
+    return (totalCrible+ totalConcasseur +totalBande)-totalSalinesStockOrder;
   }
 
 

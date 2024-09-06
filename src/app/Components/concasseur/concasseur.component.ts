@@ -87,6 +87,8 @@ export class ConcasseurComponent implements OnInit{
     this.concasseur=new Concasseur();
     this.submitted = false;
     this.concasseurDialog = true;
+    this.  getAllCribles();
+
   }
 
   deleteSelectedSbls() {
@@ -99,6 +101,7 @@ export class ConcasseurComponent implements OnInit{
     this.isUpdateConcasseur=true;
     this.concasseur= concasseur ;
     this.concasseurDialog = true;
+    this.  getAllCribles();
   }
 
   deleteConcasseur(concasseur: Concasseur) {
@@ -265,4 +268,8 @@ export class ConcasseurComponent implements OnInit{
   }
 
   protected readonly getToken = getToken;
+
+  getAllCribles(){
+    this.cribleService.getAllCribles().subscribe(value => this.cribles=value)
+  }
 }

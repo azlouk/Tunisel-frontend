@@ -2,24 +2,27 @@ import {Bassin} from "./bassin";
 import {Commande} from "./commande";
 import {Saline} from "./saline";
 import {HistoryTransfer} from "./history-transfer";
+import {Sbl} from "./sbl";
 
 
 export class StockOrder{
-   id: number;
-   reference: string;
-   dateCreation: Date;
-   nom: string;
-   calibre: number;
+  id: number;
+  reference: string;
+  dateCreation: Date;
+  nom: string;
+  calibre: number;
 
-   volumeTerrain: number;
-   volumePort: number;
-   volumeQuai: number;
+  volumeTerrain: number;
+  volumePort: number;
+  volumeQuai: number;
 
-   bassinList: Bassin[];
-   salines: Saline[];
-   listHistory: HistoryTransfer[];
+  bassinList: Bassin[];
+  salines: Saline[];
+  listHistory: HistoryTransfer[];
+  sbl:Sbl;
 
-  constructor(_id: number=0, _reference: string="", _dateCreation: Date=new Date(), _nom: string="", _calibre: number=0, _volumeTerrain: number=0, _volumePort: number=0, _volumeQuai: number=0, _bassinList: Bassin[]=[], _salines: Saline[]=[], _listHistory: HistoryTransfer[]=[]) {
+
+  constructor(_id: number=0, _reference: string="", _dateCreation: Date=new Date(), _nom: string="", _calibre: number=0, _volumeTerrain: number=0, _volumePort: number=0, _volumeQuai: number=0, _bassinList: Bassin[]=[], _salines: Saline[]=[], _listHistory: HistoryTransfer[]=[], _sbl: Sbl={}) {
     this.id = _id;
     this.reference = _reference;
     this.dateCreation = _dateCreation;
@@ -31,8 +34,8 @@ export class StockOrder{
     this.bassinList = _bassinList;
     this.salines = _salines;
     this.listHistory = _listHistory;
+    this.sbl = _sbl;
   }
-
 
   public get _id(): number {
     return this.id;
@@ -120,5 +123,13 @@ export class StockOrder{
 
   public set _listHistory(value: HistoryTransfer[]) {
     this.listHistory = value;
+  }
+
+  public get _sbl(): Sbl {
+    return this.sbl;
+  }
+
+  public set _sbl(value: Sbl) {
+    this.sbl = value;
   }
 }

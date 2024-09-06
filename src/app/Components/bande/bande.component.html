@@ -382,10 +382,10 @@
     </p-dialog>
     <!--==============================ADD TRAITEMENT STOCK===============================================================================-->
 
-    <p-dialog [(visible)]="productDialog" [style]="{width: '450px'}" header="Bande" [modal]="true" class="p-fluid">
+    <p-dialog [(visible)]="productDialog" [style]="{width: '450px'}" header="Band" [modal]="true" class="p-fluid">
       <ng-template pTemplate="content">
         <div class="field">
-          <label for="name">Sbnl</label>
+          <label for="name">Unwashed</label>
           <p-multiSelect [options]="sbnls"   [(ngModel)]="bande.sbnlList"  placeholder="Select a Stock Unwashed" optionLabel="reference" display="chip" class="w-full"  ></p-multiSelect>
 
         </div>

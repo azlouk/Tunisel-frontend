@@ -127,7 +127,6 @@
         <div class="cart mt-5">
           <p-table #dt [loading]="loading"
                    [value]="selectedBande.traitementStocks!==undefined?selectedBande.traitementStocks:[]"
-
                    responsiveLayout="scroll" [rows]="10"
                    [globalFilterFields]="['id','date','value']"
                    [paginator]="true"
@@ -390,7 +389,7 @@
 
       <ng-template pTemplate="content">
 
-        <div class="field">
+        <div class="field" [hidden]="(sbl.cribleList && sbl.cribleList.length > 0)||(sbl.concasseurList && sbl.concasseurList.length > 0)">
           <label>Band</label>
           <p-multiSelect [options]="bandes"   [(ngModel)]="sbl.bandeList"  placeholder="Select a Band" optionLabel="reference" display="chip" class="w-full" (ngModelChange)="getCalibresBySelectedBandes(sbl.bandeList)" ></p-multiSelect>
         </div>
@@ -400,12 +399,12 @@
           <p-dropdown [options]="calibres" [(ngModel)]="sbl.calibre"   class="w-full" ></p-dropdown>
         </div>
 
-        <div class="field">
+        <div class="field"[hidden]="(sbl.bandeList && sbl.bandeList.length > 0)||(sbl.concasseurList && sbl.concasseurList.length > 0)">
           <label>Crible</label>
           <p-multiSelect [options]="cribles"   [(ngModel)]="sbl.cribleList"  placeholder="Select a Crible" optionLabel="reference" display="chip" class="w-full"  ></p-multiSelect>
         </div>
 
-        <div class="field">
+        <div class="field" [hidden]="(sbl.bandeList && sbl.bandeList.length > 0)||(sbl.cribleList && sbl.cribleList.length > 0)">
           <label>Concasseur</label>
           <p-multiSelect [options]="concasseurs"   [(ngModel)]="sbl.concasseurList"  placeholder="Select a Concasseur" optionLabel="reference" display="chip" class="w-full"  ></p-multiSelect>
         </div>
