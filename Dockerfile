@@ -14,7 +14,7 @@ RUN npm run build --prod
 
 # Stage 2: Serve the app using Nginx
 FROM nginx:alpine
-COPY --from=build /app/dist/tuniselfrontend /usr/share/nginx/html
+COPY --from=app /app/dist/tuniselfrontend /usr/share/nginx/html
 
 # Copy custom Nginx configuration if needed
 # COPY nginx.conf /etc/nginx/conf.d/default.conf

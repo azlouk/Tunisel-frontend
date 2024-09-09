@@ -322,12 +322,13 @@
             </div>
           </div>
 <!--==============================================-->
-          <div class="flex justify-content-between align-items-center border-1 border-round border-gray-400 pt-5 pb-5 pr-3 pl-3">
+          <div class="flex border-1 justify-content-between align-items-center border-1 border-round border-gray-400 pt-5 pb-5 pr-3 pl-3">
             <div class="flex align-items-start gap-3 justify-content-between">
               <label class="font-bold mr-4">Customer analysis: </label>
 
             </div>
             <div class="flex flex-column gap-7">
+
             <div class="flex align-items-center gap-4">
               <label class="font-bold ">Date :</label>
               <input  class="p-2 shadow-1" type="date" pInputText dateformat="yy-MM-dd"   [(ngModel)]="commande.dateCustomer"   />
@@ -335,42 +336,47 @@
               <div class="flex align-items-start gap-3 justify-content-between">
             <div class="flex align-items-start gap-3 justify-content-between">
               <p-floatLabel>
-                <input type="text" pInputText [(ngModel)]="commande.h2o" [disabled]="getToken()!=='ADMIN'"   class="w-full" />
+                <input type="text" pInputText [(ngModel)]="commande.h2o" [disabled]="getToken()=='EMPLOYER'"  class="w-full" />
                 <label class="font-bold">H₂O</label>
               </p-floatLabel>
             </div>
             <div class="flex align-items-start gap-3 justify-content-between">
               <p-floatLabel>
-                <input type="text" pInputText [(ngModel)]="commande.mg" [disabled]="getToken()!=='ADMIN'"   class="w-full" />
+                <input type="text" pInputText [(ngModel)]="commande.mg" [disabled]="getToken()=='EMPLOYER'"   class="w-full" />
                 <label class="font-bold">Mg</label>
               </p-floatLabel>
             </div>
             <div class="flex align-items-start gap-3 justify-content-between">
               <p-floatLabel>
-                <input type="text" pInputText [(ngModel)]="commande.so4" [disabled]="getToken()!=='ADMIN'"  class="w-full" />
+                <input type="text" pInputText [(ngModel)]="commande.so4" [disabled]="getToken()=='EMPLOYER'"  class="w-full" />
                 <label class="font-bold">SO₄</label>
               </p-floatLabel>
             </div>
             <div class="flex align-items-start gap-3 justify-content-between">
               <p-floatLabel>
-                <input type="text" pInputText [(ngModel)]="commande.nacl" [disabled]="getToken()!=='ADMIN'"   class="w-full" />
+                <input type="text" pInputText [(ngModel)]="commande.nacl" [disabled]="getToken()=='EMPLOYER'"   class="w-full" />
                 <label class="font-bold">NaCL</label>
               </p-floatLabel>
             </div>
             <div class="flex align-items-start gap-3 justify-content-between">
               <p-floatLabel>
-                <input type="text" pInputText [(ngModel)]="commande.mi" [disabled]="getToken()!=='ADMIN'"    class="w-full" />
+                <input type="text" pInputText [(ngModel)]="commande.mi" [disabled]="getToken()=='EMPLOYER'"    class="w-full" />
                 <label class="font-bold">MI</label>
               </p-floatLabel>
             </div>
             <div class="flex align-items-start gap-3 justify-content-between">
               <p-floatLabel>
-                <input type="text" pInputText [(ngModel)]="commande.fecn6"  [disabled]="getToken()!=='ADMIN'"  class="w-full" />
+                <input type="text" pInputText [(ngModel)]="commande.fecn6"  [disabled]="getToken()=='EMPLOYER'"  class="w-full" />
                 <label class="font-bold">Fe(CN)₆</label>
               </p-floatLabel>
             </div>
               </div>
+              <div class="flex justify-content-end  ">
+                <button *ngIf="getToken()=='COSTUMER'" pButton label="Update" icon="pi pi-check" class="p-button-success"
+                        (click)="saveCommande()"></button>
+              </div>
             </div>
+
           </div>
 
           <!--==============================================-->
