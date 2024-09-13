@@ -397,7 +397,7 @@
                [value]="recoltes"
                [columns]="cols"
                responsiveLayout="scroll" [rows]="10"
-               [globalFilterFields]="['id','date','value']"
+               [globalFilterFields]="['id','dateCreation','value']"
                [scrollable]="true"
                [tableStyle]="{ 'min-height': '25rem' }"
                [scrollHeight]="'400px'"
@@ -444,11 +444,11 @@
               <p-tableHeaderCheckbox></p-tableHeaderCheckbox>
             </th>
             <th pSortableColumn="id">Id <p-sortIcon field="id"></p-sortIcon></th>
-            <th pSortableColumn="date">Date Harvest<p-sortIcon field="date"></p-sortIcon></th>
+            <th pSortableColumn="dateCreation">Date Harvest<p-sortIcon field="dateCreation"></p-sortIcon></th>
             <th pSortableColumn="value">Value <p-sortIcon field="value"></p-sortIcon></th>
-            <th pSortableColumn="value">Rain Quantity Bengardene <p-sortIcon field="value"></p-sortIcon></th>
-            <th pSortableColumn="value">Temperature <p-sortIcon field="value"></p-sortIcon></th>
-            <th pSortableColumn="value">Observation<p-sortIcon field="value"></p-sortIcon></th>
+            <th pSortableColumn="RainQuantityBengardene ">Rain Quantity Bengardene <p-sortIcon field="RainQuantityBengardene"></p-sortIcon></th>
+            <th pSortableColumn="temperature">Temperature <p-sortIcon field="temperature"></p-sortIcon></th>
+            <th pSortableColumn="observation">Observation<p-sortIcon field="observation"></p-sortIcon></th>
 
             <th></th>
           </tr>
