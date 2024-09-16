@@ -110,7 +110,7 @@ isUpdateCommande:boolean=false;
   selectedColumns: Column[]=[];
 commandesCopy: Commande[]=[];
   stockOrders: StockOrder[] = [];
-  stockSelected!: StockOrder;
+  stockSelected: StockOrder=new StockOrder();
 
   TotalHarv: number=0;
   TotalProd: number=0;
