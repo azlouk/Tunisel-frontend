@@ -336,43 +336,43 @@
               <div class="flex align-items-start gap-3 justify-content-between">
             <div class="flex align-items-start gap-3 justify-content-between">
               <p-floatLabel>
-                <input type="text" pInputText [(ngModel)]="commande.h2o" [disabled]="getToken()=='EMPLOYER'"  class="w-full" />
+                <input type="text" pInputText [(ngModel)]="commande.h2o"    class="w-full" />
                 <label class="font-bold">H₂O</label>
               </p-floatLabel>
             </div>
             <div class="flex align-items-start gap-3 justify-content-between">
               <p-floatLabel>
-                <input type="text" pInputText [(ngModel)]="commande.mg" [disabled]="getToken()=='EMPLOYER'"   class="w-full" />
+                <input type="text" pInputText [(ngModel)]="commande.mg"     class="w-full" />
                 <label class="font-bold">Mg</label>
               </p-floatLabel>
             </div>
             <div class="flex align-items-start gap-3 justify-content-between">
               <p-floatLabel>
-                <input type="text" pInputText [(ngModel)]="commande.so4" [disabled]="getToken()=='EMPLOYER'"  class="w-full" />
+                <input type="text" pInputText [(ngModel)]="commande.so4"    class="w-full" />
                 <label class="font-bold">SO₄</label>
               </p-floatLabel>
             </div>
             <div class="flex align-items-start gap-3 justify-content-between">
               <p-floatLabel>
-                <input type="text" pInputText [(ngModel)]="commande.nacl" [disabled]="getToken()=='EMPLOYER'"   class="w-full" />
+                <input type="text" pInputText [(ngModel)]="commande.nacl"    class="w-full" />
                 <label class="font-bold">NaCL</label>
               </p-floatLabel>
             </div>
             <div class="flex align-items-start gap-3 justify-content-between">
               <p-floatLabel>
-                <input type="text" pInputText [(ngModel)]="commande.mi" [disabled]="getToken()=='EMPLOYER'"    class="w-full" />
+                <input type="text" pInputText [(ngModel)]="commande.mi"    class="w-full" />
                 <label class="font-bold">MI</label>
               </p-floatLabel>
             </div>
             <div class="flex align-items-start gap-3 justify-content-between">
               <p-floatLabel>
-                <input type="text" pInputText [(ngModel)]="commande.fecn6"  [disabled]="getToken()=='EMPLOYER'"  class="w-full" />
+                <input type="text" pInputText [(ngModel)]="commande.fecn6"     class="w-full" />
                 <label class="font-bold">Fe(CN)₆</label>
               </p-floatLabel>
             </div>
               </div>
               <div class="flex justify-content-end  ">
-                <button *ngIf="getToken()=='COSTUMER'" pButton label="Update" icon="pi pi-check" class="p-button-success"
+                <button *ngIf="getToken()!=='ADMIN'" pButton label="Update" icon="pi pi-check" class="p-button-success"
                         (click)="saveCommande()"></button>
               </div>
             </div>
