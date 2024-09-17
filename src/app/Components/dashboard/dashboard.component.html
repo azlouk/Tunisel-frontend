@@ -66,173 +66,282 @@
 
     <div class="col-12  flex flex-column justify-content-between  ">
 
-      <div class="border-1 border-round-2xl border-gray-200 p-4  mt-4 mb-4 bg-white">
-        <div class="flex flex-wrap justify-content-between ">
-          <div class="flex flex-column gap-2">
-            <label class="font-bold"> Year</label>
-            <p-calendar
-              [(ngModel)]="date"
-              view="year"
-              dateFormat="yy"
-              (ngModelChange)="changeYear(date)"/>
-          </div>
+      <div class="card ">
+        <h5 class="text-3xl font-bold">Analyses per month</h5>
+        <div class="border-1 border-round-2xl border-gray-200 p-4  mt-4 mb-4 bg-white">
+          <div class="flex flex-wrap justify-content-between ">
+            <div class="flex flex-column gap-2">
+              <label class="font-bold"> Year</label>
+              <p-calendar
+                [(ngModel)]="date"
+                view="year"
+                dateFormat="yy"
+                (ngModelChange)="changeYear(date)"/>
+            </div>
 
-          <div class="flex flex-column gap-2">
-            <label class="font-bold"> Well</label>
+            <div class="flex flex-column gap-2">
+              <label class="font-bold"> Well</label>
 
-            <p-dropdown
-              [(ngModel)]="selectedPuit"
-              [options]="puits"
-              (ngModelChange)="changeSelectedPuit(selectedPuit)"
-              optionLabel="reference"
-              placeholder="Select a Well"/>
-          </div>
-          <div class="flex flex-column gap-2">
-            <label class="font-bold"> Pond</label>
+              <p-dropdown
+                [(ngModel)]="selectedPuit"
+                [options]="puits"
+                (ngModelChange)="changeSelectedPuit(selectedPuit)"
+                optionLabel="reference"
+                placeholder="Select a Well"/>
+            </div>
+            <div class="flex flex-column gap-2">
+              <label class="font-bold"> Pond</label>
 
-            <p-dropdown
-              [(ngModel)]="selectedBassin"
-              [options]="bassins"
-              (ngModelChange)="changeSelectedBassin(selectedBassin)"
-              optionLabel="reference"
-              placeholder="Select a Pond"/>
-          </div>
-          <div class="flex flex-column gap-2">
-            <label class="font-bold"> Unwashed</label>
+              <p-dropdown
+                [(ngModel)]="selectedBassin"
+                [options]="bassins"
+                (ngModelChange)="changeSelectedBassin(selectedBassin)"
+                optionLabel="reference"
+                placeholder="Select a Pond"/>
+            </div>
+            <div class="flex flex-column gap-2">
+              <label class="font-bold"> Unwashed</label>
 
-            <p-dropdown
+              <p-dropdown
 
-              [(ngModel)]="selectedSbnl"
-              [options]="sbnls"
-              (ngModelChange)="changeSelectedSbnl(selectedSbnl)"
-              optionLabel="reference"
-              placeholder="Select a Unwashed"/>
-          </div>
+                [(ngModel)]="selectedSbnl"
+                [options]="sbnls"
+                (ngModelChange)="changeSelectedSbnl(selectedSbnl)"
+                optionLabel="reference"
+                placeholder="Select a Unwashed"/>
+            </div>
 
-          <div class="flex flex-column gap-2">
-            <label class="font-bold"> washed</label>
+            <div class="flex flex-column gap-2">
+              <label class="font-bold"> washed</label>
 
-            <p-dropdown
+              <p-dropdown
 
-              [(ngModel)]="selectedSbl"
-              [options]="sbls"
-              (ngModelChange)="changeSelectedSbl(selectedSbl)"
-              optionLabel="reference"
-              placeholder="Select a washed"/>
-          </div>
-          <div class="flex flex-column gap-2">
-            <label class="font-bold"> washed Ship</label>
+                [(ngModel)]="selectedSbl"
+                [options]="sbls"
+                (ngModelChange)="changeSelectedSbl(selectedSbl)"
+                optionLabel="reference"
+                placeholder="Select a washed"/>
+            </div>
+            <div class="flex flex-column gap-2">
+              <label class="font-bold"> washed Ship</label>
 
-            <p-dropdown
+              <p-dropdown
 
-              [(ngModel)]="selectedSblf"
-              [options]="sblfs"
-              (ngModelChange)="changeSelectedSblf(selectedSblf)"
-              optionLabel="reference"
-              placeholder="Select a washed Ship"/>
+                [(ngModel)]="selectedSblf"
+                [options]="sblfs"
+                (ngModelChange)="changeSelectedSblf(selectedSblf)"
+                optionLabel="reference"
+                placeholder="Select a washed Ship"/>
+            </div>
           </div>
         </div>
-      </div>
-      <div class="card ">
-        <h5>Analyses per month</h5>
+
         <p-chart [data]="chartDataAnalyse" [options]="chartOptions" type="line"></p-chart>
       </div>
 
-      <div class="border-1 border-round-2xl border-gray-200 p-4  mt-4 mb-4 bg-white">
-        <div class="flex gap-7 mb-3">
-          <div class="flex flex-column gap-2">
-            <label class="font-bold"> Year</label>
-            <p-calendar
-              [(ngModel)]="dateSumRecolte"
-              view="year"
-              dateFormat="yy"
-              (ngModelChange)="changedateSumRecolte(dateSumRecolte)"/>
+      <div class="card">
+        <h5 class="text-3xl font-bold">SUM HARVEST PER YEAR OR MONTH</h5>
+        <div class="border-1 border-round-2xl border-gray-200 p-4  mt-4 mb-4 bg-white">
+          <div class="flex align-items-center gap-7 mb-3">
+            <div class="flex flex-column gap-2">
+              <label class="font-bold"> Pond</label>
+
+              <p-dropdown
+                [(ngModel)]="selectedBassinRecolte"
+                [options]="bassins"
+                (ngModelChange)="changeSelectedBassinSumRecolte(selectedBassinRecolte)"
+                optionLabel="reference"
+                placeholder="Select a Pond"/>
+            </div>
+
+            <p-tabView class="w-full">
+              <p-tabPanel header="Year">
+                <div class="flex flex-column gap-2">
+                  <label class="font-bold"> Year</label>
+                  <p-calendar
+                    [(ngModel)]="dateSumRecolte"
+                    view="year"
+                    dateFormat="yy"
+                    (ngModelChange)="changedateSumRecolte(dateSumRecolte)"/>
+                </div>
+
+              </p-tabPanel>
+              <p-tabPanel header="Month">
+                <div class="flex flex-column gap-2">
+
+                  <label class="font-bold"> Month</label>
+
+                  <p-calendar
+                    [(ngModel)]="dateSumRecolteByDay"
+                    view="month"
+                    dateFormat="mm/yy"
+                    [readonlyInput]="true"
+                    (ngModelChange)="changedateSumRecolteByDay(dateSumRecolteByDay)"/>
+
+
+                </div>
+
+              </p-tabPanel>
+
+            </p-tabView>
+
+
           </div>
-
-          <div class="flex flex-column gap-2">
-            <label class="font-bold"> Pond</label>
-
-            <p-dropdown
-              [(ngModel)]="selectedBassinRecolte"
-              [options]="bassins"
-              (ngModelChange)="changeSelectedBassinSumRecolte(selectedBassinRecolte)"
-              optionLabel="reference"
-              placeholder="Select a Pond"/>
-          </div>
-          <div class="flex flex-column gap-2">
-
-              <label class="font-bold"> Month</label>
-
-              <p-calendar
-                [(ngModel)]="dateSumRecolteByDay"
-                view="month"
-                dateFormat="mm/yy"
-                [readonlyInput]="true"
-                (ngModelChange)="changedateSumRecolteByDay(dateSumRecolteByDay)"/>
-
 
         </div>
-      </div>
 
-    </div>
-      <div class="card">
-        <h5>SUM HARVEST PER YEAR OR MONTH</h5>
         <p-chart type="bar" [data]="barData" [options]="barOptions"></p-chart>
       </div>
 
-      <div class="border-1 border-round-2xl border-gray-200 p-4  mt-4 mb-4 bg-white">
-        <div class="flex gap-7 mb-3">
-
-          <div class="flex flex-column gap-2">
-            <label class="font-bold"> Stock Order</label>
-
-            <p-dropdown
-              [(ngModel)]="selectedStockOrder"
-              [options]="stockOrders"
-              (ngModelChange)="changeSelectedStockOrder(selectedStockOrder)"
-              optionLabel="reference"
-              placeholder="Select a Stock Order"/>
-          </div>
-        </div>
-
-
-    </div>
       <div class="card flex flex-column align-items-center ">
-        <h5 class="text-left w-full">SALT STOCK LEVEL</h5>
+        <h5 class="text-left w-full text-3xl font-bold">SALT STOCK LEVEL</h5>
+        <div class="w-full justify-content-start border-1 border-round-2xl border-gray-200 p-4  mt-4 mb-4 bg-white">
+          <div class="flex gap-7 mb-3">
+
+            <div class="flex flex-column gap-2">
+              <label class="font-bold"> Stock Order</label>
+
+              <p-dropdown
+                [(ngModel)]="selectedStockOrder"
+                [options]="stockOrders"
+                (ngModelChange)="changeSelectedStockOrder(selectedStockOrder)"
+                optionLabel="reference"
+                placeholder="Select a Stock Order"/>
+            </div>
+          </div>
+
+
+        </div>
 
         <p-chart type="pie" class="w-4" [data]="pieData" [options]="pieOptions"></p-chart>
       </div>
-      <div class="border-1 border-round-2xl border-gray-200 p-4  mt-4 mb-4 bg-white">
-        <div class="flex gap-7 mb-3">
-          <div class="flex flex-column gap-2">
-            <label class="font-bold"> Year</label>
-            <p-calendar
-              [(ngModel)]="dateSumProduction"
-              view="year"
-              dateFormat="yy"
-              (ngModelChange)="changedateSumProduction(dateSumProduction)"/>
+      <div class="card">
+        <h5 class="text-3xl font-bold">QUANTITY OF SALT PRODUCED</h5>
+        <div class="border-1 border-round-2xl border-gray-200 p-4  mt-4 mb-4 bg-white">
+          <div class="flex gap-7 mb-3">
+            <p-tabView class="w-full">
+              <p-tabPanel header="Year">
+                <div class="flex flex-column gap-2">
+                  <label class="font-bold"> Year</label>
+                  <p-calendar
+                    [(ngModel)]="dateSumProduction"
+                    view="year"
+                    dateFormat="yy"
+                    (ngModelChange)="changedateSumProduction(dateSumProduction)"/>
+                </div>
+
+              </p-tabPanel>
+              <p-tabPanel header="Month">
+                <div class="flex flex-column gap-2">
+
+                  <label class="font-bold"> Month</label>
+
+                  <p-calendar
+                    [(ngModel)]="dateSumProductionByDay"
+                    view="month"
+                    dateFormat="mm/yy"
+                    [readonlyInput]="true"
+                    (ngModelChange)="changedateSumProductionByDay(dateSumProductionByDay)"/>
+
+
+                </div>
+
+              </p-tabPanel>
+
+            </p-tabView>
+
           </div>
 
-          <div class="flex flex-column gap-2">
-
-            <label class="font-bold"> Month</label>
-
-            <p-calendar
-              [(ngModel)]="dateSumProductionByDay"
-              view="month"
-              dateFormat="mm/yy"
-              [readonlyInput]="true"
-              (ngModelChange)="changedateSumProductionByDay(dateSumProductionByDay)"/>
-
-
-          </div>
         </div>
 
-      </div>
-      <div class="card">
-        <h5>QUANTITY OF SALT PRODUCED</h5>
         <p-chart type="bar" [data]="barDataProduction" [options]="barOptionsProduction"></p-chart>
       </div>
+      <!--      ============de quantité transférée de sel =============-->
+      <div class="card">
+        <h5 class="text-3xl font-bold">QUANTITY OF SALT TRANSFERRED</h5>
+        <div class="border-1 border-round-2xl border-gray-200 p-4  mt-4 mb-4 bg-white">
+          <div class="flex align-items-center gap-7 mb-3">
+            <div class=" ">
+              <label >Starting point</label>
+              <p-dropdown [options]="TransferAttributsStart" [(ngModel)]="startingPoint" [editable]="true" (ngModelChange)="getTransferAttributsFiltredStart()"  optionLabel="label" class="w-full" ></p-dropdown>
+
+            </div>
+
+            <div class="">
+              <label >Arriving point</label>
+              <p-dropdown [options]="TransferAttributsEnd" [(ngModel)]="arrivingPoint" (ngModelChange)="getTransferAttributsFiltredEnd()" [editable]="true" optionLabel="label" class="w-full" ></p-dropdown>
+            </div>
+            <p-tabView class="w-full">
+              <p-tabPanel header="Year">
+                <div class="flex flex-column gap-2">
+                  <label class="font-bold"> Year</label>
+                  <p-calendar
+                    [(ngModel)]="dateSumTransfer"
+                    view="year"
+                    dateFormat="yy"
+                    (ngModelChange)="changedateSumTransfer(dateSumTransfer)"/>
+                </div>
+
+              </p-tabPanel>
+              <p-tabPanel header="Month">
+                <div class="flex flex-column gap-2">
+
+                  <label class="font-bold"> Month</label>
+
+                  <p-calendar
+                    [(ngModel)]="dateSumTransferByDay"
+                    view="month"
+                    dateFormat="mm/yy"
+                    [readonlyInput]="true"
+                    (ngModelChange)="changedateSumTransferByDay(dateSumTransferByDay)"/>
+
+
+                </div>
+
+              </p-tabPanel>
+
+            </p-tabView>
+
+          </div>
+
+        </div>
+
+        <p-chart type="bar" [data]="barDataTransfer" [options]="barOptionsTransfer"></p-chart>
+      </div>
+
+      <!--      ============ETAT BASSIN =============-->
+      <div class="card">
+        <h5 class="text-3xl font-bold">STATE POND</h5>
+        <div class="border-1 border-round-2xl border-gray-200 p-4  mt-4 mb-4 bg-white">
+          <div class="flex gap-7 mb-3">
+            <div class="flex flex-column gap-2">
+              <label class="font-bold"> Pond</label>
+
+              <p-dropdown
+                [(ngModel)]="selectedEtatBassin"
+                [options]="bassins"
+                (ngModelChange)="changeSelectedEtatBassin(selectedEtatBassin)"
+                optionLabel="reference"
+                placeholder="Select a Pond"/>
+            </div>
+
+                <div class="flex flex-column gap-2">
+                  <label class="font-bold"> Year</label>
+                  <p-calendar
+                    [(ngModel)]="dateSumEtatBassin"
+                    view="year"
+                    dateFormat="yy"
+                    (ngModelChange)="changedateSumEtatBassin(dateSumEtatBassin)"/>
+                </div>
+
+
+
+          </div>
+
+        </div>
+        <p-chart type="bar" [data]="dataEtatBassin" [options]="optionsEtatBassin" />
+      </div>
+
 
     </div>
 

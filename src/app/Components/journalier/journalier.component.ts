@@ -92,7 +92,7 @@ export class JournalierComponent implements OnInit{
   }
   openNew() {
     this.journalierDialog=true;
-
+    this.journalier=new Journalier();
   }
 
   deleteSelectedPompe() {
@@ -161,6 +161,7 @@ export class JournalierComponent implements OnInit{
 
         this.getAllJournalier();
         this.journalierDialog=false;
+        this.journalier=new Journalier();
       });
 
 

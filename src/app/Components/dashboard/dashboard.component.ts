@@ -30,6 +30,7 @@ import {StockOrder} from "../../Models/stock-order";
 import _default from "chart.js/dist/plugins/plugin.tooltip";
 import numbers = _default.defaults.animations.numbers;
 import {StockOrderService} from "../../Services/stock-order.service";
+import {TabViewModule} from "primeng/tabview";
 
 
 @Component({
@@ -50,6 +51,7 @@ import {StockOrderService} from "../../Services/stock-order.service";
     ToolbarModule,
     CalendarModule,
     FloatLabelModule,
+    TabViewModule,
 
   ],
   templateUrl: './dashboard.component.html',
@@ -66,12 +68,22 @@ export class DashboardComponent implements OnInit {
   pieData: any;
   barOptionsProduction: any;
   barDataProduction: any;
+  barDataTransfer: any;
+  barOptionsTransfer: any;
+  dataEtatBassin: any;
+  optionsEtatBassin: any;
 
   totalRecolteValue:any[]=[];
   totalSortie1:any[]=[];
   totalSortie2:any[]=[];
   totalBigSalt:any[]=[];
   totalResultConcasseur:any[]=[];
+  totalQuantityTransfer:any[]=[];
+  totalSumEtatBassinInodee:any[]=[];
+  totalSumEtatBassinAlimentation :any[]=[];
+  totalSumEtatBassinSec:any[]=[];
+  totalSumEtatBassinVidange:any[]=[];
+  totalSumEtatBassinRecolte:any[]=[];
 
   public dashboardData: Dashboard = new Dashboard(0, 0,0,0);
   public userConnect:RegisterRequest=new RegisterRequest();
@@ -88,6 +100,13 @@ export class DashboardComponent implements OnInit {
   public selectedBassinRecolte: Bassin={};
   public selectedStockOrder:StockOrder=new StockOrder();
   public stockOrders:StockOrder[]=[];
+  selectedEtatBassin:Bassin={};
+  TransferAttributs:any[]=[];
+  TransferAttributsStart:any[]=[];
+  TransferAttributsEnd:any[]=[];
+
+  startingPoint: any;
+  arrivingPoint: any;
   constructor( private dashboardService: DashboardService,
                private userService:UserService,
                private bassinService:BassinService,
@@ -97,19 +116,34 @@ export class DashboardComponent implements OnInit {
                private sblfService:SblfService,
                private stockOrderService:StockOrderService) {}
 
-  ngOnInit() {
+  ngOnInit(){
+
+  this.TransferAttributs= [
+    {id:0,label:'Saline volume'},
+    {id:1,label:'Terrain volume'},
+    {id:2,label:'Port volume'},
+    {id:3,label:'Quai volume'},
+
+  ] ;
+    this.TransferAttributsStart=   [...this.TransferAttributs];
+    this.TransferAttributsEnd=   [...this.TransferAttributs];
+
     this.getUserConnected();
     // this.getCountTotalAnalysesChimiques();
     // this.getCountAnalyseChemiqueBassin();
-     this.fetchDashboardData()
-    this.getAllBassin();
+    this.fetchDashboardData()
+    this. getAllBassin();
     this.getAllSbnl();
     this.getAllSbl();
     this.getAllSblf();
     this.getAllPuit();
     this.getAllStockOder();
-   this.initChartBarForProduction()
-
+    this.initChartBarForProduction();
+    this.initChart();
+    this.initChartBar();
+    this.initChartPieChart(0,0,0,0);
+    this.initChartBarForTransfer()
+    this.initChartStackedBarForEtatBassin();
   }
 
   // getCountTotalAnalysesChimiques(){
@@ -251,6 +285,49 @@ export class DashboardComponent implements OnInit {
       this.totalResultConcasseur = value;
       this.initChartBarForProduction();    } );
   }
+
+  findMonthlySumTransferQuantityByStartingPointArrivingPointAndYear(startingPoint:string,arrivingPoint:string,year:number){
+    this.dashboardService.findMonthlySumTransferQuantityByStartingPointArrivingPointAndYear(startingPoint,arrivingPoint,year).subscribe((value:any[])=> {
+      this.totalQuantityTransfer = value;
+      this.initChartBarForTransfer();    } );
+  }
+
+  findDailySumTransferQuantityByStartingPointArrivingPointAndYearAndMonth(startingPoint:string,arrivingPoint:string,year:number,month:number){
+    this.dashboardService.findDailySumTransferQuantityByStartingPointArrivingPointAndYearAndMonth(startingPoint,arrivingPoint,year,month).subscribe((value:any[])=> {
+      this.totalQuantityTransfer = value;
+      this.initChartBarForTransfer();    } );
+  }
+  // =======================SUM ETAT BASSIN ==========================================
+  sumDaysByEtatBassinAndMonthAndYearInodee(bassinId:number,year:number,etatBassin:string){
+    this.dashboardService.sumDaysByEtatBassinAndMonthAndYear(bassinId,year,etatBassin).subscribe((value:any[])=> {
+      this.totalSumEtatBassinInodee = value;
+      this.initChartStackedBarForEtatBassin();    } );
+  }
+  sumDaysByEtatBassinAndMonthAndYearAlimentation (bassinId:number,year:number,etatBassin:string){
+    this.dashboardService.sumDaysByEtatBassinAndMonthAndYear(bassinId,year,etatBassin).subscribe((value:any[])=> {
+      this.totalSumEtatBassinAlimentation = value;
+      this.initChartStackedBarForEtatBassin();    } );
+  }
+
+  sumDaysByEtatBassinAndMonthAndYearSec (bassinId:number,year:number,etatBassin:string){
+    this.dashboardService.sumDaysByEtatBassinAndMonthAndYear(bassinId,year,etatBassin).subscribe((value:any[])=> {
+      this.totalSumEtatBassinSec = value;
+      this.initChartStackedBarForEtatBassin();    } );
+  }
+
+  sumDaysByEtatBassinAndMonthAndYearVidange(bassinId:number,year:number,etatBassin:string){
+    this.dashboardService.sumDaysByEtatBassinAndMonthAndYear(bassinId,year,etatBassin).subscribe((value:any[])=> {
+      this.totalSumEtatBassinVidange = value;
+      this.initChartStackedBarForEtatBassin();    } );
+  }
+
+  sumDaysByEtatBassinAndMonthAndYearRecolte(bassinId:number,year:number,etatBassin:string){
+    this.dashboardService.sumDaysByEtatBassinAndMonthAndYear(bassinId,year,etatBassin).subscribe((value:any[])=> {
+      this.totalSumEtatBassinRecolte = value;
+      this.initChartStackedBarForEtatBassin();    } );
+  }
+  // =======================SUM ETAT BASSIN ==========================================
+
   fetchDashboardData(): void {
     this.dashboardService.getDashboardData().subscribe(
       (data: Dashboard) => {
@@ -522,32 +599,103 @@ export class DashboardComponent implements OnInit {
     };
   }
 
- public getUserConnected(){
+  initChartBarForTransfer() {
+    const documentStyle = getComputedStyle(document.documentElement);
+    const textColor = documentStyle.getPropertyValue('--text-color');
+    const textColorSecondary = documentStyle.getPropertyValue('--text-color-secondary');
+    const surfaceBorder = documentStyle.getPropertyValue('--surface-border');
+
+    // Conditional labels based on `dateSumTransfer` or `dateSumTransferByDay` flags
+    let labels: string[];
+
+    if (this.dateSumTransfer) {
+      // Use month labels
+      labels = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
+    } else if (this.dateSumTransferByDay) {
+      // Extract month and year, then generate labels based on the days in that month
+      const month = this.getMonthFromDateString(this.dateSumTransferByDay);
+      const year = this.extractYearFromDate(this.dateSumTransferByDay);
+      const daysInMonth = this.getDaysInMonth(month, year);
+
+      labels = Array.from({ length: daysInMonth }, (_, i) => (i + 1).toString());
+    } else {
+      // Default or fallback label, if needed
+      labels = [];
+    }
+
+    this.barDataTransfer = {
+      labels: labels,
+      datasets: [
+
+        {
+          label: 'TRANSFER QUANTITY',
+          backgroundColor: '#ced621',
+          borderColor: '#ced621',
+          data: this.totalQuantityTransfer.map((a: any) => a[1]),
+
+        }
+      ]
+    };
+
+    this.barOptionsTransfer = {
+      plugins: {
+        legend: {
+          labels: {
+            color: textColor // Use `color` for newer chart.js versions
+          }
+        }
+      },
+      scales: {
+        x: {
+          ticks: {
+            color: textColorSecondary,
+            font: {
+              weight: 500
+            }
+          },
+          grid: {
+            display: false,
+            drawBorder: false
+          }
+        },
+        y: {
+          ticks: {
+            color: textColorSecondary
+          },
+          grid: {
+            color: surfaceBorder,
+            drawBorder: false
+          }
+        }
+      }
+    };
+  }
+  public getUserConnected(){
     this.userService.getUserConnect().subscribe(value => this.userConnect=value)
 }
-getAllBassin(){
+  getAllBassin(){
     this.bassinService.getAllBassinsDTO().subscribe(value => this.bassins=value)
-}
+  }
 
-getAllSbnl(){
+  getAllSbnl(){
     this.sbnlService.getAllSbnls().subscribe(value => this.sbnls=value)
 }
 
 
-getAllSbl(){
+  getAllSbl(){
     this.sblService.getAllSblDTO().subscribe(value => this.sbls=value)
 }
 
 
-getAllPuit(){
+  getAllPuit(){
     this.puitService.getAllPuits().subscribe(value => this.puits=value)
 }
 
-getAllSblf(){
+  getAllSblf(){
     this.sblfService.getAllSblfsDTO().subscribe(value => this.sblfs=value)
-}
+  }
 
-getAllStockOder(){
+  getAllStockOder(){
     this.stockOrderService.getAllStockOrderDTO().subscribe(value => this.stockOrders=value)
 }
   protected readonly getToken = getToken;
@@ -556,6 +704,9 @@ getAllStockOder(){
   public dateSumRecolteByDay!:Date|null;
   public dateSumProductionByDay!:Date|null;
   public dateSumProduction!:Date|null;
+  public dateSumTransfer!:Date|null;
+  public dateSumTransferByDay!:Date|null;
+  public dateSumEtatBassin!:Date|null;
 
 
 
@@ -717,4 +868,157 @@ this. selectedPuit={};
 
   }
 
+  public changedateSumTransferByDay(dateSumTransferByDay: Date | null) {
+    this.dateSumTransfer=null;
+    this.dateSumTransferByDay=dateSumTransferByDay;
+    this.changeTransferYearAndMonth()
+  }
+
+  public changedateSumTransfer(dateSumTransfer: Date | null) {
+    this.dateSumTransferByDay=null;
+    this.dateSumTransfer=dateSumTransfer;
+    this.changeTransferYearAndMonth()
+  }
+
+  public getTransferAttributsFiltredStart() {
+    if(this.startingPoint!=undefined)
+      this.TransferAttributsEnd=this.TransferAttributs.filter(t=>t.id!=this.startingPoint.id)
+    else
+      this.TransferAttributsEnd=[...this.TransferAttributs] ;
+  }
+  public getTransferAttributsFiltredEnd() {
+
+    if(this.arrivingPoint!=undefined)
+      this.TransferAttributsStart=this.TransferAttributs.filter(t=>t.id!=this.arrivingPoint.id)
+    else
+      this.TransferAttributsStart=[...this.TransferAttributs] ;
+  }
+
+
+  public changeTransferYearAndMonth() {
+    const year = this.dateSumTransfer? this.extractYearFromDate(this.dateSumTransfer) : null;
+    const month = this.dateSumTransferByDay ? this.getMonthFromDateString(this.dateSumTransferByDay) : null;
+    const yearForMonth = this.dateSumTransferByDay ? this.extractYearFromDate(this.dateSumTransferByDay) : null;
+    if (year) {
+      // Fetch data for the selected year and update the chart
+      this.findMonthlySumTransferQuantityByStartingPointArrivingPointAndYear(this.startingPoint.label,this.arrivingPoint.label,year);
+
+
+    }
+
+    if (month !== null && yearForMonth!==null && this.dateSumTransferByDay) {
+      // Fetch data for the selected day and month and update the chart
+      this.findDailySumTransferQuantityByStartingPointArrivingPointAndYearAndMonth(this.startingPoint.label,this.arrivingPoint.label,yearForMonth,month);
+    }
+
+
+  }
+
+
+  initChartStackedBarForEtatBassin(){
+
+    const documentStyle = getComputedStyle(document.documentElement);
+    const textColor = documentStyle.getPropertyValue('--text-color');
+    const textColorSecondary = documentStyle.getPropertyValue('--text-color-secondary');
+    const surfaceBorder = documentStyle.getPropertyValue('--surface-border');
+
+    this.dataEtatBassin = {
+      labels : ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'],
+
+      datasets: [
+        {
+          type: 'bar',
+          label: 'Flooded',
+          backgroundColor: '#bcbcbc',
+          data: this.totalSumEtatBassinInodee.map((a: any) => a[1]),
+        },
+        {
+          type: 'bar',
+          label: 'Filling ',
+          backgroundColor: '#5d5d5d',
+          data: this.totalSumEtatBassinAlimentation.map((a: any) => a[1]),
+        },
+        {
+          type: 'bar',
+          label: 'Dry',
+          backgroundColor:  '#00a6b9',
+          data: this.totalSumEtatBassinSec.map((a: any) => a[1]),
+        },
+        {
+          type: 'bar',
+          label: 'Draining',
+          backgroundColor:  '#ced621',
+          data: this.totalSumEtatBassinVidange.map((a: any) => a[1]),
+        },
+        {
+          type: 'bar',
+          label: 'Harvesting',
+          backgroundColor:  '#56cd8b',
+          data: this.totalSumEtatBassinRecolte.map((a: any) => a[1]),
+        }
+      ]
+    };
+
+    this.optionsEtatBassin = {
+      maintainAspectRatio: false,
+      aspectRatio: 0.8,
+      plugins: {
+        tooltip: {
+          mode: 'index',
+          intersect: false
+        },
+        legend: {
+          labels: {
+            color: textColor
+          }
+        }
+      },
+      scales: {
+        x: {
+          stacked: true,
+          ticks: {
+            color: textColorSecondary
+          },
+          grid: {
+            color: surfaceBorder,
+            drawBorder: false
+          }
+        },
+        y: {
+          stacked: true,
+          ticks: {
+            color: textColorSecondary
+          },
+          grid: {
+            color: surfaceBorder,
+            drawBorder: false
+          }
+        }
+      }
+    };
+  }
+
+
+  public changeSelectedEtatBassin(selectedEtatBassin: Bassin) {
+    if( selectedEtatBassin.id!==undefined ){
+      const year = this.dateSumEtatBassin? this.extractYearFromDate(this.dateSumEtatBassin) : null;
+
+if(year){
+
+
+      this.sumDaysByEtatBassinAndMonthAndYearAlimentation(selectedEtatBassin.id,year,'Filling')
+      this.sumDaysByEtatBassinAndMonthAndYearInodee(selectedEtatBassin.id,year,'Flooded')
+      this.sumDaysByEtatBassinAndMonthAndYearSec(selectedEtatBassin.id,year,'Dry')
+      this.sumDaysByEtatBassinAndMonthAndYearVidange(selectedEtatBassin.id,year,'Draining')
+      this.sumDaysByEtatBassinAndMonthAndYearRecolte(selectedEtatBassin.id,year,'Harvesting')
 }
+    }
+  }
+
+
+  public changedateSumEtatBassin(dateSumEtatBassin: Date | null) {
+
+  }
+}
+
+
