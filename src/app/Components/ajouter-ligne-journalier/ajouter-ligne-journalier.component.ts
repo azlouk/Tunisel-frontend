@@ -33,6 +33,7 @@ import {Journalier} from "../../Models/journalier";
 import {JournalierPompeService} from "../../Services/journalier-pompe.service";
 import {LigneJournalierService} from "../../Services/ligne-journalier.service";
 import {TooltipModule} from "primeng/tooltip";
+import {AutoCompleteCompleteEvent, AutoCompleteModule} from "primeng/autocomplete";
 
 @Component({
   selector: 'app-ajouter-ligne-journalier',
@@ -53,7 +54,8 @@ import {TooltipModule} from "primeng/tooltip";
     MultiSelectModule,
     DatePipe,
     RippleModule,
-    TooltipModule
+    TooltipModule,
+    AutoCompleteModule
   ],
   templateUrl: './ajouter-ligne-journalier.component.html',
   styleUrl: './ajouter-ligne-journalier.component.css'
@@ -72,7 +74,7 @@ export class AjouterLigneJournalierComponent implements OnInit{
   sblfs: Sblf[] = [];
   selectedSblf:Sblf={};
   analysesPhysique: AnalysesPhysique={} ;
-
+  filtereddatasel: any[] = [];
   private analysePhysiqueId: any;
   public isUpdateAnalysePhysique=false;
   visibleDetails: boolean=false;
@@ -101,7 +103,7 @@ export class AjouterLigneJournalierComponent implements OnInit{
   journalierId: any;
   journalier:Journalier=new Journalier();
   AddjournalierPompe:boolean=false;
-
+  dataEtatBassin: string []= [];
 
   selectedJournalierPompes:JournalierPompe[]=[];
   constructor(private router: Router,
@@ -120,7 +122,13 @@ export class AjouterLigneJournalierComponent implements OnInit{
 
   ngOnInit(): void {
 
-
+    this.dataEtatBassin = [
+      "Flooded",
+      "Filling",
+      "Dry",
+      "Draining",
+      "Harvesting"
+    ]
 this.getAllBassin();
 this.getAllPuits();
 this.getAllPompes()
@@ -128,7 +136,6 @@ this.getAllPompes()
 if(this.journalierId!=null)
   this.getJournalierById();
   }
-
 getAllBassin(){
     this.bassinService.getAllBassinsDTO().subscribe(value => {
       this.bassins = value
@@ -157,22 +164,33 @@ this.pompeService.getAllPompes().subscribe(value => this.pompes=value)
 
   ajouterJournalierPompe() {
 
-    this.journalier.ligneJournalierList.push(new LigneJournalier(new Date().getTime()))
+    this.journalier.ligneJournalierList.push(new LigneJournalier(new Date().getTime()*-1))
+    console.log(new JsonPipe().transform(  this.journalier.ligneJournalierList));
+
   }
 
 
   protected readonly getToken = getToken;
 
   public saveUpdateLigneJournalier(ligneJournalier: LigneJournalier) {
+
+
 this.journalierService.updateJournalier(this.journalier).subscribe( value => console.log(value))
+
   }
 
   public updateLigneJournalier() {
   }
 
   public deleteLigneJournalier(ligneJournalier: LigneJournalier) {
-this.ligneJournalierService.deleteLigneJournalier(ligneJournalier.id).subscribe(value => this.getJournalierById()
-)
+    if(ligneJournalier.id<0){
+
+      this.journalier.ligneJournalierList= this.journalier.ligneJournalierList.filter(value => ligneJournalier.id!==value.id)
+    }
+    else{
+
+this.ligneJournalierService.deleteLigneJournalier(ligneJournalier.id).subscribe(value => this.getJournalierById())
+    }
   }
 
 

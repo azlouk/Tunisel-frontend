@@ -272,4 +272,39 @@ export class DashboardService {
     }else {
       return  new Observable<any[]>()}
   }
+
+//   ==================QUANTITY TRANSFER DE SALT===========================
+  findMonthlySumTransferQuantityByStartingPointArrivingPointAndYear(startingPoint:string,arrivingPoint:string,year:number): Observable<any[]> {
+    const token = getKeyToken();
+    if (token) {
+      const headers = new HttpHeaders().set('Authorization', `Bearer ${token}`).set("Content-Type", "application/json; charset=utf8");
+      const params = new HttpParams().set('startingPoint',startingPoint).set('arrivingPoint',arrivingPoint).set('year',year);
+
+      return this.http.get<any[]>(`${this.apiUrl}/statistiques/count-by-month-total-transfer`, {headers, params });
+    }else {
+      return  new Observable<any[]>()}
+  }
+
+
+  findDailySumTransferQuantityByStartingPointArrivingPointAndYearAndMonth(startingPoint:string,arrivingPoint:string,year:number,month:number): Observable<any[]> {
+    const token = getKeyToken();
+    if (token) {
+      const headers = new HttpHeaders().set('Authorization', `Bearer ${token}`).set("Content-Type", "application/json; charset=utf8");
+      const params = new HttpParams().set('startingPoint',startingPoint).set('arrivingPoint',arrivingPoint).set('year',year).set('month',month);
+
+      return this.http.get<any[]>(`${this.apiUrl}/statistiques/count-by-day-total-transfer`, {headers, params });
+    }else {
+      return  new Observable<any[]>()}
+  }
+//   ============SUM ETAT BASSIN==============================================
+  sumDaysByEtatBassinAndMonthAndYear(bassinId:number,year:number,etatBassin:string): Observable<any[]> {
+    const token = getKeyToken();
+    if (token) {
+      const headers = new HttpHeaders().set('Authorization', `Bearer ${token}`).set("Content-Type", "application/json; charset=utf8");
+      const params = new HttpParams().set('bassinId',bassinId).set('year',year).set('etatBassin',etatBassin);
+
+      return this.http.get<any[]>(`${this.apiUrl}/statistiques/count-by-month-total-etatBassin-by-bassin`, {headers, params });
+    }else {
+      return  new Observable<any[]>()}
+  }
 }
