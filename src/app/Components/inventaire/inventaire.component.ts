@@ -14,7 +14,6 @@ import {Router} from "@angular/router";
 import {Inventaire} from "../../Models/inventaire";
 import {InventaireService} from "../../Services/inventaire.service";
 import {AutoFocusModule} from "primeng/autofocus";
-import {Puit} from "../../Models/puit";
 import {CheckboxModule} from "primeng/checkbox";
 import html2canvas from "html2canvas";
 import jsPDF from "jspdf";

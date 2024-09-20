@@ -183,7 +183,7 @@ export class CribleComponent implements OnInit{
     else
     {
       this.cribleService.addCrible(this.crible).subscribe(value => {
-        console.log(value);
+        // console.log(value);
         this.getAllCribles();
 
       })

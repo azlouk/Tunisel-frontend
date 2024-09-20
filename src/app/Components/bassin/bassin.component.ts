@@ -285,7 +285,7 @@ this.SelectetBassin={analysesPhysiques:[]}
     }
     else
     {
-      console.log(new JsonPipe().transform(this.bassin.puitList))
+      // console.log(new JsonPipe().transform(this.bassin.puitList))
 
         this.bassinService.addBassin(this.bassin).subscribe(() =>{ this.bassinService.getAllBassinsDTO().subscribe((bassins: Bassin[]) => {
             this.bassins = bassins;

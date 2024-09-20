@@ -33,7 +33,6 @@ import {MultiSelectModule} from "primeng/multiselect";
 import {RippleModule} from "primeng/ripple";
 import {TransferToBand} from "../../Models/transfer-to-band";
 import {AnalyseChimiqueComponent} from "../analyse-chimique/analyse-chimique.component";
-import {Recolte} from "../../Models/recolte";
 import {TransferToBandService} from "../../Services/transfer-to-band.service";
 
 @Component({
@@ -182,7 +181,6 @@ this.getsbnl()
 
   confirmDeleteSelected() {
     this.deleteProductsDialog = false;
-    console.log(this.selectedSbnls.length)
     this.selectedSbnls.forEach(selectedSbnl => {
       this.sbnlService.deleteSbnl(selectedSbnl.id).subscribe(
         () => {
@@ -205,7 +203,6 @@ this.getsbnl()
 
   confirmDelete() {
     this.deleteProductDialog = false;
-    console.log("this.sbnl.id", this.sbnl.id);
     this.sbnls = this.sbnls.filter(val => val.id !== this.sbnl.id);
     if (this.sbnl.id!= null) {
       this.sbnlService.deleteSbnl(this.sbnl.id).subscribe(() => {
@@ -318,10 +315,10 @@ this.Viderfiltredate()
     data.forEach(v => {
 
       if(v.dateAnalyse!==undefined){
-        console.log(typeof v.dateAnalyse )
+        // console.log(typeof v.dateAnalyse )
         const d=v.dateAnalyse+"";
         const dateana:Date=new Date(d)
-        console.log("-D-->" + dateana)
+        // console.log("-D-->" + dateana)
         if (  this.AfterTodate(this.DatefiltrageStart,dateana) &&  this.AfterTodate(dateana,this.DatefiltrageEnd)) {
           newAnalyse.push(v);
         } else {
@@ -364,10 +361,10 @@ this.Viderfiltredate()
     data.forEach(v => {
 
       if(v.dateAnalyse!==undefined){
-        console.log(typeof v.dateAnalyse )
+        // console.log(typeof v.dateAnalyse )
         const d=v.dateAnalyse+"";
         const dateana:Date=new Date(d)
-        console.log("-D-->" + dateana)
+        // console.log("-D-->" + dateana)
         if (  this.AfterTodate(this.DatefiltrageStart,dateana) &&  this.AfterTodate(dateana,this.DatefiltrageEnd)) {
           newAnalyse.push(v);
         } else {

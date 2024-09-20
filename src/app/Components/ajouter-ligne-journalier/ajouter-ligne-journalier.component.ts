@@ -139,7 +139,7 @@ if(this.journalierId!=null)
 getAllBassin(){
     this.bassinService.getAllBassinsDTO().subscribe(value => {
       this.bassins = value
-      console.log(new JsonPipe().transform(this.bassins))
+      // console.log(new JsonPipe().transform(this.bassins))
     })
 }
   getAllPuits(){
@@ -165,7 +165,7 @@ this.pompeService.getAllPompes().subscribe(value => this.pompes=value)
   ajouterJournalierPompe() {
 
     this.journalier.ligneJournalierList.push(new LigneJournalier(new Date().getTime()*-1))
-    console.log(new JsonPipe().transform(  this.journalier.ligneJournalierList));
+    // console.log(new JsonPipe().transform(  this.journalier.ligneJournalierList));
 
   }
 

@@ -219,7 +219,7 @@ commandesCopy: Commande[]=[];
 
   confirmDeleteSelected() {
     this.deleteProductsDialog = false;
-    console.log(this.selectedCommandes.length)
+    // console.log(this.selectedCommandes.length)
     this.selectedCommandes.forEach(selectedCommandes => {
       this.commandeService.deleteCommande(selectedCommandes.id).subscribe(
         () => {

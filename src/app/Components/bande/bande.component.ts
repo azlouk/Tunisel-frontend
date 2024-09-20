@@ -179,7 +179,7 @@ export class BandeComponent {
 
   confirmDeleteSelected() {
     this.deleteProductsDialog = false;
-    console.log(this.selectedBandes.length)
+    // console.log(this.selectedBandes.length)
     this.selectedBandes.forEach(selectedBande => {
       this.bandeService.deleteBande(selectedBande.id).subscribe(
         () => {
@@ -273,11 +273,13 @@ export class BandeComponent {
   }
 
   exportrapport(bande: Bande) {
-console.log('=====>>>>> export: ',new JsonPipe().transform(bande))
+// console.log('=====>>>>> export: ',new JsonPipe().transform(bande))
     this.selectedBande = bande;
     this.visiblePrint = true
-    console.log("---->"+new JsonPipe().transform(this.selectedBande));
+    // console.log("---->"+new JsonPipe().transform(this.selectedBande));
   }
+
+
 
 
   filtredate() {
@@ -286,10 +288,10 @@ console.log('=====>>>>> export: ',new JsonPipe().transform(bande))
     const newAnalyse:AnalysesChimique[] =[]
     data.forEach(v => {
       if(v.dateAnalyse!==undefined){
-        console.log(typeof v.dateAnalyse )
+        // console.log(typeof v.dateAnalyse )
         const d=v.dateAnalyse+"";
         const dateana:Date=new Date(d)
-        console.log("-D-->" + dateana)
+        // console.log("-D-->" + dateana)
         if (  this.AfterTodate(this.DatefiltrageStart,dateana) &&  this.AfterTodate(dateana,this.DatefiltrageEnd)) {
           newAnalyse.push(v);
         } else {
@@ -328,19 +330,19 @@ console.log('=====>>>>> export: ',new JsonPipe().transform(bande))
     const newAnalyse:AnalysesPhysique[] =[]
     data.forEach(v => {
       if(v.dateAnalyse!==undefined){
-        console.log(typeof v.dateAnalyse )
+        // console.log(typeof v.dateAnalyse )
         const d=v.dateAnalyse+"";
         const dateana:Date=new Date(d)
-        console.log("-D-->" + dateana)
+        // console.log("-D-->" + dateana)
         if (  this.AfterTodate(this.DatefiltrageStart,dateana) &&  this.AfterTodate(dateana,this.DatefiltrageEnd)) {
           newAnalyse.push(v);
-          console.log('ffffffffffff: ',v)
+          // console.log('ffffffffffff: ',v)
         } else {
           console.log("no compare")
         }
       }
     })
-    console.log('getAnalysePH: ',new JsonPipe().transform(newAnalyse))
+    // console.log('getAnalysePH: ',new JsonPipe().transform(newAnalyse))
 
     this.selectedBande.analysesPhysiques=[...newAnalyse] ;
     // console.log('getAnalysePH: ',new JsonPipe().transform(this.selectedBande.analysesPhysiques))
@@ -379,7 +381,7 @@ console.log('=====>>>>> export: ',new JsonPipe().transform(bande))
   }
 
   AfterTodate(date1:Date , date2:Date):boolean{
-    console.log(date1+"<"+date2)
+    // console.log(date1+"<"+date2)
     return date1.getDay()<=date2.getDay() && date1.getMonth()<=date2.getMonth() && date1.getFullYear()<=date2.getFullYear()
   }
 
@@ -575,7 +577,7 @@ console.log('=====>>>>> export: ',new JsonPipe().transform(bande))
   }
 
   public AddTraitementStock(b: Bande) {
-    console.log("traitment")
+    // console.log("traitment")
     this.TraitementStockDialog=true;
     this.bande=b;
     this. getListTraitementStock();

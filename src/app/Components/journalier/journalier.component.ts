@@ -110,7 +110,7 @@ export class JournalierComponent implements OnInit{
   addLineJournalier(journalier1: Journalier){
     this.router.navigate([`/Daily/${journalier1.id}`]);
 
-    console.error(new JsonPipe().transform(journalier1))
+    // console.error(new JsonPipe().transform(journalier1))
   }
 
   deleteJouenalier(journalier: Journalier) {

@@ -22,7 +22,7 @@ export class UserService {
 
   getAllUsers(): Observable<RegisterRequest[]> {
     const token = getKeyToken();
-    console.log(token)
+    // console.log(token)
     if (token) {
       const headers = new HttpHeaders().set('Authorization', `Bearer ${token}`).set("Content-Type", "application/json; charset=utf8");
     return this.http.get<RegisterRequest[]>(`${this.apiUrl}/users/read`, {headers});
@@ -55,7 +55,7 @@ export class UserService {
 
   changePassword(changePasswordRequest: ChangePasswordRequest,id:number): Observable<any> {
     const token = getKeyToken();
-    console.log(token)
+    // console.log(token)
     if (token) {
       const headers = new HttpHeaders().set('Authorization', `Bearer ${token}`).set("Content-Type", "application/json; charset=utf8");
       return this.http.put<any>(`${this.apiUrl}/users/updatePassword/${id}`, changePasswordRequest, {headers});
@@ -64,7 +64,7 @@ export class UserService {
   }
     getUserConnect(): Observable<RegisterRequest> {
     const token = getKeyToken();
-    console.log(token)
+    // console.log(token)
     if (token) {
       const headers = new HttpHeaders().set('Authorization', `Bearer ${token}`).set("Content-Type", "application/json; charset=utf8");
     return this.http.get<RegisterRequest>(`${this.apiUrl}/users/userConnecte`,{headers});

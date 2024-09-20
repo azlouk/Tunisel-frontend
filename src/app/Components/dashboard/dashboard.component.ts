@@ -31,6 +31,10 @@ import _default from "chart.js/dist/plugins/plugin.tooltip";
 import numbers = _default.defaults.animations.numbers;
 import {StockOrderService} from "../../Services/stock-order.service";
 import {TabViewModule} from "primeng/tabview";
+import {MultiSelectModule} from "primeng/multiselect";
+import {SumForAttributeRequest} from "../../Models/sum-for-attribute-request";
+import moment from 'moment-timezone';
+import {InputTextModule} from "primeng/inputtext";
 
 
 @Component({
@@ -52,6 +56,8 @@ import {TabViewModule} from "primeng/tabview";
     CalendarModule,
     FloatLabelModule,
     TabViewModule,
+    MultiSelectModule,
+    InputTextModule,
 
   ],
   templateUrl: './dashboard.component.html',
@@ -72,6 +78,23 @@ export class DashboardComponent implements OnInit {
   barOptionsTransfer: any;
   dataEtatBassin: any;
   optionsEtatBassin: any;
+  chartDataForAttribute: any;
+  chartDataForAttributeDensite: any[]=[];
+  chartDataForAttributeLabels: any[]=[];
+  chartDataForAttributePh: any[]=[];
+  chartDataForAttributeMatiereEnSuspension: any[]=[];
+  chartDataForAttributeSalinite: any[]=[];
+  chartDataForAttributeCalcium: any[]=[];
+  chartDataForAttributeMagnesium: any[]=[];
+  chartDataForAttributeSulfate: any[]=[];
+  chartDataForAttributeHumidite: any[]=[];
+  chartDataForAttributeMatiereInsoluble: any[]=[];
+  chartDataForAttributePotassium: any[]=[];
+  chartDataForAttributeSodium: any[]=[];
+  chartDataForAttributeChlorure: any[]=[];
+  chartDataForAttributeChlorureDeSodium: any[]=[];
+  chartDataForAttributeFerrocyanure: any[]=[];
+  chartOptionsForAttribute: any;
 
   totalRecolteValue:any[]=[];
   totalSortie1:any[]=[];
@@ -89,14 +112,19 @@ export class DashboardComponent implements OnInit {
   public userConnect:RegisterRequest=new RegisterRequest();
   public bassins: Bassin[]=[];
   public selectedBassin: Bassin={};
+  public selectedBassinForAttribute: Bassin={};
   public selectedSbnl: Sbnl={};
+  public selectedSbnlForAttribute: Sbnl={};
   public sbnls: Sbnl[]=[];
   public sbls: Sbl[]=[];
   public selectedSbl: Sbl={};
+  public selectedSblForAttribute: Sbl={};
   public puits: Puit[]=[];
   public selectedPuit: Puit={};
+  public selectedPuitForAttribute: Puit={};
   public sblfs: Sblf[]=[];
   public selectedSblf: Sblf={};
+  public selectedSblfForAttribute: Sblf={};
   public selectedBassinRecolte: Bassin={};
   public selectedStockOrder:StockOrder=new StockOrder();
   public stockOrders:StockOrder[]=[];
@@ -107,6 +135,8 @@ export class DashboardComponent implements OnInit {
 
   startingPoint: any;
   arrivingPoint: any;
+  attributes: any[]=[];
+  selectedAttributes: any[]=[];
   constructor( private dashboardService: DashboardService,
                private userService:UserService,
                private bassinService:BassinService,
@@ -117,7 +147,24 @@ export class DashboardComponent implements OnInit {
                private stockOrderService:StockOrderService) {}
 
   ngOnInit(){
+this.attributes=
+  [
+    {name:'d',label:'densite' },
+    {name:'MS',label:'matiereEnSuspension'},
+    {name:'S',label:'salinite'},
+    {name:'Ca',label:'calcium'},
+    {name:'Mg',label:'magnesium'},
+    {name:'SO₄',label:'sulfate'},
+    {name:'H₂O',label:'humidite'},
+    {name:'MI',label:'matiereInsoluble'},
+    {name:'K',label:'potassium'},
+    {name:'Na',label:'sodium'},
+    {name:'Cl',label:'chlorure'},
+    {name:'pH',label:'ph'},
+    {name:'NaCl',label:'chlorureDeSodium'},
+    {name:'Fe(CN)₆',label:'ferrocyanure'}
 
+  ];
   this.TransferAttributs= [
     {id:0,label:'Saline volume'},
     {id:1,label:'Terrain volume'},
@@ -144,6 +191,7 @@ export class DashboardComponent implements OnInit {
     this.initChartPieChart(0,0,0,0);
     this.initChartBarForTransfer()
     this.initChartStackedBarForEtatBassin();
+    this.initChartForAttributeBassin();
   }
 
   // getCountTotalAnalysesChimiques(){
@@ -327,7 +375,6 @@ export class DashboardComponent implements OnInit {
       this.initChartStackedBarForEtatBassin();    } );
   }
   // =======================SUM ETAT BASSIN ==========================================
-
   fetchDashboardData(): void {
     this.dashboardService.getDashboardData().subscribe(
       (data: Dashboard) => {
@@ -707,6 +754,8 @@ export class DashboardComponent implements OnInit {
   public dateSumTransfer!:Date|null;
   public dateSumTransferByDay!:Date|null;
   public dateSumEtatBassin!:Date|null;
+  public dateStartForAttribute!:Date|null;
+  public dateEndForAttribute!:Date|null;
 
 
 
@@ -1019,6 +1068,695 @@ if(year){
   public changedateSumEtatBassin(dateSumEtatBassin: Date | null) {
 
   }
+
+  public changeDateEndForAttribute(dateStartForAttribute: Date | null) {
+
+  }
+
+  public changeDateStartForAttribute(dateStartForAttribute: Date | null) {
+
+  }
+
+
+
+
+  // public changeSelectedBassinForAttribute(selectedBassinForAttribute: Bassin) {
+  //
+  //     if(selectedBassinForAttribute && selectedBassinForAttribute.id!==undefined && this.dateEndForAttribute!==null && this.dateStartForAttribute!== null && this.selectedAttributes.length>0){
+  //       this.selectedAttributes.forEach(value => {
+  //         if (selectedBassinForAttribute.id !== undefined && this.dateEndForAttribute!==null && this.dateStartForAttribute!== null){
+  //           if(value.label=='densite'){
+  //           this.calculateSumForAttributeBassinDensite(selectedBassinForAttribute.id, this.dateStartForAttribute, this.dateEndForAttribute, value.label)
+  //
+  //           }
+  //           if(value.label=='matiereEnSuspension'){
+  //             this.calculateSumForAttributeBassinMatiereEnSuspension(selectedBassinForAttribute.id, this.dateStartForAttribute, this.dateEndForAttribute, value.label)
+  //
+  //           }
+  //           if(value.label=='salinite'){
+  //             this.calculateSumForAttributeBassinSalinite(selectedBassinForAttribute.id, this.dateStartForAttribute, this.dateEndForAttribute, value.label)
+  //
+  //           }
+  //           if(value.label=='calcium'){
+  //             this.calculateSumForAttributeBassinCalcium(selectedBassinForAttribute.id, this.dateStartForAttribute, this.dateEndForAttribute, value.label)
+  //
+  //           }
+  //           if(value.label=='magnesium'){
+  //             this.calculateSumForAttributeBassinMagnesium(selectedBassinForAttribute.id, this.dateStartForAttribute, this.dateEndForAttribute, value.label)
+  //
+  //           }
+  //           if(value.label=='sulfate'){
+  //             this.calculateSumForAttributeBassinSulfate(selectedBassinForAttribute.id, this.dateStartForAttribute, this.dateEndForAttribute, value.label)
+  //
+  //           }
+  //           if(value.label=='humidite'){
+  //             this.calculateSumForAttributeBassinHumidite(selectedBassinForAttribute.id, this.dateStartForAttribute, this.dateEndForAttribute, value.label)
+  //
+  //           }
+  //           if(value.label=='matiereInsoluble'){
+  //             this.calculateSumForAttributeBassinMatiereInsoluble(selectedBassinForAttribute.id, this.dateStartForAttribute, this.dateEndForAttribute, value.label)
+  //
+  //           }
+  //           if(value.label=='potassium'){
+  //             this.calculateSumForAttributeBassinPotassium(selectedBassinForAttribute.id, this.dateStartForAttribute, this.dateEndForAttribute, value.label)
+  //
+  //           }
+  //           if(value.label=='sodium'){
+  //             this.calculateSumForAttributeBassinSodium(selectedBassinForAttribute.id, this.dateStartForAttribute, this.dateEndForAttribute, value.label)
+  //
+  //           }
+  //           if(value.label=='chlorure'){
+  //             this.calculateSumForAttributeBassinChlorure(selectedBassinForAttribute.id, this.dateStartForAttribute, this.dateEndForAttribute, value.label)
+  //
+  //           }
+  //
+  //           if(value.label=='ph'){
+  //             this.calculateSumForAttributeBassinPh(selectedBassinForAttribute.id, this.dateStartForAttribute, this.dateEndForAttribute, value.label)
+  //
+  //           }
+  //           if(value.label=='chlorureDeSodium'){
+  //             this.calculateSumForAttributeBassinChlorureDeSodium(selectedBassinForAttribute.id, this.dateStartForAttribute, this.dateEndForAttribute, value.label)
+  //
+  //           }
+  //           if(value.label=='ferrocyanure'){
+  //             this.calculateSumForAttributeBassinFerrocyanure(selectedBassinForAttribute.id, this.dateStartForAttribute, this.dateEndForAttribute, value.label)
+  //
+  //           }
+  //
+  //         }
+  //
+  //       })
+  //     }
+  // }
+
+
+
+
+
+
+
+
+  initChartForAttributeBassin(){
+    const documentStyle = getComputedStyle(document.documentElement);
+    const textColor = documentStyle.getPropertyValue('--text-color');
+    const textColorSecondary = documentStyle.getPropertyValue('--text-color-secondary');
+    const surfaceBorder = documentStyle.getPropertyValue('--surface-border');
+    // Process the data to extract labels and values
+    const labels = this.chartDataForAttributeLabels
+      .map((item: any) => Object.keys(item)[0]).map((dateStr: string) => new Date(dateStr)).sort((a: Date, b: Date) => a.getTime() - b.getTime()).map((date: Date) => date.toISOString().split('T')[0]);
+    // Extraire les données de densité en les triant dans le même ordre que les labels
+    const dataDensite = labels.map(label => {
+      const item = this.chartDataForAttributeDensite.find((data: any) => Object.keys(data)[0] === label);
+      return item ? Object.values(item)[0] : 0; // Assurer qu'il y a toujours une valeur pour chaque label
+    });
+
+    const dataPh = labels.map(label => {
+      const item = this.chartDataForAttributePh.find((data: any) => Object.keys(data)[0] === label);
+      return item ? Object.values(item)[0] : 0; // Assurer qu'il y a toujours une valeur pour chaque label
+    });
+
+
+
+
+    const dataMatiereEnSuspension = labels.map(label => {
+      const item = this.chartDataForAttributeMatiereEnSuspension.find((data: any) => Object.keys(data)[0] === label);
+      return item ? Object.values(item)[0] : 0; // Assurer qu'il y a toujours une valeur pour chaque label
+    });
+    const dataSalinite = labels.map(label => {
+      const item = this.chartDataForAttributeSalinite.find((data: any) => Object.keys(data)[0] === label);
+      return item ? Object.values(item)[0] : 0; // Assurer qu'il y a toujours une valeur pour chaque label
+    });
+    const dataCalcium = labels.map(label => {
+      const item = this.chartDataForAttributeCalcium.find((data: any) => Object.keys(data)[0] === label);
+      return item ? Object.values(item)[0] : 0; // Assurer qu'il y a toujours une valeur pour chaque label
+    });
+    const dataMagnesium = labels.map(label => {
+      const item = this.chartDataForAttributeMagnesium.find((data: any) => Object.keys(data)[0] === label);
+      return item ? Object.values(item)[0] : 0; // Assurer qu'il y a toujours une valeur pour chaque label
+    });
+    const dataSulfate = labels.map(label => {
+      const item = this.chartDataForAttributeSulfate.find((data: any) => Object.keys(data)[0] === label);
+      return item ? Object.values(item)[0] : 0; // Assurer qu'il y a toujours une valeur pour chaque label
+    });
+    const dataHumidite = labels.map(label => {
+      const item = this.chartDataForAttributeHumidite.find((data: any) => Object.keys(data)[0] === label);
+      return item ? Object.values(item)[0] : 0; // Assurer qu'il y a toujours une valeur pour chaque label
+    });
+    const dataMatiereInsoluble = labels.map(label => {
+      const item = this.chartDataForAttributeMatiereInsoluble.find((data: any) => Object.keys(data)[0] === label);
+      return item ? Object.values(item)[0] : 0; // Assurer qu'il y a toujours une valeur pour chaque label
+    });
+    const dataPotassium = labels.map(label => {
+      const item = this.chartDataForAttributePotassium.find((data: any) => Object.keys(data)[0] === label);
+      return item ? Object.values(item)[0] : 0; // Assurer qu'il y a toujours une valeur pour chaque label
+    });
+    const dataSodium = labels.map(label => {
+      const item = this.chartDataForAttributeSodium.find((data: any) => Object.keys(data)[0] === label);
+      return item ? Object.values(item)[0] : 0; // Assurer qu'il y a toujours une valeur pour chaque label
+    });
+    const dataChlorure = labels.map(label => {
+      const item = this.chartDataForAttributeChlorure.find((data: any) => Object.keys(data)[0] === label);
+      return item ? Object.values(item)[0] : 0; // Assurer qu'il y a toujours une valeur pour chaque label
+    });
+    const dataChlorureDeSodium = labels.map(label => {
+      const item = this.chartDataForAttributeChlorureDeSodium.find((data: any) => Object.keys(data)[0] === label);
+      return item ? Object.values(item)[0] : 0; // Assurer qu'il y a toujours une valeur pour chaque label
+    });
+    const dataFerrocyanure = labels.map(label => {
+      const item = this.chartDataForAttributeFerrocyanure.find((data: any) => Object.keys(data)[0] === label);
+      return item ? Object.values(item)[0] : 0; // Assurer qu'il y a toujours une valeur pour chaque label
+    });
+
+    this.chartDataForAttribute = {
+
+      labels:labels,
+      datasets: [
+        {
+          label: 'D',
+          data: dataDensite,
+          fill: false,
+          backgroundColor: '#5d5d5d',
+          borderColor: '#5d5d5d',
+          tension: .4
+        },
+        {
+          label: 'MS',
+          data: dataMatiereEnSuspension,
+          fill: false,
+          backgroundColor: '#bcbcbc',
+          borderColor: '#bcbcbc',
+          tension: .4
+        },
+        {
+          label: 'S',
+          data: dataSalinite,
+          fill: false,
+          backgroundColor: '#00a6b9',
+          borderColor: '#00a6b9',
+          tension: .4
+        },
+        {
+          label: 'Ca',
+          data: dataCalcium,
+          fill: false,
+          backgroundColor: '#ced621',
+          borderColor: '#ced621',
+          tension: .4
+        },
+        {
+          label: 'Mg',
+          data: dataMagnesium,
+          fill: false,
+          backgroundColor: '#56cd8b',
+          borderColor: '#56cd8b',
+          tension: .4
+        },
+        {
+          label: 'SO₄',
+          data: dataSulfate,
+          fill: false,
+          backgroundColor: '#4f4cba',
+          borderColor: '#4f4cba',
+          tension: .4
+        },
+        {
+          label: 'H₂O',
+          data: dataHumidite,
+          fill: false,
+          backgroundColor: '#dd982a',
+          borderColor: '#dd982a',
+          tension: .4
+        },
+        {
+          label: 'MI',
+          data: dataMatiereInsoluble,
+          fill: false,
+          backgroundColor: '#d9bec5',
+          borderColor: '#d9bec5',
+          tension: .4
+        },
+        {
+          label: 'K',
+          data: dataPotassium,
+          fill: false,
+          backgroundColor: '#759556',
+          borderColor: '#759556',
+          tension: .4
+        },
+        {
+          label: 'Na',
+          data: dataSodium,
+          fill: false,
+          backgroundColor: '#ebecd0',
+          borderColor: '#ebecd0',
+          tension: .4
+        },
+        {
+          label: 'Cl',
+          data: dataChlorure,
+          fill: false,
+          backgroundColor: '#008b8b',
+          borderColor: '#008b8b',
+          tension: .4
+        },
+        {
+          label: 'NaCl',
+          data: dataChlorureDeSodium,
+          fill: false,
+          backgroundColor: '#844b38',
+          borderColor: '#844b38',
+          tension: .4
+        },
+        {
+          label: 'PH ',
+          data: dataPh,
+          fill: false,
+          backgroundColor: '#e6e8ff',
+          borderColor: '#e6e8ff',
+          tension: .4
+        },
+        {
+          label: 'Fe(CN)₆',
+          data: dataFerrocyanure,
+          fill: false,
+          backgroundColor: '#006699',
+          borderColor: '#006699',
+          tension: .4
+        }
+      ]
+    };
+    this.chartOptionsForAttribute = {
+      plugins: {
+        legend: {
+          labels: {
+            color: textColor
+          }
+        }
+      },
+      scales: {
+        x: {
+          ticks: {
+            color: textColorSecondary
+          },
+          grid: {
+            color: surfaceBorder,
+            drawBorder: false
+          }
+        },
+        y: {
+          ticks: {
+            color: textColorSecondary
+          },
+          grid: {
+            color: surfaceBorder,
+            drawBorder: false
+          }
+        }
+      }
+    };
+
+  }
+
+
+  // ======For Attribute Bassin=============
+  calculateSumForAttributeBassin(bassinId: number, startDate: Date, endDate: Date, attributeName: string, chartDataVariable: string): void {
+
+    const sumForAttributeRequest: SumForAttributeRequest = new SumForAttributeRequest();
+    sumForAttributeRequest.id=bassinId;
+    sumForAttributeRequest.startDate=startDate;
+    sumForAttributeRequest.endDate=endDate;
+    sumForAttributeRequest.attributeName=attributeName;
+    this.dashboardService.calculateSumForAttributeBassin(sumForAttributeRequest).subscribe({
+      next: (value: any[]) => {
+        if (this.hasOwnProperty(chartDataVariable)) {
+          (this as any)[chartDataVariable] = value; // Type assertion to allow dynamic property access
+          this.chartDataForAttributeLabels = value;
+          this.initChartForAttributeBassin();
+        } else {
+          console.error(`Property ${chartDataVariable} does not exist on the component.`);
+        }
+      },
+      error: (err: any) => {
+        console.error('Error occurred while fetching data', err);
+      }
+    });
+  }
+  public changeSelectedBassinForAttribute(selectedBassinForAttribute: Bassin): void {
+    // Check if the selectedBassinForAttribute object and its ID are valid
+    if (
+      selectedBassinForAttribute &&
+      selectedBassinForAttribute.id !== undefined &&
+      this.dateEndForAttribute !== null &&
+      this.dateStartForAttribute !== null &&
+      this.selectedAttributes.length > 0
+    ) {
+      // Define the mapping between attributes and chart data variables
+      const attributeToChartDataMap: { [key: string]: string } = {
+        'densite': 'chartDataForAttributeDensite',
+        'matiereEnSuspension': 'chartDataForAttributeMatiereEnSuspension',
+        'salinite': 'chartDataForAttributeSalinite',
+        'calcium': 'chartDataForAttributeCalcium',
+        'magnesium': 'chartDataForAttributeMagnesium',
+        'sulfate': 'chartDataForAttributeSulfate',
+        'humidite': 'chartDataForAttributeHumidite',
+        'matiereInsoluble': 'chartDataForAttributeMatiereInsoluble',
+        'potassium': 'chartDataForAttributePotassium',
+        'sodium': 'chartDataForAttributeSodium',
+        'chlorure': 'chartDataForAttributeChlorure',
+        'chlorureDeSodium': 'chartDataForAttributeChlorureDeSodium',
+        'ferrocyanure': 'chartDataForAttributeFerrocyanure'
+      };
+
+      // Iterate over the selected attributes
+      this.selectedAttributes.forEach(attribute => {
+        // Find the corresponding chart data variable for the attribute
+        const chartDataVariable = attributeToChartDataMap[attribute.label];
+
+        // Check if the chart data variable is defined
+        if (chartDataVariable && selectedBassinForAttribute.id !== undefined && this.dateEndForAttribute !== null && this.dateStartForAttribute !== null ) {
+          // Call the method to calculate the sum for the attribute
+          this.calculateSumForAttributeBassin(
+            selectedBassinForAttribute.id,
+            this.dateStartForAttribute,
+            this.dateEndForAttribute,
+            attribute.label,
+            chartDataVariable
+          );
+        }
+      });
+    }
+
+    this. selectedSbnlForAttribute={};
+    this. selectedPuitForAttribute={};
+    this. selectedSblForAttribute={};
+    this. selectedSblfForAttribute={};
+  }
+
+// ======For Attribute Bassin=============
+
+  // ======For Attribute Puit=============
+  calculateSumForAttributePuit(puitId: number, startDate: Date, endDate: Date, attributeName: string, chartDataVariable: string): void {
+
+    const sumForAttributeRequest: SumForAttributeRequest = new SumForAttributeRequest();
+    sumForAttributeRequest.id=puitId;
+    sumForAttributeRequest.startDate=startDate;
+    sumForAttributeRequest.endDate=endDate;
+    sumForAttributeRequest.attributeName=attributeName;
+    this.dashboardService.calculateSumForAttributePuit(sumForAttributeRequest).subscribe({
+      next: (value: any[]) => {
+        if (this.hasOwnProperty(chartDataVariable)) {
+          (this as any)[chartDataVariable] = value; // Type assertion to allow dynamic property access
+          this.chartDataForAttributeLabels = value;
+          this.initChartForAttributeBassin();
+        } else {
+          console.error(`Property ${chartDataVariable} does not exist on the component.`);
+        }
+      },
+      error: (err: any) => {
+        console.error('Error occurred while fetching data', err);
+      }
+    });
+  }
+  public changeSelectedPuitForAttribute(selectedPuitForAttribute: Puit): void {
+    // Check if the selectedBassinForAttribute object and its ID are valid
+    if (
+      selectedPuitForAttribute &&
+      selectedPuitForAttribute.id !== undefined &&
+      this.dateEndForAttribute !== null &&
+      this.dateStartForAttribute !== null &&
+      this.selectedAttributes.length > 0
+    ) {
+      // Define the mapping between attributes and chart data variables
+      const attributeToChartDataMap: { [key: string]: string } = {
+        'densite': 'chartDataForAttributeDensite',
+        'matiereEnSuspension': 'chartDataForAttributeMatiereEnSuspension',
+        'salinite': 'chartDataForAttributeSalinite',
+        'calcium': 'chartDataForAttributeCalcium',
+        'magnesium': 'chartDataForAttributeMagnesium',
+        'sulfate': 'chartDataForAttributeSulfate',
+        'humidite': 'chartDataForAttributeHumidite',
+        'matiereInsoluble': 'chartDataForAttributeMatiereInsoluble',
+        'potassium': 'chartDataForAttributePotassium',
+        'sodium': 'chartDataForAttributeSodium',
+        'chlorure': 'chartDataForAttributeChlorure',
+        'chlorureDeSodium': 'chartDataForAttributeChlorureDeSodium',
+        'ferrocyanure': 'chartDataForAttributeFerrocyanure'
+      };
+
+      // Iterate over the selected attributes
+      this.selectedAttributes.forEach(attribute => {
+        // Find the corresponding chart data variable for the attribute
+        const chartDataVariable = attributeToChartDataMap[attribute.label];
+
+        // Check if the chart data variable is defined
+        if (chartDataVariable && selectedPuitForAttribute.id !== undefined && this.dateEndForAttribute !== null && this.dateStartForAttribute !== null ) {
+          // Call the method to calculate the sum for the attribute
+          this.calculateSumForAttributePuit(
+            selectedPuitForAttribute.id,
+            this.dateStartForAttribute,
+            this.dateEndForAttribute,
+            attribute.label,
+            chartDataVariable
+          );
+        }
+      });
+    }
+
+    this. selectedSbnlForAttribute={};
+    this. selectedBassinForAttribute={};
+    this. selectedSblForAttribute={};
+    this. selectedSblfForAttribute={};
+  }
+
+// ======For Attribute Puit=============
+
+  // ======For Attribute Sbnl=============
+  calculateSumForAttributeSbnl(sbnlId: number, startDate: Date, endDate: Date, attributeName: string, chartDataVariable: string): void {
+
+    const sumForAttributeRequest: SumForAttributeRequest = new SumForAttributeRequest();
+    sumForAttributeRequest.id=sbnlId;
+    sumForAttributeRequest.startDate=startDate;
+    sumForAttributeRequest.endDate=endDate;
+    sumForAttributeRequest.attributeName=attributeName;
+    this.dashboardService.calculateSumForAttributeSbnl(sumForAttributeRequest).subscribe({
+      next: (value: any[]) => {
+        if (this.hasOwnProperty(chartDataVariable)) {
+          (this as any)[chartDataVariable] = value; // Type assertion to allow dynamic property access
+          this.chartDataForAttributeLabels = value;
+          this.initChartForAttributeBassin();
+        } else {
+          console.error(`Property ${chartDataVariable} does not exist on the component.`);
+        }
+      },
+      error: (err: any) => {
+        console.error('Error occurred while fetching data', err);
+      }
+    });
+  }
+  public changeSelectedSbnlForAttribute(selectedSbnlForAttribute: Sbnl): void {
+    // Check if the selectedBassinForAttribute object and its ID are valid
+    if (
+      selectedSbnlForAttribute &&
+      selectedSbnlForAttribute.id !== undefined &&
+      this.dateEndForAttribute !== null &&
+      this.dateStartForAttribute !== null &&
+      this.selectedAttributes.length > 0
+    ) {
+      // Define the mapping between attributes and chart data variables
+      const attributeToChartDataMap: { [key: string]: string } = {
+        'densite': 'chartDataForAttributeDensite',
+        'matiereEnSuspension': 'chartDataForAttributeMatiereEnSuspension',
+        'salinite': 'chartDataForAttributeSalinite',
+        'calcium': 'chartDataForAttributeCalcium',
+        'magnesium': 'chartDataForAttributeMagnesium',
+        'sulfate': 'chartDataForAttributeSulfate',
+        'humidite': 'chartDataForAttributeHumidite',
+        'matiereInsoluble': 'chartDataForAttributeMatiereInsoluble',
+        'potassium': 'chartDataForAttributePotassium',
+        'sodium': 'chartDataForAttributeSodium',
+        'chlorure': 'chartDataForAttributeChlorure',
+        'chlorureDeSodium': 'chartDataForAttributeChlorureDeSodium',
+        'ferrocyanure': 'chartDataForAttributeFerrocyanure'
+      };
+
+      // Iterate over the selected attributes
+      this.selectedAttributes.forEach(attribute => {
+        // Find the corresponding chart data variable for the attribute
+        const chartDataVariable = attributeToChartDataMap[attribute.label];
+
+        // Check if the chart data variable is defined
+        if (chartDataVariable && selectedSbnlForAttribute.id !== undefined && this.dateEndForAttribute !== null && this.dateStartForAttribute !== null ) {
+          // Call the method to calculate the sum for the attribute
+          this.calculateSumForAttributeSbnl(
+            selectedSbnlForAttribute.id,
+            this.dateStartForAttribute,
+            this.dateEndForAttribute,
+            attribute.label,
+            chartDataVariable
+          );
+        }
+      });
+    }
+
+    this. selectedBassinForAttribute={};
+    this. selectedPuitForAttribute={};
+    this. selectedSblForAttribute={};
+    this. selectedSblfForAttribute={};
+  }
+
+// ======For Attribute Sbnl=============
+
+  // ======For Attribute Sbl=============
+  calculateSumForAttributeSbl(sblId: number, startDate: Date, endDate: Date, attributeName: string, chartDataVariable: string): void {
+
+    const sumForAttributeRequest: SumForAttributeRequest = new SumForAttributeRequest();
+    sumForAttributeRequest.id=sblId;
+    sumForAttributeRequest.startDate=startDate;
+    sumForAttributeRequest.endDate=endDate;
+    sumForAttributeRequest.attributeName=attributeName;
+    this.dashboardService.calculateSumForAttributeSbl(sumForAttributeRequest).subscribe({
+      next: (value: any[]) => {
+        if (this.hasOwnProperty(chartDataVariable)) {
+          (this as any)[chartDataVariable] = value; // Type assertion to allow dynamic property access
+          this.chartDataForAttributeLabels = value;
+          this.initChartForAttributeBassin();
+        } else {
+          console.error(`Property ${chartDataVariable} does not exist on the component.`);
+        }
+      },
+      error: (err: any) => {
+        console.error('Error occurred while fetching data', err);
+      }
+    });
+  }
+  public changeSelectedSblForAttribute(selectedSblForAttribute: Bassin): void {
+    // Check if the selectedBassinForAttribute object and its ID are valid
+    if (
+      selectedSblForAttribute &&
+      selectedSblForAttribute.id !== undefined &&
+      this.dateEndForAttribute !== null &&
+      this.dateStartForAttribute !== null &&
+      this.selectedAttributes.length > 0
+    ) {
+      // Define the mapping between attributes and chart data variables
+      const attributeToChartDataMap: { [key: string]: string } = {
+        'densite': 'chartDataForAttributeDensite',
+        'matiereEnSuspension': 'chartDataForAttributeMatiereEnSuspension',
+        'salinite': 'chartDataForAttributeSalinite',
+        'calcium': 'chartDataForAttributeCalcium',
+        'magnesium': 'chartDataForAttributeMagnesium',
+        'sulfate': 'chartDataForAttributeSulfate',
+        'humidite': 'chartDataForAttributeHumidite',
+        'matiereInsoluble': 'chartDataForAttributeMatiereInsoluble',
+        'potassium': 'chartDataForAttributePotassium',
+        'sodium': 'chartDataForAttributeSodium',
+        'chlorure': 'chartDataForAttributeChlorure',
+        'chlorureDeSodium': 'chartDataForAttributeChlorureDeSodium',
+        'ferrocyanure': 'chartDataForAttributeFerrocyanure'
+      };
+
+      // Iterate over the selected attributes
+      this.selectedAttributes.forEach(attribute => {
+        // Find the corresponding chart data variable for the attribute
+        const chartDataVariable = attributeToChartDataMap[attribute.label];
+
+        // Check if the chart data variable is defined
+        if (chartDataVariable && selectedSblForAttribute.id !== undefined && this.dateEndForAttribute !== null && this.dateStartForAttribute !== null ) {
+          // Call the method to calculate the sum for the attribute
+          this.calculateSumForAttributeSbl(
+            selectedSblForAttribute.id,
+            this.dateStartForAttribute,
+            this.dateEndForAttribute,
+            attribute.label,
+            chartDataVariable
+          );
+        }
+      });
+    }
+
+    this. selectedSbnlForAttribute={};
+    this. selectedPuitForAttribute={};
+    this. selectedBassinForAttribute={};
+    this. selectedSblfForAttribute={};
+  }
+
+// ======For Attribute Sbl=============
+
+  // ======For Attribute Sblf=============
+  calculateSumForAttributeSblf(sblfId: number, startDate: Date, endDate: Date, attributeName: string, chartDataVariable: string): void {
+
+    const sumForAttributeRequest: SumForAttributeRequest = new SumForAttributeRequest();
+    sumForAttributeRequest.id=sblfId;
+    sumForAttributeRequest.startDate=startDate;
+    sumForAttributeRequest.endDate=endDate;
+    sumForAttributeRequest.attributeName=attributeName;
+    this.dashboardService.calculateSumForAttributeSblf(sumForAttributeRequest).subscribe({
+      next: (value: any[]) => {
+        if (this.hasOwnProperty(chartDataVariable)) {
+          (this as any)[chartDataVariable] = value; // Type assertion to allow dynamic property access
+          this.chartDataForAttributeLabels = value;
+          this.initChartForAttributeBassin();
+        } else {
+          console.error(`Property ${chartDataVariable} does not exist on the component.`);
+        }
+      },
+      error: (err: any) => {
+        console.error('Error occurred while fetching data', err);
+      }
+    });
+  }
+  public changeSelectedSblfForAttribute(selectedSblfForAttribute: Sblf): void {
+    // Check if the selectedBassinForAttribute object and its ID are valid
+    if (
+      selectedSblfForAttribute &&
+      selectedSblfForAttribute.id !== undefined &&
+      this.dateEndForAttribute !== null &&
+      this.dateStartForAttribute !== null &&
+      this.selectedAttributes.length > 0
+    ) {
+      // Define the mapping between attributes and chart data variables
+      const attributeToChartDataMap: { [key: string]: string } = {
+        'densite': 'chartDataForAttributeDensite',
+        'matiereEnSuspension': 'chartDataForAttributeMatiereEnSuspension',
+        'salinite': 'chartDataForAttributeSalinite',
+        'calcium': 'chartDataForAttributeCalcium',
+        'magnesium': 'chartDataForAttributeMagnesium',
+        'sulfate': 'chartDataForAttributeSulfate',
+        'humidite': 'chartDataForAttributeHumidite',
+        'matiereInsoluble': 'chartDataForAttributeMatiereInsoluble',
+        'potassium': 'chartDataForAttributePotassium',
+        'sodium': 'chartDataForAttributeSodium',
+        'chlorure': 'chartDataForAttributeChlorure',
+        'chlorureDeSodium': 'chartDataForAttributeChlorureDeSodium',
+        'ferrocyanure': 'chartDataForAttributeFerrocyanure'
+      };
+
+      // Iterate over the selected attributes
+      this.selectedAttributes.forEach(attribute => {
+        // Find the corresponding chart data variable for the attribute
+        const chartDataVariable = attributeToChartDataMap[attribute.label];
+
+        // Check if the chart data variable is defined
+        if (chartDataVariable && selectedSblfForAttribute.id !== undefined && this.dateEndForAttribute !== null && this.dateStartForAttribute !== null ) {
+          // Call the method to calculate the sum for the attribute
+          this.calculateSumForAttributeSblf(
+            selectedSblfForAttribute.id,
+            this.dateStartForAttribute,
+            this.dateEndForAttribute,
+            attribute.label,
+            chartDataVariable
+          );
+        }
+      });
+    }
+
+    this. selectedSbnlForAttribute={};
+    this. selectedPuitForAttribute={};
+    this. selectedSblForAttribute={};
+    this. selectedBassinForAttribute={};
+  }
+
+// ======For Attribute Sblf=============
 }
 
 

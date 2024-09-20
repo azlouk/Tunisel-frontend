@@ -176,7 +176,7 @@ this.isUpdateUser=false
     if(this.isUpdateUser==false){
       if (this.registerRequest.email?.trim() && this.registerRequest.password?.trim()) {
         this.userService.register(this.registerRequest).subscribe(value => {
-          console.log(value)
+          // console.log(value)
           this.getAllUsers();
         })
       this.productDialog = false
@@ -186,7 +186,7 @@ this.isUpdateUser=false
       if (this.registerRequest.email?.trim() && this.registerRequest.password?.trim()) {
         if (this.changePassword.currentPassword?.trim() && this.changePassword.newPassword?.trim() && this.changePassword.confirmationPassword?.trim()) {
           this.userService.register(this.registerRequest).subscribe(value => {
-            console.log(value)
+            // console.log(value)
             // this.getAllUsers()
             this.userService.changePassword(this.changePassword, this.registerRequest.id).subscribe(value => {
               this.getAllUsers();
@@ -197,7 +197,7 @@ this.isUpdateUser=false
 
         } else {
           this.userService.register(this.registerRequest).subscribe(value => {
-            console.log(value)
+            // console.log(value)
             this.getAllUsers()
           })
           this.productDialog = false

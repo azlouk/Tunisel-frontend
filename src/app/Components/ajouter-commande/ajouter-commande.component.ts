@@ -474,7 +474,8 @@ getCommandeById(){
          this.commandeService.getLignesCommandesSbnl(sbnl.id).subscribe(LinesCommandes => {
            LinesCommandes.forEach(value => {
              const data= this.listeLignesCommandesCopy.find(value1 => this.getRef(value)==this.getRef(value1))
-             console.error(data)
+             // console.error(data)
+
              if(data){
                this.listeLignesCommandes.push({...data})
              }else {
@@ -506,7 +507,7 @@ getCommandeById(){
          this.commandeService.getLignesCommandesBande(bande.id).subscribe(LinesCommandes => {
            LinesCommandes.forEach(value => {
              const data= this.listeLignesCommandesCopy.find(value1 => this.getRef(value)==this.getRef(value1))
-             console.error(data)
+             // console.error(data)
              if(data){
                this.listeLignesCommandes.push({...data})
              }else {
@@ -538,7 +539,7 @@ getCommandeById(){
          this.commandeService.getLignesCommandesSbl(sbl.id).subscribe(LinesCommandes => {
            LinesCommandes.forEach(value => {
              const data= this.listeLignesCommandesCopy.find(value1 => this.getRef(value)==this.getRef(value1))
-             console.error(data)
+             // console.error(data)
              if(data){
                this.listeLignesCommandes.push({...data})
              }else {
@@ -680,7 +681,7 @@ getCommandeById(){
   }
 
   filtredate() {
-    this.listeLignesCommandes.forEach(value => console.log('ligne rouge '+new JsonPipe().transform(value)))
+    // this.listeLignesCommandes.forEach(value => console.log('ligne rouge '+new JsonPipe().transform(value)))
 
      //this.Viderfiltredate()
     const data=this.listeLignesCommandes.filter(l => this.searchAnalyse(l)==true && (this.chechMatterChemical(l)==true || this.chechMatterPhysical(l)==true) );

@@ -53,7 +53,11 @@
           <p-calendar   id="departureDate" [(ngModel)]="commande.departureDate"  dateFormat="yy-mm-dd"  [showIcon]="true" [disabled]="getToken()!=='ADMIN'"></p-calendar>
           <label for="departureDate">Departure Date</label>
         </p-floatLabel>
+
+
         <p-floatLabel>
+
+
           <p-autoComplete [disabled]="getToken()!=='ADMIN'"
             [(ngModel)]="commande.customer"
             [dropdown]="true"

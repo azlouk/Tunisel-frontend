@@ -60,7 +60,7 @@ export class DailyUpdateComponent implements OnInit {
     this.dailyUpdateService.getDataByDay(month, year).subscribe(value => {
       this.listDateDaily = value
       this.loadDaily = false
-      console.log(new JsonPipe().transform(this.listDateDaily))
+      // console.log(new JsonPipe().transform(this.listDateDaily))
       this.getuniqueCalibresProduction();
       this.getuniqueCalibresTransfer();
     })

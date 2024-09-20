@@ -164,7 +164,7 @@ export class AjouterPrelevmentPhysiqueComponent implements OnInit{
             this.id=this.selectedSblf.id!
             this.ref="sblf"
           }
-         console.error((value))
+         // console.error((value))
 
       }, error => {
 
@@ -305,7 +305,7 @@ export class AjouterPrelevmentPhysiqueComponent implements OnInit{
         this.selectedBassin.analysesPhysiques=[];
         this.analysesPhysique.tamisList=this.listeTamis;
         this.selectedBassin.analysesPhysiques.push(this.analysesPhysique) ;
-        console.log('======**********>>>>>>   '+new JsonPipe().transform(this.selectedBassin));
+        // console.log('======**********>>>>>>   '+new JsonPipe().transform(this.selectedBassin));
         this.analysePhysiqueService.addAnalysesPhysiquesToBassin(this.selectedBassin).subscribe(value => {
           this.router.navigate(['/analysePhysique']);
         },error => console.log(error));

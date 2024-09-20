@@ -105,7 +105,7 @@ export class AjouterInventaireComponent implements OnInit {
       this.listeProduits = [...value];
 
       this.cdr.markForCheck();
-      console.log("on init", this.sourceUpdate)
+      // console.log("on init", this.sourceUpdate)
     })
 
     if (this.isUpdateInventaire) {
@@ -147,7 +147,7 @@ export class AjouterInventaireComponent implements OnInit {
             // console.log("updatenewP"+newP)
 
             this.targetUpdate.push(newP)
-            console.log('new listeUpdated: ', JSON.stringify(this.targetUpdate))
+            // console.log('new listeUpdated: ', JSON.stringify(this.targetUpdate))
             // }
           }
         })
@@ -172,7 +172,7 @@ export class AjouterInventaireComponent implements OnInit {
 
       this.inventaireService.getProduitFiltre(this.inventaireId).subscribe(value => {
         this.targetProduits = [...value];
-        console.log(this.targetProduits);
+        // console.log(this.targetProduits);
       });
     }
   }
