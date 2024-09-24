@@ -169,10 +169,8 @@ export class ConcasseurComponent implements OnInit{
     }
     else
     {
-      console.log(new JsonPipe().transform(this.concasseur
-      ))
       this.concasseurService.addConcasseur(this.concasseur).subscribe(value => {
-        console.log(value);
+        // console.log(value);
         this.getAllConcasseurs();
 
       })

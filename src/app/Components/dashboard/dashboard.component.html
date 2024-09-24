@@ -1,5 +1,4 @@
 <div class="flex">
-
   <div class="grid">
     <div class="col-12 lg:col-6 xl:col-3">
       <div class="card mb-0">
@@ -10,11 +9,9 @@
           </div>
           <div [ngStyle]="{width: '2.5rem', height: '2.5rem'}"
                class="flex align-items-center justify-content-center  bg-cyan-100 border-round">
-
             <i class="pi pi-filter text-purple-500 text-xl"></i>
           </div>
         </div>
-
       </div>
     </div>
     <div class="col-12 lg:col-6 xl:col-3">
@@ -29,7 +26,6 @@
             <i class="pi pi-map text-purple-500 text-xl"></i>
           </div>
         </div>
-
       </div>
     </div>
     <div class="col-12 lg:col-6 xl:col-3">
@@ -44,7 +40,6 @@
             <i class="pi pi-wrench text-purple-500 text-xl"></i>
           </div>
         </div>
-
       </div>
     </div>
     <div class="col-12 lg:col-6 xl:col-3">
@@ -59,17 +54,14 @@
             <i class="pi pi-wrench text-purple-500 text-xl"></i>
           </div>
         </div>
-
       </div>
     </div>
-
-
     <div class="col-12  flex flex-column justify-content-between  ">
-
+      <!--========Analyses per month============-->
       <div class="card ">
         <h5 class="text-3xl font-bold">Analyses per month</h5>
         <div class="border-1 border-round-2xl border-gray-200 p-4  mt-4 mb-4 bg-white">
-          <div class="flex flex-wrap justify-content-between ">
+          <div class="flex gap-2 align-items-center justify-content-between ">
             <div class="flex flex-column gap-2">
               <label class="font-bold"> Year</label>
               <p-calendar
@@ -78,67 +70,85 @@
                 dateFormat="yy"
                 (ngModelChange)="changeYear(date)"/>
             </div>
+            <p-tabView class="w-full">
+              <p-tabPanel header="Well">
+                <div class="flex flex-column gap-2">
+                  <label class="font-bold"> Well</label>
 
-            <div class="flex flex-column gap-2">
-              <label class="font-bold"> Well</label>
+                  <p-dropdown
+                    [(ngModel)]="selectedPuit"
+                    [options]="puits"
+                    (ngModelChange)="changeSelectedPuit(selectedPuit)"
+                    optionLabel="reference"
+                    placeholder="Select a Well"/>
+                </div>
 
-              <p-dropdown
-                [(ngModel)]="selectedPuit"
-                [options]="puits"
-                (ngModelChange)="changeSelectedPuit(selectedPuit)"
-                optionLabel="reference"
-                placeholder="Select a Well"/>
-            </div>
-            <div class="flex flex-column gap-2">
-              <label class="font-bold"> Pond</label>
+              </p-tabPanel>
+              <p-tabPanel header="Pond">
+                <div class="flex flex-column gap-2">
+                  <label class="font-bold"> Pond</label>
 
-              <p-dropdown
-                [(ngModel)]="selectedBassin"
-                [options]="bassins"
-                (ngModelChange)="changeSelectedBassin(selectedBassin)"
-                optionLabel="reference"
-                placeholder="Select a Pond"/>
-            </div>
-            <div class="flex flex-column gap-2">
-              <label class="font-bold"> Unwashed</label>
+                  <p-dropdown
+                    [(ngModel)]="selectedBassin"
+                    [options]="bassins"
+                    (ngModelChange)="changeSelectedBassin(selectedBassin)"
+                    optionLabel="reference"
+                    placeholder="Select a Pond"/>
+                </div>
 
-              <p-dropdown
+              </p-tabPanel>
+              <p-tabPanel header="Unwashed">
+                <div class="flex flex-column gap-2">
+                  <label class="font-bold"> Unwashed</label>
 
-                [(ngModel)]="selectedSbnl"
-                [options]="sbnls"
-                (ngModelChange)="changeSelectedSbnl(selectedSbnl)"
-                optionLabel="reference"
-                placeholder="Select a Unwashed"/>
-            </div>
+                  <p-dropdown
 
-            <div class="flex flex-column gap-2">
-              <label class="font-bold"> washed</label>
+                    [(ngModel)]="selectedSbnl"
+                    [options]="sbnls"
+                    (ngModelChange)="changeSelectedSbnl(selectedSbnl)"
+                    optionLabel="reference"
+                    placeholder="Select a Unwashed"/>
+                </div>
 
-              <p-dropdown
+              </p-tabPanel>
+              <p-tabPanel header="Washed">
+                <div class="flex flex-column gap-2">
+                  <label class="font-bold"> washed</label>
 
-                [(ngModel)]="selectedSbl"
-                [options]="sbls"
-                (ngModelChange)="changeSelectedSbl(selectedSbl)"
-                optionLabel="reference"
-                placeholder="Select a washed"/>
-            </div>
-            <div class="flex flex-column gap-2">
-              <label class="font-bold"> washed Ship</label>
+                  <p-dropdown
 
-              <p-dropdown
+                    [(ngModel)]="selectedSbl"
+                    [options]="sbls"
+                    (ngModelChange)="changeSelectedSbl(selectedSbl)"
+                    optionLabel="reference"
+                    placeholder="Select a washed"/>
+                </div>
 
-                [(ngModel)]="selectedSblf"
-                [options]="sblfs"
-                (ngModelChange)="changeSelectedSblf(selectedSblf)"
-                optionLabel="reference"
-                placeholder="Select a washed Ship"/>
-            </div>
+              </p-tabPanel>
+              <p-tabPanel header="Washed Ship">
+                <div class="flex flex-column gap-2">
+                  <label class="font-bold"> washed Ship</label>
+
+                  <p-dropdown
+
+                    [(ngModel)]="selectedSblf"
+                    [options]="sblfs"
+                    (ngModelChange)="changeSelectedSblf(selectedSblf)"
+                    optionLabel="reference"
+                    placeholder="Select a washed Ship"/>
+                </div>
+
+              </p-tabPanel>
+
+            </p-tabView>
+
+
           </div>
         </div>
 
         <p-chart [data]="chartDataAnalyse" [options]="chartOptions" type="line"></p-chart>
       </div>
-
+      <!--========SUM HARVEST PER YEAR OR MONTH===========-->
       <div class="card">
         <h5 class="text-3xl font-bold">SUM HARVEST PER YEAR OR MONTH</h5>
         <div class="border-1 border-round-2xl border-gray-200 p-4  mt-4 mb-4 bg-white">
@@ -192,7 +202,7 @@
 
         <p-chart type="bar" [data]="barData" [options]="barOptions"></p-chart>
       </div>
-
+      <!--========SALT STOCK LEVEL==================-->
       <div class="card flex flex-column align-items-center ">
         <h5 class="text-left w-full text-3xl font-bold">SALT STOCK LEVEL</h5>
         <div class="w-full justify-content-start border-1 border-round-2xl border-gray-200 p-4  mt-4 mb-4 bg-white">
@@ -215,6 +225,7 @@
 
         <p-chart type="pie" class="w-4" [data]="pieData" [options]="pieOptions"></p-chart>
       </div>
+      <!--========QUANTITY OF SALT PRODUCED============-->
       <div class="card">
         <h5 class="text-3xl font-bold">QUANTITY OF SALT PRODUCED</h5>
         <div class="border-1 border-round-2xl border-gray-200 p-4  mt-4 mb-4 bg-white">
@@ -256,20 +267,24 @@
 
         <p-chart type="bar" [data]="barDataProduction" [options]="barOptionsProduction"></p-chart>
       </div>
-      <!--      ============de quantité transférée de sel =============-->
+      <!--============QUANTITY OF SALT TRANSFERRED =============-->
       <div class="card">
         <h5 class="text-3xl font-bold">QUANTITY OF SALT TRANSFERRED</h5>
         <div class="border-1 border-round-2xl border-gray-200 p-4  mt-4 mb-4 bg-white">
           <div class="flex align-items-center gap-7 mb-3">
             <div class=" ">
-              <label >Starting point</label>
-              <p-dropdown [options]="TransferAttributsStart" [(ngModel)]="startingPoint" [editable]="true" (ngModelChange)="getTransferAttributsFiltredStart()"  optionLabel="label" class="w-full" ></p-dropdown>
+              <label>Starting point</label>
+              <p-dropdown [options]="TransferAttributsStart" [(ngModel)]="startingPoint" [editable]="true"
+                          (ngModelChange)="getTransferAttributsFiltredStart()" optionLabel="label"
+                          class="w-full"></p-dropdown>
 
             </div>
 
             <div class="">
-              <label >Arriving point</label>
-              <p-dropdown [options]="TransferAttributsEnd" [(ngModel)]="arrivingPoint" (ngModelChange)="getTransferAttributsFiltredEnd()" [editable]="true" optionLabel="label" class="w-full" ></p-dropdown>
+              <label>Arriving point</label>
+              <p-dropdown [options]="TransferAttributsEnd" [(ngModel)]="arrivingPoint"
+                          (ngModelChange)="getTransferAttributsFiltredEnd()" [editable]="true" optionLabel="label"
+                          class="w-full"></p-dropdown>
             </div>
             <p-tabView class="w-full">
               <p-tabPanel header="Year">
@@ -308,8 +323,7 @@
 
         <p-chart type="bar" [data]="barDataTransfer" [options]="barOptionsTransfer"></p-chart>
       </div>
-
-      <!--      ============ETAT BASSIN =============-->
+      <!--============ETAT BASSIN =============-->
       <div class="card">
         <h5 class="text-3xl font-bold">STATE POND</h5>
         <div class="border-1 border-round-2xl border-gray-200 p-4  mt-4 mb-4 bg-white">
@@ -325,26 +339,118 @@
                 placeholder="Select a Pond"/>
             </div>
 
-                <div class="flex flex-column gap-2">
-                  <label class="font-bold"> Year</label>
-                  <p-calendar
-                    [(ngModel)]="dateSumEtatBassin"
-                    view="year"
-                    dateFormat="yy"
-                    (ngModelChange)="changedateSumEtatBassin(dateSumEtatBassin)"/>
-                </div>
-
+            <div class="flex flex-column gap-2">
+              <label class="font-bold"> Year</label>
+              <p-calendar
+                [(ngModel)]="dateSumEtatBassin"
+                view="year"
+                dateFormat="yy"
+                (ngModelChange)="changedateSumEtatBassin(dateSumEtatBassin)"/>
+            </div>
 
 
           </div>
 
         </div>
-        <p-chart type="bar" [data]="dataEtatBassin" [options]="optionsEtatBassin" />
+        <p-chart type="bar" [data]="dataEtatBassin" [options]="optionsEtatBassin"/>
       </div>
+      <!--========****************====================-->
+      <div class="card ">
+        <h5 class="text-3xl font-bold">Advanced Chemical Analysis</h5>
+        <div class="border-1 border-round-2xl border-gray-200 p-4  mt-4 mb-4 bg-white">
+          <div class="flex align-items-center gap-2 justify-content-between ">
+            <div class="flex flex-column gap-2">
+              <label class="font-bold"> Start Date</label>
+              <input  class="p-2 shadow-1 w-full" type="date"
+                      dateFormat="yy-mm-dd"
+                      pInputText
+                      (ngModelChange)="changeDateStartForAttribute(dateStartForAttribute)"
+                      [(ngModel)]="dateStartForAttribute"  />
+            </div>
+            <div class="flex flex-column gap-2">
+              <label class="font-bold"> End Date</label>
+              <input  class="p-2 shadow-1 w-full" type="date"
+                      dateFormat="yy-mm-dd"
+                      pInputText
+                      (ngModelChange)="changeDateEndForAttribute(dateEndForAttribute)"
+                      [(ngModel)]="dateEndForAttribute"  />
+            </div>
+            <div class="flex flex-column gap-2">
+              <label class="font-bold"> Attribute</label>
+              <p-multiSelect
+                [options]="attributes"
+                [(ngModel)]="selectedAttributes"
+                optionLabel="name"
+                placeholder="Select Attributes" />
+            </div>
+            <p-tabView class="w-full">
+              <p-tabPanel header="Well">
+                <div class="flex flex-column gap-2">
+                  <label class="font-bold"> Well</label>
+                  <p-dropdown
+                    [(ngModel)]="selectedPuitForAttribute"
+                    [options]="puits"
+                    (ngModelChange)="changeSelectedPuitForAttribute(selectedPuitForAttribute)"
+                    optionLabel="reference"
+                    placeholder="Select a Well"/>
+                </div>
 
+              </p-tabPanel>
+              <p-tabPanel header="Pond">
+                <div class="flex flex-column gap-2">
+                  <label class="font-bold"> Pond</label>
+                  <p-dropdown
+                    [(ngModel)]="selectedBassinForAttribute"
+                    [options]="bassins"
+                    (ngModelChange)="changeSelectedBassinForAttribute(selectedBassinForAttribute)"
+                    optionLabel="reference"
+                    placeholder="Select a Pond"/>
+                </div>
 
+              </p-tabPanel>
+              <p-tabPanel header="Unwashed">
+                <div class="flex flex-column gap-2">
+                  <label class="font-bold"> Unwashed</label>
+                  <p-dropdown
+                    [(ngModel)]="selectedSbnlForAttribute"
+                    [options]="sbnls"
+                    (ngModelChange)="changeSelectedSbnlForAttribute(selectedSbnlForAttribute)"
+                    optionLabel="reference"
+                    placeholder="Select a Unwashed"/>
+                </div>
+
+              </p-tabPanel>
+              <p-tabPanel header="Washed">
+                <div class="flex flex-column gap-2">
+                  <label class="font-bold"> washed</label>
+                  <p-dropdown
+                    [(ngModel)]="selectedSblForAttribute"
+                    [options]="sbls"
+                    (ngModelChange)="changeSelectedSblForAttribute(selectedSblForAttribute)"
+                    optionLabel="reference"
+                    placeholder="Select a washed"/>
+                </div>
+
+              </p-tabPanel>
+              <p-tabPanel header="Washed Ship">
+                <div class="flex flex-column gap-2">
+                  <label class="font-bold"> washed Ship</label>
+                  <p-dropdown
+                    [(ngModel)]="selectedSblfForAttribute"
+                    [options]="sblfs"
+                    (ngModelChange)="changeSelectedSblfForAttribute(selectedSblfForAttribute)"
+                    optionLabel="reference"
+                    placeholder="Select a washed Ship"/>
+                </div>
+
+              </p-tabPanel>
+
+            </p-tabView>
+
+          </div>
+        </div>
+        <p-chart [data]="chartDataForAttribute" [options]="chartOptionsForAttribute" type="line"></p-chart>
+      </div>
     </div>
-
   </div>
-
 </div>

@@ -111,7 +111,7 @@ this.getAllarticles()
 
   confirmDeleteSelected() {
     this.deleteProductsDialog = false;
-    console.log(this.selectedArticles.length)
+    // console.log(this.selectedArticles.length)
     this.selectedArticles.forEach(selectedArticle => {
       this.articleService.deleteArticle(selectedArticle.id).subscribe(
         () => {
@@ -129,7 +129,7 @@ this.getAllarticles()
 
   confirmDelete() {
     this.deleteProductDialog = false;
-    console.log("this.article.id", this.article.id);
+    // console.log("this.article.id", this.article.id);
     this.articles = this.articles.filter(val => val.id !== this.article.id);
     if (this.article.id!= null) {
       this.articleService.deleteArticle(this.article.id).subscribe(() => console.log("article deleted"));

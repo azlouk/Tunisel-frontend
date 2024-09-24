@@ -186,7 +186,7 @@ export class AjouterPrelevmentChimiqueComponent implements OnInit {
           this.id=this.selectedSblf.id!
           this.ref="sblf"
         }
-        console.log('ooooooooooooooooo  ', new JsonPipe().transform(value))
+        // console.log('ooooooooooooooooo  ', new JsonPipe().transform(value))
       }, error => {
 
       });
@@ -243,14 +243,14 @@ export class AjouterPrelevmentChimiqueComponent implements OnInit {
 
     this.sblService.getAllSblDTO().subscribe((v: Sbl[]) => {
       this.sbls = v;
-      console.log(new JsonPipe().transform("====================>>>>>>" + this.sbls))
+      // console.log(new JsonPipe().transform("====================>>>>>>" + this.sbls))
     }, error => {
       console.log(error)
     })
 
     this.sblfService.getAllSblfsDTO().subscribe((v: Sblf[]) => {
       this.sblfs = v;
-      console.log(new JsonPipe().transform("====================>>>>>>" + this.sblfs))
+      // console.log(new JsonPipe().transform("====================>>>>>>" + this.sblfs))
 
     }, error => {
       console.log(error)

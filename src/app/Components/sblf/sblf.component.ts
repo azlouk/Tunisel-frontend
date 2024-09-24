@@ -19,7 +19,6 @@ import {InputNumberModule} from "primeng/inputnumber";
 import {Sbnl} from "../../Models/sbnl";
 import {AnalysesChimique} from "../../Models/analyses-chimique";
 import {AnalysesPhysique} from "../../Models/analyses-physique";
-import {Tamis} from "../../Models/tamis";
 import html2canvas from "html2canvas";
 import jsPDF from "jspdf";
 import {ListboxModule} from "primeng/listbox";
@@ -276,10 +275,10 @@ export class SblfComponent {
     data.forEach(v => {
 
       if(v.dateAnalyse!==undefined){
-        console.log(typeof v.dateAnalyse )
+        // console.log(typeof v.dateAnalyse )
         const d=v.dateAnalyse+"";
         const dateana:Date=new Date(d)
-        console.log("-D-->" + dateana)
+        // console.log("-D-->" + dateana)
         if (  this.AfterTodate(this.DatefiltrageStart,dateana) &&  this.AfterTodate(dateana,this.DatefiltrageEnd)) {
           newAnalyse.push(v);
         } else {
@@ -321,10 +320,10 @@ export class SblfComponent {
     data.forEach(v => {
 
       if(v.dateAnalyse!==undefined){
-        console.log(typeof v.dateAnalyse )
+        // console.log(typeof v.dateAnalyse )
         const d=v.dateAnalyse+"";
         const dateana:Date=new Date(d)
-        console.log("-D-->" + dateana)
+        // console.log("-D-->" + dateana)
         if (  this.AfterTodate(this.DatefiltrageStart,dateana) &&  this.AfterTodate(dateana,this.DatefiltrageEnd)) {
           newAnalyse.push(v);
         } else {
@@ -379,7 +378,6 @@ export class SblfComponent {
 
 
   AfterTodate(date1:Date , date2:Date):boolean{
-    console.log(date1+"<"+date2)
     return date1.getDay()<=date2.getDay() && date1.getMonth()<=date2.getMonth() && date1.getFullYear()<=date2.getFullYear()
   }
 

@@ -108,7 +108,7 @@ this.getALLphysique() ;
 
   confirmDeleteSelected() {
     this.deleteProductsDialog = false;
-    console.log(this.selectedAnalysesPhysiques.length)
+    // console.log(this.selectedAnalysesPhysiques.length)
     this.selectedAnalysesPhysiques.forEach(selectedAnalysePhysique => {
       this.analysePhysiqueService.deleteAnalysesPhysiques(selectedAnalysePhysique.id).subscribe(
         () => {

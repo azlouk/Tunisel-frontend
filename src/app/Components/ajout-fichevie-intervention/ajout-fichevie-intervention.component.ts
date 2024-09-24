@@ -123,7 +123,7 @@ export class AjoutFichevieInterventionComponent implements OnInit {
         this.ficheVieService.createFicheVie(this.ficheVie).subscribe(value => {
           this.router.navigate(['/etalonage']);
         }, error => {
-          console.log('eroooooooorrrrr')
+          console.log(error)
         });
       }
 

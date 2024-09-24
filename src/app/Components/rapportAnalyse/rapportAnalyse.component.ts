@@ -700,7 +700,7 @@ export class RapportAnalyseComponent {
        return this.listeTamis.reduce((previousValue, currentValue) =>previousValue+ (currentValue!==undefined && currentValue.masse!=undefined?parseFloat(currentValue.masse.toString()):0) ,0);
   }
   calculateRefus(total:number) {
-    console.log(total)
+
     for (let tamis of this.listeTamis){
       tamis.refus=0;
       if(tamis.masse!==undefined){
@@ -737,7 +737,7 @@ export class RapportAnalyseComponent {
   }
   calculateTamis(){
     let total:number=this.calculateTotalMass();
-    console.error(total)
+
     this.calculateRefus(total);
     this.calculateRefusCumulated();
     this.calculatePassCumulated();

@@ -4,6 +4,8 @@ import {Observable} from "rxjs";
 import {Dashboard} from "../Models/Dashboard";
 import {environment} from "../environment/environment";
 import {getKeyToken} from "../../main";
+import {DatePipe} from "@angular/common";
+import {SumForAttributeRequest} from "../Models/sum-for-attribute-request";
 
 @Injectable({
   providedIn: 'root'
@@ -14,7 +16,7 @@ export class DashboardService {
 
 
 
-  constructor(private http: HttpClient) { }
+  constructor(private http: HttpClient,private datePipe: DatePipe) { }
 
   getDashboardData(): Observable<Dashboard> {
     const token = getKeyToken();
@@ -307,4 +309,70 @@ export class DashboardService {
     }else {
       return  new Observable<any[]>()}
   }
+
+//   ===========================API Data For Attribute Bassin============================================
+  calculateSumForAttributeBassin(sumForAttributeRequest:SumForAttributeRequest): Observable<any[]> {
+    const token = getKeyToken();
+    if (token) {
+      const headers = new HttpHeaders()
+        .set('Authorization', `Bearer ${token}`)
+        .set('Content-Type', 'application/json; charset=utf-8');
+      return this.http.post<any[]>(`${this.apiUrl}/statistiques/count-by-month-total-SumForAttribute-by-bassin`, sumForAttributeRequest, {headers} );
+    } else {
+      return new Observable<any[]>(); // Return an empty observable if no token is present
+    }
+  }
+//   ===========================API Data For Attribute Puit============================================
+  calculateSumForAttributePuit(sumForAttributeRequest:SumForAttributeRequest): Observable<any[]> {
+    const token = getKeyToken();
+    if (token) {
+      const headers = new HttpHeaders()
+        .set('Authorization', `Bearer ${token}`)
+        .set('Content-Type', 'application/json; charset=utf-8');
+      return this.http.post<any[]>(`${this.apiUrl}/statistiques/count-by-month-total-SumForAttribute-by-puit`, sumForAttributeRequest, {headers} );
+    } else {
+      return new Observable<any[]>(); // Return an empty observable if no token is present
+    }
+  }
+
+  //   ===========================API Data For Attribute Sbnl============================================
+  calculateSumForAttributeSbnl(sumForAttributeRequest:SumForAttributeRequest): Observable<any[]> {
+    const token = getKeyToken();
+    if (token) {
+      const headers = new HttpHeaders()
+        .set('Authorization', `Bearer ${token}`)
+        .set('Content-Type', 'application/json; charset=utf-8');
+      return this.http.post<any[]>(`${this.apiUrl}/statistiques/count-by-month-total-SumForAttribute-by-sbnl`, sumForAttributeRequest, {headers} );
+    } else {
+      return new Observable<any[]>(); // Return an empty observable if no token is present
+    }
+  }
+
+  //   ===========================API Data For Attribute Sbl============================================
+  calculateSumForAttributeSbl(sumForAttributeRequest:SumForAttributeRequest): Observable<any[]> {
+    const token = getKeyToken();
+    if (token) {
+      const headers = new HttpHeaders()
+        .set('Authorization', `Bearer ${token}`)
+        .set('Content-Type', 'application/json; charset=utf-8');
+      return this.http.post<any[]>(`${this.apiUrl}/statistiques/count-by-month-total-SumForAttribute-by-sbl`, sumForAttributeRequest, {headers} );
+    } else {
+      return new Observable<any[]>(); // Return an empty observable if no token is present
+    }
+  }
+
+  //   ===========================API Data For Attribute Sblf============================================
+  calculateSumForAttributeSblf(sumForAttributeRequest:SumForAttributeRequest): Observable<any[]> {
+    const token = getKeyToken();
+    if (token) {
+      const headers = new HttpHeaders()
+        .set('Authorization', `Bearer ${token}`)
+        .set('Content-Type', 'application/json; charset=utf-8');
+      return this.http.post<any[]>(`${this.apiUrl}/statistiques/count-by-month-total-SumForAttribute-by-sblf`, sumForAttributeRequest, {headers} );
+    } else {
+      return new Observable<any[]>(); // Return an empty observable if no token is present
+    }
+  }
+
+
 }

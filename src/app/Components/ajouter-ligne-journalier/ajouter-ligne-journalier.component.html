@@ -61,6 +61,7 @@
         </tr>
       </ng-template>
       <ng-template pTemplate="body" let-ligneJournalier let-editing="editing" >
+
         <tr [pEditableRow]="ligneJournalier" class="align-content-start "
         >
 
@@ -207,9 +208,11 @@
                 <button *ngIf="!editing" pButton pRipple type="button" pInitEditableRow icon="pi pi-pencil"
                         (click)="updateLigneJournalier()"
                         class="p-button-rounded   mr-2"></button>
-                <button *ngIf="editing" pButton pRipple type="button"  pSaveEditableRow icon="pi pi-check"
-                        (click)="saveUpdateLigneJournalier(ligneJournalier)"
-                        class="p-button-rounded p-button-text  mr-2"></button>
+<!--                <p-button *ngIf="editing" pButton pRipple type="button"  pSaveEditableRow [outlined]="true" icon="pi pi-check"-->
+<!--                        (click)="saveUpdateLigneJournalier(ligneJournalier)"-->
+<!--                        class="p-button-rounded p-button-text  mr-2">Save</p-button>-->
+                <p-button label="Save" [outlined]="true"*ngIf="editing" pSaveEditableRow icon="pi pi-check" (click)="saveUpdateLigneJournalier(ligneJournalier)"/>
+
               </div>
               <button *ngIf="getToken()=='ADMIN'" pButton pRipple icon="pi pi-trash" class="p-button-rounded p-button-warning mr-2" (click)="deleteLigneJournalier(ligneJournalier)"></button>
             </div>
