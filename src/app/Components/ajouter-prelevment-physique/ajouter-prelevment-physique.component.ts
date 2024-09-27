@@ -28,8 +28,8 @@ import {Tamis} from "../../Models/tamis";
 import {AnalysePhysiqueService} from "../../Services/analysePhysique.service";
 import {TamisService} from "../../Services/tamis.service";
 import Swal from "sweetalert2";
-import {Bande} from "../../Models/bande";
-import {BandeService} from "../../Services/bande.service";
+import {CribleLiwell} from "../../Models/cribleLiwell";
+import {CribleLiwellService} from "../../Services/cribleLiwell.service";
 import {InputTextareaModule} from "primeng/inputtextarea";
 import {AutoCompleteCompleteEvent, AutoCompleteModule} from "primeng/autocomplete";
 import {getToken} from "../../../main";
@@ -68,8 +68,8 @@ export class AjouterPrelevmentPhysiqueComponent implements OnInit{
   selectedBassin: Bassin = {};
   sbnls: Sbnl[] = [];
   selectedSbnl:Sbnl={};
-  bandes: Bande[] = [];
-  selectedBande:Bande={};
+  cribleLiwells: CribleLiwell[] = [];
+  selectedCribleLiwell:CribleLiwell={};
   sbls: Sbl[] = [];
   selectedSbl:Sbl={};
   sblfs: Sblf[] = [];
@@ -104,7 +104,7 @@ export class AjouterPrelevmentPhysiqueComponent implements OnInit{
               private analysePhysiqueService:AnalysePhysiqueService ,
               private tamisService:TamisService ,
               private route: ActivatedRoute,
-              private bandeService:BandeService
+              private cribleLiwellService:CribleLiwellService
               )
   {}
 
@@ -146,7 +146,7 @@ export class AjouterPrelevmentPhysiqueComponent implements OnInit{
         this.selectedSbl = value.sbl;
         this.selectedSbnl = value.sbnl;
         this.selectedSblf = value.sblf;
-        this.selectedBande = value.bande;
+        this.selectedCribleLiwell = value.cribleLiwell;
 
           if(this.selectedBassin){
             this.id=this.selectedBassin.id!
@@ -154,9 +154,9 @@ export class AjouterPrelevmentPhysiqueComponent implements OnInit{
           }else if (this.selectedSbnl){
             this.id=this.selectedSbnl.id!
             this.ref="sbnl"
-          }else if (this.selectedBande){
-            this.id=this.selectedBande.id!
-            this.ref="bande"
+          }else if (this.selectedCribleLiwell){
+            this.id=this.selectedCribleLiwell.id!
+            this.ref="cribleLiwell"
           }else if (this.selectedSbl){
             this.id=this.selectedSbl.id!
             this.ref="sbl"
@@ -190,8 +190,8 @@ export class AjouterPrelevmentPhysiqueComponent implements OnInit{
     },error => {
       console.log(error)});
 
-    this.bandeService.getAllBandesDTO().subscribe((v:  Bande[]) => {
-      this.bandes=v;
+    this.cribleLiwellService.getAllCribleLiwellsDTO().subscribe((v:  CribleLiwell[]) => {
+      this.cribleLiwells=v;
 
     },error => {
       console.log(error)})
@@ -219,7 +219,7 @@ export class AjouterPrelevmentPhysiqueComponent implements OnInit{
     // alert(new JsonPipe().transform(this.selectedBassin))
 
      this.selectedSbnl = {};
-    this.selectedBande = {};
+    this.selectedCribleLiwell = {};
     this.selectedSbl = {};
     this.selectedSblf = {};
 
@@ -231,22 +231,22 @@ export class AjouterPrelevmentPhysiqueComponent implements OnInit{
     //   alert(new JsonPipe().transform(this.selectedSbnl))
 
     this.selectedBassin = {};
-     this.selectedBande = {};
+     this.selectedCribleLiwell = {};
     this.selectedSbl = {};
     this.selectedSblf = {};
     this.id=this.selectedSbnl && this.selectedSbnl.id?this.selectedSbnl.id:0;
     this.ref="sbnl"
   }
 
-  selectBande() {
-    // alert(new JsonPipe().transform(this.selectedBande))
+  selectCribleLiwell() {
+    // alert(new JsonPipe().transform(this.selectedCribleLiwell))
 
     this.selectedBassin = {};
     this.selectedSbnl = {};
      this.selectedSbl = {};
     this.selectedSblf = {};
-    this.id=this.selectedBande && this.selectedBande.id?this.selectedBande.id:0;
-    this.ref="bande"
+    this.id=this.selectedCribleLiwell && this.selectedCribleLiwell.id?this.selectedCribleLiwell.id:0;
+    this.ref="cribleLiwell"
   }
 
   selectSBL() {
@@ -254,7 +254,7 @@ export class AjouterPrelevmentPhysiqueComponent implements OnInit{
 
     this.selectedBassin = {};
     this.selectedSbnl = {};
-    this.selectedBande = {};
+    this.selectedCribleLiwell = {};
      this.selectedSblf = {};
     this.id=this.selectedSbl && this.selectedSbl.id?this.selectedSbl.id:0;
     this.ref="sbl"
@@ -265,7 +265,7 @@ export class AjouterPrelevmentPhysiqueComponent implements OnInit{
 
     this.selectedBassin = {};
     this.selectedSbnl = {};
-    this.selectedBande = {};
+    this.selectedCribleLiwell = {};
     this.selectedSbl = {};
      this.id=this.selectedSblf && this.selectedSblf.id?this.selectedSblf.id:0;
     this.ref="sblf"
@@ -277,7 +277,7 @@ export class AjouterPrelevmentPhysiqueComponent implements OnInit{
         this.selectedBassin !== undefined && this.selectedBassin !== null && this.selectedBassin.hasOwnProperty('id') ||
         this.selectedSbnl !== undefined && this.selectedSbnl !== null && this.selectedSbnl.hasOwnProperty('id') ||
         this.selectedSbl !== undefined && this.selectedSbl !== null && this.selectedSbl.hasOwnProperty('id') ||
-        this.selectedBande !== undefined && this.selectedBande !== null && this.selectedBande.hasOwnProperty('id') ||
+        this.selectedCribleLiwell !== undefined && this.selectedCribleLiwell !== null && this.selectedCribleLiwell.hasOwnProperty('id') ||
         this.selectedSblf !== undefined && this.selectedSblf.hasOwnProperty('id')
       ) {
        // alert(this.id+" ref"+this.ref+"  id an"+this.analysesPhysique.id)
@@ -316,11 +316,11 @@ export class AjouterPrelevmentPhysiqueComponent implements OnInit{
         this.selectedSbnl.analysesPhysiques.push(this.analysesPhysique) ;
         this.analysePhysiqueService.addAnalysesPhysiquesToSbnl(this.selectedSbnl).subscribe(value => this.router.navigate(['/analysePhysique']))
       }
-      else if(this.selectedBande.hasOwnProperty('id')){
-        this.selectedBande.analysesPhysiques=[];
+      else if(this.selectedCribleLiwell.hasOwnProperty('id')){
+        this.selectedCribleLiwell.analysesPhysiques=[];
         this.analysesPhysique.tamisList=this.listeTamis;
-        this.selectedBande.analysesPhysiques.push(this.analysesPhysique) ;
-        this.analysePhysiqueService.addAnalysesPhysiquesToBande(this.selectedBande).subscribe(value => this.router.navigate(['/analysePhysique']))
+        this.selectedCribleLiwell.analysesPhysiques.push(this.analysesPhysique) ;
+        this.analysePhysiqueService.addAnalysesPhysiquesToCribleLiwell(this.selectedCribleLiwell).subscribe(value => this.router.navigate(['/analysePhysique']))
       }
       else if(this.selectedSbl.hasOwnProperty('id')){
         this.selectedSbl.analysesPhysiques=[];

@@ -13,7 +13,7 @@ import {Table, TableModule} from "primeng/table";
 import {ToastModule} from "primeng/toast";
 import {ToolbarModule} from "primeng/toolbar";
 import {Concasseur} from "../../Models/concasseur";
-import {Bande} from "../../Models/bande";
+import {CribleLiwell} from "../../Models/cribleLiwell";
 import {ResultConcasseur} from "../../Models/result-concasseur";
 import {ConcasseurService} from "../../Services/concasseur.service";
 import {ResultConcasseurService} from "../../Services/result-concasseur.service";

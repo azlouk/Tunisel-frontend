@@ -1,7 +1,7 @@
 import {StockType} from "../Enum/stock-type";
 import {AnalysesChimique} from "./analyses-chimique";
 import {AnalysesPhysique} from "./analyses-physique";
-import {Bande} from "./bande";
+import {CribleLiwell} from "./cribleLiwell";
 import {Crible} from "./crible";
 import {Concasseur} from "./concasseur";
 import {StockOrder} from "./stock-order";
@@ -18,7 +18,7 @@ export interface Sbl {
   stockType?:StockType ;
   analysesChimiques?: AnalysesChimique[];
   analysesPhysiques?: AnalysesPhysique[];
-  bandeList?: Bande[];
+  cribleLiwellList?: CribleLiwell[];
   cribleList?: Crible[];
   concasseurList?: Concasseur[];
   calibre?: number ;

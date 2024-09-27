@@ -16,7 +16,7 @@ import {LoginComponent} from "./Components/login/login.component";
 import {AuthGuard} from "./guard/AuthGuard";
 import {AjouterInventaireComponent} from "./Components/ajouter-inventaire/ajouter-inventaire.component";
 import {ArticleComponent} from "./Components/article/article.component";
-import {BandeComponent} from "./Components/bande/bande.component";
+import {CribleLiwellComponent} from "./Components/cribleLiwell/cribleLiwell.component";
 import {ProduitComponent} from "./Components/produit/produit.component";
 import {RapportAnalyseComponent} from "./Components/rapportAnalyse/rapportAnalyse.component";
 import {CommandeComponent} from "./Components/commande/commande.component";
@@ -40,7 +40,7 @@ export const routes: Routes = [
   {path:'bassins', component:BassinComponent, canActivate:[AuthGuard]},
   {path:'sbls', component:SblComponent, canActivate:[AuthGuard]},
   {path:'sbnls', component:SbnlComponent, canActivate:[AuthGuard]},
-  {path:'bandes', component:BandeComponent, canActivate:[AuthGuard]},
+  {path:'cribleLiwells', component:CribleLiwellComponent, canActivate:[AuthGuard]},
   {path:'sblfs', component:SblfComponent, canActivate:[AuthGuard]},
   {path:'login', component:LoginComponent},
   {path:'sblfs', component:SblfComponent, canActivate:[AuthGuard]},

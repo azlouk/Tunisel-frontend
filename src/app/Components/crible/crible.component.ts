@@ -16,8 +16,8 @@ import {Table, TableModule} from "primeng/table";
 import {ToastModule} from "primeng/toast";
 import {ToolbarModule} from "primeng/toolbar";
 import {TooltipModule} from "primeng/tooltip";
-import {Bande} from "../../Models/bande";
-import {BandeService} from "../../Services/bande.service";
+import {CribleLiwell} from "../../Models/cribleLiwell";
+import {CribleLiwellService} from "../../Services/cribleLiwell.service";
 import Swal from "sweetalert2";
 import {Sbnl} from "../../Models/sbnl";
 import {getToken} from "../../../main";
@@ -75,21 +75,21 @@ export class CribleComponent implements OnInit{
   crible:Crible=new Crible();
 
   selectedCribles: Crible[] = [];
-  bandes: Bande[] = [];
+  cribleLiwells: CribleLiwell[] = [];
   public isUpdateCrible=false;
   SelectAll: boolean = false;
 
 
   public  _selectedColumns: any[]=[];
   detailsDialog: boolean=false;
-  public selectedBande: Bande={};
+  public selectedCribleLiwell: CribleLiwell={};
   public resultCribleDialog: boolean=false
   resultCrible:ResultCrible=new ResultCrible();
   ListResultCribles:ResultCrible[]=[];
   @Input() get selectedColumns(): any[] {
     return this._selectedColumns;
   }
-  constructor( private messageService: MessageService,private cribleService :CribleService,private bandeService:BandeService,
+  constructor( private messageService: MessageService,private cribleService :CribleService,private cribleLiwellService:CribleLiwellService,
                private resultCribleService:ResultCribleService) {}
 
   ngOnInit() {
@@ -101,7 +101,7 @@ export class CribleComponent implements OnInit{
     this.crible=new Crible();
     this.submitted = false;
     this.cribleDialog = true;
-   this.getAllBandes()
+   this.getAllCribleLiwells()
   }
 
   deleteSelectedSbls() {
@@ -114,7 +114,7 @@ export class CribleComponent implements OnInit{
     this.isUpdateCrible=true;
     this.crible= crible ;
     this.cribleDialog = true;
-    this.getAllBandes()
+    this.getAllCribleLiwells()
 
   }
 
@@ -267,10 +267,10 @@ export class CribleComponent implements OnInit{
     if(crible.resultCribles!=undefined){
       totalResultCrible= crible.resultCribles.reduce((sum, resultCrible) => sum+resultCrible.bigSalt+resultCrible.refus,0)
     }
-    if(crible.bandeList!=undefined){
-      crible.bandeList?.forEach(bande => {
-        if(bande.traitementStocks!=undefined)
-          totalRefus +=bande.traitementStocks.reduce((sum, traitementStock) => sum + traitementStock.refus, 0)
+    if(crible.cribleLiwellList!=undefined){
+      crible.cribleLiwellList?.forEach(cribleLiwell => {
+        if(cribleLiwell.traitementStocks!=undefined)
+          totalRefus +=cribleLiwell.traitementStocks.reduce((sum, traitementStock) => sum + traitementStock.refus, 0)
       } )}
 
     return totalRefus-totalResultCrible;
@@ -280,7 +280,7 @@ export class CribleComponent implements OnInit{
   this.getAllCribles();
   this.resultCribleDialog=false;
   }
-  getAllBandes(){
-    this.bandeService.getAllBandesDTO().subscribe(value => this.bandes=value)
+  getAllCribleLiwells(){
+    this.cribleLiwellService.getAllCribleLiwellsDTO().subscribe(value => this.cribleLiwells=value)
   }
 }

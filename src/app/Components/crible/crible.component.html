@@ -15,7 +15,7 @@
 
       </p-toolbar>
 
-      <p-table  [loading]="loading" #dt [value]="cribles" responsiveLayout="scroll" [rows]="10" [globalFilterFields]="['id','nom','reference','description','etat','bandeList']" [paginator]="true" [rowsPerPageOptions]="[10,20,30]" [showCurrentPageReport]="true" currentPageReportTemplate="Display  {first} to  {last} of  {totalRecords} entries" [(selection)]="selectedCribles" selectionMode="multiple" [rowHover]="true" dataKey="id">
+      <p-table  [loading]="loading" #dt [value]="cribles" responsiveLayout="scroll" [rows]="10" [globalFilterFields]="['id','nom','reference','description','etat','cribleLiwellList']" [paginator]="true" [rowsPerPageOptions]="[10,20,30]" [showCurrentPageReport]="true" currentPageReportTemplate="Display  {first} to  {last} of  {totalRecords} entries" [(selection)]="selectedCribles" selectionMode="multiple" [rowHover]="true" dataKey="id">
         <ng-template pTemplate="caption">
           <div class="flex flex-column md:flex-row md:justify-content-between md:align-items-center">
             <h5 class="m-0">Management of Crible</h5>
@@ -39,7 +39,7 @@
             <th pSortableColumn="description">Description <p-sortIcon field="description"></p-sortIcon></th>
             <th pSortableColumn="etat">State <p-sortIcon field="etat"></p-sortIcon></th>
             <th pSortableColumn="quantity">Quantity <p-sortIcon field="quantity"></p-sortIcon></th>
-            <th pSortableColumn="bandeList">Band <p-sortIcon field="bandeList"></p-sortIcon></th>
+            <th pSortableColumn="cribleLiwellList">Band <p-sortIcon field="cribleLiwellList"></p-sortIcon></th>
             <th>Action</th>
 
           </tr>
@@ -100,8 +100,8 @@
           <div class="flex flex-column gap-2 col-2">
             <label> Band List</label>
             <p-dropdown
-              [options]="this.crible.bandeList"
-              [(ngModel)]="selectedBande"
+              [options]="this.crible.cribleLiwellList"
+              [(ngModel)]="selectedCribleLiwell"
               optionLabel="reference"
               placeholder="Select a Band" />
           </div>
@@ -110,7 +110,7 @@
         </div>
         <div class="cart mt-5">
           <p-table #dt [loading]="loading"
-                   [value]="selectedBande.traitementStocks!==undefined?selectedBande.traitementStocks:[]"
+                   [value]="selectedCribleLiwell.traitementStocks!==undefined?selectedCribleLiwell.traitementStocks:[]"
 
                    responsiveLayout="scroll" [rows]="10"
                    [globalFilterFields]="['id','date','value']"
@@ -196,7 +196,7 @@
       <ng-template pTemplate="content">
         <div class="field">
           <label>Band</label>
-          <p-multiSelect [options]="bandes"   [(ngModel)]="crible.bandeList"  placeholder="Select a Band" optionLabel="reference" display="chip" class="w-full"  ></p-multiSelect>
+          <p-multiSelect [options]="cribleLiwells"   [(ngModel)]="crible.cribleLiwellList"  placeholder="Select a Band" optionLabel="reference" display="chip" class="w-full"  ></p-multiSelect>
 
         </div>
         <div class="field">

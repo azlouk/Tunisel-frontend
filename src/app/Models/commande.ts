@@ -1,6 +1,6 @@
 import {LineCommande} from "./lineCommande";
 import {Bassin} from "./bassin";
-import {Bande} from "./bande";
+import {CribleLiwell} from "./cribleLiwell";
 import {Sblf} from "./sblf";
 import {Sbl} from "./sbl";
 import {Sbnl} from "./sbnl";
@@ -19,7 +19,7 @@ export interface Commande {
   sbnls?:Sbnl[];
   sbls?:Sbl[];
   sblfs?:Sblf[];
-  bandes?:Bande[];
+  cribleLiwells?:CribleLiwell[];
   dataHeaders?:Column[];
   calibre?:string
 

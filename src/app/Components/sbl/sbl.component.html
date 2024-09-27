@@ -116,8 +116,8 @@
           <div class="flex flex-column gap-2 col-2">
             <label> Band List</label>
             <p-dropdown
-              [options]="this.sbl.bandeList"
-              [(ngModel)]="selectedBande"
+              [options]="this.sbl.cribleLiwellList"
+              [(ngModel)]="selectedCribleLiwell"
               optionLabel="reference"
               placeholder="Select a Band" />
           </div>
@@ -126,7 +126,7 @@
         </div>
         <div class="cart mt-5">
           <p-table #dt [loading]="loading"
-                   [value]="selectedBande.traitementStocks!==undefined?selectedBande.traitementStocks:[]"
+                   [value]="selectedCribleLiwell.traitementStocks!==undefined?selectedCribleLiwell.traitementStocks:[]"
                    responsiveLayout="scroll" [rows]="10"
                    [globalFilterFields]="['id','date','value']"
                    [paginator]="true"
@@ -391,20 +391,20 @@
 
         <div class="field" [hidden]="(sbl.cribleList && sbl.cribleList.length > 0)||(sbl.concasseurList && sbl.concasseurList.length > 0)">
           <label>Band</label>
-          <p-multiSelect [options]="bandes"   [(ngModel)]="sbl.bandeList"  placeholder="Select a Band" optionLabel="reference" display="chip" class="w-full" (ngModelChange)="getCalibresBySelectedBandes(sbl.bandeList)" ></p-multiSelect>
+          <p-multiSelect [options]="cribleLiwells"   [(ngModel)]="sbl.cribleLiwellList"  placeholder="Select a Band" optionLabel="reference" display="chip" class="w-full" (ngModelChange)="getCalibresBySelectedCribleLiwells(sbl.cribleLiwellList)" ></p-multiSelect>
         </div>
 
-        <div class="field" *ngIf="sbl.bandeList && sbl.bandeList.length > 0">
+        <div class="field" *ngIf="sbl.cribleLiwellList && sbl.cribleLiwellList.length > 0">
           <label >Calibre</label>
           <p-dropdown [options]="calibres" [(ngModel)]="sbl.calibre"   class="w-full" ></p-dropdown>
         </div>
 
-        <div class="field"[hidden]="(sbl.bandeList && sbl.bandeList.length > 0)||(sbl.concasseurList && sbl.concasseurList.length > 0)">
+        <div class="field"[hidden]="(sbl.cribleLiwellList && sbl.cribleLiwellList.length > 0)||(sbl.concasseurList && sbl.concasseurList.length > 0)">
           <label>Crible</label>
           <p-multiSelect [options]="cribles"   [(ngModel)]="sbl.cribleList"  placeholder="Select a Crible" optionLabel="reference" display="chip" class="w-full"  ></p-multiSelect>
         </div>
 
-        <div class="field" [hidden]="(sbl.bandeList && sbl.bandeList.length > 0)||(sbl.cribleList && sbl.cribleList.length > 0)">
+        <div class="field" [hidden]="(sbl.cribleLiwellList && sbl.cribleLiwellList.length > 0)||(sbl.cribleList && sbl.cribleList.length > 0)">
           <label>Concasseur</label>
           <p-multiSelect [options]="concasseurs"   [(ngModel)]="sbl.concasseurList"  placeholder="Select a Concasseur" optionLabel="reference" display="chip" class="w-full"  ></p-multiSelect>
         </div>

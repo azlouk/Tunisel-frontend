@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import {environment} from "../environment/environment";
 import {HttpClient, HttpHeaders} from "@angular/common/http";
 import {Observable} from "rxjs";
-import {Bande} from "../Models/bande";
+import {CribleLiwell} from "../Models/cribleLiwell";
 import {Sblf} from "../Models/sblf";
 import {Bassin} from "../Models/bassin";
 import {Sbnl} from "../Models/sbnl";
@@ -49,11 +49,11 @@ export class RapportAnalyseService {
   }else {
       return  new Observable<any>()}}
 
-  addRapportToBande(bande:Bande) : Observable<void>{
+  addRapportToCribleLiwell(cribleLiwell:CribleLiwell) : Observable<void>{
     const token = getKeyToken();
     if (token) {
       const headers = new HttpHeaders().set('Authorization', `Bearer ${token}`).set("Content-Type", "application/json; charset=utf8");
-    return this.http.put<void>(`${this.apiUrl}/analysesPhysiques/AddRapport/bande`, bande, {headers});
+    return this.http.put<void>(`${this.apiUrl}/analysesPhysiques/AddRapport/cribleLiwell`, cribleLiwell, {headers});
   }else {
       return  new Observable<any>()}}
 

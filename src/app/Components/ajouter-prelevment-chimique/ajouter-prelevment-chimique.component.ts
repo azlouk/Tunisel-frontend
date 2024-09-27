@@ -29,8 +29,8 @@ import {AnalyseChimiqueService} from "../../Services/analyse-chimique.service";
 import {DialogModule} from "primeng/dialog";
 import {DropdownModule} from "primeng/dropdown";
 import Swal from "sweetalert2";
-import {Bande} from "../../Models/bande";
-import {BandeService} from "../../Services/bande.service";
+import {CribleLiwell} from "../../Models/cribleLiwell";
+import {CribleLiwellService} from "../../Services/cribleLiwell.service";
 import {InputTextareaModule} from "primeng/inputtextarea";
 import {getToken} from "../../../main";
 import {AutoCompleteCompleteEvent, AutoCompleteModule} from "primeng/autocomplete";
@@ -72,8 +72,8 @@ export class AjouterPrelevmentChimiqueComponent implements OnInit {
   selectedBassin: Bassin = {};
   sbnls: Sbnl[] = [];
   selectedSbnl: Sbnl = {};
-  bandes: Bande[] = [];
-  selectedBande: Bande = {};
+  cribleLiwells: CribleLiwell[] = [];
+  selectedCribleLiwell: CribleLiwell = {};
   sbls: Sbl[] = [];
   selectedSbl: Sbl = {};
   sblfs: Sblf[] = [];
@@ -100,7 +100,7 @@ export class AjouterPrelevmentChimiqueComponent implements OnInit {
               private sblfService: SblfService,
               private analyseChimiqueService: AnalyseChimiqueService,
               private route: ActivatedRoute,
-              private bandeService: BandeService) {
+              private cribleLiwellService: CribleLiwellService) {
   }
 
 
@@ -165,7 +165,7 @@ export class AjouterPrelevmentChimiqueComponent implements OnInit {
         this.selectedSbl = value.sbl;
         this.selectedSbnl = value.sbnl;
         this.selectedSblf = value.sblf;
-        this.selectedBande = value.bande;
+        this.selectedCribleLiwell = value.cribleLiwell;
         if(this.selectedPuit){
           this.id=this.selectedPuit.id!
           this.ref="puit"}
@@ -176,9 +176,9 @@ export class AjouterPrelevmentChimiqueComponent implements OnInit {
         }else if (this.selectedSbnl){
           this.id=this.selectedSbnl.id!
           this.ref="sbnl"
-        }else if (this.selectedBande){
-          this.id=this.selectedBande.id!
-          this.ref="bande"
+        }else if (this.selectedCribleLiwell){
+          this.id=this.selectedCribleLiwell.id!
+          this.ref="cribleLiwell"
         }else if (this.selectedSbl){
           this.id=this.selectedSbl.id!
           this.ref="sbl"
@@ -234,8 +234,8 @@ export class AjouterPrelevmentChimiqueComponent implements OnInit {
     }, error => {
       console.log(error)
     });
-    this.bandeService.getAllBandesDTO().subscribe((v: Bande[]) => {
-      this.bandes = v;
+    this.cribleLiwellService.getAllCribleLiwellsDTO().subscribe((v: CribleLiwell[]) => {
+      this.cribleLiwells = v;
 
     }, error => {
       console.log(error)
@@ -291,7 +291,7 @@ export class AjouterPrelevmentChimiqueComponent implements OnInit {
           this.selectedBassin!==undefined &&   this.selectedBassin!==null &&  this.selectedBassin.hasOwnProperty('id') ||
           this.selectedSbnl!==undefined &&  this.selectedSbnl!==null && this.selectedSbnl.hasOwnProperty('id') ||
           this.selectedSbl!==undefined &&this.selectedSbl!==null && this.selectedSbl.hasOwnProperty('id') ||
-          this.selectedBande!==undefined && this.selectedBande!==null && this.selectedBande.hasOwnProperty('id') ||
+          this.selectedCribleLiwell!==undefined && this.selectedCribleLiwell!==null && this.selectedCribleLiwell.hasOwnProperty('id') ||
           this.selectedSblf!==undefined &&  this.selectedSblf!==null && this.selectedSblf.hasOwnProperty('id')
         ) {
           this.analyseChimiqueService.updateAnalyseChimique(this.analysesChimique, this.id, this.ref).subscribe(value => this.router.navigate(['/analyseChimique']),error => {
@@ -325,10 +325,10 @@ export class AjouterPrelevmentChimiqueComponent implements OnInit {
           this.selectedSbnl.analysesChimiques.push(this.analysesChimique);
           this.analyseChimiqueService.addAnalyseChimiqueToSbnl(this.selectedSbnl).subscribe(value => this.router.navigate(['/analyseChimique']))
         }
-        else if (this.selectedBande!==null && this.selectedBande.hasOwnProperty('id') == true) {
-          this.selectedBande.analysesChimiques = [];
-          this.selectedBande.analysesChimiques.push(this.analysesChimique);
-          this.analyseChimiqueService.addAnalyseChimiqueToBande(this.selectedBande).subscribe(value => this.router.navigate(['/analyseChimique']))
+        else if (this.selectedCribleLiwell!==null && this.selectedCribleLiwell.hasOwnProperty('id') == true) {
+          this.selectedCribleLiwell.analysesChimiques = [];
+          this.selectedCribleLiwell.analysesChimiques.push(this.analysesChimique);
+          this.analyseChimiqueService.addAnalyseChimiqueToCribleLiwell(this.selectedCribleLiwell).subscribe(value => this.router.navigate(['/analyseChimique']))
         }
         else if (this.selectedSbl!==null && this.selectedSbl.hasOwnProperty('id')) {
           this.selectedSbl.analysesChimiques = [];
@@ -372,7 +372,7 @@ export class AjouterPrelevmentChimiqueComponent implements OnInit {
     // alert(new JsonPipe().transform(this.selectedPuit))
     this.selectedBassin = {};
     this.selectedSbnl = {};
-    this.selectedBande = {};
+    this.selectedCribleLiwell = {};
     this.selectedSbl = {};
     this.selectedSblf = {};
 
@@ -386,7 +386,7 @@ export class AjouterPrelevmentChimiqueComponent implements OnInit {
 
     this.selectedPuit = {};
     this.selectedSbnl = {};
-    this.selectedBande = {};
+    this.selectedCribleLiwell = {};
     this.selectedSbl = {};
     this.selectedSblf = {};
 
@@ -399,23 +399,23 @@ export class AjouterPrelevmentChimiqueComponent implements OnInit {
 
     this.selectedBassin = {};
     this.selectedPuit = {};
-    this.selectedBande = {};
+    this.selectedCribleLiwell = {};
     this.selectedSbl = {};
     this.selectedSblf = {};
     this.id=this.selectedSbnl && this.selectedSbnl.id?this.selectedSbnl.id:0;
     this.ref="sbnl"
   }
 
-  selectBande() {
-    // alert(new JsonPipe().transform(this.selectedBande))
+  selectCribleLiwell() {
+    // alert(new JsonPipe().transform(this.selectedCribleLiwell))
 
     this.selectedBassin = {};
     this.selectedSbnl = {};
     this.selectedPuit = {};
     this.selectedSbl = {};
     this.selectedSblf = {};
-    this.id=this.selectedBande && this.selectedBande.id?this.selectedBande.id:0;
-    this.ref="bande"
+    this.id=this.selectedCribleLiwell && this.selectedCribleLiwell.id?this.selectedCribleLiwell.id:0;
+    this.ref="cribleLiwell"
   }
 
   selectSBL() {
@@ -423,7 +423,7 @@ export class AjouterPrelevmentChimiqueComponent implements OnInit {
 
     this.selectedBassin = {};
     this.selectedSbnl = {};
-    this.selectedBande = {};
+    this.selectedCribleLiwell = {};
     this.selectedPuit = {};
     this.selectedSblf = {};
     this.id=this.selectedSbl && this.selectedSbl.id?this.selectedSbl.id:0;
@@ -435,7 +435,7 @@ export class AjouterPrelevmentChimiqueComponent implements OnInit {
 
     this.selectedBassin = {};
     this.selectedSbnl = {};
-    this.selectedBande = {};
+    this.selectedCribleLiwell = {};
     this.selectedSbl = {};
     this.selectedPuit = {};
     this.id=this.selectedSblf && this.selectedSblf.id?this.selectedSblf.id:0;

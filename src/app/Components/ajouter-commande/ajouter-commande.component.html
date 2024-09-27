@@ -87,7 +87,7 @@
           </p-tabPanel>
 
           <p-tabPanel header="Band" >
-          <p-multiSelect [options]="bandes"  [disabled]="getToken()!=='ADMIN'"  [(ngModel)]="commande.bandes" (ngModelChange)="getLine()" placeholder="Select a Band" optionLabel="reference" display="chip" ></p-multiSelect>
+          <p-multiSelect [options]="cribleLiwells"  [disabled]="getToken()!=='ADMIN'"  [(ngModel)]="commande.cribleLiwells" (ngModelChange)="getLine()" placeholder="Select a Band" optionLabel="reference" display="chip" ></p-multiSelect>
         </p-tabPanel>
 
           <p-tabPanel header="Washed" >

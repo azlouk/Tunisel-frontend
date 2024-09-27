@@ -20,8 +20,8 @@ import html2canvas from "html2canvas";
 import jsPDF from "jspdf";
 import {CheckboxModule} from "primeng/checkbox";
 import {ListboxModule} from "primeng/listbox";
-import {Bande} from "../../Models/bande";
-import {BandeService} from "../../Services/bande.service";
+import {CribleLiwell} from "../../Models/cribleLiwell";
+import {CribleLiwellService} from "../../Services/cribleLiwell.service";
 import {getToken} from "../../../main";
 import {AutoFocusModule} from "primeng/autofocus";
 import {TooltipModule} from "primeng/tooltip";
@@ -86,7 +86,7 @@ export class SblComponent implements OnInit {
   sbl: Sbl = {};
 
   selectedSbls: Sbl[] = [];
-  bandes: Bande[] = [];
+  cribleLiwells: CribleLiwell[] = [];
   Selectetsbl: Sbl = {}
   private isUpdateSbl = false;
   SelectAll: boolean = false;
@@ -103,7 +103,7 @@ export class SblComponent implements OnInit {
   detailsDialog: boolean=false;
   detailsDialogCrible: boolean=false;
   detailsDialogConcasseur: boolean=false;
-  selectedBande:Bande={};
+  selectedCribleLiwell:CribleLiwell={};
   selectedCrible:Crible=new Crible();
   selectedConcasseur:Concasseur=new Concasseur();
   @Input() get selectedColumns(): any[] {
@@ -111,7 +111,7 @@ export class SblComponent implements OnInit {
   }
 
   constructor(private messageService: MessageService, private sblService: SblService,
-              private bandeService: BandeService,
+              private cribleLiwellService: CribleLiwellService,
               private cribleService: CribleService,
               private concasseurService: ConcasseurService) {
   }
@@ -182,7 +182,7 @@ export class SblComponent implements OnInit {
 
   openNew() {
     this.sbl = {};
-    // console.log("sbl: " + new JsonPipe().transform(this.sbl.bandeList))
+    // console.log("sbl: " + new JsonPipe().transform(this.sbl.cribleLiwellList))
     this.submitted = false;
 
     this.productDialog = true;
@@ -198,7 +198,7 @@ export class SblComponent implements OnInit {
     this.isUpdateSbl = true;
     this.sbl = {...sbl};
     this.productDialog = true;
-    this.getCalibresBySelectedBandes(sbl.bandeList);
+    this.getCalibresBySelectedCribleLiwells(sbl.cribleLiwellList);
   }
 
   deleteSbl(sbl: Sbl) {
@@ -295,8 +295,8 @@ export class SblComponent implements OnInit {
     })
     this.loading = true;
 
-    this.bandeService.getAllBandesDTO().subscribe((v: Sbnl[]) => {
-      this.bandes = v;
+    this.cribleLiwellService.getAllCribleLiwellsDTO().subscribe((v: Sbnl[]) => {
+      this.cribleLiwells = v;
       this.loading = false;
 
     }, error => {
@@ -609,11 +609,11 @@ export class SblComponent implements OnInit {
   }
 
 
-  getCalibresBySelectedBandes(bandesList: Bande[] | undefined) {
+  getCalibresBySelectedCribleLiwells(cribleLiwellsList: CribleLiwell[] | undefined) {
     const uniqueCalibres = new Set<number>(); // Use Set to avoid duplicates
-    if (bandesList !== undefined) {
-      bandesList.forEach(bande =>
-        bande.traitementStocks?.forEach(traitement => {
+    if (cribleLiwellsList !== undefined) {
+      cribleLiwellsList.forEach(cribleLiwell =>
+        cribleLiwell.traitementStocks?.forEach(traitement => {
           uniqueCalibres.add(traitement.calibreB1); // Add calibreB1
           uniqueCalibres.add(traitement.calibreB2); // Add calibreB2
         })
@@ -626,18 +626,18 @@ export class SblComponent implements OnInit {
   public getTotalQuantitySbl(sbl: Sbl):number {
     let totalCrible: number = 0;
     let totalConcasseur: number = 0;
-    let totalBande: number = 0;
+    let totalCribleLiwell: number = 0;
     let totalSalinesStockOrder: number = 0;
 
-    // Calculate totalBande
-    if (sbl.bandeList && sbl.bandeList.length > 0) {
-      sbl.bandeList.forEach(bande => {
-        bande.traitementStocks?.forEach(traitement => {
+    // Calculate totalCribleLiwell
+    if (sbl.cribleLiwellList && sbl.cribleLiwellList.length > 0) {
+      sbl.cribleLiwellList.forEach(cribleLiwell => {
+        cribleLiwell.traitementStocks?.forEach(traitement => {
           if (traitement.calibreB1 === sbl.calibre) {
-            totalBande += traitement.sortieB1;
+            totalCribleLiwell += traitement.sortieB1;
           }
           if (traitement.calibreB2 === sbl.calibre) {
-            totalBande += traitement.sortieB2;
+            totalCribleLiwell += traitement.sortieB2;
           }
         });
       });
@@ -665,7 +665,7 @@ export class SblComponent implements OnInit {
       });
     }
 
-    return (totalCrible+ totalConcasseur +totalBande)-totalSalinesStockOrder;
+    return (totalCrible+ totalConcasseur +totalCribleLiwell)-totalSalinesStockOrder;
   }
 
 

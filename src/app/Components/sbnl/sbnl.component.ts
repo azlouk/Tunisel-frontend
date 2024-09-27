@@ -31,9 +31,11 @@ import {writeFile} from "xlsx";
 import Swal from "sweetalert2";
 import {MultiSelectModule} from "primeng/multiselect";
 import {RippleModule} from "primeng/ripple";
-import {TransferToBand} from "../../Models/transfer-to-band";
+import {TransferToCribleLiwell} from "../../Models/TransferToCribleLiwell";
 import {AnalyseChimiqueComponent} from "../analyse-chimique/analyse-chimique.component";
-import {TransferToBandService} from "../../Services/transfer-to-band.service";
+import {TransferToCribleLiwellService} from "../../Services/TransferToCribleLiwell.service";
+import {CribleLiwell} from "../../Models/cribleLiwell";
+import {CribleLiwellService} from "../../Services/cribleLiwell.service";
 
 @Component({
   selector: 'app-sbnl',
@@ -106,13 +108,19 @@ export class SbnlComponent implements OnInit{
   DatefiltrageEnd: Date = new Date();
   public  _selectedColumns: any[]=[];
   selectedBassin:Bassin={};
-  TransferToBandDialog:boolean=false;
-  TransferToBand:TransferToBand=new TransferToBand();
-  ListTransfersToBand:TransferToBand[] =[];
+  TransferToDialog:boolean=false;
+  transferToCribleLiwell:TransferToCribleLiwell=new TransferToCribleLiwell();
+  ListTransferToCribleLiwell:TransferToCribleLiwell[] =[];
+  selectedCribleLiwell:CribleLiwell={};
+  listCribleLiwells:CribleLiwell[]=[];
   @Input() get selectedColumns(): any[] {
     return this._selectedColumns;
   }
-  constructor(  private messageService: MessageService,private sbnlService :SbnlService,private serviceBassin:BassinService,private transferToBandService:TransferToBandService) {}
+  constructor(  private messageService: MessageService,
+                private sbnlService :SbnlService,
+                private serviceBassin:BassinService,
+                private transferToCribleLiwellService:TransferToCribleLiwellService,
+                private cribleLiwellService:CribleLiwellService) {}
 
   ngOnInit() {
     this.colsfiltre = [
@@ -148,9 +156,11 @@ this.getsbnl()
       { field: 'pond', header: 'pond' },
     ];
 
-
+this. getAllCribleLiwells()
   }
-
+ getAllCribleLiwells(){
+    this.cribleLiwellService.getAllCribleLiwellsDTO().subscribe(value => this.listCribleLiwells=value)
+ }
   openNew() {
     this.sbnl = {};
     this.submitted = false;
@@ -614,43 +624,43 @@ this.Viderfiltredate()
 this.detailsDialog=true;
   }
 
-  public AddTransferToBand(sbnl: Sbnl) {
-this.TransferToBandDialog=true;
+  public AddTransferTo(sbnl: Sbnl) {
+this.TransferToDialog=true;
 this.sbnl=sbnl;
-    this. getListTransferToBand();
+    this. getListTransferToCribleLiwell();
   }
 
-  public saveTransferToBand() {
+  public saveTransferToCribleLiwell() {
 
       if ( this.sbnl.id!==undefined)
-        this.transferToBandService.addTransferToBand(this.TransferToBand,this.sbnl.id).subscribe(value => {
-          this. getListTransferToBand();
-          this.TransferToBand=new TransferToBand();
+        this.transferToCribleLiwellService.addTransferToCribleLiwell(this.transferToCribleLiwell,this.sbnl.id).subscribe(value => {
+          this. getListTransferToCribleLiwell();
+          this.transferToCribleLiwell=new TransferToCribleLiwell();
         })
 
   }
 
-  public updateTransferToBand(transferToBand: TransferToBand) {
-this.TransferToBand=transferToBand;
+  public updateTransferTo(transferToCribleLiwell: TransferToCribleLiwell) {
+this.transferToCribleLiwell=transferToCribleLiwell;
   }
 
-  public saveUpdateTransferToBand() {
-    this.transferToBandService.updateTransferToBand(this.TransferToBand).subscribe(value => {
-      this. getListTransferToBand();
+  public saveUpdateTransferToCribleLiwell() {
+    this.transferToCribleLiwellService.updateTransferToCribleLiwell(this.transferToCribleLiwell).subscribe(value => {
+      this. getListTransferToCribleLiwell();
 
     })
   }
 
-  public deleteTransferToBand(TransferToBand: any) {
-    this.transferToBandService.deleteTransferToBand(TransferToBand.id).subscribe(value =>     this.ListTransfersToBand= this.ListTransfersToBand.filter(transfer => transfer.id !== TransferToBand.id))
+  public deleteTransferTo(transferToCribleLiwell: any) {
+    this.transferToCribleLiwellService.deleteTransferToCribleLiwell(transferToCribleLiwell.id).subscribe(value =>     this.ListTransferToCribleLiwell= this.ListTransferToCribleLiwell.filter(transfer => transfer.id !== transferToCribleLiwell.id))
 
   }
 
-  getListTransferToBand(){
+  getListTransferToCribleLiwell(){
     if(this.sbnl.id!=undefined)
     this.sbnlService.getSbnlById(this.sbnl.id).subscribe(value => {
-      if(value.transferToBands!=undefined)
-      this.ListTransfersToBand = value.transferToBands;
+      if(value.transferToCribleLiwellList!=undefined)
+      this.ListTransferToCribleLiwell = value.transferToCribleLiwellList;
     } )
   }
 
@@ -658,8 +668,8 @@ this.TransferToBand=transferToBand;
     let totalTransfer:number=0;
     let totalRecolte:number=0;
 
-    if(sbnl.transferToBands!=undefined)
-   totalTransfer= sbnl.transferToBands.reduce((sum, transfer) => sum+transfer.quantityTransfer,0)
+    if(sbnl.transferToCribleLiwellList!=undefined)
+   totalTransfer= sbnl.transferToCribleLiwellList.reduce((sum, transfer) => sum+transfer.quantityTransfer,0)
  if(sbnl.bassinList!=undefined){
     sbnl.bassinList?.forEach(bassin => {
       if(bassin.recolteList!=undefined)

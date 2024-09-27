@@ -6,8 +6,8 @@
         <ng-template pTemplate="left">
           <div class="my-2">
             <button *ngIf="getToken()=='ADMIN'" pButton pRipple label="Add" icon="pi pi-plus" class="p-button-success mr-2" (click)="openNew()"></button>
-            <button *ngIf="getToken()=='ADMIN'" pButton pRipple label="Delete" icon="pi pi-trash" class="p-button-danger mr-2" (click)="deleteSelectedBandes()" [disabled]="!selectedBandes || !selectedBandes.length"></button>
-            <button pButton pRipple label="Refresh" icon="pi pi-refresh" class="p-button-primary mr-2" (click)="getBande()"  ></button>
+            <button *ngIf="getToken()=='ADMIN'" pButton pRipple label="Delete" icon="pi pi-trash" class="p-button-danger mr-2" (click)="deleteSelectedCribleLiwells()" [disabled]="!selectedCribleLiwells || !selectedCribleLiwells.length"></button>
+            <button pButton pRipple label="Refresh" icon="pi pi-refresh" class="p-button-primary mr-2" (click)="getCribleLiwell()"  ></button>
 
           </div>
         </ng-template>
@@ -15,10 +15,10 @@
 
       </p-toolbar>
 
-      <p-table #dt [value]="bandes" [columns]="cols"  responsiveLayout="scroll" [rows]="10" [globalFilterFields]="['id','reference','description','dateCreation','state','totalquantite','refusalquantite','Sbnl']" [paginator]="true" [rowsPerPageOptions]="[10,20,30]" [showCurrentPageReport]="true" currentPageReportTemplate="Display  {first} to  {last} of  {totalRecords} entries" [(selection)]="selectedBandes" selectionMode="multiple" [rowHover]="true" dataKey="id">
+      <p-table #dt [value]="cribleLiwells" [columns]="cols"  responsiveLayout="scroll" [rows]="10" [globalFilterFields]="['id','reference','description','dateCreation','state','totalquantite','refusalquantite','Sbnl']" [paginator]="true" [rowsPerPageOptions]="[10,20,30]" [showCurrentPageReport]="true" currentPageReportTemplate="Display  {first} to  {last} of  {totalRecords} entries" [(selection)]="selectedCribleLiwells" selectionMode="multiple" [rowHover]="true" dataKey="id">
         <ng-template pTemplate="caption">
           <div class="flex flex-column md:flex-row md:justify-content-between md:align-items-center">
-            <h5 class="m-0">Band Inventory Management</h5>
+            <h5 class="m-0">CribleLiwell Inventory Management</h5>
             <span class="block mt-2 md:mt-0 p-input-icon-left">
                             <i class="pi pi-search"></i>
                             <input  type="text" pInputText (input)="onGlobalFilter(dt, $event)" placeholder="Search..."  class="w-full sm:w-auto"/>
@@ -87,8 +87,8 @@
             <td>
               <div class="flex gap-2">
                 <button *ngIf="getToken()=='ADMIN'" pButton pRipple  class="p-button-rounded p-button-info " (click)="AddTraitementStock(b)">Traitement</button>
-                <button *ngIf="getToken()=='ADMIN'" pButton pRipple icon="pi pi-pencil" class="p-button-rounded p-button-success " (click)="editBande(b)"></button>
-                <button *ngIf="getToken()=='ADMIN'" pButton pRipple icon="pi pi-trash" class="p-button-rounded p-button-warning " (click)="deleteBande(b)"></button>
+                <button *ngIf="getToken()=='ADMIN'" pButton pRipple icon="pi pi-pencil" class="p-button-rounded p-button-success " (click)="editCribleLiwell(b)"></button>
+                <button *ngIf="getToken()=='ADMIN'" pButton pRipple icon="pi pi-trash" class="p-button-rounded p-button-warning " (click)="deleteCribleLiwell(b)"></button>
                 <button pButton pRipple icon="pi pi-file-pdf" class="p-button-rounded p-button-primary"  (click)="exportrapport(b)"></button>
 
               </div>
@@ -104,7 +104,7 @@
             <div class="flex flex-column gap-2 col-2">
               <label> Stock Unwashed List</label>
               <p-dropdown
-                [options]="this.bande.sbnlList"
+                [options]="this.cribleLiwell.sbnlList"
                 [(ngModel)]="selectedSbnl"
                 optionLabel="reference"
                 placeholder="Select a Stock Unwashed" />
@@ -114,7 +114,7 @@
           </div>
           <div class="cart mt-5">
             <p-table #dt [loading]="loading"
-                     [value]="selectedSbnl.transferToBands!==undefined?selectedSbnl.transferToBands:[]"
+                     [value]="selectedSbnl.transferToCribleLiwellList!==undefined?selectedSbnl.transferToCribleLiwellList:[]"
                      [columns]="cols"
                      responsiveLayout="scroll" [rows]="10"
                      [globalFilterFields]="['id','date','value']"
@@ -125,7 +125,7 @@
               <ng-template pTemplate="caption">
                 <div class="flex flex-column md:flex-row md:justify-content-between md:align-items-center">
                   <div class="flex justify-content-between align-items-center w-full">
-                    <h5 class="m-0">Transfer to Band management</h5>
+                    <h5 class="m-0">Transfer to CribleLiwell management</h5>
 
 
 
@@ -382,36 +382,36 @@
     </p-dialog>
     <!--==============================ADD TRAITEMENT STOCK===============================================================================-->
 
-    <p-dialog [(visible)]="productDialog" [style]="{width: '450px'}" header="Band" [modal]="true" class="p-fluid">
+    <p-dialog [(visible)]="productDialog" [style]="{width: '450px'}" header="CribleLiwell" [modal]="true" class="p-fluid">
       <ng-template pTemplate="content">
         <div class="field">
           <label for="name">Unwashed</label>
-          <p-multiSelect [options]="sbnls"   [(ngModel)]="bande.sbnlList"  placeholder="Select a Stock Unwashed" optionLabel="reference" display="chip" class="w-full"  ></p-multiSelect>
+          <p-multiSelect [options]="sbnls"   [(ngModel)]="cribleLiwell.sbnlList"  placeholder="Select a Stock Unwashed" optionLabel="reference" display="chip" class="w-full"  ></p-multiSelect>
 
         </div>
         <div class="field">
           <label for="name">Reference</label>
-          <input type="text" pInputText id="name"  [(ngModel)]="bande.reference" required autofocus [ngClass]="{'ng-invalid ng-dirty' : submitted && !bande.reference}"/>
+          <input type="text" pInputText id="name"  [(ngModel)]="cribleLiwell.reference" required autofocus [ngClass]="{'ng-invalid ng-dirty' : submitted && !cribleLiwell.reference}"/>
         </div>
         <div class="field">
           <label for="Description">Description</label>
-          <input type="text" pInputText id="Description"  [(ngModel)]="bande.description" required autofocus [ngClass]="{'ng-invalid ng-dirty' : submitted && !bande.description}"/>
+          <input type="text" pInputText id="Description"  [(ngModel)]="cribleLiwell.description" required autofocus [ngClass]="{'ng-invalid ng-dirty' : submitted && !cribleLiwell.description}"/>
         </div>
 
         <div class="field">
           <label for="dateCreation">Date Stock</label>
-          <input  class="p-2 shadow-1" type="date" pInputText id="dateCreation"  [(ngModel)]="bande.dateStock"  />
+          <input  class="p-2 shadow-1" type="date" pInputText id="dateCreation"  [(ngModel)]="cribleLiwell.dateStock"  />
 
         </div>
 
 
         <div class="field">
           <label for="etat">State</label>
-          <input type="text" pInputText id="etat"  [(ngModel)]="bande.etat" required autofocus [ngClass]="{'ng-invalid ng-dirty' : submitted && !bande.etat}"/>
+          <input type="text" pInputText id="etat"  [(ngModel)]="cribleLiwell.etat" required autofocus [ngClass]="{'ng-invalid ng-dirty' : submitted && !cribleLiwell.etat}"/>
         </div>
 <!--        <div class="field">-->
 <!--          <label for="quantite">Total Quantity</label>-->
-<!--          <p-inputNumber Id="quantite" mode="decimal" [minFractionDigits]="3" [(ngModel)]="bande.quantite"  [ngClass]="{'ng-invalid ng-dirty' : submitted && !bande.quantite}" ></p-inputNumber>-->
+<!--          <p-inputNumber Id="quantite" mode="decimal" [minFractionDigits]="3" [(ngModel)]="cribleLiwell.quantite"  [ngClass]="{'ng-invalid ng-dirty' : submitted && !cribleLiwell.quantite}" ></p-inputNumber>-->
 <!--        </div>-->
 
 
@@ -422,7 +422,7 @@
 
       <ng-template pTemplate="footer">
         <button pButton pRipple label="Cancel" icon="pi pi-times" class="p-button-text" (click)="hideDialog()"></button>
-        <button pButton pRipple label="Add" icon="pi pi-check" class="p-button-text" (click)="saveBande()"></button>
+        <button pButton pRipple label="Add" icon="pi pi-check" class="p-button-text" (click)="saveCribleLiwell()"></button>
       </ng-template>
     </p-dialog>
 
@@ -466,11 +466,11 @@
     </div>
     <br>
     <div class="shadow-1 p-2 gap-1 text-3xl flex inline-flex justify-content-evenly" >filtrate Grain size  :<br>
-      <p-listbox [options]="selectedBande.analysesPhysiques!==undefined?selectedBande.analysesPhysiques:[]" [(ngModel)]="SelectedBandePrintAnalyse" optionLabel="reference" [filter]="true" [style]="{ width: '15rem' }" [listStyle]="{'max-height': '220px'}"></p-listbox>
+      <p-listbox [options]="selectedCribleLiwell.analysesPhysiques!==undefined?selectedCribleLiwell.analysesPhysiques:[]" [(ngModel)]="SelectedCribleLiwellPrintAnalyse" optionLabel="reference" [filter]="true" [style]="{ width: '15rem' }" [listStyle]="{'max-height': '220px'}"></p-listbox>
       <div  class="p-2">
-        <label class="text-2xl font-bold">Reference  :</label><span class="ml-2 text-2xl">{{SelectedBandePrintAnalyse.dateAnalyse}}</span><br>
-        <label class="text-2xl font-bold">Relative :</label><span class=" ml-2 text-2xl">{{SelectedBandePrintAnalyse.matiere}}</span><br>
-        <label class="text-2xl font-bold">Temperature :</label><span class=" ml-2 text-2xl">{{SelectedBandePrintAnalyse.temperature}} °C</span><br>
+        <label class="text-2xl font-bold">Reference  :</label><span class="ml-2 text-2xl">{{SelectedCribleLiwellPrintAnalyse.dateAnalyse}}</span><br>
+        <label class="text-2xl font-bold">Relative :</label><span class=" ml-2 text-2xl">{{SelectedCribleLiwellPrintAnalyse.matiere}}</span><br>
+        <label class="text-2xl font-bold">Temperature :</label><span class=" ml-2 text-2xl">{{SelectedCribleLiwellPrintAnalyse.temperature}} °C</span><br>
       </div>
     </div>
   </div>
@@ -479,15 +479,15 @@
   <div #pdfpuit class="pt-8 pl-4 pr-4">
     <img src="assets/layout/images/logo.png">
     <div class="row justify-content-end font-bold flex text-1xl"> Creation date: <span class=" text-1xl font-bold  pi pi-calendar ">{{dateToday | date :"yyyy-MM-dd"}}</span></div>
-    <div class="row    font-bold flex text-1xl   "> Identification :<span class=" text-1xl font-bold   "> {{selectedBande.reference}}</span></div>
+    <div class="row    font-bold flex text-1xl   "> Identification :<span class=" text-1xl font-bold   "> {{selectedCribleLiwell.reference}}</span></div>
 
     <div class="row   text-8xl font-bold text-center m-2 p-3" > Analysis Report </div>
     <div class="mt-5 mb-5">
 
       <label class="font-bold text-5xl  ">Chemical analysis</label>
       <br><br><br><br>
-      <label class="text-2xl font-bold">Reference  :</label><span class="ml-2 text-2xl">{{selectedBande.reference}}</span><br>
-      <label class="text-2xl font-bold">Date creation :</label><span class=" ml-2 text-2xl">{{selectedBande.dateStock|date :'dd-MM-yyyy'}}</span><br>
+      <label class="text-2xl font-bold">Reference  :</label><span class="ml-2 text-2xl">{{selectedCribleLiwell.reference}}</span><br>
+      <label class="text-2xl font-bold">Date creation :</label><span class=" ml-2 text-2xl">{{selectedCribleLiwell.dateStock|date :'dd-MM-yyyy'}}</span><br>
 
     </div>
 
@@ -542,10 +542,10 @@
     <label class="font-bold top-5 text-5xl">Grain Size</label>
     <br><br><br><br>
     <div class=" top-5 bottom-5">
-      <label class="text-2xl font-bold">Date   :</label><span class="ml-2 text-2xl">{{SelectedBandePrintAnalyse.dateAnalyse}}</span><br>
-      <label class="text-2xl font-bold">Reference  :</label><span class="ml-2 text-2xl">{{SelectedBandePrintAnalyse.reference}}</span><br>
-      <label class="text-2xl font-bold">Relative :</label><span class=" ml-2 text-2xl">{{SelectedBandePrintAnalyse.matiere}}</span><br>
-      <label class="text-2xl font-bold">Temperature :</label><span class=" ml-2 text-2xl">{{SelectedBandePrintAnalyse.temperature}} °C</span><br>
+      <label class="text-2xl font-bold">Date   :</label><span class="ml-2 text-2xl">{{SelectedCribleLiwellPrintAnalyse.dateAnalyse}}</span><br>
+      <label class="text-2xl font-bold">Reference  :</label><span class="ml-2 text-2xl">{{SelectedCribleLiwellPrintAnalyse.reference}}</span><br>
+      <label class="text-2xl font-bold">Relative :</label><span class=" ml-2 text-2xl">{{SelectedCribleLiwellPrintAnalyse.matiere}}</span><br>
+      <label class="text-2xl font-bold">Temperature :</label><span class=" ml-2 text-2xl">{{SelectedCribleLiwellPrintAnalyse.temperature}} °C</span><br>
     </div>
     <br><br><br>
     <p-table class=" " #dt [value]="getTamisFiltred()" [columns]="cols"  responsiveLayout="scroll"    id ="TAMIS"     dataKey="id">

@@ -4,7 +4,7 @@ import {AnalysesPhysique} from "./analyses-physique";
 import {Sbnl} from "./sbnl";
 import {TraitementStock} from "./traitement-stock";
 
-export interface Bande {
+export interface CribleLiwell {
   id?: number;
   reference?: string;
   description?: string;

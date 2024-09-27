@@ -524,9 +524,9 @@ if (liste!=undefined){
       related = sblf.reference;
     }
 
-    const bande = this.commande.bandes?.find(bande => bande.analysesChimiques!.find(analyse => analyse.id == lineCommande.analyseChimique?.id) !== undefined || bande.analysesPhysiques!.find(analyseph => analyseph.id == lineCommande.analysePhysique?.id) !== undefined)
-    if (bande !== undefined && bande.reference !== undefined) {
-      related = bande.reference;
+    const cribleLiwell = this.commande.cribleLiwells?.find(cribleLiwell => cribleLiwell.analysesChimiques!.find(analyse => analyse.id == lineCommande.analyseChimique?.id) !== undefined || cribleLiwell.analysesPhysiques!.find(analyseph => analyseph.id == lineCommande.analysePhysique?.id) !== undefined)
+    if (cribleLiwell !== undefined && cribleLiwell.reference !== undefined) {
+      related = cribleLiwell.reference;
     }
 
     return related;

@@ -109,11 +109,11 @@ export class CommandeService {
   }else {
       return  new Observable<any>()}}
 
-  getLignesCommandesBande(bandeId:number): Observable<LineCommande[]> {
+  getLignesCommandesCribleLiwell(cribleLiwellId:number): Observable<LineCommande[]> {
     const token = getKeyToken();
     if (token) {
       const headers = new HttpHeaders().set('Authorization', `Bearer ${token}`).set("Content-Type", "application/json; charset=utf8");
-    return this.http.get<LineCommande[]>(`${this.apiUrl}/commandes/linesCommandesBande/${bandeId}`, {headers}) ;
+    return this.http.get<LineCommande[]>(`${this.apiUrl}/commandes/linesCommandesCribleLiwell/${cribleLiwellId}`, {headers}) ;
   }else {
       return  new Observable<any>()}}
 

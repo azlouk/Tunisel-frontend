@@ -2,10 +2,9 @@ import { Injectable } from '@angular/core';
 import {environment} from "../environment/environment";
 import {HttpClient, HttpHeaders} from "@angular/common/http";
 import {Observable} from "rxjs";
-import {Puit} from "../Models/puit";
+
 import {Sbnl} from "../Models/sbnl";
-import {JsonPipe} from "@angular/common";
-import {parseJson} from "@angular/cli/src/utilities/json-file";
+
 import {getKeyToken} from "../../main";
 
 @Injectable({

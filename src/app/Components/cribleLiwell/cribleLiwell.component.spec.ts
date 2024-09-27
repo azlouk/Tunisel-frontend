@@ -1,18 +1,18 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { BandeComponent } from './bande.component';
+import { CribleLiwellComponent } from './cribleLiwell.component';
 
 describe('BandeComponent', () => {
-  let component: BandeComponent;
-  let fixture: ComponentFixture<BandeComponent>;
+  let component: CribleLiwellComponent;
+  let fixture: ComponentFixture<CribleLiwellComponent>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [BandeComponent]
+      imports: [CribleLiwellComponent]
     })
     .compileComponents();
-    
-    fixture = TestBed.createComponent(BandeComponent);
+
+    fixture = TestBed.createComponent(CribleLiwellComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });
