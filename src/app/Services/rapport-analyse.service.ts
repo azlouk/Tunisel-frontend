@@ -8,6 +8,8 @@ import {Bassin} from "../Models/bassin";
 import {Sbnl} from "../Models/sbnl";
 import {Sbl} from "../Models/sbl";
 import {getKeyToken} from "../../main";
+import {Puit} from "../Models/puit";
+import {Band} from "../Models/band";
 
 @Injectable({
   providedIn: 'root'
@@ -56,8 +58,20 @@ export class RapportAnalyseService {
     return this.http.put<void>(`${this.apiUrl}/analysesPhysiques/AddRapport/cribleLiwell`, cribleLiwell, {headers});
   }else {
       return  new Observable<any>()}}
-
-
+  addRapportToBand(band:Band) : Observable<void>{
+    const token = getKeyToken();
+    if (token) {
+      const headers = new HttpHeaders().set('Authorization', `Bearer ${token}`).set("Content-Type", "application/json; charset=utf8");
+      return this.http.put<void>(`${this.apiUrl}/analysesPhysiques/AddRapport/band`, band, {headers});
+    }else {
+      return  new Observable<any>()}}
+  addRapportToPuit(puit:Puit) : Observable<void>{
+    const token = getKeyToken();
+    if (token) {
+      const headers = new HttpHeaders().set('Authorization', `Bearer ${token}`).set("Content-Type", "application/json; charset=utf8");
+      return this.http.put<void>(`${this.apiUrl}/analysesPhysiques/AddRapport/puit`, puit, {headers});
+    }else {
+      return  new Observable<any>()}}
 
 
 }

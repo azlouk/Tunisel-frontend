@@ -34,6 +34,8 @@ import {RippleModule} from "primeng/ripple";
 import {TraitementStock} from "../../Models/traitement-stock";
 import {TraitementStockService} from "../../Services/traitement-stock.service";
 import {TransferToCribleLiwell} from "../../Models/TransferToCribleLiwell";
+import {Laverie} from "../../Models/laverie";
+import {LaverieService} from "../../Services/laverie.service";
 
 @Component({
   selector: 'app-cribleLiwell',
@@ -94,8 +96,10 @@ export class CribleLiwellComponent {
   selectedCribleLiwell:CribleLiwell={}
   private isUpdatecribleLiwell=false;
   sbnls: Sbnl[] = [];
+ laveries: Laverie[]=[];
   SelectAll: boolean = false;
   detailsDialog: boolean = false;
+  detailsDialogLaverie: boolean = false;
   TraitementStockDialog: boolean = false;
   @ViewChild("pdfpuit") htmlContent: ElementRef | undefined;
   visiblePrint: boolean = false;
@@ -106,11 +110,15 @@ export class CribleLiwellComponent {
   public  _selectedColumns: any[]=[];
   traitementStock:TraitementStock=new TraitementStock();
   ListTraitementStock:TraitementStock[] =[];
+  selectedLaverie:Laverie=new Laverie();
   @Input() get selectedColumns(): any[] {
     return this._selectedColumns;
   }
-  constructor(  private messageService: MessageService,private sbnlService :SbnlService,private cribleLiwellService:CribleLiwellService,
-                private traitementStockService:TraitementStockService) {}
+  constructor(  private messageService: MessageService,
+                private sbnlService :SbnlService,
+                private cribleLiwellService:CribleLiwellService,
+                private traitementStockService:TraitementStockService,
+                private laverieService:LaverieService) {}
 
   ngOnInit() {
     this.colsfiltre = [
@@ -147,7 +155,7 @@ export class CribleLiwellComponent {
       { field: 'Sbnl', header: 'Sbnl' },
     ];
 
-
+  this.getAllLaveries();
   }
 
   openNew() {
@@ -267,10 +275,17 @@ export class CribleLiwellComponent {
         this.loading=false ;
 
       }, error => {
-        console.log('Error fetching users:', error);
+        console.log('Error fetching sbnls:', error);
       });
   }
+  getAllLaveries(){
+    this.laverieService.getAllLaveriesDto().subscribe(value => {
+this.laveries=value
+    },error => {
+      console.log('Error fetching Laveris:', error);
 
+    })
+  }
   exportrapport(cribleLiwell: CribleLiwell) {
 // console.log('=====>>>>> export: ',new JsonPipe().transform(cribleLiwell))
     this.selectedCribleLiwell = cribleLiwell;
@@ -574,7 +589,10 @@ export class CribleLiwellComponent {
     this.detailsDialog=true;
       this.cribleLiwell=b;
   }
-
+  public openDialogLaverie(b:CribleLiwell) {
+    this.detailsDialogLaverie=true;
+    this.cribleLiwell=b;
+  }
   public AddTraitementStock(b: CribleLiwell) {
     // console.log("traitment")
     this.TraitementStockDialog=true;
@@ -601,6 +619,7 @@ export class CribleLiwellComponent {
 
   protected readonly TransferToCribleLiwell = TransferToCribleLiwell;
 
+
   public updateTraitementStock(traitement: TraitementStock) {
     this.traitementStock=traitement;
 
@@ -619,7 +638,8 @@ export class CribleLiwellComponent {
   }
 
   public getTotalQuantity(b: CribleLiwell) {
-    let totalTransfer:number=0;
+    let totalTransferSbnl:number=0;
+    let totalTransferLaverie:number=0;
     let totalTraitment:number=0;
 
     if(b.traitementStocks!=undefined){
@@ -628,9 +648,14 @@ export class CribleLiwellComponent {
     if(b.sbnlList!=undefined){
       b.sbnlList?.forEach(sbnl => {
         if(sbnl.transferToCribleLiwellList!=undefined)
-          totalTransfer +=sbnl.transferToCribleLiwellList.reduce((sum, transfer) => sum + transfer.quantityTransfer, 0)
+          totalTransferSbnl +=sbnl.transferToCribleLiwellList.reduce((sum, transfer) => sum + transfer.quantityTransfer, 0)
       } )}
-    return totalTransfer-totalTraitment;
+    if(b.laverieList!=undefined){
+      b.laverieList?.forEach(laverie => {
+        if(laverie.transferLaverieToCribleLiwells!=undefined)
+          totalTransferLaverie +=laverie.transferLaverieToCribleLiwells.reduce((sum, transfer) => sum + transfer.quantityTransfer, 0)
+      } )}
+    return (totalTransferSbnl+totalTransferLaverie)-totalTraitment;
   }
 
 

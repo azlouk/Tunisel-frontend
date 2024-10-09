@@ -22,11 +22,18 @@ export class SbnlService {
     return this.http.get<Sbnl[]>(`${this.apiUrl}/sbnls/read`, {headers}) ;
   }else {
       return  new Observable<any>()}}
-  getSbnlById(id:number): Observable<Sbnl> {
+  // getSbnlById(id:number): Observable<Sbnl> {
+  //   const token = getKeyToken();
+  //   if (token) {
+  //     const headers = new HttpHeaders().set('Authorization', `Bearer ${token}`).set("Content-Type", "application/json; charset=utf8");
+  //     return this.http.get<Sbnl>(`${this.apiUrl}/sbnls/${id}`, {headers}) ;
+  //   }else {
+  //     return  new Observable<any>()}}
+  getSbnlByIdDto(id:number): Observable<Sbnl> {
     const token = getKeyToken();
     if (token) {
       const headers = new HttpHeaders().set('Authorization', `Bearer ${token}`).set("Content-Type", "application/json; charset=utf8");
-      return this.http.get<Sbnl>(`${this.apiUrl}/sbnls/${id}`, {headers}) ;
+      return this.http.get<Sbnl>(`${this.apiUrl}/sbnls/${id}/DTO`, {headers}) ;
     }else {
       return  new Observable<any>()}}
   getAllSbnlsDTO(): Observable<Sbnl[]> {

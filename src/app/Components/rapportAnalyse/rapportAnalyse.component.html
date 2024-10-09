@@ -52,6 +52,10 @@
 
       <div class="card">
         <p-tabView *ngIf="!isUpdateAnalyseChimique"[scrollable]="true">
+          <p-tabPanel header="Well" >
+            <p-listbox [options]="puits" [(ngModel)]="selectedPuit" (ngModelChange)="selectPuit()" optionLabel="nom" [filter]="true"  [listStyle]="{'height': '200px'}" ></p-listbox>
+
+          </p-tabPanel>
           <p-tabPanel header="Pond" >
             <p-listbox [options]="bassins" [(ngModel)]="selectedBassin" optionLabel="nom" (ngModelChange)="selectBassin()"[filter]="true" [listStyle]="{'height': '87px'}"  ></p-listbox>
           </p-tabPanel>
@@ -60,7 +64,7 @@
 
           </p-tabPanel>
           <p-tabPanel header="Band" pTooltip="Enter your username" >
-            <p-listbox [options]="cribleLiwells" [(ngModel)]="selectedCribleLiwell" optionLabel="reference" (ngModelChange)="selectCribleLiwell()"[filter]="true" [listStyle]="{'height': '87px'}"  ></p-listbox>
+            <p-listbox [options]="bands" [(ngModel)]="selectedBand" optionLabel="reference" (ngModelChange)="selectBand()"[filter]="true" [listStyle]="{'height': '87px'}"  ></p-listbox>
 
           </p-tabPanel>
           <p-tabPanel header="Washed stock" >

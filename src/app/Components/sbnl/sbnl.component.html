@@ -210,27 +210,110 @@
             <ng-template pTemplate="content">
               <h3>Add Transfer To </h3>
               <div *ngIf="getToken()=='ADMIN'" class="flex justify-content-between align-items-center border border-1 border-round border-gray-400 p-3">
-                <div class="">
-                  <label for="value">Crible Liwell</label>
-                  <p-dropdown
-                    [options]="listCribleLiwells"
-                    [(ngModel)]="transferToCribleLiwell.cribleLiwell"
-                    optionLabel="reference"
-                    placeholder="Select a Crible Liwell" />                </div>
-                <div class="">
-                  <label for="dateCreationr">Date Creation</label>
-                  <input  class="p-2 shadow-1" type="date" dateFormat="yy-mm-dd"  pInputText id="dateCreationr"  [(ngModel)]="transferToCribleLiwell.dateCreation"  />
+                <div class="card flex flex-column gap-4 w-full justify-content-center">
+                  <div class="flex flex-wrap gap-3">
+                    <div class="flex align-items-center">
+                      <p-radioButton
+                        value="liwellSieve"
+                        [(ngModel)]="ingredient"
+                      />
+                      <label  class="ml-2">
+                        Liwell Sieve
+                      </label>
+                    </div>
+
+                    <div class="flex align-items-center">
+                      <p-radioButton
+                        value="greenSieve"
+                        [(ngModel)]="ingredient"
+                        />
+                      <label  class="ml-2">
+                        Green Sieve
+                      </label>
+                    </div>
+
+                    <div class="flex align-items-center">
+                      <p-radioButton
+                        value="laundry"
+                        [(ngModel)]="ingredient"
+                       />
+                      <label  class="ml-2">
+                        Laundry
+                      </label>
+                    </div>
+
+                  </div>
+
+                  <div class="flex align-items-center w-full justify-content-between" *ngIf="ingredient=='liwellSieve'">
+                    <div class="">
+                      <label for="value"> Liwell Sieve</label>
+                      <p-dropdown
+                        [options]="listCribleLiwells"
+                        [(ngModel)]="selectedCribleLiwell"
+                        optionLabel="reference"
+                        placeholder="Select a Liwell Sieve" />                </div>
+                    <div class="">
+                      <label for="dateCreationr">Date Creation</label>
+                      <input  class="p-2 shadow-1" type="date" dateFormat="yy-mm-dd"  pInputText id="dateCreationr"  [(ngModel)]="transferToCribleLiwell.dateCreation"  />
+                    </div>
+                    <div class="">
+                      <label for="value">Transfer Quantity</label>
+                      <p-inputNumber  id="value"  [(ngModel)]="transferToCribleLiwell.quantityTransfer" mode="decimal" [minFractionDigits]="3" ></p-inputNumber>
+                    </div>
+                    <div>
+                      <button pButton pRipple label="Save" icon="pi pi-check" class="p-button-text" (click)="saveTransferToCribleLiwell()"></button>
+                    </div>
+                  </div   >
+                  <div class="flex align-items-center w-full justify-content-between" *ngIf="ingredient=='greenSieve'">
+                    <div class="">
+                      <label>Green Sieve</label>
+                      <p-dropdown
+                        [options]="listCribleVerts"
+                        [(ngModel)]="selectedCribleVert"
+                        optionLabel="reference"
+                        placeholder="Select a Green Sieve" />
+                    </div>
+                    <div class="">
+                      <label >Date Creation</label>
+                      <input  class="p-2 shadow-1" type="date" dateFormat="yy-mm-dd"  pInputText   [(ngModel)]="transferToCribleVert.dateCreation"  />
+                    </div>
+                    <div class="">
+                      <label for="value">Transfer Quantity</label>
+                      <p-inputNumber    [(ngModel)]="transferToCribleVert.quantityTransfer" mode="decimal" [minFractionDigits]="3" ></p-inputNumber>
+                    </div>
+                    <div>
+                      <button pButton pRipple label="Save" icon="pi pi-check" class="p-button-text" (click)="saveTransferToCribleVert()"></button>
+                    </div>
+                  </div   >
+                  <div class="flex align-items-center w-full justify-content-between" *ngIf="ingredient=='laundry'">
+                    <div class="">
+                      <label >Laundry</label>
+                      <p-dropdown
+                        [options]="listLaveries"
+                        [(ngModel)]="selectedLaverie"
+                        optionLabel="reference"
+                        placeholder="Select a Laundry" />                </div>
+                    <div class="">
+                      <label >Date Creation</label>
+                      <input  class="p-2 shadow-1" type="date" dateFormat="yy-mm-dd"  pInputText  [(ngModel)]="transferToLaverie.dateCreation"  />
+                    </div>
+                    <div class="">
+                      <label >Transfer Quantity</label>
+                      <p-inputNumber   [(ngModel)]="transferToLaverie.quantityTransfer" mode="decimal" [minFractionDigits]="3" ></p-inputNumber>
+                    </div>
+                    <div>
+                      <button pButton pRipple label="Save" icon="pi pi-check" class="p-button-text" (click)="saveTransferToLaverie()"></button>
+                    </div>
+                  </div   >
+
                 </div>
 
-                <div class="">
-                  <label for="value">Transfer Quantity</label>
-                  <p-inputNumber  id="value"  [(ngModel)]="transferToCribleLiwell.quantityTransfer" mode="decimal" [minFractionDigits]="3" ></p-inputNumber>
-                </div>
-                <div>
-                  <button pButton pRipple label="Save" icon="pi pi-check" class="p-button-text" (click)="saveTransferToCribleLiwell()"></button>
-                </div>
+
+
               </div>
               <div class="cart mt-5">
+                <!------------- CRIBLE LIWELL ---------------------->
+
                 <p-table #dt [loading]="loading"
                          [value]="ListTransferToCribleLiwell"
                          [columns]="cols"
@@ -239,6 +322,7 @@
                          [paginator]="true"
                          editMode="row"
                          [rowsPerPageOptions]="[10,20,30]"
+                         *ngIf="ingredient=='liwellSieve'"
                          [showCurrentPageReport]="true" currentPageReportTemplate="Display  {first} to  {last} of  {totalRecords} entries"  selectionMode="multiple" [rowHover]="true" dataKey="id">
                   <ng-template pTemplate="caption">
                     <div class="flex flex-column md:flex-row md:justify-content-between md:align-items-center">
@@ -261,7 +345,7 @@
                     <tr>
 
                       <th pSortableColumn="id">Id <p-sortIcon field="id"></p-sortIcon></th>
-                      <th pSortableColumn="cribleLiwell">Crible Liwell <p-sortIcon field="cribleLiwell"></p-sortIcon></th>
+                      <th pSortableColumn="cribleLiwell">Liwell Sieve <p-sortIcon field="cribleLiwell"></p-sortIcon></th>
                       <th pSortableColumn="date">Date Transfer<p-sortIcon field="date"></p-sortIcon></th>
                       <th pSortableColumn="value">Transfer Quantity <p-sortIcon field="value"></p-sortIcon></th>
 
@@ -277,7 +361,7 @@
                         {{TransferToCribleLiwell.id}}
                       </td>
                       <td>
-                        {{TransferToCribleLiwell.cribleLiwell.reference}}
+                        {{TransferToCribleLiwell.referenceCribleLiwell}}
                       </td>
                       <td >
                         <p-cellEditor>
@@ -309,19 +393,206 @@
                         <div class="flex  align-items-center gap-2">
                           <div class="flex align-items-center justify-content-center gap-2" *ngIf="getToken()=='ADMIN'">
                             <button *ngIf="!editing" pButton pRipple type="button" pInitEditableRow icon="pi pi-pencil"
-                                    (click)="updateTransferTo(TransferToCribleLiwell)"
+                                    (click)="updateTransferToCribleLiwell(TransferToCribleLiwell)"
                                     class="p-button-rounded   mr-2"></button>
                             <button *ngIf="editing" pButton pRipple type="button"  pSaveEditableRow icon="pi pi-check"
                                     (click)="saveUpdateTransferToCribleLiwell()"
                                     class="p-button-rounded p-button-text  mr-2"></button>
                           </div>
-                          <button *ngIf="getToken()=='ADMIN'" pButton pRipple icon="pi pi-trash" class="p-button-rounded p-button-warning mr-2" (click)="deleteTransferTo(TransferToCribleLiwell)"></button>
+                          <button *ngIf="getToken()=='ADMIN'" pButton pRipple icon="pi pi-trash" class="p-button-rounded p-button-warning mr-2" (click)="deleteTransferToCribleLiwell(TransferToCribleLiwell)"></button>
                         </div>
                       </td>
                     </tr>
                   </ng-template>
                 </p-table>
+                <!------------- CRIBLE LIWELL ---------------------->
+                <!------------- CRIBLE VERT ------------------------>
+                <p-table #dt [loading]="loading"
+                         [value]="ListTransferToCribleVert"
+                         [columns]="cols"
+                         responsiveLayout="scroll" [rows]="10"
+                         [globalFilterFields]="['id','date','value']"
+                         [paginator]="true"
+                         editMode="row"
+                         [rowsPerPageOptions]="[10,20,30]"
+                         *ngIf="ingredient=='greenSieve'"
+                         [showCurrentPageReport]="true" currentPageReportTemplate="Display  {first} to  {last} of  {totalRecords} entries"  selectionMode="multiple" [rowHover]="true" dataKey="id">
+                  <ng-template pTemplate="caption">
+                    <div class="flex flex-column md:flex-row md:justify-content-between md:align-items-center">
+                      <div class="flex justify-content-between align-items-center w-full">
+                        <h5 class="m-0">Transfer To  management</h5>
 
+                        <div>
+
+
+            <span class=" p-input-icon-left ">
+                            <i class="pi pi-search"></i>
+                            <input  type="text" pInputText (input)="onGlobalFilter(dt, $event)" placeholder="Search..."  class="w-full sm:w-auto"/>
+                        </span>
+                        </div>
+                      </div>
+
+                    </div>
+                  </ng-template>
+                  <ng-template pTemplate="header">
+                    <tr>
+
+                      <th pSortableColumn="id">Id <p-sortIcon field="id"></p-sortIcon></th>
+                      <th pSortableColumn="cribleLiwell">Green Sieve <p-sortIcon field="cribleLiwell"></p-sortIcon></th>
+                      <th pSortableColumn="date">Date Transfer<p-sortIcon field="date"></p-sortIcon></th>
+                      <th pSortableColumn="value">Transfer Quantity <p-sortIcon field="value"></p-sortIcon></th>
+
+                      <th></th>
+                    </tr>
+                  </ng-template>
+                  <ng-template pTemplate="body" let-TransferToCribleVert
+                               let-editing="editing" >
+                    <tr [pEditableRow]="TransferToCribleVert" >
+
+                      <td >
+                        <span class="p-column-title">Id</span>
+                        {{TransferToCribleVert.id}}
+                      </td>
+                      <td>
+                        {{TransferToCribleVert.referenceCribleVert}}
+                      </td>
+                      <td >
+                        <p-cellEditor>
+                          <ng-template pTemplate="input">
+                            <input  class="p-2 shadow-1" type="date" dateFormat="yy-mm-dd"  pInputText   [(ngModel)]="TransferToCribleVert.dateCreation"  />
+
+                          </ng-template>
+                          <ng-template pTemplate="output">
+                            {{TransferToCribleVert.dateCreation|date:'yyyy-MM-dd'}}
+                          </ng-template>
+                        </p-cellEditor>
+                      </td>
+
+                      <td >
+                        <p-cellEditor>
+                          <ng-template pTemplate="input">
+                            <input
+                              pInputText
+                              type="text"
+                              [(ngModel)]="TransferToCribleVert.quantityTransfer" />
+                          </ng-template>
+                          <ng-template pTemplate="output">
+                            {{TransferToCribleVert.quantityTransfer}}
+                          </ng-template>
+                        </p-cellEditor>
+                      </td>
+
+                      <td>
+                        <div class="flex  align-items-center gap-2">
+                          <div class="flex align-items-center justify-content-center gap-2" *ngIf="getToken()=='ADMIN'">
+                            <button *ngIf="!editing" pButton pRipple type="button" pInitEditableRow icon="pi pi-pencil"
+                                    (click)="updateTransferToCribleVert(TransferToCribleVert)"
+                                    class="p-button-rounded   mr-2"></button>
+                            <button *ngIf="editing" pButton pRipple type="button"  pSaveEditableRow icon="pi pi-check"
+                                    (click)="saveUpdateTransferToCribleVert()"
+                                    class="p-button-rounded p-button-text  mr-2"></button>
+                          </div>
+                          <button *ngIf="getToken()=='ADMIN'" pButton pRipple icon="pi pi-trash" class="p-button-rounded p-button-warning mr-2" (click)="deleteTransferToCribleVert(TransferToCribleVert)"></button>
+                        </div>
+                      </td>
+                    </tr>
+                  </ng-template>
+                </p-table>
+                <!------------- CRIBLE VERT ------------------------>
+                <!------------- LAVERIE ---------------------------->
+                <p-table #dt [loading]="loading"
+                         [value]="ListTransferToLaverie"
+                         [columns]="cols"
+                         responsiveLayout="scroll" [rows]="10"
+                         [globalFilterFields]="['id','date','value']"
+                         [paginator]="true"
+                         editMode="row"
+                         [rowsPerPageOptions]="[10,20,30]"
+                         *ngIf="ingredient=='laundry'"
+                         [showCurrentPageReport]="true" currentPageReportTemplate="Display  {first} to  {last} of  {totalRecords} entries"  selectionMode="multiple" [rowHover]="true" dataKey="id">
+                  <ng-template pTemplate="caption">
+                    <div class="flex flex-column md:flex-row md:justify-content-between md:align-items-center">
+                      <div class="flex justify-content-between align-items-center w-full">
+                        <h5 class="m-0">Transfer To  management</h5>
+
+                        <div>
+
+
+            <span class=" p-input-icon-left ">
+                            <i class="pi pi-search"></i>
+                            <input  type="text" pInputText (input)="onGlobalFilter(dt, $event)" placeholder="Search..."  class="w-full sm:w-auto"/>
+                        </span>
+                        </div>
+                      </div>
+
+                    </div>
+                  </ng-template>
+                  <ng-template pTemplate="header">
+                    <tr>
+
+                      <th pSortableColumn="id">Id <p-sortIcon field="id"></p-sortIcon></th>
+                      <th pSortableColumn="cribleLiwell">Laundry <p-sortIcon field="cribleLiwell"></p-sortIcon></th>
+                      <th pSortableColumn="date">Date Transfer<p-sortIcon field="date"></p-sortIcon></th>
+                      <th pSortableColumn="value">Transfer Quantity <p-sortIcon field="value"></p-sortIcon></th>
+
+                      <th></th>
+                    </tr>
+                  </ng-template>
+                  <ng-template pTemplate="body" let-TransferToLaundry
+                               let-editing="editing" >
+                    <tr [pEditableRow]="TransferToLaundry" >
+
+                      <td >
+                        <span class="p-column-title">Id</span>
+                        {{TransferToLaundry.id}}
+                      </td>
+                      <td>
+                        {{TransferToLaundry.referenceLaverie}}
+
+                      </td>
+                      <td >
+                        <p-cellEditor>
+                          <ng-template pTemplate="input">
+                            <input  class="p-2 shadow-1" type="date" dateFormat="yy-mm-dd"  pInputText   [(ngModel)]="TransferToLaundry.dateCreation"  />
+
+                          </ng-template>
+                          <ng-template pTemplate="output">
+                            {{TransferToLaundry.dateCreation|date:'yyyy-MM-dd'}}
+                          </ng-template>
+                        </p-cellEditor>
+                      </td>
+
+                      <td >
+                        <p-cellEditor>
+                          <ng-template pTemplate="input">
+                            <input
+                              pInputText
+                              type="text"
+                              [(ngModel)]="TransferToLaundry.quantityTransfer" />
+                          </ng-template>
+                          <ng-template pTemplate="output">
+                            {{TransferToLaundry.quantityTransfer}}
+                          </ng-template>
+                        </p-cellEditor>
+                      </td>
+
+                      <td>
+                        <div class="flex  align-items-center gap-2">
+                          <div class="flex align-items-center justify-content-center gap-2" *ngIf="getToken()=='ADMIN'">
+                            <button *ngIf="!editing" pButton pRipple type="button" pInitEditableRow icon="pi pi-pencil"
+                                    (click)="updateTransferToLaverie(TransferToLaundry)"
+                                    class="p-button-rounded   mr-2"></button>
+                            <button *ngIf="editing" pButton pRipple type="button"  pSaveEditableRow icon="pi pi-check"
+                                    (click)="saveUpdateTransferToLaverie()"
+                                    class="p-button-rounded p-button-text  mr-2"></button>
+                          </div>
+                          <button *ngIf="getToken()=='ADMIN'" pButton pRipple icon="pi pi-trash" class="p-button-rounded p-button-warning mr-2" (click)="deleteTransferToLaverie(TransferToLaundry)"></button>
+                        </div>
+                      </td>
+                    </tr>
+                  </ng-template>
+                </p-table>
+                <!------------- LAVERIE ---------------------------->
               </div>
 
             </ng-template>

@@ -36,6 +36,15 @@ import {AnalyseChimiqueComponent} from "../analyse-chimique/analyse-chimique.com
 import {TransferToCribleLiwellService} from "../../Services/TransferToCribleLiwell.service";
 import {CribleLiwell} from "../../Models/cribleLiwell";
 import {CribleLiwellService} from "../../Services/cribleLiwell.service";
+import {TransferToCrible} from "../../Models/transfer-to-crible";
+import {Crible} from "../../Models/crible";
+import {TransferToLaverie} from "../../Models/transfer-to-laverie";
+import {Laverie} from "../../Models/laverie";
+import {CribleService} from "../../Services/crible.service";
+import {LaverieService} from "../../Services/laverie.service";
+import {TransferToCribleService} from "../../Services/transfer-to-crible.service";
+import {TransferToLaverieService} from "../../Services/transfer-to-laverie.service";
+import {LoginService} from "../../Services/login.service";
 
 @Component({
   selector: 'app-sbnl',
@@ -96,6 +105,9 @@ export class SbnlComponent implements OnInit{
 
   selectedSbnls: Sbnl[] = [];
    selectedSbnl:Sbnl={}
+  selectedLaverie:Laverie=new Laverie();
+  selectedCribleVert:Crible=new Crible();
+  selectedCribleLiwell:CribleLiwell= {};
   private isUpdatesbnl=false;
   bassins: Bassin[] = [];
 
@@ -111,8 +123,14 @@ export class SbnlComponent implements OnInit{
   TransferToDialog:boolean=false;
   transferToCribleLiwell:TransferToCribleLiwell=new TransferToCribleLiwell();
   ListTransferToCribleLiwell:TransferToCribleLiwell[] =[];
-  selectedCribleLiwell:CribleLiwell={};
   listCribleLiwells:CribleLiwell[]=[];
+  ingredient: string='liwellSieve';
+  transferToCribleVert:TransferToCrible=new TransferToCrible();
+  ListTransferToCribleVert:TransferToCrible[] =[];
+  listCribleVerts:Crible[]=[];
+  transferToLaverie:TransferToLaverie=new TransferToLaverie();
+  ListTransferToLaverie:TransferToLaverie[] =[];
+  listLaveries:Laverie[]=[];
   @Input() get selectedColumns(): any[] {
     return this._selectedColumns;
   }
@@ -120,7 +138,11 @@ export class SbnlComponent implements OnInit{
                 private sbnlService :SbnlService,
                 private serviceBassin:BassinService,
                 private transferToCribleLiwellService:TransferToCribleLiwellService,
-                private cribleLiwellService:CribleLiwellService) {}
+                private cribleLiwellService:CribleLiwellService,
+                private cribleVertservice:CribleService,
+                private laverieService:LaverieService,
+                private transferToCribleVertService:TransferToCribleService,
+                private transferToLaverieService:TransferToLaverieService) {}
 
   ngOnInit() {
     this.colsfiltre = [
@@ -156,7 +178,9 @@ this.getsbnl()
       { field: 'pond', header: 'pond' },
     ];
 
-this. getAllCribleLiwells()
+    this.getAllCribleLiwells();
+    this.getAllCribleVerts();
+    this.getAllLaveries();
   }
  getAllCribleLiwells(){
     this.cribleLiwellService.getAllCribleLiwellsDTO().subscribe(value => this.listCribleLiwells=value)
@@ -620,61 +644,151 @@ this.Viderfiltredate()
   protected readonly JsonPipe = JsonPipe;
   protected readonly JSON = JSON;
 
+
   public openDialog() {
-this.detailsDialog=true;
+  this.detailsDialog=true;
   }
 
   public AddTransferTo(sbnl: Sbnl) {
-this.TransferToDialog=true;
-this.sbnl=sbnl;
-    this. getListTransferToCribleLiwell();
+  this.TransferToDialog=true;
+  this.sbnl=sbnl;
+  this. getListTransferToCribleLiwell();
+  this. getListTransferToCribleVert();
+  this. getListTransferToLaverie();
   }
 
   public saveTransferToCribleLiwell() {
-
-      if ( this.sbnl.id!==undefined)
+      if ( this.sbnl.id!==undefined&&this.selectedCribleLiwell.reference!==undefined)
+      {
+        this.transferToCribleLiwell.referenceCribleLiwell=this.selectedCribleLiwell.reference;
         this.transferToCribleLiwellService.addTransferToCribleLiwell(this.transferToCribleLiwell,this.sbnl.id).subscribe(value => {
           this. getListTransferToCribleLiwell();
           this.transferToCribleLiwell=new TransferToCribleLiwell();
-        })
-
+        })   }
   }
 
-  public updateTransferTo(transferToCribleLiwell: TransferToCribleLiwell) {
+  public updateTransferToCribleLiwell(transferToCribleLiwell: TransferToCribleLiwell) {
 this.transferToCribleLiwell=transferToCribleLiwell;
   }
 
   public saveUpdateTransferToCribleLiwell() {
     this.transferToCribleLiwellService.updateTransferToCribleLiwell(this.transferToCribleLiwell).subscribe(value => {
       this. getListTransferToCribleLiwell();
+      this.transferToCribleLiwell=new TransferToCribleLiwell();
+
 
     })
   }
 
-  public deleteTransferTo(transferToCribleLiwell: any) {
+  public deleteTransferToCribleLiwell(transferToCribleLiwell: any) {
     this.transferToCribleLiwellService.deleteTransferToCribleLiwell(transferToCribleLiwell.id).subscribe(value =>     this.ListTransferToCribleLiwell= this.ListTransferToCribleLiwell.filter(transfer => transfer.id !== transferToCribleLiwell.id))
 
   }
 
   getListTransferToCribleLiwell(){
     if(this.sbnl.id!=undefined)
-    this.sbnlService.getSbnlById(this.sbnl.id).subscribe(value => {
+    this.sbnlService.getSbnlByIdDto(this.sbnl.id).subscribe(value => {
       if(value.transferToCribleLiwellList!=undefined)
       this.ListTransferToCribleLiwell = value.transferToCribleLiwellList;
     } )
   }
 
   public getQuantitySbnl(sbnl: Sbnl) {
-    let totalTransfer:number=0;
+    let totalTransferCribleLiwell:number=0;
+    let totalTransferCribleVert:number=0;
+    let totalTransferLaverie:number=0;
     let totalRecolte:number=0;
 
     if(sbnl.transferToCribleLiwellList!=undefined)
-   totalTransfer= sbnl.transferToCribleLiwellList.reduce((sum, transfer) => sum+transfer.quantityTransfer,0)
+      totalTransferCribleLiwell= sbnl.transferToCribleLiwellList.reduce((sum, transfer) => sum+transfer.quantityTransfer,0)
+    if(sbnl.transferToCribleVertList!=undefined)
+      totalTransferCribleVert= sbnl.transferToCribleVertList.reduce((sum, transfer) => sum+transfer.quantityTransfer,0)
+    if(sbnl.transferToLaverieList!=undefined)
+      totalTransferLaverie= sbnl.transferToLaverieList.reduce((sum, transfer) => sum+transfer.quantityTransfer,0)
+
  if(sbnl.bassinList!=undefined){
     sbnl.bassinList?.forEach(bassin => {
       if(bassin.recolteList!=undefined)
         totalRecolte +=bassin.recolteList.reduce((sum, recolte) => sum + recolte.value, 0)
     } )}
-return totalRecolte-totalTransfer;
+return totalRecolte-(totalTransferCribleLiwell+totalTransferCribleVert+totalTransferLaverie);
+  }
+
+  public saveTransferToLaverie() {
+    if ( this.sbnl.id!==undefined){
+      this.transferToLaverie.referenceLaverie=this.selectedLaverie.reference;
+      this.transferToLaverieService.addTransferToLaverie(this.transferToLaverie,this.sbnl.id).subscribe(value => {
+        this.getListTransferToLaverie();
+        this.transferToLaverie=new TransferToLaverie();
+      })
+    }
+  }
+  getListTransferToLaverie(){
+    if(this.sbnl.id!=undefined)
+      this.sbnlService.getSbnlByIdDto(this.sbnl.id).subscribe(value => {
+
+        if(value.transferToLaverieList!=undefined)
+          this.ListTransferToLaverie = value.transferToLaverieList;
+      } )
+  }
+  public saveTransferToCribleVert() {
+    if ( this.sbnl.id!==undefined){
+      this.transferToCribleVert.referenceCribleVert=this.selectedCribleVert.reference;
+      this.transferToCribleVertService.addTransferToCrible(this.transferToCribleVert,this.sbnl.id).subscribe(value => {
+        this.getListTransferToCribleVert();
+        this.transferToCribleVert=new TransferToCrible();
+      },error => {
+        console.log(error)
+      })    }
+  }
+
+  getListTransferToCribleVert(){
+    if(this.sbnl.id!=undefined)
+      this.sbnlService.getSbnlByIdDto(this.sbnl.id).subscribe(value => {
+        if(value.transferToCribleVertList!=undefined)
+          this.ListTransferToCribleVert = value.transferToCribleVertList;
+      } )
+  }
+
+
+  getAllCribleVerts(){
+    this.cribleVertservice.getAllCriblesDto().subscribe(value => this.listCribleVerts=value)
+  }
+  public deleteTransferToCribleVert(transferToCribleVert: TransferToCrible) {
+    this.transferToCribleVertService.deleteTransferToCrible(transferToCribleVert.id).subscribe(value =>     this.ListTransferToCribleVert= this.ListTransferToCribleVert.filter(transfer => transfer.id !== transferToCribleVert.id))
+
+  }
+
+  public saveUpdateTransferToCribleVert() {
+    this.transferToCribleVertService.updateTransferToCrible(this.transferToCribleVert).subscribe(value => {
+      this. getListTransferToCribleVert();
+      this.transferToCribleVert=new TransferToCrible();
+
+    })
+  }
+
+  public updateTransferToCribleVert(transferToCribleVert: TransferToCrible) {
+    this.transferToCribleVert=transferToCribleVert;
+
+  }
+  getAllLaveries(){
+    this.laverieService.getAllLaveries().subscribe(value => this.listLaveries=value)
+  }
+  public deleteTransferToLaverie(transferToLaundry: TransferToLaverie) {
+    this.transferToLaverieService.deleteTransferToLaverie(transferToLaundry.id).subscribe(value =>     this.ListTransferToLaverie= this.ListTransferToLaverie.filter(transfer => transfer.id !== transferToLaundry.id))
+
+  }
+
+  public saveUpdateTransferToLaverie() {
+    this.transferToLaverieService.updateTransferToLaverie(this.transferToLaverie).subscribe(value => {
+      this. getListTransferToLaverie();
+      this.transferToLaverie=new TransferToLaverie();
+
+    })
+  }
+
+  public updateTransferToLaverie(transferToLaundry: TransferToLaverie) {
+    this.transferToLaverie=transferToLaundry;
+
   }
 }

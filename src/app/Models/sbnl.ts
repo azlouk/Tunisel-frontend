@@ -4,6 +4,8 @@ import {AnalysesPhysique} from "./analyses-physique";
 import {Sbl} from "./sbl";
 import {Bassin} from "./bassin";
 import {TransferToCribleLiwell} from "./TransferToCribleLiwell";
+import {TransferToCrible} from "./transfer-to-crible";
+import {TransferToLaverie} from "./transfer-to-laverie";
 
 export interface Sbnl {
 
@@ -20,4 +22,6 @@ export interface Sbnl {
   analysesPhysiques?: AnalysesPhysique[];
   bassinList?:Bassin[];
   transferToCribleLiwellList?:TransferToCribleLiwell[];
+  transferToCribleVertList?:TransferToCrible[];
+  transferToLaverieList?:TransferToLaverie[];
 }

@@ -1,66 +1,79 @@
 import {Component, ElementRef, Input, OnInit, ViewChild} from '@angular/core';
-import {ButtonModule} from "primeng/button";
-import {CalendarModule} from "primeng/calendar";
-import {DialogModule} from "primeng/dialog";
-import {InputTextModule} from "primeng/inputtext";
-import {CommonModule, DatePipe, JsonPipe, NgClass, NgIf} from "@angular/common";
-import {PaginatorModule} from "primeng/paginator";
-import {MessageService, SharedModule} from "primeng/api";
-import {Table, TableModule} from "primeng/table";
-import {ToastModule} from "primeng/toast";
-import {ToolbarModule} from "primeng/toolbar";
 import {Product} from "../../Models/product";
- import {Sbl} from "../../Models/sbl";
+import {Sbl} from "../../Models/sbl";
+import {CribleLiwell} from "../../Models/cribleLiwell";
+import {Crible} from "../../Models/crible";
+import {Concasseur} from "../../Models/concasseur";
+import {MessageService, SharedModule} from "primeng/api";
 import {SblService} from "../../Services/sbl.service";
+import {CribleLiwellService} from "../../Services/cribleLiwell.service";
+import {CribleService} from "../../Services/crible.service";
+import {ConcasseurService} from "../../Services/concasseur.service";
+import Swal from "sweetalert2";
+import {Table, TableModule} from "primeng/table";
 import {Sbnl} from "../../Models/sbnl";
-import {OverlayPanelModule} from "primeng/overlaypanel";
 import {AnalysesChimique} from "../../Models/analyses-chimique";
 import {AnalysesPhysique} from "../../Models/analyses-physique";
 import html2canvas from "html2canvas";
 import jsPDF from "jspdf";
-import {CheckboxModule} from "primeng/checkbox";
-import {ListboxModule} from "primeng/listbox";
-import {CribleLiwell} from "../../Models/cribleLiwell";
-import {CribleLiwellService} from "../../Services/cribleLiwell.service";
-import {getToken} from "../../../main";
-import {AutoFocusModule} from "primeng/autofocus";
-import {TooltipModule} from "primeng/tooltip";
 import * as XLSX from "xlsx";
 import {writeFile} from "xlsx";
-import Swal from "sweetalert2";
+import {AutoFocusModule} from "primeng/autofocus";
+import {ButtonModule} from "primeng/button";
+import {CalendarModule} from "primeng/calendar";
+import {CheckboxModule} from "primeng/checkbox";
+import {DatePipe, NgClass, NgForOf, NgIf} from "@angular/common";
+import {DialogModule} from "primeng/dialog";
+import {DropdownModule} from "primeng/dropdown";
+import {InputTextModule} from "primeng/inputtext";
+import {ListboxModule} from "primeng/listbox";
 import {MultiSelectModule} from "primeng/multiselect";
-import {Crible} from "../../Models/crible";
-import {CribleService} from "../../Services/crible.service";
-import {Concasseur} from "../../Models/concasseur";
-import {ConcasseurService} from "../../Services/concasseur.service";
-import {transferArrayItem} from "@angular/cdk/drag-drop";
+import {FormsModule, ReactiveFormsModule} from "@angular/forms";
 import {RippleModule} from "primeng/ripple";
+import {ToastModule} from "primeng/toast";
+import {ToolbarModule} from "primeng/toolbar";
+import {TooltipModule} from "primeng/tooltip";
+import {getToken} from "../../../main";
+import {Band} from "../../Models/band";
+import {BandService} from "../../Services/band.service";
+import {RadioButtonModule} from "primeng/radiobutton";
+import {InputNumberModule} from "primeng/inputnumber";
+import {SbnlService} from "../../Services/sbnl.service";
+import {Laverie} from "../../Models/laverie";
+import {LaverieService} from "../../Services/laverie.service";
 
 @Component({
-  selector: 'app-sbl',
+  selector: 'app-band',
   standalone: true,
   imports: [
+    AutoFocusModule,
     ButtonModule,
     CalendarModule,
+    CheckboxModule,
+    DatePipe,
     DialogModule,
+    DropdownModule,
     InputTextModule,
+    ListboxModule,
+    MultiSelectModule,
+    NgForOf,
     NgIf,
-    PaginatorModule,
+    ReactiveFormsModule,
+    RippleModule,
     SharedModule,
     TableModule,
     ToastModule,
     ToolbarModule,
+    TooltipModule,
+    FormsModule,
     NgClass,
-    OverlayPanelModule,
-    CheckboxModule,
-    ListboxModule,
-    DatePipe, CommonModule, AutoFocusModule, TooltipModule, MultiSelectModule, RippleModule,
-
+    RadioButtonModule,
+    InputNumberModule
   ],
-  templateUrl: './sbl.component.html',
-  styleUrl: './sbl.component.css'
+  templateUrl: './band.component.html',
+  styleUrl: './band.component.css'
 })
-export class SblComponent implements OnInit {
+export class BandComponent implements OnInit{
   productDialog: boolean = false;
 
   deleteProductDialog: boolean = false;
@@ -81,14 +94,14 @@ export class SblComponent implements OnInit {
 
   rowsPerPageOptions = [5, 10, 20];
   // ======********============
-  sbls: Sbl[] = [];
+  bands: Band[] = [];
 
-  sbl: Sbl = {};
+  band: Band = new Band();
 
-  selectedSbls: Sbl[] = [];
+  selectedBands: Sbl[] = [];
   cribleLiwells: CribleLiwell[] = [];
-  Selectetsbl: Sbl = {}
-  private isUpdateSbl = false;
+  SelectetBand: Sbl = {}
+  private isUpdateBand = false;
   SelectAll: boolean = false;
   @ViewChild("pdfpuit") htmlContent: ElementRef | undefined;
   visiblePrint: boolean = false;
@@ -97,23 +110,38 @@ export class SblComponent implements OnInit {
   DatefiltrageStart: Date = new Date();
   DatefiltrageEnd: Date = new Date();
   public _selectedColumns: any[] = [];
-  cribles: Crible[] = [];
-  concasseurs: Concasseur[] = [];
+  listCribles: Crible[] = [];
+  listConcasseurs: Concasseur[] = [];
   calibres: number[] = [];
   detailsDialog: boolean=false;
-  detailsDialogCrible: boolean=false;
-  detailsDialogConcasseur: boolean=false;
-  selectedCribleLiwell:CribleLiwell={};
-  selectedCrible:Crible=new Crible();
+
+  selectedFromCribleLiwell:CribleLiwell={};
+  selectedToCribleLiwell:CribleLiwell={};
+  listCribleLiwells:CribleLiwell[]=[];
+  selectedFromCrible:Crible=new Crible();
+  selectedToCrible:Crible=new Crible();
   selectedConcasseur:Concasseur=new Concasseur();
+  selectedFromSbnl:Sbnl={};
+  listSbnls:Sbnl[]=[];
+  selectedFromLaverie:Laverie=new Laverie();
+  selectedToLaverie:Laverie=new Laverie();
+  listLaverie:Laverie[]=[];
+  selectedToWashed:Sbl={}
+  listWasheds:Sbl[]=[];
+  froms:string="unwashed"
+  tos:string="washed"
   @Input() get selectedColumns(): any[] {
     return this._selectedColumns;
   }
 
-  constructor(private messageService: MessageService, private sblService: SblService,
+  constructor(private messageService: MessageService,
+              private sblService: SblService,
               private cribleLiwellService: CribleLiwellService,
               private cribleService: CribleService,
-              private concasseurService: ConcasseurService) {
+              private concasseurService: ConcasseurService,
+              private bandService:BandService,
+              private sbnlService:SbnlService,
+              private laverieService:LaverieService) {
   }
 
   ngOnInit() {
@@ -139,7 +167,7 @@ export class SblComponent implements OnInit {
     ];
 
     this._selectedColumns = this.colsfiltre;
-    this.getAllSbl();
+    this.getAllBands();
     this.cols = [
       {field: 'id', header: 'id'},
       {field: 'reference', header: 'reference'},
@@ -152,6 +180,10 @@ export class SblComponent implements OnInit {
     ];
     this.getAllCribles();
     this.getAllConcasseurs();
+    this.getAllCriblesLiwell();
+    this.getAllSbnls();
+    this.getAllLaveries();
+    this.getAllSbl();
 
   }
 
@@ -159,7 +191,7 @@ export class SblComponent implements OnInit {
     this.loading = true;
 
     this.cribleService.getAllCriblesDto().subscribe((value: Crible[]) => {
-      this.cribles = value;
+      this.listCribles = value;
       this.loading = false;
 
     }, error => {
@@ -172,7 +204,7 @@ export class SblComponent implements OnInit {
     this.loading = true;
 
     this.concasseurService.getAllConcasseurs().subscribe((value: Concasseur[]) => {
-      this.concasseurs = value;
+      this.listConcasseurs = value;
       this.loading = false;
 
     }, error => {
@@ -180,46 +212,68 @@ export class SblComponent implements OnInit {
     })
   }
 
+  getAllCriblesLiwell(){
+    this.cribleLiwellService.getAllCribleLiwellsDTO().subscribe(value => {
+      this.listCribleLiwells=value
+    },error => {
+      console.log(error)})
+  }
+  getAllSbnls(){
+    this.sbnlService.getAllSbnlsDTO().subscribe(value => {
+      this.listSbnls=value
+    },error => {
+      console.log(error)})
+  }
+  getAllLaveries(){
+    this.laverieService.getAllLaveriesDto().subscribe(value => {
+      this.listLaverie=value
+    },error => {
+      console.log(error)})
+  }
+  getAllSbl(){
+    this.sblService.getAllSblDTO().subscribe(value => {
+      this.listWasheds=value
+    },error => {
+      console.log(error)})
+  }
   openNew() {
-    this.sbl = {};
-    // console.log("sbl: " + new JsonPipe().transform(this.sbl.cribleLiwellList))
+    this.band = new Band();
     this.submitted = false;
-
     this.productDialog = true;
   }
 
-  deleteSelectedSbls() {
+  deleteSelectedBands() {
 
     this.deleteProductsDialog = true;
 
   }
 
-  editSbl(sbl: Sbl) {
-    this.isUpdateSbl = true;
-    this.sbl = {...sbl};
+  editBand(band: Band) {
+    this.isUpdateBand = true;
+    this.band = band;
     this.productDialog = true;
-    this.getCalibresBySelectedCribleLiwells(sbl.cribleLiwellList);
+    // this.getCalibresBySelectedCribleLiwells(sbl.cribleLiwellList);
   }
 
-  deleteSbl(sbl: Sbl) {
+  deleteBand(band: Band) {
     this.deleteProductDialog = true;
-    this.sbl = {...sbl};
+    this.band =band;
   }
 
   confirmDeleteSelected() {
     this.deleteProductsDialog = false;
-    this.selectedSbls.forEach(selectedSbl => {
-      this.sblService.deleteSbl(selectedSbl.id).subscribe(
+    this.selectedBands.forEach(band => {
+      this.bandService.deleteBand(band.id).subscribe(
         () => {
-          this.sbls = this.sbls.filter(sbl => sbl.id !== selectedSbl.id);
-          this.messageService.add({severity: 'success', summary: 'Successful', detail: 'Sbl Deleted', life: 3000});
+          this.bands = this.bands.filter(band1 => band1.id !== band.id);
+          this.messageService.add({severity: 'success', summary: 'Successful', detail: 'Band Deleted', life: 3000});
 
         },
         (error) => {
           Swal.fire({
             icon: "error",
             title: "Can not deleted",
-            text: "Washed related with Washed ship !",
+            text: "Can not deleted",
           })
           console.error(error);
         }
@@ -230,18 +284,17 @@ export class SblComponent implements OnInit {
 
   confirmDelete() {
     this.deleteProductDialog = false;
-    // console.log("this.sbl.id", this.sbl.id);
-    if (this.sbl.id != null) {
-      this.sblService.deleteSbl(this.sbl.id).subscribe(() => {
-        this.sbls = this.sbls.filter(val => val.id !== this.sbl.id);
+    if (this.band.id != null) {
+      this.bandService.deleteBand(this.band.id).subscribe(() => {
+        this.bands = this.bands.filter(val => val.id !== this.band.id);
 
-        this.messageService.add({severity: 'success', summary: 'Successful', detail: 'Sbl Deleted', life: 3000});
+        this.messageService.add({severity: 'success', summary: 'Successful', detail: 'Band Deleted', life: 3000});
 
       }, error => {
         Swal.fire({
           icon: "error",
           title: "Can not deleted",
-          text: "Washed related with Washed ship !",
+          text: "Can not deleted !",
         })
         console.log(error)
       });
@@ -252,27 +305,62 @@ export class SblComponent implements OnInit {
     this.productDialog = false;
     this.submitted = false;
   }
-
-  saveSbl() {
+getAllBands(){
+    this.bandService.getAllBands().subscribe(value => {
+      this.bands = value
+    },error => {
+      console.log(error)})
+}
+  saveBand() {
     this.submitted = false;
     this.productDialog = false
-    if (this.isUpdateSbl == true) {
-      this.sblService.updateSbl(this.sbl).subscribe(() => {
-        this.sblService.getAllSblDTO().subscribe((sbls: Sbl[]) => {
-          this.sbls = sbls;
-
-        });
+    if(this.froms=='unwashed' && this.selectedFromSbnl.id !== undefined){
+      this.band.from.typeId=this.selectedFromSbnl.id;
+      this.band.from.type='Sbnl';
+    }
+    if(this.froms == 'liwellSieve' && this.selectedFromCribleLiwell.id !== undefined){
+      this.band.from.typeId=this.selectedFromCribleLiwell.id;
+      this.band.from.type='Crible Liwell';
+    }
+    if(this.froms=='greenSieve'){
+      this.band.from.typeId=this.selectedFromCrible.id;
+      this.band.from.type='Green Crible';
+    }
+    if(this.froms=='laundry'){
+      this.band.from.typeId=this.selectedFromLaverie.id;
+      this.band.from.type='laundry';
+    }
+    // ========= TO ================
+    if(this.tos=='washed' && this.selectedToWashed.id !== undefined){
+      this.band.to.typeId=this.selectedToWashed.id;
+      this.band.to.type='Sbnl';
+    }
+    if(this.tos == 'liwellSieve' && this.selectedToCribleLiwell.id !== undefined){
+      this.band.to.typeId=this.selectedToCribleLiwell.id;
+      this.band.to.type='Crible Liwell';
+    }
+    if(this.tos=='greenSieve'){
+      this.band.to.typeId=this.selectedToCrible.id;
+      this.band.to.type='Green Crible';
+    }
+    if(this.tos=='laundry'){
+      this.band.to.typeId=this.selectedToLaverie.id;
+      this.band.to.type='laundry';
+    }
+    // ========= TO ================
+    if (this.isUpdateBand == true) {
+      this.bandService.updateBand(this.band).subscribe(() => {
+        this.getAllBands();
       });
-      console.log('Sbl updated');
+      console.log('Band updated');
 
-      this.isUpdateSbl = false;
+      this.isUpdateBand = false;
     } else {
-      this.sblService.addSbl(this.sbl).subscribe(() => {
-        this.sblService.getAllSblDTO().subscribe((sbls: Sbl[]) => {
-          this.sbls = sbls;
-        });
+      this.bandService.addBand(this.band).subscribe(() => {
+        this.getAllBands();
+
       });
-      console.log('Sbl added');
+      console.log('Band added');
     }
   }
 
@@ -282,32 +370,11 @@ export class SblComponent implements OnInit {
   }
 
 
-  getAllSbl() {
-    this.loading = true;
-
-    this.sblService.getAllSblDTO().subscribe((v: Sbl[]) => {
-      this.sbls = v;
-      // console.log("====================>>>>>>"+new JsonPipe().transform(this.sbls))
-      this.loading = false;
-
-    }, error => {
-      console.log(error)
-    })
-    this.loading = true;
-
-    this.cribleLiwellService.getAllCribleLiwellsDTO().subscribe((v: Sbnl[]) => {
-      this.cribleLiwells = v;
-      this.loading = false;
-
-    }, error => {
-      console.log(error)
-    })
-  }
 
 
-  exportrapport(Sbl: Sbl) {
+  exportrapport(band: Band) {
 
-    this.Selectetsbl = Sbl;
+    this.SelectetBand = band;
     this.visiblePrint = true
     // console.log("---->" + new JsonPipe().transform(this.Selectetsbl));
   }
@@ -315,7 +382,7 @@ export class SblComponent implements OnInit {
 
   filtredate() {
     this.Viderfiltredate()
-    const data = this.Selectetsbl.analysesChimiques !== undefined ? this.Selectetsbl.analysesChimiques : []
+    const data = this.SelectetBand.analysesChimiques !== undefined ? this.SelectetBand.analysesChimiques : []
     const newAnalyse: AnalysesChimique[] = []
     data.forEach(v => {
 
@@ -334,7 +401,7 @@ export class SblComponent implements OnInit {
       }
 
     })
-    this.Selectetsbl.analysesChimiques = [...newAnalyse];
+    this.SelectetBand.analysesChimiques = [...newAnalyse];
     // console.log(new JsonPipe().transform(data))
 
 
@@ -346,25 +413,23 @@ export class SblComponent implements OnInit {
 
   Viderfiltredate() {
 
-    this.sblService.getAllSblDTO().subscribe((sbl: Sbl[]) => {
-      this.sbls = sbl;
-
-      const sblsbl: Sbl | undefined = this.sbls.find(value => this.Selectetsbl.id == value.id)
-      if (sblsbl)
-        this.Selectetsbl = sblsbl;
+    this.bandService.getAllBands().subscribe(value => {
+      this.bands = value;
+      const band2: Band | undefined = this.bands.find(value => this.SelectetBand.id == value.id)
+      if (band2)
+        this.SelectetBand = band2;
 
     });
   }
 
   getAnalyse() {
-    return this.Selectetsbl.analysesChimiques !== undefined ? this.Selectetsbl.analysesChimiques : []
+    return this.SelectetBand.analysesChimiques !== undefined ? this.SelectetBand.analysesChimiques : []
   }
 
   getAnalyseGranoli() {
-    const data = this.Selectetsbl.analysesPhysiques !== undefined ? this.Selectetsbl.analysesPhysiques : []
+    const data = this.SelectetBand.analysesPhysiques !== undefined ? this.SelectetBand.analysesPhysiques : []
     const newAnalyse: AnalysesPhysique[] = []
     data.forEach(v => {
-
       if (v.dateAnalyse !== undefined) {
         // console.log(typeof v.dateAnalyse)
         const d = v.dateAnalyse + "";
@@ -379,9 +444,9 @@ export class SblComponent implements OnInit {
       }
 
     })
-    this.Selectetsbl.analysesPhysiques = [...newAnalyse];
+    this.SelectetBand.analysesPhysiques = [...newAnalyse];
 
-    return this.Selectetsbl.analysesPhysiques !== undefined ? this.Selectetsbl.analysesPhysiques : []
+    return this.SelectetBand.analysesPhysiques !== undefined ? this.SelectetBand.analysesPhysiques : []
   }
 
 
@@ -424,7 +489,6 @@ export class SblComponent implements OnInit {
     return date1.getDay() <= date2.getDay() && date1.getMonth() <= date2.getMonth() && date1.getFullYear() <= date2.getFullYear()
   }
 
-  protected readonly getToken = getToken;
   loading: boolean = false;
 
   ExportExcel() {
@@ -451,7 +515,7 @@ export class SblComponent implements OnInit {
 
       // Add Bassin data
       const bassinData = [
-        [this.Selectetsbl.reference, this.Selectetsbl.dateStock]
+        [this.SelectetBand.reference, this.SelectetBand.dateStock]
       ];
       XLSX.utils.sheet_add_json(ws, bassinData, {origin: 'A6', skipHeader: true});
 
@@ -530,7 +594,7 @@ export class SblComponent implements OnInit {
       let csvData: string[] = Object.values(headers).map(header => header.join(','));
 
       // Add Bassin data to the CSV data array
-      const bassinData: string = [this.Selectetsbl.reference, this.Selectetsbl.dateStock].join(',');
+      const bassinData: string = [this.SelectetBand.reference, this.SelectetBand.dateStock].join(',');
       csvData.push(bassinData);
 
       // Add Analyse Physique data to the CSV data array
@@ -669,19 +733,12 @@ export class SblComponent implements OnInit {
   }
 
 
-  public openDialogBand(sbl: Sbl) {
-    this.detailsDialog=true;
-    this.sbl=sbl;
-  }
 
 
-  public openDialogCrible(sbl: Sbl) {
-    this.detailsDialogCrible=true;
-    this.sbl=sbl;
-  }
 
-  public openDialogConcasseur(sbl: any) {
-    this.detailsDialogConcasseur=true;
-    this.sbl=sbl;
-  }
+
+
+
+
+  protected readonly getToken = getToken;
 }

@@ -123,11 +123,12 @@ export class AjouterLigneJournalierComponent implements OnInit{
   ngOnInit(): void {
 
     this.dataEtatBassin = [
-      "Flooded",
-      "Filling",
+      "Flooding",
+      "Feeding",
       "Dry",
       "Draining",
-      "Harvesting"
+      "Harvest",
+      "Maintenance"
     ]
 this.getAllBassin();
 this.getAllPuits();

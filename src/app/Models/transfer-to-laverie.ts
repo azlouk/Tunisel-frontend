@@ -1,26 +1,24 @@
-import {CribleLiwell} from "./cribleLiwell";
 
-export class TransferToCribleLiwell {
-
-    id: number;
-    dateCreation: Date;
-    quantityTransfer: number;
-   referenceCribleLiwell:string;
+export class TransferToLaverie {
+  id: number;
+  dateCreation: Date;
+  quantityTransfer: number;
+ referenceLaverie:string;
 
 
-  constructor(_id: number=0, _dateCreation: Date=new Date(), _quantityTransfer: number=0, _referenceCribleLiwell: string='') {
+  constructor(_id: number=0, _dateCreation: Date=new Date(), _quantityTransfer: number=0, _referenceLaverie: string="") {
     this.id = _id;
     this.dateCreation = _dateCreation;
     this.quantityTransfer = _quantityTransfer;
-    this.referenceCribleLiwell = _referenceCribleLiwell;
+    this.referenceLaverie = _referenceLaverie;
   }
 
-  public get _referenceCribleLiwell(): string {
-    return this.referenceCribleLiwell;
+  public get _referenceLaverie(): string {
+    return this.referenceLaverie;
   }
 
-  public set _referenceCribleLiwell(value: string) {
-    this.referenceCribleLiwell = value;
+  public set _referenceLaverie(value: string) {
+    this.referenceLaverie = value;
   }
 
   public get _id(): number {
@@ -46,6 +44,5 @@ export class TransferToCribleLiwell {
   public set _quantityTransfer(value: number) {
     this.quantityTransfer = value;
   }
-
 
 }

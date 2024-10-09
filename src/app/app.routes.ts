@@ -31,6 +31,8 @@ import {
 import {DailyUpdateComponent} from "./Components/daily-update/daily-update.component";
 import {CribleComponent} from "./Components/crible/crible.component";
 import {ConcasseurComponent} from "./Components/concasseur/concasseur.component";
+import {LaverieComponent} from "./Components/laverie/laverie.component";
+import {BandComponent} from "./Components/band/band.component";
 
 export const routes: Routes = [
   {path:'', component:LoginComponent},
@@ -70,5 +72,7 @@ export const routes: Routes = [
   {path:'Daily/:id', component:AjouterLigneJournalierComponent,  canActivate:[AuthGuard]},
   {path:'DailyUpdate', component:DailyUpdateComponent,  canActivate:[AuthGuard]},
   {path:'cribles', component:CribleComponent,  canActivate:[AuthGuard]},
+  {path:'laveries', component:LaverieComponent,  canActivate:[AuthGuard]},
   {path:'concasseurs', component:ConcasseurComponent,  canActivate:[AuthGuard]},
+  {path:'bands', component:BandComponent,  canActivate:[AuthGuard]},
 ];

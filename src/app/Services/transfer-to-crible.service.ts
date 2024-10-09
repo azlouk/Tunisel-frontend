@@ -3,56 +3,55 @@ import {environment} from "../environment/environment";
 import {HttpClient, HttpHeaders} from "@angular/common/http";
 import {Observable} from "rxjs";
 import {getKeyToken} from "../../main";
-import {TransferToCribleLiwell} from "../Models/TransferToCribleLiwell";
+import {TransferToCrible} from "../Models/transfer-to-crible";
 
 @Injectable({
   providedIn: 'root'
 })
-export class TransferToCribleLiwellService {
+export class TransferToCribleService {
+
 
 
   apiUrl=environment.apiUrl
   constructor(private http: HttpClient) { }
 
-  getAllTransferToCribleLiwell(): Observable<TransferToCribleLiwell[]> {
+  getAllTransferToCrible(): Observable<TransferToCrible[]> {
     const token = getKeyToken();
     if (token) {
       const headers = new HttpHeaders().set('Authorization', `Bearer ${token}`).set("Content-Type", "application/json; charset=utf8");
-      return this.http.get<TransferToCribleLiwell[]>(`${this.apiUrl}/transferToCribleLiwell/read`, {headers}) ;
+      return this.http.get<TransferToCrible[]>(`${this.apiUrl}/transferToCrible/read`, {headers}) ;
     }else {
       return  new Observable<any>()}}
-  getTransferToCribleLiwellById(id:number): Observable<TransferToCribleLiwell> {
+  getTransferToCribleById(id:number): Observable<TransferToCrible> {
     const token = getKeyToken();
     if (token) {
       const headers = new HttpHeaders().set('Authorization', `Bearer ${token}`).set("Content-Type", "application/json; charset=utf8");
-      return this.http.get<TransferToCribleLiwell>(`${this.apiUrl}/transferToCribleLiwell/${id}`, {headers}) ;
-    }else {
-      return  new Observable<any>()}}
-
-  deleteTransferToCribleLiwell(transferToCribleLiwellId: number | undefined): Observable<any> {
-    const token = getKeyToken();
-    if (token) {
-      const headers = new HttpHeaders().set('Authorization', `Bearer ${token}`).set("Content-Type", "application/json; charset=utf8");
-      return this.http.delete(`${this.apiUrl}/transferToCribleLiwell/delete/${transferToCribleLiwellId}`, {headers});
+      return this.http.get<TransferToCrible>(`${this.apiUrl}/transferToCrible/${id}`, {headers}) ;
     }else {
       return  new Observable<any>()}}
 
-  updateTransferToCribleLiwell(transferToCribleLiwell: TransferToCribleLiwell): Observable<TransferToCribleLiwell> {
+  deleteTransferToCrible(transferToCribleId: number | undefined): Observable<any> {
     const token = getKeyToken();
     if (token) {
       const headers = new HttpHeaders().set('Authorization', `Bearer ${token}`).set("Content-Type", "application/json; charset=utf8");
-      return this.http.put<TransferToCribleLiwell>(`${this.apiUrl}/transferToCribleLiwell/update`, transferToCribleLiwell, {headers});
+      return this.http.delete(`${this.apiUrl}/transferToCrible/delete/${transferToCribleId}`, {headers});
     }else {
       return  new Observable<any>()}}
 
-
-  addTransferToCribleLiwell(transferToCribleLiwell: TransferToCribleLiwell, id:number) : Observable<boolean>{
+  updateTransferToCrible(transferToCrible: TransferToCrible): Observable<TransferToCrible> {
     const token = getKeyToken();
     if (token) {
       const headers = new HttpHeaders().set('Authorization', `Bearer ${token}`).set("Content-Type", "application/json; charset=utf8");
-      return this.http.post<boolean>(`${this.apiUrl}/transferToCribleLiwell/add/${id}`, transferToCribleLiwell, {headers});
+      return this.http.put<TransferToCrible>(`${this.apiUrl}/transferToCrible/update`, transferToCrible, {headers});
     }else {
       return  new Observable<any>()}}
 
 
+  addTransferToCrible(transferToCrible: TransferToCrible, id:number) : Observable<boolean>{
+    const token = getKeyToken();
+    if (token) {
+      const headers = new HttpHeaders().set('Authorization', `Bearer ${token}`).set("Content-Type", "application/json; charset=utf8");
+      return this.http.post<boolean>(`${this.apiUrl}/transferToCrible/add/${id}`, transferToCrible, {headers});
+    }else {
+      return  new Observable<any>()}}
 }

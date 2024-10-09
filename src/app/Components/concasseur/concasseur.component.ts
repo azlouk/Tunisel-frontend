@@ -268,6 +268,6 @@ export class ConcasseurComponent implements OnInit{
   protected readonly getToken = getToken;
 
   getAllCribles(){
-    this.cribleService.getAllCribles().subscribe(value => this.cribles=value)
+    this.cribleService.getAllCriblesDto().subscribe(value => this.cribles=value)
   }
 }

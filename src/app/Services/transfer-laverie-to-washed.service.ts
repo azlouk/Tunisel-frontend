@@ -3,56 +3,54 @@ import {environment} from "../environment/environment";
 import {HttpClient, HttpHeaders} from "@angular/common/http";
 import {Observable} from "rxjs";
 import {getKeyToken} from "../../main";
-import {TransferToCribleLiwell} from "../Models/TransferToCribleLiwell";
+import {TransferLaverieToWashed} from "../Models/transfer-laverie-to-washed";
 
 @Injectable({
   providedIn: 'root'
 })
-export class TransferToCribleLiwellService {
+export class TransferLaverieToWashedService {
 
 
   apiUrl=environment.apiUrl
   constructor(private http: HttpClient) { }
 
-  getAllTransferToCribleLiwell(): Observable<TransferToCribleLiwell[]> {
+  getAllTransferLaverieToWashed(): Observable<TransferLaverieToWashed[]> {
     const token = getKeyToken();
     if (token) {
       const headers = new HttpHeaders().set('Authorization', `Bearer ${token}`).set("Content-Type", "application/json; charset=utf8");
-      return this.http.get<TransferToCribleLiwell[]>(`${this.apiUrl}/transferToCribleLiwell/read`, {headers}) ;
+      return this.http.get<TransferLaverieToWashed[]>(`${this.apiUrl}/transferLaverieToWashed/read`, {headers}) ;
     }else {
       return  new Observable<any>()}}
-  getTransferToCribleLiwellById(id:number): Observable<TransferToCribleLiwell> {
+  getTransferLaverieToWashedById(id:number): Observable<TransferLaverieToWashed> {
     const token = getKeyToken();
     if (token) {
       const headers = new HttpHeaders().set('Authorization', `Bearer ${token}`).set("Content-Type", "application/json; charset=utf8");
-      return this.http.get<TransferToCribleLiwell>(`${this.apiUrl}/transferToCribleLiwell/${id}`, {headers}) ;
-    }else {
-      return  new Observable<any>()}}
-
-  deleteTransferToCribleLiwell(transferToCribleLiwellId: number | undefined): Observable<any> {
-    const token = getKeyToken();
-    if (token) {
-      const headers = new HttpHeaders().set('Authorization', `Bearer ${token}`).set("Content-Type", "application/json; charset=utf8");
-      return this.http.delete(`${this.apiUrl}/transferToCribleLiwell/delete/${transferToCribleLiwellId}`, {headers});
+      return this.http.get<TransferLaverieToWashed>(`${this.apiUrl}/transferLaverieToWashed/${id}`, {headers}) ;
     }else {
       return  new Observable<any>()}}
 
-  updateTransferToCribleLiwell(transferToCribleLiwell: TransferToCribleLiwell): Observable<TransferToCribleLiwell> {
+  deleteTransferLaverieToWashed(transferLaverieToWashedId: number | undefined): Observable<any> {
     const token = getKeyToken();
     if (token) {
       const headers = new HttpHeaders().set('Authorization', `Bearer ${token}`).set("Content-Type", "application/json; charset=utf8");
-      return this.http.put<TransferToCribleLiwell>(`${this.apiUrl}/transferToCribleLiwell/update`, transferToCribleLiwell, {headers});
+      return this.http.delete(`${this.apiUrl}/transferLaverieToWashed/delete/${transferLaverieToWashedId}`, {headers});
     }else {
       return  new Observable<any>()}}
 
-
-  addTransferToCribleLiwell(transferToCribleLiwell: TransferToCribleLiwell, id:number) : Observable<boolean>{
+  updateTransferLaverieToWashed(transferLaverieToWashed: TransferLaverieToWashed): Observable<TransferLaverieToWashed> {
     const token = getKeyToken();
     if (token) {
       const headers = new HttpHeaders().set('Authorization', `Bearer ${token}`).set("Content-Type", "application/json; charset=utf8");
-      return this.http.post<boolean>(`${this.apiUrl}/transferToCribleLiwell/add/${id}`, transferToCribleLiwell, {headers});
+      return this.http.put<TransferLaverieToWashed>(`${this.apiUrl}/transferLaverieToWashed/update`, transferLaverieToWashed, {headers});
     }else {
       return  new Observable<any>()}}
 
 
+  addTransferLaverieToWashed(transferLaverieToWashed: TransferLaverieToWashed, id:number) : Observable<boolean>{
+    const token = getKeyToken();
+    if (token) {
+      const headers = new HttpHeaders().set('Authorization', `Bearer ${token}`).set("Content-Type", "application/json; charset=utf8");
+      return this.http.post<boolean>(`${this.apiUrl}/transferLaverieToWashed/add/${id}`, transferLaverieToWashed, {headers});
+    }else {
+      return  new Observable<any>()}}
 }

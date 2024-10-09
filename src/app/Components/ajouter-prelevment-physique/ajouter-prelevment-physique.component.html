@@ -66,7 +66,7 @@
 
           </p-tabPanel>
           <p-tabPanel header="Band" pTooltip="Enter your username" >
-            <p-listbox [options]="cribleLiwells" [(ngModel)]="selectedCribleLiwell" optionLabel="reference" (ngModelChange)="selectCribleLiwell()" [filter]="true"  [listStyle]="{'height': '200px'}"    ></p-listbox>
+            <p-listbox [options]="bands" [(ngModel)]="selectedBand" optionLabel="reference" (ngModelChange)="selectBand()" [filter]="true"  [listStyle]="{'height': '200px'}"    ></p-listbox>
 
           </p-tabPanel>
           <p-tabPanel header="Washed stock" >
@@ -165,10 +165,9 @@
           <!--          =========-->
 
           <!--          =========-->
-          <div class="border-1 border-round border-gray-300 p-2 " *ngIf=" selectedCribleLiwell!=undefined && selectedCribleLiwell.hasOwnProperty('id')">
+          <div class="border-1 border-round border-gray-300 p-2 " *ngIf=" selectedBand!=undefined && selectedBand.hasOwnProperty('id')">
             <div class="flex flex-column ">
-              <p><span class="font-bold"> Reference: </span>{{selectedCribleLiwell.reference}}</p>
-              <p><span class="font-bold">  State: </span>{{selectedCribleLiwell.etat}}</p>
+              <p><span class="font-bold"> Reference: </span>{{selectedBand.reference}}</p>
               <div class=" flex justify-content-end">
                 <button pButton pRipple label="Details" icon="pi pi-eye" class="p-button-primary mr-2 " (click)="openNew()"></button>
               </div>
@@ -177,22 +176,22 @@
             <p-dialog [(visible)]="visibleDetails" [style]="{width: '450px'}" header="Band Details" [modal]="true" class="p-fluid">
               <ng-template pTemplate="content">
                 <div class="field">
-                  <p><span class="font-bold"> Reference: </span>{{selectedCribleLiwell.reference}}</p>
+                  <p><span class="font-bold"> Reference: </span>{{selectedBand.reference}}</p>
                 </div>
 
                 <div class="field">
-                  <p><span class="font-bold"> Description: </span>{{selectedCribleLiwell.description}}</p>
+                  <p><span class="font-bold"> Description: </span>{{selectedBand.description}}</p>
                 </div>
-                <div class="field">
-                  <div class="field">
-                    <p><span class="font-bold"> State: </span>{{selectedCribleLiwell.etat}}</p>
-                  </div>
-                  <p><span class="font-bold"> Quantity: </span>{{selectedCribleLiwell.quantite}}</p>
-                </div>
+<!--                <div class="field">-->
+<!--                  <div class="field">-->
+<!--                    <p><span class="font-bold"> State: </span>{{selectedBand.etat}}</p>-->
+<!--                  </div>-->
+<!--                  <p><span class="font-bold"> Quantity: </span>{{selectedBand.quantite}}</p>-->
+<!--                </div>-->
 
-                <div class="field">
-                  <p><span class="font-bold"> Quantity Refusal: </span>{{selectedCribleLiwell.quantiteRefus}}</p>
-                </div>
+<!--                <div class="field">-->
+<!--                  <p><span class="font-bold"> Quantity Refusal: </span>{{selectedBand.quantiteRefus}}</p>-->
+<!--                </div>-->
 
 
               </ng-template>

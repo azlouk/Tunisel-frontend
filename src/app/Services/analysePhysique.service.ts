@@ -9,6 +9,7 @@ import {Sblf} from "../Models/sblf";
 import {AnalysesPhysique} from "../Models/analyses-physique";
 import {CribleLiwell} from "../Models/cribleLiwell";
 import {getKeyToken} from "../../main";
+import {Band} from "../Models/band";
 
 @Injectable({
   providedIn: 'root'
@@ -102,6 +103,13 @@ export class AnalysePhysiqueService {
       const headers = new HttpHeaders().set('Authorization', `Bearer ${token}`).set("Content-Type", "application/json; charset=utf8");
     return this.http.put<void>(`${this.apiUrl}/analysesPhysiques/AddanalysePhysique/sblf`, sblf, {headers});
   }else {
+      return  new Observable<any>()}}
+  addAnalysesPhysiquesToBand(band:Band) : Observable<void>{
+    const token = getKeyToken();
+    if (token) {
+      const headers = new HttpHeaders().set('Authorization', `Bearer ${token}`).set("Content-Type", "application/json; charset=utf8");
+      return this.http.put<void>(`${this.apiUrl}/analysesPhysiques/AddanalysePhysique/band`, band, {headers});
+    }else {
       return  new Observable<any>()}}
 
 }

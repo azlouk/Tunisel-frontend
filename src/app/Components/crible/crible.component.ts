@@ -28,6 +28,9 @@ import {RippleModule} from "primeng/ripple";
 import {ResultCrible} from "../../Models/result-crible";
 import {ResultCribleService} from "../../Services/result-crible.service";
 import {TraitementStock} from "../../Models/traitement-stock";
+import {Laverie} from "../../Models/laverie";
+import {LaverieService} from "../../Services/laverie.service";
+import {SbnlService} from "../../Services/sbnl.service";
 
 @Component({
   selector: 'app-calibration',
@@ -82,19 +85,30 @@ export class CribleComponent implements OnInit{
 
   public  _selectedColumns: any[]=[];
   detailsDialog: boolean=false;
+  detailsDialogSbnl: boolean=false;
+  detailsDialogLaverie: boolean=false;
   public selectedCribleLiwell: CribleLiwell={};
   public resultCribleDialog: boolean=false
   resultCrible:ResultCrible=new ResultCrible();
   ListResultCribles:ResultCrible[]=[];
+  selectedLaverie:Laverie=new Laverie();
+  selectedSbnl:Sbnl= {};
+  laveries:Laverie[]=[];
+  sbnls:Sbnl[]=[];
   @Input() get selectedColumns(): any[] {
     return this._selectedColumns;
   }
-  constructor( private messageService: MessageService,private cribleService :CribleService,private cribleLiwellService:CribleLiwellService,
-               private resultCribleService:ResultCribleService) {}
+  constructor( private messageService: MessageService,
+               private cribleService :CribleService,
+               private cribleLiwellService:CribleLiwellService,
+               private resultCribleService:ResultCribleService,
+               private laverieService:LaverieService,
+               private sbnlService:SbnlService) {}
 
   ngOnInit() {
     this.getAllCribles() ;
-
+    this.getAllLaveries();
+    this.getAllSbnl();
   }
 
   openNew() {
@@ -200,7 +214,7 @@ export class CribleComponent implements OnInit{
   getAllCribles() {
     this.loading=true ;
 
-    this.cribleService.getAllCribles().subscribe((value:  Crible[]) => {
+    this.cribleService.getAllCriblesDto().subscribe((value:  Crible[]) => {
       this.cribles=value;
       this.loading=false ;
 
@@ -216,6 +230,14 @@ export class CribleComponent implements OnInit{
 
   public openDialog(crible: Crible) {
     this.detailsDialog=true;
+    this.crible=crible;
+  }
+  public openDialogSbnl(crible: Crible) {
+    this.detailsDialogSbnl=true;
+    this.crible=crible;
+  }
+  public openDialogLaverie(crible: Crible) {
+    this.detailsDialogLaverie=true;
     this.crible=crible;
   }
 
@@ -262,6 +284,9 @@ export class CribleComponent implements OnInit{
 
   public getTotalQuantityCrible(crible: Crible) {
     let totalRefus:number=0;
+    let totalUnwashed:number=0;
+    let totalLaverie:number=0;
+
     let totalResultCrible:number=0;
 
     if(crible.resultCribles!=undefined){
@@ -272,8 +297,17 @@ export class CribleComponent implements OnInit{
         if(cribleLiwell.traitementStocks!=undefined)
           totalRefus +=cribleLiwell.traitementStocks.reduce((sum, traitementStock) => sum + traitementStock.refus, 0)
       } )}
-
-    return totalRefus-totalResultCrible;
+    if(crible.sbnlList!=undefined){
+      crible.sbnlList?.forEach(sbnl => {
+        if(sbnl.transferToCribleVertList!=undefined)
+          totalRefus +=sbnl.transferToCribleVertList.reduce((sum, Transfer) => sum + Transfer.quantityTransfer, 0)
+      } )}
+    if(crible.laverieList!=undefined){
+      crible.laverieList?.forEach(laverie => {
+        if(laverie.transferLaverieToCriblesVert!=undefined)
+          totalRefus +=laverie.transferLaverieToCriblesVert.reduce((sum, Transfer) => sum + Transfer.quantityTransfer, 0)
+      } )}
+    return (totalRefus+totalUnwashed+totalLaverie)-totalResultCrible;
   }
 
   public hideDialogResult() {
@@ -282,5 +316,23 @@ export class CribleComponent implements OnInit{
   }
   getAllCribleLiwells(){
     this.cribleLiwellService.getAllCribleLiwellsDTO().subscribe(value => this.cribleLiwells=value)
+  }
+  getAllLaveries(){
+    this.laverieService.getAllLaveriesDto().subscribe(value => {
+      this.laveries=value
+    },error => {
+      console.log('Error fetching Laveris:', error);
+
+    })
+  }
+  getAllSbnl(){
+    this.sbnlService.getAllSbnlsDTO()
+      .subscribe((sbnls: Sbnl[]) => {
+        this.sbnls = sbnls;
+        this.loading=false ;
+
+      }, error => {
+        console.log('Error fetching sbnls:', error);
+      });
   }
 }

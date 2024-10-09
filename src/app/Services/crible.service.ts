@@ -20,6 +20,13 @@ export class CribleService {
       return this.http.get<Crible[]>(`${this.apiUrl}/cribles/read`, {headers}) ;
     }else {
       return  new Observable<any>()}}
+  getAllCriblesDto(): Observable<Crible[]> {
+    const token = getKeyToken();
+    if (token) {
+      const headers = new HttpHeaders().set('Authorization', `Bearer ${token}`).set("Content-Type", "application/json; charset=utf8");
+      return this.http.get<Crible[]>(`${this.apiUrl}/cribles/readDto`, {headers}) ;
+    }else {
+      return  new Observable<any>()}}
   getCribleById(id:number): Observable<Crible> {
     const token = getKeyToken();
     if (token) {

@@ -10,6 +10,7 @@ import {Sbl} from "../Models/sbl";
 import {Sblf} from "../Models/sblf";
 import {CribleLiwell} from "../Models/cribleLiwell";
 import {getKeyToken} from "../../main";
+import {Band} from "../Models/band";
 
 @Injectable({
   providedIn: 'root'
@@ -102,6 +103,13 @@ export class AnalyseChimiqueService {
       const headers = new HttpHeaders().set('Authorization', `Bearer ${token}`).set("Content-Type", "application/json; charset=utf8");
     return this.http.put<void>(`${this.apiUrl}/analysechimiques/Addanalyse/cribleLiwell`, cribleLiwell, {headers});
   }else {
+      return  new Observable<any>()}}
+  addAnalyseChimiqueToBand(band:Band) : Observable<void>{
+    const token = getKeyToken();
+    if (token) {
+      const headers = new HttpHeaders().set('Authorization', `Bearer ${token}`).set("Content-Type", "application/json; charset=utf8");
+      return this.http.put<void>(`${this.apiUrl}/analysechimiques/Addanalyse/band`, band, {headers});
+    }else {
       return  new Observable<any>()}}
   addAnalyseChimiqueToSbl(sbl:Sbl) : Observable<void>{
     const token = getKeyToken();
