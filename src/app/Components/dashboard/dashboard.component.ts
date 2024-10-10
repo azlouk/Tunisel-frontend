@@ -120,6 +120,7 @@ export class DashboardComponent implements OnInit {
   public selectedBand: Band=new Band();
   public bands: Band[]=[];
   public selectedSbnlForAttribute: Sbnl={};
+  public selectedBandForAttribute: Band=new Band();
   public sbnls: Sbnl[]=[];
   public sbls: Sbl[]=[];
   public selectedSbl: Sbl={};
@@ -1505,6 +1506,8 @@ if(year){
     this. selectedPuitForAttribute={};
     this. selectedSblForAttribute={};
     this. selectedSblfForAttribute={};
+    this.selectedBandForAttribute=new Band();
+
   }
 
 // ======For Attribute Bassin=============
@@ -1581,6 +1584,8 @@ if(year){
     this. selectedBassinForAttribute={};
     this. selectedSblForAttribute={};
     this. selectedSblfForAttribute={};
+    this.selectedBandForAttribute=new Band();
+
   }
 
 // ======For Attribute Puit=============
@@ -1657,6 +1662,8 @@ if(year){
     this. selectedPuitForAttribute={};
     this. selectedSblForAttribute={};
     this. selectedSblfForAttribute={};
+    this.selectedBandForAttribute=new Band();
+
   }
 
 // ======For Attribute Sbnl=============
@@ -1733,6 +1740,8 @@ if(year){
     this. selectedPuitForAttribute={};
     this. selectedBassinForAttribute={};
     this. selectedSblfForAttribute={};
+    this.selectedBandForAttribute=new Band();
+
   }
 
 // ======For Attribute Sbl=============
@@ -1809,10 +1818,87 @@ if(year){
     this. selectedPuitForAttribute={};
     this. selectedSblForAttribute={};
     this. selectedBassinForAttribute={};
+    this.selectedBandForAttribute=new Band();
   }
 
 // ======For Attribute Sblf=============
 
+// ======For Attribute BAND=============
+  calculateSumForAttributeBand(bandId: number, startDate: Date, endDate: Date, attributeName: string, chartDataVariable: string): void {
+
+    const sumForAttributeRequest: SumForAttributeRequest = new SumForAttributeRequest();
+    sumForAttributeRequest.id=bandId;
+    sumForAttributeRequest.startDate=startDate;
+    sumForAttributeRequest.endDate=endDate;
+    sumForAttributeRequest.attributeName=attributeName;
+    this.dashboardService.calculateSumForAttributeBand(sumForAttributeRequest).subscribe({
+      next: (value: any[]) => {
+        if (this.hasOwnProperty(chartDataVariable)) {
+          (this as any)[chartDataVariable] = value; // Type assertion to allow dynamic property access
+          this.chartDataForAttributeLabels = value;
+          this.initChartForAttributeBassin();
+        } else {
+          console.error(`Property ${chartDataVariable} does not exist on the component.`);
+        }
+      },
+      error: (err: any) => {
+        console.error('Error occurred while fetching data', err);
+      }
+    });
+  }
+
+  public changeSelectedBandForAttribute(selectedBandForAttribute: Band) {
+    // Check if the selectedBassinForAttribute object and its ID are valid
+    if (
+      selectedBandForAttribute &&
+      selectedBandForAttribute.id !== undefined &&
+      this.dateEndForAttribute !== null &&
+      this.dateStartForAttribute !== null &&
+      this.selectedAttributes.length > 0
+    ) {
+      // Define the mapping between attributes and chart data variables
+      const attributeToChartDataMap: { [key: string]: string } = {
+        'densite': 'chartDataForAttributeDensite',
+        'matiereEnSuspension': 'chartDataForAttributeMatiereEnSuspension',
+        'salinite': 'chartDataForAttributeSalinite',
+        'calcium': 'chartDataForAttributeCalcium',
+        'magnesium': 'chartDataForAttributeMagnesium',
+        'sulfate': 'chartDataForAttributeSulfate',
+        'humidite': 'chartDataForAttributeHumidite',
+        'matiereInsoluble': 'chartDataForAttributeMatiereInsoluble',
+        'potassium': 'chartDataForAttributePotassium',
+        'sodium': 'chartDataForAttributeSodium',
+        'chlorure': 'chartDataForAttributeChlorure',
+        'chlorureDeSodium': 'chartDataForAttributeChlorureDeSodium',
+        'ferrocyanure': 'chartDataForAttributeFerrocyanure'
+      };
+
+      // Iterate over the selected attributes
+      this.selectedAttributes.forEach(attribute => {
+        // Find the corresponding chart data variable for the attribute
+        const chartDataVariable = attributeToChartDataMap[attribute.label];
+
+        // Check if the chart data variable is defined
+        if (chartDataVariable && selectedBandForAttribute.id !== undefined && this.dateEndForAttribute !== null && this.dateStartForAttribute !== null ) {
+          // Call the method to calculate the sum for the attribute
+          this.calculateSumForAttributeBand(
+            selectedBandForAttribute.id,
+            this.dateStartForAttribute,
+            this.dateEndForAttribute,
+            attribute.label,
+            chartDataVariable
+          );
+        }
+      });
+    }
+
+    this. selectedSbnlForAttribute={};
+    this. selectedPuitForAttribute={};
+    this. selectedSblForAttribute={};
+    this. selectedBassinForAttribute={};
+    this.selectedSblfForAttribute={};
+  }
+  // ======For Attribute BAND=============
 
 }
 
