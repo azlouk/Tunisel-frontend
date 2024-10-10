@@ -5,6 +5,7 @@ import {CribleLiwell} from "./cribleLiwell";
 import {Crible} from "./crible";
 import {Concasseur} from "./concasseur";
 import {StockOrder} from "./stock-order";
+import {Laverie} from "./laverie";
 
 export interface Sbl {
 
@@ -23,4 +24,5 @@ export interface Sbl {
   concasseurList?: Concasseur[];
   calibre?: number ;
   stockOrderList?:StockOrder[];
+  laverieList?:Laverie[];
 }

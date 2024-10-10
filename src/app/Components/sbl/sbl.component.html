@@ -40,8 +40,9 @@
             <th pSortableColumn="emplacement">Location <p-sortIcon field="emplacement"></p-sortIcon></th>
             <th pSortableColumn="etat">State <p-sortIcon field="etat"></p-sortIcon></th>
             <th pSortableColumn="quantite">Quantity <p-sortIcon field="quantite"></p-sortIcon></th>
-            <th pSortableColumn="band">Band </th>
-            <th pSortableColumn="crible">Crible </th>
+            <th pSortableColumn="band">Liwell Sieve </th>
+            <th pSortableColumn="crible">Green Sieve </th>
+            <th pSortableColumn="crible">Laundry </th>
             <th pSortableColumn="concasseur">Concasseur </th>
             <th>Action</th>
 
@@ -52,14 +53,14 @@
             <td>
               <p-tableCheckbox [value]="sbl"></p-tableCheckbox>
             </td>
-            <td style="width:14%; min-width:10rem;"><span class="p-column-title">Id</span>
+            <td ><span class="p-column-title">Id</span>
               {{sbl.id}}
             </td>
-            <td style="width:14%; min-width:10rem;">
+            <td >
               <span class="p-column-title">Reference</span>
               {{sbl.reference}}
             </td>
-            <td style="width:14%; min-width:10rem;">
+            <td >
               <span class="p-column-title">Description</span>
               {{sbl.description}}
 
@@ -67,33 +68,37 @@
             </td>
 
 
-            <td style="width:14%; min-width:10rem;">
+            <td>
               <span class="p-column-title">Date Stock</span>
               {{sbl.dateStock | date :'dd-mm-yyyy'}}
             </td>
 
-            <td style="width:14%; min-width:8rem;">
+            <td >
               <span class="p-column-title">Location</span>
               {{sbl.emplacement}}
             </td>
-            <td style="width:14%; min-width:8rem;">
+            <td >
               <span class="p-column-title">State</span>
               {{sbl.etat}}
             </td>
-            <td style="width:14%; min-width:8rem;">
+            <td >
               <span class="p-column-title">Quantity</span>
               {{getTotalQuantitySbl(sbl)}}
             </td>
-            <td style="width:14%; min-width:8rem;">
-              <span class="p-column-title">Band</span>
+            <td >
+              <span class="p-column-title text-center">Liwell sieve</span>
               <span class="pi pi-eye text-3xl text-primary cursor-pointer m-2" (click)="openDialogBand(sbl)"  ></span>
             </td>
-            <td style="width:14%; min-width:8rem;">
-              <span class="p-column-title">Band</span>
+            <td >
+              <span class="p-column-title text-center">Green Sieve</span>
               <span class="pi pi-eye text-3xl text-primary cursor-pointer m-2" (click)="openDialogCrible(sbl)"  ></span>
             </td>
-            <td style="width:14%; min-width:8rem;">
-              <span class="p-column-title">Band</span>
+            <td >
+              <span class="p-column-title text-center">Laundry</span>
+              <span class="pi pi-eye text-3xl text-primary cursor-pointer m-2" (click)="openDialogLaverie(sbl)"  ></span>
+            </td>
+            <td >
+              <span class="p-column-title text-center">Concasseur</span>
               <span class="pi pi-eye text-3xl text-primary cursor-pointer m-2" (click)="openDialogConcasseur(sbl)"  ></span>
             </td>
             <td>
@@ -108,18 +113,18 @@
         </ng-template>
       </p-table>
     </div>
-    <!--    =========DETAILS BANDlIST-->
+    <!--    =========DETAILS liwell Sieve-->
     <p-dialog [(visible)]="detailsDialog" [style]="{width: '1300px'}"  [modal]="true" class="p-fluid">
       <ng-template pTemplate="content">
 
         <div *ngIf="getToken()=='ADMIN'" class="flex justify-content-between align-items-center border border-1 border-round border-gray-400 p-3">
           <div class="flex flex-column gap-2 col-2">
-            <label> Band List</label>
+            <label> Liwell Sieve List</label>
             <p-dropdown
               [options]="this.sbl.cribleLiwellList"
               [(ngModel)]="selectedCribleLiwell"
               optionLabel="reference"
-              placeholder="Select a Band" />
+              placeholder="Select a Liwell Sieve" />
           </div>
 
 
@@ -206,9 +211,9 @@
         <button pButton pRipple label="Close" icon="pi pi-times" class="p-button-text" (click)="detailsDialog=false"></button>
       </ng-template>
     </p-dialog>
-    <!--    =========DETAILS BAND lIST-->
+    <!--    =========DETAILS liwell Sieve-->
 
-    <!--    =========DETAILS CRIBLE lIST-->
+    <!--    =========DETAILS CRIBLE vert lIST-->
     <p-dialog [(visible)]="detailsDialogCrible" [style]="{width: '1300px'}"  [modal]="true" class="p-fluid">
       <ng-template pTemplate="content">
 
@@ -297,7 +302,7 @@
         <button pButton pRipple label="Close" icon="pi pi-times" class="p-button-text" (click)="detailsDialogCrible=false"></button>
       </ng-template>
     </p-dialog>
-    <!--    =========DETAILS CRIBLE lIST-->
+    <!--    =========DETAILS CRIBLE vert lIST-->
 
     <!--    =========DETAILS CONCASSEUR lIST-->
     <p-dialog [(visible)]="detailsDialogConcasseur" [style]="{width: '1300px'}"  [modal]="true" class="p-fluid">
@@ -389,9 +394,9 @@
 
       <ng-template pTemplate="content">
 
-        <div class="field" [hidden]="(sbl.cribleList && sbl.cribleList.length > 0)||(sbl.concasseurList && sbl.concasseurList.length > 0)">
-          <label>Band</label>
-          <p-multiSelect [options]="cribleLiwells"   [(ngModel)]="sbl.cribleLiwellList"  placeholder="Select a Band" optionLabel="reference" display="chip" class="w-full" (ngModelChange)="getCalibresBySelectedCribleLiwells(sbl.cribleLiwellList)" ></p-multiSelect>
+        <div class="field" [hidden]="(sbl.cribleList && sbl.cribleList.length > 0)||(sbl.concasseurList && sbl.concasseurList.length > 0)||(sbl.laverieList && sbl.laverieList.length > 0)">
+          <label>Liwell Sieve</label>
+          <p-multiSelect [options]="cribleLiwells"   [(ngModel)]="sbl.cribleLiwellList"  placeholder="Select a Liwell Sieve" optionLabel="reference" display="chip" class="w-full" (ngModelChange)="getCalibresBySelectedCribleLiwells(sbl.cribleLiwellList)" ></p-multiSelect>
         </div>
 
         <div class="field" *ngIf="sbl.cribleLiwellList && sbl.cribleLiwellList.length > 0">
@@ -399,12 +404,15 @@
           <p-dropdown [options]="calibres" [(ngModel)]="sbl.calibre"   class="w-full" ></p-dropdown>
         </div>
 
-        <div class="field"[hidden]="(sbl.cribleLiwellList && sbl.cribleLiwellList.length > 0)||(sbl.concasseurList && sbl.concasseurList.length > 0)">
-          <label>Crible</label>
-          <p-multiSelect [options]="cribles"   [(ngModel)]="sbl.cribleList"  placeholder="Select a Crible" optionLabel="reference" display="chip" class="w-full"  ></p-multiSelect>
+        <div class="field"[hidden]="(sbl.cribleLiwellList && sbl.cribleLiwellList.length > 0)||(sbl.concasseurList && sbl.concasseurList.length > 0)||(sbl.laverieList && sbl.laverieList.length > 0)">
+          <label>Green Sieve</label>
+          <p-multiSelect [options]="cribles"   [(ngModel)]="sbl.cribleList"  placeholder="Select a Green Sieve" optionLabel="reference" display="chip" class="w-full"  ></p-multiSelect>
         </div>
-
-        <div class="field" [hidden]="(sbl.cribleLiwellList && sbl.cribleLiwellList.length > 0)||(sbl.cribleList && sbl.cribleList.length > 0)">
+        <div class="field"[hidden]="(sbl.cribleLiwellList && sbl.cribleLiwellList.length > 0)||(sbl.concasseurList && sbl.concasseurList.length > 0)||(sbl.cribleList && sbl.cribleList.length > 0)">
+          <label>Laundries</label>
+          <p-multiSelect [options]="laveries"   [(ngModel)]="sbl.laverieList"  placeholder="Select a Laundry" optionLabel="reference" display="chip" class="w-full"  ></p-multiSelect>
+        </div>
+        <div class="field" [hidden]="(sbl.cribleLiwellList && sbl.cribleLiwellList.length > 0)||(sbl.cribleList && sbl.cribleList.length > 0)||(sbl.laverieList && sbl.laverieList.length > 0)">
           <label>Concasseur</label>
           <p-multiSelect [options]="concasseurs"   [(ngModel)]="sbl.concasseurList"  placeholder="Select a Concasseur" optionLabel="reference" display="chip" class="w-full"  ></p-multiSelect>
         </div>
@@ -448,6 +456,92 @@
       </ng-template>
 
     </p-dialog>
+    <!--============= LAVERIE================-->
+    <p-dialog [(visible)]="detailsDialogLaverie" [style]="{width: '1300px'}"  [modal]="true" class="p-fluid">
+      <ng-template pTemplate="content">
+
+        <div *ngIf="getToken()=='ADMIN'" class="flex justify-content-between align-items-center border border-1 border-round border-gray-400 p-3">
+          <div class="flex flex-column gap-2 col-2">
+            <label> Liwell Sieve List</label>
+            <p-dropdown
+              [options]="this.sbl.laverieList"
+              [(ngModel)]="selectedLaverie"
+              optionLabel="reference"
+              placeholder="Select a Liwell Sieve" />
+          </div>
+
+
+        </div>
+        <div class="cart mt-5">
+          <p-table #dt [loading]="loading"
+                   [value]="selectedLaverie.transferLaverieToWasheds!==undefined?selectedLaverie.transferLaverieToWasheds:[]"
+                   responsiveLayout="scroll" [rows]="10"
+                   [globalFilterFields]="['id','dateCreation','quantityTransfer','washedReference']"
+                   [paginator]="true"
+                   editMode="row"
+                   [rowsPerPageOptions]="[10,20,30]"
+                   [showCurrentPageReport]="true" currentPageReportTemplate="Display  {first} to  {last} of  {totalRecords} entries"  selectionMode="multiple" [rowHover]="true" dataKey="id">
+            <ng-template pTemplate="caption">
+              <div class="flex flex-column md:flex-row md:justify-content-between md:align-items-center">
+                <div class="flex justify-content-between align-items-center w-full">
+                  <h5 class="m-0">Stock Processing</h5>
+
+
+
+                  <div>
+
+
+            <span class=" p-input-icon-left ">
+                            <i class="pi pi-search"></i>
+                            <input  type="text" pInputText (input)="onGlobalFilter(dt, $event)" placeholder="Search..."  class="w-full sm:w-auto"/>
+                        </span>
+                  </div>
+                </div>
+
+              </div>
+            </ng-template>
+            <ng-template pTemplate="header">
+              <tr>
+
+                <th pSortableColumn="id">Id <p-sortIcon field="id"></p-sortIcon></th>
+                <th pSortableColumn="dateCreation">Date Creationt<p-sortIcon field="dateCreation"></p-sortIcon></th>
+                <th pSortableColumn="quantityTransfer">Quantity Transfer <p-sortIcon field="quantityTransfer"></p-sortIcon></th>
+                <th pSortableColumn="washedReference">Washed Reference  <p-sortIcon field="washedReference"></p-sortIcon></th>
+
+
+              </tr>
+            </ng-template>
+            <ng-template pTemplate="body" let-transferToWashed let-editing="editing" >
+              <tr [pEditableRow]="transferToWashed" >
+
+                <td >
+                  <span class="p-column-title">Id</span>
+                  {{transferToWashed.id}}
+                </td>
+
+                <td >
+                  {{transferToWashed.dateCreation|date:'yyyy-MM-dd'}}
+                </td>
+
+                <td >
+                  {{transferToWashed.quantityTransfer}}
+                </td>
+
+                <td >
+                  {{transferToWashed.washedReference}}
+                </td>
+
+              </tr>
+            </ng-template>
+          </p-table>
+        </div>
+      </ng-template>
+      <ng-template pTemplate="footer">
+        <button pButton pRipple label="Close" icon="pi pi-times" class="p-button-text" (click)="detailsDialogLaverie=false"></button>
+      </ng-template>
+    </p-dialog>
+
+    <!--============= LAVERIE================-->
 
     <p-dialog [(visible)]="deleteProductDialog" header="Confirm" [modal]="true" [style]="{width:'450px'}">
       <div class="flex align-items-center justify-content-center">

@@ -35,6 +35,8 @@ import {MultiSelectModule} from "primeng/multiselect";
 import {SumForAttributeRequest} from "../../Models/sum-for-attribute-request";
 import moment from 'moment-timezone';
 import {InputTextModule} from "primeng/inputtext";
+import {Band} from "../../Models/band";
+import {BandService} from "../../Services/band.service";
 
 
 @Component({
@@ -115,6 +117,8 @@ export class DashboardComponent implements OnInit {
   public selectedBassin: Bassin={};
   public selectedBassinForAttribute: Bassin={};
   public selectedSbnl: Sbnl={};
+  public selectedBand: Band=new Band();
+  public bands: Band[]=[];
   public selectedSbnlForAttribute: Sbnl={};
   public sbnls: Sbnl[]=[];
   public sbls: Sbl[]=[];
@@ -145,7 +149,8 @@ export class DashboardComponent implements OnInit {
                private sblService:SblService,
                private puitService:PuitService,
                private sblfService:SblfService,
-               private stockOrderService:StockOrderService) {}
+               private stockOrderService:StockOrderService,
+               private bandService:BandService) {}
 
   ngOnInit(){
 this.attributes=
@@ -182,6 +187,7 @@ this.attributes=
     this.fetchDashboardData()
     this. getAllBassin();
     this.getAllSbnl();
+    this.getAllBand();
     this.getAllSbl();
     this.getAllSblf();
     this.getAllPuit();
@@ -266,6 +272,21 @@ this.attributes=
   }
   countPhysicalAnalysesBySblfIdAndByMonth(sblfID:number,year:number){
     this.dashboardService.countPhysicalAnalysesBySblfIdAndByMonth(sblfID,year).subscribe((value:any[])=> {
+      this.totalPhysique = value;
+      this.initChart();
+    } );
+  }
+
+  // ===============BAND===============================
+  countAnalysesChimiquesByBandIdAndByMonth(bandID:number,year:number){
+    this.dashboardService.countAnalysesChimiquesByBandIdAndByMonth(bandID,year).subscribe((value:any[]) => {
+      this.totalChimique = value;
+
+      this.initChart();
+    } );
+  }
+  countPhysicalAnalysesByBandIdAndByMonth(bandID:number,year:number){
+    this.dashboardService.countPhysicalAnalysesByBandIdAndByMonth(bandID,year).subscribe((value:any[])=> {
       this.totalPhysique = value;
       this.initChart();
     } );
@@ -733,7 +754,9 @@ this.attributes=
   getAllSbnl(){
     this.sbnlService.getAllSbnls().subscribe(value => this.sbnls=value)
 }
-
+  getAllBand(){
+    this.bandService.getAllBands().subscribe(value => this.bands=value)
+  }
 
   getAllSbl(){
     this.sblService.getAllSblDTO().subscribe(value => this.sbls=value)
@@ -770,10 +793,11 @@ this.attributes=
     this.getCountAnalyseChemiqueBassin(selectedBassin.id,this.extractYearFromDate(this.date));
     this.countPhysicalAnalysesByBassinIdAndByMonth(selectedBassin.id,this.extractYearFromDate(this.date));
   }
-this. selectedSbnl={};
-this. selectedSbl={};
-this. selectedPuit={};
+    this. selectedSbnl={};
+    this. selectedSbl={};
+    this. selectedPuit={};
     this. selectedSblf={};
+    this. selectedBand=new Band();
   }
 
   public changeSelectedSbnl(selectedSbnl: Sbnl) {
@@ -785,6 +809,7 @@ this. selectedPuit={};
     this. selectedSbl={};
     this. selectedPuit={};
     this. selectedSblf={};
+    this. selectedBand=new Band();
 
   }
 
@@ -797,6 +822,8 @@ this. selectedPuit={};
     this. selectedSbnl={};
     this. selectedPuit={};
     this. selectedSblf={};
+    this. selectedBand=new Band();
+
   }
 
 
@@ -810,6 +837,8 @@ this. selectedPuit={};
     this. selectedSbnl={};
     this. selectedSbl={};
     this. selectedSblf={};
+    this. selectedBand=new Band();
+
   }
 
   public changeSelectedSblf(selectedSblf: Sblf) {
@@ -821,6 +850,19 @@ this. selectedPuit={};
     this. selectedSbnl={};
     this. selectedPuit={};
     this. selectedSbl={};
+    this. selectedBand=new Band();
+
+  }
+  public changeSelectedBand(selectedBand: Band) {
+    if(selectedBand.id!=undefined){
+      this.countAnalysesChimiquesByBandIdAndByMonth(selectedBand.id,this.extractYearFromDate(this.date));
+      this.countPhysicalAnalysesByBandIdAndByMonth(selectedBand.id,this.extractYearFromDate(this.date));
+    }
+    this. selectedBassin={};
+    this. selectedSbnl={};
+    this. selectedPuit={};
+    this. selectedSbl={};
+    this. selectedSblf={};
   }
   extractYearFromDate(date: Date): number {
     return date.getFullYear();
@@ -1770,6 +1812,8 @@ if(year){
   }
 
 // ======For Attribute Sblf=============
+
+
 }
 
 
