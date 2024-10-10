@@ -1,0 +1,538 @@
+<div class="grid">
+  <div class="col-12">
+    <div class="card px-6 py-6">
+      <p-toast></p-toast>
+      <p-toolbar styleClass="mb-4">
+        <ng-template pTemplate="left">
+          <div class="my-2">
+            <button *ngIf="getToken()=='ADMIN'" pButton pRipple label="Add" icon="pi pi-plus"
+                    class="p-button-success mr-2" (click)="openNew()"></button>
+            <button *ngIf="getToken()=='ADMIN'" pButton pRipple label="Delete" icon="pi pi-trash"
+                    class="p-button-danger mr-2" (click)="deleteSelectedBands()"
+                    [disabled]="!selectedBands || !selectedBands.length"></button>
+            <button pButton pRipple label="Refresh" icon="pi pi-refresh" class="p-button-primary mr-2"
+                    (click)="getAllBands()"></button>
+
+          </div>
+        </ng-template>
+
+
+      </p-toolbar>
+
+      <p-table [loading]="loading" #dt [value]="bands" [columns]="cols" responsiveLayout="scroll" [rows]="10"
+               [globalFilterFields]="['id','reference','description','dateStock','emplacement','etat','quantite','type']"
+               [paginator]="true" [rowsPerPageOptions]="[10,20,30]" [showCurrentPageReport]="true"
+               currentPageReportTemplate="Display  {first} to  {last} of  {totalRecords} entries"
+               [(selection)]="selectedBands" selectionMode="multiple" [rowHover]="true" dataKey="id">
+        <ng-template pTemplate="caption">
+          <div class="flex flex-column md:flex-row md:justify-content-between md:align-items-center">
+            <h5 class="m-0">Management of washed stock</h5>
+            <span class="block mt-2 md:mt-0 p-input-icon-left">
+                            <i class="pi pi-search"></i>
+                            <input type="text" pInputText (input)="onGlobalFilter(dt, $event)" placeholder="Search..."
+                                   class="w-full sm:w-auto"/>
+                        </span>
+
+
+          </div>
+        </ng-template>
+        <ng-template pTemplate="header">
+          <tr>
+            <th style="width: 3rem">
+              <p-tableHeaderCheckbox></p-tableHeaderCheckbox>
+            </th>
+            <th pSortableColumn="id">Id
+              <p-sortIcon field="id"></p-sortIcon>
+            </th>
+            <th pSortableColumn="reference">Reference
+              <p-sortIcon field="reference"></p-sortIcon>
+            </th>
+            <th pSortableColumn="dateCreation">Date Creation
+              <p-sortIcon field="dateCreation"></p-sortIcon>
+            </th>
+            <th pSortableColumn="description">Description
+              <p-sortIcon field="description"></p-sortIcon>
+            </th>
+            <th pSortableColumn="from">From
+              <p-sortIcon field="from"></p-sortIcon>
+            </th>
+            <th pSortableColumn="to">To
+              <p-sortIcon field="to"></p-sortIcon>
+            </th>
+            <th>Action</th>
+
+          </tr>
+        </ng-template>
+        <ng-template pTemplate="body" let-band>
+          <tr>
+            <td>
+              <p-tableCheckbox [value]="band"></p-tableCheckbox>
+            </td>
+            <td style="width:14%; min-width:10rem;"><span class="p-column-title">Id</span>
+              {{band.id}}
+            </td>
+            <td style="width:14%; min-width:10rem;">
+              <span class="p-column-title">Reference</span>
+              {{band.reference}}
+            </td>
+            <td style="width:14%; min-width:10rem;">
+              <span class="p-column-title">Date Creation</span>
+              {{band.dateCreation}}
+            </td>
+
+            <td style="width:14%; min-width:10rem;">
+              <span class="p-column-title">Description</span>
+              {{band.description }}
+            </td>
+
+            <td style="width:14%; min-width:8rem;">
+              <span class="p-column-title">From</span>
+              {{band.from.type}}
+            </td>
+            <td style="width:14%; min-width:8rem;">
+              <span class="p-column-title">To</span>
+              {{band.to.type}}
+            </td>
+
+
+            <td>
+              <div class="flex ">
+                <button *ngIf="getToken()=='ADMIN'" pButton pRipple icon="pi pi-pencil"
+                        class="p-button-rounded p-button-success mr-2" (click)="editBand(band)"></button>
+                <button *ngIf="getToken()=='ADMIN'" pButton pRipple icon="pi pi-trash"
+                        class="p-button-rounded p-button-warning mr-2" (click)="deleteBand(band)"></button>
+                <button pButton pRipple icon="pi pi-file-pdf" class="p-button-rounded p-button-primary mr-2"
+                        (click)="exportrapport(band)"></button>
+
+              </div>
+            </td>
+          </tr>
+        </ng-template>
+      </p-table>
+    </div>
+
+    <p-dialog [(visible)]="productDialog" [style]="{width: '600px'}" header="Washed" [maximizable]="true" [modal]="true"
+              class="p-fluid">
+
+      <ng-template pTemplate="content">
+        <!--====== FROM =====-->
+        <div class="field">
+          <label>From</label>
+          <div class="flex align-items-center justify-content-between">
+            <div class="flex align-items-center">
+              <p-radioButton
+                value="unwashed"
+                [(ngModel)]="froms"
+              />
+              <label class="ml-2">
+                Unwashed
+              </label>
+            </div>
+            <div class="flex align-items-center">
+              <p-radioButton
+                value="liwellSieve"
+                [(ngModel)]="froms"
+              />
+              <label class="ml-2">
+                Liwell Sieve
+              </label>
+            </div>
+            <div class="flex align-items-center">
+              <p-radioButton
+                value="greenSieve"
+                [(ngModel)]="froms"
+              />
+              <label class="ml-2">
+                Green Sieve
+              </label>
+            </div>
+            <div class="flex align-items-center">
+              <p-radioButton
+                value="laundry"
+                [(ngModel)]="froms"
+              />
+              <label class="ml-2">
+                Laundry
+              </label>
+            </div>
+          </div>
+
+          <div class="mt-3"*ngIf="froms=='unwashed'">
+            <label > Unwashed</label>
+            <p-dropdown
+              [options]="listSbnls"
+              [(ngModel)]="selectedFromSbnl"
+              optionLabel="reference"
+              placeholder="Select a Unwashed" />
+          </div>
+          <div class="mt-3"*ngIf="froms=='liwellSieve'">
+            <label > Liwell Sieve</label>
+            <p-dropdown
+              [options]="listCribleLiwells"
+              [(ngModel)]="selectedFromCribleLiwell"
+              optionLabel="reference"
+              placeholder="Select a Liwell Sieve" />
+          </div>
+          <div class="mt-3"*ngIf="froms=='greenSieve'">
+            <label >Green Sieve</label>
+            <p-dropdown
+              [options]="listCribles"
+              [(ngModel)]="selectedFromCrible"
+              optionLabel="reference"
+              placeholder="Select a Green Sieve" />
+          </div>
+          <div class="mt-3"*ngIf="froms=='laundry'">
+            <label >Green Sieve</label>
+            <p-dropdown
+              [options]="listLaverie"
+              [(ngModel)]="selectedFromLaverie"
+              optionLabel="reference"
+              placeholder="Select a Laundry" />
+          </div>
+
+        </div   >
+        <!--====== FROM =====-->
+        <!--====== TO =====-->
+        <div class="field">
+          <label>To</label>
+          <div class="flex align-items-center justify-content-between">
+            <div class="flex align-items-center">
+              <p-radioButton
+                value="washed"
+                [(ngModel)]="tos"
+              />
+              <label class="ml-2">
+                Washed
+              </label>
+            </div>
+            <div class="flex align-items-center">
+              <p-radioButton
+                value="liwellSieve"
+                [(ngModel)]="tos"
+              />
+              <label class="ml-2">
+                Liwell Sieve
+              </label>
+            </div>
+            <div class="flex align-items-center">
+              <p-radioButton
+                value="greenSieve"
+                [(ngModel)]="tos"
+              />
+              <label class="ml-2">
+                Green Sieve
+              </label>
+            </div>
+            <div class="flex align-items-center">
+              <p-radioButton
+                value="laundry"
+                [(ngModel)]="tos"
+              />
+              <label class="ml-2">
+                Laundry
+              </label>
+            </div>
+
+          </div>
+          <div class="mt-3"*ngIf="tos=='washed'">
+            <label > Washed</label>
+            <p-dropdown
+              [options]="listWasheds"
+              [(ngModel)]="selectedToWashed"
+              optionLabel="reference"
+              placeholder="Select a Washed" />
+          </div>
+          <div class="mt-3"*ngIf="tos=='liwellSieve'">
+            <label > Liwell Sieve</label>
+            <p-dropdown
+              [options]="listCribleLiwells"
+              [(ngModel)]="selectedToCribleLiwell"
+              optionLabel="reference"
+              placeholder="Select a Liwell Sieve" />
+          </div>
+          <div class="mt-3"*ngIf="tos=='greenSieve'">
+            <label >Green Sieve</label>
+            <p-dropdown
+              [options]="listCribles"
+              [(ngModel)]="selectedToCrible"
+              optionLabel="reference"
+              placeholder="Select a Green Sieve" />
+          </div>
+          <div class="mt-3"*ngIf="tos=='laundry'">
+            <label >Green Sieve</label>
+            <p-dropdown
+              [options]="listLaverie"
+              [(ngModel)]="selectedToLaverie"
+              optionLabel="reference"
+              placeholder="Select a Laundry" />
+          </div>
+
+
+        </div   >
+        <!--====== TO =====-->
+
+
+
+        <div class="field">
+          <label for="reference">Reference</label>
+          <input type="text" pInputText id="reference" [(ngModel)]="band.reference" required autofocus
+                 [ngClass]="{'ng-invalid ng-dirty' : submitted && !band.reference}"/>
+          <small class="ng-dirty ng-invalid" *ngIf="submitted && !band.reference">Reference is required.</small>
+        </div>
+        <div class="field">
+          <label for="dateCreation">Date Creation</label>
+          <input class="p-2 shadow-1" type="date" pInputText id="dateCreation" [(ngModel)]="band.dateCreation"/>
+        </div>
+        <div class="field">
+          <label for="Description">Description</label>
+          <input type="text" pInputText id="Description" [(ngModel)]="band.description" required autofocus/>
+        </div>
+
+      </ng-template>
+
+      <ng-template pTemplate="footer">
+        <button pButton pRipple label="Cancel" icon="pi pi-times" class="p-button-text" (click)="hideDialog()"></button>
+        <button pButton pRipple label="Add" icon="pi pi-check" class="p-button-text" (click)="saveBand()"></button>
+      </ng-template>
+
+    </p-dialog>
+
+    <p-dialog [(visible)]="deleteProductDialog" header="Confirm" [modal]="true" [style]="{width:'450px'}">
+      <div class="flex align-items-center justify-content-center">
+        <i class="pi pi-exclamation-triangle mr-3" style="font-size: 2rem"></i>
+        <span *ngIf="product">Are you sure you want to delete<b>{{product.name}}</b>?</span>
+      </div>
+      <ng-template pTemplate="footer">
+        <button pButton pRipple icon="pi pi-times" class="p-button-text" label="Cancel"
+                (click)="deleteProductDialog = false"></button>
+        <button pButton pRipple icon="pi pi-check" class="p-button-text" label="Yes" (click)="confirmDelete()"></button>
+      </ng-template>
+    </p-dialog>
+
+    <p-dialog [(visible)]="deleteProductsDialog" header="Add" [modal]="true" [style]="{width:'450px'}">
+      <div class="flex align-items-center justify-content-center">
+        <i class="pi pi-exclamation-triangle mr-3" style="font-size: 2rem"></i>
+        <span>Do you really want to delete?</span>
+      </div>
+      <ng-template pTemplate="footer">
+        <button pButton pRipple icon="pi pi-times" class="p-button-text" label="No"
+                (click)="deleteProductsDialog = false"></button>
+        <button pButton pRipple icon="pi pi-check" class="p-button-text" label="Yes"
+                (click)="confirmDeleteSelected()"></button>
+      </ng-template>
+    </p-dialog>
+  </div>
+</div>
+
+
+<p-dialog header="Chemical and particle size analysis" [(visible)]="visiblePrint" [modal]="true"
+          [style]="{width: '100%'}">
+  <div class="shadow-1 p-2  ">chemical filtration :
+
+    <div class="card flex justify-content-evenly ">
+      <div class="gap-1 flex align-items-center">Analysis start date :
+        <p-calendar [(ngModel)]="DatefiltrageStart"></p-calendar>
+      </div>
+      <div class="gap-1    flex align-items-center">
+        Date End Analysis :
+        <p-calendar [(ngModel)]="DatefiltrageEnd"></p-calendar>
+      </div>
+      <p-button (click)="filtredate()" class=" " icon="pi pi-search" label="Search"></p-button>
+      <p-button (click)="Viderfiltredate()" class=" " icon="pi pi-refresh" label="Refresh"></p-button>
+
+    </div>
+    <div class="shadow-1 p-2 overflow-auto">
+      <p-checkbox [(ngModel)]="SelectAll" (ngModelChange)="SelectAllCheck()" [binary]="true" inputId="binary"
+                  class="text-primary" label="All"></p-checkbox>
+
+      <th *ngFor="let c of colsfiltre">
+
+        <p-checkbox [(ngModel)]="c.hide" label=" {{ c.header}}" [binary]="true" inputId="binary"></p-checkbox>
+
+      </th>
+    </div>
+    <br>
+    <div class="shadow-1 p-2 gap-1 text-3xl flex inline-flex justify-content-evenly">filtrate Grain size :<br>
+      <p-listbox [options]="SelectetBand.analysesPhysiques!==undefined?SelectetBand.analysesPhysiques:[]"
+                 [(ngModel)]="SelectedsbnlPrintAnalyse" optionLabel="reference" [filter]="true"
+                 [style]="{ width: '15rem' }" [listStyle]="{'max-height': '220px'}"></p-listbox>
+      <div *ngIf="SelectedsbnlPrintAnalyse.hasOwnProperty('id')" class="p-2">
+        <label class="text-2xl font-bold">Reference :</label><span
+        class="ml-2 text-2xl">{{SelectedsbnlPrintAnalyse.dateAnalyse}}</span><br>
+        <label class="text-2xl font-bold">Relative :</label><span
+        class=" ml-2 text-2xl">{{SelectedsbnlPrintAnalyse.matiere}}</span><br>
+        <label class="text-2xl font-bold">Temperature :</label><span
+        class=" ml-2 text-2xl">{{SelectedsbnlPrintAnalyse.temperature}} °C</span><br>
+      </div>
+    </div>
+  </div>
+
+  <hr>
+  <div #pdfpuit class="pt-8 pl-4 pr-4">
+    <img src="assets/layout/images/logo.png">
+    <div class="row justify-content-end font-bold flex text-1xl"> Creation date: <span
+      class=" text-1xl font-bold  pi pi-calendar ">{{dateToday | date :"yyyy-MM-dd"}}</span></div>
+    <div class="row    font-bold flex text-1xl   "> Identification :<span
+      class=" text-1xl font-bold   "> {{SelectetBand.reference}}</span></div>
+
+    <div class="row   text-8xl font-bold text-center m-2 p-3"> Analysis Report</div>
+    <div class="mt-5 mb-5">
+
+      <label class="font-bold text-5xl  ">Chemical analysis</label>
+      <br><br><br><br>
+      <label class="text-2xl font-bold">Reference :</label><span class="ml-2 text-2xl">{{SelectetBand.reference}}</span><br>
+      <label class="text-2xl font-bold">Date creation :</label><span
+      class=" ml-2 text-2xl">{{SelectetBand.dateStock|date :'dd-MM-yyyy'}}</span><br>
+
+    </div>
+
+    <p-table #dt1 [value]="getAnalyse()" [tableStyle]="{ 'min-width': '50rem' }"
+             dataKey="id" id="EXCEL"
+             [showCurrentPageReport]="true"
+             [globalFilterFields]="['dateAnalyse']"
+
+
+    >
+
+
+      <ng-template pTemplate="header">
+        <tr>
+
+          <ng-container *ngFor="let c of getColsfiltr()">
+            <th>{{ c.header }}</th>
+          </ng-container>
+
+
+          <!--       <th>-->
+          <!--         <p-columnFilter type="date" field="dateAnalyse" display="menu"></p-columnFilter>-->
+
+          <!--         Date Analyse</th>-->
+
+
+          <!--        <th>Temperature °C</th>-->
+          <!--        <th>wind (km/h)</th>-->
+          <!--        <th>humidity  </th>-->
+          <!--        <th>Densite (g/cm 3)</th>-->
+          <!--        <th>Suspended Matter (g)</th>-->
+          <!--        <th>salinite (psu)</th>-->
+          <!--        <th>Calcium (mmol/L)</th>-->
+          <!--        <th>Magnesium (g)</th>-->
+          <!--        <th>Sulfate (g)</th>-->
+          <!--        <th>Insoluble matter (g)</th>-->
+          <!--        <th>Potassium (mmol/L)</th>-->
+          <!--        <th>Sodium (mmol)</th>-->
+          <!--        <th>Chlorure (meq · L–1)</th>-->
+          <!--        <th>pH</th>-->
+          <!--        <th>sodium chloride (g)</th>-->
+          <!--        <th>Ferrocyanure (g/mol)</th>-->
+
+        </tr>
+      </ng-template>
+      <ng-template pTemplate="body" let-a>
+        <tr>
+
+
+          <td *ngIf="colsfiltre[0].hide">{{ a.reference == undefined ? '-' : a.reference }}</td>
+          <td *ngIf="colsfiltre[1].hide">{{ a.dateAnalyse | date: 'MM/dd/yyyy'}}</td>
+          <td *ngIf="colsfiltre[2].hide">{{ a.temperature == undefined ? '-' : a.temperature }}</td>
+          <td *ngIf="colsfiltre[3].hide">{{ a.vent == undefined ? '-' : a.vent}}</td>
+          <td *ngIf="colsfiltre[4].hide">{{ a.humidite == undefined ? '-' : a.humidite }}</td>
+          <td *ngIf="colsfiltre[5].hide">{{ a.densite == undefined ? '-' : a.densite}}</td>
+          <td *ngIf="colsfiltre[6].hide">{{ a.matiereEnSuspension == undefined ? '-' : a.matiereEnSuspension }}</td>
+          <td *ngIf="colsfiltre[7].hide">{{ a.salinite == undefined ? '-' : a.salinite}}</td>
+          <td *ngIf="colsfiltre[8].hide">{{ a.calcium == undefined ? '-' : a.calcium }}</td>
+          <td *ngIf="colsfiltre[9].hide">{{ a.magnesium == undefined ? '-' : a.magnesium}}</td>
+          <td *ngIf="colsfiltre[10].hide">{{ a.sulfate == undefined ? '-' : a.sulfate }}</td>
+          <td *ngIf="colsfiltre[11].hide">{{ a.matiereInsoluble == undefined ? '-' : a.matiereInsoluble}}</td>
+          <td *ngIf="colsfiltre[12].hide">{{ a.potassium == undefined ? '-' : a.potassium }}</td>
+          <td *ngIf="colsfiltre[13].hide">{{ a.sodium == undefined ? '-' : a.sodium}}</td>
+          <td *ngIf="colsfiltre[14].hide">{{ a.chlorure == undefined ? '-' : a.chlorure }}</td>
+          <td *ngIf="colsfiltre[15].hide">{{ a.ph == undefined ? '-' : a.ph}}</td>
+          <td *ngIf="colsfiltre[16].hide">{{ a.chlorureDeSodium == undefined ? '-' : a.chlorureDeSodium}}</td>
+          <td *ngIf="colsfiltre[17].hide">{{ a.ferrocyanure == undefined ? '-' : a.ferrocyanure}}</td>
+
+        </tr>
+      </ng-template>
+    </p-table>
+    <br><br><br><br>
+
+    <label class="font-bold top-5 text-5xl">Grain Size</label>
+    <br><br><br><br>
+    <div class=" top-5 bottom-5">
+      <label class="text-2xl font-bold">Date :</label><span
+      class="ml-2 text-2xl">{{SelectedsbnlPrintAnalyse.dateAnalyse}}</span><br>
+      <label class="text-2xl font-bold">Reference :</label><span
+      class="ml-2 text-2xl">{{SelectedsbnlPrintAnalyse.reference}}</span><br>
+      <label class="text-2xl font-bold">Relative :</label><span
+      class=" ml-2 text-2xl">{{SelectedsbnlPrintAnalyse.matiere}}</span><br>
+      <label class="text-2xl font-bold">Temperature :</label><span
+      class=" ml-2 text-2xl">{{SelectedsbnlPrintAnalyse.temperature}} °C</span><br>
+    </div>
+    <br><br><br>
+    <p-table class=" " id="TAMIS" #dt [value]="getTamisFiltred()" [columns]="cols" responsiveLayout="scroll"
+             dataKey="id">
+
+      <ng-template pTemplate="header">
+        <tr>
+
+          <th pSortableColumn="dateintervention">Calibre
+            <p-sortIcon field="dateintervention"></p-sortIcon>
+          </th>
+          <th pSortableColumn="qui">Weight
+            <p-sortIcon field="qui"></p-sortIcon>
+          </th>
+          <th pSortableColumn="natureAction">Refus
+            <p-sortIcon field="natureAction"></p-sortIcon>
+          </th>
+          <th pSortableColumn="resultat">Refus Cumulated
+            <p-sortIcon field="resultat"></p-sortIcon>
+          </th>
+          <th pSortableColumn="certificat">pass Cumulated
+            <p-sortIcon field="certificat"></p-sortIcon>
+          </th>
+          <th></th>
+        </tr>
+      </ng-template>
+      <ng-template pTemplate="body" let-tamis>
+        <tr>
+
+          <td>
+            {{tamis.calibre}}
+          </td>
+          <td>
+
+            {{tamis.masse}}
+          </td>
+          <td>
+
+            {{tamis.refus}}
+
+
+          </td>
+
+
+          <td>
+
+            {{tamis.refusCumulated}}
+          </td>
+          <td>
+
+            {{tamis.passCumulated}}
+          </td>
+
+
+        </tr>
+      </ng-template>
+    </p-table>
+
+
+  </div>
+  <ng-template pTemplate="footer">
+    <p-button icon="pi pi-file-pdf" (click)="SavePDF()" class="text-green-50" label="PDF"></p-button>
+    <button type="button" pButton pRipple icon="pi pi-file-excel" (click)="ExportExcel()" class="p-button-success "
+            label="EXCEL" pAutoFocus [autofocus]="true"></button>
+    <button type="button" pButton pRipple icon="pi pi-file" (click)="exportcsv()" class="p-button-warning " label="CSV"
+            pTooltip="CSV"></button>
+
+  </ng-template>
+</p-dialog>

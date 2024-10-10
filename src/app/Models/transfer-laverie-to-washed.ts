@@ -1,13 +1,14 @@
-export class TransferToBand {
+export class TransferLaverieToWashed {
+  id: number;
+  dateCreation: Date;
+  quantityTransfer: number;
+  washedReference:string;
 
-    id: number;
-    dateCreation: Date;
-    quantityTransfer: number;
-
-  constructor(_id: number=0, _dateCreation: Date=new Date(), _quantityTransfer: number=0) {
+  constructor(_id: number=0, _dateCreation: Date=new Date(), _quantityTransfer: number=0, _washedReference: string="") {
     this.id = _id;
     this.dateCreation = _dateCreation;
     this.quantityTransfer = _quantityTransfer;
+    this.washedReference = _washedReference;
   }
 
   public get _id(): number {
@@ -32,5 +33,13 @@ export class TransferToBand {
 
   public set _quantityTransfer(value: number) {
     this.quantityTransfer = value;
+  }
+
+  public get _washedReference(): string {
+    return this.washedReference;
+  }
+
+  public set _washedReference(value: string) {
+    this.washedReference = value;
   }
 }

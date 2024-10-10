@@ -16,8 +16,8 @@ import {Table, TableModule} from "primeng/table";
 import {ToastModule} from "primeng/toast";
 import {ToolbarModule} from "primeng/toolbar";
 import {TooltipModule} from "primeng/tooltip";
-import {Bande} from "../../Models/bande";
-import {BandeService} from "../../Services/bande.service";
+import {CribleLiwell} from "../../Models/cribleLiwell";
+import {CribleLiwellService} from "../../Services/cribleLiwell.service";
 import Swal from "sweetalert2";
 import {Sbnl} from "../../Models/sbnl";
 import {getToken} from "../../../main";
@@ -28,6 +28,9 @@ import {RippleModule} from "primeng/ripple";
 import {ResultCrible} from "../../Models/result-crible";
 import {ResultCribleService} from "../../Services/result-crible.service";
 import {TraitementStock} from "../../Models/traitement-stock";
+import {Laverie} from "../../Models/laverie";
+import {LaverieService} from "../../Services/laverie.service";
+import {SbnlService} from "../../Services/sbnl.service";
 
 @Component({
   selector: 'app-calibration',
@@ -75,33 +78,44 @@ export class CribleComponent implements OnInit{
   crible:Crible=new Crible();
 
   selectedCribles: Crible[] = [];
-  bandes: Bande[] = [];
+  cribleLiwells: CribleLiwell[] = [];
   public isUpdateCrible=false;
   SelectAll: boolean = false;
 
 
   public  _selectedColumns: any[]=[];
   detailsDialog: boolean=false;
-  public selectedBande: Bande={};
+  detailsDialogSbnl: boolean=false;
+  detailsDialogLaverie: boolean=false;
+  public selectedCribleLiwell: CribleLiwell={};
   public resultCribleDialog: boolean=false
   resultCrible:ResultCrible=new ResultCrible();
   ListResultCribles:ResultCrible[]=[];
+  selectedLaverie:Laverie=new Laverie();
+  selectedSbnl:Sbnl= {};
+  laveries:Laverie[]=[];
+  sbnls:Sbnl[]=[];
   @Input() get selectedColumns(): any[] {
     return this._selectedColumns;
   }
-  constructor( private messageService: MessageService,private cribleService :CribleService,private bandeService:BandeService,
-               private resultCribleService:ResultCribleService) {}
+  constructor( private messageService: MessageService,
+               private cribleService :CribleService,
+               private cribleLiwellService:CribleLiwellService,
+               private resultCribleService:ResultCribleService,
+               private laverieService:LaverieService,
+               private sbnlService:SbnlService) {}
 
   ngOnInit() {
     this.getAllCribles() ;
-
+    this.getAllLaveries();
+    this.getAllSbnl();
   }
 
   openNew() {
     this.crible=new Crible();
     this.submitted = false;
     this.cribleDialog = true;
-   this.getAllBandes()
+   this.getAllCribleLiwells()
   }
 
   deleteSelectedSbls() {
@@ -114,7 +128,7 @@ export class CribleComponent implements OnInit{
     this.isUpdateCrible=true;
     this.crible= crible ;
     this.cribleDialog = true;
-    this.getAllBandes()
+    this.getAllCribleLiwells()
 
   }
 
@@ -200,7 +214,7 @@ export class CribleComponent implements OnInit{
   getAllCribles() {
     this.loading=true ;
 
-    this.cribleService.getAllCribles().subscribe((value:  Crible[]) => {
+    this.cribleService.getAllCriblesDto().subscribe((value:  Crible[]) => {
       this.cribles=value;
       this.loading=false ;
 
@@ -216,6 +230,14 @@ export class CribleComponent implements OnInit{
 
   public openDialog(crible: Crible) {
     this.detailsDialog=true;
+    this.crible=crible;
+  }
+  public openDialogSbnl(crible: Crible) {
+    this.detailsDialogSbnl=true;
+    this.crible=crible;
+  }
+  public openDialogLaverie(crible: Crible) {
+    this.detailsDialogLaverie=true;
     this.crible=crible;
   }
 
@@ -262,25 +284,55 @@ export class CribleComponent implements OnInit{
 
   public getTotalQuantityCrible(crible: Crible) {
     let totalRefus:number=0;
+    let totalUnwashed:number=0;
+    let totalLaverie:number=0;
+
     let totalResultCrible:number=0;
 
     if(crible.resultCribles!=undefined){
       totalResultCrible= crible.resultCribles.reduce((sum, resultCrible) => sum+resultCrible.bigSalt+resultCrible.refus,0)
     }
-    if(crible.bandeList!=undefined){
-      crible.bandeList?.forEach(bande => {
-        if(bande.traitementStocks!=undefined)
-          totalRefus +=bande.traitementStocks.reduce((sum, traitementStock) => sum + traitementStock.refus, 0)
+    if(crible.cribleLiwellList!=undefined){
+      crible.cribleLiwellList?.forEach(cribleLiwell => {
+        if(cribleLiwell.traitementStocks!=undefined)
+          totalRefus +=cribleLiwell.traitementStocks.reduce((sum, traitementStock) => sum + traitementStock.refus, 0)
       } )}
-
-    return totalRefus-totalResultCrible;
+    if(crible.sbnlList!=undefined){
+      crible.sbnlList?.forEach(sbnl => {
+        if(sbnl.transferToCribleVertList!=undefined)
+          totalRefus +=sbnl.transferToCribleVertList.reduce((sum, Transfer) => sum + Transfer.quantityTransfer, 0)
+      } )}
+    if(crible.laverieList!=undefined){
+      crible.laverieList?.forEach(laverie => {
+        if(laverie.transferLaverieToCriblesVert!=undefined)
+          totalRefus +=laverie.transferLaverieToCriblesVert.reduce((sum, Transfer) => sum + Transfer.quantityTransfer, 0)
+      } )}
+    return (totalRefus+totalUnwashed+totalLaverie)-totalResultCrible;
   }
 
   public hideDialogResult() {
   this.getAllCribles();
   this.resultCribleDialog=false;
   }
-  getAllBandes(){
-    this.bandeService.getAllBandesDTO().subscribe(value => this.bandes=value)
+  getAllCribleLiwells(){
+    this.cribleLiwellService.getAllCribleLiwellsDTO().subscribe(value => this.cribleLiwells=value)
+  }
+  getAllLaveries(){
+    this.laverieService.getAllLaveriesDto().subscribe(value => {
+      this.laveries=value
+    },error => {
+      console.log('Error fetching Laveris:', error);
+
+    })
+  }
+  getAllSbnl(){
+    this.sbnlService.getAllSbnlsDTO()
+      .subscribe((sbnls: Sbnl[]) => {
+        this.sbnls = sbnls;
+        this.loading=false ;
+
+      }, error => {
+        console.log('Error fetching sbnls:', error);
+      });
   }
 }

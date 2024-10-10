@@ -1,7 +1,7 @@
 import {Component, OnInit} from '@angular/core';
 import {Bassin} from "../../Models/bassin";
 import {Sbnl} from "../../Models/sbnl";
-import {Bande} from "../../Models/bande";
+import {CribleLiwell} from "../../Models/cribleLiwell";
 import {Sbl} from "../../Models/sbl";
 import {Sblf} from "../../Models/sblf";
 import {AnalysesPhysique} from "../../Models/analyses-physique";
@@ -67,8 +67,8 @@ export class AjouterLigneJournalierComponent implements OnInit{
   selectedBassin: Bassin = {};
   sbnls: Sbnl[] = [];
   selectedSbnl:Sbnl={};
-  bandes: Bande[] = [];
-  selectedBande:Bande={};
+  bandes: CribleLiwell[] = [];
+  selectedBande:CribleLiwell={};
   sbls: Sbl[] = [];
   selectedSbl:Sbl={};
   sblfs: Sblf[] = [];
@@ -123,11 +123,12 @@ export class AjouterLigneJournalierComponent implements OnInit{
   ngOnInit(): void {
 
     this.dataEtatBassin = [
-      "Flooded",
-      "Filling",
+      "Flooding",
+      "Feeding",
       "Dry",
       "Draining",
-      "Harvesting"
+      "Harvest",
+      "Maintenance"
     ]
 this.getAllBassin();
 this.getAllPuits();

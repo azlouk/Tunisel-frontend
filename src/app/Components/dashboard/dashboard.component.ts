@@ -107,6 +107,7 @@ export class DashboardComponent implements OnInit {
   totalSumEtatBassinSec:any[]=[];
   totalSumEtatBassinVidange:any[]=[];
   totalSumEtatBassinRecolte:any[]=[];
+  totalSumEtatBassinMaintenance:any[]=[];
 
   public dashboardData: Dashboard = new Dashboard(0, 0,0,0);
   public userConnect:RegisterRequest=new RegisterRequest();
@@ -372,6 +373,11 @@ this.attributes=
   sumDaysByEtatBassinAndMonthAndYearRecolte(bassinId:number,year:number,etatBassin:string){
     this.dashboardService.sumDaysByEtatBassinAndMonthAndYear(bassinId,year,etatBassin).subscribe((value:any[])=> {
       this.totalSumEtatBassinRecolte = value;
+      this.initChartStackedBarForEtatBassin();    } );
+  }
+  sumDaysByEtatBassinAndMonthAndYearMaintenance(bassinId:number,year:number,etatBassin:string){
+    this.dashboardService.sumDaysByEtatBassinAndMonthAndYear(bassinId,year,etatBassin).subscribe((value:any[])=> {
+      this.totalSumEtatBassinMaintenance = value;
       this.initChartStackedBarForEtatBassin();    } );
   }
   // =======================SUM ETAT BASSIN ==========================================
@@ -977,13 +983,13 @@ this. selectedPuit={};
       datasets: [
         {
           type: 'bar',
-          label: 'Flooded',
+          label: 'Flooding',
           backgroundColor: '#bcbcbc',
           data: this.totalSumEtatBassinInodee.map((a: any) => a[1]),
         },
         {
           type: 'bar',
-          label: 'Filling ',
+          label: 'Feeding ',
           backgroundColor: '#5d5d5d',
           data: this.totalSumEtatBassinAlimentation.map((a: any) => a[1]),
         },
@@ -1001,9 +1007,15 @@ this. selectedPuit={};
         },
         {
           type: 'bar',
-          label: 'Harvesting',
+          label: 'Harvest',
           backgroundColor:  '#56cd8b',
           data: this.totalSumEtatBassinRecolte.map((a: any) => a[1]),
+        },
+        {
+          type: 'bar',
+          label: 'Maintenance',
+          backgroundColor:  '#d39b9e',
+          data: this.totalSumEtatBassinMaintenance.map((a: any) => a[1]),
         }
       ]
     };
@@ -1055,11 +1067,12 @@ this. selectedPuit={};
 if(year){
 
 
-      this.sumDaysByEtatBassinAndMonthAndYearAlimentation(selectedEtatBassin.id,year,'Filling')
-      this.sumDaysByEtatBassinAndMonthAndYearInodee(selectedEtatBassin.id,year,'Flooded')
+      this.sumDaysByEtatBassinAndMonthAndYearAlimentation(selectedEtatBassin.id,year,'Feeding')
+      this.sumDaysByEtatBassinAndMonthAndYearInodee(selectedEtatBassin.id,year,'Flooding')
       this.sumDaysByEtatBassinAndMonthAndYearSec(selectedEtatBassin.id,year,'Dry')
       this.sumDaysByEtatBassinAndMonthAndYearVidange(selectedEtatBassin.id,year,'Draining')
-      this.sumDaysByEtatBassinAndMonthAndYearRecolte(selectedEtatBassin.id,year,'Harvesting')
+      this.sumDaysByEtatBassinAndMonthAndYearRecolte(selectedEtatBassin.id,year,'Harvest')
+      this.sumDaysByEtatBassinAndMonthAndYearMaintenance(selectedEtatBassin.id,year,'Maintenance')
 }
     }
   }

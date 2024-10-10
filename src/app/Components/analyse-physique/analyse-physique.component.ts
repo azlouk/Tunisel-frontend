@@ -166,8 +166,8 @@ this.getALLphysique() ;
             }
             if(value.sblf) {
               analysephysique.ref=value.sblf.reference
-            } if(value.bande) {
-              analysephysique.ref=value.bande.reference
+            } if(value.band) {
+              analysephysique.ref=value.band.reference
             }
 
 

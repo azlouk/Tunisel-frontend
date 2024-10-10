@@ -3,7 +3,9 @@ import {AnalysesChimique} from "./analyses-chimique";
 import {AnalysesPhysique} from "./analyses-physique";
 import {Sbl} from "./sbl";
 import {Bassin} from "./bassin";
-import {TransferToBand} from "./transfer-to-band";
+import {TransferToCribleLiwell} from "./TransferToCribleLiwell";
+import {TransferToCrible} from "./transfer-to-crible";
+import {TransferToLaverie} from "./transfer-to-laverie";
 
 export interface Sbnl {
 
@@ -19,5 +21,7 @@ export interface Sbnl {
   analysesChimiques?: AnalysesChimique[];
   analysesPhysiques?: AnalysesPhysique[];
   bassinList?:Bassin[];
-  transferToBands?:TransferToBand[];
+  transferToCribleLiwellList?:TransferToCribleLiwell[];
+  transferToCribleVertList?:TransferToCrible[];
+  transferToLaverieList?:TransferToLaverie[];
 }

@@ -2,61 +2,56 @@ import { Injectable } from '@angular/core';
 import {environment} from "../environment/environment";
 import {HttpClient, HttpHeaders} from "@angular/common/http";
 import {Observable} from "rxjs";
-import {Bande} from "../Models/bande";
 import {getKeyToken} from "../../main";
-import {Sbnl} from "../Models/sbnl";
+import {TransferToCrible} from "../Models/transfer-to-crible";
 
 @Injectable({
   providedIn: 'root'
 })
-export class BandeService {
+export class TransferToCribleService {
+
+
 
   apiUrl=environment.apiUrl
   constructor(private http: HttpClient) { }
 
-  getAllBandes(): Observable<Bande[]> {
+  getAllTransferToCrible(): Observable<TransferToCrible[]> {
     const token = getKeyToken();
     if (token) {
       const headers = new HttpHeaders().set('Authorization', `Bearer ${token}`).set("Content-Type", "application/json; charset=utf8");
-    return this.http.get<Bande[]>(`${this.apiUrl}/bandes/read`, {headers}) ;
-  }else {
-      return  new Observable<any>()}}
-  getAllBandesDTO(): Observable<Bande[]> {
-    const token = getKeyToken();
-    if (token) {
-      const headers = new HttpHeaders().set('Authorization', `Bearer ${token}`).set("Content-Type", "application/json; charset=utf8");
-    return this.http.get<Bande[]>(`${this.apiUrl}/bandes/readDTO`, {headers}) ;
-  }else {
-      return  new Observable<any>()}}
-  getBandeById(id:number): Observable<Bande> {
-    const token = getKeyToken();
-    if (token) {
-      const headers = new HttpHeaders().set('Authorization', `Bearer ${token}`).set("Content-Type", "application/json; charset=utf8");
-      return this.http.get<Bande>(`${this.apiUrl}/bandes/${id}`, {headers}) ;
+      return this.http.get<TransferToCrible[]>(`${this.apiUrl}/transferToCrible/read`, {headers}) ;
     }else {
       return  new Observable<any>()}}
-  deleteBande(bandeId: number | undefined): Observable<any> {
+  getTransferToCribleById(id:number): Observable<TransferToCrible> {
     const token = getKeyToken();
     if (token) {
       const headers = new HttpHeaders().set('Authorization', `Bearer ${token}`).set("Content-Type", "application/json; charset=utf8");
-    return this.http.delete(`${this.apiUrl}/bandes/delete/${bandeId}`, {headers});
-  }else {
-      return  new Observable<any>()}}
-  updateBande(bande: Bande): Observable<Bande> {
-    const token = getKeyToken();
-    if (token) {
-      const headers = new HttpHeaders().set('Authorization', `Bearer ${token}`).set("Content-Type", "application/json; charset=utf8");
-    return this.http.put<Bande>(`${this.apiUrl}/bandes/update`, bande,{headers});
-  }else {
+      return this.http.get<TransferToCrible>(`${this.apiUrl}/transferToCrible/${id}`, {headers}) ;
+    }else {
       return  new Observable<any>()}}
 
-
-  addBande(bande: Bande) : Observable<Bande>{
+  deleteTransferToCrible(transferToCribleId: number | undefined): Observable<any> {
     const token = getKeyToken();
     if (token) {
       const headers = new HttpHeaders().set('Authorization', `Bearer ${token}`).set("Content-Type", "application/json; charset=utf8");
-    return this.http.post<Bande>(`${this.apiUrl}/bandes/add`, bande,{headers});
+      return this.http.delete(`${this.apiUrl}/transferToCrible/delete/${transferToCribleId}`, {headers});
+    }else {
+      return  new Observable<any>()}}
 
-  }else {
+  updateTransferToCrible(transferToCrible: TransferToCrible): Observable<TransferToCrible> {
+    const token = getKeyToken();
+    if (token) {
+      const headers = new HttpHeaders().set('Authorization', `Bearer ${token}`).set("Content-Type", "application/json; charset=utf8");
+      return this.http.put<TransferToCrible>(`${this.apiUrl}/transferToCrible/update`, transferToCrible, {headers});
+    }else {
+      return  new Observable<any>()}}
+
+
+  addTransferToCrible(transferToCrible: TransferToCrible, id:number) : Observable<boolean>{
+    const token = getKeyToken();
+    if (token) {
+      const headers = new HttpHeaders().set('Authorization', `Bearer ${token}`).set("Content-Type", "application/json; charset=utf8");
+      return this.http.post<boolean>(`${this.apiUrl}/transferToCrible/add/${id}`, transferToCrible, {headers});
+    }else {
       return  new Observable<any>()}}
 }

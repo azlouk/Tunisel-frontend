@@ -19,8 +19,8 @@ import {AnalysesChimique} from "../../Models/analyses-chimique";
 import {AnalysesPhysique} from "../../Models/analyses-physique";
 import html2canvas from "html2canvas";
 import jsPDF from "jspdf";
-import {Bande} from "../../Models/bande";
-import {BandeService} from "../../Services/bande.service";
+import {CribleLiwell} from "../../Models/cribleLiwell";
+import {CribleLiwellService} from "../../Services/cribleLiwell.service";
 import {AutoFocusModule} from "primeng/autofocus";
 import {PasswordModule} from "primeng/password";
 import {RadioButtonModule} from "primeng/radiobutton";
@@ -33,11 +33,12 @@ import {MultiSelectModule} from "primeng/multiselect";
 import {RippleModule} from "primeng/ripple";
 import {TraitementStock} from "../../Models/traitement-stock";
 import {TraitementStockService} from "../../Services/traitement-stock.service";
-import {TransferToBand} from "../../Models/transfer-to-band";
-import {LoginService} from "../../Services/login.service";
+import {TransferToCribleLiwell} from "../../Models/TransferToCribleLiwell";
+import {Laverie} from "../../Models/laverie";
+import {LaverieService} from "../../Services/laverie.service";
 
 @Component({
-  selector: 'app-bande',
+  selector: 'app-cribleLiwell',
   standalone: true,
   imports: [
     ButtonModule,
@@ -64,10 +65,10 @@ import {LoginService} from "../../Services/login.service";
     RippleModule
 
   ],
-  templateUrl: './bande.component.html',
-  styleUrl: './bande.component.css'
+  templateUrl: './cribleLiwell.component.html',
+  styleUrl: './cribleLiwell.component.css'
 })
-export class BandeComponent {
+export class CribleLiwellComponent {
   productDialog: boolean = false;
 
   deleteProductDialog: boolean = false;
@@ -87,16 +88,18 @@ export class BandeComponent {
 
   rowsPerPageOptions = [5, 10, 20];
   // ======********============
-  bandes: Bande[] = [];
+  cribleLiwells: CribleLiwell[] = [];
 
-  bande:Bande={};
+  cribleLiwell:CribleLiwell={};
 
-  selectedBandes: Bande[] = [];
-  selectedBande:Bande={}
-  private isUpdatebande=false;
+  selectedCribleLiwells: CribleLiwell[] = [];
+  selectedCribleLiwell:CribleLiwell={}
+  private isUpdatecribleLiwell=false;
   sbnls: Sbnl[] = [];
+ laveries: Laverie[]=[];
   SelectAll: boolean = false;
   detailsDialog: boolean = false;
+  detailsDialogLaverie: boolean = false;
   TraitementStockDialog: boolean = false;
   @ViewChild("pdfpuit") htmlContent: ElementRef | undefined;
   visiblePrint: boolean = false;
@@ -107,11 +110,15 @@ export class BandeComponent {
   public  _selectedColumns: any[]=[];
   traitementStock:TraitementStock=new TraitementStock();
   ListTraitementStock:TraitementStock[] =[];
+  selectedLaverie:Laverie=new Laverie();
   @Input() get selectedColumns(): any[] {
     return this._selectedColumns;
   }
-  constructor(  private messageService: MessageService,private sbnlService :SbnlService,private bandeService:BandeService,
-                private traitementStockService:TraitementStockService) {}
+  constructor(  private messageService: MessageService,
+                private sbnlService :SbnlService,
+                private cribleLiwellService:CribleLiwellService,
+                private traitementStockService:TraitementStockService,
+                private laverieService:LaverieService) {}
 
   ngOnInit() {
     this.colsfiltre = [
@@ -136,7 +143,7 @@ export class BandeComponent {
     ];
 
     this._selectedColumns = this.colsfiltre;
-    this.getBande()
+    this.getCribleLiwell()
     this.cols = [
       { field: 'id', header: 'id' },
       { field: 'reference', header: 'reference' },
@@ -148,43 +155,43 @@ export class BandeComponent {
       { field: 'Sbnl', header: 'Sbnl' },
     ];
 
-
+  this.getAllLaveries();
   }
 
   openNew() {
-    this.bande={};
+    this.cribleLiwell={};
     this.submitted = false;
     this.productDialog = true;
   }
 
-  deleteSelectedBandes() {
+  deleteSelectedCribleLiwells() {
 
     this.deleteProductsDialog = true;
 
   }
 
-  editBande(bande: Bande) {
-    this.isUpdatebande=true;
+  editCribleLiwell(cribleLiwell: CribleLiwell) {
+    this.isUpdatecribleLiwell=true;
 
 
-    this.bande = { ...bande };
+    this.cribleLiwell = { ...cribleLiwell };
     this.productDialog = true;
   }
 
-  deleteBande(bande :Bande) {
+  deleteCribleLiwell(cribleLiwell :CribleLiwell) {
     this.deleteProductDialog = true;
-    this.bande=bande;
+    this.cribleLiwell=cribleLiwell;
 
   }
 
   confirmDeleteSelected() {
     this.deleteProductsDialog = false;
-    // console.log(this.selectedBandes.length)
-    this.selectedBandes.forEach(selectedBande => {
-      this.bandeService.deleteBande(selectedBande.id).subscribe(
+    // console.log(this.selectedCribleLiwells.length)
+    this.selectedCribleLiwells.forEach(selectedCribleLiwell => {
+      this.cribleLiwellService.deleteCribleLiwell(selectedCribleLiwell.id).subscribe(
         () => {
-          this.bandes = this.bandes.filter(bande =>bande.id !== selectedBande.id);
-          this.messageService.add({ severity: 'success', summary: 'successful', detail: 'Bande Delete', life: 3000 });
+          this.cribleLiwells = this.cribleLiwells.filter(cribleLiwell =>cribleLiwell.id !== selectedCribleLiwell.id);
+          this.messageService.add({ severity: 'success', summary: 'successful', detail: 'CribleLiwell Delete', life: 3000 });
 
         },
         (error) => {
@@ -192,28 +199,28 @@ export class BandeComponent {
           Swal.fire({
             icon: "error",
             title: "Can not deleted",
-            text: "Band related with Washed !",
+            text: "CribleLiwell related with Washed !",
           })
         }
       );
     });
 
-    this.selectedBandes = [];
+    this.selectedCribleLiwells = [];
   }
 
   confirmDelete() {
     this.deleteProductDialog = false;
 
-    if (this.bande.id!= null) {
-      this.bandeService.deleteBande(this.bande.id).subscribe(() => { this.bandes = this.bandes.filter(val => val.id !== this.bande.id);
-        this.messageService.add({ severity: 'success', summary: 'successful', detail: 'Bande Deleted', life: 3000 });
+    if (this.cribleLiwell.id!= null) {
+      this.cribleLiwellService.deleteCribleLiwell(this.cribleLiwell.id).subscribe(() => { this.cribleLiwells = this.cribleLiwells.filter(val => val.id !== this.cribleLiwell.id);
+        this.messageService.add({ severity: 'success', summary: 'successful', detail: 'CribleLiwell Deleted', life: 3000 });
 
       },error => {
         console.log(error)
         Swal.fire({
           icon: "error",
           title: "Can not deleted",
-          text: "Band related with Washed !",
+          text: "CribleLiwell related with Washed !",
         })
       });
     }
@@ -225,20 +232,20 @@ export class BandeComponent {
     this.submitted = false;
   }
 
-  saveBande() {
+  saveCribleLiwell() {
     this.submitted = false;
     this.productDialog=false
 
-    if(this.isUpdatebande==true) {
-      this.bandeService.updateBande(this.bande).subscribe(() =>{
-        this.getBande();
+    if(this.isUpdatecribleLiwell==true) {
+      this.cribleLiwellService.updateCribleLiwell(this.cribleLiwell).subscribe(() =>{
+        this.getCribleLiwell();
       });
-      console.log('Band updated');
-      this.isUpdatebande=false;
+      console.log('CribleLiwell updated');
+      this.isUpdatecribleLiwell=false;
     }
     else
     {
-      this.bandeService.addBande(this.bande).subscribe(() => {this.getBande();});
+      this.cribleLiwellService.addCribleLiwell(this.cribleLiwell).subscribe(() => {this.getCribleLiwell();});
 
 
     }
@@ -251,11 +258,11 @@ export class BandeComponent {
     table.filterGlobal((event.target as HTMLInputElement).value, 'contains');
   }
 
-  getBande() {
+  getCribleLiwell() {
     this.loading=true ;
 
-    this.bandeService.getAllBandesDTO().subscribe((v:  Bande[]) => {
-      this.bandes=v;
+    this.cribleLiwellService.getAllCribleLiwellsDTO().subscribe((v:  CribleLiwell[]) => {
+      this.cribleLiwells=v;
       this.loading=false ;
 
     },error => {
@@ -268,15 +275,22 @@ export class BandeComponent {
         this.loading=false ;
 
       }, error => {
-        console.log('Error fetching users:', error);
+        console.log('Error fetching sbnls:', error);
       });
   }
+  getAllLaveries(){
+    this.laverieService.getAllLaveriesDto().subscribe(value => {
+this.laveries=value
+    },error => {
+      console.log('Error fetching Laveris:', error);
 
-  exportrapport(bande: Bande) {
-// console.log('=====>>>>> export: ',new JsonPipe().transform(bande))
-    this.selectedBande = bande;
+    })
+  }
+  exportrapport(cribleLiwell: CribleLiwell) {
+// console.log('=====>>>>> export: ',new JsonPipe().transform(cribleLiwell))
+    this.selectedCribleLiwell = cribleLiwell;
     this.visiblePrint = true
-    // console.log("---->"+new JsonPipe().transform(this.selectedBande));
+    // console.log("---->"+new JsonPipe().transform(this.selectedCribleLiwell));
   }
 
 
@@ -284,7 +298,7 @@ export class BandeComponent {
 
   filtredate() {
     this.Viderfiltredate()
-    const data=this.selectedBande.analysesChimiques !== undefined ? this.selectedBande.analysesChimiques : []
+    const data=this.selectedCribleLiwell.analysesChimiques !== undefined ? this.selectedCribleLiwell.analysesChimiques : []
     const newAnalyse:AnalysesChimique[] =[]
     data.forEach(v => {
       if(v.dateAnalyse!==undefined){
@@ -299,7 +313,7 @@ export class BandeComponent {
         }
       }
     })
-    this.selectedBande.analysesChimiques=[...newAnalyse] ;
+    this.selectedCribleLiwell.analysesChimiques=[...newAnalyse] ;
 
   }
 
@@ -310,12 +324,12 @@ export class BandeComponent {
   Viderfiltredate() {
     this.loading=true ;
 
-    this.bandeService.getAllBandesDTO().subscribe((bande: Bande[]) => {
-      this.bandes = bande;
+    this.cribleLiwellService.getAllCribleLiwellsDTO().subscribe((cribleLiwell: CribleLiwell[]) => {
+      this.cribleLiwells = cribleLiwell;
 
-      const bandeBande: Bande | undefined = this.bandes.find(value => this.selectedBande.id == value.id)
-      if (bandeBande)
-        this.selectedBande = bandeBande;
+      const cribleLiwellCribleLiwell: CribleLiwell | undefined = this.cribleLiwells.find(value => this.selectedCribleLiwell.id == value.id)
+      if (cribleLiwellCribleLiwell)
+        this.selectedCribleLiwell = cribleLiwellCribleLiwell;
       this.loading=false ;
 
     });
@@ -323,10 +337,10 @@ export class BandeComponent {
 
   getAnalyse() {
 
-    return this.selectedBande.analysesChimiques !== undefined ? this.selectedBande.analysesChimiques : []
+    return this.selectedCribleLiwell.analysesChimiques !== undefined ? this.selectedCribleLiwell.analysesChimiques : []
   }
   getAnalyseGranoli() {
-    const data=this.selectedBande.analysesPhysiques !== undefined ? this.selectedBande.analysesPhysiques : []
+    const data=this.selectedCribleLiwell.analysesPhysiques !== undefined ? this.selectedCribleLiwell.analysesPhysiques : []
     const newAnalyse:AnalysesPhysique[] =[]
     data.forEach(v => {
       if(v.dateAnalyse!==undefined){
@@ -344,15 +358,15 @@ export class BandeComponent {
     })
     // console.log('getAnalysePH: ',new JsonPipe().transform(newAnalyse))
 
-    this.selectedBande.analysesPhysiques=[...newAnalyse] ;
-    // console.log('getAnalysePH: ',new JsonPipe().transform(this.selectedBande.analysesPhysiques))
-    return this.selectedBande.analysesPhysiques !== undefined ? this.selectedBande.analysesPhysiques : []
+    this.selectedCribleLiwell.analysesPhysiques=[...newAnalyse] ;
+    // console.log('getAnalysePH: ',new JsonPipe().transform(this.selectedCribleLiwell.analysesPhysiques))
+    return this.selectedCribleLiwell.analysesPhysiques !== undefined ? this.selectedCribleLiwell.analysesPhysiques : []
   }
 
 
   colsfiltre: any[] = [];
   // ListTamisSelected: Tamis={};
-  SelectedBandePrintAnalyse: AnalysesPhysique={};
+  SelectedCribleLiwellPrintAnalyse: AnalysesPhysique={};
   getColsfiltr() {
     return this.colsfiltre.filter(value => value.hide==true)
   }
@@ -377,7 +391,7 @@ export class BandeComponent {
 
 
   getTamisFiltred() {
-    return this.SelectedBandePrintAnalyse.tamisList==undefined?[]:this.SelectedBandePrintAnalyse.tamisList
+    return this.SelectedCribleLiwellPrintAnalyse.tamisList==undefined?[]:this.SelectedCribleLiwellPrintAnalyse.tamisList
   }
 
   AfterTodate(date1:Date , date2:Date):boolean{
@@ -411,18 +425,18 @@ export class BandeComponent {
 
       // Add Bassin data
       const bassinData = [
-        [this.selectedBande.reference, this.selectedBande.dateStock]
+        [this.selectedCribleLiwell.reference, this.selectedCribleLiwell.dateStock]
       ];
       XLSX.utils.sheet_add_json(ws, bassinData, { origin: 'A6', skipHeader: true });
 
       // Add Analyse Physique data
       const analysePhyData = [
         [
-          this.SelectedBandePrintAnalyse.dateAnalyse,
-          this.SelectedBandePrintAnalyse.reference,
-          this.SelectedBandePrintAnalyse.matiere,
-          this.SelectedBandePrintAnalyse.temperature,
-          this.SelectedBandePrintAnalyse.description
+          this.SelectedCribleLiwellPrintAnalyse.dateAnalyse,
+          this.SelectedCribleLiwellPrintAnalyse.reference,
+          this.SelectedCribleLiwellPrintAnalyse.matiere,
+          this.SelectedCribleLiwellPrintAnalyse.temperature,
+          this.SelectedCribleLiwellPrintAnalyse.description
         ]
       ];
       XLSX.utils.sheet_add_json(ws, analysePhyData, { origin: 'A17', skipHeader: true });
@@ -469,7 +483,7 @@ export class BandeComponent {
 
       // Append worksheet to workbook and save the file
       XLSX.utils.book_append_sheet(wb, ws, 'Fiche de Vie');
-      writeFile(wb, 'Bande Report.xlsx');
+      writeFile(wb, 'CribleLiwell Report.xlsx');
     } catch (error) {
       console.error('Error exporting Excel file:', error);
     }
@@ -489,16 +503,16 @@ export class BandeComponent {
       let csvData: string[] = Object.values(headers).map(header => header.join(','));
 
       // Add Bassin data to the CSV data array
-      const bassinData: string = [this.selectedBande.reference, this.selectedBande.dateStock].join(',');
+      const bassinData: string = [this.selectedCribleLiwell.reference, this.selectedCribleLiwell.dateStock].join(',');
       csvData.push(bassinData);
 
       // Add Analyse Physique data to the CSV data array
       const analysePhyData: string = [
-        this.SelectedBandePrintAnalyse.dateAnalyse,
-        this.SelectedBandePrintAnalyse.reference,
-        this.SelectedBandePrintAnalyse.matiere,
-        this.SelectedBandePrintAnalyse.temperature,
-        this.SelectedBandePrintAnalyse.description
+        this.SelectedCribleLiwellPrintAnalyse.dateAnalyse,
+        this.SelectedCribleLiwellPrintAnalyse.reference,
+        this.SelectedCribleLiwellPrintAnalyse.matiere,
+        this.SelectedCribleLiwellPrintAnalyse.temperature,
+        this.SelectedCribleLiwellPrintAnalyse.description
       ].join(',');
       csvData.push(analysePhyData);
 
@@ -552,7 +566,7 @@ export class BandeComponent {
       // Create a link and trigger the download
       const link: HTMLAnchorElement = document.createElement('a');
       link.setAttribute('href', url);
-      link.setAttribute('download', 'Bande_Report.csv');
+      link.setAttribute('download', 'CribleLiwell_Report.csv');
       document.body.appendChild(link);
       link.click();
       document.body.removeChild(link);
@@ -571,36 +585,40 @@ export class BandeComponent {
   public selectedSbnl: Sbnl={};
 
 
-  public openDialog(b:Bande) {
+  public openDialog(b:CribleLiwell) {
     this.detailsDialog=true;
-      this.bande=b;
+      this.cribleLiwell=b;
   }
-
-  public AddTraitementStock(b: Bande) {
+  public openDialogLaverie(b:CribleLiwell) {
+    this.detailsDialogLaverie=true;
+    this.cribleLiwell=b;
+  }
+  public AddTraitementStock(b: CribleLiwell) {
     // console.log("traitment")
     this.TraitementStockDialog=true;
-    this.bande=b;
+    this.cribleLiwell=b;
     this. getListTraitementStock();
   }
 
   public saveTraitementStock() {
 
-    if ( this.bande.id!==undefined)
-      this.traitementStockService.addTraitementStock(this.traitementStock,this.bande.id).subscribe(value => {
+    if ( this.cribleLiwell.id!==undefined)
+      this.traitementStockService.addTraitementStock(this.traitementStock,this.cribleLiwell.id).subscribe(value => {
         this. getListTraitementStock();
         this.traitementStock=new TraitementStock();
       })
 
   }
   getListTraitementStock(){
-    if(this.bande.id!=undefined)
-      this.bandeService.getBandeById(this.bande.id).subscribe(value => {
+    if(this.cribleLiwell.id!=undefined)
+      this.cribleLiwellService.getCribleLiwellById(this.cribleLiwell.id).subscribe(value => {
         if(value.traitementStocks!=undefined)
           this.ListTraitementStock = value.traitementStocks;
       } )
   }
 
-  protected readonly TransferToBand = TransferToBand;
+  protected readonly TransferToCribleLiwell = TransferToCribleLiwell;
+
 
   public updateTraitementStock(traitement: TraitementStock) {
     this.traitementStock=traitement;
@@ -619,8 +637,9 @@ export class BandeComponent {
 
   }
 
-  public getTotalQuantity(b: Bande) {
-    let totalTransfer:number=0;
+  public getTotalQuantity(b: CribleLiwell) {
+    let totalTransferSbnl:number=0;
+    let totalTransferLaverie:number=0;
     let totalTraitment:number=0;
 
     if(b.traitementStocks!=undefined){
@@ -628,10 +647,15 @@ export class BandeComponent {
     }
     if(b.sbnlList!=undefined){
       b.sbnlList?.forEach(sbnl => {
-        if(sbnl.transferToBands!=undefined)
-          totalTransfer +=sbnl.transferToBands.reduce((sum, transfer) => sum + transfer.quantityTransfer, 0)
+        if(sbnl.transferToCribleLiwellList!=undefined)
+          totalTransferSbnl +=sbnl.transferToCribleLiwellList.reduce((sum, transfer) => sum + transfer.quantityTransfer, 0)
       } )}
-    return totalTransfer-totalTraitment;
+    if(b.laverieList!=undefined){
+      b.laverieList?.forEach(laverie => {
+        if(laverie.transferLaverieToCribleLiwells!=undefined)
+          totalTransferLaverie +=laverie.transferLaverieToCribleLiwells.reduce((sum, transfer) => sum + transfer.quantityTransfer, 0)
+      } )}
+    return (totalTransferSbnl+totalTransferLaverie)-totalTraitment;
   }
 
 

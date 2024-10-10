@@ -20,7 +20,7 @@ import {DropdownModule} from "primeng/dropdown";
 import {Puit} from "../../Models/puit";
 import {Bassin} from "../../Models/bassin";
 import {Sbnl} from "../../Models/sbnl";
-import {Bande} from "../../Models/bande";
+import {CribleLiwell} from "../../Models/cribleLiwell";
 import {Sbl} from "../../Models/sbl";
 import {Sblf} from "../../Models/sblf";
 import {AnalysesChimique} from "../../Models/analyses-chimique";
@@ -31,7 +31,7 @@ import {SbnlService} from "../../Services/sbnl.service";
 import {SblService} from "../../Services/sbl.service";
 import {SblfService} from "../../Services/sblf.service";
 import {AnalyseChimiqueService} from "../../Services/analyse-chimique.service";
-import {BandeService} from "../../Services/bande.service";
+import {CribleLiwellService} from "../../Services/cribleLiwell.service";
 import Swal from "sweetalert2";
 import {AnalysePhysiqueService} from "../../Services/analysePhysique.service";
 import {AnalysesPhysique} from "../../Models/analyses-physique";
@@ -44,6 +44,8 @@ import {InputTextareaModule} from "primeng/inputtextarea";
 import {getToken} from "../../../main";
 import {RapportAnalyseService} from "../../Services/rapport-analyse.service";
 import {RippleModule} from "primeng/ripple";
+import {Band} from "../../Models/band";
+import {BandService} from "../../Services/band.service";
 
 @Component({
   selector: 'app-analyse',
@@ -86,8 +88,8 @@ export class RapportAnalyseComponent {
   selectedBassin: Bassin = {};
   sbnls: Sbnl[] = [];
   selectedSbnl: Sbnl = {};
-  bandes: Bande[] = [];
-  selectedBande: Bande = {};
+  bands: Band[] = [];
+  selectedBand: Band = new Band();
   sbls: Sbl[] = [];
   selectedSbl: Sbl = {};
   sblfs: Sblf[] = [];
@@ -134,7 +136,7 @@ export class RapportAnalyseComponent {
               private sblfService: SblfService,
               private analyseChimiqueService: AnalyseChimiqueService,
               private route: ActivatedRoute,
-              private bandeService: BandeService,
+              private bandService: BandService,
               private analysePhysiqueService: AnalysePhysiqueService,
               private tamisService: TamisService,
               private rapportAnalyseService: RapportAnalyseService,
@@ -207,7 +209,7 @@ export class RapportAnalyseComponent {
         this.selectedSbl = value.sbl;
         this.selectedSbnl = value.sbnl;
         this.selectedSblf = value.sblf;
-        this.selectedBande = value.bande;
+        this.selectedBand = value.band;
 
       }, error => {
 
@@ -256,8 +258,8 @@ export class RapportAnalyseComponent {
     }, error => {
       console.log(error)
     });
-    this.bandeService.getAllBandesDTO().subscribe((v: Bande[]) => {
-      this.bandes = v;
+    this.bandService.getAllBands().subscribe(value => {
+      this.bands = value;
 
     }, error => {
       console.log(error)
@@ -292,7 +294,7 @@ export class RapportAnalyseComponent {
         this.selectedSbl = value.sbl;
         this.selectedSbnl = value.sbnl;
         this.selectedSblf = value.sblf;
-        this.selectedBande = value.bande;
+        this.selectedBand = value.band;
 
       }, error => {
 
@@ -319,8 +321,8 @@ export class RapportAnalyseComponent {
       console.log(error)
     });
 
-    this.bandeService.getAllBandesDTO().subscribe((v: Bande[]) => {
-      this.bandes = v;
+    this.bandService.getAllBands().subscribe(value => {
+      this.bands = value;
 
     }, error => {
       console.log(error)
@@ -367,7 +369,7 @@ export class RapportAnalyseComponent {
     this.analysesChimique.ferrocyanure = this.attributs[13].value;
     //Test Select Of Stock
     try {
-      if (this.selectedPuit.hasOwnProperty('id') || this.selectedSbnl.hasOwnProperty("id") || this.selectedBassin.hasOwnProperty("id") || this.selectedSbl.hasOwnProperty("id") || this.selectedSblf.hasOwnProperty("id") || this.selectedBande.hasOwnProperty("id")) {
+      if (this.selectedPuit.hasOwnProperty('id') || this.selectedSbnl.hasOwnProperty("id") || this.selectedBassin.hasOwnProperty("id") || this.selectedSbl.hasOwnProperty("id") || this.selectedSblf.hasOwnProperty("id") || this.selectedBand.hasOwnProperty("id")) {
         if (this.isUpdateAnalyseChimique) {
           this.analyseChimiqueService.updateAnalyseChimique(this.analysesChimique,2,"bassin").subscribe(value => this.router.navigate(['/analyseChimique']))
         } else {
@@ -389,11 +391,11 @@ export class RapportAnalyseComponent {
             this.selectedSbnl.analysesChimiques = [];
             this.selectedSbnl.analysesChimiques.push(this.analysesChimique);
             this.analyseChimiqueService.addAnalyseChimiqueToSbnl(this.selectedSbnl).subscribe(value => this.router.navigate(['/analyseChimique']))
-          } else if (this.selectedBande.hasOwnProperty('id') == true) {
-            // alert(new JsonPipe().transform(this.selectedBande))
-            this.selectedBande.analysesChimiques = [];
-            this.selectedBande.analysesChimiques.push(this.analysesChimique);
-            this.analyseChimiqueService.addAnalyseChimiqueToBande(this.selectedBande).subscribe(value => this.router.navigate(['/analyseChimique']))
+          } else if (this.selectedBand.hasOwnProperty('id') == true) {
+            // alert(new JsonPipe().transform(this.selectedCribleLiwell))
+            this.selectedBand.analysesChimiques = [];
+            this.selectedBand.analysesChimiques.push(this.analysesChimique);
+            this.analyseChimiqueService.addAnalyseChimiqueToBand(this.selectedBand).subscribe(value => this.router.navigate(['/analyseChimique']))
           } else if (this.selectedSbl.hasOwnProperty('id')) {
             this.selectedSbl.analysesChimiques = [];
             this.selectedSbl.analysesChimiques.push(this.analysesChimique);
@@ -411,7 +413,7 @@ export class RapportAnalyseComponent {
       Swal.fire({
         title: "Erreur de séléction",
         icon: "error",
-        text: "Sélectionner puit, bassin ,bande ,sbnl ,sbln ou sblf"
+        text: "Sélectionner puit, bassin ,cribleLiwell ,sbnl ,sbln ou sblf"
       })
     }
   }
@@ -438,7 +440,7 @@ export class RapportAnalyseComponent {
     // alert(new JsonPipe().transform(this.selectedPuit))
     this.selectedBassin = {};
     this.selectedSbnl = {};
-    this.selectedBande = {};
+    this.selectedBand = new Band();
     this.selectedSbl = {};
     this.selectedSblf = {};
 
@@ -449,7 +451,7 @@ export class RapportAnalyseComponent {
 
     this.selectedPuit = {};
     this.selectedSbnl = {};
-    this.selectedBande = {};
+    this.selectedBand = new Band();
     this.selectedSbl = {};
     this.selectedSblf = {};
 
@@ -460,14 +462,14 @@ export class RapportAnalyseComponent {
 
     this.selectedBassin = {};
     this.selectedPuit = {};
-    this.selectedBande = {};
+    this.selectedBand = new Band();
     this.selectedSbl = {};
     this.selectedSblf = {};
 
   }
 
-  selectBande() {
-    //alert(new JsonPipe().transform(this.selectedBande))
+  selectBand() {
+    //alert(new JsonPipe().transform(this.selectedCribleLiwell))
 
     this.selectedBassin = {};
     this.selectedSbnl = {};
@@ -482,7 +484,7 @@ export class RapportAnalyseComponent {
 
     this.selectedBassin = {};
     this.selectedSbnl = {};
-    this.selectedBande = {};
+    this.selectedBand = new Band();
     this.selectedPuit = {};
     this.selectedSblf = {};
 
@@ -493,7 +495,7 @@ export class RapportAnalyseComponent {
 
     this.selectedBassin = {};
     this.selectedSbnl = {};
-    this.selectedBande = {};
+    this.selectedBand = new Band();
     this.selectedSbl = {};
     this.selectedPuit = {};
 
@@ -530,7 +532,17 @@ export class RapportAnalyseComponent {
     this.analysesChimique.qualite=this.analysesPhysique.qualite;
     this.analysesPhysique.pluie=this.analysesChimique.pluie;
 
-    if (this.selectedBassin!==null && this.selectedBassin.hasOwnProperty('id')) {
+    if (this.selectedPuit!==null && this.selectedPuit.hasOwnProperty('id')) {
+      this.selectedPuit.analysesChimiques = [];
+      if (this.checkedChimique == true) {
+        this.selectedPuit.analysesChimiques.push(this.analysesChimique);
+      }
+
+      this.rapportAnalyseService.addRapportToPuit(this.selectedPuit).subscribe(value => {
+        this.router.navigate(['/analysePhysique']);
+      }, error => console.log(error));
+    }
+    else if (this.selectedBassin!==null && this.selectedBassin.hasOwnProperty('id')) {
       this.selectedBassin.analysesChimiques = [];
       if (this.checkedChimique == true) {
         this.selectedBassin.analysesChimiques.push(this.analysesChimique);
@@ -592,18 +604,18 @@ export class RapportAnalyseComponent {
         this.router.navigate(['/analysePhysique']);
       }, error => console.log(error));
     }
-    else if (this.selectedBande!==null && this.selectedBande.hasOwnProperty('id')) {
-      this.selectedBande.analysesChimiques = [];
+    else if (this.selectedBand!==null && this.selectedBand.hasOwnProperty('id')) {
+      this.selectedBand.analysesChimiques = [];
       if (this.checkedChimique == true) {
-        this.selectedBande.analysesChimiques.push(this.analysesChimique);
+        this.selectedBand.analysesChimiques.push(this.analysesChimique);
       }
-      this.selectedBande.analysesPhysiques = [];
+      this.selectedBand.analysesPhysiques = [];
       if (this.checkedPhysique == true) {
         this.analysesPhysique.tamisList = this.listeTamis;
-        this.selectedBande.analysesPhysiques.push(this.analysesPhysique);
+        this.selectedBand.analysesPhysiques.push(this.analysesPhysique);
       }
 
-      this.rapportAnalyseService.addRapportToBande(this.selectedBande).subscribe(value => {
+      this.rapportAnalyseService.addRapportToBand(this.selectedBand).subscribe(value => {
         this.router.navigate(['/analysePhysique']);
       }, error => console.log(error));
     }

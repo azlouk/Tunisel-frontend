@@ -15,7 +15,7 @@
 
       </p-toolbar>
 
-      <p-table  [loading]="loading" #dt [value]="cribles" responsiveLayout="scroll" [rows]="10" [globalFilterFields]="['id','nom','reference','description','etat','bandeList']" [paginator]="true" [rowsPerPageOptions]="[10,20,30]" [showCurrentPageReport]="true" currentPageReportTemplate="Display  {first} to  {last} of  {totalRecords} entries" [(selection)]="selectedCribles" selectionMode="multiple" [rowHover]="true" dataKey="id">
+      <p-table  [loading]="loading" #dt [value]="cribles" responsiveLayout="scroll" [rows]="10" [globalFilterFields]="['id','nom','reference','description','etat','cribleLiwellList']" [paginator]="true" [rowsPerPageOptions]="[10,20,30]" [showCurrentPageReport]="true" currentPageReportTemplate="Display  {first} to  {last} of  {totalRecords} entries" [(selection)]="selectedCribles" selectionMode="multiple" [rowHover]="true" dataKey="id">
         <ng-template pTemplate="caption">
           <div class="flex flex-column md:flex-row md:justify-content-between md:align-items-center">
             <h5 class="m-0">Management of Crible</h5>
@@ -39,7 +39,9 @@
             <th pSortableColumn="description">Description <p-sortIcon field="description"></p-sortIcon></th>
             <th pSortableColumn="etat">State <p-sortIcon field="etat"></p-sortIcon></th>
             <th pSortableColumn="quantity">Quantity <p-sortIcon field="quantity"></p-sortIcon></th>
-            <th pSortableColumn="bandeList">Band <p-sortIcon field="bandeList"></p-sortIcon></th>
+            <th pSortableColumn="cribleLiwellList">Stock Unwashed </th>
+            <th pSortableColumn="cribleLiwellList">Liwell Sieve </th>
+            <th pSortableColumn="cribleLiwellList">Laundry </th>
             <th>Action</th>
 
           </tr>
@@ -49,39 +51,45 @@
             <td>
               <p-tableCheckbox [value]="crible"></p-tableCheckbox>
             </td>
-            <td style="width:14%; min-width:10rem;"><span class="p-column-title">Id</span>
+            <td ><span class="p-column-title">Id</span>
               {{crible.id}}
             </td>
-            <td style="width:14%; min-width:10rem;">
+            <td >
               <span class="p-column-title">Name</span>
               {{crible.nom}}
             </td>
-            <td style="width:14%; min-width:10rem;">
+            <td >
               <span class="p-column-title">Reference</span>
               {{crible.reference}}
             </td>
 
-            <td style="width:14%; min-width:10rem;">
+            <td >
               <span class="p-column-title">Description</span>
               {{crible.description}}
             </td>
 
-            <td style="width:14%; min-width:8rem;">
+            <td >
               <span class="p-column-title">State</span>
               {{crible.etat}}
             </td>
 
-            <td style="width:14%; min-width:8rem;">
+            <td >
               <span class="p-column-title">State</span>
               {{getTotalQuantityCrible(crible)}}
             </td>
-            <td style="width:14%; min-width:8rem;">
 
-              <span class="p-column-title">Band</span>
-              <span class="pi pi-eye text-3xl text-primary cursor-pointer m-2" (click)="openDialog(crible)"  ></span>
-
+            <td >
+              <span class="p-column-title">Stock Unwashed</span>
+              <span class="pi pi-eye text-3xl text-primary cursor-pointer m-2" (click)="openDialogSbnl(crible)"  ></span>
             </td>
-
+            <td >
+              <span class="p-column-title">Liwell Sieve</span>
+              <span class="pi pi-eye text-3xl text-primary cursor-pointer m-2" (click)="openDialog(crible)"  ></span>
+            </td>
+            <td >
+              <span class="p-column-title">Laundry</span>
+              <span class="pi pi-eye text-3xl text-primary cursor-pointer m-2" (click)="openDialogLaverie(crible)"  ></span>
+            </td>
             <td>
               <div class="flex align-items-center gap-2">
                 <button *ngIf="getToken()=='ADMIN'" pButton pRipple  class="p-button-rounded p-button-info " (click)="AddResultCrible(crible)">ResultCrible </button>
@@ -93,6 +101,9 @@
         </ng-template>
       </p-table>
     </div>
+
+
+<!--    ---------------------------------Crible liwell-------------------------------------------------->
     <p-dialog [(visible)]="detailsDialog" [style]="{width: '1300px'}"  [modal]="true" class="p-fluid">
       <ng-template pTemplate="content">
 
@@ -100,8 +111,8 @@
           <div class="flex flex-column gap-2 col-2">
             <label> Band List</label>
             <p-dropdown
-              [options]="this.crible.bandeList"
-              [(ngModel)]="selectedBande"
+              [options]="this.crible.cribleLiwellList"
+              [(ngModel)]="selectedCribleLiwell"
               optionLabel="reference"
               placeholder="Select a Band" />
           </div>
@@ -110,7 +121,7 @@
         </div>
         <div class="cart mt-5">
           <p-table #dt [loading]="loading"
-                   [value]="selectedBande.traitementStocks!==undefined?selectedBande.traitementStocks:[]"
+                   [value]="selectedCribleLiwell.traitementStocks!==undefined?selectedCribleLiwell.traitementStocks:[]"
 
                    responsiveLayout="scroll" [rows]="10"
                    [globalFilterFields]="['id','date','value']"
@@ -191,13 +202,196 @@
         <button pButton pRipple label="Close" icon="pi pi-times" class="p-button-text" (click)="detailsDialog=false"></button>
       </ng-template>
     </p-dialog>
+    <!--    ---------------------------------Crible liwell-------------------------------------------------->
 
-    <p-dialog [(visible)]="cribleDialog" [style]="{width: '450px'}" header="Crible" [modal]="true" class="p-fluid">
+    <!--    ---------------------------------SBNL-------------------------------------------------->
+    <p-dialog [(visible)]="detailsDialogSbnl" [style]="{width: '1300px'}"  [modal]="true" class="p-fluid">
+      <ng-template pTemplate="content">
+
+        <div *ngIf="getToken()=='ADMIN'" class="flex justify-content-between align-items-center border border-1 border-round border-gray-400 p-3">
+
+          <div class="flex flex-column gap-2 col-2">
+            <label> Unwashed List</label>
+            <p-dropdown
+              [options]="this.crible.sbnlList"
+              [(ngModel)]="selectedSbnl"
+              optionLabel="reference"
+              placeholder="Select a Unwashed" />
+          </div>
+        </div>
+        <div class="cart mt-5">
+          <p-table #dt [loading]="loading"
+                   [value]="selectedSbnl.transferToCribleVertList!==undefined?selectedSbnl.transferToCribleVertList:[]"
+                   responsiveLayout="scroll" [rows]="10"
+                   [globalFilterFields]="['id','date','value']"
+                   [paginator]="true"
+
+                   editMode="row"
+                   [rowsPerPageOptions]="[10,20,30]"
+                   [showCurrentPageReport]="true" currentPageReportTemplate="Display  {first} to  {last} of  {totalRecords} entries"  selectionMode="multiple" [rowHover]="true" dataKey="id">
+            <ng-template pTemplate="caption">
+              <div class="flex flex-column md:flex-row md:justify-content-between md:align-items-center">
+                <div class="flex justify-content-between align-items-center w-full">
+                  <h5 class="m-0">Transfer Unwashed to Green Sieve management</h5>
+
+
+
+                  <div>
+
+
+            <span class=" p-input-icon-left ">
+                            <i class="pi pi-search"></i>
+                            <input  type="text" pInputText (input)="onGlobalFilter(dt, $event)" placeholder="Search..."  class="w-full sm:w-auto"/>
+                        </span>
+                  </div>
+                </div>
+
+              </div>
+            </ng-template>
+            <ng-template pTemplate="header">
+              <tr>
+
+                <th pSortableColumn="id">Id <p-sortIcon field="id"></p-sortIcon></th>
+                <th pSortableColumn="date">Date Creation<p-sortIcon field="date"></p-sortIcon></th>
+                <th pSortableColumn="value">Transfer Quantity <p-sortIcon field="value"></p-sortIcon></th>
+
+                <th></th>
+              </tr>
+            </ng-template>
+            <ng-template pTemplate="body" let-transfer let-editing="editing" >
+              <tr [pEditableRow]="transfer" >
+
+                <td >
+                  <span class="p-column-title">Id</span>
+                  {{transfer.id}}
+                </td>
+
+                <td >
+                  {{transfer.dateCreation|date:'yyyy-MM-dd'}}
+                </td>
+
+                <td >
+                  {{transfer.quantityTransfer}}
+                </td>
+
+                <td>
+
+                </td>
+              </tr>
+            </ng-template>
+          </p-table>
+        </div>
+
+      </ng-template>
+      <ng-template pTemplate="footer">
+        <button pButton pRipple label="Close" icon="pi pi-times" class="p-button-text" (click)="detailsDialogSbnl=false"></button>
+      </ng-template>
+    </p-dialog>
+    <!--    ---------------------------------SBNL-------------------------------------------------->
+
+    <!--    ---------------------------------LAVERIE-------------------------------------------------->
+    <p-dialog [(visible)]="detailsDialogLaverie" [style]="{width: '1300px'}"  [modal]="true" class="p-fluid">
+      <ng-template pTemplate="content">
+
+        <div *ngIf="getToken()=='ADMIN'" class="flex justify-content-between align-items-center border border-1 border-round border-gray-400 p-3">
+
+          <div class="flex flex-column gap-2 col-2">
+            <label> Laundries List</label>
+            <p-dropdown
+              [options]="this.crible.laverieList"
+              [(ngModel)]="selectedLaverie"
+              optionLabel="reference"
+              placeholder="Select a Laundries" />
+          </div>
+        </div>
+        <div class="cart mt-5">
+          <p-table #dt [loading]="loading"
+                   [value]="selectedLaverie.transferLaverieToCriblesVert!==undefined?selectedLaverie.transferLaverieToCriblesVert:[]"
+                   responsiveLayout="scroll" [rows]="10"
+                   [globalFilterFields]="['id','date','value']"
+                   [paginator]="true"
+
+                   editMode="row"
+                   [rowsPerPageOptions]="[10,20,30]"
+                   [showCurrentPageReport]="true" currentPageReportTemplate="Display  {first} to  {last} of  {totalRecords} entries"  selectionMode="multiple" [rowHover]="true" dataKey="id">
+            <ng-template pTemplate="caption">
+              <div class="flex flex-column md:flex-row md:justify-content-between md:align-items-center">
+                <div class="flex justify-content-between align-items-center w-full">
+                  <h5 class="m-0">Transfer Laundry to Green Sieve management</h5>
+
+
+
+                  <div>
+
+
+            <span class=" p-input-icon-left ">
+                            <i class="pi pi-search"></i>
+                            <input  type="text" pInputText (input)="onGlobalFilter(dt, $event)" placeholder="Search..."  class="w-full sm:w-auto"/>
+                        </span>
+                  </div>
+                </div>
+
+              </div>
+            </ng-template>
+            <ng-template pTemplate="header">
+              <tr>
+
+                <th pSortableColumn="id">Id <p-sortIcon field="id"></p-sortIcon></th>
+                <th pSortableColumn="date">Date Creation<p-sortIcon field="date"></p-sortIcon></th>
+                <th pSortableColumn="value">Transfer Quantity <p-sortIcon field="value"></p-sortIcon></th>
+
+                <th></th>
+              </tr>
+            </ng-template>
+            <ng-template pTemplate="body" let-transfer let-editing="editing" >
+              <tr [pEditableRow]="transfer" >
+
+                <td >
+                  <span class="p-column-title">Id</span>
+                  {{transfer.id}}
+                </td>
+
+                <td >
+                  {{transfer.dateCreation|date:'yyyy-MM-dd'}}
+                </td>
+
+                <td >
+                  {{transfer.quantityTransfer}}
+                </td>
+
+                <td>
+
+                </td>
+              </tr>
+            </ng-template>
+          </p-table>
+        </div>
+
+      </ng-template>
+      <ng-template pTemplate="footer">
+        <button pButton pRipple label="Close" icon="pi pi-times" class="p-button-text" (click)="detailsDialogLaverie=false"></button>
+      </ng-template>
+    </p-dialog>
+    <!--    ---------------------------------LAVERIE-------------------------------------------------->
+
+
+
+
+
+
+    <p-dialog [(visible)]="cribleDialog" [style]="{width: '450px'}" header="Green Sieve" [modal]="true" class="p-fluid">
       <ng-template pTemplate="content">
         <div class="field">
-          <label>Band</label>
-          <p-multiSelect [options]="bandes"   [(ngModel)]="crible.bandeList"  placeholder="Select a Band" optionLabel="reference" display="chip" class="w-full"  ></p-multiSelect>
-
+          <label>Stock Unwashed</label>
+          <p-multiSelect [options]="sbnls"   [(ngModel)]="crible.sbnlList"  placeholder="Select a Unwashed" optionLabel="reference" display="chip" class="w-full"  ></p-multiSelect>
+        </div>
+        <div class="field">
+          <label>Liwell Sieve</label>
+          <p-multiSelect [options]="cribleLiwells"   [(ngModel)]="crible.cribleLiwellList"  placeholder="Select a Band" optionLabel="reference" display="chip" class="w-full"  ></p-multiSelect>
+        </div>
+        <div class="field">
+          <label>Laundries</label>
+          <p-multiSelect [options]="laveries"   [(ngModel)]="crible.laverieList"  placeholder="Select a Laundry" optionLabel="reference" display="chip" class="w-full"  ></p-multiSelect>
         </div>
         <div class="field">
           <label for="name">Name</label>

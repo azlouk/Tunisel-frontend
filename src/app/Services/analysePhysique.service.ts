@@ -7,8 +7,9 @@ import {Sbnl} from "../Models/sbnl";
 import {Sbl} from "../Models/sbl";
 import {Sblf} from "../Models/sblf";
 import {AnalysesPhysique} from "../Models/analyses-physique";
-import {Bande} from "../Models/bande";
+import {CribleLiwell} from "../Models/cribleLiwell";
 import {getKeyToken} from "../../main";
+import {Band} from "../Models/band";
 
 @Injectable({
   providedIn: 'root'
@@ -82,11 +83,11 @@ export class AnalysePhysiqueService {
     return this.http.put<void>(`${this.apiUrl}/analysesPhysiques/AddanalysePhysique/sbnl`, sbnl, {headers});
   }else {
       return  new Observable<any>()}}
-  addAnalysesPhysiquesToBande(bande:Bande) : Observable<void>{
+  addAnalysesPhysiquesToCribleLiwell(cribleLiwell:CribleLiwell) : Observable<void>{
     const token = getKeyToken();
     if (token) {
       const headers = new HttpHeaders().set('Authorization', `Bearer ${token}`).set("Content-Type", "application/json; charset=utf8");
-    return this.http.put<void>(`${this.apiUrl}/analysesPhysiques/AddanalysePhysique/bande`, bande, {headers});
+    return this.http.put<void>(`${this.apiUrl}/analysesPhysiques/AddanalysePhysique/cribleLiwell`, cribleLiwell, {headers});
   }else {
       return  new Observable<any>()}}
   addAnalysesPhysiquesToSbl(sbl:Sbl) : Observable<void>{
@@ -102,6 +103,13 @@ export class AnalysePhysiqueService {
       const headers = new HttpHeaders().set('Authorization', `Bearer ${token}`).set("Content-Type", "application/json; charset=utf8");
     return this.http.put<void>(`${this.apiUrl}/analysesPhysiques/AddanalysePhysique/sblf`, sblf, {headers});
   }else {
+      return  new Observable<any>()}}
+  addAnalysesPhysiquesToBand(band:Band) : Observable<void>{
+    const token = getKeyToken();
+    if (token) {
+      const headers = new HttpHeaders().set('Authorization', `Bearer ${token}`).set("Content-Type", "application/json; charset=utf8");
+      return this.http.put<void>(`${this.apiUrl}/analysesPhysiques/AddanalysePhysique/band`, band, {headers});
+    }else {
       return  new Observable<any>()}}
 
 }

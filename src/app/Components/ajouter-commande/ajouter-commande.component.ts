@@ -34,13 +34,13 @@ import {AutoFocusModule} from "primeng/autofocus";
 import html2canvas from "html2canvas";
 import jsPDF from "jspdf";
 import {Sbnl} from "../../Models/sbnl";
-import {Bande} from "../../Models/bande";
+import {CribleLiwell} from "../../Models/cribleLiwell";
 import {Sbl} from "../../Models/sbl";
 import {Sblf} from "../../Models/sblf";
 import {SbnlService} from "../../Services/sbnl.service";
 import {SblService} from "../../Services/sbl.service";
 import {SblfService} from "../../Services/sblf.service";
-import {BandeService} from "../../Services/bande.service";
+import {CribleLiwellService} from "../../Services/cribleLiwell.service";
 import autoTable from "jspdf-autotable";
 import {OverlayPanelModule} from "primeng/overlaypanel";
 import {ProgressBarModule} from "primeng/progressbar";
@@ -104,7 +104,7 @@ export interface Column {
 export class AjouterCommandeComponent implements OnInit{
   bassins: Bassin[] = [];
   sbnls: Sbnl[] = [];
-  bandes: Bande[] = [];
+  cribleLiwells: CribleLiwell[] = [];
   sbls: Sbl[] = [];
   sblfs: Sblf[] = [];
 
@@ -163,7 +163,7 @@ export class AjouterCommandeComponent implements OnInit{
               private sbnlService :SbnlService,
               private sblService :SblService,
               private sblfService :SblfService,
-              private bandeService:BandeService,
+              private cribleLiwellService:CribleLiwellService,
               private stockOrderService:StockOrderService,
   )
   {}
@@ -254,13 +254,13 @@ export class AjouterCommandeComponent implements OnInit{
     // =============================================
 
     this.isUpdateTamis=false ;
-    this.commandeId = this.route.snapshot.paramMap.get('id');
-    this.isUpdateCommande=this.commandeId!==null
+    // this.commandeId = this.route.snapshot.paramMap.get('id');
+    // this.isUpdateCommande=this.commandeId!==null
 
-
-    if (this.commandeId) {
-      this.getCommandeById();
-    }
+    //
+    // if (this.commandeId) {
+    //   this.getCommandeById();
+    // }
 
 
     this.bassinService.getAllBassinsDTO()
@@ -275,8 +275,8 @@ export class AjouterCommandeComponent implements OnInit{
     },error => {
       console.log(error)});
 
-    this.bandeService.getAllBandesDTO().subscribe((v:  Bande[]) => {
-      this.bandes=v;
+    this.cribleLiwellService.getAllCribleLiwellsDTO().subscribe((v:  CribleLiwell[]) => {
+      this.cribleLiwells=v;
 
     },error => {
       console.log(error)})
@@ -422,7 +422,7 @@ getCommandeById(){
 
     this.getLineBassin();
     this.getLinesbln();
-    this.getLineBande();
+    this.getLineCribleLiwell();
     this.getLinesbl() ;
     this.getLinesblf() ;
 
@@ -498,13 +498,13 @@ getCommandeById(){
    }
  }
 
- getLineBande(){
+ getLineCribleLiwell(){
 
-    if(this.commande.bandes){
-     this.commande.bandes.forEach(bande => {
-       if(bande.id){
+    if(this.commande.cribleLiwells){
+     this.commande.cribleLiwells.forEach(cribleLiwell => {
+       if(cribleLiwell.id){
          this.loadingcommande=true;
-         this.commandeService.getLignesCommandesBande(bande.id).subscribe(LinesCommandes => {
+         this.commandeService.getLignesCommandesCribleLiwell(cribleLiwell.id).subscribe(LinesCommandes => {
            LinesCommandes.forEach(value => {
              const data= this.listeLignesCommandesCopy.find(value1 => this.getRef(value)==this.getRef(value1))
              // console.error(data)
@@ -1265,9 +1265,9 @@ this.getLine()
         related = sblf.reference;
       }
 
-      const bande = this.commande.bandes?.find(bande => bande.analysesChimiques!.find(analyse => analyse.id == lineCommande.analyseChimique?.id) !== undefined || bande.analysesPhysiques!.find(analyseph => analyseph.id == lineCommande.analysePhysique?.id) !== undefined)
-      if (bande !== undefined && bande.reference !== undefined) {
-        related = bande.reference;
+      const cribleLiwell = this.commande.cribleLiwells?.find(cribleLiwell => cribleLiwell.analysesChimiques!.find(analyse => analyse.id == lineCommande.analyseChimique?.id) !== undefined || cribleLiwell.analysesPhysiques!.find(analyseph => analyseph.id == lineCommande.analysePhysique?.id) !== undefined)
+      if (cribleLiwell !== undefined && cribleLiwell.reference !== undefined) {
+        related = cribleLiwell.reference;
       }
 
       return related;

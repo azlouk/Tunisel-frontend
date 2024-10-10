@@ -3,62 +3,53 @@ import {environment} from "../environment/environment";
 import {HttpClient, HttpHeaders} from "@angular/common/http";
 import {Observable} from "rxjs";
 import {getKeyToken} from "../../main";
-import {Crible} from "../Models/crible";
+import {TransferLaverieToCrible} from "../Models/transfer-laverie-to-crible";
 
 @Injectable({
   providedIn: 'root'
 })
-export class CribleService {
+export class TransferLaverieToCribleService {
 
   apiUrl=environment.apiUrl
   constructor(private http: HttpClient) { }
 
-  getAllCribles(): Observable<Crible[]> {
+  getAllTransferLaverieToCrible(): Observable<TransferLaverieToCrible[]> {
     const token = getKeyToken();
     if (token) {
       const headers = new HttpHeaders().set('Authorization', `Bearer ${token}`).set("Content-Type", "application/json; charset=utf8");
-      return this.http.get<Crible[]>(`${this.apiUrl}/cribles/read`, {headers}) ;
+      return this.http.get<TransferLaverieToCrible[]>(`${this.apiUrl}/transferLaverieToCrible/read`, {headers}) ;
     }else {
       return  new Observable<any>()}}
-  getAllCriblesDto(): Observable<Crible[]> {
+  getTransferLaverieToCribleById(id:number): Observable<TransferLaverieToCrible> {
     const token = getKeyToken();
     if (token) {
       const headers = new HttpHeaders().set('Authorization', `Bearer ${token}`).set("Content-Type", "application/json; charset=utf8");
-      return this.http.get<Crible[]>(`${this.apiUrl}/cribles/readDto`, {headers}) ;
-    }else {
-      return  new Observable<any>()}}
-  getCribleById(id:number): Observable<Crible> {
-    const token = getKeyToken();
-    if (token) {
-      const headers = new HttpHeaders().set('Authorization', `Bearer ${token}`).set("Content-Type", "application/json; charset=utf8");
-      return this.http.get<Crible>(`${this.apiUrl}/cribles/${id}`, {headers}) ;
+      return this.http.get<TransferLaverieToCrible>(`${this.apiUrl}/transferLaverieToCrible/${id}`, {headers}) ;
     }else {
       return  new Observable<any>()}}
 
-  deleteCrible(CribleId: number | undefined): Observable<any> {
+  deleteTransferLaverieToCrible(transferLaverieToCribleId: number | undefined): Observable<any> {
     const token = getKeyToken();
     if (token) {
       const headers = new HttpHeaders().set('Authorization', `Bearer ${token}`).set("Content-Type", "application/json; charset=utf8");
-      return this.http.delete(`${this.apiUrl}/cribles/delete/${CribleId}`, {headers});
+      return this.http.delete(`${this.apiUrl}/transferLaverieToCrible/delete/${transferLaverieToCribleId}`, {headers});
     }else {
       return  new Observable<any>()}}
 
-  updateCrible(crible: Crible): Observable<Crible> {
+  updateTransferLaverieToCrible(transferLaverieToCrible: TransferLaverieToCrible): Observable<TransferLaverieToCrible> {
     const token = getKeyToken();
     if (token) {
       const headers = new HttpHeaders().set('Authorization', `Bearer ${token}`).set("Content-Type", "application/json; charset=utf8");
-      return this.http.put<Crible>(`${this.apiUrl}/cribles/update`, crible, {headers});
+      return this.http.put<TransferLaverieToCrible>(`${this.apiUrl}/transferLaverieToCrible/update`, transferLaverieToCrible, {headers});
     }else {
       return  new Observable<any>()}}
 
 
-  addCrible(crible: Crible) : Observable<Crible>{
+  addTransferLaverieToCrible(transferLaverieToCrible: TransferLaverieToCrible, id:number) : Observable<boolean>{
     const token = getKeyToken();
     if (token) {
       const headers = new HttpHeaders().set('Authorization', `Bearer ${token}`).set("Content-Type", "application/json; charset=utf8");
-      return this.http.post<Crible>(`${this.apiUrl}/cribles/add`, crible, {headers});
+      return this.http.post<boolean>(`${this.apiUrl}/transferLaverieToCrible/add/${id}`, transferLaverieToCrible, {headers});
     }else {
       return  new Observable<any>()}}
-
-
 }

@@ -1,5 +1,7 @@
-import {Bande} from "./bande";
+import {CribleLiwell} from "./cribleLiwell";
 import {ResultCrible} from "./result-crible";
+import {Laverie} from "./laverie";
+import {Sbnl} from "./sbnl";
 
 export class Crible {
 
@@ -8,20 +10,39 @@ export class Crible {
    reference: string;
    description: string;
    etat: string;
-   bandeList: Bande[];
+   cribleLiwellList: CribleLiwell[];
    resultCribles: ResultCrible[];
+   laverieList:Laverie[];
+   sbnlList:Sbnl[];
 
 
-  constructor(_id: number=0, _nom: string="", _reference: string="", _description: string="", _etat: string="", _bandeList: Bande[]=[], _resultCribles: ResultCrible[]=[]) {
+  constructor(_id: number=0, _nom: string="", _reference: string="", _description: string="", _etat: string="", _cribleLiwellList: CribleLiwell[]=[], _resultCribles: ResultCrible[]=[], _laverieList: Laverie[]=[], _sbnlList: Sbnl[]=[]) {
     this.id = _id;
     this.nom = _nom;
     this.reference = _reference;
     this.description = _description;
     this.etat = _etat;
-    this.bandeList = _bandeList;
+    this.cribleLiwellList = _cribleLiwellList;
     this.resultCribles = _resultCribles;
+    this.laverieList = _laverieList;
+    this.sbnlList = _sbnlList;
   }
 
+  public get _laverieList(): Laverie[] {
+    return this.laverieList;
+  }
+
+  public set _laverieList(value: Laverie[]) {
+    this.laverieList = value;
+  }
+
+  public get _sbnlList(): Sbnl[] {
+    return this.sbnlList;
+  }
+
+  public set _sbnlList(value: Sbnl[]) {
+    this.sbnlList = value;
+  }
 
   public get _id(): number {
     return this.id;
@@ -63,12 +84,12 @@ export class Crible {
     this.etat = value;
   }
 
-  public get _bandeList(): Bande[] {
-    return this.bandeList;
+  public get _cribleLiwellList(): CribleLiwell[] {
+    return this.cribleLiwellList;
   }
 
-  public set _bandeList(value: Bande[]) {
-    this.bandeList = value;
+  public set _cribleLiwellList(value: CribleLiwell[]) {
+    this.cribleLiwellList = value;
   }
 
   public get _resultCribles(): ResultCrible[] {

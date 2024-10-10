@@ -3,54 +3,54 @@ import {environment} from "../environment/environment";
 import {HttpClient, HttpHeaders} from "@angular/common/http";
 import {Observable} from "rxjs";
 import {getKeyToken} from "../../main";
-import {TransferToBand} from "../Models/transfer-to-band";
+import {TransferToCribleLiwell} from "../Models/TransferToCribleLiwell";
 
 @Injectable({
   providedIn: 'root'
 })
-export class TransferToBandService {
+export class TransferToCribleLiwellService {
 
 
   apiUrl=environment.apiUrl
   constructor(private http: HttpClient) { }
 
-  getAllTransferToBand(): Observable<TransferToBand[]> {
+  getAllTransferToCribleLiwell(): Observable<TransferToCribleLiwell[]> {
     const token = getKeyToken();
     if (token) {
       const headers = new HttpHeaders().set('Authorization', `Bearer ${token}`).set("Content-Type", "application/json; charset=utf8");
-      return this.http.get<TransferToBand[]>(`${this.apiUrl}/transferToBand/read`, {headers}) ;
+      return this.http.get<TransferToCribleLiwell[]>(`${this.apiUrl}/transferToCribleLiwell/read`, {headers}) ;
     }else {
       return  new Observable<any>()}}
-  getTransferToBandById(id:number): Observable<TransferToBand> {
+  getTransferToCribleLiwellById(id:number): Observable<TransferToCribleLiwell> {
     const token = getKeyToken();
     if (token) {
       const headers = new HttpHeaders().set('Authorization', `Bearer ${token}`).set("Content-Type", "application/json; charset=utf8");
-      return this.http.get<TransferToBand>(`${this.apiUrl}/transferToBand/${id}`, {headers}) ;
-    }else {
-      return  new Observable<any>()}}
-
-  deleteTransferToBand(TransferToBandId: number | undefined): Observable<any> {
-    const token = getKeyToken();
-    if (token) {
-      const headers = new HttpHeaders().set('Authorization', `Bearer ${token}`).set("Content-Type", "application/json; charset=utf8");
-      return this.http.delete(`${this.apiUrl}/transferToBand/delete/${TransferToBandId}`, {headers});
+      return this.http.get<TransferToCribleLiwell>(`${this.apiUrl}/transferToCribleLiwell/${id}`, {headers}) ;
     }else {
       return  new Observable<any>()}}
 
-  updateTransferToBand(TransferToBand: TransferToBand): Observable<TransferToBand> {
+  deleteTransferToCribleLiwell(transferToCribleLiwellId: number | undefined): Observable<any> {
     const token = getKeyToken();
     if (token) {
       const headers = new HttpHeaders().set('Authorization', `Bearer ${token}`).set("Content-Type", "application/json; charset=utf8");
-      return this.http.put<TransferToBand>(`${this.apiUrl}/transferToBand/update`, TransferToBand, {headers});
+      return this.http.delete(`${this.apiUrl}/transferToCribleLiwell/delete/${transferToCribleLiwellId}`, {headers});
+    }else {
+      return  new Observable<any>()}}
+
+  updateTransferToCribleLiwell(transferToCribleLiwell: TransferToCribleLiwell): Observable<TransferToCribleLiwell> {
+    const token = getKeyToken();
+    if (token) {
+      const headers = new HttpHeaders().set('Authorization', `Bearer ${token}`).set("Content-Type", "application/json; charset=utf8");
+      return this.http.put<TransferToCribleLiwell>(`${this.apiUrl}/transferToCribleLiwell/update`, transferToCribleLiwell, {headers});
     }else {
       return  new Observable<any>()}}
 
 
-  addTransferToBand(TransferToBand: TransferToBand, id:number) : Observable<TransferToBand>{
+  addTransferToCribleLiwell(transferToCribleLiwell: TransferToCribleLiwell, id:number) : Observable<boolean>{
     const token = getKeyToken();
     if (token) {
       const headers = new HttpHeaders().set('Authorization', `Bearer ${token}`).set("Content-Type", "application/json; charset=utf8");
-      return this.http.post<TransferToBand>(`${this.apiUrl}/transferToBand/add/${id}`, TransferToBand, {headers});
+      return this.http.post<boolean>(`${this.apiUrl}/transferToCribleLiwell/add/${id}`, transferToCribleLiwell, {headers});
     }else {
       return  new Observable<any>()}}
 

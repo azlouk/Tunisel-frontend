@@ -3,8 +3,9 @@ import {AnalysesChimique} from "./analyses-chimique";
 import {AnalysesPhysique} from "./analyses-physique";
 import {Sbnl} from "./sbnl";
 import {TraitementStock} from "./traitement-stock";
+import {Laverie} from "./laverie";
 
-export interface Bande {
+export interface CribleLiwell {
   id?: number;
   reference?: string;
   description?: string;
@@ -19,4 +20,5 @@ export interface Bande {
   analysesPhysiques?: AnalysesPhysique[];
   traitementStocks?:TraitementStock[];
   sbnlList?:Sbnl[];
+  laverieList?:Laverie[];
 }

@@ -158,8 +158,8 @@ export class AnalyseChimiqueComponent implements OnInit {
             if (value.sblf) {
               analysechimique.ref = value.sblf.reference;
             }
-            if (value.bande) {
-              analysechimique.ref = value.bande.reference;
+            if (value.band) {
+              analysechimique.ref = value.band.reference;
             }
           }, error => {
             console.error(error);
