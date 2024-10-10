@@ -7,6 +7,10 @@ import {RegisterRequest} from "../Models/register-request";
 import {AuthenticationResponse} from "../Models/authentication-response";
 import {ChangePasswordRequest} from "../Models/change-password-request";
 import {getKeyToken, getToken} from "../../main";
+import {LoginService} from "./login.service";
+import Swal from "sweetalert2";
+import {Router} from "@angular/router";
+import {MessageService} from "primeng/api";
 
 
 
