@@ -396,6 +396,17 @@ export class DashboardService {
       return new Observable<any[]>(); // Return an empty observable if no token is present
     }
   }
-
+//   ===========================API Data For Attribute Band============================================
+  calculateSumForAttributeBand(sumForAttributeRequest:SumForAttributeRequest): Observable<any[]> {
+    const token = getKeyToken();
+    if (token) {
+      const headers = new HttpHeaders()
+        .set('Authorization', `Bearer ${token}`)
+        .set('Content-Type', 'application/json; charset=utf-8');
+      return this.http.post<any[]>(`${this.apiUrl}/statistiques/count-by-month-total-SumForAttribute-by-band`, sumForAttributeRequest, {headers} );
+    } else {
+      return new Observable<any[]>(); // Return an empty observable if no token is present
+    }
+  }
 
 }
