@@ -134,7 +134,7 @@ export class DashboardService {
       return  new Observable<any[]>()}
   }
 
-//   ================SBL========================================================
+//   ================SBLF========================================================
   countAnalysesChimiquesBySblfIdAndByMonth(sblfId:number,year:number): Observable<any[]> {
     const token = getKeyToken();
     if (token) {
@@ -158,7 +158,30 @@ export class DashboardService {
     }else {
       return  new Observable<any[]>()}
   }
+//   ================Band========================================================
+  countAnalysesChimiquesByBandIdAndByMonth(bandId:number,year:number): Observable<any[]> {
+    const token = getKeyToken();
+    if (token) {
+      const headers = new HttpHeaders().set('Authorization', `Bearer ${token}`).set("Content-Type", "application/json; charset=utf8");
+      const params = new HttpParams().set('bandId', bandId).set('year',year);
 
+      return this.http.get<any[]>(`${this.apiUrl}/statistiques/count-by-month-total-chimiques-by-band`, {headers, params });
+    }else {
+      return  new Observable<any[]>()}
+  }
+
+
+
+  countPhysicalAnalysesByBandIdAndByMonth(bandId:number,year:number): Observable<any[]> {
+    const token = getKeyToken();
+    if (token) {
+      const headers = new HttpHeaders().set('Authorization', `Bearer ${token}`).set("Content-Type", "application/json; charset=utf8");
+      const params = new HttpParams().set('bandId', bandId).set('year',year);
+
+      return this.http.get<any[]>(`${this.apiUrl}/statistiques/count-by-month-total-physiques-by-band`, {headers, params });
+    }else {
+      return  new Observable<any[]>()}
+  }
 // ========================================SUM RECOLTE VALUE BY BASSIN======================================
   sumRecolteValueByBassinIdAndByMonthAndYear(bassinId:number,year:number): Observable<any[]> {
     const token = getKeyToken();

@@ -111,6 +111,21 @@
                 </div>
 
               </p-tabPanel>
+              <p-tabPanel header="Band">
+                <div class="flex flex-column gap-2">
+                  <label class="font-bold"> Band</label>
+
+                  <p-dropdown
+
+                    [(ngModel)]="selectedBand"
+                    [options]="bands"
+                    (ngModelChange)="changeSelectedBand(selectedBand)"
+                    optionLabel="reference"
+                    placeholder="Select a Band"/>
+                </div>
+
+              </p-tabPanel>
+
               <p-tabPanel header="Washed">
                 <div class="flex flex-column gap-2">
                   <label class="font-bold"> washed</label>

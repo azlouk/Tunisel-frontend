@@ -35,6 +35,8 @@ import {Concasseur} from "../../Models/concasseur";
 import {ConcasseurService} from "../../Services/concasseur.service";
 import {transferArrayItem} from "@angular/cdk/drag-drop";
 import {RippleModule} from "primeng/ripple";
+import {Laverie} from "../../Models/laverie";
+import {LaverieService} from "../../Services/laverie.service";
 
 @Component({
   selector: 'app-sbl',
@@ -87,6 +89,7 @@ export class SblComponent implements OnInit {
 
   selectedSbls: Sbl[] = [];
   cribleLiwells: CribleLiwell[] = [];
+  laveries: Laverie[] = [];
   Selectetsbl: Sbl = {}
   private isUpdateSbl = false;
   SelectAll: boolean = false;
@@ -103,7 +106,9 @@ export class SblComponent implements OnInit {
   detailsDialog: boolean=false;
   detailsDialogCrible: boolean=false;
   detailsDialogConcasseur: boolean=false;
+  detailsDialogLaverie: boolean=false;
   selectedCribleLiwell:CribleLiwell={};
+  selectedLaverie:Laverie=new Laverie();
   selectedCrible:Crible=new Crible();
   selectedConcasseur:Concasseur=new Concasseur();
   @Input() get selectedColumns(): any[] {
@@ -113,7 +118,8 @@ export class SblComponent implements OnInit {
   constructor(private messageService: MessageService, private sblService: SblService,
               private cribleLiwellService: CribleLiwellService,
               private cribleService: CribleService,
-              private concasseurService: ConcasseurService) {
+              private concasseurService: ConcasseurService,
+              private laverieService:LaverieService) {
   }
 
   ngOnInit() {
@@ -152,6 +158,7 @@ export class SblComponent implements OnInit {
     ];
     this.getAllCribles();
     this.getAllConcasseurs();
+    this.getAllLaveries();
 
   }
 
@@ -167,7 +174,16 @@ export class SblComponent implements OnInit {
     })
 
   }
+  getAllLaveries() {
 
+    this.laverieService.getAllLaveriesDto().subscribe(value => {
+      this.laveries = value;
+
+    }, error => {
+      console.log(error)
+    })
+
+  }
   getAllConcasseurs() {
     this.loading = true;
 
@@ -627,6 +643,7 @@ export class SblComponent implements OnInit {
     let totalCrible: number = 0;
     let totalConcasseur: number = 0;
     let totalCribleLiwell: number = 0;
+    let totalLaverie: number = 0;
     let totalSalinesStockOrder: number = 0;
 
     // Calculate totalCribleLiwell
@@ -650,6 +667,12 @@ export class SblComponent implements OnInit {
         totalConcasseur += concasseur.resultConcasseurs?.reduce((sum, resultConcasseur) => sum + resultConcasseur.result, 0) || 0;
       });
     }
+    // Calculate totalLaverie
+    if (sbl.laverieList && sbl.laverieList.length > 0) {
+      sbl.laverieList.forEach(laverie => {
+        totalLaverie += laverie.transferLaverieToWasheds?.reduce((sum, transferToWashed) => sum + transferToWashed.quantityTransfer, 0) || 0;
+      });
+    }
     // Calculate totalCrible
     if (sbl.cribleList && sbl.cribleList.length > 0) {
       sbl.cribleList.forEach(crible => {
@@ -665,7 +688,7 @@ export class SblComponent implements OnInit {
       });
     }
 
-    return (totalCrible+ totalConcasseur +totalCribleLiwell)-totalSalinesStockOrder;
+    return (totalCrible+ totalConcasseur +totalCribleLiwell+totalLaverie)-totalSalinesStockOrder;
   }
 
 
@@ -682,6 +705,11 @@ export class SblComponent implements OnInit {
 
   public openDialogConcasseur(sbl: any) {
     this.detailsDialogConcasseur=true;
+    this.sbl=sbl;
+  }
+
+  public openDialogLaverie(sbl: any) {
+    this.detailsDialogLaverie=true;
     this.sbl=sbl;
   }
 }
