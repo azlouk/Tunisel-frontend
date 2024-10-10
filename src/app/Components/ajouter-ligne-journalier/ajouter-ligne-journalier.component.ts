@@ -165,7 +165,7 @@ this.pompeService.getAllPompes().subscribe(value => this.pompes=value)
 
   ajouterJournalierPompe() {
 
-    this.journalier.ligneJournalierList.push(new LigneJournalier(new Date().getTime()*-1))
+    this.journalier.ligneJournalierList.unshift(new LigneJournalier(new Date().getTime()*-1))
     // console.log(new JsonPipe().transform(  this.journalier.ligneJournalierList));
 
   }
