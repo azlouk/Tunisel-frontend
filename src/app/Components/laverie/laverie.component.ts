@@ -105,7 +105,7 @@ export class LaverieComponent {
 
   selectedLaveries: Laverie[] = [];
   selectedlaverie:Laverie=new Laverie();
-  private isUpdatelaverie=false;
+   isUpdatelaverie=false;
   sbnls: Sbnl[] = [];
   SelectAll: boolean = false;
   detailsDialog: boolean = false;

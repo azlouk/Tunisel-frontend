@@ -40,10 +40,10 @@
             <th pSortableColumn="emplacement">Location <p-sortIcon field="emplacement"></p-sortIcon></th>
             <th pSortableColumn="etat">State <p-sortIcon field="etat"></p-sortIcon></th>
             <th pSortableColumn="quantite">Quantity <p-sortIcon field="quantite"></p-sortIcon></th>
-            <th pSortableColumn="band">Liwell Sieve </th>
-            <th pSortableColumn="crible">Green Sieve </th>
-            <th pSortableColumn="crible">Laundry </th>
-            <th pSortableColumn="concasseur">Concasseur </th>
+            <th >Liwell Sieve </th>
+            <th >Green Sieve </th>
+            <th >Laundry </th>
+            <th >Crushing </th>
             <th>Action</th>
 
           </tr>
@@ -98,7 +98,7 @@
               <span class="pi pi-eye text-3xl text-primary cursor-pointer m-2" (click)="openDialogLaverie(sbl)"  ></span>
             </td>
             <td >
-              <span class="p-column-title text-center">Concasseur</span>
+              <span class="p-column-title text-center">Crushing</span>
               <span class="pi pi-eye text-3xl text-primary cursor-pointer m-2" (click)="openDialogConcasseur(sbl)"  ></span>
             </td>
             <td>
@@ -310,12 +310,12 @@
 
         <div *ngIf="getToken()=='ADMIN'" class="flex justify-content-between align-items-center border border-1 border-round border-gray-400 p-3">
           <div class="flex flex-column gap-2 col-2">
-            <label> Concasseur List</label>
+            <label> Crushing List</label>
             <p-dropdown
               [options]="sbl.concasseurList"
               [(ngModel)]="selectedConcasseur"
               optionLabel="reference"
-              placeholder="Select a Concasseur" />
+              placeholder="Select a Crushing" />
           </div>
 
 
@@ -333,7 +333,7 @@
             <ng-template pTemplate="caption">
               <div class="flex flex-column md:flex-row md:justify-content-between md:align-items-center">
                 <div class="flex justify-content-between align-items-center w-full">
-                  <h5 class="m-0">Result Concasseur</h5>
+                  <h5 class="m-0">Result Crushing</h5>
 
 
 
@@ -413,8 +413,8 @@
           <p-multiSelect [options]="laveries"   [(ngModel)]="sbl.laverieList"  placeholder="Select a Laundry" optionLabel="reference" display="chip" class="w-full"  ></p-multiSelect>
         </div>
         <div class="field" [hidden]="(sbl.cribleLiwellList && sbl.cribleLiwellList.length > 0)||(sbl.cribleList && sbl.cribleList.length > 0)||(sbl.laverieList && sbl.laverieList.length > 0)">
-          <label>Concasseur</label>
-          <p-multiSelect [options]="concasseurs"   [(ngModel)]="sbl.concasseurList"  placeholder="Select a Concasseur" optionLabel="reference" display="chip" class="w-full"  ></p-multiSelect>
+          <label>Crushing</label>
+          <p-multiSelect [options]="concasseurs"   [(ngModel)]="sbl.concasseurList"  placeholder="Select a Crushing" optionLabel="reference" display="chip" class="w-full"  ></p-multiSelect>
         </div>
 
         <div class="field">
@@ -452,7 +452,7 @@
 
       <ng-template pTemplate="footer">
         <button pButton pRipple label="Cancel" icon="pi pi-times" class="p-button-text" (click)="hideDialog()"></button>
-        <button pButton pRipple label="Add" icon="pi pi-check" class="p-button-text" (click)="saveSbl()"></button>
+        <button pButton pRipple label="{{isUpdateSbl==false?'Add':'Update'}}" icon="pi pi-check" class="p-button-text" (click)="saveSbl()"></button>
       </ng-template>
 
     </p-dialog>

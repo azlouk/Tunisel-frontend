@@ -18,7 +18,7 @@
       <p-table  [loading]="loading" #dt [value]="cribles" responsiveLayout="scroll" [rows]="10" [globalFilterFields]="['id','nom','reference','description','etat','cribleLiwellList']" [paginator]="true" [rowsPerPageOptions]="[10,20,30]" [showCurrentPageReport]="true" currentPageReportTemplate="Display  {first} to  {last} of  {totalRecords} entries" [(selection)]="selectedCribles" selectionMode="multiple" [rowHover]="true" dataKey="id">
         <ng-template pTemplate="caption">
           <div class="flex flex-column md:flex-row md:justify-content-between md:align-items-center">
-            <h5 class="m-0">Management of Crible</h5>
+            <h5 class="m-0">Management of Green Sieve</h5>
             <span class="block mt-2 md:mt-0 p-input-icon-left">
                             <i class="pi pi-search"></i>
                             <input  type="text" pInputText (input)="onGlobalFilter(dt, $event)" placeholder="Search..."  class="w-full sm:w-auto"/>
@@ -39,9 +39,9 @@
             <th pSortableColumn="description">Description <p-sortIcon field="description"></p-sortIcon></th>
             <th pSortableColumn="etat">State <p-sortIcon field="etat"></p-sortIcon></th>
             <th pSortableColumn="quantity">Quantity <p-sortIcon field="quantity"></p-sortIcon></th>
-            <th pSortableColumn="cribleLiwellList">Stock Unwashed </th>
-            <th pSortableColumn="cribleLiwellList">Liwell Sieve </th>
-            <th pSortableColumn="cribleLiwellList">Laundry </th>
+            <th >Stock Unwashed </th>
+            <th >Liwell Sieve </th>
+            <th >Laundry </th>
             <th>Action</th>
 
           </tr>
@@ -92,7 +92,7 @@
             </td>
             <td>
               <div class="flex align-items-center gap-2">
-                <button *ngIf="getToken()=='ADMIN'" pButton pRipple  class="p-button-rounded p-button-info " (click)="AddResultCrible(crible)">ResultCrible </button>
+                <button *ngIf="getToken()=='ADMIN'" pButton pRipple  class="p-button-rounded p-button-info " (click)="AddResultCrible(crible)">ResultGreenSieve </button>
                 <button *ngIf="getToken()=='ADMIN'" pButton pRipple icon="pi pi-pencil" class="p-button-rounded p-button-success mr-2" (click)="editCrible(crible)"></button>
                 <button *ngIf="getToken()=='ADMIN'" pButton pRipple icon="pi pi-trash" class="p-button-rounded p-button-warning mr-2" (click)="deleteCrible(crible)"></button>
               </div>
@@ -426,14 +426,14 @@
 
       <ng-template pTemplate="footer">
         <button pButton pRipple label="Cancel" icon="pi pi-times" class="p-button-text" (click)="hideDialog()"></button>
-        <button pButton pRipple label="Add" icon="pi pi-check" class="p-button-text" (click)="saveCrible()"></button>
+        <button pButton pRipple label="{{isUpdateCrible==false?'Add':'Update'}}" icon="pi pi-check" class="p-button-text" (click)="saveCrible()"></button>
       </ng-template>
     </p-dialog>
 
     <!--==============================ADD TRAITEMENT STOCK===============================================================================-->
     <p-dialog [(visible)]="resultCribleDialog" [style]="{width: '1300px'}" header="Result Crible" [modal]="true" class="p-fluid">
       <ng-template pTemplate="content">
-        <h3>Add Result Crible</h3>
+        <h3>Add Result Green Sieve</h3>
         <div *ngIf="getToken()=='ADMIN'" class="flex justify-content-between align-items-center border border-1 border-round border-gray-400 p-3">
           <div class="">
             <label for="dateCreationr">Date Creation</label>
@@ -465,7 +465,7 @@
             <ng-template pTemplate="caption">
               <div class="flex flex-column md:flex-row md:justify-content-between md:align-items-center">
                 <div class="flex justify-content-between align-items-center w-full">
-                  <h5 class="m-0">Result Crible management</h5>
+                  <h5 class="m-0">Result Green Sieve management</h5>
 
                   <div>
 

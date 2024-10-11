@@ -94,7 +94,7 @@ export class CribleLiwellComponent {
 
   selectedCribleLiwells: CribleLiwell[] = [];
   selectedCribleLiwell:CribleLiwell={}
-  private isUpdatecribleLiwell=false;
+  isUpdatecribleLiwell=false;
   sbnls: Sbnl[] = [];
  laveries: Laverie[]=[];
   SelectAll: boolean = false;

@@ -87,7 +87,7 @@ export class PuitComponent implements OnInit {
 
   selectedPuits: Puit[] = [];
   SelectAll: boolean = false;
-  private isUpdateUser = false;
+  isUpdatePuit = false;
   loading: boolean = false;
   ReportedBy:any={}
   pompes:Pompe[]=[];
@@ -176,7 +176,7 @@ getAllPompes(){
   }
 
   editPuit(puit: Puit) {
-    this.isUpdateUser = true;
+    this.isUpdatePuit = true;
 
 
     this.puit = {...puit};
@@ -251,14 +251,14 @@ getAllPompes(){
       this.submitted = true
     else {
       this.productDialog = false;
-      if (this.isUpdateUser == true) {
+      if (this.isUpdatePuit == true) {
         this.puitService.updatePuit(this.puit).subscribe(() => {
           this.puitService.getAllPuits().subscribe((puits: Puit[]) => {
             this.puits = puits;
           });
         });
         console.log('Puit updated');
-        this.isUpdateUser = false;
+        this.isUpdatePuit = false;
       } else {
         this.puitService.addPuit(this.puit).subscribe(() => {
           this.puitService.getAllPuits().subscribe((puits: Puit[]) => {

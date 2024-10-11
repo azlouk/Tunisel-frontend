@@ -68,7 +68,7 @@
 
             <td style="width:14%; min-width:10rem;">
               <span class="p-column-title">Date Stock</span>
-              {{sbnl.dateStock  | date :'dd-mm-yyyy'}}
+              {{sbnl.dateStock  | date :'dd-MM-yyyy'}}
             </td>
 
             <td style="width:14%; min-width:8rem;">
@@ -655,7 +655,7 @@
 
       <ng-template pTemplate="footer">
         <button pButton pRipple label="Cancel" icon="pi pi-times" class="p-button-text" (click)="hideDialog()"></button>
-        <button pButton pRipple label="Add" icon="pi pi-check" class="p-button-text" (click)="saveSbnl()"></button>
+        <button pButton pRipple label="{{isUpdatesbnl==false?'Add':'Update'}}" icon="pi pi-check" class="p-button-text" (click)="saveSbnl()"></button>
       </ng-template>
     </p-dialog>
 

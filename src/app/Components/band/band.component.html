@@ -292,7 +292,7 @@
 
       <ng-template pTemplate="footer">
         <button pButton pRipple label="Cancel" icon="pi pi-times" class="p-button-text" (click)="hideDialog()"></button>
-        <button pButton pRipple label="Add" icon="pi pi-check" class="p-button-text" (click)="saveBand()"></button>
+        <button pButton pRipple label="{{isUpdateBand==false?'Add':'Update'}}" icon="pi pi-check" class="p-button-text" (click)="saveBand()"></button>
       </ng-template>
 
     </p-dialog>

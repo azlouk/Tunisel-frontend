@@ -152,7 +152,7 @@
 
       <ng-template pTemplate="footer">
         <button pButton pRipple label="Cancel" icon="pi pi-times" class="p-button-text" (click)="hideDialog()"></button>
-        <button pButton pRipple label="Add" icon="pi pi-check" class="p-button-text" (click)="savePuit()"></button>
+        <button pButton pRipple label="{{isUpdatePuit==false?'Add':'Update'}}" icon="pi pi-check" class="p-button-text" (click)="savePuit()"></button>
       </ng-template>
     </p-dialog>
 

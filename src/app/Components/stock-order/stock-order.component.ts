@@ -103,7 +103,7 @@ export class StockOrderComponent implements OnInit{
   dateStartSaline!:Date;
   dateEndSaline!:Date;
   totalSalineFiltree:number=0;
-  private isUpdateStockOrder=false;
+  isUpdateStockOrder=false;
 
   loading:boolean=false ;
   public sbls: Sbl[]=[];

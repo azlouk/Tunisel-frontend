@@ -107,7 +107,7 @@
       </p-table>
     </div>
 
-    <p-dialog [(visible)]="productDialog" [style]="{width: '600px'}" header="Pond details" [modal]="true" class="p-fluid">
+    <p-dialog [(visible)]="productDialog" [style]="{width: '600px'}" header="Stock Order details" [modal]="true" class="p-fluid">
       <ng-template pTemplate="content">
 
 
@@ -163,7 +163,7 @@
 
       <ng-template pTemplate="footer">
         <button pButton pRipple label="Cancel" icon="pi pi-times" class="p-button-text" (click)="hideDialog()"></button>
-        <button pButton pRipple label="Save" icon="pi pi-check" class="p-button-text" (click)="saveStockOrder()"></button>
+        <button pButton pRipple label="{{isUpdateStockOrder==false?'Add':'Update'}}" icon="pi pi-check" class="p-button-text" (click)="saveStockOrder()"></button>
       </ng-template>
     </p-dialog>
 
