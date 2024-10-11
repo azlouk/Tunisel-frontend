@@ -53,7 +53,6 @@ export interface Column {
     ToastModule,
     ToolbarModule,
     FormsModule,
-    DropdownModule,
     MultiSelectModule,
     NgForOf,
     RippleModule,
@@ -66,7 +65,8 @@ export interface Column {
     NgClass,
     AutoCompleteModule,
     BadgeModule,
-    FloatLabelModule
+    FloatLabelModule,
+    DropdownModule
   ],
   templateUrl: './commande.component.html',
   styleUrl: './commande.component.css'
