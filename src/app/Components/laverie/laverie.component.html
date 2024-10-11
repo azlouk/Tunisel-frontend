@@ -18,7 +18,7 @@
       <p-table #dt [value]="laveries" [columns]="cols"  responsiveLayout="scroll" [rows]="10" [globalFilterFields]="['id','reference','description','dateCreation','state','totalquantite','nom','Sbnl']" [paginator]="true" [rowsPerPageOptions]="[10,20,30]" [showCurrentPageReport]="true" currentPageReportTemplate="Display  {first} to  {last} of  {totalRecords} entries" [(selection)]="selectedLaveries" selectionMode="multiple" [rowHover]="true" dataKey="id">
         <ng-template pTemplate="caption">
           <div class="flex flex-column md:flex-row md:justify-content-between md:align-items-center">
-            <h5 class="m-0">Laverie Inventory Management</h5>
+            <h5 class="m-0">Laundry Management</h5>
             <span class="block mt-2 md:mt-0 p-input-icon-left">
                             <i class="pi pi-search"></i>
                             <input  type="text" pInputText (input)="onGlobalFilter(dt, $event)" placeholder="Search..."  class="w-full sm:w-auto"/>
@@ -86,7 +86,6 @@
               <div class="flex gap-2">
                 <button *ngIf="getToken()=='ADMIN'" pButton pRipple  class="p-button-rounded p-button-info mr-2" (click)="AddTransferTo(laverie)">Transfer</button>
 
-                <!--                <button *ngIf="getToken()=='ADMIN'" pButton pRipple  class="p-button-rounded p-button-info " (click)="AddTraitementStock(b)">Traitement</button>-->
                 <button *ngIf="getToken()=='ADMIN'" pButton pRipple icon="pi pi-pencil" class="p-button-rounded p-button-success " (click)="editLaverie(laverie)"></button>
                 <button *ngIf="getToken()=='ADMIN'" pButton pRipple icon="pi pi-trash" class="p-button-rounded p-button-warning " (click)="deleteLaverie(laverie)"></button>
 
@@ -124,7 +123,7 @@
               <ng-template pTemplate="caption">
                 <div class="flex flex-column md:flex-row md:justify-content-between md:align-items-center">
                   <div class="flex justify-content-between align-items-center w-full">
-                    <h5 class="m-0">Transfer to Laverie management</h5>
+                    <h5 class="m-0">Transfer to Laundry management</h5>
                     <div>
             <span class=" p-input-icon-left ">
                             <i class="pi pi-search"></i>
@@ -380,7 +379,7 @@
     </p-dialog>
     <!--==============================ADD TRAITEMENT STOCK===============================================================================-->
 
-    <p-dialog [(visible)]="productDialog" [style]="{width: '450px'}" header="Laverie" [modal]="true" class="p-fluid">
+    <p-dialog [(visible)]="productDialog" [style]="{width: '450px'}" header="Laundry" [modal]="true" class="p-fluid">
       <ng-template pTemplate="content">
         <div class="field">
           <label for="name">Unwashed</label>
@@ -416,7 +415,7 @@
 
       <ng-template pTemplate="footer">
         <button pButton pRipple label="Cancel" icon="pi pi-times" class="p-button-text" (click)="hideDialog()"></button>
-        <button pButton pRipple label="Add" icon="pi pi-check" class="p-button-text" (click)="saveLaverie()"></button>
+        <button pButton pRipple label="{{isUpdatelaverie==false?'Add':'Update'}}" icon="pi pi-check" class="p-button-text" (click)="saveLaverie()"></button>
       </ng-template>
     </p-dialog>
 

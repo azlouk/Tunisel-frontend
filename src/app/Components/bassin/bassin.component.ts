@@ -106,7 +106,7 @@ export class BassinComponent implements OnInit {
   selectedBassins: Bassin[] = [];
   SelectetBassin:Bassin={}
   puits: Puit[] = [];
-  private isUpdateBassin=false;
+  public isUpdateBassin=false;
   selectedPuit?: Puit;
   SelectAll: boolean = false;
 loading:boolean=false ;

@@ -79,7 +79,7 @@ export class CribleComponent implements OnInit{
 
   selectedCribles: Crible[] = [];
   cribleLiwells: CribleLiwell[] = [];
-  public isUpdateCrible=false;
+ isUpdateCrible=false;
   SelectAll: boolean = false;
 
 

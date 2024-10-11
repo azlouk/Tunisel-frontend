@@ -62,7 +62,7 @@ export class ConcasseurComponent implements OnInit{
 
   selectedConcasseurs: Concasseur[] = [];
   cribles: Crible[] = [];
-  public isUpdateConcasseur=false;
+  isUpdateConcasseur=false;
   SelectAll: boolean = false;
 
 

@@ -101,7 +101,7 @@ export class BandComponent implements OnInit{
   selectedBands: Sbl[] = [];
   cribleLiwells: CribleLiwell[] = [];
   SelectetBand: Sbl = {}
-  private isUpdateBand = false;
+  public isUpdateBand = false;
   SelectAll: boolean = false;
   @ViewChild("pdfpuit") htmlContent: ElementRef | undefined;
   visiblePrint: boolean = false;
@@ -316,15 +316,15 @@ getAllBands(){
     this.productDialog = false
     if(this.froms=='unwashed' && this.selectedFromSbnl.id !== undefined){
       this.band.from.typeId=this.selectedFromSbnl.id;
-      this.band.from.type='Sbnl';
+      this.band.from.type='Unwashed';
     }
     if(this.froms == 'liwellSieve' && this.selectedFromCribleLiwell.id !== undefined){
       this.band.from.typeId=this.selectedFromCribleLiwell.id;
-      this.band.from.type='Crible Liwell';
+      this.band.from.type='Liwell Sieve';
     }
     if(this.froms=='greenSieve'){
       this.band.from.typeId=this.selectedFromCrible.id;
-      this.band.from.type='Green Crible';
+      this.band.from.type='Green Sieve';
     }
     if(this.froms=='laundry'){
       this.band.from.typeId=this.selectedFromLaverie.id;
@@ -333,15 +333,15 @@ getAllBands(){
     // ========= TO ================
     if(this.tos=='washed' && this.selectedToWashed.id !== undefined){
       this.band.to.typeId=this.selectedToWashed.id;
-      this.band.to.type='Sbnl';
+      this.band.to.type='Unwashed';
     }
     if(this.tos == 'liwellSieve' && this.selectedToCribleLiwell.id !== undefined){
       this.band.to.typeId=this.selectedToCribleLiwell.id;
-      this.band.to.type='Crible Liwell';
+      this.band.to.type='Liwell Sieve';
     }
     if(this.tos=='greenSieve'){
       this.band.to.typeId=this.selectedToCrible.id;
-      this.band.to.type='Green Crible';
+      this.band.to.type='Green Sieve';
     }
     if(this.tos=='laundry'){
       this.band.to.typeId=this.selectedToLaverie.id;

@@ -18,7 +18,7 @@
       <p-table  [loading]="loading" #dt [value]="concasseurs" responsiveLayout="scroll" [rows]="10" [globalFilterFields]="['id','nom','reference','description','etat','bandeList']" [paginator]="true" [rowsPerPageOptions]="[10,20,30]" [showCurrentPageReport]="true" currentPageReportTemplate="Display  {first} to  {last} of  {totalRecords} entries" [(selection)]="selectedConcasseurs" selectionMode="multiple" [rowHover]="true" dataKey="id">
         <ng-template pTemplate="caption">
           <div class="flex flex-column md:flex-row md:justify-content-between md:align-items-center">
-            <h5 class="m-0">Management of Concasseur</h5>
+            <h5 class="m-0">Management of Crushing</h5>
             <span class="block mt-2 md:mt-0 p-input-icon-left">
                             <i class="pi pi-search"></i>
                             <input  type="text" pInputText (input)="onGlobalFilter(dt, $event)" placeholder="Search..."  class="w-full sm:w-auto"/>
@@ -39,7 +39,7 @@
             <th pSortableColumn="description">Description <p-sortIcon field="description"></p-sortIcon></th>
             <th pSortableColumn="etat">State <p-sortIcon field="etat"></p-sortIcon></th>
             <th pSortableColumn="quantity">Quantity <p-sortIcon field="quantity"></p-sortIcon></th>
-            <th pSortableColumn="bandeList">Crible <p-sortIcon field="bandeList"></p-sortIcon></th>
+            <th >Green Sieve</th>
             <th>Action</th>
 
           </tr>
@@ -84,7 +84,7 @@
 
             <td>
               <div class="flex align-items-center gap-2">
-                <button *ngIf="getToken()=='ADMIN'" pButton pRipple  class="p-button-rounded p-button-info " (click)="AddResultConcasseur(concasseur)">ResultConcasseur </button>
+                <button *ngIf="getToken()=='ADMIN'" pButton pRipple  class="p-button-rounded p-button-info " (click)="AddResultConcasseur(concasseur)">ResultCrushing </button>
                 <button *ngIf="getToken()=='ADMIN'" pButton pRipple icon="pi pi-pencil" class="p-button-rounded p-button-success mr-2" (click)="editConcasseur(concasseur)"></button>
                 <button *ngIf="getToken()=='ADMIN'" pButton pRipple icon="pi pi-trash" class="p-button-rounded p-button-warning mr-2" (click)="deleteConcasseur(concasseur)"></button>
               </div>
@@ -98,12 +98,12 @@
 
         <div *ngIf="getToken()=='ADMIN'" class="flex justify-content-between align-items-center border border-1 border-round border-gray-400 p-3">
           <div class="flex flex-column gap-2 col-2">
-            <label> Crible List</label>
+            <label> Green Sieve List</label>
             <p-dropdown
               [options]="concasseur.cribleList"
               [(ngModel)]="selectedCrible"
               optionLabel="reference"
-              placeholder="Select a Crible" />
+              placeholder="Select a Green Sieve" />
           </div>
 
 
@@ -121,7 +121,7 @@
             <ng-template pTemplate="caption">
               <div class="flex flex-column md:flex-row md:justify-content-between md:align-items-center">
                 <div class="flex justify-content-between align-items-center w-full">
-                  <h5 class="m-0">Result Crible</h5>
+                  <h5 class="m-0">Result Green Sieve</h5>
 
 
 
@@ -182,11 +182,11 @@
       </ng-template>
     </p-dialog>
 
-    <p-dialog [(visible)]="concasseurDialog" [style]="{width: '450px'}" header="Crible" [modal]="true" class="p-fluid">
+    <p-dialog [(visible)]="concasseurDialog" [style]="{width: '450px'}" header="Crushing" [modal]="true" class="p-fluid">
       <ng-template pTemplate="content">
         <div class="field">
-          <label>Band</label>
-          <p-multiSelect [options]="cribles"   [(ngModel)]="concasseur.cribleList"  placeholder="Select a Band" optionLabel="reference" display="chip" class="w-full"  ></p-multiSelect>
+          <label>Green Sieve</label>
+          <p-multiSelect [options]="cribles"   [(ngModel)]="concasseur.cribleList"  placeholder="Select a Green Sieve" optionLabel="reference" display="chip" class="w-full"  ></p-multiSelect>
 
         </div>
         <div class="field">
@@ -222,14 +222,14 @@
 
       <ng-template pTemplate="footer">
         <button pButton pRipple label="Cancel" icon="pi pi-times" class="p-button-text" (click)="hideDialog()"></button>
-        <button pButton pRipple label="Add" icon="pi pi-check" class="p-button-text" (click)="saveConcasseur()"></button>
+        <button pButton pRipple label="{{isUpdateConcasseur==false?'Add':'Update'}}" icon="pi pi-check" class="p-button-text" (click)="saveConcasseur()"></button>
       </ng-template>
     </p-dialog>
 
     <!--==============================ADD TRAITEMENT STOCK===============================================================================-->
     <p-dialog [(visible)]="resultConcasseurDialog" [style]="{width: '1300px'}" header="Result Concasseur" [modal]="true" class="p-fluid">
       <ng-template pTemplate="content">
-        <h3>Add Result Concasseur</h3>
+        <h3>Add Result Crushing</h3>
         <div *ngIf="getToken()=='ADMIN'" class="flex justify-content-between align-items-center border border-1 border-round border-gray-400 p-3">
           <div class="">
             <label for="dateCreationr">Date Creation</label>
@@ -258,7 +258,7 @@
             <ng-template pTemplate="caption">
               <div class="flex flex-column md:flex-row md:justify-content-between md:align-items-center">
                 <div class="flex justify-content-between align-items-center w-full">
-                  <h5 class="m-0">Result Concasseur management</h5>
+                  <h5 class="m-0">Result Crushing management</h5>
 
                   <div>
 

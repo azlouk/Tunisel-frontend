@@ -108,7 +108,7 @@ export class SbnlComponent implements OnInit{
   selectedLaverie:Laverie=new Laverie();
   selectedCribleVert:Crible=new Crible();
   selectedCribleLiwell:CribleLiwell= {};
-  private isUpdatesbnl=false;
+   isUpdatesbnl=false;
   bassins: Bassin[] = [];
 
   SelectAll: boolean = false;

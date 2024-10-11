@@ -91,7 +91,7 @@ export class SblComponent implements OnInit {
   cribleLiwells: CribleLiwell[] = [];
   laveries: Laverie[] = [];
   Selectetsbl: Sbl = {}
-  private isUpdateSbl = false;
+  isUpdateSbl = false;
   SelectAll: boolean = false;
   @ViewChild("pdfpuit") htmlContent: ElementRef | undefined;
   visiblePrint: boolean = false;

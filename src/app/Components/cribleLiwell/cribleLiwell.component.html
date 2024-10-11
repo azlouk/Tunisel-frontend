@@ -130,7 +130,7 @@
               <ng-template pTemplate="caption">
                 <div class="flex flex-column md:flex-row md:justify-content-between md:align-items-center">
                   <div class="flex justify-content-between align-items-center w-full">
-                    <h5 class="m-0">Transfer Unwashed to CribleLiwell management</h5>
+                    <h5 class="m-0">Transfer Unwashed to Liwell Sieve management</h5>
 
 
 
@@ -215,7 +215,7 @@
               <ng-template pTemplate="caption">
                 <div class="flex flex-column md:flex-row md:justify-content-between md:align-items-center">
                   <div class="flex justify-content-between align-items-center w-full">
-                    <h5 class="m-0">Transfer Laundry to CribleLiwell management</h5>
+                    <h5 class="m-0">Transfer Laundry to Liwell Sieve management</h5>
 
 
 
@@ -474,7 +474,7 @@
     </p-dialog>
     <!--==============================ADD TRAITEMENT STOCK===============================================================================-->
 
-    <p-dialog [(visible)]="productDialog" [style]="{width: '450px'}" header="CribleLiwell" [modal]="true" class="p-fluid">
+    <p-dialog [(visible)]="productDialog" [style]="{width: '450px'}" header="Liwell Sieve" [modal]="true" class="p-fluid">
       <ng-template pTemplate="content">
         <div class="field">
           <label for="name">Unwashed</label>
@@ -519,7 +519,7 @@
 
       <ng-template pTemplate="footer">
         <button pButton pRipple label="Cancel" icon="pi pi-times" class="p-button-text" (click)="hideDialog()"></button>
-        <button pButton pRipple label="Add" icon="pi pi-check" class="p-button-text" (click)="saveCribleLiwell()"></button>
+        <button pButton pRipple label="{{isUpdatecribleLiwell==false?'Add':'Update'}}" icon="pi pi-check" class="p-button-text" (click)="saveCribleLiwell()"></button>
       </ng-template>
     </p-dialog>
 

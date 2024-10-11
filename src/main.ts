@@ -64,15 +64,15 @@ export function getModelDefault(){
 
     },
     {
-      label: 'Stock Basin',
+      label: 'Stock ',
       items: [
         {label: 'Unwashed', icon: 'pi pi-fw pi-box', routerLink: ['sbnls']},
-        {label: 'Band', icon: 'pi pi-fw pi-box', routerLink: ['bands']},
+        {label: 'Laundry', icon: 'pi pi-fw pi-box', routerLink: ['laveries']},
         {label: 'Liwell Sieve', icon: 'pi pi-fw pi-box', routerLink: ['cribleLiwells']},
         {label: 'Green Sieve', icon: 'pi pi-fw pi-box', routerLink: ['cribles']},
-        {label: 'Laundry', icon: 'pi pi-fw pi-box', routerLink: ['laveries']},
-        {label: 'Concasseur', icon: 'pi pi-fw pi-box', routerLink: ['concasseurs']},
+        {label: 'Crushing', icon: 'pi pi-fw pi-box', routerLink: ['concasseurs']},
         {label: 'Washed', icon: 'pi pi-fw pi-box', routerLink: ['/sbls']},
+        {label: 'Band', icon: 'pi pi-fw pi-box', routerLink: ['bands']},
         {label: 'Washed Ship', icon: 'pi pi-fw pi-box', routerLink: ['/sblfs']},
 
       ]

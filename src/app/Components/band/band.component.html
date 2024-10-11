@@ -26,7 +26,7 @@
                [(selection)]="selectedBands" selectionMode="multiple" [rowHover]="true" dataKey="id">
         <ng-template pTemplate="caption">
           <div class="flex flex-column md:flex-row md:justify-content-between md:align-items-center">
-            <h5 class="m-0">Management of washed stock</h5>
+            <h5 class="m-0">Management of Band</h5>
             <span class="block mt-2 md:mt-0 p-input-icon-left">
                             <i class="pi pi-search"></i>
                             <input type="text" pInputText (input)="onGlobalFilter(dt, $event)" placeholder="Search..."
@@ -111,7 +111,7 @@
       </p-table>
     </div>
 
-    <p-dialog [(visible)]="productDialog" [style]="{width: '600px'}" header="Washed" [maximizable]="true" [modal]="true"
+    <p-dialog [(visible)]="productDialog" [style]="{width: '600px'}" header="Band" [maximizable]="true" [modal]="true"
               class="p-fluid">
 
       <ng-template pTemplate="content">
@@ -292,7 +292,7 @@
 
       <ng-template pTemplate="footer">
         <button pButton pRipple label="Cancel" icon="pi pi-times" class="p-button-text" (click)="hideDialog()"></button>
-        <button pButton pRipple label="Add" icon="pi pi-check" class="p-button-text" (click)="saveBand()"></button>
+        <button pButton pRipple label="{{isUpdateBand==false?'Add':'Update'}}" icon="pi pi-check" class="p-button-text" (click)="saveBand()"></button>
       </ng-template>
 
     </p-dialog>

@@ -78,7 +78,7 @@
 
             <td style="width:14%; min-width:10rem;">
               <span class="p-column-title">Creation Date</span>
-              {{bassin.dateCreation| date :'dd-mm-yyyy' }}
+              {{bassin.dateCreation| date :'dd-MM-yyyy' }}
             </td>
             <td style="width:14%; min-width:8rem;">
               <span class="p-column-title">Name</span>
@@ -159,7 +159,7 @@
 
       <ng-template pTemplate="footer">
         <button pButton pRipple label="Cancel" icon="pi pi-times" class="p-button-text" (click)="hideDialog()"></button>
-        <button pButton pRipple label="Save" icon="pi pi-check" class="p-button-text" (click)="saveBassin()"></button>
+        <button pButton pRipple label="{{isUpdateBassin==false?'Add':'Update'}}" icon="pi pi-check" class="p-button-text" (click)="saveBassin()"></button>
       </ng-template>
     </p-dialog>
 

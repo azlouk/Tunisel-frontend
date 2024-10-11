@@ -61,7 +61,7 @@ export class PompeComponent implements OnInit{
   pompe:Pompe=new Pompe();
   selectedPompe: Pompe[] = [];
 
-  private isUpdatePompe=false;
+  isUpdatePompe=false;
   pompes: Pompe[]=[];
    filtereddataPompeType: any[]=[];
 
