@@ -398,8 +398,7 @@ this.getAllStockOrder();
   }
 
   saveSaline() {
-
-// @ts-ignore
+if(this.selectedBassin)
     this.saline.nomBassin=this.selectedBassin.nom;
     this.salineService.addSaline(this.saline, this.stockOrder.id).subscribe(value => {
       this.getSalinesByStockOrder();

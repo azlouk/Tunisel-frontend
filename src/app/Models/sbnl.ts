@@ -1,7 +1,6 @@
 import {StockType} from "../Enum/stock-type";
 import {AnalysesChimique} from "./analyses-chimique";
 import {AnalysesPhysique} from "./analyses-physique";
-import {Sbl} from "./sbl";
 import {Bassin} from "./bassin";
 import {TransferToCribleLiwell} from "./TransferToCribleLiwell";
 import {TransferToCrible} from "./transfer-to-crible";
@@ -24,4 +23,6 @@ export interface Sbnl {
   transferToCribleLiwellList?:TransferToCribleLiwell[];
   transferToCribleVertList?:TransferToCrible[];
   transferToLaverieList?:TransferToLaverie[];
+  dateDebutHarvest?:Date;
+  dateFinHarvest?:Date;
 }

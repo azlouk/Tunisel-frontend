@@ -699,6 +699,7 @@ this.transferToCribleLiwell=transferToCribleLiwell;
     let totalTransferLaverie:number=0;
     let totalRecolte:number=0;
 
+
     if(sbnl.transferToCribleLiwellList!=undefined)
       totalTransferCribleLiwell= sbnl.transferToCribleLiwellList.reduce((sum, transfer) => sum+transfer.quantityTransfer,0)
     if(sbnl.transferToCribleVertList!=undefined)
@@ -707,10 +708,22 @@ this.transferToCribleLiwell=transferToCribleLiwell;
       totalTransferLaverie= sbnl.transferToLaverieList.reduce((sum, transfer) => sum+transfer.quantityTransfer,0)
 
  if(sbnl.bassinList!=undefined){
-    sbnl.bassinList?.forEach(bassin => {
-      if(bassin.recolteList!=undefined)
-        totalRecolte +=bassin.recolteList.reduce((sum, recolte) => sum + recolte.value, 0)
-    } )}
+   const dateDebutHarvest = sbnl.dateDebutHarvest ? new Date(sbnl.dateDebutHarvest) : null;
+   const dateFinHarvest = sbnl.dateFinHarvest ? new Date(sbnl.dateFinHarvest) : null;
+   if (dateDebutHarvest && dateFinHarvest) { // Ensure both dates are valid
+     sbnl.bassinList?.forEach(bassin => {
+       if (bassin.recolteList != undefined) {
+         totalRecolte += bassin.recolteList
+           .filter(recolte => {
+             const recolteDate = recolte.dateCreation ? new Date(recolte.dateCreation) : null;
+             return recolteDate && recolteDate >= dateDebutHarvest && recolteDate <= dateFinHarvest;
+           })
+           .reduce((sum, recolte) => sum + recolte.value, 0);
+       }
+     });
+   }
+ }
+
 return totalRecolte-(totalTransferCribleLiwell+totalTransferCribleVert+totalTransferLaverie);
   }
 
