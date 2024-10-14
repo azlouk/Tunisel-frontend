@@ -31,7 +31,13 @@ export class StockOrderService {
     return this.http.get<StockOrder[]>(`${this.apiUrl}/stockOrders/readDTO`, {headers}) ;
   }else {
       return  new Observable<any>()}}
-
+  getAllStockOrderDTORead(): Observable<StockOrder[]> {
+    const token = getKeyToken();
+    if (token) {
+      const headers = new HttpHeaders().set('Authorization', `Bearer ${token}`).set("Content-Type", "application/json; charset=utf8");
+      return this.http.get<StockOrder[]>(`${this.apiUrl}/stockOrders/readDTOForCommande`, {headers}) ;
+    }else {
+      return  new Observable<any>()}}
   deleteStockOrder(stockOrderId: number | undefined): Observable<any> {
     const token = getKeyToken();
     if (token) {

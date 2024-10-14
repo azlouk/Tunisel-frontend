@@ -273,7 +273,7 @@ commandesCopy: Commande[]=[];
       console.log(error)});
         }
   getAllStockOrder() {
-    this.stockOrderService.getAllStockOrderDTO()
+    this.stockOrderService.getAllStockOrderDTORead()
       .subscribe((stockOrders: any[]) => {
         this.initiaTimeLine();
 
