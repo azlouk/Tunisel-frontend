@@ -273,7 +273,7 @@ commandesCopy: Commande[]=[];
       console.log(error)});
         }
   getAllStockOrder() {
-    this.stockOrderService.getAllStockOrder()
+    this.stockOrderService.getAllStockOrderDTO()
       .subscribe((stockOrders: any[]) => {
         this.initiaTimeLine();
 
@@ -285,7 +285,7 @@ commandesCopy: Commande[]=[];
         })).sort((a: StockOrder, b: StockOrder) => b.dateCreation.getTime() - a.dateCreation.getTime());
         this.stockSelected = this.stockOrders[0];
         this. filtreByStock( this.stockSelected );
-        this.getAllCommandesByStockOrdersId(this.stockSelected.id)
+        // this.getAllCommandesByStockOrdersId(this.stockSelected.id)
       }, error => {
         console.log(error);
       });
@@ -364,16 +364,12 @@ commandesCopy: Commande[]=[];
 
 
   filtreByStock(stockSelected: StockOrder) {
-    this.commandes = this.commandesCopy.filter(commande => {
-
-     // this.commandeService.getCommandesByStockOrderAndEtatContains(stockSelected.id,"Loading Completed").subscribe(value => {
-     //   this.ListCommandes = value;
-     //
-     //   // this.CalculeTotalInput();
-     // })
-
-      return commande.stockOrder && commande.stockOrder.id === stockSelected.id;
-    });
+    // this.commandes = this.commandesCopy.filter(commande => {
+    //
+    //
+    //
+    //   return commande.stockOrder && commande.stockOrder.id === stockSelected.id;
+    // });
     this.calculVolumeAvailble(stockSelected);
     this.getAllCommandesByStockOrdersId(stockSelected.id)
 
