@@ -112,7 +112,7 @@ export class AjouterCommandeComponent implements OnInit{
   commande: Commande={} ;
 
   private commandeId: any;
-  public isUpdateCommande=false;
+ isUpdateCommande=false;
   visibleDetails: boolean=false;
 
   // ======================
@@ -254,13 +254,13 @@ export class AjouterCommandeComponent implements OnInit{
     // =============================================
 
     this.isUpdateTamis=false ;
-    // this.commandeId = this.route.snapshot.paramMap.get('id');
-    // this.isUpdateCommande=this.commandeId!==null
+    this.commandeId = this.route.snapshot.paramMap.get('id');
+    this.isUpdateCommande=this.commandeId!==null
 
-    //
-    // if (this.commandeId) {
-    //   this.getCommandeById();
-    // }
+
+    if (this.isUpdateCommande==true) {
+      this.getCommandeById();
+    }
 
 
     this.bassinService.getAllBassinsDTO()
@@ -356,14 +356,15 @@ getCommandeById(){
 
    // console.log(new JsonPipe().transform( this.commande))
 
-    if(this.isUpdateCommande){
-
+    if(this.isUpdateCommande==true){
       this.commandeService.updateCommande(this.commande).subscribe(value => {
        this.loadinSave=false;
         this.router.navigate(['/commande'])
       })
     }
     else{
+      this.commande.id=0;
+
       this.commande.isLoading=false;
         this.commandeService.addCommande(this.commande).subscribe(value => {
           this.loadinSave=false;
