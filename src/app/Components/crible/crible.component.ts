@@ -95,6 +95,10 @@ export class CribleComponent implements OnInit{
   selectedSbnl:Sbnl= {};
   laveries:Laverie[]=[];
   sbnls:Sbnl[]=[];
+
+  public dateStartResultCrible!: Date;
+  public dateEndResultCrible!: Date;
+  public totalResultCribleFiltree: number=0;
   @Input() get selectedColumns(): any[] {
     return this._selectedColumns;
   }
@@ -228,6 +232,7 @@ export class CribleComponent implements OnInit{
 
   protected readonly getToken = getToken;
 
+
   public openDialog(crible: Crible) {
     this.detailsDialog=true;
     this.crible=crible;
@@ -257,8 +262,10 @@ export class CribleComponent implements OnInit{
   getListResultCribles(){
     if(this.crible.id!=undefined)
       this.cribleService.getCribleById(this.crible.id).subscribe(value => {
-        if(value.resultCribles!=undefined)
+        if(value.resultCribles!=undefined){
+          this.totalResultCribleFiltree=0;
           this.ListResultCribles= value.resultCribles;
+        }
       } )
   }
 
@@ -334,5 +341,17 @@ export class CribleComponent implements OnInit{
       }, error => {
         console.log('Error fetching sbnls:', error);
       });
+  }
+
+  public filtreListResultCribleWithDate(dateStartResultCrible: Date, dateEndResultCrible: Date) {
+    this. totalResultCribleFiltree=0
+    if (!this.ListResultCribles) return;
+
+    this.ListResultCribles = this.ListResultCribles.filter(resultCrible => {
+
+      return new Date(dateStartResultCrible)  <= new Date(resultCrible.dateCreation) && new Date(dateEndResultCrible)  >= new Date(resultCrible.dateCreation);
+    });
+    this.ListResultCribles.forEach(resultCrible => this.totalResultCribleFiltree+=(resultCrible.bigSalt+resultCrible.refus))
+
   }
 }

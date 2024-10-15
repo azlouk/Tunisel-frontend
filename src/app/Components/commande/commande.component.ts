@@ -1,4 +1,4 @@
-import {Component,  OnInit} from '@angular/core';
+import {Component, OnInit} from '@angular/core';
 import {ButtonModule} from "primeng/button";
 import {DialogModule} from "primeng/dialog";
 import {InputTextModule} from "primeng/inputtext";
@@ -8,8 +8,8 @@ import {Table, TableModule} from "primeng/table";
 import {ToastModule} from "primeng/toast";
 import {ToolbarModule} from "primeng/toolbar";
 import {Product} from "../../Models/product";
- import {Router} from "@angular/router";
- import {Commande} from "../../Models/commande";
+import {Router} from "@angular/router";
+import {Commande} from "../../Models/commande";
 import {CommandeService} from "../../Services/commande.service";
 import {getToken} from "../../../main";
 import {FormsModule} from "@angular/forms";
@@ -36,10 +36,11 @@ import {TamisService} from "../../Services/tamis.service";
 
 
 export interface Column {
-  id:number;
+  id: number;
   field: string;
   header: string;
 }
+
 @Component({
   selector: 'app-commande',
   standalone: true,
@@ -73,13 +74,13 @@ export interface Column {
 })
 
 
-export class CommandeComponent implements OnInit{
+export class CommandeComponent implements OnInit {
 
   itemsData: MenuItem[] | undefined;
 
-  datenow!:any ;
+  datenow!: any;
 
-  activeIndex: number =0;
+  activeIndex: number = 0;
 
   productDialog: boolean = false;
 
@@ -100,95 +101,95 @@ export class CommandeComponent implements OnInit{
   rowsPerPageOptions = [5, 10, 20];
   // ======********============
 
-  commandes:Commande[] = [];
+  commandes: Commande[] = [];
 
-  commande:Commande={};
- updateCommande:Commande={};
-  selectedCommandes:Commande[] = [];
-isUpdateCommande:boolean=false;
-  visible: boolean=false;
-  selectedColumns: Column[]=[];
-commandesCopy: Commande[]=[];
+  commande: Commande = {};
+  updateCommande: Commande = {};
+  selectedCommandes: Commande[] = [];
+  isUpdateCommande: boolean = false;
+  visible: boolean = false;
+  selectedColumns: Column[] = [];
+  commandesCopy: Commande[] = [];
   stockOrders: StockOrder[] = [];
-  stockSelected: StockOrder=new StockOrder();
+  stockSelected: StockOrder = new StockOrder();
 
-  TotalHarv: number=0;
-  TotalProd: number=0;
-  TotalTrQu: number=0;
-  TotalVolume: number=0;
-  VolumeAvailble: number=0;
-  referenceDialoge:boolean=false;
-  visibleCommande: boolean=false;
-  listcalibre:Column[]=[];
+  TotalHarv: number = 0;
+  TotalProd: number = 0;
+  TotalTrQu: number = 0;
+  TotalVolume: number = 0;
+  VolumeAvailble: number = 0;
+  referenceDialoge: boolean = false;
+  visibleCommande: boolean = false;
+  listcalibre: Column[] = [];
+
   constructor(private router: Router,
               private messageService: MessageService,
-              private commandeService :CommandeService,
-              private stockOrderService:StockOrderService,
-              private tamisService:TamisService) {}
+              private commandeService: CommandeService,
+              private stockOrderService: StockOrderService,
+              private tamisService: TamisService) {
+  }
 
   ngOnInit() {
-    this.datenow=new Date() ;
+    this.datenow = new Date();
 
     this.cols = [
 
-      {id:0, field: 'dateAnalyse', header: 'Prelevelment date' },
-      {id:1, field: 'reference', header: 'Reference' },
-      {id:2,field: 'matiere', header: 'Matter' },
-      {id:3, field: 'description', header: 'Description' },
-      {id:4, field: 'temperature', header: 'Temperature' },
-      {id:5, field: 'vent', header: 'wind' },
-      {id:6, field: 'densite', header: 'Densite' },
-      {id:7, field: 'matiereEnSuspension', header: 'Suspended matter'},
-      {id:8, field: 'salinite', header: 'Salinite'},
-      {id:9, field: 'calcium', header: 'Calcium'},
-      {id:10, field: 'magnesium', header: 'Magnesium'},
-      {id:11, field: 'sulfate', header: 'sulfate'},
-      {id:12, field: 'humidite', header: 'Humidite'},
-      {id:13, field: 'matiereInsoluble', header: 'Insoluble matter'},
-      {id:14, field: 'potassium', header: 'Potassium'},
-      {id:15, field: 'sodium', header: 'Sodium'},
-      {id:16, field: 'chlorure', header: 'Chorure'},
-      {id:17, field: 'ph', header: 'Ph'},
-      {id:18, field: 'chlorureDeSodium', header: 'Chlorure de Sodium'},
-      {id:19, field: 'ferrocyanure', header: 'Ferrocyanure'},
-      {id:20, field: 'conformite', header: 'Conformite'},
-      {id:21, field: 'qualite', header: 'Quality'},
-      {id:22, field: 'calibre', header: 'Calibre'},
-      {id:23, field: 'masse', header: 'Weight'},
-      {id:24, field: 'refus', header: 'Refusal '},
-      {id:25, field: 'refusCumulated', header: 'Refusal Cumulateds '},
-      {id:26, field: 'passCumulated', header: 'Cumulated Pass'},
-      {id:27, field: 'quantityRecolte', header: 'Harvest'},
-      {id:28, field: 'quantityProduction', header: 'Production'},
-      {id:29, field: 'quantityPluieBengarden', header: 'Ben Gardane Rain'},
-      {id:30, field: 'quantityPluieZarzis', header: 'Zarzis Rain'},
-      {id:31, field: 'quantiteTransfert', header: 'Transfer Quantity'},
-      {id:32, field: 'decisionTransfert', header: 'Transfer Decision'},
-      {id:33, field: 'numeroLot', header: 'Number Lot'},
-      {id:34, field: 'poidsLot', header: 'Lot Weight'},
-      {id:35, field: 'emplassementLot', header: 'Lot Location'},
-      {id:36, field: 'lieuxPrelevement', header: 'Places Prelevement'},
-      {id:37, field: 'matCamion', header: 'Truck Mat'},
-      {id:38, field: 'conformite', header: 'Conformite'},
+      {id: 0, field: 'dateAnalyse', header: 'Prelevelment date'},
+      {id: 1, field: 'reference', header: 'Reference'},
+      {id: 2, field: 'matiere', header: 'Matter'},
+      {id: 3, field: 'description', header: 'Description'},
+      {id: 4, field: 'temperature', header: 'Temperature'},
+      {id: 5, field: 'vent', header: 'wind'},
+      {id: 6, field: 'densite', header: 'Densite'},
+      {id: 7, field: 'matiereEnSuspension', header: 'Suspended matter'},
+      {id: 8, field: 'salinite', header: 'Salinite'},
+      {id: 9, field: 'calcium', header: 'Calcium'},
+      {id: 10, field: 'magnesium', header: 'Magnesium'},
+      {id: 11, field: 'sulfate', header: 'sulfate'},
+      {id: 12, field: 'humidite', header: 'Humidite'},
+      {id: 13, field: 'matiereInsoluble', header: 'Insoluble matter'},
+      {id: 14, field: 'potassium', header: 'Potassium'},
+      {id: 15, field: 'sodium', header: 'Sodium'},
+      {id: 16, field: 'chlorure', header: 'Chorure'},
+      {id: 17, field: 'ph', header: 'Ph'},
+      {id: 18, field: 'chlorureDeSodium', header: 'Chlorure de Sodium'},
+      {id: 19, field: 'ferrocyanure', header: 'Ferrocyanure'},
+      {id: 20, field: 'conformite', header: 'Conformite'},
+      {id: 21, field: 'qualite', header: 'Quality'},
+      {id: 22, field: 'calibre', header: 'Calibre'},
+      {id: 23, field: 'masse', header: 'Weight'},
+      {id: 24, field: 'refus', header: 'Refusal '},
+      {id: 25, field: 'refusCumulated', header: 'Refusal Cumulateds '},
+      {id: 26, field: 'passCumulated', header: 'Cumulated Pass'},
+      {id: 27, field: 'quantityRecolte', header: 'Harvest'},
+      {id: 28, field: 'quantityProduction', header: 'Production'},
+      {id: 29, field: 'quantityPluieBengarden', header: 'Ben Gardane Rain'},
+      {id: 30, field: 'quantityPluieZarzis', header: 'Zarzis Rain'},
+      {id: 31, field: 'quantiteTransfert', header: 'Transfer Quantity'},
+      {id: 32, field: 'decisionTransfert', header: 'Transfer Decision'},
+      {id: 33, field: 'numeroLot', header: 'Number Lot'},
+      {id: 34, field: 'poidsLot', header: 'Lot Weight'},
+      {id: 35, field: 'emplassementLot', header: 'Lot Location'},
+      {id: 36, field: 'lieuxPrelevement', header: 'Places Prelevement'},
+      {id: 37, field: 'matCamion', header: 'Truck Mat'},
+      {id: 38, field: 'conformite', header: 'Conformite'},
 
     ];
     this.selectedColumns = this.cols;
 
 
-
-   this.getAllStockOrder();
+    this.getAllStockOrder();
 
     this.cols = [
-      { field: 'id', header: 'id' },
-      { field: 'reference', header: 'reference' },
-      { field: 'description', header: 'description' },
-      { field: 'dateCreation', header: 'dateCreation' },
-      { field: 'nom', header: 'nom' },
-      { field: 'emplacement', header: 'emplacement' },
-      { field: 'etat', header: 'etat' },
-      { field: 'dateFermeture', header: 'dateFermeture' },
+      {field: 'id', header: 'id'},
+      {field: 'reference', header: 'reference'},
+      {field: 'description', header: 'description'},
+      {field: 'dateCreation', header: 'dateCreation'},
+      {field: 'nom', header: 'nom'},
+      {field: 'emplacement', header: 'emplacement'},
+      {field: 'etat', header: 'etat'},
+      {field: 'dateFermeture', header: 'dateFermeture'},
     ];
-
 
 
   }
@@ -206,15 +207,15 @@ commandesCopy: Commande[]=[];
 
   editCommande(commande: Commande) {
     this.router.navigate([`/updateCommande/${commande.id}`]);
-    this.isUpdateCommande=true;
-    this.commande = { ...commande };
+    this.isUpdateCommande = true;
+    this.commande = {...commande};
 
-    this.updateCommande = { ...commande };
+    this.updateCommande = {...commande};
   }
 
   deleteCommande(commande: Commande) {
     this.deleteProductDialog = true;
-    this.commande = { ...commande };
+    this.commande = {...commande};
   }
 
   confirmDeleteSelected() {
@@ -223,10 +224,10 @@ commandesCopy: Commande[]=[];
     this.selectedCommandes.forEach(selectedCommandes => {
       this.commandeService.deleteCommande(selectedCommandes.id).subscribe(
         () => {
-          this.messageService.add({ severity: 'success', summary: 'Successful', detail: 'User Deleted', life: 3000 });
+          this.messageService.add({severity: 'success', summary: 'Successful', detail: 'User Deleted', life: 3000});
 
           this.getAllCommandesByStockOrdersId(this.stockSelected.id);
-          if(this.commande.stockOrder)
+          if (this.commande.stockOrder)
             this.calculVolumeAvailble(this.commande.stockOrder);
         },
         (error) => {
@@ -239,13 +240,13 @@ commandesCopy: Commande[]=[];
   confirmDelete() {
     this.deleteProductDialog = false;
     this.commandes = this.commandes.filter(val => val.id !== this.commande.id);
-    if (this.commande.id!= null) {
+    if (this.commande.id != null) {
       this.commandeService.deleteCommande(this.commande.id).subscribe(() => {
         console.log("Command Deleted")
-        this.messageService.add({ severity: 'success', summary: 'Successful', detail: 'Command Deleted', life: 3000 });
+        this.messageService.add({severity: 'success', summary: 'Successful', detail: 'Command Deleted', life: 3000});
         this.getAllCommandesByStockOrdersId(this.stockSelected.id);
-        if(this.commande.stockOrder)
-        this.calculVolumeAvailble(this.commande.stockOrder);
+        if (this.commande.stockOrder)
+          this.calculVolumeAvailble(this.commande.stockOrder);
       });
     }
 
@@ -261,19 +262,21 @@ commandesCopy: Commande[]=[];
     table.filterGlobal((event.target as HTMLInputElement).value, 'contains');
   }
 
-  getAllCommandesByStockOrdersId(id:number) {
-    this.loading=true ;
-    this.commandeService.getAllCommandeByStockOrderId(id).subscribe((ListCommande:  Commande[]) => {
-      this.commandes=ListCommande;
-    this.commandesCopy=[... this.commandes]
+  getAllCommandesByStockOrdersId(id: number) {
+    this.loading = true;
+    this.commandeService.getAllCommandeByStockOrderId(id).subscribe((ListCommande: Commande[]) => {
+      this.commandes = ListCommande;
+      this.commandesCopy = [...this.commandes]
       this.initiaTimeLine();
-      this.loading=false ;
+      this.loading = false;
 
     }, error => {
-      console.log(error)});
-        }
+      console.log(error)
+    });
+  }
+
   getAllStockOrder() {
-    this.loadingstock=true
+    this.loadingstock = true
     this.stockOrderService.getAllStockOrderDTORead()
       .subscribe((stockOrders: any[]) => {
         this.initiaTimeLine();
@@ -285,8 +288,8 @@ commandesCopy: Commande[]=[];
 
         })).sort((a: StockOrder, b: StockOrder) => b.dateCreation.getTime() - a.dateCreation.getTime());
         this.stockSelected = this.stockOrders[0];
-        this. filtreByStock( this.stockSelected );
-        this.loadingstock=false;
+        this.filtreByStock(this.stockSelected);
+        this.loadingstock = false;
         // this.getAllCommandesByStockOrdersId(this.stockSelected.id)
       }, error => {
         console.log(error);
@@ -294,19 +297,12 @@ commandesCopy: Commande[]=[];
   }
 
 
-
-
-
-
-
-
-
-
   cancel() {
-    this.visible=false;
+    this.visible = false;
   }
-    protected readonly getToken = getToken;
-  loading: boolean=false;
+
+  protected readonly getToken = getToken;
+  loading: boolean = false;
 
   // calculAvailableVolume(commande:Commande){
   //   let total:number=0;
@@ -320,11 +316,9 @@ commandesCopy: Commande[]=[];
   // }
 
 
-
   onActiveIndexChange(event: number) {
     this.activeIndex = event;
   }
-
 
 
   initiaTimeLine() {
@@ -361,10 +355,6 @@ commandesCopy: Commande[]=[];
   }
 
 
-
-
-
-
   filtreByStock(stockSelected: StockOrder) {
     // this.commandes = this.commandesCopy.filter(commande => {
     //
@@ -379,46 +369,49 @@ commandesCopy: Commande[]=[];
 
 
   calculVolumeAvailble(stockSelected: StockOrder) {
-const total=this.getSumSalines(stockSelected)+stockSelected.volumeTerrain+stockSelected.volumePort+stockSelected.volumeQuai;
-    this.VolumeAvailble= total
-  }
-  getSumSalines(stockOrder:StockOrder){
-
-    const TotalSaline= stockOrder.salines.reduce((sum, saline) => sum+saline.volumeSaline,0)
-    const TotalTransferFromSaline=stockOrder.listHistory.filter(lh=>lh.startingPoint=='Saline volume').reduce((sum, history) => sum+history.transferQuantity,0)
-    const TotalTransferToSaline=stockOrder.listHistory.filter(lh=>lh.arrivingPoint=='Saline volume').reduce((sum, history) => sum+history.transferQuantity,0)
-
-    return  (TotalSaline-TotalTransferFromSaline) +TotalTransferToSaline;
+    const total = this.getSumSalines(stockSelected) + stockSelected.volumeTerrain + stockSelected.volumePort + stockSelected.volumeQuai;
+    this.VolumeAvailble = total
   }
 
-  CalculeTotalVolume(commande:Commande):number {
+  getSumSalines(stockOrder: StockOrder) {
 
-    this.TotalVolume=0 ;
-commande.ligneCommandes?.forEach(l => {
-  if(l.quantiteTransfert)
-    this.TotalVolume+=parseFloat(l.quantiteTransfert+'');
+    const TotalSaline = stockOrder.salines.reduce((sum, saline) => sum + saline.volumeSaline, 0)
+    const TotalTransferFromSaline = stockOrder.listHistory.filter(lh => lh.startingPoint == 'Saline volume').reduce((sum, history) => sum + history.transferQuantity, 0)
+    const TotalTransferToSaline = stockOrder.listHistory.filter(lh => lh.arrivingPoint == 'Saline volume').reduce((sum, history) => sum + history.transferQuantity, 0)
 
-})
-    return  this.TotalVolume;
+    return (TotalSaline - TotalTransferFromSaline) + TotalTransferToSaline;
+  }
 
-    }
+  CalculeTotalVolume(commande: Commande): number {
+
+    this.TotalVolume = 0;
+    commande.ligneCommandes?.forEach(l => {
+      if (l.quantiteTransfert)
+        this.TotalVolume += parseFloat(l.quantiteTransfert + '');
+
+    })
+    return this.TotalVolume;
+
+  }
 
 
   public verifyState(commande: Commande) {
 
-    if(commande.etat && commande.etat.replace(" ","").toLowerCase()=='loadingcompleted'){
+    if (commande.etat && commande.etat.replace(" ", "").toLowerCase() == 'loadingcompleted') {
       return true;
-    }else return false;
+    } else return false;
 
   }
-  listeLignesCommandes:LineCommande[]=[]
-  public OpenReferenceDialoge(commande: Commande) {
-    this.commande=commande
-    if (this.commande.calibre!=undefined)
 
-    this.getCalibre();
-    this.selectedColumns=commande.dataHeaders || [];
-let liste= commande.ligneCommandes?.filter(lc => {
+  listeLignesCommandes: LineCommande[] = []
+
+  public OpenReferenceDialoge(commande: Commande) {
+    this.commande = commande
+    if (this.commande.calibre != undefined)
+
+      this.getCalibre();
+    this.selectedColumns = commande.dataHeaders || [];
+    let liste = commande.ligneCommandes?.filter(lc => {
       if (lc.analysePhysique != null) {
         return lc.analysePhysique.reference === commande.analyseReference;
       } else if (lc.analyseChimique != null) {
@@ -428,67 +421,63 @@ let liste= commande.ligneCommandes?.filter(lc => {
 
 
     });
-if (liste!=undefined){
-  this.listeLignesCommandes=liste
-  this.commande.ligneCommandes=liste;
-}
+    if (liste != undefined) {
+      this.listeLignesCommandes = liste
+      this.commande.ligneCommandes = liste;
+    }
 
     this.referenceDialoge = true;
   }
+
   selectedColumnsCalibre!: any;
   public selectedProduct: any;
+
   getValueOfligneCommande(col: any, ligneCommande: any): any {
 
     if (col.id < 21) {
-      if(col.id==0) {
+      if (col.id == 0) {
         return ligneCommande?.analyseChimique !== null ? this.pipedate(ligneCommande?.analyseChimique[col.field]) :
           ligneCommande?.analysePhysique !== null && ligneCommande?.analysePhysique !== undefined ? this.pipedate(ligneCommande?.analysePhysique[col.field]) : '-';
 
       }
-      if(ligneCommande.analyseChimique==null && ligneCommande.analysePhysique!==null && col.field=="reference"){
-        return  ligneCommande.analysePhysique[col.field]
+      if (ligneCommande.analyseChimique == null && ligneCommande.analysePhysique !== null && col.field == "reference") {
+        return ligneCommande.analysePhysique[col.field]
       }
-      return ligneCommande.analyseChimique!==null ? ligneCommande.analyseChimique[col.field] :"-" ;
-    }
-    else
-    if (col.id > 20 && col.id < 24)
-    {
-      if(col.id==22){
+      return ligneCommande.analyseChimique !== null ? ligneCommande.analyseChimique[col.field] : "-";
+    } else if (col.id > 20 && col.id < 24) {
+      if (col.id == 22) {
         return ligneCommande?.analysePhysique?.qualite !== null ? ligneCommande?.analysePhysique?.qualite :
           ligneCommande?.analyseChimique?.qualite !== null ? ligneCommande?.analyseChimique?.qualite : '-';
 
 
       }
-      return ligneCommande.analysePhysique!==null  ? ligneCommande.analysePhysique[col.field] : '-';
-    } else
-    if (col.id > 23 && col.id < 29 && this.selectedColumnsCalibre && this.selectedColumnsCalibre.header) {
+      return ligneCommande.analysePhysique !== null ? ligneCommande.analysePhysique[col.field] : '-';
+    } else if (col.id > 23 && col.id < 29 && this.selectedColumnsCalibre && this.selectedColumnsCalibre.header) {
       if (ligneCommande.analysePhysique !== null && ligneCommande.analysePhysique.tamisList) {
         // Use filter to find matching items in tamisList and add checks for undefined items
-        const filteredTamis:any = ligneCommande.analysePhysique.tamisList.find((tamis: any) =>
+        const filteredTamis: any = ligneCommande.analysePhysique.tamisList.find((tamis: any) =>
           tamis && tamis.calibre == this.selectedColumnsCalibre.header
         );
         // Check if filteredTamisList is not empty and return it, otherwise return '-'
-        return filteredTamis!==undefined? filteredTamis[col.field]  : '-';
+        return filteredTamis !== undefined ? filteredTamis[col.field] : '-';
       } else {
         return '-';
       }
-    }
-
-    else if(col.id==42){
+    } else if (col.id == 42) {
       // return ligneCommande.analysePhysique!==null  ? ligneCommande.analysePhysique[col.field] : '-';
-      return ligneCommande.related!==null  ? this.getRelatedAnalyse(ligneCommande) : '-';
+      return ligneCommande.related !== null ? this.getRelatedAnalyse(ligneCommande) : '-';
 
-    }
-    else {
+    } else {
       // ligneCommande.dateCreation=new Date();
 
-      return ligneCommande!==null  ? ligneCommande[col.field] : '-';
+      return ligneCommande !== null ? ligneCommande[col.field] : '-';
     }
 
 
   }
+
   pipedate(analyseChimiqueElement: any) {
-    const date:Date=new Date(analyseChimiqueElement+"");
+    const date: Date = new Date(analyseChimiqueElement + "");
     const day = String(date.getDate()).padStart(2, '0');
     const month = String(date.getMonth() + 1).padStart(2, '0'); // Month is 0-indexed
     const year = date.getFullYear();
@@ -496,7 +485,8 @@ if (liste!=undefined){
     return `${day}-${month}-${year}`;
 
   }
-  getRelatedAnalyse(lineCommande:LineCommande): string {
+
+  getRelatedAnalyse(lineCommande: LineCommande): string {
     let related: string = '';
 
 
@@ -532,11 +522,11 @@ if (liste!=undefined){
   }
 
 
+  headerCopy!: string;
 
-  headerCopy!:string;
+  CountClick: number = 0;
+  loadingstock: boolean = false;
 
-  CountClick:number=0;
-  loadingstock: boolean=false;
   public SavePDF(): void {
     let headerPage = document.getElementById("headerpages");
 
@@ -546,11 +536,10 @@ if (liste!=undefined){
 
       setTimeout(() => {
 
-        if(this.CountClick==0)
-        {
+        if (this.CountClick == 0) {
 
           // @ts-ignore
-          this.headerCopy=document.getElementById("headerpages").innerHTML.toString()+"";
+          this.headerCopy = document.getElementById("headerpages").innerHTML.toString() + "";
 
 
         }
@@ -591,8 +580,8 @@ if (liste!=undefined){
         let headerPage = document.getElementById("headerpages");
 
         if (headerPage) {
-          if(this.CountClick!=0)
-            headerPage.innerHTML=this.headerCopy ;
+          if (this.CountClick != 0)
+            headerPage.innerHTML = this.headerCopy;
           headerPage.innerHTML +=
             '<!--      infoPropreTableCommande--> ' +
             '      <div class="flex me-3 mt-5 p-2 gap-1 text-3xl flex justify-content-evenly">' +
@@ -701,12 +690,12 @@ if (liste!=undefined){
         }
 
         if (headerPage)
-          html2canvas(headerPage, { scale: 1 }).then((canvas) => {
+          html2canvas(headerPage, {scale: 1}).then((canvas) => {
             const imgData = canvas.toDataURL('image/png');
             const imgWidth = 210; // PDF width
             const imgHeight = (canvas.height * imgWidth) / canvas.width; // Maintain aspect ratio
             doc.addImage(imgData, 'png', 2, 2, imgWidth * sizeimageA4, imgHeight * sizeimageA4);
-            autoTable(doc, { startY: imgHeight + (60 * sizeimageA4) });
+            autoTable(doc, {startY: imgHeight + (60 * sizeimageA4)});
 
             autoTable(doc, {
               head: [header],
@@ -719,12 +708,21 @@ if (liste!=undefined){
         this.CountClick++;
       }, this.commande.ligneCommandes!.length * 100);
     } else {
-      Swal.fire({ title: "Error", text: "No data found to print", icon: "error" });
+      Swal.fire({title: "Error", text: "No data found to print", icon: "error"});
     }
 
   }
+
   calculerMoyennes():
-    { passCumulated: number,humidite: number,magnesium: number,sulfate: number,chlorureDeSodium: number, matiereInsoluble: number, ferrocyanure: number } {
+    {
+      passCumulated: number,
+      humidite: number,
+      magnesium: number,
+      sulfate: number,
+      chlorureDeSodium: number,
+      matiereInsoluble: number,
+      ferrocyanure: number
+    } {
 
     let totalHumidite = 0;
 
@@ -735,9 +733,7 @@ if (liste!=undefined){
     let totalchlorureDeSodium = 0;
 
     let totalferrocyanure = 0;
-    let totalPassCum:number = 0;
-
-
+    let totalPassCum: number = 0;
 
 
     let countPassCum = 0;
@@ -765,10 +761,10 @@ if (liste!=undefined){
       //   }
 
       if (lineCommande.analysePhysique) {
-        if (lineCommande.analysePhysique.tamisList !== undefined ) {
+        if (lineCommande.analysePhysique.tamisList !== undefined) {
           lineCommande.analysePhysique.tamisList.forEach(value => {
 
-            if (this.selectedColumnsCalibre!==undefined && value.passCumulated !== undefined && value.passCumulated !== null && value.calibre==parseFloat(this.selectedColumnsCalibre.header)) {
+            if (this.selectedColumnsCalibre !== undefined && value.passCumulated !== undefined && value.passCumulated !== null && value.calibre == parseFloat(this.selectedColumnsCalibre.header)) {
               // Convertir la valeur en chaîne pour s'assurer que 'match' peut être utilisé
               let passCumulatedString = value.passCumulated;
 
@@ -798,12 +794,12 @@ if (liste!=undefined){
 
       if (lineCommande.analyseChimique) {
 
-        if (lineCommande.analyseChimique.humidite !== undefined &&  lineCommande.analyseChimique.humidite !== null) {
+        if (lineCommande.analyseChimique.humidite !== undefined && lineCommande.analyseChimique.humidite !== null) {
 
-          if (lineCommande.analyseChimique.humidite !== undefined &&  lineCommande.analyseChimique.humidite !== null) {
-            const humidite:number[]=this.extractDoublesFromString(lineCommande.analyseChimique.humidite);
+          if (lineCommande.analyseChimique.humidite !== undefined && lineCommande.analyseChimique.humidite !== null) {
+            const humidite: number[] = this.extractDoublesFromString(lineCommande.analyseChimique.humidite);
             // Si une partie numérique est trouvée, elle est convertie en nombre
-            if (humidite.length!=0) {
+            if (humidite.length != 0) {
               totalHumidite += humidite[0];
               countHumidite++;
 
@@ -812,22 +808,22 @@ if (liste!=undefined){
 
         }
 
-        if (lineCommande.analyseChimique.magnesium !== undefined &&  lineCommande.analyseChimique.magnesium !== null) {
-          const magnes:number[]=this.extractDoublesFromString(lineCommande.analyseChimique.magnesium);
+        if (lineCommande.analyseChimique.magnesium !== undefined && lineCommande.analyseChimique.magnesium !== null) {
+          const magnes: number[] = this.extractDoublesFromString(lineCommande.analyseChimique.magnesium);
           // Si une partie numérique est trouvée, elle est convertie en nombre
-          if (magnes.length!=0) {
+          if (magnes.length != 0) {
             totalMagnesium += magnes[0];
             countMagnesium++;
 
           }
         }
 
-        if (lineCommande.analyseChimique.sulfate !== undefined &&    lineCommande.analyseChimique.sulfate !== null) {
+        if (lineCommande.analyseChimique.sulfate !== undefined && lineCommande.analyseChimique.sulfate !== null) {
 
-          if (lineCommande.analyseChimique.sulfate !== undefined &&  lineCommande.analyseChimique.sulfate !== null) {
-            const sulfate:number[]=this.extractDoublesFromString(lineCommande.analyseChimique.sulfate);
+          if (lineCommande.analyseChimique.sulfate !== undefined && lineCommande.analyseChimique.sulfate !== null) {
+            const sulfate: number[] = this.extractDoublesFromString(lineCommande.analyseChimique.sulfate);
             // Si une partie numérique est trouvée, elle est convertie en nombre
-            if (sulfate.length!=0) {
+            if (sulfate.length != 0) {
               totalSulfate += sulfate[0];
               countSulfate++;
 
@@ -836,12 +832,12 @@ if (liste!=undefined){
 
         }
 
-        if (lineCommande.analyseChimique.chlorureDeSodium !== undefined &&   lineCommande.analyseChimique.chlorureDeSodium !== null) {
+        if (lineCommande.analyseChimique.chlorureDeSodium !== undefined && lineCommande.analyseChimique.chlorureDeSodium !== null) {
 
-          if (lineCommande.analyseChimique.chlorureDeSodium !== undefined &&  lineCommande.analyseChimique.chlorureDeSodium !== null) {
-            const chlorureDeSodium:number[]=this.extractDoublesFromString(lineCommande.analyseChimique.chlorureDeSodium);
+          if (lineCommande.analyseChimique.chlorureDeSodium !== undefined && lineCommande.analyseChimique.chlorureDeSodium !== null) {
+            const chlorureDeSodium: number[] = this.extractDoublesFromString(lineCommande.analyseChimique.chlorureDeSodium);
             // Si une partie numérique est trouvée, elle est convertie en nombre
-            if (chlorureDeSodium.length!=0) {
+            if (chlorureDeSodium.length != 0) {
               totalchlorureDeSodium += chlorureDeSodium[0];
               countchlorureDeSodium++;
 
@@ -850,7 +846,7 @@ if (liste!=undefined){
 
         }
 
-        if (lineCommande.analyseChimique.matiereInsoluble !== undefined &&  lineCommande.analyseChimique.matiereInsoluble !== null) {
+        if (lineCommande.analyseChimique.matiereInsoluble !== undefined && lineCommande.analyseChimique.matiereInsoluble !== null) {
 
           if (lineCommande.analyseChimique.matiereInsoluble !== undefined && lineCommande.analyseChimique.matiereInsoluble !== null) {
             const matiereInsoluble: number[] = this.extractDoublesFromString(lineCommande.analyseChimique.matiereInsoluble);
@@ -864,11 +860,11 @@ if (liste!=undefined){
 
         }
 
-        if (lineCommande.analyseChimique.ferrocyanure !== undefined &&   lineCommande.analyseChimique.ferrocyanure !== null) {
-          if (lineCommande.analyseChimique.ferrocyanure !== undefined &&  lineCommande.analyseChimique.ferrocyanure !== null) {
-            const ferrocyanure:number[]=this.extractDoublesFromString(lineCommande.analyseChimique.ferrocyanure);
+        if (lineCommande.analyseChimique.ferrocyanure !== undefined && lineCommande.analyseChimique.ferrocyanure !== null) {
+          if (lineCommande.analyseChimique.ferrocyanure !== undefined && lineCommande.analyseChimique.ferrocyanure !== null) {
+            const ferrocyanure: number[] = this.extractDoublesFromString(lineCommande.analyseChimique.ferrocyanure);
             // Si une partie numérique est trouvée, elle est convertie en nombre
-            if (ferrocyanure.length!=0) {
+            if (ferrocyanure.length != 0) {
               totalferrocyanure += ferrocyanure[0];
               countferrocyanure++;
 
@@ -894,6 +890,7 @@ if (liste!=undefined){
 
     };
   }
+
   extractDoublesFromString(input: string): number[] {
     const regex = /-?\d+(\.\d+)?/g;
     const matches = input.match(regex);
@@ -903,29 +900,29 @@ if (liste!=undefined){
       return [];
     }
   }
+
   caliber(selectedColumnsCalibre: any) {
-    this.selectedColumnsCalibre=selectedColumnsCalibre ;
+    this.selectedColumnsCalibre = selectedColumnsCalibre;
   }
+
   getCalibre() {
 
     this.tamisService.getDistinctCalibres().subscribe(value => {
 
       value.forEach((value1: number) => {
-        if(this.listcalibre.length<value.length){
-          this.listcalibre.push({ id: value1, field: '', header: value1.toString() });}
+        if (this.listcalibre.length < value.length) {
+          this.listcalibre.push({id: value1, field: '', header: value1.toString()});
+        }
         // if(this.isUpdateCommande){
-          if(value1.toString()==this.commande.calibre){
-            this.selectedColumnsCalibre={ id: value1, field: '', header: value1.toString() }
+        if (value1.toString() == this.commande.calibre) {
+          this.selectedColumnsCalibre = {id: value1, field: '', header: value1.toString()}
 
-          }
+        }
         // }
       });
 
     });
   }
-
-
-
 
 
 }

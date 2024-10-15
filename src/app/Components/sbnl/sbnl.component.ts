@@ -131,6 +131,18 @@ export class SbnlComponent implements OnInit{
   transferToLaverie:TransferToLaverie=new TransferToLaverie();
   ListTransferToLaverie:TransferToLaverie[] =[];
   listLaveries:Laverie[]=[];
+
+  public dateStartLiwellSieve!: Date;
+  public dateEndLiwellSieve!: Date;
+
+  public totalLiwelSieveFiltree: number=0;
+  public dateStartCribleVert!: Date;
+  public dateEndCribleVert!: Date;
+  public totalCribleVertFiltree: number=0;
+
+  public dateStartLaverie!: Date;
+  public dateEndLaverie!: Date;
+  public totalLaverieFiltree: number=0;
   @Input() get selectedColumns(): any[] {
     return this._selectedColumns;
   }
@@ -646,6 +658,9 @@ this.Viderfiltredate()
   protected readonly JSON = JSON;
 
 
+
+
+
   public openDialog() {
   this.detailsDialog=true;
   }
@@ -689,8 +704,11 @@ this.transferToCribleLiwell=transferToCribleLiwell;
   getListTransferToCribleLiwell(){
     if(this.sbnl.id!=undefined)
     this.sbnlService.getSbnlByIdDto(this.sbnl.id).subscribe(value => {
-      if(value.transferToCribleLiwellList!=undefined)
+      if(value.transferToCribleLiwellList!=undefined){
+
+        this.totalLiwelSieveFiltree=0;
       this.ListTransferToCribleLiwell = value.transferToCribleLiwellList;
+      }
     } )
   }
 
@@ -741,8 +759,10 @@ return totalRecolte-(totalTransferCribleLiwell+totalTransferCribleVert+totalTran
     if(this.sbnl.id!=undefined)
       this.sbnlService.getSbnlByIdDto(this.sbnl.id).subscribe(value => {
 
-        if(value.transferToLaverieList!=undefined)
+        if(value.transferToLaverieList!=undefined){
+         this.totalLaverieFiltree=0;
           this.ListTransferToLaverie = value.transferToLaverieList;
+        }
       } )
   }
   public saveTransferToCribleVert() {
@@ -759,8 +779,10 @@ return totalRecolte-(totalTransferCribleLiwell+totalTransferCribleVert+totalTran
   getListTransferToCribleVert(){
     if(this.sbnl.id!=undefined)
       this.sbnlService.getSbnlByIdDto(this.sbnl.id).subscribe(value => {
-        if(value.transferToCribleVertList!=undefined)
+        if(value.transferToCribleVertList!=undefined){
+          this.totalCribleVertFiltree=0;
           this.ListTransferToCribleVert = value.transferToCribleVertList;
+        }
       } )
   }
 
@@ -803,6 +825,44 @@ return totalRecolte-(totalTransferCribleLiwell+totalTransferCribleVert+totalTran
 
   public updateTransferToLaverie(transferToLaundry: TransferToLaverie) {
     this.transferToLaverie=transferToLaundry;
+
+  }
+
+  public filtreListLiwellSieveWithDate(dateStartLiwellSieve: Date, dateEndLiwellSieve: Date) {
+
+      this. totalLiwelSieveFiltree=0
+      if (!this.ListTransferToCribleLiwell) return;
+
+      this.ListTransferToCribleLiwell = this.ListTransferToCribleLiwell.filter(transferToCribleLiwell => {
+
+        return new Date(dateStartLiwellSieve)  <= new Date(transferToCribleLiwell.dateCreation) && new Date(dateEndLiwellSieve)  >= new Date(transferToCribleLiwell.dateCreation);
+      });
+      this.ListTransferToCribleLiwell.forEach(transferToCribleLiwell => this.totalLiwelSieveFiltree+=transferToCribleLiwell.quantityTransfer)
+
+
+  }
+
+  public filtreListCribleVertWithDate(dateStartCribleVert: Date, dateEndCribleVert: Date) {
+    this. totalCribleVertFiltree=0
+    if (!this.ListTransferToCribleLiwell) return;
+
+    this.ListTransferToCribleVert = this.ListTransferToCribleVert.filter(transferToCrible => {
+
+      return new Date(dateStartCribleVert)  <= new Date(transferToCrible.dateCreation) && new Date(dateEndCribleVert)  >= new Date(transferToCrible.dateCreation);
+    });
+    this.ListTransferToCribleVert.forEach(transferToCrible => this.totalCribleVertFiltree+=transferToCrible.quantityTransfer)
+
+  }
+
+  public filtreListLaverieWithDate(dateStartLaverie: Date, dateEndLaverie: Date) {
+    this. totalLaverieFiltree=0
+    if (!this.ListTransferToLaverie) return;
+
+    this.ListTransferToLaverie = this.ListTransferToLaverie.filter(transferToLaverie => {
+
+      return new Date(dateStartLaverie)  <= new Date(transferToLaverie.dateCreation) && new Date(dateEndLaverie)  >= new Date(transferToLaverie.dateCreation);
+    });
+    this.ListTransferToLaverie.forEach(transferToLaverie => this.totalLaverieFiltree+=transferToLaverie.quantityTransfer)
 
   }
 }

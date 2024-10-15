@@ -133,6 +133,19 @@ export class LaverieComponent {
   selectedWashed:Sbl={};
   ListTransferLaverieToWashed:TransferLaverieToWashed[]=[];
   transferLaverieToWashed:TransferLaverieToWashed=new TransferLaverieToWashed()
+
+  public dateStartLaverieToCribleLiwell!: Date;
+  public dateEndLaverieToCribleLiwell!: Date;
+  public totalLaverieToCribleLiwellFiltree: number=0;
+
+
+  public dateStartLaverieToCribleVert!: Date;
+  public dateEndLaverieToCribleVert!: Date;
+  public totalLaverieToCribleVertFiltree: number=0;
+
+  public dateStartLaverieToWashed!: Date;
+  public dateEndLaverieToWashed!: Date;
+  public totalLaverieToWashedFiltree: number=0;
   @Input() get selectedColumns(): any[] {
     return this._selectedColumns;
   }
@@ -374,8 +387,10 @@ export class LaverieComponent {
   getListTransferLaverieToCribleVert(){
     if(this.laverie.id!=undefined)
       this.laverieService.getLaverieDtoById(this.laverie.id).subscribe(value => {
-        if(value.transferLaverieToCriblesVert!=undefined)
+        if(value.transferLaverieToCriblesVert!=undefined){
+          this.totalLaverieToCribleVertFiltree=0;
           this.ListTransferLaverieToCribleVert = value.transferLaverieToCriblesVert;
+        }
       } )
   }
 
@@ -440,11 +455,16 @@ export class LaverieComponent {
   getListTransferLaverieToCribleLiwell(){
     if(this.laverie.id!=undefined)
       this.laverieService.getLaverieDtoById(this.laverie.id).subscribe(value => {
-        if(value.transferLaverieToCribleLiwells!=undefined)
+        if(value.transferLaverieToCribleLiwells!=undefined){
+          this.totalLaverieToCribleLiwellFiltree=0;
           this.ListTransferLaverieToCribleLiwell = value.transferLaverieToCribleLiwells;
+        }
       } )
   }
 // -------------------TRANSFER LAVERIE TO WASHED-----------------------------------------
+
+
+
   public saveTransferLaverieToWashed() {
     if ( this.laverie.id!==undefined&&this.selectedWashed.reference!==undefined)
     {
@@ -473,8 +493,10 @@ export class LaverieComponent {
   getListTransferLaverieToWashed(){
     if(this.laverie.id!=undefined)
       this.laverieService.getLaverieDtoById(this.laverie.id).subscribe(value => {
-        if(value.transferLaverieToWasheds!=undefined)
+        if(value.transferLaverieToWasheds!=undefined){
+          this.totalLaverieToWashedFiltree=0;
           this.ListTransferLaverieToWashed = value.transferLaverieToWasheds;
+        }
       } )
   }
 
@@ -501,6 +523,42 @@ export class LaverieComponent {
       } )}
 
     return totalUnwashed-(totalCribleLiwell+totalWashed+totalCribleVert);
+
+  }
+
+  public filtreListLaverieToCribleLiwellWithDate(dateStartLaverieToCribleLiwell: Date, dateEndLaverieToCribleLiwell: Date) {
+    this. totalLaverieToCribleLiwellFiltree=0
+    if (!this.ListTransferLaverieToCribleLiwell) return;
+
+    this.ListTransferLaverieToCribleLiwell = this.ListTransferLaverieToCribleLiwell.filter(transferLaverieToCribleLiwell => {
+
+      return new Date(dateStartLaverieToCribleLiwell)  <= new Date(transferLaverieToCribleLiwell.dateCreation) && new Date(dateEndLaverieToCribleLiwell)  >= new Date(transferLaverieToCribleLiwell.dateCreation);
+    });
+    this.ListTransferLaverieToCribleLiwell.forEach(transferLaverieToCribleLiwell => this.totalLaverieToCribleLiwellFiltree+=transferLaverieToCribleLiwell.quantityTransfer)
+
+  }
+
+  public filtreListLaverieToCribleVertWithDate(dateStartLaverieToCribleVert: Date, dateEndLaverieToCribleVert: Date) {
+    this. totalLaverieToCribleVertFiltree=0
+    if (!this.ListTransferLaverieToCribleVert) return;
+
+    this.ListTransferLaverieToCribleVert = this.ListTransferLaverieToCribleVert.filter(transferLaverieToCrible => {
+
+      return new Date(dateStartLaverieToCribleVert)  <= new Date(transferLaverieToCrible.dateCreation) && new Date(dateEndLaverieToCribleVert)  >= new Date(transferLaverieToCrible.dateCreation);
+    });
+    this.ListTransferLaverieToCribleVert.forEach(transferLaverieToCrible => this.totalLaverieToCribleVertFiltree+=transferLaverieToCrible.quantityTransfer)
+
+  }
+
+  public filtreListLaverieToWashedWithDate(dateStartLaverieToWashed: any, dateEndLaverieToWashed: any) {
+    this. totalLaverieToWashedFiltree=0
+    if (!this.ListTransferLaverieToWashed) return;
+
+    this.ListTransferLaverieToWashed = this.ListTransferLaverieToWashed.filter(transferLaverieToWashed => {
+
+      return new Date(dateStartLaverieToWashed)  <= new Date(transferLaverieToWashed.dateCreation) && new Date(dateEndLaverieToWashed)  >= new Date(transferLaverieToWashed.dateCreation);
+    });
+    this.ListTransferLaverieToWashed.forEach(transferLaverieToWashed => this.totalLaverieToWashedFiltree+=transferLaverieToWashed.quantityTransfer)
 
   }
 }

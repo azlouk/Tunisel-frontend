@@ -72,6 +72,10 @@ export class ConcasseurComponent implements OnInit{
   public resultConcasseurDialog: boolean=false
   resultConcasseur:ResultConcasseur=new ResultConcasseur();
   ListResultConcasseurs:ResultConcasseur[]=[];
+
+  public dateStartResultConcasseur!: Date;
+  public dateEndResultConcasseur!: Date;
+  public totalResultConcasseurFiltree: number=0;
   @Input() get selectedColumns(): any[] {
     return this._selectedColumns;
   }
@@ -219,8 +223,10 @@ export class ConcasseurComponent implements OnInit{
   getListResultConcasseurs(){
     if(this.concasseur.id!=undefined)
       this.concasseurService.getConcasseurById(this.concasseur.id).subscribe(value => {
-        if(value.resultConcasseurs!=undefined)
+        if(value.resultConcasseurs!=undefined){
+          this.totalResultConcasseurFiltree=0;
           this.ListResultConcasseurs= value.resultConcasseurs;
+        }
       } )
   }
 
@@ -267,7 +273,20 @@ export class ConcasseurComponent implements OnInit{
 
   protected readonly getToken = getToken;
 
+
   getAllCribles(){
     this.cribleService.getAllCriblesDto().subscribe(value => this.cribles=value)
+  }
+
+  public filtreListResultConcasseurWithDate(dateStartResultConcasseur: Date, dateEndResultConcasseur: Date) {
+    this. totalResultConcasseurFiltree=0
+    if (!this.ListResultConcasseurs) return;
+
+    this.ListResultConcasseurs = this.ListResultConcasseurs.filter(resultConcasseur => {
+
+      return new Date(dateStartResultConcasseur)  <= new Date(resultConcasseur.dateCreation) && new Date(dateEndResultConcasseur)  >= new Date(resultConcasseur.dateCreation);
+    });
+    this.ListResultConcasseurs.forEach(resultConcasseur => this.totalResultConcasseurFiltree+=resultConcasseur.result)
+
   }
 }

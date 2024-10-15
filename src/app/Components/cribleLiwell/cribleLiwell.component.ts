@@ -111,6 +111,10 @@ export class CribleLiwellComponent {
   traitementStock:TraitementStock=new TraitementStock();
   ListTraitementStock:TraitementStock[] =[];
   selectedLaverie:Laverie=new Laverie();
+
+  public dateStartTraitementStock!:Date;
+  public dateEndTraitementStock!:Date;
+  public totalTraitementStockFiltree: number=0;
   @Input() get selectedColumns(): any[] {
     return this._selectedColumns;
   }
@@ -612,12 +616,15 @@ this.laveries=value
   getListTraitementStock(){
     if(this.cribleLiwell.id!=undefined)
       this.cribleLiwellService.getCribleLiwellById(this.cribleLiwell.id).subscribe(value => {
-        if(value.traitementStocks!=undefined)
+        if(value.traitementStocks!=undefined){
+          this.totalTraitementStockFiltree=0;
           this.ListTraitementStock = value.traitementStocks;
+        }
       } )
   }
 
   protected readonly TransferToCribleLiwell = TransferToCribleLiwell;
+
 
 
   public updateTraitementStock(traitement: TraitementStock) {
@@ -659,4 +666,15 @@ this.laveries=value
   }
 
 
+  public filtreListTraitementStockWithDate(dateStartTraitementStock: any, dateEndTraitementStock: any) {
+    this. totalTraitementStockFiltree=0
+    if (!this.ListTraitementStock) return;
+
+    this.ListTraitementStock = this.ListTraitementStock.filter(traitementStock => {
+
+      return new Date(dateStartTraitementStock)  <= new Date(traitementStock.dateCreation) && new Date(dateEndTraitementStock)  >= new Date(traitementStock.dateCreation);
+    });
+    this.ListTraitementStock.forEach(traitementStock => this.totalTraitementStockFiltree+=(traitementStock.sortieB1+traitementStock.sortieB2+traitementStock.refus))
+
+  }
 }

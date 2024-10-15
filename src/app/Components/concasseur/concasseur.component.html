@@ -259,7 +259,24 @@
               <div class="flex flex-column md:flex-row md:justify-content-between md:align-items-center">
                 <div class="flex justify-content-between align-items-center w-full">
                   <h5 class="m-0">Result Crushing management</h5>
+                  <div class=" flex gap-1">
+                    <div class="gap-1 flex align-items-center">Date Start :
 
+                      <input  class="p-2 shadow-1" type="date" dateFormat="dd-MM-yyyy"    pInputText   [(ngModel)]="dateStartResultConcasseur"  />
+
+                    </div>
+                    <div class="gap-1  flex align-items-center">
+                      Date End :
+
+                      <input  class="p-2 shadow-1" type="date" dateFormat="dd-MM-yyyy"    pInputText   [(ngModel)]="dateEndResultConcasseur"  />
+
+                    </div>
+                  </div>
+                  <p-button (click)="filtreListResultConcasseurWithDate(dateStartResultConcasseur,dateEndResultConcasseur)" class=" " icon="pi pi-search" label="Search"></p-button>
+                  <p-button (click)=" getListResultConcasseurs()" class=" " icon="pi pi-refresh" label="Clear"></p-button>
+                  <div>
+                    <span> <span class="font-bold">Total :</span> {{totalResultConcasseurFiltree}}</span>
+                  </div>
                   <div>
 
 
