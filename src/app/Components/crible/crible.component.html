@@ -439,9 +439,12 @@
             <label for="dateCreationr">Date Creation</label>
             <input  class="p-2 shadow-1" type="date" dateFormat="yy-mm-dd"  pInputText id="dateCreationr"  [(ngModel)]="resultCrible.dateCreation"  />
           </div>
-
           <div class="">
-            <label for="bisSalt">Big Salt</label>
+            <label for="bisSalt">Calibre</label>
+            <p-inputNumber  id="calibre"  [(ngModel)]="resultCrible.calibre" mode="decimal" [minFractionDigits]="3" ></p-inputNumber>
+          </div>
+          <div class="">
+            <label for="bisSalt">Output</label>
             <p-inputNumber  id="bisSalt"  [(ngModel)]="resultCrible.bigSalt" mode="decimal" [minFractionDigits]="3" ></p-inputNumber>
           </div>
 
@@ -484,7 +487,8 @@
 
                 <th pSortableColumn="id">Id <p-sortIcon field="id"></p-sortIcon></th>
                 <th pSortableColumn="dateCreation">Date Result<p-sortIcon field="dateCreation"></p-sortIcon></th>
-                <th pSortableColumn="bigSalt">Big Salt <p-sortIcon field="bigSalt"></p-sortIcon></th>
+                <th pSortableColumn="bigSalt">Calibre<p-sortIcon field="bigSalt"></p-sortIcon></th>
+                <th pSortableColumn="bigSalt">Output<p-sortIcon field="bigSalt"></p-sortIcon></th>
                 <th pSortableColumn="refus">Refus <p-sortIcon field="refus"></p-sortIcon></th>
 
                 <th></th>
@@ -511,6 +515,19 @@
                   </p-cellEditor>
                 </td>
 
+                <td >
+                  <p-cellEditor>
+                    <ng-template pTemplate="input">
+                      <input
+                        pInputText
+                        type="text"
+                        [(ngModel)]="resultCrible.calibre" />
+                    </ng-template>
+                    <ng-template pTemplate="output">
+                      {{resultCrible.calibre}}
+                    </ng-template>
+                  </p-cellEditor>
+                </td>
                 <td >
                   <p-cellEditor>
                     <ng-template pTemplate="input">

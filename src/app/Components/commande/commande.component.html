@@ -28,8 +28,18 @@
       <div class="flex align-items-center justify-content-around  mb-5 w-full border  border-2 p-3 border-round border-gray-200 bg-blue-50">
         <div class=" ">
         <label class="font-bold mr-4">Filtre By Stock :</label>
-        <p-dropdown [options]="stockOrders" [(ngModel)]="stockSelected" [editable]="true" optionLabel="nom" class="w-full" (ngModelChange)="filtreByStock(stockSelected)"   placeholder="Select a Stock Order"></p-dropdown>
-        </div>
+         <p-dropdown
+          [options]="stockOrders"
+          [(ngModel)]="stockSelected"
+           [placeholder]="'Loading data of stock'"
+          [loading]="loadingstock"
+          (ngModelChange)="filtreByStock(stockSelected)"
+          optionLabel="nom"
+
+          class="w-full"
+        />
+
+         </div>
 
         <div class="">
           <label class="font-bold mr-4">Volume Availble :</label>

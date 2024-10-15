@@ -129,8 +129,9 @@ export class StockOrderComponent implements OnInit{
     ] ;
     this.TransferAttributsStart=   [...this.TransferAttributs]
     this.TransferAttributsEnd=   [...this.TransferAttributs]
-    this.getAllBassin();
+
     this.getAllStockOrder();
+    this.getAllBassin();
   }
 
   getAllSbls(){
@@ -243,11 +244,11 @@ export class StockOrderComponent implements OnInit{
 
 
   getAllBassin() {
-    this.loading=true ;
+
     this.bassinService.getAllBassinsDTO()
       .subscribe((bassins: Bassin[]) => {
         this.bassins = bassins;
-        this.loading=false ;
+
 
       }, error => {
         console.log( error);

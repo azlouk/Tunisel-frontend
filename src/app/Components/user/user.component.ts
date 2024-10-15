@@ -78,7 +78,7 @@ export class UserComponent implements OnInit {
   ngOnInit() {
 
     this.getUserConnected();
-    this.getAllUsers();
+
     this.cols = [
       {field: 'id', header: 'id'},
       {field: 'nom', header: 'nom'},
@@ -96,6 +96,7 @@ export class UserComponent implements OnInit {
   }
 
   getAllUsers() {
+    this.loadingUsers=true ;
     this.userService.getAllUsers().subscribe((v: RegisterRequest[]) => {
       if(this.userConnect.role=='EMPLOYER'){
         this.users=v;
@@ -104,6 +105,7 @@ export class UserComponent implements OnInit {
       }else {
         this.users=v;
       }
+      this.loadingUsers=false ;
     }, error => {
       console.log(error)
     })
@@ -214,6 +216,7 @@ this.isUpdateUser=false
 
 
   protected readonly getToken = getToken;
+  loadingUsers: boolean=false;
 
   alertOnhide() {
     this.isUpdateUser=false
@@ -223,7 +226,10 @@ this.isUpdateUser=false
 
 
   public getUserConnected(){
-    this.userService.getUserConnect().subscribe(value => this.userConnect=value)
+    this.userService.getUserConnect().subscribe(value => {
+      this.userConnect = value
+      this.getAllUsers();
+    })
   }
 
 }

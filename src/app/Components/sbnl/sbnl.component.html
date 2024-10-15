@@ -642,13 +642,15 @@
         </div>
               <!----------Date Start Harvest--------->
         <div class="field">
-          <label for="dateStartHarvest">Date Start Harvest</label>
+          <label for="dateStartHarvest" >Date Start Harvest</label>
+          {{sbnl.dateDebutHarvest}}
+
           <input  class="p-2 shadow-1" type="date" pInputText id="dateStartHarvest"  [(ngModel)]="sbnl.dateDebutHarvest"  />
         </div>
               <!----------Date End Harvest--------->
         <div class="field">
           <label for="dateEndHarvest">Date End Harvest</label>
-          <input  class="p-2 shadow-1" type="date" pInputText id="dateEndHarvest"  [(ngModel)]="sbnl.dateFinHarvest"  />
+          <input  class="p-2 shadow-1" type="date" pInputText id="dateEndHarvest"  [(ngModel)]="sbnl.dateFinHarvest"   />
         </div>
         <div class="field">
           <label for="emplacement">Location</label>

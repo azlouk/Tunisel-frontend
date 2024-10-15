@@ -215,6 +215,7 @@ export class SblComponent implements OnInit {
     this.sbl = {...sbl};
     this.productDialog = true;
     this.getCalibresBySelectedCribleLiwells(sbl.cribleLiwellList);
+    this.getCalibresBySelectedGreenCrible(sbl.cribleList)
   }
 
   deleteSbl(sbl: Sbl) {
@@ -442,6 +443,7 @@ export class SblComponent implements OnInit {
 
   protected readonly getToken = getToken;
   loading: boolean = false;
+  calibresGreen: number[]=[];
 
   ExportExcel() {
     try {
@@ -639,6 +641,20 @@ export class SblComponent implements OnInit {
     }
   }
 
+  getCalibresBySelectedGreenCrible(cribleGreen: Crible[] | undefined) {
+    const uniqueCalibres = new Set<number>(); // Use Set to avoid duplicates
+    if (cribleGreen !== undefined) {
+      cribleGreen.forEach(cribleGreen =>
+        cribleGreen.resultCribles?.forEach(results => {
+          uniqueCalibres.add(results.calibre); // Add calibreB1
+
+        })
+      );
+
+      this.calibresGreen = Array.from(uniqueCalibres); // Convert Set back to array
+    }
+  }
+
   public getTotalQuantitySbl(sbl: Sbl):number {
     let totalCrible: number = 0;
     let totalConcasseur: number = 0;
@@ -676,7 +692,7 @@ export class SblComponent implements OnInit {
     // Calculate totalCrible
     if (sbl.cribleList && sbl.cribleList.length > 0) {
       sbl.cribleList.forEach(crible => {
-        totalCrible += crible.resultCribles?.reduce((sum, result) => sum + result.bigSalt, 0) || 0;
+        totalCrible += crible.resultCribles?.filter(value => value.calibre==sbl.calibre).reduce((sum, result) => sum + result.bigSalt, 0) || 0;
       });
     }
 

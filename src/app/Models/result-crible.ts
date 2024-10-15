@@ -1,46 +1,57 @@
 export class ResultCrible {
 
-  id: number ;
-  dateCreation: Date ;
-  bigSalt: number ;
-  refus: number ;
+ id: number ;
+ dateCreation: Date ;
+ bigSalt: number ;
+ refus: number ;
+ calibre :number
 
-  constructor(_id: number=0, _dateCreation: Date=new Date(), _bigSalt: number=0, _refus: number=0) {
+
+  constructor(_id: number=0, _dateCreation: Date=new Date(), _bigSalt: number=0, _refus: number=0, _calibre: number=0) {
     this.id = _id;
     this.dateCreation = _dateCreation;
     this.bigSalt = _bigSalt;
     this.refus = _refus;
+    this.calibre = _calibre;
   }
 
-  public get _id(): number {
+  get _id(): number {
     return this.id;
   }
 
-  public set _id(value: number) {
+  set _id(value: number) {
     this.id = value;
   }
 
-  public get _dateCreation(): Date {
+  get _dateCreation(): Date {
     return this.dateCreation;
   }
 
-  public set _dateCreation(value: Date) {
+  set _dateCreation(value: Date) {
     this.dateCreation = value;
   }
 
-  public get _bigSalt(): number {
+  get _bigSalt(): number {
     return this.bigSalt;
   }
 
-  public set _bigSalt(value: number) {
+  set _bigSalt(value: number) {
     this.bigSalt = value;
   }
 
-  public get _refus(): number {
+  get _refus(): number {
     return this.refus;
   }
 
-  public set _refus(value: number) {
+  set _refus(value: number) {
     this.refus = value;
+  }
+
+  get _calibre(): number {
+    return this.calibre;
+  }
+
+  set _calibre(value: number) {
+    this.calibre = value;
   }
 }

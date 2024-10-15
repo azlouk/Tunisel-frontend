@@ -273,6 +273,7 @@ commandesCopy: Commande[]=[];
       console.log(error)});
         }
   getAllStockOrder() {
+    this.loadingstock=true
     this.stockOrderService.getAllStockOrderDTORead()
       .subscribe((stockOrders: any[]) => {
         this.initiaTimeLine();
@@ -285,6 +286,7 @@ commandesCopy: Commande[]=[];
         })).sort((a: StockOrder, b: StockOrder) => b.dateCreation.getTime() - a.dateCreation.getTime());
         this.stockSelected = this.stockOrders[0];
         this. filtreByStock( this.stockSelected );
+        this.loadingstock=false;
         // this.getAllCommandesByStockOrdersId(this.stockSelected.id)
       }, error => {
         console.log(error);
@@ -534,6 +536,7 @@ if (liste!=undefined){
   headerCopy!:string;
 
   CountClick:number=0;
+  loadingstock: boolean=false;
   public SavePDF(): void {
     let headerPage = document.getElementById("headerpages");
 

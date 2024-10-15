@@ -234,7 +234,7 @@
                    [value]="selectedCrible.resultCribles!==undefined?selectedCrible.resultCribles:[]"
 
                    responsiveLayout="scroll" [rows]="10"
-                   [globalFilterFields]="['id','date','value']"
+                   [globalFilterFields]="['id','dateCreation','value','calibre','bigSalt']"
                    [paginator]="true"
                    editMode="row"
                    [rowsPerPageOptions]="[10,20,30]"
@@ -262,8 +262,9 @@
               <tr>
 
                 <th pSortableColumn="id">Id <p-sortIcon field="id"></p-sortIcon></th>
-                <th pSortableColumn="date">Date Traitement<p-sortIcon field="date"></p-sortIcon></th>
-                <th pSortableColumn="bigSalt">Big Salt  <p-sortIcon field="bigSalt"></p-sortIcon></th>
+                <th pSortableColumn="dateCreation">Date Traitement<p-sortIcon field="dateCreation"></p-sortIcon></th>
+                <th pSortableColumn="calibre">Calibre  <p-sortIcon field="calibre"></p-sortIcon></th>
+                <th pSortableColumn="bigSalt">OutPut  <p-sortIcon field="bigSalt"></p-sortIcon></th>
                 <th pSortableColumn="refus">Refus <p-sortIcon field="refus"></p-sortIcon></th>
 
               </tr>
@@ -283,6 +284,11 @@
 
                 </td>
 
+                <td >
+
+                  {{resultCrible.calibre}}
+
+                </td>
                 <td >
 
                   {{resultCrible.bigSalt}}
@@ -406,7 +412,12 @@
 
         <div class="field"[hidden]="(sbl.cribleLiwellList && sbl.cribleLiwellList.length > 0)||(sbl.concasseurList && sbl.concasseurList.length > 0)||(sbl.laverieList && sbl.laverieList.length > 0)">
           <label>Green Sieve</label>
-          <p-multiSelect [options]="cribles"   [(ngModel)]="sbl.cribleList"  placeholder="Select a Green Sieve" optionLabel="reference" display="chip" class="w-full"  ></p-multiSelect>
+          <p-multiSelect [options]="cribles"   [(ngModel)]="sbl.cribleList" (ngModelChange)="getCalibresBySelectedGreenCrible(sbl.cribleList)"  placeholder="Select a Green Sieve" optionLabel="reference" display="chip" class="w-full"  ></p-multiSelect>
+
+        </div>
+        <div class="field" *ngIf="sbl.cribleList && sbl.cribleList.length > 0">
+          <label >Calibre</label>
+          <p-dropdown [options]="calibresGreen" [(ngModel)]="sbl.calibre"   class="w-full" ></p-dropdown>
         </div>
         <div class="field"[hidden]="(sbl.cribleLiwellList && sbl.cribleLiwellList.length > 0)||(sbl.concasseurList && sbl.concasseurList.length > 0)||(sbl.cribleList && sbl.cribleList.length > 0)">
           <label>Laundries</label>
