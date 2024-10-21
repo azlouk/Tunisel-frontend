@@ -319,7 +319,8 @@
                       <button pButton pRipple label="Save" icon="pi pi-check" class="p-button-text" (click)="saveTransferToLaverie()"></button>
                     </div>
                   </div   >
-
+                  <p-messages [(value)]="messages" [enableService]="false"   [showTransitionOptions]="'500ms'"
+                              [hideTransitionOptions]="'500ms'" />
                 </div>
 
 
@@ -392,7 +393,19 @@
                         {{TransferToCribleLiwell.id}}
                       </td>
                       <td>
-                        {{TransferToCribleLiwell.referenceCribleLiwell}}
+                        <p-cellEditor>
+                          <ng-template pTemplate="input">
+                            <p-dropdown
+                              [options]="listCribleLiwells"
+                              appendTo="body"
+                              optionLabel="reference"
+                              [(ngModel)]="selectedCribleLiwell"
+                              [style]="{'width':'100%'}" />
+                          </ng-template>
+                          <ng-template pTemplate="output">
+                            {{TransferToCribleLiwell.referenceCribleLiwell}}
+                          </ng-template>
+                        </p-cellEditor>
                       </td>
                       <td >
                         <p-cellEditor>
@@ -502,7 +515,19 @@
                         {{TransferToCribleVert.id}}
                       </td>
                       <td>
-                        {{TransferToCribleVert.referenceCribleVert}}
+                        <p-cellEditor>
+                          <ng-template pTemplate="input">
+                            <p-dropdown
+                              [options]="listCribleVerts"
+                              appendTo="body"
+                              optionLabel="reference"
+                              [(ngModel)]="selectedCribleVert"
+                              [style]="{'width':'100%'}" />
+                          </ng-template>
+                          <ng-template pTemplate="output">
+                            {{TransferToCribleVert.referenceCribleVert}}
+                          </ng-template>
+                        </p-cellEditor>
                       </td>
                       <td >
                         <p-cellEditor>
@@ -612,7 +637,19 @@
                         {{TransferToLaundry.id}}
                       </td>
                       <td>
-                        {{TransferToLaundry.referenceLaverie}}
+                        <p-cellEditor>
+                          <ng-template pTemplate="input">
+                            <p-dropdown
+                              [options]="listLaveries"
+                              appendTo="body"
+                              optionLabel="reference"
+                              [(ngModel)]="selectedLaverie"
+                              [style]="{'width':'100%'}" />
+                          </ng-template>
+                          <ng-template pTemplate="output">
+                            {{TransferToLaundry.referenceLaverie}}
+                          </ng-template>
+                        </p-cellEditor>
 
                       </td>
                       <td >

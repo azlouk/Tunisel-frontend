@@ -46,7 +46,6 @@ export class SblService {
     const token = getKeyToken();
     if (token) {
 
-      console.log(new JsonPipe().transform(sbl.stockOrderList))
       const headers = new HttpHeaders().set('Authorization', `Bearer ${token}`).set("Content-Type", "application/json; charset=utf8");
     return this.http.put<Sbl>(`${this.apiUrl}/sbls/update`, sbl, {headers});
   }else {

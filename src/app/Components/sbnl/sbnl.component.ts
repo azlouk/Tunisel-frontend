@@ -5,7 +5,7 @@ import {CommonModule, DatePipe, JsonPipe, NgClass, NgIf} from "@angular/common";
 import {PaginatorModule} from "primeng/paginator";
 import {PasswordModule} from "primeng/password";
 import {RadioButtonModule} from "primeng/radiobutton";
-import {MessageService, SharedModule} from "primeng/api";
+import {Message, MessageService, SharedModule} from "primeng/api";
 import {Table, TableModule} from "primeng/table";
 import {ToastModule} from "primeng/toast";
 import {ToolbarModule} from "primeng/toolbar";
@@ -45,6 +45,7 @@ import {LaverieService} from "../../Services/laverie.service";
 import {TransferToCribleService} from "../../Services/transfer-to-crible.service";
 import {TransferToLaverieService} from "../../Services/transfer-to-laverie.service";
 import {LoginService} from "../../Services/login.service";
+import {MessagesModule} from "primeng/messages";
 
 @Component({
   selector: 'app-sbnl',
@@ -72,7 +73,8 @@ import {LoginService} from "../../Services/login.service";
     TooltipModule,
     MultiSelectModule,
     RippleModule,
-    AnalyseChimiqueComponent
+    AnalyseChimiqueComponent,
+    MessagesModule
   ],
   templateUrl: './sbnl.component.html',
   styleUrl: './sbnl.component.css'
@@ -656,6 +658,7 @@ this.Viderfiltredate()
 
   protected readonly JsonPipe = JsonPipe;
   protected readonly JSON = JSON;
+  public messages: Message[]=[];
 
 
 
@@ -674,16 +677,24 @@ this.Viderfiltredate()
   }
 
   public saveTransferToCribleLiwell() {
-      if ( this.sbnl.id!==undefined&&this.selectedCribleLiwell.reference!==undefined)
+      if ( this.sbnl.id!==undefined&&this.selectedCribleLiwell.reference!==undefined && this.selectedCribleLiwell)
       {
         this.transferToCribleLiwell.referenceCribleLiwell=this.selectedCribleLiwell.reference;
         this.transferToCribleLiwellService.addTransferToCribleLiwell(this.transferToCribleLiwell,this.sbnl.id).subscribe(value => {
           this. getListTransferToCribleLiwell();
           this.transferToCribleLiwell=new TransferToCribleLiwell();
-        })   }
+        })   }else {
+        this.messages = [
+          {severity: 'error', detail: 'Please select a Liwell Sieve before saving.'}
+        ];
+      }
   }
 
   public updateTransferToCribleLiwell(transferToCribleLiwell: TransferToCribleLiwell) {
+    const cribleLiwell=this.getCribleLiwellByReference(transferToCribleLiwell.referenceCribleLiwell);
+    if(cribleLiwell!==undefined){
+      this.selectedCribleLiwell=cribleLiwell;
+    }
 this.transferToCribleLiwell=transferToCribleLiwell;
   }
 
@@ -747,12 +758,16 @@ return totalRecolte-(totalTransferCribleLiwell+totalTransferCribleVert+totalTran
   }
 
   public saveTransferToLaverie() {
-    if ( this.sbnl.id!==undefined){
+    if ( this.sbnl.id!==undefined && this.selectedLaverie.reference!=="" && this.selectedLaverie){
       this.transferToLaverie.referenceLaverie=this.selectedLaverie.reference;
       this.transferToLaverieService.addTransferToLaverie(this.transferToLaverie,this.sbnl.id).subscribe(value => {
         this.getListTransferToLaverie();
         this.transferToLaverie=new TransferToLaverie();
       })
+    }else {
+      this.messages = [
+        {severity: 'error', detail: 'Please select a Laundry before saving.'}
+      ];
     }
   }
   getListTransferToLaverie(){
@@ -766,14 +781,18 @@ return totalRecolte-(totalTransferCribleLiwell+totalTransferCribleVert+totalTran
       } )
   }
   public saveTransferToCribleVert() {
-    if ( this.sbnl.id!==undefined){
+    if ( this.sbnl.id!==undefined && this.selectedCribleVert.reference!="" && this.selectedCribleVert){
       this.transferToCribleVert.referenceCribleVert=this.selectedCribleVert.reference;
       this.transferToCribleVertService.addTransferToCrible(this.transferToCribleVert,this.sbnl.id).subscribe(value => {
         this.getListTransferToCribleVert();
         this.transferToCribleVert=new TransferToCrible();
       },error => {
         console.log(error)
-      })    }
+      })    }else {
+      this.messages = [
+        {severity: 'error', detail: 'Please select a Green Sieve before saving.'}
+      ];
+    }
   }
 
   getListTransferToCribleVert(){
@@ -804,6 +823,10 @@ return totalRecolte-(totalTransferCribleLiwell+totalTransferCribleVert+totalTran
   }
 
   public updateTransferToCribleVert(transferToCribleVert: TransferToCrible) {
+    const cribleVert=this.getCribleVertByReference(transferToCribleVert.referenceCribleVert);
+    if(cribleVert!==undefined){
+      this.selectedCribleVert=cribleVert;
+    }
     this.transferToCribleVert=transferToCribleVert;
 
   }
@@ -824,6 +847,10 @@ return totalRecolte-(totalTransferCribleLiwell+totalTransferCribleVert+totalTran
   }
 
   public updateTransferToLaverie(transferToLaundry: TransferToLaverie) {
+    const laverie=this.getLaveriedByReference(transferToLaundry.referenceLaverie);
+    if(laverie!==undefined){
+      this.selectedLaverie=laverie;
+    }
     this.transferToLaverie=transferToLaundry;
 
   }
@@ -864,5 +891,15 @@ return totalRecolte-(totalTransferCribleLiwell+totalTransferCribleVert+totalTran
     });
     this.ListTransferToLaverie.forEach(transferToLaverie => this.totalLaverieFiltree+=transferToLaverie.quantityTransfer)
 
+  }
+
+  getLaveriedByReference(reference:string){
+    return this.listLaveries.find(value => value.reference==reference)
+  }
+  getCribleVertByReference(reference:string){
+    return this.listCribleVerts.find(value => value.reference==reference)
+  }
+  getCribleLiwellByReference(reference:string){
+    return this.listCribleLiwells.find(value => value.reference==reference)
   }
 }

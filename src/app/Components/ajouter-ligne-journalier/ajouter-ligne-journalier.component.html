@@ -23,8 +23,6 @@
              dataKey="id"
              styleClass="p-datatable-striped"
              [scrollable]="true"
-             scrollHeight="500px"
-             [tableStyle]="{ 'min-height': '40rem' }"
              [rowsPerPageOptions]="[10,20,30]"
              [showCurrentPageReport]="true" currentPageReportTemplate="Display  {first} to  {last} of  {totalRecords} entries" [(selection)]="selectedLigneJournalier" selectionMode="multiple" [rowHover]="true" >
       <ng-template pTemplate="caption">
@@ -90,6 +88,7 @@
 
                 <p-dropdown
                   [options]="bassins"
+                  appendTo="body"
                   [(ngModel)]="ligneJournalier.bassin"
                   optionLabel="nom"
                   placeholder="Select a Pond"
@@ -109,7 +108,7 @@
           <td >
             <p-cellEditor>
               <ng-template pTemplate="input">
-                <p-multiSelect [options]="puits"      [(ngModel)]="ligneJournalier.puitUtilises"  placeholder="Select a Puits"   optionLabel="reference" display="chip" ></p-multiSelect>
+                <p-multiSelect [options]="puits"   appendTo="body"   [(ngModel)]="ligneJournalier.puitUtilises"  placeholder="Select a Puits"   optionLabel="reference" display="chip" ></p-multiSelect>
 
               </ng-template>
               <ng-template pTemplate="output">
@@ -121,12 +120,12 @@
             <p-cellEditor>
               <ng-template pTemplate="input">
 
-                <div class="z-5">
+                <div >
 
                   <p-dropdown
                     [options]="dataEtatBassin"
                     [(ngModel)]="ligneJournalier.etatBassin"
-
+                    appendTo="body"
                     placeholder="Select a State Pond"
 
 
@@ -322,7 +321,7 @@
             <td >
               <p-cellEditor>
                 <ng-template pTemplate="input">
-                  <p-dropdown   [options]="pompes" [(ngModel)]="journalierPompe.pompe" [editable]="true" optionLabel="model" class="w-full" ></p-dropdown>
+                  <p-dropdown   [options]="pompes" appendTo="body" [(ngModel)]="journalierPompe.pompe" [editable]="true" optionLabel="model" class="w-full" ></p-dropdown>
 
                 </ng-template>
                 <ng-template pTemplate="output">
