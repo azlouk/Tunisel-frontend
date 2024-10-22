@@ -533,6 +533,8 @@
             <button pButton pRipple label="Save" icon="pi pi-check" class="p-button-text" (click)="saveTransferLaverieToWashed()"></button>
           </div>
         </div   >
+        <p-messages [(value)]="messages" [enableService]="false"   [showTransitionOptions]="'500ms'"
+                    [hideTransitionOptions]="'500ms'" />
 
       </div>
 
@@ -606,7 +608,20 @@
               {{TransferLaverieToCribleLiwell.id}}
             </td>
             <td>
-              {{TransferLaverieToCribleLiwell.cribleLiwellReference}}
+              <p-cellEditor>
+                <ng-template pTemplate="input">
+                  <p-dropdown
+                    [options]="listCribleLiwells"
+                    appendTo="body"
+                    optionLabel="reference"
+
+                    [(ngModel)]="selectedCribleLiwell"
+                    [style]="{'width':'100%'}" />
+                </ng-template>
+                <ng-template pTemplate="output">
+                  {{TransferLaverieToCribleLiwell.cribleLiwellReference}}
+                </ng-template>
+              </p-cellEditor>
             </td>
             <td >
               <p-cellEditor>
@@ -716,7 +731,21 @@
               {{TransferLaverieToCribleVert.id}}
             </td>
             <td>
-              {{TransferLaverieToCribleVert.cribleVertReference}}
+              <p-cellEditor>
+                <ng-template pTemplate="input">
+                  <p-dropdown
+                    [options]="listCribleVerts"
+                    appendTo="body"
+                    optionLabel="reference"
+
+                    [(ngModel)]="selectedCribleVert"
+                    [style]="{'width':'100%'}" />
+                </ng-template>
+                <ng-template pTemplate="output">
+                  {{TransferLaverieToCribleVert.cribleVertReference}}
+                </ng-template>
+              </p-cellEditor>
+
             </td>
             <td >
               <p-cellEditor>
@@ -826,7 +855,21 @@
               {{TransferLaverieToWashed.id}}
             </td>
             <td>
-              {{TransferLaverieToWashed.washedReference}}
+              <p-cellEditor>
+                <ng-template pTemplate="input">
+                  <p-dropdown
+                    [options]="listWasheds"
+                    appendTo="body"
+                    optionLabel="reference"
+
+                    [(ngModel)]="selectedWashed"
+                    [style]="{'width':'100%'}" />
+                </ng-template>
+                <ng-template pTemplate="output">
+                  {{TransferLaverieToWashed.washedReference}}
+                </ng-template>
+              </p-cellEditor>
+
             </td>
             <td >
               <p-cellEditor>
@@ -880,6 +923,9 @@
   </ng-template>
 </p-dialog>
 <!--==============================ADD TRANSFER TO BAND===============================================================================-->
+<!------------------------ ERROR ----------------->
+
+
 
 
 

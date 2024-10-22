@@ -1,6 +1,6 @@
 import {Component, ElementRef, Input, ViewChild} from '@angular/core';
 import {Laverie} from "../../Models/laverie";
-import {MessageService, SharedModule} from "primeng/api";
+import {Message, MessageService, SharedModule} from "primeng/api";
 import {LaverieService} from "../../Services/laverie.service";
 import Swal from "sweetalert2";
 import {Table, TableModule} from "primeng/table";
@@ -47,6 +47,9 @@ import {Sbl} from "../../Models/sbl";
 import {TransferLaverieToWashed} from "../../Models/transfer-laverie-to-washed";
 import {TransferLaverieToWashedService} from "../../Services/transfer-laverie-to-washed.service";
 import {SblService} from "../../Services/sbl.service";
+import {ConfirmPopupModule} from "primeng/confirmpopup";
+import {MessagesModule} from "primeng/messages";
+import {TagModule} from "primeng/tag";
 
 @Component({
   selector: 'app-laverie',
@@ -74,7 +77,10 @@ import {SblService} from "../../Services/sbl.service";
     ListboxModule,
     NgForOf,
     TooltipModule,
-    RadioButtonModule
+    RadioButtonModule,
+    ConfirmPopupModule,
+    MessagesModule,
+    TagModule
   ],
   templateUrl: './laverie.component.html',
   styleUrl: './laverie.component.css'
@@ -146,6 +152,9 @@ export class LaverieComponent {
   public dateStartLaverieToWashed!: Date;
   public dateEndLaverieToWashed!: Date;
   public totalLaverieToWashedFiltree: number=0;
+
+
+  messages: Message[] =[];
   @Input() get selectedColumns(): any[] {
     return this._selectedColumns;
   }
@@ -162,7 +171,6 @@ export class LaverieComponent {
                 ) {}
 
   ngOnInit() {
-
     this.getAllCribleVerts();
     this.getAllCribleLiwells();
     this.getAllWasheds();
@@ -374,14 +382,18 @@ export class LaverieComponent {
   }
 
   public saveTransferLaverieToCribleVert() {
-    if ( this.laverie.id!==undefined){
+    if ( this.laverie.id!==undefined && this.selectedCribleVert.reference!=='' && this.selectedCribleVert){
       this.transferLaverieToCribleVert.cribleVertReference=this.selectedCribleVert.reference;
       this.transferLaverieToCribleVertService.addTransferLaverieToCrible(this.transferLaverieToCribleVert,this.laverie.id).subscribe(value => {
         this.getListTransferLaverieToCribleVert();
         this.transferLaverieToCribleVert=new TransferLaverieToCrible();
       },error => {
         console.log(error)
-      })    }
+      })    }else {
+      this.messages = [
+        {severity: 'error', detail: 'Please select a Green Sieve before saving.'}
+      ];
+    }
   }
 
   getListTransferLaverieToCribleVert(){
@@ -412,39 +424,61 @@ export class LaverieComponent {
   }
 
   public saveUpdateTransferLaverieToCribleVert() {
-    this.transferLaverieToCribleVertService.updateTransferLaverieToCrible(this.transferLaverieToCribleVert).subscribe(value => {
-      this. getListTransferLaverieToCribleVert();
-      this.transferLaverieToCribleVert=new TransferLaverieToCrible();
+    if ( this.laverie.id!==undefined&&this.selectedCribleVert.reference!==undefined  )
+    {
+      this.transferLaverieToCribleVert.cribleVertReference=this.selectedCribleVert.reference;
+      this.transferLaverieToCribleVertService.updateTransferLaverieToCrible(this.transferLaverieToCribleVert).subscribe(value => {
+        this. getListTransferLaverieToCribleVert();
+        this.transferLaverieToCribleVert=new TransferLaverieToCrible();
+      })   }
 
-    })
+
+
   }
 
   public updateTransferLaverieToCribleVert(transferLaverieToCribleVert: TransferLaverieToCrible) {
+    const cribleVert=this.getCribleVertByReference(transferLaverieToCribleVert.cribleVertReference);
+    if(cribleVert!==undefined){
+      this.selectedCribleVert=cribleVert;
+    }
     this.transferLaverieToCribleVert=transferLaverieToCribleVert;
 
   }
 
   public saveTransferLaverieToCribleLiwell() {
-    if ( this.laverie.id!==undefined&&this.selectedCribleLiwell.reference!==undefined)
+    if ( this.laverie.id!==undefined&&this.selectedCribleLiwell.reference!==undefined && this.selectedCribleLiwell)
     {
       this.transferLaverieToCribleLiwell.cribleLiwellReference=this.selectedCribleLiwell.reference;
       this.transferLaverieToCribleLiwellService.addTransferLaverieToCribleLiwell(this.transferLaverieToCribleLiwell,this.laverie.id).subscribe(value => {
         this. getListTransferLaverieToCribleLiwell();
         this.transferLaverieToCribleLiwell=new TransferLaverieToCribleLiwell();
-      })   }
+
+      }) }  else {
+      this.messages = [
+        {severity: 'error', detail: 'Please select a Liwell Sieve before saving.'}
+      ];
+    }
   }
 
   public updateTransferLaverieToCribleLiwell(transferLaverieToCribleLiwell: TransferLaverieToCribleLiwell) {
+    const cribleLiwell=this.getCribleLiwellByReference(transferLaverieToCribleLiwell.cribleLiwellReference);
+    if(cribleLiwell!==undefined){
+      this.selectedCribleLiwell=cribleLiwell;
+    }
     this.transferLaverieToCribleLiwell=transferLaverieToCribleLiwell;
   }
 
   public saveUpdateTransferLaverieToCribleLiwell() {
-    this.transferLaverieToCribleLiwellService.updateTransferLaverieToCribleLiwell(this.transferLaverieToCribleLiwell).subscribe(value => {
-      this. getListTransferLaverieToCribleLiwell();
-      this.transferLaverieToCribleLiwell=new TransferLaverieToCribleLiwell();
+
+      if ( this.laverie.id!==undefined && this.selectedCribleLiwell.reference!==undefined )
+      {
+        this.transferLaverieToCribleLiwell.cribleLiwellReference=this.selectedCribleLiwell.reference;
+        this.transferLaverieToCribleLiwellService.updateTransferLaverieToCribleLiwell(this.transferLaverieToCribleLiwell).subscribe(value => {
+          this. getListTransferLaverieToCribleLiwell();
+          this.transferLaverieToCribleLiwell=new TransferLaverieToCribleLiwell();
+        })   }
 
 
-    })
   }
 
   public deleteTransferLaverieToCribleLiwell(transferLaverieToCribleLiwell: any) {
@@ -466,24 +500,37 @@ export class LaverieComponent {
 
 
   public saveTransferLaverieToWashed() {
-    if ( this.laverie.id!==undefined&&this.selectedWashed.reference!==undefined)
+    if ( this.laverie.id!==undefined&&this.selectedWashed.reference!==undefined  && this.selectedWashed)
     {
       this.transferLaverieToWashed.washedReference=this.selectedWashed.reference;
       this.transferLaverieToWashedService.addTransferLaverieToWashed(this.transferLaverieToWashed,this.laverie.id).subscribe(value => {
         this. getListTransferLaverieToWashed();
         this.transferLaverieToWashed=new TransferLaverieToWashed();
-      })   }
+      })   }else {
+      this.messages = [
+        {severity: 'error', detail: 'Please select a Washed before saving.'}
+      ];
+    }
   }
 
   public updateTransferLaverieToWashed(transferLaverieToWashed: TransferLaverieToWashed) {
+    const sbl=this.getWashedByReference(transferLaverieToWashed.washedReference);
+    if(sbl!==undefined){
+      this.selectedWashed=sbl;
+    }
     this.transferLaverieToWashed=transferLaverieToWashed;
   }
 
   public saveUpdateTransferLaverieToWashed() {
-    this.transferLaverieToWashedService.updateTransferLaverieToWashed(this.transferLaverieToWashed).subscribe(value => {
-      this. getListTransferLaverieToWashed();
-      this.transferLaverieToWashed=new TransferLaverieToWashed();
-    })
+    if ( this.laverie.id!==undefined&&this.selectedWashed.reference!==undefined )
+    {
+      this.transferLaverieToWashed.washedReference=this.selectedWashed.reference;
+      this.transferLaverieToWashedService.updateTransferLaverieToWashed(this.transferLaverieToWashed).subscribe(value => {
+        this. getListTransferLaverieToWashed();
+        this.transferLaverieToWashed=new TransferLaverieToWashed();
+      })   }
+
+
   }
 
   public deleteTransferLaverieToWashed(transferLaverieToWashed: TransferLaverieToWashed) {
@@ -560,5 +607,15 @@ export class LaverieComponent {
     });
     this.ListTransferLaverieToWashed.forEach(transferLaverieToWashed => this.totalLaverieToWashedFiltree+=transferLaverieToWashed.quantityTransfer)
 
+  }
+
+  getWashedByReference(reference:string){
+    return this.listWasheds.find(value => value.reference==reference)
+  }
+  getCribleVertByReference(reference:string){
+    return this.listCribleVerts.find(value => value.reference==reference)
+  }
+  getCribleLiwellByReference(reference:string){
+    return this.listCribleLiwells.find(value => value.reference==reference)
   }
 }

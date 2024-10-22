@@ -278,10 +278,10 @@ export class SblComponent implements OnInit {
       this.sblService.updateSbl(this.sbl).subscribe(() => {
         this.sblService.getAllSblDTO().subscribe((sbls: Sbl[]) => {
           this.sbls = sbls;
+          console.log('Sbl updated');
 
         });
       });
-      console.log('Sbl updated');
 
       this.isUpdateSbl = false;
     } else {
