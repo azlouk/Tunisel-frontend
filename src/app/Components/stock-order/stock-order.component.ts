@@ -107,8 +107,8 @@ export class StockOrderComponent implements OnInit{
 
   loading:boolean=false ;
   public sbls: Sbl[]=[];
-
-
+  deleteHistoryDialog:boolean=false ;
+  deleteSalineDialog:boolean=false ;
   constructor(  private messageService: MessageService,
                 private bassinService :BassinService,
                 private stockOrderService :StockOrderService,
@@ -393,9 +393,15 @@ this.getAllStockOrder();
     this.selectedBassin=this.stockOrder.bassinList.find(value => value.nom==saline.nomBassin);
     this.saline=saline;
   }
-
-  deleteSaline(saline: Saline) {
-    this.salineService.deleteSaline(saline.id).subscribe(value => this.getSalinesByStockOrder())
+  deleteSaline(saline: Saline){
+    this.saline=saline;
+    this.deleteSalineDialog=true;
+  }
+  confirmDeleteSaline() {
+    this.salineService.deleteSaline(this.saline.id).subscribe(value => {
+      this.getSalinesByStockOrder();
+      this.deleteSalineDialog=false;
+    })
   }
 
   saveSaline() {
@@ -453,18 +459,24 @@ if(this.selectedBassin)
     this.saveQuantityTranferStarAndArriving();
     this.historyTransfer=new HistoryTransfer();
   }
-  public deleteHistory(history: HistoryTransfer) {
-    this.arrivingPoint=   this.getTransferAttributsByLabel(history.startingPoint);
-    this. startingPoint=   this.getTransferAttributsByLabel(history.arrivingPoint);
-    this.TransferQuantity=history.transferQuantity;
-    this.stockOrder.listHistory=this.stockOrder.listHistory.filter(value => value.id!==history.id) ;
+
+  deleteHistory(history: HistoryTransfer){
+    this.deleteHistoryDialog=true;
+    this.historyTransfer=history;
+  }
+  public confirmDeleteHistory() {
+    this.arrivingPoint=   this.getTransferAttributsByLabel(this.historyTransfer.startingPoint);
+    this. startingPoint=   this.getTransferAttributsByLabel(this.historyTransfer.arrivingPoint);
+    this.TransferQuantity=this.historyTransfer.transferQuantity;
+    this.stockOrder.listHistory=this.stockOrder.listHistory.filter(value => value.id!==this.historyTransfer.id) ;
         this.saveQuantityTranferStarAndArriving().then(value => {
-          this.historyTransferService.deleteHistoryTransfer(history.id).subscribe(value => this.getAllStockOrder())
+          this.historyTransferService.deleteHistoryTransfer(this.historyTransfer.id).subscribe(value => this.getAllStockOrder())
           this.historyTransfer=new HistoryTransfer();
         });
 
 
       this.historyTransfer=new HistoryTransfer();
+      this.deleteHistoryDialog=false;
   }
 
   getTransferAttributsByLabel(label:string){

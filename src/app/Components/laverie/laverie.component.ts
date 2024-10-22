@@ -21,12 +21,7 @@ import {Sbnl} from "../../Models/sbnl";
 import {TraitementStock} from "../../Models/traitement-stock";
 import {SbnlService} from "../../Services/sbnl.service";
 import {TraitementStockService} from "../../Services/traitement-stock.service";
-import {AnalysesChimique} from "../../Models/analyses-chimique";
-import {AnalysesPhysique} from "../../Models/analyses-physique";
-import html2canvas from "html2canvas";
-import jsPDF from "jspdf";
-import * as XLSX from "xlsx";
-import {writeFile} from "xlsx";
+
 import {AutoFocusModule} from "primeng/autofocus";
 import {CalendarModule} from "primeng/calendar";
 import {CheckboxModule} from "primeng/checkbox";
@@ -37,8 +32,7 @@ import {TransferLaverieToCribleLiwell} from "../../Models/transfer-laverie-to-cr
 import {CribleLiwell} from "../../Models/cribleLiwell";
 import {Crible} from "../../Models/crible";
 import {TransferLaverieToCrible} from "../../Models/transfer-laverie-to-crible";
-import {TransferToCrible} from "../../Models/transfer-to-crible";
-import {TransferToCribleLiwell} from "../../Models/TransferToCribleLiwell";
+
 import {CribleService} from "../../Services/crible.service";
 import {TransferLaverieToCribleService} from "../../Services/transfer-laverie-to-crible.service";
 import {TransferLaverieToCribleLiwellService} from "../../Services/transfer-laverie-to-crible-liwell.service";
@@ -155,6 +149,10 @@ export class LaverieComponent {
 
 
   messages: Message[] =[];
+
+  deleteTransferToWashedDialog:boolean=false;
+  deleteTransferToCribleLiwellDialog:boolean=false;
+  deleteTransferToCribleVertDialog:boolean=false;
   @Input() get selectedColumns(): any[] {
     return this._selectedColumns;
   }
@@ -418,8 +416,15 @@ export class LaverieComponent {
 
     })
   }
-  public deleteTransferLaverieToCribleVert(transferLaverieToCribleVert: TransferLaverieToCrible) {
-    this.transferLaverieToCribleVertService.deleteTransferLaverieToCrible(transferLaverieToCribleVert.id).subscribe(value =>     this.ListTransferLaverieToCribleVert= this.ListTransferLaverieToCribleVert.filter(transfer => transfer.id !== transferLaverieToCribleVert.id))
+  public deleteTransferLaverieToCribleVert(transferLaverieToCribleVert: TransferLaverieToCrible){
+    this.deleteTransferToCribleVertDialog=true;
+    this.transferLaverieToCribleVert=transferLaverieToCribleVert;
+  }
+  public confirmDeleteTransferLaverieToCribleVert() {
+    this.transferLaverieToCribleVertService.deleteTransferLaverieToCrible(this.transferLaverieToCribleVert.id).subscribe(value => {
+      this.ListTransferLaverieToCribleVert = this.ListTransferLaverieToCribleVert.filter(transfer => transfer.id !== this.transferLaverieToCribleVert.id);
+      this.deleteTransferToCribleVertDialog=false;
+    })
 
   }
 
@@ -480,9 +485,15 @@ export class LaverieComponent {
 
 
   }
-
-  public deleteTransferLaverieToCribleLiwell(transferLaverieToCribleLiwell: any) {
-    this.transferLaverieToCribleLiwellService.deleteTransferLaverieToCribleLiwell(transferLaverieToCribleLiwell.id).subscribe(value =>     this.ListTransferLaverieToCribleLiwell= this.ListTransferLaverieToCribleLiwell.filter(transfer => transfer.id !== transferLaverieToCribleLiwell.id))
+  public deleteTransferLaverieToCribleLiwell(transferLaverieToCribleLiwell: any){
+    this.deleteTransferToCribleLiwellDialog=true;
+    this.transferLaverieToCribleLiwell=transferLaverieToCribleLiwell;
+  }
+  public confirmDeleteTransferLaverieToCribleLiwell() {
+    this.transferLaverieToCribleLiwellService.deleteTransferLaverieToCribleLiwell(this.transferLaverieToCribleLiwell.id)
+      .subscribe(value => {this.ListTransferLaverieToCribleLiwell = this.ListTransferLaverieToCribleLiwell.filter(transfer => transfer.id !== this.transferLaverieToCribleLiwell.id);
+        this.deleteTransferToCribleLiwellDialog=false;
+  })
 
   }
 
@@ -532,9 +543,15 @@ export class LaverieComponent {
 
 
   }
-
-  public deleteTransferLaverieToWashed(transferLaverieToWashed: TransferLaverieToWashed) {
-    this.transferLaverieToWashedService.deleteTransferLaverieToWashed(transferLaverieToWashed.id).subscribe(value =>     this.ListTransferLaverieToWashed= this.ListTransferLaverieToWashed.filter(transfer => transfer.id !== transferLaverieToWashed.id))
+  public deleteTransferLaverieToWashed(transferLaverieToWashed: TransferLaverieToWashed){
+    this.deleteTransferToWashedDialog=true;
+    this.transferLaverieToWashed=transferLaverieToWashed;
+  }
+  public confirmDeleteTransferLaverieToWashed() {
+    this.transferLaverieToWashedService.deleteTransferLaverieToWashed(this.transferLaverieToWashed.id).subscribe(value => {
+      this.ListTransferLaverieToWashed = this.ListTransferLaverieToWashed.filter(transfer => transfer.id !== this.transferLaverieToWashed.id);
+      this.deleteTransferToWashedDialog=false;
+    })
   }
 
   getListTransferLaverieToWashed(){

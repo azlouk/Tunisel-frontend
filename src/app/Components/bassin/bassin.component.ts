@@ -138,7 +138,8 @@ recoltes:Recolte[]=[];
   suiviBassinPDF: boolean = false;
   linesJournaliers:LigneJournalier[]=[];
   BassinSuivi!:Bassin;
-
+  deleteHarvest:boolean=false;
+  deleteSondageDialog:boolean=false;
   MonthName:String[]=["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"]
   @Input() get selectedColumns(): any[] {
     return this._selectedColumns;
@@ -686,9 +687,16 @@ this.SelectetBassin={analysesPhysiques:[]}
      )
     }
 
+  deleteRecolte(recolte: Recolte){
+    this.deleteHarvest=true;
+    this.recolte=recolte;
 
-  deleteRecolte(recolte: Recolte)   {
-  this.recolteService.deleteRecolte(recolte.id).subscribe(value =>     this.recoltes= this.recoltes.filter(rec => rec.id !== recolte.id)
+  }
+  confirmdeleteRecolte()   {
+  this.recolteService.deleteRecolte(this.recolte.id).subscribe(value => {
+    this.recoltes = this.recoltes.filter(rec => rec.id !== this.recolte.id);
+      this.deleteHarvest=false;
+  }
   )
 
   }
@@ -856,9 +864,15 @@ let total:number=0;
       )
   }
 
-
-  deleteSondage(sondage: Sondage)   {
-    this.sondageService.deleteSondage(sondage.id).subscribe(value =>     this.sondages= this.sondages.filter(son => son.id !== sondage.id)
+deleteSondage(sondage: Sondage){
+    this.sondage=sondage;
+    this.deleteSondageDialog=true;
+}
+  confirmDeleteSondage()   {
+    this.sondageService.deleteSondage(this.sondage.id).subscribe(value => {
+        this.sondages = this.sondages.filter(son => son.id !== this.sondage.id);
+        this.deleteSondageDialog=false;
+      }
     )
 
   }

@@ -145,6 +145,10 @@ export class SbnlComponent implements OnInit{
   public dateStartLaverie!: Date;
   public dateEndLaverie!: Date;
   public totalLaverieFiltree: number=0;
+
+  deleteTransferToCribleliwellDialog:boolean=false
+  deleteTransferToCribleVertDialog:boolean=false
+  deleteTransferToLaverieDialog:boolean=false
   @Input() get selectedColumns(): any[] {
     return this._selectedColumns;
   }
@@ -706,9 +710,16 @@ this.transferToCribleLiwell=transferToCribleLiwell;
 
     })
   }
-
-  public deleteTransferToCribleLiwell(transferToCribleLiwell: any) {
-    this.transferToCribleLiwellService.deleteTransferToCribleLiwell(transferToCribleLiwell.id).subscribe(value =>     this.ListTransferToCribleLiwell= this.ListTransferToCribleLiwell.filter(transfer => transfer.id !== transferToCribleLiwell.id))
+  deleteTransferToCribleLiwell(transferToCribleLiwell: any) {
+    this.deleteTransferToCribleliwellDialog=true;
+    this.transferToCribleLiwell=transferToCribleLiwell;
+  }
+  public confirmDeleteTransferToCribleLiwell() {
+    this.transferToCribleLiwellService.deleteTransferToCribleLiwell(this.transferToCribleLiwell.id)
+      .subscribe(value => {
+        this.ListTransferToCribleLiwell = this.ListTransferToCribleLiwell.filter(transfer => transfer.id !== this.transferToCribleLiwell.id);
+        this.deleteTransferToCribleliwellDialog=false;
+      })
 
   }
 
@@ -809,8 +820,17 @@ return totalRecolte-(totalTransferCribleLiwell+totalTransferCribleVert+totalTran
   getAllCribleVerts(){
     this.cribleVertservice.getAllCriblesDto().subscribe(value => this.listCribleVerts=value)
   }
-  public deleteTransferToCribleVert(transferToCribleVert: TransferToCrible) {
-    this.transferToCribleVertService.deleteTransferToCrible(transferToCribleVert.id).subscribe(value =>     this.ListTransferToCribleVert= this.ListTransferToCribleVert.filter(transfer => transfer.id !== transferToCribleVert.id))
+
+  deleteTransferToCribleVert(transferToCribleVert: TransferToCrible) {
+    this.deleteTransferToCribleVertDialog=true;
+    this.transferToCribleVert=transferToCribleVert;
+  }
+  public confirmDeleteTransferToCribleVert() {
+    this.transferToCribleVertService.deleteTransferToCrible(this.transferToCribleVert.id).
+    subscribe(value => {
+      this.ListTransferToCribleVert = this.ListTransferToCribleVert.filter(transfer => transfer.id !== this.transferToCribleVert.id);
+      this.deleteTransferToCribleVertDialog=false;
+    })
 
   }
 
@@ -833,8 +853,17 @@ return totalRecolte-(totalTransferCribleLiwell+totalTransferCribleVert+totalTran
   getAllLaveries(){
     this.laverieService.getAllLaveries().subscribe(value => this.listLaveries=value)
   }
-  public deleteTransferToLaverie(transferToLaundry: TransferToLaverie) {
-    this.transferToLaverieService.deleteTransferToLaverie(transferToLaundry.id).subscribe(value =>     this.ListTransferToLaverie= this.ListTransferToLaverie.filter(transfer => transfer.id !== transferToLaundry.id))
+
+  deleteTransferToLaverie(transferToLaundry: TransferToLaverie) {
+    this.deleteTransferToLaverieDialog=true;
+    this.transferToLaverie=transferToLaundry;
+  }
+  public confirmDeleteTransferToLaverie() {
+    this.transferToLaverieService.deleteTransferToLaverie(this.transferToLaverie.id).
+    subscribe(value => {
+      this.ListTransferToLaverie = this.ListTransferToLaverie.filter(transfer => transfer.id !== this.transferToLaverie.id);
+      this.deleteTransferToLaverieDialog=false;
+    })
 
   }
 
