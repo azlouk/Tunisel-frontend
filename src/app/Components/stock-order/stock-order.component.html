@@ -455,7 +455,6 @@
                responsiveLayout="scroll"
                [globalFilterFields]="['id','dateCreation','pondName','volumeSaline','rainQuantityBengardene','temperature','observation']"
                [scrollable]="true"
-               [tableStyle]="{ 'min-height': '25rem' }"
                [scrollHeight]="'400px'"
                editMode="row"
                [(selection)]="selectedSalines" selectionMode="multiple" [rowHover]="true" dataKey="id">
@@ -532,6 +531,7 @@
                     [options]="stockOrder.bassinList"
                     [(ngModel)]="selectedBassin"
                     optionLabel="nom"
+                    appendTo="body"
                     placeholder="Select a Pond" />
                 </ng-template>
                 <ng-template pTemplate="output">
