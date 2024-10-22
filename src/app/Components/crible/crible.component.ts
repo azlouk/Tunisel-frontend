@@ -99,6 +99,7 @@ export class CribleComponent implements OnInit{
   public dateStartResultCrible!: Date;
   public dateEndResultCrible!: Date;
   public totalResultCribleFiltree: number=0;
+  deleteResultCribleDialog:boolean=false;
   @Input() get selectedColumns(): any[] {
     return this._selectedColumns;
   }
@@ -282,8 +283,16 @@ export class CribleComponent implements OnInit{
     })
   }
 
-  public deleteResultCrible(resultCrible: ResultCrible) {
-      this.resultCribleService.deleteResultCrible(resultCrible.id).subscribe(value =>     this.ListResultCribles= this.ListResultCribles.filter(res => res.id !== resultCrible.id))
+
+  public deleteResultCrible(resultCrible: ResultCrible){
+    this.resultCrible=resultCrible;
+    this.deleteResultCribleDialog=true;
+  }
+  public confirmDeleteResultCrible() {
+      this.resultCribleService.deleteResultCrible(this.resultCrible.id).subscribe(value => {
+        this.ListResultCribles = this.ListResultCribles.filter(res => res.id !== this.resultCrible.id);
+        this.deleteResultCribleDialog=false;
+      })
 
   }
 

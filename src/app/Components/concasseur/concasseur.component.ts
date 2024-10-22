@@ -76,6 +76,8 @@ export class ConcasseurComponent implements OnInit{
   public dateStartResultConcasseur!: Date;
   public dateEndResultConcasseur!: Date;
   public totalResultConcasseurFiltree: number=0;
+  public deleteResultConcasseurDialog :boolean=false;
+
   @Input() get selectedColumns(): any[] {
     return this._selectedColumns;
   }
@@ -242,9 +244,15 @@ export class ConcasseurComponent implements OnInit{
 
     })
   }
-
-  public deleteResultConcasseur(resultConcasseur: ResultConcasseur) {
-    this.resultConcasseurService.deleteResultConcasseur(resultConcasseur.id).subscribe(value =>     this.ListResultConcasseurs= this.ListResultConcasseurs.filter(res => res.id !== resultConcasseur.id))
+  public deleteResultConcasseur(resultConcasseur: ResultConcasseur){
+    this.deleteResultConcasseurDialog=true;
+    this.resultConcasseur=resultConcasseur;
+  }
+  public confirmDeleteResultConcasseur() {
+    this.resultConcasseurService.deleteResultConcasseur( this.resultConcasseur.id).subscribe(value => {
+      this.ListResultConcasseurs = this.ListResultConcasseurs.filter(res => res.id !== this.resultConcasseur.id);
+      this.deleteResultConcasseurDialog=false;
+    })
 
   }
 

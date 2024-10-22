@@ -115,6 +115,7 @@ export class CribleLiwellComponent {
   public dateStartTraitementStock!:Date;
   public dateEndTraitementStock!:Date;
   public totalTraitementStockFiltree: number=0;
+  deleteTraitementStockDialog:boolean=false;
   @Input() get selectedColumns(): any[] {
     return this._selectedColumns;
   }
@@ -638,9 +639,16 @@ this.laveries=value
 
     })
   }
-
-  public deleteTraitementStock(traitementStock: TraitementStock) {
-    this.traitementStockService.deleteTraitementStock(traitementStock.id).subscribe(value =>     this.ListTraitementStock= this.ListTraitementStock.filter(traitement => traitement.id !== traitementStock.id))
+  public deleteTraitementStock(traitementStock: TraitementStock){
+    this.deleteTraitementStockDialog=true;
+    this.traitementStock=traitementStock;
+  }
+  public confirmDeleteTraitementStock() {
+    this.traitementStockService.deleteTraitementStock( this.traitementStock.id).
+    subscribe(value => {
+      this.ListTraitementStock = this.ListTraitementStock.filter(traitement => traitement.id !== this.traitementStock.id);
+      this.deleteTraitementStockDialog=false;
+    })
 
   }
 
