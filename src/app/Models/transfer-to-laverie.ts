@@ -3,14 +3,16 @@ export class TransferToLaverie {
   id: number;
   dateCreation: Date;
   quantityTransfer: number;
- referenceLaverie:string;
+  referenceLaverie:string;
+  pert:number;
 
 
-  constructor(_id: number=0, _dateCreation: Date=new Date(), _quantityTransfer: number=0, _referenceLaverie: string="") {
+  constructor(_id: number=0, _dateCreation: Date=new Date(), _quantityTransfer: number=0, _referenceLaverie: string="",_pert:number=0) {
     this.id = _id;
     this.dateCreation = _dateCreation;
     this.quantityTransfer = _quantityTransfer;
     this.referenceLaverie = _referenceLaverie;
+    this.pert =_pert;
   }
 
   public get _referenceLaverie(): string {
@@ -45,4 +47,11 @@ export class TransferToLaverie {
     this.quantityTransfer = value;
   }
 
+  public get _pert(): number {
+    return this.pert;
+  }
+
+  public set _pert(value: number) {
+    this.pert = value;
+  }
 }

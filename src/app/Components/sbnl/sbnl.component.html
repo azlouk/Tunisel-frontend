@@ -313,7 +313,14 @@
                     </div>
                     <div class="">
                       <label >Transfer Quantity</label>
-                      <p-inputNumber   [(ngModel)]="transferToLaverie.quantityTransfer" mode="decimal" [minFractionDigits]="3" ></p-inputNumber>
+                      <p-inputNumber   [(ngModel)]="quantityTransferHorsPert" mode="decimal" [minFractionDigits]="3" ></p-inputNumber>
+                    </div>
+                    <div class="">
+                      <label >Waste</label>
+                      <p-inputNumber
+                        [(ngModel)]="transferToLaverie.pert"
+                        inputId="percent"
+                        prefix="%" />
                     </div>
                     <div>
                       <button pButton pRipple label="Save" icon="pi pi-check" class="p-button-text" (click)="saveTransferToLaverie()"></button>
@@ -623,7 +630,8 @@
                       <th pSortableColumn="id">Id <p-sortIcon field="id"></p-sortIcon></th>
                       <th pSortableColumn="cribleLiwell">Laundry <p-sortIcon field="cribleLiwell"></p-sortIcon></th>
                       <th pSortableColumn="date">Date Transfer<p-sortIcon field="date"></p-sortIcon></th>
-                      <th pSortableColumn="value">Transfer Quantity <p-sortIcon field="value"></p-sortIcon></th>
+                      <th pSortableColumn="transferQuantity">Transfer Quantity <p-sortIcon field="transferQuantity"></p-sortIcon></th>
+                      <th pSortableColumn="pert">Waste <p-sortIcon field="pert"></p-sortIcon></th>
 
                       <th></th>
                     </tr>
@@ -667,17 +675,27 @@
                       <td >
                         <p-cellEditor>
                           <ng-template pTemplate="input">
-                            <input
-                              pInputText
-                              type="text"
-                              [(ngModel)]="TransferToLaundry.quantityTransfer" />
+                            <p-inputNumber   [(ngModel)]="quantityTransferHorsPert" mode="decimal" [minFractionDigits]="3" ></p-inputNumber>
+
                           </ng-template>
                           <ng-template pTemplate="output">
                             {{TransferToLaundry.quantityTransfer}}
                           </ng-template>
                         </p-cellEditor>
                       </td>
-
+                      <td >
+                        <p-cellEditor>
+                          <ng-template pTemplate="input">
+                            <p-inputNumber
+                              [(ngModel)]="TransferToLaundry.pert"
+                              inputId="percent"
+                              prefix="%" />
+                          </ng-template>
+                          <ng-template pTemplate="output">
+                            {{TransferToLaundry.pert}}
+                          </ng-template>
+                        </p-cellEditor>
+                      </td>
                       <td>
                         <div class="flex  align-items-center gap-2">
                           <div class="flex align-items-center justify-content-center gap-2" *ngIf="getToken()=='ADMIN'">

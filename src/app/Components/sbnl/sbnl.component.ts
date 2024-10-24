@@ -663,6 +663,7 @@ this.Viderfiltredate()
   protected readonly JsonPipe = JsonPipe;
   protected readonly JSON = JSON;
   public messages: Message[]=[];
+  public quantityTransferHorsPert: number=0;
 
 
 
@@ -770,6 +771,12 @@ return totalRecolte-(totalTransferCribleLiwell+totalTransferCribleVert+totalTran
 
   public saveTransferToLaverie() {
     if ( this.sbnl.id!==undefined && this.selectedLaverie.reference!=="" && this.selectedLaverie){
+      if(this.transferToLaverie.pert>0){
+
+      this.transferToLaverie.quantityTransfer=this.quantityTransferHorsPert-((this.quantityTransferHorsPert*this.transferToLaverie.pert)/100)
+      }else{
+        this.transferToLaverie.quantityTransfer=this.quantityTransferHorsPert;
+      }
       this.transferToLaverie.referenceLaverie=this.selectedLaverie.reference;
       this.transferToLaverieService.addTransferToLaverie(this.transferToLaverie,this.sbnl.id).subscribe(value => {
         this.getListTransferToLaverie();
@@ -868,6 +875,12 @@ return totalRecolte-(totalTransferCribleLiwell+totalTransferCribleVert+totalTran
   }
 
   public saveUpdateTransferToLaverie() {
+    if(this.transferToLaverie.pert>0){
+
+      this.transferToLaverie.quantityTransfer=this.quantityTransferHorsPert-((this.quantityTransferHorsPert*this.transferToLaverie.pert)/100)
+    }else{
+      this.transferToLaverie.quantityTransfer=this.quantityTransferHorsPert;
+    }
     this.transferToLaverieService.updateTransferToLaverie(this.transferToLaverie).subscribe(value => {
       this. getListTransferToLaverie();
       this.transferToLaverie=new TransferToLaverie();
@@ -875,13 +888,33 @@ return totalRecolte-(totalTransferCribleLiwell+totalTransferCribleVert+totalTran
     })
   }
 
+  // public updateTransferToLaverie(transferToLaundry: TransferToLaverie) {
+  //   const laverie=this.getLaveriedByReference(transferToLaundry.referenceLaverie);
+  //   if(laverie!==undefined){
+  //     this.selectedLaverie=laverie;
+  //   }
+  //   this.quantityTransferHorsPert=transferToLaundry.quantityTransfer+((transferToLaundry.quantityTransfer*transferToLaundry.pert)/100)
+  //   this.transferToLaverie=transferToLaundry;
+  //
+  // }
   public updateTransferToLaverie(transferToLaundry: TransferToLaverie) {
-    const laverie=this.getLaveriedByReference(transferToLaundry.referenceLaverie);
-    if(laverie!==undefined){
-      this.selectedLaverie=laverie;
-    }
-    this.transferToLaverie=transferToLaundry;
+    // Find the laverie by its reference
+    const laverie = this.getLaveriedByReference(transferToLaundry.referenceLaverie);
 
+    if (laverie !== undefined) {
+      this.selectedLaverie = laverie;
+    }
+
+    // Calculate the original quantityTransferHorsPert based on the stored percentage (pert)
+    this.quantityTransferHorsPert = transferToLaundry.quantityTransfer; // Start with the quantityTransfer value
+
+    // If pert is available, reverse the percentage adjustment
+    if (transferToLaundry.pert > 0) {
+      this.quantityTransferHorsPert = transferToLaundry.quantityTransfer / (1 - (transferToLaundry.pert / 100));
+    }
+
+    // Set the transferToLaverie with the updated transferToLaundry
+    this.transferToLaverie = transferToLaundry;
   }
 
   public filtreListLiwellSieveWithDate(dateStartLiwellSieve: Date, dateEndLiwellSieve: Date) {
